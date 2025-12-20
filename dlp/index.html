@@ -91,6 +91,51 @@
           </div>
         </div>
 
+        <h2>Why DLP Started Later</h2>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Different Timeline, Different Dependencies
+          </div>
+          <div class="callout-content">
+            <p>Unlike SIEM (log ingestion) or EDR (agent deployment), <strong>DLP depends heavily on data classification framework and business alignment</strong>.</p>
+            <p>Before policies can be enforced — or even meaningfully tested — the organization needs:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Data classification taxonomy agreed with business</li>
+              <li>Sensitive information types (SITs) defined and validated</li>
+              <li>Business process flows documented (what data moves where)</li>
+              <li>Executive buy-in on enforcement approach</li>
+            </ul>
+            <p><strong>Result:</strong> DLP was introduced later in the program and initially operated in audit mode while classification and policy foundations were finalized.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Track</th><th>Primary Dependency</th><th>Start Timing</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SIEM</strong></td>
+                <td>Log source availability, connector configuration</td>
+                <td>After discovery phase (Month 1-2)</td>
+              </tr>
+              <tr>
+                <td><strong>EDR</strong></td>
+                <td>Endpoint access, deployment infrastructure</td>
+                <td>Early start to establish telemetry (Month 2-3)</td>
+              </tr>
+              <tr>
+                <td><strong>DLP</strong></td>
+                <td>Data classification framework, business alignment</td>
+                <td>Later start after classification groundwork (Month 4-6)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <h2>Why DLP Migration is Different</h2>
         <p>Unlike SIEM (backend) or EDR (silent), DLP directly impacts user workflows. Users see notifications, get blocked, and must change behavior. This makes DLP the most change-management intensive track.</p>
 

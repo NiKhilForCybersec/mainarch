@@ -26,6 +26,7 @@
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
           <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
           <a href="../program-structure.html" class="nav-item">Program Structure</a>
         </div>
         <div class="nav-divider"></div>
@@ -92,6 +93,39 @@
             <p><strong>Integration:</strong> M365 Defender → Sentinel connector active. XDR incidents appear in unified queue.</p>
             <p><strong>Legacy:</strong> ESET removed from endpoints. Protect server decommissioned.</p>
           </div>
+        </div>
+
+        <h2>Why MDE Rollout Started Early</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Telemetry-First Strategy
+          </div>
+          <div class="callout-content">
+            <p>After the discovery and foundation phase, we started MDE rollout early to <strong>establish endpoint telemetry before new detections were fully implemented</strong>.</p>
+            <p>This ensured that by the time the detection translation catalog was finalized and implementations began in Sentinel, <strong>sufficient endpoint telemetry was already available for validation and tuning</strong>.</p>
+            <p>Detection work was therefore <strong>threat-intent driven and mapped to target controls</strong>, rather than being blocked by telemetry readiness.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Approach</th><th>Problem</th><th>Our Strategy</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Detection-First</strong></td>
+                <td>Write detections → then realize telemetry isn't there → blocked</td>
+                <td rowspan="2" style="background-color: rgba(63, 185, 80, 0.1);"><strong>Telemetry-First:</strong> Deploy MDE early → telemetry flows → detections validated immediately when implemented</td>
+              </tr>
+              <tr>
+                <td><strong>Parallel Start</strong></td>
+                <td>Both start same time → detections ready but no data to test against</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <h2>Migration Approach: Active-Active</h2>

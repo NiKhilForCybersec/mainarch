@@ -28,6 +28,7 @@
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
           <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
           <a href="../program-structure.html" class="nav-item">Program Structure</a>
         </div>
         
@@ -155,6 +156,18 @@
             <p><strong>Sentinel:</strong> Primary SIEM, fully operational with identity, cloud, endpoint, and network telemetry.</p>
             <p><strong>Log Sources:</strong> All critical sources onboarded via built-in connectors and custom DCRs.</p>
             <p><strong>SOC:</strong> Analysts trained and operational on Sentinel + M365 Defender unified queue.</p>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Parallel SOC Operations
+          </div>
+          <div class="callout-content">
+            <p><strong>During Transition:</strong> The SOC continued operating on the legacy stack (RSA NetWitness, ESET) while the new Sentinel and MDE environment matured.</p>
+            <p><strong>MDE Started Early:</strong> Endpoint rollout began early to establish telemetry before detection implementations, ensuring validation data was available when detections went live.</p>
+            <p><strong>Gradual Shift:</strong> Analysts worked both platforms during transition, with Sentinel becoming primary only after detection coverage was validated.</p>
           </div>
         </div>
 
@@ -346,6 +359,39 @@
           <li>Simpler troubleshooting</li>
           <li>Most companies operate this way</li>
         </ul>
+
+        <h3>Single Workspace vs Regional Workspaces</h3>
+
+        <p>
+          Despite serving clients in North America, Europe, and APAC, we deployed a <strong>single Sentinel workspace in Canada</strong> rather than regional workspaces.
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Decision Factor</th><th>Our Choice</th><th>Rationale</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Workspace Count</strong></td><td>Single primary</td><td>Centralized SOC, unified detection strategy</td></tr>
+              <tr><td><strong>Workspace Region</strong></td><td>Canada</td><td>HQ location, SOC operates from Canada/US</td></tr>
+              <tr><td><strong>EU Data Residency</strong></td><td>Not required</td><td>GDPR compliance via SCCs, not regional infrastructure</td></tr>
+              <tr><td><strong>Correlation</strong></td><td>Identity-anchored</td><td>Same user seen across all regions in one view</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Architecture Principle
+          </div>
+          <div class="callout-content">
+            <p><strong>"Global clients don't force regional SIEMs — regulatory pressure and data sensitivity do."</strong></p>
+            <p>We optimized for detection consistency and operational efficiency while meeting compliance through legal safeguards (SCCs) rather than infrastructure fragmentation.</p>
+          </div>
+        </div>
+
+        <p><strong>Future-Ready:</strong> If customer contracts or regulators require EU data residency, we can introduce a regional EU workspace and federate detections without redesigning our security model.</p>
 
         <h2>Section Guide</h2>
 

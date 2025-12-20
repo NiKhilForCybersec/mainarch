@@ -28,6 +28,7 @@
           <div class="nav-section-title">Overview</div>
           <a href="index.html" class="nav-item">Executive Summary</a>
           <a href="company-profile.html" class="nav-item active">Company Profile</a>
+          <a href="security-framework.html" class="nav-item">Security Framework</a>
           <a href="program-structure.html" class="nav-item">Program Structure</a>
         </div>
         
@@ -162,23 +163,100 @@
                 <td>~9,000 (Workstations, Laptops, Servers, VDI)</td>
               </tr>
               <tr>
+                <td><strong>Headquarters</strong></td>
+                <td>Canada (Primary Operations)</td>
+              </tr>
+              <tr>
                 <td><strong>Global Offices</strong></td>
-                <td>North America (HQ), EMEA, APAC</td>
+                <td>Canada (HQ), United States, India</td>
               </tr>
               <tr>
-                <td><strong>Customers</strong></td>
-                <td>Enterprise B2B (Fortune 500 clients)</td>
+                <td><strong>Clients</strong></td>
+                <td>Enterprise B2B — North America, Europe, APAC</td>
               </tr>
               <tr>
-                <td><strong>Compliance Requirements</strong></td>
-                <td>SOC 2 Type II, ISO 27001, GDPR, Siemens Corporate Standards</td>
+                <td><strong>Cloud Strategy</strong></td>
+                <td>Azure-first (primary), AWS (legacy workloads)</td>
               </tr>
             </tbody>
           </table>
         </div>
 
+        <h2>Regulatory & Compliance Framework</h2>
+        <p>As a global B2B SaaS company serving clients across North America, Europe, and APAC, RevFlow must comply with multiple regulatory frameworks:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Regulation</th><th>Applicability</th><th>Key Requirements</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SOC 2 Type II</strong></td>
+                <td>Enterprise customer requirement</td>
+                <td>Security controls, availability, processing integrity</td>
+              </tr>
+              <tr>
+                <td><strong>ISO 27001</strong></td>
+                <td>Enterprise customer requirement</td>
+                <td>Information security management system</td>
+              </tr>
+              <tr>
+                <td><strong>PIPEDA</strong></td>
+                <td>Canada (HQ jurisdiction)</td>
+                <td>Personal information protection for Canadian operations</td>
+              </tr>
+              <tr>
+                <td><strong>GDPR</strong></td>
+                <td>EU clients (data processing)</td>
+                <td>EU personal data protection — applies based on processing EU data, not office location</td>
+              </tr>
+              <tr>
+                <td><strong>Siemens Corporate Standards</strong></td>
+                <td>Parent company mandate</td>
+                <td>Alignment with Siemens security policies and controls</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            GDPR Compliance Approach
+          </div>
+          <div class="callout-content">
+            <p><strong>Key Decision:</strong> GDPR applies based on processing EU personal data, not on office location. RevFlow has no EU office but serves EU clients.</p>
+            <p><strong>Approach:</strong> Rather than requiring EU infrastructure, compliance is achieved through lawful cross-border transfer mechanisms (Standard Contractual Clauses) and strong technical safeguards.</p>
+          </div>
+        </div>
+
+        <h2>Data Residency & Transfer Strategy</h2>
+        <p>Centralize security telemetry where operationally efficient, while protecting EU personal data through legal and technical controls.</p>
+
+        <div class="comparison-grid">
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(56, 139, 253, 0.15); color: var(--accent-blue);">Legal Safeguards</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Standard Contractual Clauses (SCCs) for EU data</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Privacy notices for telemetry processing</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Data Protection Impact Assessments (DPIAs)</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Breach notification processes defined</span></div>
+            </div>
+          </div>
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(63, 185, 80, 0.15); color: var(--accent-green);">Technical Safeguards</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Encryption at rest and in transit</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>RBAC / least privilege access to logs</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Data minimization (no unnecessary PII)</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Retention controls per log type</span></div>
+            </div>
+          </div>
+        </div>
+
         <h2>Security Team Structure</h2>
-        <p>As a Siemens subsidiary with 4,000 employees and enterprise customers, RevFlow operates a dedicated Security Operations Center with 24/7 coverage:</p>
+        <p>As a Siemens subsidiary with 4,000 employees and enterprise customers across three continents, RevFlow operates a centralized Security Operations Center:</p>
 
         <div class="table-wrapper">
           <table>
@@ -187,7 +265,7 @@
             </thead>
             <tbody>
               <tr>
-                <td colspan="4" style="background-color: var(--bg-tertiary); font-weight: 600;">SOC Operations</td>
+                <td colspan="4" style="background-color: var(--bg-tertiary); font-weight: 600;">SOC Operations (Central SOC — Canada/US)</td>
               </tr>
               <tr>
                 <td><strong>SOC Manager</strong></td>
@@ -250,11 +328,12 @@
         <div class="callout info">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            SOC Coverage Model
+            Centralized SOC Model
           </div>
           <div class="callout-content">
-            <p><strong>24/7 Coverage:</strong> 8 L1/L2 analysts across 3 shifts (NA morning, NA evening, APAC/EMEA overnight). Each shift has 2-3 analysts on duty.</p>
-            <p><strong>On-Call Rotation:</strong> L3 analysts and Security Engineering Lead rotate weekly on-call for critical escalations outside business hours.</p>
+            <p><strong>Location:</strong> Central SOC operates from Canada/US timezone coverage.</p>
+            <p><strong>24/7 Coverage:</strong> 8 L1/L2 analysts across 3 shifts. Each shift has 2-3 analysts on duty.</p>
+            <p><strong>Tiered Access:</strong> Analysts see only required data based on role. EU-related logs restricted via RBAC.</p>
           </div>
         </div>
 
@@ -292,6 +371,140 @@
               <tr><td><strong>MTTR (P2/P3)</strong></td><td>~4 hours</td><td>Mean time to resolution</td></tr>
             </tbody>
           </table>
+        </div>
+
+        <h2>SIEM Architecture Decision</h2>
+        <p>A critical architectural decision: single centralized Sentinel workspace vs. regional workspaces.</p>
+
+        <h3>Workspace Strategy</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Decision</th><th>Choice</th><th>Rationale</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Workspace Count</strong></td><td>Single primary workspace</td><td>Centralized SOC, unified detection strategy</td></tr>
+              <tr><td><strong>Workspace Region</strong></td><td>Canada</td><td>HQ location, SOC operates from Canada/US</td></tr>
+              <tr><td><strong>EU Workspace</strong></td><td>Not required (currently)</td><td>GDPR compliance via SCCs, not data residency</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Why Single Workspace Was Chosen</h3>
+        <div class="comparison-grid">
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(63, 185, 80, 0.15); color: var(--accent-green);">Single Workspace (Chosen)</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Centralized SOC operations</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Unified detection strategy</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Identity-anchored correlation across regions</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Lower operational complexity</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Easier detection engineering and tuning</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Single pane of glass for analysts</span></div>
+            </div>
+          </div>
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(248, 81, 73, 0.15); color: var(--accent-red);">Multi-Regional (Not Needed)</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Fragmented detection coverage</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Cross-workspace correlation complexity</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Higher operational overhead</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Duplicate detection rules to maintain</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Not required by current regulations</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Over-engineering without benefit</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Architecture Philosophy
+          </div>
+          <div class="callout-content">
+            <p><strong>"We optimized for detection consistency and operational efficiency while meeting compliance requirements through safeguards rather than fragmentation."</strong></p>
+          </div>
+        </div>
+
+        <h3>Future-Ready Design</h3>
+        <p>The architecture allows expansion without redesign:</p>
+        <ul>
+          <li><strong>EU Workspace Addition:</strong> If customer contracts or regulators require EU data residency, we can introduce a regional EU Sentinel workspace for EU-specific telemetry</li>
+          <li><strong>Federated Detections:</strong> Cross-workspace analytics rules can correlate across regions if needed</li>
+          <li><strong>No Redesign Required:</strong> Current architecture scales to regional workspaces without fundamental changes</li>
+        </ul>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            When Would This Change?
+          </div>
+          <div class="callout-content">
+            <p>"If customer contracts or regulators required EU data residency, we would introduce a regional EU Sentinel workspace for EU-specific telemetry and federate detections, without redesigning our security model."</p>
+            <p><em>This shows foresight, not over-engineering.</em></p>
+          </div>
+        </div>
+
+        <h2>Detection Strategy Anchors</h2>
+        <p>Detection strategy is built around stable, high-confidence signal sources that work consistently across all regions:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Detection Anchor</th><th>Why It's Primary</th><th>EU Consideration</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Identity (Entra ID)</strong></td>
+                <td>Stable across regions, supports centralized correlation</td>
+                <td>Contains personal data → protected via SCCs, RBAC, retention limits</td>
+              </tr>
+              <tr>
+                <td><strong>Endpoint (MDE)</strong></td>
+                <td>High-confidence detection signal, behavior-based</td>
+                <td>Minimal PII, primarily process/network telemetry</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud Control Plane</strong></td>
+                <td>High security value, low personal data</td>
+                <td>Infrastructure actions, not user PII</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            EU Detection Approach
+          </div>
+          <div class="callout-content">
+            <p><strong>No special EU-only detections needed.</strong> Same detections apply globally. Access to EU-related logs restricted via RBAC. Retention minimized where possible.</p>
+          </div>
+        </div>
+
+        <h2>Key Mental Model</h2>
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Remember This
+          </div>
+          <div class="callout-content">
+            <p style="font-size: 1.1em; font-weight: 600;">"Global clients don't force regional SIEMs — regulatory pressure and data sensitivity do."</p>
+          </div>
+        </div>
+
+        <h2>Interview-Ready Summary</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Use This Framing</span></div>
+          <pre><code>"Although the company serves EU clients, GDPR requirements are addressed 
+through lawful cross-border transfer mechanisms like Standard Contractual 
+Clauses and strong technical safeguards, rather than physical EU presence. 
+
+We deployed a single Sentinel workspace in a compliant region to support 
+centralized detection and SOC operations, while designing the architecture 
+to scale to regional workspaces in the future if customer or regulatory 
+requirements evolved."</code></pre>
         </div>
 
         <h2>Core Business Operations</h2>

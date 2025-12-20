@@ -28,6 +28,7 @@
           <div class="nav-section-title">Overview</div>
           <a href="index.html" class="nav-item active">Executive Summary</a>
           <a href="company-profile.html" class="nav-item">Company Profile</a>
+          <a href="security-framework.html" class="nav-item">Security Framework</a>
           <a href="program-structure.html" class="nav-item">Program Structure</a>
         </div>
         
@@ -143,7 +144,7 @@
 
         <h2>The Challenge</h2>
         <p>
-          RevFlow Analytics, a B2B SaaS company providing revenue intelligence and deal prediction analytics, operated with a legacy security stack that was increasingly misaligned with their cloud-first business model. The existing infrastructure included:
+          RevFlow Analytics, a Siemens subsidiary providing revenue intelligence and deal prediction analytics, operated with a legacy security stack that was increasingly misaligned with their cloud-first business model. With <strong>4,000 employees across Canada (HQ), United States, and India</strong>, serving <strong>global clients in North America, Europe, and APAC</strong>, the existing infrastructure needed modernization:
         </p>
         
         <div class="comparison-grid">
@@ -177,11 +178,11 @@
             <div class="comparison-content">
               <div class="comparison-item">
                 <span class="comparison-item-icon">📊</span>
-                <span>Microsoft Sentinel for SIEM</span>
+                <span>Microsoft Sentinel (single workspace, Canada)</span>
               </div>
               <div class="comparison-item">
                 <span class="comparison-item-icon">🛡️</span>
-                <span>Microsoft Defender for Endpoint</span>
+                <span>Microsoft Defender for Endpoint (9,000 endpoints)</span>
               </div>
               <div class="comparison-item">
                 <span class="comparison-item-icon">🔒</span>
@@ -189,13 +190,24 @@
               </div>
               <div class="comparison-item">
                 <span class="comparison-item-icon">👤</span>
-                <span>Microsoft Entra ID</span>
+                <span>Microsoft Entra ID (hybrid)</span>
               </div>
               <div class="comparison-item">
                 <span class="comparison-item-icon">☁️</span>
-                <span>Microsoft Azure cloud</span>
+                <span>Microsoft Azure (primary), AWS (legacy)</span>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Global Compliance Approach
+          </div>
+          <div class="callout-content">
+            <p><strong>EU Clients Without EU Office:</strong> GDPR requirements addressed through lawful cross-border transfer mechanisms (Standard Contractual Clauses) and strong technical safeguards, rather than physical EU presence.</p>
+            <p><strong>Single SIEM Workspace:</strong> Optimized for detection consistency and operational efficiency. Architecture can scale to regional workspaces if regulatory requirements evolve.</p>
           </div>
         </div>
 
@@ -207,10 +219,13 @@
         <div class="callout info">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Key Principle
+            Strategic Sequencing
           </div>
           <div class="callout-content">
-            <p>All legacy and modern systems run simultaneously for 12+ months. This allows for validation, comparison, SOC training, and risk-free transition. The cost of parallel operation is justified by the risk mitigation it provides.</p>
+            <p><strong>MDE Started Early:</strong> After discovery, MDE rollout began immediately to establish endpoint telemetry before detection implementations. This ensured telemetry was available for validation when detections went live.</p>
+            <p><strong>Detection Work:</strong> Threat-intent driven and mapped to target controls — not blocked by telemetry readiness.</p>
+            <p><strong>DLP Started Later:</strong> DLP depends on data classification framework and business alignment, so it was introduced later and initially operated in audit mode.</p>
+            <p><strong>Parallel SOC:</strong> The SOC continued on the legacy stack while Sentinel and MDE matured.</p>
           </div>
         </div>
 

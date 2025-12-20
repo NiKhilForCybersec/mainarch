@@ -26,6 +26,7 @@
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
           <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
           <a href="../program-structure.html" class="nav-item">Program Structure</a>
         </div>
         <div class="nav-divider"></div>
@@ -79,6 +80,89 @@
           <div class="callout-content">
             <p><strong>My Contribution (Security Engineer):</strong> Implemented and enabled built-in detection rules from the detection translation catalog — specifically those with direct native equivalents in Microsoft Sentinel and Microsoft Defender. Translated and aligned detection use cases around endpoint telemetry, ensuring proper correlation between MDE, identity, and network signals. Deployed Microsoft Content Hub solutions and configured XDR-aligned rules.</p>
             <p><strong>Detection Engineering Team:</strong> Detailed custom KQL detection development, complex rule translation requiring significant logic rewrite, ongoing threshold tuning, false positive reduction, and continuous detection optimization.</p>
+          </div>
+        </div>
+
+        <h2>Detection Anchors (Global Strategy)</h2>
+        <p>Our detection strategy is built around <strong>three primary signal sources</strong> that are stable across all regions and support centralized correlation:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Detection Anchor</th><th>Signal Value</th><th>EU Consideration</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Identity (Entra ID)</strong></td>
+                <td>User behavior, sign-in anomalies, privilege changes — foundation for correlation</td>
+                <td>Contains personal data → protected via SCCs, RBAC, retention limits</td>
+              </tr>
+              <tr>
+                <td><strong>2. Endpoint (MDE)</strong></td>
+                <td>High-confidence behavioral detections — process, network, credential access</td>
+                <td>Minimal PII, primarily process/network metadata</td>
+              </tr>
+              <tr>
+                <td><strong>3. Cloud Control Plane</strong></td>
+                <td>Privilege escalation, resource changes, misconfigurations</td>
+                <td>Infrastructure actions, not user PII</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            EU Detection Approach
+          </div>
+          <div class="callout-content">
+            <p><strong>No special EU-only detections needed.</strong> Same detection rules apply globally. Access to EU-related logs restricted via RBAC. Retention minimized where possible.</p>
+          </div>
+        </div>
+
+        <h2>Threat-Intent Driven Detection</h2>
+        <p>Detection work was <strong>threat-intent driven and mapped to target controls</strong>, rather than being blocked by telemetry readiness.</p>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Why This Worked
+          </div>
+          <div class="callout-content">
+            <p><strong>MDE Rollout Started Early:</strong> After discovery, MDE deployment began immediately to establish endpoint telemetry before detection implementations started.</p>
+            <p><strong>Telemetry Ready First:</strong> By the time the detection translation catalog was finalized, sufficient endpoint telemetry was already available for validation and tuning.</p>
+            <p><strong>No Detection Blocking:</strong> Detection engineers could implement rules and immediately validate against real data — no waiting for telemetry to catch up.</p>
+          </div>
+        </div>
+
+        <div class="flow-diagram">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <strong>Threat Intent</strong><br>What are we trying to detect? (Account takeover, lateral movement, data exfil)
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <strong>Target Controls</strong><br>What signals would show this behavior? (Sign-in anomalies, process execution, network connections)
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <strong>Telemetry Validation</strong><br>Is the data flowing? (MDE already deployed → yes, telemetry available)
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-content">
+              <strong>Detection Implementation</strong><br>Enable built-in rules, translate custom rules, validate against real data
+            </div>
           </div>
         </div>
 

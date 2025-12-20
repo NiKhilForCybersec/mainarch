@@ -26,6 +26,7 @@
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
           <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
           <a href="../program-structure.html" class="nav-item">Program Structure</a>
         </div>
         <div class="nav-divider"></div>
@@ -87,6 +88,18 @@
           <p class="intro-text">Not all logs belong in Sentinel. This document defines what goes where, why, and how. The key principle: <strong>Sentinel for security, Splunk for operations</strong>.</p>
         </div>
 
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Compliance-Aware Log Architecture
+          </div>
+          <div class="callout-content">
+            <p><strong>Single Workspace:</strong> All logs flow to a centralized Sentinel workspace in Canada, supporting our centralized SOC.</p>
+            <p><strong>EU Data Handling:</strong> Identity logs contain personal data (EU users) → protected via Standard Contractual Clauses (SCCs), RBAC access controls, and defined retention limits.</p>
+            <p><strong>Data Minimization:</strong> No unnecessary PII ingestion. Endpoint and network logs are primarily metadata, not content.</p>
+          </div>
+        </div>
+
         <h2>The Two-Platform Architecture</h2>
         <p>RevFlow already operates Splunk Cloud for application monitoring and business analytics. Rather than migrate everything to Sentinel, we maintain clear separation of concerns:</p>
 
@@ -126,7 +139,8 @@
 
         <h2>Complete Log Source Mapping</h2>
 
-        <h3>Identity & Access Logs → Sentinel</h3>
+        <h3>Identity & Access Logs → Sentinel (Highest Priority)</h3>
+        <p><strong>Detection anchor #1.</strong> Identity is the foundation of security correlation. Contains personal data (usernames, IPs, locations) — protected via SCCs, RBAC, and retention limits.</p>
         <div class="table-wrapper">
           <table>
             <thead>
@@ -138,6 +152,8 @@
               <tr><td><strong>Non-Interactive Sign-ins</strong></td><td><code>AADNonInteractiveUserSignInLogs</code></td><td>Microsoft Entra ID</td><td>5-20 GB</td><td>Analytics</td></tr>
               <tr><td><strong>Service Principal Sign-ins</strong></td><td><code>AADServicePrincipalSignInLogs</code></td><td>Microsoft Entra ID</td><td>1-5 GB</td><td>Analytics</td></tr>
               <tr><td><strong>Identity Protection Events</strong></td><td><code>AADUserRiskEvents</code></td><td>Microsoft Entra ID</td><td>&lt;500 MB</td><td>Free</td></tr>
+              <tr><td><strong>Conditional Access Events</strong></td><td><code>SigninLogs</code></td><td>Microsoft Entra ID</td><td>Included above</td><td>Free*</td></tr>
+              <tr><td><strong>Risky Sign-ins / Users</strong></td><td><code>AADRiskyUsers</code></td><td>Microsoft Entra ID</td><td>&lt;100 MB</td><td>Free</td></tr>
             </tbody>
           </table>
         </div>
@@ -163,7 +179,8 @@
 Verify: SigninLogs | take 10</code></pre>
         </div>
 
-        <h3>Microsoft 365 & Defender → Sentinel</h3>
+        <h3>Endpoint & M365 Defender → Sentinel (Detection Anchor #2)</h3>
+        <p><strong>Primary high-confidence detection signal.</strong> Process execution, network connections, credential access. Minimal PII — primarily behavioral/metadata telemetry.</p>
         <div class="table-wrapper">
           <table>
             <thead>
@@ -177,6 +194,7 @@ Verify: SigninLogs | take 10</code></pre>
               <tr><td><strong>MDE File Events</strong></td><td><code>DeviceFileEvents</code></td><td>M365 Defender XDR</td><td>15-40 GB</td><td>Free (XDR)</td></tr>
               <tr><td><strong>MDE Logon Events</strong></td><td><code>DeviceLogonEvents</code></td><td>M365 Defender XDR</td><td>5-15 GB</td><td>Free (XDR)</td></tr>
               <tr><td><strong>Email Events</strong></td><td><code>EmailEvents</code></td><td>M365 Defender</td><td>5-20 GB</td><td>Free (XDR)</td></tr>
+              <tr><td><strong>MDE Alerts & Incidents</strong></td><td><code>SecurityIncident</code></td><td>M365 Defender</td><td>&lt;100 MB</td><td>Free</td></tr>
             </tbody>
           </table>
         </div>
@@ -209,7 +227,8 @@ Verify: SigninLogs | take 10</code></pre>
 Verify: DeviceProcessEvents | take 10</code></pre>
         </div>
 
-        <h3>Azure Cloud Logs → Sentinel</h3>
+        <h3>Cloud Control Plane → Sentinel (Detection Anchor #3)</h3>
+        <p><strong>High security value, low personal data.</strong> Azure RBAC changes, resource creation, privilege escalation. Infrastructure actions, not user PII.</p>
         <div class="table-wrapper">
           <table>
             <thead>
@@ -221,11 +240,13 @@ Verify: DeviceProcessEvents | take 10</code></pre>
               <tr><td><strong>Azure Key Vault</strong></td><td><code>AzureDiagnostics</code></td><td>Diagnostic Settings</td><td>0.5-2 GB</td><td>Analytics</td></tr>
               <tr><td><strong>Azure Firewall</strong></td><td><code>AzureDiagnostics</code></td><td>Diagnostic Settings</td><td>10-50 GB</td><td>Basic</td></tr>
               <tr><td><strong>NSG Flow Logs</strong></td><td><code>AzureNetworkAnalytics_CL</code></td><td>NSG Flow Logs</td><td>50-200 GB</td><td>Basic</td></tr>
+              <tr><td><strong>Azure RBAC Changes</strong></td><td><code>AzureActivity</code></td><td>Azure Activity</td><td>Included above</td><td>Free</td></tr>
             </tbody>
           </table>
         </div>
 
-        <h3>AWS Logs → Sentinel</h3>
+        <h3>AWS Logs → Sentinel (Legacy Workloads)</h3>
+        <p>AWS workloads are legacy — migrating to Azure over time. Still need visibility for security coverage.</p>
         <div class="table-wrapper">
           <table>
             <thead>
@@ -248,7 +269,8 @@ Verify: DeviceProcessEvents | take 10</code></pre>
           <div class="flow-step"><div class="flow-step-number">3</div><div class="flow-step-content"><strong>Sentinel: Install AWS Connector</strong><br>Content Hub → Amazon Web Services → Configure with Role ARN</div></div>
         </div>
 
-        <h3>On-Premises & Network → Sentinel</h3>
+        <h3>Network & On-Premises → Sentinel</h3>
+        <p><strong>Metadata-only, no packet capture.</strong> DNS logs, firewall logs, auth events. On-prem systems migrating to Azure over time.</p>
         <div class="table-wrapper">
           <table>
             <thead>
@@ -264,7 +286,8 @@ Verify: DeviceProcessEvents | take 10</code></pre>
           </table>
         </div>
 
-        <h3>SaaS Applications → Sentinel</h3>
+        <h3>Email & SaaS Applications → Sentinel</h3>
+        <p><strong>Business data — protected via data minimization and access control.</strong> Salesforce audit logs, M365 audit, other SaaS business apps.</p>
         <div class="table-wrapper">
           <table>
             <thead>

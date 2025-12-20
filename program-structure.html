@@ -130,6 +130,58 @@
           </p>
         </div>
 
+        <h2>Strategic Sequencing</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Why This Sequence?
+          </div>
+          <div class="callout-content">
+            <p><strong>MDE Rollout Early:</strong> After discovery, we started MDE rollout early to establish endpoint telemetry <em>before</em> detection implementations began. This ensured that by the time the detection translation catalog was finalized, sufficient telemetry was already available for validation and tuning.</p>
+            <p><strong>Detection Work:</strong> Threat-intent driven and mapped to target controls — not blocked by telemetry readiness.</p>
+            <p><strong>DLP Later:</strong> DLP depends heavily on data classification framework and business alignment, requiring more upfront groundwork. Introduced later, initially in audit mode while classification and policy foundations were finalized.</p>
+            <p><strong>Parallel SOC Operations:</strong> SOC continued operating on the legacy stack (RSA NetWitness, ESET) while the new Sentinel and MDE environment matured.</p>
+          </div>
+        </div>
+
+        <div class="flow-diagram">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <strong>Discovery & Foundation</strong><br>Log source identification, stakeholder coordination, Sentinel workspace setup, connector configuration
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <strong>MDE Rollout (Early Start)</strong><br>Endpoint onboarding begins to establish telemetry foundation before detections are implemented
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <strong>Detection Implementation</strong><br>Built-in rules enabled, detection translation catalog implemented — telemetry already available for validation
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-content">
+              <strong>DLP Foundation (Later Start)</strong><br>Data classification framework, business alignment, policy translation — audit mode first
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">5</div>
+            <div class="flow-step-content">
+              <strong>SOC Transition</strong><br>Gradual shift from legacy stack to Sentinel/MDE as new environment matures
+            </div>
+          </div>
+        </div>
+
         <h2>Parallel Workstream Model</h2>
 
         <p>
