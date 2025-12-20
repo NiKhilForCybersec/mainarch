@@ -102,25 +102,104 @@
           <p class="intro-text">Managing 6+ security consoles simultaneously during the 12-month transition period. Procedures for alert handling, incident management, and console prioritization.</p>
         </div>
 
-        <h2>Console Inventory During Transition</h2>
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Why Parallel Operations?
+          </div>
+          <div class="callout-content">
+            <p>We run legacy and new platforms in parallel during transition. This approach:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Avoids blind spots</strong> — if one platform misses something, the other catches it</li>
+              <li><strong>Validates detection parity</strong> — compare alerts side by side</li>
+              <li><strong>Enables safe SOC transition</strong> — analysts can fall back if needed</li>
+              <li><strong>Reduces operational risk</strong> — no "big bang" cutover</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Key insight:</strong> Rushing cutover to save parallel licensing costs is a false economy. The risk of missing detections far outweighs the license overlap cost.</p>
+          </div>
+        </div>
+
+        <h2>Cutover Criteria (Gate-Based, Not Calendar-Based)</h2>
+        <p>Platforms become primary only after meeting specific criteria — not arbitrary dates:</p>
+
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Console</th><th>Purpose</th><th>Status</th><th>Primary/Secondary</th></tr>
+              <tr><th>Platform</th><th>Cutover Criteria</th><th>Status</th></tr>
             </thead>
             <tbody>
-              <tr><td><strong>RSA NetWitness</strong></td><td>Legacy SIEM</td><td><span class="status-badge in-progress">Parallel</span></td><td>Secondary → Decom</td></tr>
-              <tr><td><strong>Microsoft Sentinel</strong></td><td>New SIEM</td><td><span class="status-badge complete">Active</span></td><td>Primary</td></tr>
-              <tr><td><strong>ESET Protect</strong></td><td>Legacy EPP/EDR</td><td><span class="status-badge in-progress">Parallel</span></td><td>Secondary → Decom</td></tr>
-              <tr><td><strong>M365 Defender</strong></td><td>New XDR</td><td><span class="status-badge complete">Active</span></td><td>Primary</td></tr>
-              <tr><td><strong>Symantec DLP</strong></td><td>Legacy DLP</td><td><span class="status-badge in-progress">Parallel</span></td><td>Secondary → Decom</td></tr>
-              <tr><td><strong>Microsoft Purview</strong></td><td>New DLP</td><td><span class="status-badge complete">Active</span></td><td>Primary</td></tr>
+              <tr>
+                <td><strong>Sentinel (SIEM)</strong></td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>All critical log sources onboarded and validated</li>
+                    <li>90+ days stable telemetry for baselining</li>
+                    <li>Detection coverage validated vs RSA</li>
+                    <li>SOC trained and comfortable with KQL</li>
+                    <li>Playbooks tested and operational</li>
+                  </ul>
+                </td>
+                <td><span class="status-badge complete">Criteria Met</span></td>
+              </tr>
+              <tr>
+                <td><strong>MDE (EDR)</strong></td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>70-80% endpoint onboarding coverage</li>
+                    <li>Policy compliance across devices</li>
+                    <li>ASR rules validated in audit mode</li>
+                    <li>ESET exclusions configured (no conflicts)</li>
+                    <li>Detection parity confirmed vs ESET</li>
+                  </ul>
+                </td>
+                <td><span class="status-badge complete">Criteria Met</span></td>
+              </tr>
+              <tr>
+                <td><strong>Purview (DLP)</strong></td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>All Symantec policies translated</li>
+                    <li>60-90 days audit mode validation</li>
+                    <li>False positive rate &lt;10%</li>
+                    <li>User training completed</li>
+                    <li>Help desk prepared for queries</li>
+                  </ul>
+                </td>
+                <td><span class="status-badge complete">Criteria Met</span></td>
+              </tr>
             </tbody>
           </table>
         </div>
 
-        <h2>Alert Routing Matrix</h2>
-        <p>When an alert fires, which console takes priority:</p>
+        <h2>Console Inventory (Current State)</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Console</th><th>Purpose</th><th>Status</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>RSA NetWitness</strong></td><td>Legacy SIEM</td><td><span class="status-badge complete">Decommissioned</span></td><td>Replaced by Sentinel</td></tr>
+              <tr><td><strong>Microsoft Sentinel</strong></td><td>Primary SIEM</td><td><span class="status-badge complete">Active</span></td><td>Fully operational</td></tr>
+              <tr><td><strong>ESET Protect</strong></td><td>Legacy EPP/EDR</td><td><span class="status-badge complete">Decommissioned</span></td><td>Replaced by MDE</td></tr>
+              <tr><td><strong>M365 Defender</strong></td><td>Primary XDR</td><td><span class="status-badge complete">Active</span></td><td>Fully deployed</td></tr>
+              <tr><td><strong>Symantec DLP</strong></td><td>Legacy DLP</td><td><span class="status-badge complete">Decommissioned</span></td><td>Replaced by Purview</td></tr>
+              <tr><td><strong>Microsoft Purview</strong></td><td>Primary DLP</td><td><span class="status-badge complete">Active</span></td><td>Enforcement mode</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Transformation Complete
+          </div>
+          <div class="callout-content">
+            <p>All legacy platforms have been decommissioned. Microsoft security stack is fully operational. Currently in knowledge transfer phase with handover to internal security team.</p>
+          </div>
+        </div>
+
+        <h2>Historical Reference: Alert Routing During Transition</h2>
+        <p>During parallel operations, alerts were routed as follows:</p>
         <div class="table-wrapper">
           <table>
             <thead>

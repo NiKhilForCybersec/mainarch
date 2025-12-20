@@ -121,16 +121,34 @@
         </div>
 
         <h2>Transition Phases</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Gate-Based Cutover
+          </div>
+          <div class="callout-content">
+            <p><strong>Sentinel became primary SIEM only after:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>All critical log sources onboarded and validated</li>
+              <li>90+ days of stable telemetry for baselining and tuning</li>
+              <li>Detection coverage validated against RSA</li>
+              <li>SOC analysts trained and comfortable with KQL/workflows</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">This approach avoided blind spots, validated detections, and transitioned the SOC safely without operational risk.</p>
+          </div>
+        </div>
+
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Phase</th><th>Months</th><th>SOC Activity</th><th>Primary Console</th></tr>
+              <tr><th>Phase</th><th>Months</th><th>SOC Activity</th><th>Primary Console</th><th>Gate to Next Phase</th></tr>
             </thead>
             <tbody>
-              <tr><td><strong>Training</strong></td><td>1-4</td><td>Lab exercises, KQL learning</td><td>RSA (Production)</td></tr>
-              <tr><td><strong>Shadow Operations</strong></td><td>5-8</td><td>Junior analysts monitor Sentinel, seniors on RSA</td><td>RSA (Production)</td></tr>
-              <tr><td><strong>Primary Switchover</strong></td><td>9-10</td><td>Sentinel for new incidents, RSA for historical</td><td>Sentinel (Production)</td></tr>
-              <tr><td><strong>Decommission</strong></td><td>11-12</td><td>RSA read-only, final cutover</td><td>Sentinel (Sole)</td></tr>
+              <tr><td><strong>Training</strong></td><td>1-4</td><td>Lab exercises, KQL learning</td><td>RSA (Production)</td><td>All analysts pass KQL assessment</td></tr>
+              <tr><td><strong>Shadow Operations</strong></td><td>5-8</td><td>Junior analysts monitor Sentinel, seniors on RSA</td><td>RSA (Production)</td><td>90+ days stable telemetry, detections validated</td></tr>
+              <tr><td><strong>Primary Switchover</strong></td><td>9-10</td><td>Sentinel for new incidents, RSA for historical</td><td>Sentinel (Production)</td><td>SOC comfortable, playbooks operational</td></tr>
+              <tr><td><strong>Decommission</strong></td><td>11-12</td><td>RSA read-only, final cutover</td><td>Sentinel (Sole)</td><td>30 days with no fallback to RSA</td></tr>
             </tbody>
           </table>
         </div>

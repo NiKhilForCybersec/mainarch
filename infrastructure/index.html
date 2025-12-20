@@ -100,16 +100,27 @@
         <div class="page-header">
           <h1>Infrastructure: Azure Migration</h1>
           <div class="page-header-meta">
-            <span class="page-badge infra">Track 5</span>
-            <span class="page-reading-time">12 months</span>
+            <span class="page-badge infra">Pre-Existing</span>
+            <span class="page-reading-time">Status: Stable</span>
           </div>
-          <p class="intro-text">Migrating on-premises data center workloads to Azure. Covers landing zone architecture, network design, and phased workload migration.</p>
+          <p class="intro-text">Azure infrastructure and network architecture were already established and stable before this security transformation project began. This documentation is included for reference and covers landing zone architecture, network design, and connectivity options.</p>
         </div>
 
-        <h2>Migration Scope</h2>
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Pre-Existing Infrastructure
+          </div>
+          <div class="callout-content">
+            <p><strong>Context:</strong> Identity and Infrastructure tracks were already implemented and stable before the DLP, SIEM, and EDR migrations began. This documentation is included for reference.</p>
+            <p><strong>Current State:</strong> Azure landing zone operational. Hub-spoke network architecture. ExpressRoute connectivity. Azure Firewall and NSGs configured.</p>
+          </div>
+        </div>
+
+        <h2>Current Architecture</h2>
         <div class="comparison-grid">
           <div class="comparison-column">
-            <div class="comparison-header before">On-Premises (Before)</div>
+            <div class="comparison-header before">On-Premises (Legacy)</div>
             <div class="comparison-content">
               <div class="comparison-item"><span class="comparison-item-icon">🖥️</span><span>30 physical servers</span></div>
               <div class="comparison-item"><span class="comparison-item-icon">💾</span><span>SAN storage (50TB)</span></div>
@@ -118,7 +129,7 @@
             </div>
           </div>
           <div class="comparison-column">
-            <div class="comparison-header after">Azure (After)</div>
+            <div class="comparison-header after">Azure (Current)</div>
             <div class="comparison-content">
               <div class="comparison-item"><span class="comparison-item-icon">☁️</span><span>Azure App Services, VMs</span></div>
               <div class="comparison-item"><span class="comparison-item-icon">💾</span><span>Azure SQL, Storage Accounts</span></div>
@@ -128,19 +139,18 @@
           </div>
         </div>
 
-        <h2>Timeline</h2>
+        <h2>Infrastructure Status</h2>
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Phase</th><th>Months</th><th>Activities</th></tr>
+              <tr><th>Component</th><th>Status</th><th>Notes</th></tr>
             </thead>
             <tbody>
-              <tr><td><strong>Landing Zone</strong></td><td>1-3</td><td>Hub network, Azure Firewall, connectivity, governance</td></tr>
-              <tr><td><strong>Pilot Migration</strong></td><td>4-5</td><td>Non-critical workloads, validate process</td></tr>
-              <tr><td><strong>App Services</strong></td><td>6-8</td><td>Web apps, APIs to Azure App Services</td></tr>
-              <tr><td><strong>Databases</strong></td><td>7-9</td><td>SQL Server to Azure SQL/MI</td></tr>
-              <tr><td><strong>Remaining</strong></td><td>9-11</td><td>File servers, remaining VMs</td></tr>
-              <tr><td><strong>Decommission</strong></td><td>12</td><td>On-prem cleanup, colo exit</td></tr>
+              <tr><td><strong>Landing Zone</strong></td><td><span class="status-badge complete">Active</span></td><td>Hub network, governance, connectivity</td></tr>
+              <tr><td><strong>Azure Firewall</strong></td><td><span class="status-badge complete">Active</span></td><td>Network rules, application rules</td></tr>
+              <tr><td><strong>ExpressRoute</strong></td><td><span class="status-badge complete">Active</span></td><td>Private connectivity to Azure</td></tr>
+              <tr><td><strong>VMs & App Services</strong></td><td><span class="status-badge complete">Active</span></td><td>Workloads migrated</td></tr>
+              <tr><td><strong>Azure SQL</strong></td><td><span class="status-badge complete">Active</span></td><td>Databases migrated</td></tr>
             </tbody>
           </table>
         </div>

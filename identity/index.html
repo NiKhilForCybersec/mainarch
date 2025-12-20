@@ -99,32 +99,46 @@
         <div class="page-header">
           <h1>Identity: Active Directory → Microsoft Entra ID</h1>
           <div class="page-header-meta">
-            <span class="page-badge identity">Track 4</span>
+            <span class="page-badge identity">Pre-Existing</span>
+            <span class="page-reading-time">Status: Stable</span>
           </div>
-          <p class="intro-text">Modernizing identity from on-premises Active Directory to cloud-native Microsoft Entra ID with hybrid coexistence, Conditional Access, and Privileged Identity Management.</p>
+          <p class="intro-text">Identity infrastructure was already established and stable before this security transformation project began. On-premises Active Directory is synced to Microsoft Entra ID with Conditional Access and PIM in place. Future plans include decommissioning on-prem AD after complete cloud migration.</p>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Pre-Existing Infrastructure
+          </div>
+          <div class="callout-content">
+            <p><strong>Context:</strong> Identity and Infrastructure tracks were already implemented and stable before the DLP, SIEM, and EDR migrations began. This documentation is included for reference.</p>
+            <p><strong>Current State:</strong> Hybrid identity with on-prem AD synced to Entra ID. Conditional Access policies active. PIM configured for privileged access.</p>
+            <p><strong>Future Plans:</strong> Decommission on-premises Active Directory after complete cloud migration is achieved.</p>
+          </div>
         </div>
 
         <h2>Identity Strategy</h2>
-        <p>RevFlow's cloud-first business requires cloud-native identity. The approach:</p>
+        <p>RevFlow's cloud-first business uses cloud-native identity with hybrid coexistence during transition:</p>
         <ul>
           <li><strong>Hybrid Sync</strong> — Entra Connect syncs on-prem AD to Entra ID</li>
           <li><strong>Conditional Access</strong> — Zero Trust access policies</li>
           <li><strong>PIM</strong> — Just-in-time privileged access</li>
           <li><strong>SSO</strong> — All SaaS apps federated to Entra ID</li>
+          <li><strong>Future</strong> — Cloud-only identity after on-prem decommission</li>
         </ul>
 
-        <h2>Timeline</h2>
+        <h2>Current Architecture</h2>
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Phase</th><th>Months</th><th>Activities</th></tr>
+              <tr><th>Component</th><th>Status</th><th>Notes</th></tr>
             </thead>
             <tbody>
-              <tr><td>Hybrid Setup</td><td>1-2</td><td>Entra Connect, Password Hash Sync, SSO</td></tr>
-              <tr><td>Conditional Access</td><td>3-4</td><td>MFA policies, device compliance, risk-based access</td></tr>
-              <tr><td>PIM</td><td>5-6</td><td>Admin role governance, JIT activation</td></tr>
-              <tr><td>SaaS Integration</td><td>4-8</td><td>Federate all apps to Entra ID</td></tr>
-              <tr><td>Optimization</td><td>9-12</td><td>Cloud-only accounts, reduce AD dependency</td></tr>
+              <tr><td>On-Prem AD</td><td><span class="status-badge in-progress">Active (Future Decom)</span></td><td>Still running, synced to Entra ID</td></tr>
+              <tr><td>Entra Connect</td><td><span class="status-badge complete">Active</span></td><td>Password Hash Sync enabled</td></tr>
+              <tr><td>Conditional Access</td><td><span class="status-badge complete">Active</span></td><td>MFA, device compliance, risk-based</td></tr>
+              <tr><td>PIM</td><td><span class="status-badge complete">Active</span></td><td>JIT admin access configured</td></tr>
+              <tr><td>SSO</td><td><span class="status-badge complete">Active</span></td><td>SaaS apps federated</td></tr>
             </tbody>
           </table>
         </div>

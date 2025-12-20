@@ -100,22 +100,22 @@
         <div class="page-header">
           <h1>DLP Migration: Symantec → Microsoft Purview</h1>
           <div class="page-header-meta">
-            <span class="page-badge dlp">Track 3</span>
-            <span class="page-reading-time">Current: Audit Mode Monitoring</span>
+            <span class="page-badge dlp">Track 1</span>
+            <span class="page-reading-time">Status: Complete — Handover in Progress</span>
           </div>
-          <p class="intro-text">Migrating from Symantec DLP to Microsoft Purview Endpoint DLP. Currently supporting audit mode monitoring and tuning after SIEM and EDR tracks stabilized. DLP is user-impacting — careful phasing prevents business disruption.</p>
+          <p class="intro-text">Migrating from Symantec DLP to Microsoft Purview Endpoint DLP. This track started first (M1) as DLP is user-impacting and requires careful phasing. Currently in final handover phase with knowledge transfer to internal security team.</p>
         </div>
 
         <div class="callout info">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Role Scope (Supporting)
+            Role Scope
           </div>
           <div class="callout-content">
-            <p><strong>Context:</strong> Joined DLP track to provide support after SIEM and EDR foundations were stable.</p>
-            <p><strong>My Focus:</strong> Audit mode monitoring, Activity Explorer analysis, tuning, and validating policy behavior prior to enforcement rollout.</p>
+            <p><strong>Context:</strong> DLP track started at M1, before SIEM and EDR tracks (which started at M6). Recently moved back to DLP to support final wind-up and handover.</p>
+            <p><strong>My Focus:</strong> Audit mode monitoring, Activity Explorer analysis, tuning, policy validation, and currently supporting knowledge transfer to internal team.</p>
             <p><strong>DLP Team Lead:</strong> Policy translation from Symantec, sensitive information type (SIT) configuration, user communication strategy, and enforcement decisions.</p>
-            <p><strong>Note:</strong> This section documents the full DLP migration approach for reference, including work led by the DLP team.</p>
+            <p><strong>Note:</strong> This section documents the full DLP migration approach for reference.</p>
           </div>
         </div>
 
@@ -125,28 +125,29 @@
             Current State
           </div>
           <div class="callout-content">
+            <p><strong>DLP:</strong> Enforcement mode active. Symantec DLP decommissioned.</p>
             <p><strong>SIEM & EDR:</strong> Foundationally stable. Sentinel + MDE operational.</p>
-            <p><strong>DLP:</strong> In audit mode. Policies deployed and logging. Currently monitoring Activity Explorer, tuning sensitive info types, reducing false positives before enforcement.</p>
+            <p><strong>Current Phase:</strong> Knowledge transfer and final handover to internal security team. Documentation, runbooks, and operational procedures being finalized.</p>
           </div>
         </div>
 
-        <h2>Why DLP Started Later</h2>
+        <h2>Why DLP Started First (M1)</h2>
 
         <div class="callout warning">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            Different Timeline, Different Dependencies
+            User-Impacting Changes Require More Time
           </div>
           <div class="callout-content">
-            <p>Unlike SIEM (log ingestion) or EDR (agent deployment), <strong>DLP depends heavily on data classification framework and business alignment</strong>.</p>
-            <p>Before policies can be enforced — or even meaningfully tested — the organization needs:</p>
+            <p>Unlike SIEM (backend logging) or EDR (mostly silent), <strong>DLP directly impacts user workflows</strong>. Users see notifications, get blocked, and must change behavior.</p>
+            <p>This makes DLP the most change-management intensive track, requiring:</p>
             <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li>Data classification taxonomy agreed with business</li>
-              <li>Sensitive information types (SITs) defined and validated</li>
-              <li>Business process flows documented (what data moves where)</li>
+              <li>Extended audit mode to baseline and tune policies</li>
+              <li>Gradual progression: Audit → Warn → Block</li>
+              <li>User training and communication campaigns</li>
               <li>Executive buy-in on enforcement approach</li>
             </ul>
-            <p><strong>Result:</strong> DLP was introduced later in the program and initially operated in audit mode while classification and policy foundations were finalized.</p>
+            <p><strong>Result:</strong> DLP started at M1 to allow sufficient time for careful phasing before SIEM/EDR tracks began at M6.</p>
           </div>
         </div>
 
@@ -157,19 +158,29 @@
             </thead>
             <tbody>
               <tr>
+                <td><strong>DLP</strong></td>
+                <td>Data classification framework, business alignment, user training</td>
+                <td>Started first (M1) — user-impacting changes need time</td>
+              </tr>
+              <tr>
                 <td><strong>SIEM</strong></td>
                 <td>Log source availability, connector configuration</td>
-                <td>After discovery phase (Month 1-2)</td>
+                <td>Started later (M6)</td>
               </tr>
               <tr>
                 <td><strong>EDR</strong></td>
                 <td>Endpoint access, deployment infrastructure</td>
-                <td>Early start to establish telemetry (Month 2-3)</td>
+                <td>Started with SIEM (M6) for telemetry alignment</td>
               </tr>
               <tr>
-                <td><strong>DLP</strong></td>
-                <td>Data classification framework, business alignment</td>
-                <td>Later start after classification groundwork (Month 4-6)</td>
+                <td><strong>Identity</strong></td>
+                <td>AD infrastructure, Entra ID tenant</td>
+                <td>Pre-existing (stable before project)</td>
+              </tr>
+              <tr>
+                <td><strong>Infrastructure</strong></td>
+                <td>Azure subscription, network architecture</td>
+                <td>Pre-existing (stable before project)</td>
               </tr>
             </tbody>
           </table>
@@ -200,17 +211,28 @@
         </div>
 
         <h2>Timeline</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Parallel Operations Strategy
+          </div>
+          <div class="callout-content">
+            <p>Symantec DLP remains active and enforcing while Purview validates in audit mode. Purview becomes primary only after gate criteria are met — not on a fixed calendar date.</p>
+          </div>
+        </div>
+
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Phase</th><th>Months</th><th>Purview Mode</th><th>Symantec</th><th>User Impact</th></tr>
+              <tr><th>Phase</th><th>Months</th><th>Purview Mode</th><th>Symantec</th><th>User Impact</th><th>Gate to Next Phase</th></tr>
             </thead>
             <tbody>
-              <tr><td><strong>Policy Translation</strong></td><td>1-2</td><td>—</td><td>Active</td><td>None</td></tr>
-              <tr><td><strong>Audit Mode</strong></td><td>3-6</td><td>Audit</td><td>Active</td><td>None (silent logging)</td></tr>
-              <tr><td><strong>Warn Mode</strong></td><td>7-9</td><td>Warn</td><td>Active</td><td>User sees tips, can override</td></tr>
-              <tr><td><strong>Block + Override</strong></td><td>10-11</td><td>Block with override</td><td>Disabled</td><td>Must justify to proceed</td></tr>
-              <tr><td><strong>Full Block</strong></td><td>12+</td><td>Block</td><td>Decommissioned</td><td>Hard block on violations</td></tr>
+              <tr><td><strong>Policy Translation</strong></td><td>1-2</td><td>—</td><td>Active</td><td>None</td><td>All policies translated, SITs validated</td></tr>
+              <tr><td><strong>Audit Mode</strong></td><td>3-6</td><td>Audit</td><td>Active</td><td>None (silent logging)</td><td>60-90 days data, FP rate &lt;10%</td></tr>
+              <tr><td><strong>Warn Mode</strong></td><td>7-9</td><td>Warn</td><td>Active</td><td>User sees tips, can override</td><td>User training complete, helpdesk ready</td></tr>
+              <tr><td><strong>Block + Override</strong></td><td>10-11</td><td>Block with override</td><td>Disabled</td><td>Must justify to proceed</td><td>Override rate acceptable</td></tr>
+              <tr><td><strong>Full Block</strong></td><td>12+</td><td>Block</td><td>Decommissioned</td><td>Hard block on violations</td><td>30 days stable without Symantec</td></tr>
             </tbody>
           </table>
         </div>

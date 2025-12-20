@@ -100,10 +100,10 @@
         <div class="page-header">
           <h1>EDR Migration: ESET → Microsoft Defender for Endpoint</h1>
           <div class="page-header-meta">
-            <span class="page-badge edr">Track 2</span>
-            <span class="page-reading-time">Status: Foundationally Stable</span>
+            <span class="page-badge edr">Track 3</span>
+            <span class="page-reading-time">Status: Complete — Handover in Progress</span>
           </div>
-          <p class="intro-text">Microsoft Defender for Endpoint deployed across 9,000 endpoints. Transitioned to lead this track after SIEM foundation was established. Focus: endpoint onboarding, MDE policy configuration, ASR rollout, exclusions management, and operational tuning.</p>
+          <p class="intro-text">Microsoft Defender for Endpoint deployed across 9,000 endpoints. This track started at M6 alongside SIEM (after DLP which began at M1). ESET removed, MDE is primary EDR. Currently in final handover phase with knowledge transfer to internal security team.</p>
         </div>
 
         <div class="callout info">
@@ -113,7 +113,7 @@
           </div>
           <div class="callout-content">
             <p><strong>Platform Engineering:</strong> Endpoint onboarding and stabilization, MDE policy configuration, agent rollouts via Intune/SCCM, attack surface reduction (ASR) policy deployment, exclusions and allow-listing, coexistence management, and operational tuning to minimize business impact.</p>
-            <p><strong>Detection Alignment:</strong> Ensured consistent telemetry flow from MDE into Sentinel. Aligned endpoint detection use cases with identity and network signals. Worked both SIEM and EDR tracks in parallel after MDE rollout began.</p>
+            <p><strong>Detection Alignment:</strong> Ensured consistent telemetry flow from MDE into Sentinel. Aligned endpoint detection use cases with identity and network signals. Worked both SIEM and EDR tracks in parallel after they began at M6.</p>
             <p><strong>Detection Engineering Team:</strong> Custom endpoint detection development and ongoing tuning handled by SOC analysts and detection engineers. Leveraged Microsoft's extensive built-in detection library.</p>
           </div>
         </div>
@@ -127,20 +127,21 @@
             <p><strong>MDE:</strong> Fully deployed to all 9,000 endpoints. ASR rules in enforcement mode.</p>
             <p><strong>Integration:</strong> M365 Defender → Sentinel connector active. XDR incidents appear in unified queue.</p>
             <p><strong>Legacy:</strong> ESET removed from endpoints. Protect server decommissioned.</p>
+            <p><strong>Current Phase:</strong> Knowledge transfer and handover to internal security team.</p>
           </div>
         </div>
 
-        <h2>Why MDE Rollout Started Early</h2>
+        <h2>Why SIEM & EDR Started at M6</h2>
 
         <div class="callout info">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Telemetry-First Strategy
+            Project Timeline Context
           </div>
           <div class="callout-content">
-            <p>After the discovery and foundation phase, we started MDE rollout early to <strong>establish endpoint telemetry before new detections were fully implemented</strong>.</p>
-            <p>This ensured that by the time the detection translation catalog was finalized and implementations began in Sentinel, <strong>sufficient endpoint telemetry was already available for validation and tuning</strong>.</p>
-            <p>Detection work was therefore <strong>threat-intent driven and mapped to target controls</strong>, rather than being blocked by telemetry readiness.</p>
+            <p><strong>DLP Started First (M1):</strong> DLP is user-impacting and required longer phasing through audit → warn → block modes.</p>
+            <p><strong>SIEM & EDR Started at M6:</strong> These tracks began later in the project. Within the SIEM/EDR phase, MDE rollout started early to establish endpoint telemetry before detection implementations.</p>
+            <p><strong>Telemetry-First Strategy:</strong> By deploying MDE early within our phase, we ensured that by the time detection work progressed, sufficient endpoint telemetry was already available for validation and tuning.</p>
           </div>
         </div>
 
@@ -186,19 +187,38 @@
         </div>
 
         <h2>Timeline</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Gate-Based Cutover (Not Calendar-Based)
+          </div>
+          <div class="callout-content">
+            <p><strong>MDE became primary EDR only after meeting these criteria:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>70-80% endpoint onboarding coverage achieved</li>
+              <li>Policy compliance across onboarded devices</li>
+              <li>ASR rules validated in audit mode</li>
+              <li>ESET exclusions properly configured (no conflicts)</li>
+              <li>Detection parity confirmed vs legacy EDR</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">We ran ESET and MDE in parallel throughout the deployment. This avoided blind spots, validated detection effectiveness, and ensured zero protection gaps during transition.</p>
+          </div>
+        </div>
+
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Phase</th><th>Months</th><th>Activities</th></tr>
+              <tr><th>Phase</th><th>Months</th><th>Activities</th><th>Gate to Next Phase</th></tr>
             </thead>
             <tbody>
-              <tr><td><strong>Preparation</strong></td><td>1</td><td>Exclusions configured, pilot group selected, deployment package ready</td></tr>
-              <tr><td><strong>Pilot Deployment</strong></td><td>2</td><td>Deploy MDE to IT + Security teams (500 endpoints), validate coexistence</td></tr>
-              <tr><td><strong>Broad Deployment</strong></td><td>3-6</td><td>Roll out to all 9,000 endpoints in waves (by region/department), ASR rules in Audit mode</td></tr>
-              <tr><td><strong>Detection Comparison</strong></td><td>4-8</td><td>Weekly comparison reports, prove MDE efficacy</td></tr>
-              <tr><td><strong>ASR Enforcement</strong></td><td>7-9</td><td>Move ASR rules from Audit → Warn → Block</td></tr>
-              <tr><td><strong>ESET Removal</strong></td><td>8-10</td><td>Phased uninstall starting with IT, then departments</td></tr>
-              <tr><td><strong>Cleanup</strong></td><td>11-12</td><td>ESET Protect server decommission, license termination</td></tr>
+              <tr><td><strong>Preparation</strong></td><td>1</td><td>Exclusions configured, pilot group selected, deployment package ready</td><td>Exclusions tested in lab</td></tr>
+              <tr><td><strong>Pilot Deployment</strong></td><td>2</td><td>Deploy MDE to IT + Security teams (500 endpoints), validate coexistence</td><td>No performance issues, coexistence stable</td></tr>
+              <tr><td><strong>Broad Deployment</strong></td><td>3-6</td><td>Roll out to all 9,000 endpoints in waves (by region/department), ASR rules in Audit mode</td><td>70-80% coverage, policy compliant</td></tr>
+              <tr><td><strong>Detection Comparison</strong></td><td>4-8</td><td>Weekly comparison reports, prove MDE efficacy</td><td>Detection parity confirmed</td></tr>
+              <tr><td><strong>ASR Enforcement</strong></td><td>7-9</td><td>Move ASR rules from Audit → Warn → Block</td><td>False positive rate acceptable</td></tr>
+              <tr><td><strong>ESET Removal</strong></td><td>8-10</td><td>Phased uninstall starting with IT, then departments</td><td>MDE is primary, ESET redundant</td></tr>
+              <tr><td><strong>Cleanup</strong></td><td>11-12</td><td>ESET Protect server decommission, license termination</td><td>30 days stable without ESET</td></tr>
             </tbody>
           </table>
         </div>

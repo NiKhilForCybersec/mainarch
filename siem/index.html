@@ -108,11 +108,11 @@
         <div class="page-header">
           <h1>SIEM Migration: RSA NetWitness → Microsoft Sentinel</h1>
           <div class="page-header-meta">
-            <span class="page-badge siem">Track 1</span>
-            <span class="page-reading-time">Status: Foundationally Stable</span>
+            <span class="page-badge siem">Track 2</span>
+            <span class="page-reading-time">Status: Complete — Handover in Progress</span>
           </div>
           <p class="intro-text">
-            The SIEM track is foundationally complete. Sentinel is operational, log sources are onboarded, and the SOC is running on the new platform. This documentation covers the platform engineering work — log source identification, ingestion strategy, connector configuration, and operational readiness.
+            The SIEM track started at M6 (after DLP which began at M1). Sentinel is now operational, log sources are onboarded, RSA is decommissioned, and the SOC is running on the new platform. Currently in final handover phase with knowledge transfer to internal security team.
           </p>
         </div>
 
@@ -134,28 +134,29 @@
             Current State
           </div>
           <div class="callout-content">
-            <p><strong>Sentinel:</strong> Primary SIEM, fully operational with identity, cloud, endpoint, and network telemetry.</p>
+            <p><strong>Sentinel:</strong> Primary SIEM, fully operational. RSA NetWitness decommissioned.</p>
             <p><strong>Log Sources:</strong> All critical sources onboarded via built-in connectors and custom DCRs.</p>
             <p><strong>SOC:</strong> Analysts trained and operational on Sentinel + M365 Defender unified queue.</p>
+            <p><strong>Current Phase:</strong> Knowledge transfer and handover to internal security team.</p>
           </div>
         </div>
 
         <div class="callout info">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Parallel SOC Operations
+            Project Timeline Context
           </div>
           <div class="callout-content">
-            <p><strong>During Transition:</strong> The SOC continued operating on the legacy stack (RSA NetWitness, ESET) while the new Sentinel and MDE environment matured.</p>
-            <p><strong>MDE Started Early:</strong> Endpoint rollout began early to establish telemetry before detection implementations, ensuring validation data was available when detections went live.</p>
-            <p><strong>Gradual Shift:</strong> Analysts worked both platforms during transition, with Sentinel becoming primary only after detection coverage was validated.</p>
+            <p><strong>DLP Started First (M1):</strong> User-impacting DLP migration required longer phasing, so it started at the beginning of the project.</p>
+            <p><strong>SIEM & EDR Started Later (M6):</strong> RSA → Sentinel and ESET → MDE migrations began at Month 6. MDE rollout started early in this phase to establish telemetry before detection implementations.</p>
+            <p><strong>Parallel Operations:</strong> SOC continued on legacy stack (RSA, ESET) while new platform matured. Sentinel became primary only after gate criteria were met.</p>
           </div>
         </div>
 
         <h2>Migration Overview</h2>
 
         <p>
-          The SIEM migration follows a methodical approach: discover what exists, plan what moves where, engineer the ingestion, enable detections, and transition the SOC. Throughout this process, both SIEMs remain operational.
+          The SIEM migration follows a methodical approach: discover what exists, plan what moves where, engineer the ingestion, enable detections, and transition the SOC. Throughout this process, both SIEMs remained operational until cutover criteria were met.
         </p>
 
         <div class="flow-diagram">

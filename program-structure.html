@@ -108,7 +108,7 @@
         <div class="page-header">
           <h1>Program Structure</h1>
           <p class="intro-text">
-            The transformation program consists of five parallel workstreams, each with dedicated teams, running simultaneously over 18 months. This structure enables rapid progress while managing interdependencies.
+            The transformation program consists of multiple workstreams with staggered timelines. DLP migration started first (M1), followed by SIEM and EDR (M6). Identity and Infrastructure were already stable before this project began. Currently in final handover phase with knowledge transfer to internal security team.
           </p>
         </div>
 
@@ -117,49 +117,63 @@
         <div class="callout info">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Why This Sequence?
+            Project Timeline Context
           </div>
           <div class="callout-content">
-            <p><strong>MDE Rollout Early:</strong> After discovery, we started MDE rollout early to establish endpoint telemetry <em>before</em> detection implementations began. This ensured that by the time the detection translation catalog was finalized, sufficient telemetry was already available for validation and tuning.</p>
-            <p><strong>Detection Work:</strong> Threat-intent driven and mapped to target controls — not blocked by telemetry readiness.</p>
-            <p><strong>DLP Later:</strong> DLP depends heavily on data classification framework and business alignment, requiring more upfront groundwork. Introduced later, initially in audit mode while classification and policy foundations were finalized.</p>
-            <p><strong>Parallel SOC Operations:</strong> SOC continued operating on the legacy stack (RSA NetWitness, ESET) while the new Sentinel and MDE environment matured.</p>
+            <p><strong>Pre-Existing (Stable):</strong> Identity (AD → Entra ID sync) and Infrastructure (Azure landing zone, network) were already implemented and stable before this security transformation project began. On-prem AD is synced to Entra ID with future plans to decommission on-prem after complete cloud migration.</p>
+            <p><strong>DLP First (M1):</strong> DLP migration from Symantec to Purview started at Month 1. User-impacting changes required careful phasing through audit → warn → block modes.</p>
+            <p><strong>SIEM & EDR Later (M6):</strong> RSA → Sentinel and ESET → MDE migrations started at Month 6. MDE rollout began early in this phase to establish telemetry before detection implementations.</p>
+            <p><strong>Current State:</strong> DLP enforcement complete, SIEM and EDR stable. Now in final handover phase with knowledge transfer to internal security team.</p>
           </div>
         </div>
 
         <div class="flow-diagram">
           <div class="flow-step">
+            <div class="flow-step-number">0</div>
+            <div class="flow-step-content">
+              <strong>Pre-Existing Foundation</strong><br>Identity (AD synced to Entra ID) and Infrastructure (Azure landing zone, network architecture) already stable before project start
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
             <div class="flow-step-number">1</div>
             <div class="flow-step-content">
-              <strong>Discovery & Foundation</strong><br>Log source identification, stakeholder coordination, Sentinel workspace setup, connector configuration
+              <strong>DLP Migration (M1-M12)</strong><br>Symantec → Purview. Policy translation, audit mode validation, warn mode, then block enforcement
             </div>
           </div>
           <div class="flow-connector">↓</div>
           <div class="flow-step">
             <div class="flow-step-number">2</div>
             <div class="flow-step-content">
-              <strong>MDE Rollout (Early Start)</strong><br>Endpoint onboarding begins to establish telemetry foundation before detections are implemented
+              <strong>SIEM & EDR Start (M6)</strong><br>RSA → Sentinel discovery and foundation. MDE rollout begins to establish endpoint telemetry early.
             </div>
           </div>
           <div class="flow-connector">↓</div>
           <div class="flow-step">
             <div class="flow-step-number">3</div>
             <div class="flow-step-content">
-              <strong>Detection Implementation</strong><br>Built-in rules enabled, detection translation catalog implemented — telemetry already available for validation
+              <strong>Detection Implementation (M8-M12)</strong><br>Built-in rules enabled, detection translation catalog implemented — telemetry already available for validation
             </div>
           </div>
           <div class="flow-connector">↓</div>
           <div class="flow-step">
             <div class="flow-step-number">4</div>
             <div class="flow-step-content">
-              <strong>DLP Foundation (Later Start)</strong><br>Data classification framework, business alignment, policy translation — audit mode first
+              <strong>Parallel Operations & Cutover</strong><br>Legacy and new platforms run in parallel. Cutover based on gate criteria, not calendar dates.
             </div>
           </div>
           <div class="flow-connector">↓</div>
           <div class="flow-step">
             <div class="flow-step-number">5</div>
             <div class="flow-step-content">
-              <strong>SOC Transition</strong><br>Gradual shift from legacy stack to Sentinel/MDE as new environment matures
+              <strong>SOC Transition & Stabilization</strong><br>Gradual shift from legacy stack to Sentinel/MDE as new environment matures
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">6</div>
+            <div class="flow-step-content">
+              <strong>Knowledge Transfer & Handover (Current)</strong><br>Final KT to internal security team. Documentation, runbooks, and operational handover.
             </div>
           </div>
         </div>
@@ -167,7 +181,7 @@
         <h2>Parallel Workstream Model</h2>
 
         <p>
-          Enterprise security transformations cannot be done sequentially. Running all tracks in parallel with extended dual operation is the only practical approach for organizations that cannot afford security gaps.
+          This security transformation had staggered start times. DLP began at M1, with SIEM and EDR joining at M6. Identity and Infrastructure were pre-existing. Extended parallel operation ensures no security gaps during transitions.
         </p>
 
         <div class="timeline">
@@ -182,15 +196,85 @@
           </div>
           
           <div class="timeline-track">
-            <span class="timeline-track-label">SIEM</span>
+            <span class="timeline-track-label">DLP</span>
             <div class="timeline-track-bar">
-              <div class="timeline-segment siem" style="width: 100%;" data-track="siem">
-                <span class="timeline-tooltip">RSA + Sentinel parallel (12 months)</span>
+              <div class="timeline-segment dlp" style="width: 100%;" data-track="dlp">
+                <span class="timeline-tooltip">DLP: M1-M12+ (started first)</span>
               </div>
             </div>
           </div>
           
           <div class="timeline-track">
+            <span class="timeline-track-label">SIEM</span>
+            <div class="timeline-track-bar">
+              <div class="timeline-segment" style="width: 28%; background: transparent;"></div>
+              <div class="timeline-segment siem" style="width: 72%;" data-track="siem">
+                <span class="timeline-tooltip">SIEM: M6-M18 (started later)</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="timeline-track">
+            <span class="timeline-track-label">EDR</span>
+            <div class="timeline-track-bar">
+              <div class="timeline-segment" style="width: 28%; background: transparent;"></div>
+              <div class="timeline-segment edr" style="width: 72%;" data-track="edr">
+                <span class="timeline-tooltip">EDR: M6-M18 (started with SIEM)</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="timeline-track">
+            <span class="timeline-track-label">Identity</span>
+            <div class="timeline-track-bar">
+              <div class="timeline-segment identity" style="width: 100%; opacity: 0.5;" data-track="identity">
+                <span class="timeline-tooltip">Identity: Pre-existing (stable)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-track">
+            <span class="timeline-track-label">Infra</span>
+            <div class="timeline-track-bar">
+              <div class="timeline-segment infra" style="width: 100%; opacity: 0.5;" data-track="infra">
+                <span class="timeline-tooltip">Infrastructure: Pre-existing (stable)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Current State
+          </div>
+          <div class="callout-content">
+            <p><strong>DLP:</strong> Enforcement complete. Symantec decommissioned.</p>
+            <p><strong>SIEM:</strong> Sentinel primary. RSA decommissioned.</p>
+            <p><strong>EDR:</strong> MDE fully deployed. ESET removed.</p>
+            <p><strong>Identity/Infra:</strong> Stable throughout. Future: decommission on-prem AD after complete cloud migration.</p>
+            <p><strong>Current Phase:</strong> Knowledge transfer and final handover to internal security team.</p>
+          </div>
+        </div>
+
+        <h2>Track Details</h2>
+        
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Track</th><th>Start</th><th>Status</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>DLP</strong></td><td>M1</td><td><span class="status-badge complete">Complete</span></td><td>Started first. Symantec → Purview. Now in handover.</td></tr>
+              <tr><td><strong>SIEM</strong></td><td>M6</td><td><span class="status-badge complete">Complete</span></td><td>RSA → Sentinel. Joined later in project.</td></tr>
+              <tr><td><strong>EDR</strong></td><td>M6</td><td><span class="status-badge complete">Complete</span></td><td>ESET → MDE. Started with SIEM track.</td></tr>
+              <tr><td><strong>Identity</strong></td><td>Pre-existing</td><td><span class="status-badge complete">Stable</span></td><td>AD synced to Entra ID. Future: decom on-prem.</td></tr>
+              <tr><td><strong>Infrastructure</strong></td><td>Pre-existing</td><td><span class="status-badge complete">Stable</span></td><td>Azure landing zone, network architecture.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Legacy Reference: Original Workstream Model</h2>
             <span class="timeline-track-label">EDR</span>
             <div class="timeline-track-bar">
               <div class="timeline-segment edr" style="width: 85%;" data-track="edr">

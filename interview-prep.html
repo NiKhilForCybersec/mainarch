@@ -202,25 +202,27 @@ Sentinel work."</code></pre>
           
           <div class="code-block">
             <div class="code-header"><span class="code-lang">Response</span></div>
-            <pre><code>"For the last couple of months, my responsibilities have been focused on 
-supporting the DLP track in audit mode — reviewing DLP events, validating 
-policy behavior against real business workflows, identifying false positives, 
-and tuning conditions before enforcement. My role here is validation and 
-stabilization rather than leading the program.
+            <pre><code>"Currently, I'm in the final wind-up phase of a security transformation 
+project. The main tracks — DLP, SIEM, and EDR — are all complete, and 
+I've recently moved back to the DLP track to support knowledge transfer 
+and handover to the internal security team. Day-to-day right now involves 
+finalizing documentation, conducting KT sessions, and ensuring the 
+internal team is ready to take over operations.
 
-Before this, my primary focus was SIEM and EDR. During SIEM discovery, 
-I was meeting with log source owners, configuring connectors and DCRs, 
-validating data quality, and troubleshooting ingestion issues. For MDE, 
-I coordinated deployment waves with IT, monitored onboarding status, 
-configured ASR rules, and managed exclusions based on application team 
-requests.
+Before this handover phase, my primary focus was SIEM and EDR — I joined 
+those tracks when they started at M6. During SIEM discovery, I was meeting 
+with log source owners, configuring connectors and DCRs, validating data 
+quality, and troubleshooting ingestion issues. For MDE, I coordinated 
+deployment waves with IT, monitored onboarding status, configured ASR 
+rules, and managed exclusions based on application team requests.
 
-Throughout all phases, I collaborate closely with SOC teams — they're the 
-consumers of our telemetry and detections. I also work with business 
-stakeholders when we need to understand workflows for tuning or exclusions.
+Throughout all phases, I collaborated closely with SOC teams — they're 
+the consumers of our telemetry and detections. I also worked with business 
+stakeholders when we needed to understand workflows for tuning or exclusions.
 
 The common thread across all my work is ensuring security platforms are 
-deployed in a controlled, scalable way with reliable telemetry."</code></pre>
+deployed in a controlled, scalable way with reliable telemetry — and now, 
+ensuring that knowledge transfers cleanly to the team that will run it."</code></pre>
           </div>
         </div>
 
@@ -237,6 +239,10 @@ deployed in a controlled, scalable way with reliable telemetry."</code></pre>
 I worked on. The company was a B2B SaaS provider with about 4,000 employees, 
 9,000 endpoints, and global offices.
 
+CONTEXT: This was part of a larger security transformation. Identity and 
+Infrastructure were already stable. DLP migration had started earlier at 
+M1. I joined when the SIEM and EDR tracks began at M6.
+
 DISCOVERY: We started by documenting the existing RSA environment — what 
 log sources were configured, what parsers were in use, what detection rules 
 existed. I met with IT, infrastructure, and application teams to understand 
@@ -251,18 +257,24 @@ INGESTION: For each source, I configured the appropriate connector — built-in
 where available, custom DCRs for on-prem sources. We validated data quality: 
 are fields parsing correctly? Are timestamps accurate? Is the volume expected?
 
-DETECTION ALIGNMENT: We started MDE deployment early so endpoint telemetry 
-was already flowing when we implemented detections. I enabled built-in rules 
-from Content Hub and implemented rules from our detection translation catalog 
-where we had native Sentinel equivalents. Custom KQL development was handled 
-by dedicated detection engineers.
+DETECTION ALIGNMENT: We started MDE deployment early in our phase so endpoint 
+telemetry was already flowing when we implemented detections. I enabled 
+built-in rules from Content Hub and implemented rules from our detection 
+translation catalog where we had native Sentinel equivalents.
 
-SOC HANDOVER: The SOC ran both platforms in parallel for months. We did shadow 
-operations where analysts triaged in Sentinel while RSA was still primary. 
-Once detection coverage was validated and analysts were comfortable, we 
-transitioned Sentinel to primary.
+PARALLEL OPERATIONS & CUTOVER:
+We ran RSA and Sentinel in parallel for several months. Sentinel became the 
+primary SIEM only after all critical log sources were onboarded and we had 
+more than 90 days of stable telemetry for baselining and tuning.
 
-The key was sequencing — telemetry first, then detections, then SOC transition."</code></pre>
+Similarly, MDE became the primary EDR once we reached around 70-80% endpoint 
+onboarding and policy compliance.
+
+This approach avoided blind spots, validated detections, and transitioned 
+the SOC safely without operational risk.
+
+CURRENT STATE: All tracks complete. RSA and ESET decommissioned. Currently 
+in final handover phase with knowledge transfer to internal team."</code></pre>
           </div>
         </div>
 
@@ -1274,7 +1286,49 @@ it adds detection value."</code></pre>
         </div>
 
         <div class="interview-question">
-          <h3>24. What challenges do you commonly see in SIEM migrations?</h3>
+          <h3>24. When do you decide to cut over from the legacy platform to the new one?</h3>
+          <p class="interview-context"><strong>They want:</strong> Clear criteria, risk awareness, not arbitrary timelines.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"Cutover is gate-based, not calendar-based. I don't set an arbitrary date — 
+I define criteria that must be met before transitioning to primary.
+
+FOR SIEM (Sentinel):
+Sentinel became primary only after:
+• All critical log sources onboarded and validated
+• 90+ days of stable telemetry for baselining and tuning
+• Detection coverage validated against legacy platform
+• SOC analysts trained and comfortable with KQL/workflows
+• Playbooks tested and operational
+
+FOR EDR (MDE):
+MDE became primary once we reached:
+• 70-80% endpoint onboarding coverage
+• Policy compliance across onboarded devices
+• ASR rules validated in audit mode
+• ESET exclusions properly configured (no conflicts)
+• Detection parity confirmed vs legacy EDR
+
+PARALLEL OPERATIONS APPROACH:
+We ran both platforms simultaneously during transition. This approach:
+• Avoids blind spots — if one misses something, the other catches it
+• Validates detection parity — compare alerts side by side
+• Enables safe SOC transition — analysts can fall back if needed
+• Reduces operational risk — no "big bang" cutover
+
+The parallel period for SIEM was about 3-4 months. For EDR, it was 
+the duration of the phased rollout (8-10 months) until we reached 
+full coverage and started ESET removal.
+
+The key insight: rushing cutover to save parallel licensing costs 
+is a false economy. The risk of missing detections or analyst errors 
+in an unfamiliar tool far outweighs the license overlap cost."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>25. What challenges do you commonly see in SIEM migrations?</h3>
           <p class="interview-context"><strong>They want:</strong> Real pain points, lessons learned.</p>
           
           <div class="code-block">
@@ -1336,7 +1390,7 @@ The meta-lesson: Most challenges are organizational, not technical."</code></pre
         <h2>Block 8: Wrap-Up Questions</h2>
 
         <div class="interview-question">
-          <h3>25. What do you think makes a SIEM deployment successful?</h3>
+          <h3>26. What do you think makes a SIEM deployment successful?</h3>
           <p class="interview-context"><strong>High-level maturity check.</strong></p>
           
           <div class="code-block">
@@ -1383,7 +1437,7 @@ many log sources we connected."</code></pre>
         </div>
 
         <div class="interview-question">
-          <h3>26. Do you have any questions for us?</h3>
+          <h3>27. Do you have any questions for us?</h3>
           <p class="interview-context"><strong>Always prepare 2-3:</strong> Client types, SIEM maturity, consulting model.</p>
           
           <div class="code-block">
