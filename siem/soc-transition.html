@@ -22,13 +22,14 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <div class="nav-section">
+                <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
           <a href="../company-profile.html" class="nav-item">Company Profile</a>
           <a href="../security-framework.html" class="nav-item">Security Framework</a>
           <a href="../program-structure.html" class="nav-item">Program Structure</a>
           <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -234,6 +235,71 @@ If high-risk indicators found:
               <tr><td>2</td><td>Extended business hours</td><td>Tuning, false positive reduction</td></tr>
               <tr><td>3-4</td><td>Business hours</td><td>Optimization, training reinforcement</td></tr>
               <tr><td>5+</td><td>Normal operations</td><td>BAU with scheduled reviews</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Industry Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            SOC Transition Best Practices
+          </div>
+          <div class="callout-content">
+            <p><strong>SANS SOC Recommendations:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Parallel Operations:</strong> Run both SIEMs simultaneously for 3-6 months minimum</li>
+              <li><strong>Detection Validation:</strong> Verify all critical detections fire before cutover</li>
+              <li><strong>Analyst Training:</strong> 40+ hours platform training before go-live</li>
+              <li><strong>Playbook Migration:</strong> Update all runbooks and response procedures</li>
+              <li><strong>Metric Baselines:</strong> Establish KPIs before transition for comparison</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Gartner SOC Modernization:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Target MTTD (Mean Time to Detect): &lt;1 hour for critical alerts</li>
+              <li>Target MTTR (Mean Time to Respond): &lt;4 hours for P2 incidents</li>
+              <li>Automation target: 70%+ alerts with automated enrichment</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Extended parallel operations</td>
+                <td>SANS SIEM deployment, Gartner</td>
+                <td>12 months parallel with RSA NetWitness</td>
+              </tr>
+              <tr>
+                <td>Formal analyst certification</td>
+                <td>Microsoft SC-200, SANS SOC training</td>
+                <td>All analysts complete KQL training, SC-200 recommended</td>
+              </tr>
+              <tr>
+                <td>Documented playbooks</td>
+                <td>NIST 800-61, SANS IR framework</td>
+                <td>All playbooks updated for Sentinel workflows</td>
+              </tr>
+              <tr>
+                <td>Automated enrichment</td>
+                <td>SOC efficiency best practices</td>
+                <td>SOAR playbooks for user/IP enrichment on all alerts</td>
+              </tr>
+              <tr>
+                <td>24/7 hypercare post-cutover</td>
+                <td>Enterprise change management</td>
+                <td>Week 1: 24/7, Week 2-4: extended hours</td>
+              </tr>
+              <tr>
+                <td>Rollback plan documented</td>
+                <td>ITIL change management</td>
+                <td>RSA maintained operational for 90 days post-cutover</td>
+              </tr>
             </tbody>
           </table>
         </div>

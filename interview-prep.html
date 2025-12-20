@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Preparation | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+                <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="index.html" class="nav-item">Executive Summary</a>
+          <a href="company-profile.html" class="nav-item">Company Profile</a>
+          <a href="security-framework.html" class="nav-item">Security Framework</a>
+          <a href="program-structure.html" class="nav-item">Program Structure</a>
+          <a href="career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="interview-prep.html" class="nav-item">Interview Preparation</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="siem/index.html" class="nav-item"><span class="nav-track-indicator siem"></span>SIEM: RSA → Sentinel</a>
+          <a href="edr/index.html" class="nav-item"><span class="nav-track-indicator edr"></span>EDR: ESET → MDE</a>
+          <a href="dlp/index.html" class="nav-item"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+          <a href="identity/index.html" class="nav-item"><span class="nav-track-indicator identity"></span>Identity: AD → Entra ID</a>
+          <a href="infrastructure/index.html" class="nav-item"><span class="nav-track-indicator infra"></span>Infrastructure: Azure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="resources/timeline.html" class="nav-item">Interactive Timeline</a>
+          <a href="resources/scripts.html" class="nav-item">Scripts & Queries</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Interview Preparation</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Interview Preparation</h1>
+          <p class="intro-text">
+            26 common interview questions for SIEM/Security Consulting roles, with structured answers based on real project experience. Think in 5 blocks: You & Your Role, SIEM Foundations, Detections, Operations & IR, Consulting Mindset.
+          </p>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Interview Structure
+          </div>
+          <div class="callout-content">
+            <p><strong>5 Blocks to Remember:</strong></p>
+            <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>You & Your Role (Opening)</li>
+              <li>SIEM Foundations (Core Experience)</li>
+              <li>Detections & Use Cases</li>
+              <li>Operations & IR</li>
+              <li>Consulting Mindset</li>
+            </ol>
+            <p>If you can answer 2-3 questions per block, you are covered.</p>
+          </div>
+        </div>
+
+        <!-- BLOCK 1: OPENING -->
+        <h2>Block 1: Opening / Warm-up</h2>
+
+        <div class="interview-question">
+          <h3>1. Tell me about yourself</h3>
+          <p class="interview-context"><strong>What they want:</strong> 2-3 minute structured story. SIEM + security engineering focus, Sentinel/Splunk exposure, consulting mindset.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"I'm a Security Engineer with about 5 years of experience across EDR, SIEM, 
+and DLP platforms. Most recently, I've been working on a large-scale security 
+transformation for a Siemens subsidiary — migrating from legacy tools like 
+RSA NetWitness, ESET, and Symantec DLP to Microsoft's security stack: 
+Sentinel, Defender for Endpoint, and Purview.
+
+My role started on the SIEM track, where I led log source discovery, 
+ingestion strategy, and Sentinel workspace setup. I worked closely with 
+SOC teams and business stakeholders to ensure the right telemetry was 
+available for detection and investigation. I also contributed to detection 
+engineering — implementing built-in rules from our translation catalog and 
+aligning endpoint telemetry correlation across MDE, identity, and network.
+
+Once the SIEM foundation was stable, I transitioned to lead the MDE rollout — 
+agent onboarding, policy configuration, ASR rules, and exclusion management 
+across 9,000 endpoints. More recently, I've been supporting the DLP track 
+in audit mode, validating policy behavior before enforcement.
+
+What I enjoy most is understanding an organization's architecture end-to-end 
+and helping shape how security should be built. That's what draws me to 
+consulting — applying this engineering foundation across different 
+environments and industries."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>2. Walk me through your day-to-day responsibilities</h3>
+          <p class="interview-context"><strong>What they probe:</strong> What you do daily, how much is SIEM vs EDR, who you work with.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"For the last couple of months, my responsibilities have been focused on 
+supporting the DLP track in audit mode — reviewing DLP events, validating 
+policy behavior against real business workflows, identifying false positives, 
+and tuning conditions before enforcement. My role here is validation and 
+stabilization rather than leading the program.
+
+Before this, my primary focus was SIEM and EDR. During SIEM discovery, 
+I was meeting with log source owners, configuring connectors and DCRs, 
+validating data quality, and troubleshooting ingestion issues. For MDE, 
+I coordinated deployment waves with IT, monitored onboarding status, 
+configured ASR rules, and managed exclusions based on application team 
+requests.
+
+Throughout all phases, I collaborate closely with SOC teams — they're the 
+consumers of our telemetry and detections. I also work with business 
+stakeholders when we need to understand workflows for tuning or exclusions.
+
+The common thread across all my work is ensuring security platforms are 
+deployed in a controlled, scalable way with reliable telemetry."</code></pre>
+          </div>
+        </div>
+
+        <!-- BLOCK 2: SIEM CORE -->
+        <h2>Block 2: SIEM Core Experience</h2>
+
+        <div class="interview-question">
+          <h3>3. Walk me through a SIEM deployment you worked on end-to-end</h3>
+          <p class="interview-context"><strong>What they expect:</strong> Discovery, log source identification, ingestion, detection alignment, SOC handover.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"I'll walk you through the RSA NetWitness to Microsoft Sentinel migration 
+I worked on. The company was a B2B SaaS provider with about 4,000 employees, 
+9,000 endpoints, and global offices.
+
+DISCOVERY: We started by documenting the existing RSA environment — what 
+log sources were configured, what parsers were in use, what detection rules 
+existed. I met with IT, infrastructure, and application teams to understand 
+their logging capabilities.
+
+LOG SOURCE STRATEGY: We prioritized based on detection value. Identity logs 
+first — Entra ID sign-ins, audit logs — because identity is our primary 
+detection anchor. Then endpoint telemetry through the M365 Defender connector, 
+which is free. Then cloud control plane, network, and SaaS applications.
+
+INGESTION: For each source, I configured the appropriate connector — built-in 
+where available, custom DCRs for on-prem sources. We validated data quality: 
+are fields parsing correctly? Are timestamps accurate? Is the volume expected?
+
+DETECTION ALIGNMENT: We started MDE deployment early so endpoint telemetry 
+was already flowing when we implemented detections. I enabled built-in rules 
+from Content Hub and implemented rules from our detection translation catalog 
+where we had native Sentinel equivalents. Custom KQL development was handled 
+by dedicated detection engineers.
+
+SOC HANDOVER: The SOC ran both platforms in parallel for months. We did shadow 
+operations where analysts triaged in Sentinel while RSA was still primary. 
+Once detection coverage was validated and analysts were comfortable, we 
+transitioned Sentinel to primary.
+
+The key was sequencing — telemetry first, then detections, then SOC transition."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>4. How do you decide which log sources to onboard first?</h3>
+          <p class="interview-context"><strong>What they want:</strong> Risk-based prioritization, identity/endpoint/network first, cost awareness.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"I prioritize based on detection value, not volume. My framework is:
+
+1. IDENTITY FIRST (Detection Anchor #1)
+   Entra ID sign-in and audit logs. Identity is the foundation for 
+   correlation — every detection eventually ties back to a user or 
+   service principal. This is also free tier in Sentinel.
+
+2. ENDPOINT SECOND (Detection Anchor #2)
+   MDE telemetry through the M365 Defender connector. This gives us 
+   process execution, network connections, credential access — high-
+   confidence behavioral signals. And it's free ingestion through XDR.
+
+3. CLOUD CONTROL PLANE (Detection Anchor #3)
+   Azure Activity Logs, Defender for Cloud alerts. High security value, 
+   low personal data, mostly free.
+
+4. NETWORK AND PERIMETER
+   Firewall logs, DNS, NSG flows. Important for lateral movement and 
+   exfiltration detection, but higher volume so we're selective.
+
+5. SAAS AND CUSTOM APPLICATIONS
+   Salesforce audit logs, custom app logs. Important for business-specific 
+   detections but lower priority than the anchors.
+
+Cost is always a factor. With Sentinel, MDE telemetry is free through the 
+XDR connector — that's 150+ GB/day we don't pay for. I focus billable 
+ingestion on sources that add detection value the free data doesn't cover."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>5. Can you give examples of log sources you onboarded?</h3>
+          <p class="interview-context"><strong>Follow-ups:</strong> Built-in vs custom, parsing issues, validation steps.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"Here are specific examples from my recent project:
+
+BUILT-IN CONNECTORS (Simple):
+• Microsoft Entra ID — Diagnostic settings to workspace, instant data flow
+• M365 Defender — Content Hub solution, XDR connector for all Device* tables
+• Azure Activity — Subscription-level diagnostic settings
+• AWS CloudTrail — S3 connector with SQS notifications
+
+CUSTOM LOG ONBOARDING (More Complex):
+• Windows Security Events — Azure Monitor Agent with Data Collection Rules. 
+  We filtered to specific Event IDs (4624, 4625, 4688, etc.) to control volume.
+  
+• Linux Auth Logs — AMA with Syslog DCR. Had to troubleshoot rsyslog 
+  configuration on older servers.
+  
+• On-prem Firewall (CEF) — CEF via AMA. Required working with network team 
+  to configure syslog forwarding. Parsing issues with non-standard CEF fields 
+  that needed custom parsing functions.
+  
+• Custom Application Logs — HTTP Data Collector API initially, then migrated 
+  to DCR-based ingestion. Had to work with dev teams to standardize log format.
+
+PARSING ISSUES I'VE ENCOUNTERED:
+• Timestamp format mismatches — logs in local time vs UTC
+• Multi-line log events not grouping correctly
+• CEF extensions with vendor-specific fields not mapping to CommonSecurityLog
+• JSON logs with nested objects requiring mv-expand
+
+For each source, I validate: Is data flowing? Are fields parsing? Is volume 
+expected? Can we build detections on it?"</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>6. How do you validate that a log source is usable after onboarding?</h3>
+          <p class="interview-context"><strong>What they want:</strong> Data completeness, field availability, timestamp accuracy, use-case readiness.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"I have a validation checklist I run through for every log source:
+
+1. DATA FLOW VERIFICATION
+   • Is data arriving? (TableName | take 10)
+   • Is ingestion latency acceptable? (TimeGenerated vs _TimeReceived)
+   • Is volume consistent with expectations?
+
+2. FIELD COMPLETENESS
+   • Are critical fields populated? (not empty or null)
+   • Are fields parsing correctly? (no raw unparsed data in single field)
+   • For identity logs: is UserPrincipalName, IPAddress, ResultType present?
+
+3. TIMESTAMP ACCURACY
+   • Is TimeGenerated in UTC?
+   • Does event time match when events actually occurred?
+   • Any timezone conversion issues?
+
+4. USE-CASE READINESS
+   • Can I write a detection against this data?
+   • Run a sample KQL query that matches a known event
+   • Correlate with another table — does the join work?
+
+5. SOC VALIDATION
+   • Have analysts reviewed the data?
+   • Can they find what they need for investigation?
+   • Any enrichment needed?
+
+Example validation query:
+
+SigninLogs
+| where TimeGenerated > ago(1h)
+| summarize 
+    RecordCount = count(),
+    UniqueUsers = dcount(UserPrincipalName),
+    NullIPCount = countif(isempty(IPAddress)),
+    FailedLogins = countif(ResultType != "0")
+| extend DataQuality = iff(NullIPCount < RecordCount * 0.01, "Good", "Review")
+
+If critical fields have >1% null rate, I investigate before declaring 
+the source production-ready."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>7. How do you manage SIEM ingestion cost?</h3>
+          <p class="interview-context"><strong>Very common for Sentinel roles.</strong> Filtering, prioritization, free Defender data, retention strategy.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"Cost management is critical with Sentinel's per-GB pricing. Here's my approach:
+
+1. LEVERAGE FREE DATA FIRST
+   • M365 Defender connector — all Device* tables are free (~150 GB/day for us)
+   • Azure Activity Logs — free
+   • Defender for Cloud alerts — free
+   • This alone saved us roughly $12,000/month vs paying for that telemetry
+
+2. FILTER AT INGESTION, NOT AFTER
+   • Data Collection Rules to filter Windows events to security-relevant IDs only
+   • Don't ingest verbose debug logs — filter at source
+   • NSG flow logs: selective, not all subnets
+
+3. USE APPROPRIATE LOG TIERS
+   • Analytics tier for data you query frequently
+   • Basic tier for high-volume, low-query data (50% cheaper)
+   • Archive tier for long-term retention (compliance)
+
+4. COMMITMENT TIERS
+   • We use 100 GB/day commitment tier — 50% discount vs pay-as-you-go
+   • Monitor actual usage to right-size the commitment
+
+5. RETENTION STRATEGY
+   • 90 days hot retention for most tables
+   • Archive beyond that for compliance
+   • Some high-volume tables: 30 days only
+
+6. COST MONITORING
+   • Weekly review of ingestion by table
+   • Alert on unexpected volume spikes
+   • Usage workbook to identify optimization opportunities
+
+Our Sentinel cost is roughly $12,000/month. The legacy RSA NetWitness was 
+$35,000/month — that's 66% reduction while actually improving detection 
+coverage through the free XDR data."</code></pre>
+          </div>
+        </div>
+
+        <!-- BLOCK 3: DETECTION ENGINEERING -->
+        <h2>Block 3: Detection Engineering & Use Cases</h2>
+
+        <div class="interview-question">
+          <h3>8. How do you translate security requirements into detection use cases?</h3>
+          <p class="interview-context"><strong>Maps directly to JD.</strong> Business risk → threat → detection, not just "write rules."</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"I use a threat-intent driven approach, not a rule-first approach:
+
+1. START WITH BUSINESS RISK
+   What does the business care about? For our B2B SaaS company:
+   • Customer data exposure
+   • Account takeover
+   • Intellectual property theft
+
+2. MAP TO THREAT SCENARIOS
+   For account takeover risk:
+   • Credential phishing → compromised password
+   • Token theft → session hijack
+   • MFA bypass → SIM swap or fatigue attack
+
+3. IDENTIFY OBSERVABLE BEHAVIORS
+   What would we see in telemetry if this happened?
+   • Impossible travel (sign-in from two locations)
+   • Sign-in from new device + sensitive action
+   • Failed MFA followed by success from different IP
+
+4. CHECK TELEMETRY AVAILABILITY
+   Do we have the data to detect this?
+   • SigninLogs for sign-in anomalies ✓
+   • AuditLogs for sensitive actions ✓
+   • RiskySignIns for Microsoft's ML signals ✓
+
+5. IMPLEMENT DETECTION
+   • Check Content Hub for built-in rules first
+   • Enable and tune thresholds
+   • Custom KQL only if no native equivalent
+
+6. VALIDATE
+   • Does it fire on known-bad scenarios?
+   • What's the false positive rate?
+   • Can SOC investigate with available context?
+
+The key is: Business Risk → Threat → Behavior → Telemetry → Detection
+Not: Tool → Rule → Hope it catches something"</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>9. Do you follow MITRE ATT&CK? How do you use it practically?</h3>
+          <p class="interview-context"><strong>Checking:</strong> Real usage vs buzzwords, mapping detections to techniques, gap identification.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"Yes, but practically — not as a checkbox exercise. Here's how I actually use it:
+
+1. DETECTION COVERAGE MAPPING
+   When we migrated from RSA to Sentinel, I mapped our existing detections 
+   to ATT&CK techniques. This showed us:
+   • Where we had strong coverage (Initial Access, Credential Access)
+   • Where we had gaps (Defense Evasion, Lateral Movement)
+   
+2. PRIORITIZING NEW DETECTIONS
+   Instead of trying to cover all 200+ techniques, I prioritize based on:
+   • Relevance to our environment (cloud-first = focus on T1078 Valid Accounts)
+   • Telemetry availability (can we actually detect it?)
+   • Attack prevalence (what are threat actors actually using?)
+
+3. CONTENT HUB ALIGNMENT
+   Microsoft's Content Hub solutions map to ATT&CK. When enabling built-in 
+   rules, I check which techniques they cover and whether those align with 
+   our priority gaps.
+
+4. PRACTICAL EXAMPLE
+   For T1078.004 (Cloud Accounts), we implemented:
+   • Impossible travel detection (built-in, tuned threshold)
+   • Sign-in from anonymous IP (built-in)
+   • Service principal added to privileged role (custom)
+   
+   Each maps to a specific sub-technique with clear detection logic.
+
+5. GAP COMMUNICATION
+   MITRE mapping helps communicate with leadership:
+   "We have coverage for 15 of the 20 techniques most relevant to our 
+   threat model. Here are the 5 gaps and what we need to close them."
+
+I don't aim for 100% coverage — I aim for coverage where it matters for 
+our specific risk profile."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>10. How do you decide between built-in detections vs custom rules?</h3>
+          <p class="interview-context"><strong>Great consultant question.</strong> Efficiency, maintainability, signal-to-noise thinking.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"My default is built-in first, custom only when necessary. Here's my framework:
+
+USE BUILT-IN WHEN:
+• Microsoft provides a native equivalent (Content Hub)
+• The detection logic is well-maintained by the vendor
+• It covers common attack patterns (credential attacks, malware, etc.)
+• You want automatic updates when new threats emerge
+
+Example: I enabled Microsoft's "Possible AiTM phishing attempt" detection 
+rather than writing custom KQL. Microsoft has more threat intel and updates 
+it constantly.
+
+USE CUSTOM WHEN:
+• Business-specific logic (our Salesforce data export patterns)
+• Environment-specific thresholds (what's "normal" for us)
+• No built-in equivalent exists
+• Need to correlate across sources in a specific way
+
+Example: We wrote custom KQL for "Service principal granted privileged role 
+outside change window" — this requires knowing our change windows.
+
+MY DECISION PROCESS:
+1. Check Content Hub — is there a solution for this use case?
+2. Enable and test built-in rules — do they work in our environment?
+3. Tune thresholds — Microsoft defaults are often too sensitive
+4. Custom only for gaps — document why built-in didn't work
+
+MAINTAINABILITY MATTERS:
+• Built-in rules: Microsoft maintains, you tune
+• Custom rules: You maintain forever
+• Every custom rule is technical debt
+
+In our migration, about 70% of detections came from built-in rules (enabled 
+and tuned), 30% were custom for environment-specific needs."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>11. How do you validate detections once implemented?</h3>
+          <p class="interview-context"><strong>What they expect:</strong> Telemetry availability, test cases, SOC feedback, false positive tuning.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"Validation happens at multiple stages:
+
+1. PRE-DEPLOYMENT: TELEMETRY CHECK
+   Before enabling a detection, I verify the required data exists:
+   
+   // Does the table have data?
+   DeviceProcessEvents | where TimeGenerated > ago(1d) | count
+   
+   // Are the fields we need populated?
+   DeviceProcessEvents | where isempty(InitiatingProcessFileName) | count
+
+2. CONTROLLED TESTING
+   For detections we can safely test:
+   • Run known-bad command in test environment
+   • Verify alert fires within expected time
+   • Check alert has necessary context for investigation
+   
+   Example: Test ASR rule detection by triggering blocked action on test machine
+
+3. PURPLE TEAM VALIDATION
+   For detections we can't easily trigger:
+   • Work with red team to simulate specific techniques
+   • Validate detection fires correctly
+   • Tune if it misses or over-fires
+
+4. SOC FEEDBACK LOOP
+   Once detection is live:
+   • Monitor alert volume for first 48-72 hours
+   • Review false positive rate with analysts
+   • Tune thresholds based on real-world data
+   
+   If SOC says "this fires 50 times a day and they're all false positives" 
+   — that's a failed detection, not a security win.
+
+5. ONGOING VALIDATION
+   • Weekly review of detection performance
+   • Track: Alerts generated, incidents created, true positive rate
+   • Retire detections that don't produce value
+
+Our target: <20% false positive rate for any detection. Above that, we 
+tune or disable until fixed."</code></pre>
+          </div>
+        </div>
+
+        <!-- BLOCK 4: ENDPOINT & NETWORK -->
+        <h2>Block 4: Endpoint, OS, and Network Fundamentals</h2>
+
+        <div class="interview-question">
+          <h3>12. What endpoint telemetry do you rely on most for detections?</h3>
+          <p class="interview-context"><strong>Checking:</strong> EDR understanding, process/network/identity linkage.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"From MDE, I rely heavily on these tables in order of detection value:
+
+1. DeviceProcessEvents (HIGHEST VALUE)
+   • Process creation with full command line
+   • Parent-child process relationships
+   • User context
+   Critical for: Malware execution, LOLBins, script-based attacks
+   
+   Example: Detecting encoded PowerShell:
+   | where ProcessCommandLine contains "-enc" or ProcessCommandLine contains "-e "
+
+2. DeviceNetworkEvents
+   • Outbound connections with process context
+   • DNS queries
+   • Remote IP/port
+   Critical for: C2 detection, data exfiltration, lateral movement
+   
+   Example: Detecting suspicious outbound on non-standard ports
+
+3. DeviceLogonEvents
+   • Local and network logons
+   • Logon type (interactive, network, service)
+   • Source context
+   Critical for: Credential abuse, lateral movement, privilege escalation
+
+4. DeviceFileEvents
+   • File creation, modification, deletion
+   • File path and hash
+   Critical for: Ransomware (mass file changes), data staging
+
+5. DeviceRegistryEvents
+   • Registry modifications
+   • Persistence mechanisms
+   Critical for: Persistence detection, defense evasion
+
+THE POWER IS IN CORRELATION:
+A process event alone might be benign. But:
+   Process spawns encoded PowerShell 
+   + Makes outbound connection to rare domain
+   + Downloads file to temp directory
+   + File executes and modifies registry
+
+That chain across tables tells the full story."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>13. How does Windows logging differ from EDR telemetry?</h3>
+          <p class="interview-context"><strong>Good depth question.</strong> Awareness of overlap, when you need each, cost/value trade-offs.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"They serve different purposes and have different characteristics:
+
+WINDOWS SECURITY EVENTS (SecurityEvent table):
+• Native OS logging — no agent required beyond Azure Monitor Agent
+• Event-based: specific Event IDs for specific actions
+• Examples: 4624 (logon), 4688 (process creation), 4625 (failed logon)
+• Limitations:
+  - Command line logging requires GPO configuration
+  - No automatic process ancestry
+  - Can be disabled by attackers with admin rights
+• Cost: You pay for ingestion
+
+EDR TELEMETRY (MDE Device* tables):
+• Agent-based — richer behavioral context
+• Continuous monitoring, not just events
+• Automatic process trees and ancestry
+• Harder for attackers to evade (kernel-level hooks)
+• Built-in threat intelligence enrichment
+• Cost: FREE through M365 Defender connector
+
+WHEN I USE EACH:
+
+Windows Events:
+• Servers without MDE (legacy, air-gapped)
+• Specific audit requirements (4769 for Kerberos)
+• Domain controller events (not always MDE-enrolled)
+• Compliance requirements that specify Windows logging
+
+EDR Telemetry:
+• Primary detection source for endpoints
+• Process-based detections
+• Network connection context
+• File and registry activity
+• Anything behavioral
+
+COST TRADE-OFF:
+With MDE, I get richer telemetry for free. Windows Security Events 
+cost ~$2.76/GB. So I filter Windows events to only what MDE doesn't 
+cover — domain controllers, specific audit requirements.
+
+In practice: 80% of endpoint detections use MDE tables, 20% use 
+Windows events for gaps."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>14. Can you explain TCP/IP at a high level and how it impacts detections?</h3>
+          <p class="interview-context"><strong>Not packet-level deep</strong> — connections, DNS, network boundaries.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"At a detection-relevant level:
+
+TCP/IP BASICS FOR SECURITY:
+• IP addresses identify hosts (source/destination)
+• Ports identify services (80=HTTP, 443=HTTPS, 445=SMB)
+• TCP = connection-oriented (handshake, reliable)
+• UDP = connectionless (DNS, faster but no guarantee)
+
+HOW THIS IMPACTS DETECTIONS:
+
+1. UNUSUAL PORTS
+   Normal: Outbound 443, 80
+   Suspicious: Outbound 4444 (Metasploit default), 8080 to internet
+   
+   Detection: Process making outbound connection on non-standard port
+
+2. DNS AS DETECTION SIGNAL
+   • DNS queries happen before connections
+   • Can detect C2 domains before payload executes
+   • DNS tunneling uses TXT records or long subdomains
+   
+   Detection: Unusually long DNS queries, high query volume to single domain
+
+3. LATERAL MOVEMENT PATTERNS
+   • SMB (445) between workstations = suspicious
+   • RDP (3389) from workstation to server = maybe normal
+   • WinRM (5985/5986) from non-admin machine = suspicious
+   
+   Detection: Workstation-to-workstation SMB connections
+
+4. NETWORK BOUNDARIES
+   • Internal to internal (lateral movement)
+   • Internal to external (exfiltration, C2)
+   • External to internal (initial access, if exposed)
+   
+   Detection logic changes based on direction
+
+5. BEACONING PATTERNS
+   • C2 often has regular callback intervals
+   • TCP connections to same IP at consistent intervals
+   
+   Detection: Regular outbound connections with consistent timing
+
+For Sentinel, this translates to:
+• DeviceNetworkEvents: process-to-network correlation
+• CommonSecurityLog: firewall allow/deny with IP/port
+• DnsEvents: query patterns
+• AzureNetworkAnalytics: flow logs for cloud workloads"</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>15. Where do you typically place security controls in a network?</h3>
+          <p class="interview-context"><strong>Looking for:</strong> Perimeter, endpoint, identity, cloud control plane.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"I think in terms of the three planes, plus perimeter:
+
+1. PERIMETER (Traditional Boundary)
+   • Firewall — allow/deny based on IP, port, protocol
+   • WAF — protect web applications from OWASP top 10
+   • Email gateway — filter phishing and malware
+   • DDoS protection — volumetric attack mitigation
+   
+   Reality: Perimeter is less relevant with cloud and remote work. 
+   Still important but not the primary control anymore.
+
+2. IDENTITY PLANE (Most Critical)
+   • Conditional Access — device, location, risk-based access
+   • MFA — everywhere, especially privileged accounts
+   • PIM — just-in-time privileged access
+   • Identity Protection — risk-based sign-in policies
+   
+   "Identity is the new perimeter" — this is where most attacks start.
+
+3. DATA PLANE (Where Business Runs)
+   • Endpoint: MDE for detection and response, ASR for prevention
+   • Email: Defender for Office 365, Safe Attachments/Links
+   • SaaS: Cloud App Security, session controls
+   • Data: DLP policies, sensitivity labels, encryption
+
+4. CLOUD CONTROL PLANE
+   • Azure Policy — enforce configurations
+   • Defender for Cloud — posture management
+   • RBAC — least privilege access to resources
+   • Management plane protection — PIM for Azure roles
+
+FOR DETECTION (SIEM PERSPECTIVE):
+I need telemetry from all layers:
+• Perimeter: firewall logs, email gateway
+• Identity: Entra ID logs, Conditional Access events
+• Endpoint: MDE telemetry
+• Cloud: Azure Activity, Defender for Cloud
+
+Detection is strongest when I can correlate across layers:
+Identity anomaly + Endpoint behavior + Network connection = High confidence"</code></pre>
+          </div>
+        </div>
+
+        <!-- BLOCK 5: INCIDENT RESPONSE -->
+        <h2>Block 5: Incident Response & Operations</h2>
+
+        <div class="interview-question">
+          <h3>16. How do you support incident response as a SIEM engineer?</h3>
+          <p class="interview-context"><strong>What they want:</strong> Collaboration with SOC, context enrichment, detection improvement post-incident.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"As a SIEM engineer, I'm not the primary investigator, but I enable and 
+support the SOC in several ways:
+
+1. CONTEXT ENRICHMENT
+   When an incident occurs, analysts often need more data. I help by:
+   • Writing ad-hoc KQL queries to find related events
+   • Pulling historical data they might not have access to
+   • Correlating across tables they're less familiar with
+   
+   Example: "Can you find all activity by this user in the last 7 days?"
+
+2. DETECTION GAP ANALYSIS
+   After every significant incident, I ask:
+   • Did we detect this? If not, why?
+   • What telemetry was available?
+   • Can we create a detection for this pattern?
+   
+   Example: Post-incident, we discovered we weren't logging a specific 
+   API that was abused. I worked with the app team to add that telemetry.
+
+3. PLAYBOOK VALIDATION
+   • Verify that detections are feeding the right playbooks
+   • Ensure entity mapping is correct for automated enrichment
+   • Test that automated response actions work
+
+4. DATA AVAILABILITY
+   • Ensure retention is sufficient for investigation scope
+   • Verify logs weren't dropped or delayed during incident
+   • Provide access to archived data if needed
+
+5. POST-INCIDENT IMPROVEMENTS
+   Every incident is an input to detection engineering:
+   • New detection rule if we missed the initial access
+   • Tuned threshold if we detected but too late
+   • New log source if we lacked visibility
+
+My role is making sure the SOC has the data and tools they need, and 
+that we continuously improve detection based on real incidents."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>17. How do you reduce alert fatigue?</h3>
+          <p class="interview-context"><strong>Very common question.</strong> Correlation, tuning, severity alignment, incident grouping.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"Alert fatigue is one of the biggest operational problems in security. 
+Here's my approach:
+
+1. TUNE BEFORE YOU ENABLE
+   • Never enable a detection at vendor defaults without testing
+   • Run in "audit mode" first — generate alerts but don't notify
+   • Analyze: How many alerts per day? What's the FP rate?
+   
+   We reduced initial alert volume by 75% through pre-deployment tuning.
+
+2. ENVIRONMENT-SPECIFIC EXCLUSIONS
+   • Whitelist known-good behavior specific to your environment
+   • Service accounts that legitimately do suspicious things
+   • Scheduled tasks that look like persistence but aren't
+   
+   Example: Our backup service triggers "sensitive file access" constantly. 
+   Exclude the service account, keep the detection for everyone else.
+
+3. CORRELATION AND GROUPING
+   • Use Fusion rules to combine related low-confidence signals
+   • Group alerts into incidents — 10 alerts, 1 incident to triage
+   • Cross-table correlation: sign-in anomaly + endpoint behavior = higher confidence
+
+4. SEVERITY ALIGNMENT
+   • Low severity = informational, doesn't page anyone
+   • Medium = review during business hours
+   • High = investigate within SLA
+   • Critical = immediate response
+   
+   Be honest about severity. Not everything is critical.
+
+5. MEASURE AND ITERATE
+   • Track: Alerts/day, incidents/day, true positive rate
+   • Target: <200 alerts/day, <25 incidents/day, >80% TP rate
+   • Weekly review of noisy detections
+
+6. RETIRE BAD DETECTIONS
+   If a detection has <10% true positive rate after tuning, disable it. 
+   A rule that generates 100 false positives and 1 true positive is 
+   worse than no rule at all.
+
+Our SOC went from 800+ alerts/day to ~150 through systematic tuning."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>18. What metrics do you track to measure SIEM effectiveness?</h3>
+          <p class="interview-context"><strong>They like hearing:</strong> Alerts/day, incidents/day, MTTR, detection coverage.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"I track metrics across three categories: Volume, Quality, and Coverage.
+
+VOLUME METRICS:
+• Alerts per day: ~150-200 (after tuning)
+• Incidents per day: ~15-25
+• Ingestion volume: ~250 GB/day
+• Cost per GB: tracked monthly
+
+QUALITY METRICS:
+• True positive rate: target >80%
+• Mean time to detect (MTTD): how long from event to alert?
+• Mean time to respond (MTTR): ~4 hours for P2/P3
+• False positive rate by detection: identify noisy rules
+
+COVERAGE METRICS:
+• Log source coverage: % of critical sources onboarded
+• Detection coverage: mapped to MITRE ATT&CK techniques
+• Time to new detection: how fast can we deploy new rules?
+
+OPERATIONAL METRICS:
+• Analyst utilization: are we overwhelming or underutilizing SOC?
+• Escalation rate: what % of incidents go to L3?
+• Automation rate: % of alerts with automated enrichment
+
+HOW I PRESENT THESE:
+• Weekly: Alert volume, FP rate, top noisy detections
+• Monthly: MTTR trends, coverage gaps, cost analysis
+• Quarterly: MITRE coverage, detection effectiveness review
+
+EXAMPLE DASHBOARD QUERY:
+SecurityIncident
+| where TimeGenerated > ago(7d)
+| summarize 
+    IncidentCount = count(),
+    AvgCloseTime = avg(ClosedTime - CreatedTime),
+    P1Count = countif(Severity == "High"),
+    TPRate = countif(Classification == "TruePositive") / count()
+| extend MTTR_Hours = AvgCloseTime / 1h
+
+These metrics help me show value and identify improvement areas."</code></pre>
+          </div>
+        </div>
+
+        <!-- BLOCK 6: CONSULTING -->
+        <h2>Block 6: Consulting & Communication Skills</h2>
+
+        <div class="interview-question">
+          <h3>19. How do you work with non-technical stakeholders?</h3>
+          <p class="interview-context"><strong>Checking:</strong> Communication clarity, translation of security risk to business impact.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"The key is translating security concepts into business impact. Examples:
+
+1. AVOID TECHNICAL JARGON
+   Don't say: "We need to onboard your syslog to the SIEM via CEF."
+   Say: "We need to connect your firewall to our monitoring system so 
+   we can detect threats targeting your network."
+
+2. FRAME IN BUSINESS TERMS
+   Don't say: "This detection covers T1078 Valid Accounts."
+   Say: "This alerts us if someone's credentials are stolen and used 
+   to access your customer data."
+
+3. USE RISK-BASED CONVERSATIONS
+   Don't say: "We have a gap in our MITRE coverage."
+   Say: "There's a type of attack we can't currently detect. Based on 
+   recent incidents in our industry, I recommend we address this."
+
+4. QUANTIFY WHEN POSSIBLE
+   Don't say: "DLP will block data exfiltration."
+   Say: "DLP will prevent scenarios like an employee downloading your 
+   entire customer database before leaving the company."
+
+5. PRACTICAL EXAMPLES FROM MY WORK:
+   
+   With application owners:
+   "I need to understand your logging so we can detect if someone 
+   compromises your application. Can you walk me through what you log 
+   and how?"
+   
+   With executives:
+   "The security transformation reduced our annual tool costs by $500K 
+   while improving our detection capability. We can now detect account 
+   compromises in minutes instead of missing them entirely."
+   
+   With legal/compliance:
+   "This DLP policy will audit before blocking. You'll have 60 days to 
+   review real activity before we make enforcement decisions."
+
+The goal is making security understandable and showing value to the business."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>20. How do you handle situations where business requirements conflict with security?</h3>
+          <p class="interview-context"><strong>Classic consultant scenario.</strong> Risk-based trade-offs, not "security says no."</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"My approach is risk-based trade-offs, not "security says no."
+
+1. UNDERSTAND THE BUSINESS NEED FIRST
+   Before pushing back, ask: Why do they need this? What's the business 
+   outcome they're trying to achieve?
+   
+   Often there's a secure way to achieve the same outcome.
+
+2. QUANTIFY THE RISK
+   Don't say: "That's insecure."
+   Say: "If we do this, here's the specific risk: unauthorized access to 
+   customer data. The likelihood is medium because..."
+
+3. OFFER ALTERNATIVES
+   "I understand you need to share files externally. Instead of disabling 
+   DLP, let's create an approved channel with logging. You get your 
+   functionality, we keep visibility."
+
+4. DOCUMENT THE DECISION
+   If business accepts the risk, document it:
+   • What's the risk?
+   • Who accepted it?
+   • What compensating controls exist?
+   • When do we revisit?
+
+REAL EXAMPLE:
+Application team wanted to exclude their entire server from MDE scanning 
+because it was causing performance issues.
+
+My response:
+"I understand the performance concern. Let's investigate the specific 
+processes causing overhead and create targeted exclusions. Full exclusion 
+means we have zero visibility if that server is compromised."
+
+We found 3 specific processes to exclude. They got their performance, 
+we kept detection coverage for everything else.
+
+THE KEY PRINCIPLE:
+Security's job isn't to say no — it's to help the business achieve 
+its goals securely. If we just block everything, people find workarounds 
+that are even less secure."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>21. Why do you want to move into a consulting role?</h3>
+          <p class="interview-context"><strong>Expect:</strong> Growth, broader exposure, architecture mindset. (See Career Narrative page)</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"I've spent the last several years in hands-on security engineering roles, 
+where I've been deeply involved in designing, deploying, and stabilizing 
+security platforms like SIEM, EDR, and DLP in real production environments.
+
+Through that work, I realized that the part I enjoy most is understanding 
+an organization's architecture end-to-end, identifying gaps, and helping 
+shape how security should be built — rather than just operating a single 
+environment long-term.
+
+A consulting role allows me to apply that engineering foundation across 
+different environments, industries, and architectures. I like walking into 
+new organizations, quickly understanding their business, control and data 
+planes, and then mapping the right security controls and detection strategies 
+to their risk profile.
+
+I also feel my background fits consulting well because I've worked across 
+multiple security domains — SIEM, EDR, identity, and DLP — which gives me 
+a broader view of how controls work together rather than in silos.
+
+Consulting lets me leverage that breadth, contribute earlier in design and 
+decision-making, and help organizations accelerate their security maturity 
+while still staying close to the technical details."</code></pre>
+          </div>
+        </div>
+
+        <!-- BLOCK 7: SCENARIO-BASED -->
+        <h2>Block 7: Scenario-Based / Design Questions</h2>
+
+        <div class="interview-question">
+          <h3>22. If you joined a new client tomorrow, how would you assess their SIEM maturity?</h3>
+          <p class="interview-context"><strong>They want:</strong> Structured thinking, not tools first.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"I'd use a structured assessment across five dimensions:
+
+1. LOG SOURCE COVERAGE (Day 1-2)
+   • What's connected? What's missing?
+   • Identity logs? Endpoint? Network? Cloud?
+   • Check for critical gaps: "Do you have Entra ID sign-in logs?" 
+   • If they don't have identity logs, that's a major gap.
+
+2. DETECTION MATURITY (Day 2-3)
+   • How many active detection rules?
+   • Built-in vs custom ratio?
+   • When was the last rule added or tuned?
+   • MITRE coverage assessment
+   • Ask: "Show me your most recent detection that fired and resulted 
+     in a true positive."
+
+3. OPERATIONAL HEALTH (Day 3-4)
+   • Alert volume vs incident volume
+   • True positive rate
+   • MTTR for incidents
+   • Analyst capacity and skill level
+   • Ask: "What's your biggest operational pain point?"
+
+4. DATA QUALITY (Day 4-5)
+   • Are logs parsing correctly?
+   • Any ingestion delays?
+   • Retention appropriate for investigation needs?
+   • Run validation queries on critical tables
+
+5. INTEGRATION & AUTOMATION (Week 2)
+   • SOAR integration?
+   • Automated enrichment?
+   • Ticketing integration?
+   • Response playbooks defined?
+
+OUTPUT:
+• Maturity score: 1-5 across each dimension
+• Gap prioritization: what to fix first
+• Quick wins: low effort, high impact improvements
+• Roadmap: 30/60/90 day plan
+
+The first question I always ask: "Walk me through what happens when 
+an alert fires." The answer tells me more about maturity than any 
+technical checklist."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>23. How would you design SIEM for a company with 5,000 endpoints?</h3>
+          <p class="interview-context"><strong>Ties everything together:</strong> Log sources, cost, SOC model.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"I'd start with questions before design:
+
+BUSINESS CONTEXT:
+• What industry? (Compliance requirements vary)
+• Cloud-first or hybrid?
+• In-house SOC or managed?
+• What's the security budget?
+
+ASSUMING: Cloud-first, in-house SOC, Microsoft shop, compliance-aware
+
+1. PLATFORM SELECTION
+   Microsoft Sentinel — integrates with M365 E5, free XDR data
+   
+2. LOG SOURCE ARCHITECTURE (Priority Order)
+   
+   Phase 1 (Week 1-2): Identity & Endpoint
+   • Entra ID (free tier) — sign-in, audit logs
+   • M365 Defender connector — all Device* tables FREE
+   • Estimated: 100 GB/day, $0 (free XDR)
+   
+   Phase 2 (Week 3-4): Cloud Control Plane
+   • Azure Activity Logs (free)
+   • Defender for Cloud alerts (free)
+   • Estimated: 5 GB/day, $0
+   
+   Phase 3 (Month 2): Network & Perimeter
+   • Firewall logs (CEF via AMA)
+   • DNS logs
+   • Estimated: 50 GB/day, ~$4K/month
+   
+   Phase 4 (Month 3): SaaS & Custom
+   • Salesforce, ServiceNow, etc.
+   • Custom applications
+   • Estimated: 20 GB/day, ~$1.5K/month
+
+3. WORKSPACE DESIGN
+   • Single workspace (unless regulatory requires regional)
+   • Commitment tier: 100 GB/day (~50% discount)
+   • Retention: 90 days hot, archive beyond
+
+4. DETECTION STRATEGY
+   • Content Hub solutions first
+   • Detection translation if migrating from legacy SIEM
+   • Custom for environment-specific needs
+   • Target: 50+ detection rules by end of month 2
+
+5. SOC MODEL
+   • For 5,000 endpoints: likely 24/7 coverage needed
+   • 8-10 analysts across shifts
+   • Tiered: L1 triage, L2 investigate, L3 hunt
+
+6. COST ESTIMATE
+   • Ingestion: ~$6-8K/month after optimization
+   • Compare to legacy SIEM: likely 40-60% savings
+
+The key is sequencing: free high-value data first, paid data where 
+it adds detection value."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>24. What challenges do you commonly see in SIEM migrations?</h3>
+          <p class="interview-context"><strong>They want:</strong> Real pain points, lessons learned.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"Based on my experience, these are the most common challenges:
+
+1. DETECTION TRANSLATION PARALYSIS
+   Problem: Teams try to migrate every rule 1:1 from legacy SIEM
+   Reality: 60% of rules are obsolete, noisy, or have built-in equivalents
+   
+   Solution: Categorize rules first. Only translate what adds value.
+   Many detections are better replaced by vendor-native content.
+
+2. TELEMETRY NOT READY FOR DETECTIONS
+   Problem: Detection engineers write rules, but data isn't flowing yet
+   Result: Blocked work, frustration, delayed timelines
+   
+   Solution: Deploy telemetry sources BEFORE detection implementation.
+   We started MDE rollout early specifically for this reason.
+
+3. UNDERESTIMATING SOC TRANSITION
+   Problem: "We'll just train analysts for a week"
+   Reality: SOC needs months of parallel operation, shadow mode, 
+   gradual confidence building
+   
+   Solution: Plan for 3-6 months of parallel operation. Budget for it.
+
+4. COST SURPRISES
+   Problem: Migrate everything, get shocked by bill
+   Reality: Per-GB pricing adds up fast with verbose logs
+   
+   Solution: Instrument cost monitoring from day 1. Use free tiers 
+   aggressively. Filter before ingest.
+
+5. CUSTOM LOG SOURCE COMPLEXITY
+   Problem: On-prem and custom apps are always harder than expected
+   Reality: Every non-standard log source has quirks
+   
+   Solution: Inventory all log sources early. Identify the hard ones. 
+   Build in buffer time.
+
+6. STAKEHOLDER ALIGNMENT
+   Problem: Teams surprised by new logging requirements
+   Reality: You need cooperation from IT, apps, network, cloud teams
+   
+   Solution: Stakeholder engagement in discovery phase, not deployment.
+
+7. UNREALISTIC TIMELINES
+   Problem: "We'll migrate in 3 months"
+   Reality: Enterprise SIEM migrations take 12-18 months done right
+   
+   Solution: Set expectations. Plan for parallel operation costs.
+
+The meta-lesson: Most challenges are organizational, not technical."</code></pre>
+          </div>
+        </div>
+
+        <!-- BLOCK 8: WRAP-UP -->
+        <h2>Block 8: Wrap-Up Questions</h2>
+
+        <div class="interview-question">
+          <h3>25. What do you think makes a SIEM deployment successful?</h3>
+          <p class="interview-context"><strong>High-level maturity check.</strong></p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"Three things determine SIEM success:
+
+1. SOC ADOPTION
+   The SIEM is only successful if the SOC uses it effectively. 
+   Metrics don't matter if analysts are frustrated, overwhelmed, 
+   or working around the tool.
+   
+   Success indicator: Analysts prefer the new SIEM over the old one.
+   Failure indicator: "We still use the old tool for real investigations."
+
+2. DETECTION COVERAGE THAT MATTERS
+   Not "we have 500 rules" — but "we detect the threats relevant to 
+   our business."
+   
+   Success indicator: Detections map to actual risks, generate 
+   actionable alerts, and have reasonable true positive rates.
+   Failure indicator: High alert volume, low incident rate, analyst 
+   fatigue.
+
+3. OPERATIONAL SUSTAINABILITY
+   Can the team maintain this without burning out?
+   
+   Success indicator: Stable alert volume, clear processes, continuous 
+   improvement cadence.
+   Failure indicator: Detection debt growing, no one tuning rules, 
+   same false positives for months.
+
+THE UNDERLYING PRINCIPLE:
+A successful SIEM deployment is one where:
+• Security outcomes improve (faster detection, better coverage)
+• Operations are sustainable (not overwhelming the SOC)
+• The business is protected (risks are mitigated)
+
+Technical metrics are means to these ends, not ends themselves.
+
+My personal test: Six months after deployment, does the SOC feel 
+more capable or less capable? If less, we failed regardless of how 
+many log sources we connected."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>26. Do you have any questions for us?</h3>
+          <p class="interview-context"><strong>Always prepare 2-3:</strong> Client types, SIEM maturity, consulting model.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Questions to Ask</span></div>
+            <pre><code>ABOUT THE WORK:
+1. "What's the typical client profile — are they greenfield deployments, 
+   migrations from legacy SIEMs, or optimization of existing Sentinel?"
+
+2. "How mature are most clients when they engage? Are we designing from 
+   scratch or improving existing implementations?"
+
+3. "What's the balance between advisory work vs hands-on implementation?"
+
+ABOUT THE TEAM:
+4. "How is the team structured? Do consultants specialize in specific 
+   areas (SIEM, EDR, identity) or work across the stack?"
+
+5. "What does a typical engagement look like — duration, team size, 
+   client interaction model?"
+
+6. "How does knowledge sharing work across the team? Are there internal 
+   communities of practice?"
+
+ABOUT GROWTH:
+7. "What does the learning and development path look like for someone 
+   in this role?"
+
+8. "What differentiates your top-performing consultants from others?"
+
+ABOUT CHALLENGES:
+9. "What's the biggest challenge clients face with SIEM right now? 
+   Is it deployment, cost, detection quality, or something else?"
+
+10. "What's one thing you wish candidates understood better about 
+    consulting work before joining?"
+
+Pick 2-3 based on conversation flow. Avoid questions answered earlier 
+or on their website.</code></pre>
+          </div>
+        </div>
+
+        <h2>Quick Reference: 5 Blocks Summary</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Block</th><th>Key Questions</th><th>Core Message</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. You & Role</strong></td>
+                <td>Tell me about yourself, Day-to-day</td>
+                <td>SIEM/EDR/DLP experience, consulting mindset, platform engineering</td>
+              </tr>
+              <tr>
+                <td><strong>2. SIEM Foundations</strong></td>
+                <td>Deployment end-to-end, Log sources, Validation, Cost</td>
+                <td>Risk-based prioritization, telemetry-first, free XDR data</td>
+              </tr>
+              <tr>
+                <td><strong>3. Detections</strong></td>
+                <td>Requirements to use cases, MITRE, Built-in vs custom</td>
+                <td>Threat-intent driven, built-in first, validate and tune</td>
+              </tr>
+              <tr>
+                <td><strong>4. Operations & IR</strong></td>
+                <td>Support IR, Alert fatigue, Metrics</td>
+                <td>Enable SOC, reduce noise, measure outcomes</td>
+              </tr>
+              <tr>
+                <td><strong>5. Consulting</strong></td>
+                <td>Non-technical stakeholders, Conflicts, Why consulting</td>
+                <td>Business translation, risk trade-offs, architecture mindset</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="career-narrative.html" class="page-nav-link prev">
+            <span class="page-nav-label">Previous</span>
+            <span class="page-nav-title">← Career Narrative</span>
+          </a>
+          <a href="siem/index.html" class="page-nav-link next">
+            <span class="page-nav-label">Next</span>
+            <span class="page-nav-title">SIEM Migration →</span>
+          </a>
+        </nav>
+
+      </div>
+    </main>
+  </div>
+  <script src="js/main.js"></script>
+  <style>
+    .interview-question {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 4px solid var(--accent-blue);
+    }
+    .interview-question h3 {
+      margin-top: 0;
+      color: var(--accent-blue);
+    }
+    .interview-context {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+    .interview-question .code-block {
+      margin-top: 1rem;
+    }
+  </style>
+</body>
+</html>

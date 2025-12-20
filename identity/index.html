@@ -22,9 +22,14 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <div class="nav-section">
+                <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -104,6 +109,65 @@
             <div class="card-description">Privileged Identity Management for just-in-time admin access.</div>
             <span class="card-link">View section →</span>
           </a>
+        </div>
+
+        <h2>Industry Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Identity Security Best Practices
+          </div>
+          <div class="callout-content">
+            <p><strong>Microsoft Zero Trust Identity Pillars:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Verify explicitly:</strong> Always authenticate and authorize based on all available data points</li>
+              <li><strong>Use least privilege:</strong> Limit user access with JIT/JEA and risk-based policies</li>
+              <li><strong>Assume breach:</strong> Minimize blast radius and segment access</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>CISA & NIST Recommendations:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Phishing-resistant MFA for all users (FIDO2, Windows Hello)</li>
+              <li>Block legacy authentication protocols (IMAP, POP3, SMTP AUTH)</li>
+              <li>Implement Conditional Access with device compliance</li>
+              <li>Monitor and protect privileged accounts with PIM</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>MFA for all users</td>
+                <td>CISA, NIST 800-63B, CIS Control 6</td>
+                <td>CA policy requiring MFA for all cloud apps</td>
+              </tr>
+              <tr>
+                <td>Block legacy authentication</td>
+                <td>Microsoft Security Defaults, CIS Benchmark</td>
+                <td>CA policy blocking IMAP/POP3/SMTP AUTH</td>
+              </tr>
+              <tr>
+                <td>Just-in-time privileged access</td>
+                <td>Microsoft Zero Trust, NIST 800-53 AC-6</td>
+                <td>PIM with 8-hour activation window</td>
+              </tr>
+              <tr>
+                <td>Risk-based access policies</td>
+                <td>Gartner ZTNA, Microsoft Identity Protection</td>
+                <td>CA policies blocking high-risk sign-ins</td>
+              </tr>
+              <tr>
+                <td>Passwordless authentication</td>
+                <td>CISA, Microsoft recommendation</td>
+                <td>FIDO2 keys for privileged accounts (roadmap)</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <nav class="page-nav">

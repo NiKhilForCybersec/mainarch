@@ -22,9 +22,14 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <div class="nav-section">
+                <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -113,6 +118,66 @@
             <div class="card-description">Migration order, methods (rehost, refactor, rebuild), database migration.</div>
             <span class="card-link">View section →</span>
           </a>
+        </div>
+
+        <h2>Industry Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Cloud Infrastructure Best Practices
+          </div>
+          <div class="callout-content">
+            <p><strong>Microsoft Cloud Adoption Framework (CAF):</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Landing Zone First:</strong> Establish governance, networking, identity before workloads</li>
+              <li><strong>Hub-Spoke Network:</strong> Centralized connectivity and security controls</li>
+              <li><strong>Policy as Code:</strong> Azure Policy for compliance guardrails</li>
+              <li><strong>Identity Foundation:</strong> Entra ID as single identity plane</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>CIS Azure Benchmark:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Enable Defender for Cloud on all subscriptions</li>
+              <li>Encrypt data at rest and in transit</li>
+              <li>Use NSGs and Azure Firewall for network segmentation</li>
+              <li>Enable diagnostic logging to Log Analytics</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Hub-spoke network topology</td>
+                <td>Microsoft CAF, Azure Well-Architected</td>
+                <td>Centralized hub with Azure Firewall, spoke VNets per workload</td>
+              </tr>
+              <tr>
+                <td>Encryption at rest</td>
+                <td>CIS Azure 4.1, ISO 27001 A.10</td>
+                <td>Azure Storage encryption, Azure SQL TDE, Key Vault</td>
+              </tr>
+              <tr>
+                <td>Network segmentation</td>
+                <td>CIS Control 12, NIST 800-53 SC-7</td>
+                <td>NSGs per subnet, Azure Firewall for egress</td>
+              </tr>
+              <tr>
+                <td>Enable cloud security posture</td>
+                <td>Gartner CSPM, Microsoft recommendation</td>
+                <td>Defender for Cloud on all subscriptions</td>
+              </tr>
+              <tr>
+                <td>Infrastructure as Code</td>
+                <td>DevSecOps, Microsoft CAF</td>
+                <td>Bicep/ARM templates in Git, reviewed deployments</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <nav class="page-nav">

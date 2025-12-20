@@ -22,9 +22,14 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <div class="nav-section">
+                <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -511,6 +516,71 @@ AuditLogs
             <p><strong>Target:</strong> No user has permanent Global Admin, Security Admin, or Azure Owner. 100% of privileged access through PIM with time-limited activations.</p>
             <p><strong>Audit check:</strong> Monthly review of any active (non-eligible) assignments. Any standing privilege requires documented exception.</p>
           </div>
+        </div>
+
+        <h2>Industry Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Privileged Access Management Best Practices
+          </div>
+          <div class="callout-content">
+            <p><strong>Microsoft Zero Trust & PAM Recommendations:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Just-in-Time (JIT):</strong> No standing privileges — all access via time-limited activation</li>
+              <li><strong>Just-Enough-Access (JEA):</strong> Grant minimum permissions needed for the task</li>
+              <li><strong>Approval Workflows:</strong> Require approval for high-risk roles (Global Admin, Security Admin)</li>
+              <li><strong>MFA on Activation:</strong> Always require MFA when activating privileged roles</li>
+              <li><strong>Justification Required:</strong> Document business reason for every activation</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Gartner PAM Best Practices:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Maximum activation duration: 8 hours for most roles, 1-4 hours for highest-risk</li>
+              <li>Quarterly access reviews for all privileged role assignments</li>
+              <li>Alert on activation of Global Administrator role</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Eliminate standing privileged access</td>
+                <td>Microsoft Zero Trust, NIST 800-53 AC-6</td>
+                <td>100% PIM for privileged Entra ID and Azure roles</td>
+              </tr>
+              <tr>
+                <td>Require MFA for privilege activation</td>
+                <td>CIS Microsoft 365 1.1.2, Microsoft PAM guidance</td>
+                <td>MFA required on all PIM activations</td>
+              </tr>
+              <tr>
+                <td>Multi-person approval for highest-risk roles</td>
+                <td>SOX, SOC 2 separation of duties</td>
+                <td>Global Admin requires Security Lead + CTO approval</td>
+              </tr>
+              <tr>
+                <td>Time-bound access (maximum 8 hours)</td>
+                <td>Gartner PAM, Microsoft recommendation</td>
+                <td>1-8 hour limits based on role risk level</td>
+              </tr>
+              <tr>
+                <td>Document justification with ticket reference</td>
+                <td>ITIL, SOC 2, audit requirements</td>
+                <td>Ticket # required for production access</td>
+              </tr>
+              <tr>
+                <td>Quarterly access reviews</td>
+                <td>ISO 27001 A.9.2.5, SOC 2 CC6.1</td>
+                <td>Automated PIM access review every 90 days</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <nav class="page-nav">

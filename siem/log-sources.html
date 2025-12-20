@@ -22,13 +22,14 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <div class="nav-section">
+                <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
           <a href="../company-profile.html" class="nav-item">Company Profile</a>
           <a href="../security-framework.html" class="nav-item">Security Framework</a>
           <a href="../program-structure.html" class="nav-item">Program Structure</a>
           <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -391,6 +392,61 @@ Verify: DeviceProcessEvents | take 10</code></pre>
             <p><strong>Free XDR Telemetry:</strong> 5,400 GB/month of endpoint data ingested at no cost via M365 Defender connector.</p>
             <p><strong>Result:</strong> 69% cost reduction with improved cloud-native capabilities and unified XDR experience.</p>
           </div>
+        </div>
+
+        <h2>Industry Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Log Ingestion Best Practices
+          </div>
+          <div class="callout-content">
+            <p><strong>Microsoft & Industry Recommendations:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Retention:</strong> 90 days hot for investigation, 1+ year archive for compliance (NIST, SOC 2)</li>
+              <li><strong>Prioritization:</strong> Identity → Endpoint → Cloud → Network (CIS Controls, MITRE D3FEND)</li>
+              <li><strong>Cost Optimization:</strong> Use commitment tiers at 100+ GB/day for 50% savings</li>
+              <li><strong>Basic vs Analytics:</strong> Use Basic tier for high-volume, low-query logs (firewall, flow)</li>
+              <li><strong>XDR Integration:</strong> Always enable M365 Defender connector first — free high-value telemetry</li>
+              <li><strong>Data Minimization:</strong> Filter at source, not after ingestion (GDPR, privacy compliance)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Log all authentication events</td>
+                <td>NIST 800-53 AU-2, CIS Control 8</td>
+                <td>Entra ID sign-in + audit logs, full coverage</td>
+              </tr>
+              <tr>
+                <td>Retain security logs 1 year minimum</td>
+                <td>SOC 2, PCI-DSS, ISO 27001</td>
+                <td>90 days hot, 1 year archive tier</td>
+              </tr>
+              <tr>
+                <td>Centralize security telemetry</td>
+                <td>MITRE D3FEND, Gartner SOC recommendations</td>
+                <td>Single Sentinel workspace, unified XDR</td>
+              </tr>
+              <tr>
+                <td>Monitor privileged access</td>
+                <td>CIS Control 5, NIST 800-53 AC-6</td>
+                <td>PIM logs, admin audit, role changes</td>
+              </tr>
+              <tr>
+                <td>Log endpoint process execution</td>
+                <td>MITRE ATT&CK, CIS Control 8</td>
+                <td>MDE DeviceProcessEvents with command line</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <nav class="page-nav">

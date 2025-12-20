@@ -22,9 +22,14 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <div class="nav-section">
+                <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -145,6 +150,66 @@ az network firewall network-rule create \
               <tr><td>Allowed VM SKUs</td><td>Deny</td><td>Production - no B-series</td></tr>
               <tr><td>Storage HTTPS only</td><td>Deny</td><td>All subscriptions</td></tr>
               <tr><td>Defender for Cloud</td><td>DeployIfNotExists</td><td>All subscriptions</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Industry Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Landing Zone Best Practices
+          </div>
+          <div class="callout-content">
+            <p><strong>Microsoft Cloud Adoption Framework:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Hub-Spoke Topology:</strong> Centralized connectivity and security controls</li>
+              <li><strong>Azure Firewall:</strong> Centralized egress filtering and threat intelligence</li>
+              <li><strong>Management Group Hierarchy:</strong> Governance at scale with inherited policies</li>
+              <li><strong>Policy as Guardrails:</strong> Prevent non-compliant deployments before they happen</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>CIS Azure Foundations Benchmark:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Enable Defender for Cloud (Standard tier) on all subscriptions</li>
+              <li>Require secure transfer for storage accounts</li>
+              <li>Enable Network Watcher for all regions</li>
+              <li>Configure diagnostic settings for all resources</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Centralized firewall</td>
+                <td>Microsoft CAF, Zero Trust</td>
+                <td>Azure Firewall in hub VNet, all egress routed through</td>
+              </tr>
+              <tr>
+                <td>Network segmentation</td>
+                <td>CIS Control 12, NIST SC-7</td>
+                <td>Spoke VNets per workload, NSGs on all subnets</td>
+              </tr>
+              <tr>
+                <td>Policy enforcement</td>
+                <td>Microsoft CAF governance</td>
+                <td>Azure Policy with Deny effect for critical controls</td>
+              </tr>
+              <tr>
+                <td>Security monitoring</td>
+                <td>CIS Azure 2.1, Gartner CSPM</td>
+                <td>Defender for Cloud on all subscriptions</td>
+              </tr>
+              <tr>
+                <td>Encryption in transit</td>
+                <td>CIS Azure 4.1, ISO 27001</td>
+                <td>HTTPS required for all storage, TLS 1.2 minimum</td>
+              </tr>
             </tbody>
           </table>
         </div>

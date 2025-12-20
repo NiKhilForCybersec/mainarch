@@ -24,15 +24,15 @@
       </div>
       
       <nav class="sidebar-nav">
-        <div class="nav-section">
+                <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
           <a href="../company-profile.html" class="nav-item">Company Profile</a>
           <a href="../security-framework.html" class="nav-item">Security Framework</a>
           <a href="../program-structure.html" class="nav-item">Program Structure</a>
           <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
         </div>
-        
         <div class="nav-divider"></div>
         
         <div class="nav-section">
@@ -476,6 +476,67 @@
                 <td>Mean time to detect</td>
                 <td>≤ RSA baseline</td>
                 <td>Purple team exercises</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Industry Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            SIEM Implementation Best Practices
+          </div>
+          <div class="callout-content">
+            <p><strong>Gartner SOC Modernization:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>XDR Integration:</strong> SIEM should integrate with XDR for unified detection and response</li>
+              <li><strong>Cloud-Native First:</strong> Prioritize cloud-native SIEM for cloud-first organizations</li>
+              <li><strong>Automation:</strong> Implement SOAR for playbook automation and response</li>
+              <li><strong>Cost Optimization:</strong> Use tiered storage and filter high-volume, low-value logs</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Microsoft Sentinel Best Practices:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Enable M365 Defender connector for free XDR telemetry</li>
+              <li>Use commitment tiers at 100+ GB/day for 50% savings</li>
+              <li>Implement workspace design based on RBAC, not geography (unless required)</li>
+              <li>Use Content Hub solutions before writing custom detections</li>
+              <li>Enable UEBA for entity-based threat detection</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Centralize security logs</td>
+                <td>CIS Control 8, NIST 800-92</td>
+                <td>Single Sentinel workspace for all security telemetry</td>
+              </tr>
+              <tr>
+                <td>Retain logs for investigation</td>
+                <td>SOC 2, ISO 27001, NIST 800-53 AU-11</td>
+                <td>90 days hot, 1 year archive</td>
+              </tr>
+              <tr>
+                <td>Protect log integrity</td>
+                <td>NIST 800-53 AU-9, SOX</td>
+                <td>Immutable storage, RBAC on workspace</td>
+              </tr>
+              <tr>
+                <td>Alert on security events</td>
+                <td>CIS Control 8, MITRE ATT&CK</td>
+                <td>Analytics rules mapped to ATT&CK techniques</td>
+              </tr>
+              <tr>
+                <td>Integrate threat intelligence</td>
+                <td>Gartner TIP, MITRE D3FEND</td>
+                <td>Microsoft TI connector, custom IOC feeds</td>
               </tr>
             </tbody>
           </table>

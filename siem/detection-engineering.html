@@ -22,13 +22,14 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <div class="nav-section">
+                <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
           <a href="../company-profile.html" class="nav-item">Company Profile</a>
           <a href="../security-framework.html" class="nav-item">Security Framework</a>
           <a href="../program-structure.html" class="nav-item">Program Structure</a>
           <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -353,6 +354,69 @@ DeviceProcessEvents
               <tr><td><strong>Historical data</strong></td><td>Query last 30 days</td><td>Expected alerts would have fired</td></tr>
               <tr><td><strong>False positive rate</strong></td><td>Review first week of alerts</td><td>&lt;20% false positive rate</td></tr>
               <tr><td><strong>Purple team</strong></td><td>Simulate attack</td><td>Detection within SLA</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Industry Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Detection Engineering Best Practices
+          </div>
+          <div class="callout-content">
+            <p><strong>MITRE ATT&CK Alignment:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Coverage Mapping:</strong> Map all detections to ATT&CK techniques for gap analysis</li>
+              <li><strong>Priority Focus:</strong> Focus on techniques used by threat actors targeting your industry</li>
+              <li><strong>Data Source Validation:</strong> Verify required data sources per ATT&CK technique</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Detection Development Lifecycle (Gartner/SANS):</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Threat Intelligence → Detection Logic → Validation → Tuning → Production</strong></li>
+              <li><strong>Detection-as-Code:</strong> Version control all detection rules (Git)</li>
+              <li><strong>CI/CD for Detections:</strong> Automated testing before deployment</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Map detections to ATT&CK framework</td>
+                <td>MITRE ATT&CK, CISA recommendations</td>
+                <td>All rules tagged with technique IDs</td>
+              </tr>
+              <tr>
+                <td>Prioritize high-fidelity detections</td>
+                <td>Palantir Detection Engineering, Gartner</td>
+                <td>Built-in rules first, custom for gaps</td>
+              </tr>
+              <tr>
+                <td>Maintain detection coverage metrics</td>
+                <td>SANS Detection Maturity Model</td>
+                <td>Weekly coverage review by ATT&CK tactic</td>
+              </tr>
+              <tr>
+                <td>Test detections with adversary simulation</td>
+                <td>MITRE Caldera, Atomic Red Team</td>
+                <td>Purple team validation for critical rules</td>
+              </tr>
+              <tr>
+                <td>Document detection intent and limitations</td>
+                <td>Detection Engineering best practices</td>
+                <td>Each rule includes description, limitations, tuning notes</td>
+              </tr>
+              <tr>
+                <td>False positive rate &lt;20%</td>
+                <td>Industry benchmark</td>
+                <td>Track FP rate per rule, disable if >30%</td>
+              </tr>
             </tbody>
           </table>
         </div>

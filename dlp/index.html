@@ -22,10 +22,14 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <div class="nav-section">
+                <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
           <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -262,6 +266,71 @@
               <tr><td>User override rate</td><td>&lt;5% in Block mode</td><td>DLP reports</td></tr>
               <tr><td>Help desk tickets</td><td>&lt;20/week during rollout</td><td>ServiceNow metrics</td></tr>
               <tr><td>Training completion</td><td>100% of users</td><td>LMS completion</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Industry Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            DLP Implementation Best Practices
+          </div>
+          <div class="callout-content">
+            <p><strong>Microsoft Purview Recommendations:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Phased Rollout:</strong> Audit → Warn (Policy Tips) → Block — never skip audit phase</li>
+              <li><strong>Data Classification First:</strong> Implement sensitivity labels before DLP policies</li>
+              <li><strong>Minimum 60-90 days audit:</strong> Microsoft recommends extended audit to understand baseline</li>
+              <li><strong>User Training:</strong> Train users before enforcement, not after</li>
+              <li><strong>Business Alignment:</strong> Work with legal/compliance to define what data needs protection</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Gartner DLP Best Practices:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Start with crown jewels (most sensitive data) before broad deployment</li>
+              <li>False positive rate target: &lt;10% after tuning</li>
+              <li>Integrate DLP with SIEM for security monitoring</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Classify data before DLP enforcement</td>
+                <td>NIST 800-53 SC-16, ISO 27001 A.8.2</td>
+                <td>Sensitivity labels deployed, SITs validated</td>
+              </tr>
+              <tr>
+                <td>Audit mode before enforcement</td>
+                <td>Microsoft Purview guidance, Gartner DLP</td>
+                <td>60+ days audit, validate FP rate &lt;10%</td>
+              </tr>
+              <tr>
+                <td>Policy tip / warn before block</td>
+                <td>User adoption best practices</td>
+                <td>30-day warn phase with policy tips</td>
+              </tr>
+              <tr>
+                <td>Define business justification overrides</td>
+                <td>Microsoft Purview, business alignment</td>
+                <td>Override with justification for legitimate exceptions</td>
+              </tr>
+              <tr>
+                <td>Monitor DLP events in SIEM</td>
+                <td>Integrated security monitoring</td>
+                <td>DLP events flow to Sentinel for SOC visibility</td>
+              </tr>
+              <tr>
+                <td>Quarterly policy review</td>
+                <td>Compliance best practices</td>
+                <td>Review coverage, tune conditions, retire obsolete policies</td>
+              </tr>
             </tbody>
           </table>
         </div>

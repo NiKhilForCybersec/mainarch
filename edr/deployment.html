@@ -22,9 +22,14 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <div class="nav-section">
+                <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -206,6 +211,71 @@ DeviceInfo
         <div class="callout info">
           <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Client Analyzer</div>
           <div class="callout-content"><p>Use the MDE Client Analyzer tool to diagnose onboarding issues: <code>MDEClientAnalyzer.cmd</code> from Microsoft's download center.</p></div>
+        </div>
+
+        <h2>Industry Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            EDR Deployment Best Practices
+          </div>
+          <div class="callout-content">
+            <p><strong>Microsoft MDE Recommendations:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Phased Rollout:</strong> Pilot → IT → Engineering → Business (never mass deploy day 1)</li>
+              <li><strong>Ring-Based Deployment:</strong> Use device groups and deployment rings for controlled rollout</li>
+              <li><strong>Health Monitoring:</strong> Monitor sensor health and connectivity daily during rollout</li>
+              <li><strong>Exclusion Planning:</strong> Document exclusions before deployment, not after incidents</li>
+              <li><strong>Coexistence Testing:</strong> Validate performance with existing AV in pilot group</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Gartner EDR Deployment Guidance:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Target: 100% endpoint coverage within 90 days of project start</li>
+              <li>Success gate: &lt;5% deployment failures per wave</li>
+              <li>Have rollback plan ready for each wave</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>100% endpoint coverage</td>
+                <td>CIS Control 10, NIST 800-53 SI-3</td>
+                <td>Target: 9,000 endpoints, 100% onboarded</td>
+              </tr>
+              <tr>
+                <td>Phased deployment with pilot</td>
+                <td>Microsoft deployment guidance, ITIL</td>
+                <td>8 waves: Pilot → IT → Engineering → Business → Servers</td>
+              </tr>
+              <tr>
+                <td>Monitor sensor health</td>
+                <td>Microsoft MDE operations guide</td>
+                <td>Daily health check KQL query, &lt;2% inactive target</td>
+              </tr>
+              <tr>
+                <td>Document exclusions centrally</td>
+                <td>Operational security best practices</td>
+                <td>Exclusion registry with business justification</td>
+              </tr>
+              <tr>
+                <td>Enable tamper protection</td>
+                <td>Microsoft security baseline, CIS</td>
+                <td>Tamper protection enabled org-wide via Intune</td>
+              </tr>
+              <tr>
+                <td>Integrate with SIEM</td>
+                <td>XDR architecture, Microsoft Sentinel</td>
+                <td>M365 Defender connector for unified telemetry</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <nav class="page-nav">

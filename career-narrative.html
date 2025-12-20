@@ -22,14 +22,14 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <div class="nav-section">
+                <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="index.html" class="nav-item">Executive Summary</a>
           <a href="company-profile.html" class="nav-item">Company Profile</a>
           <a href="security-framework.html" class="nav-item">Security Framework</a>
           <a href="program-structure.html" class="nav-item">Program Structure</a>
           <a href="career-narrative.html" class="nav-item">Career Narrative</a>
-          <a href="career-narrative.html" class="nav-item active">Career Narrative</a>
+          <a href="interview-prep.html" class="nav-item">Interview Preparation</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -72,6 +72,150 @@
           <p class="intro-text">
             Why security consulting? This page documents the career progression from hands-on security engineering to consulting — and why the transition makes sense.
           </p>
+        </div>
+
+        <h2>Current Responsibilities (Day-to-Day)</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Current Focus: DLP Audit Support
+          </div>
+          <div class="callout-content">
+            <p>For the last couple of months, my responsibilities have been focused on supporting the DLP track, primarily in audit mode:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Reviewing DLP events in Activity Explorer</li>
+              <li>Validating policy behavior against real business workflows</li>
+              <li>Identifying false positives</li>
+              <li>Tuning conditions and exclusions before enforcement decisions</li>
+            </ul>
+            <p><strong>Role:</strong> Validation and stabilization — not leading the overall DLP program.</p>
+          </div>
+        </div>
+
+        <h3>Responsibility Progression</h3>
+
+        <div class="flow-diagram">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <strong>SIEM Discovery & Foundation</strong><br>
+              Log source identification, ingestion strategy, onboarding telemetry into Sentinel, validating data quality. Collaborated with SOC teams and stakeholders to ensure security-relevant logs were ingested and usable.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <strong>MDE Rollout (Parallel with SIEM)</strong><br>
+              Agent onboarding, policy configuration, exclusions and allow-listing, stabilizing endpoint telemetry. Ensured reliable integration with Sentinel and effective detection coverage.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <strong>DLP Audit Support (Current)</strong><br>
+              As SIEM and MDE reached stable operational state, focus shifted to supporting DLP audit phase — event review, policy validation, false positive tuning.
+            </div>
+          </div>
+        </div>
+
+        <h3>Day-to-Day Activities by Phase</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Phase</th><th>Daily Activities</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SIEM Foundation</strong></td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>Meeting with log source owners to understand data</li>
+                    <li>Configuring connectors and data collection rules</li>
+                    <li>Validating log ingestion and data quality</li>
+                    <li>Troubleshooting missing or malformed logs</li>
+                    <li>Documenting ingestion status for stakeholders</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>MDE Rollout</strong></td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>Coordinating deployment waves with IT teams</li>
+                    <li>Monitoring onboarding status in Defender portal</li>
+                    <li>Investigating agent health issues</li>
+                    <li>Configuring and testing ASR rules</li>
+                    <li>Managing exclusions based on application team requests</li>
+                    <li>Validating telemetry flow to Sentinel</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>DLP Audit (Current)</strong></td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>Reviewing Activity Explorer for policy matches</li>
+                    <li>Analyzing false positive patterns</li>
+                    <li>Tuning SIT conditions and thresholds</li>
+                    <li>Adding exclusions for legitimate workflows</li>
+                    <li>Documenting policy behavior for DLP team lead</li>
+                    <li>Preparing recommendations before enforcement</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Cross-Phase Consistency</h3>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Common Thread
+          </div>
+          <div class="callout-content">
+            <p><strong>"Across all phases, my role has been to ensure security platforms are deployed in a controlled and scalable way, telemetry is reliable, and controls are tuned in close collaboration with SOC teams and business stakeholders."</strong></p>
+          </div>
+        </div>
+
+        <h3>Interview-Ready Response: Day-to-Day</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">What Do You Do Day-to-Day?</span></div>
+          <pre><code>"For the last couple of months, my current responsibilities have been 
+focused on supporting the DLP track, primarily in audit mode. This work 
+involves reviewing DLP events, validating policy behavior against real 
+business workflows, identifying false positives, and tuning conditions 
+and exclusions before any enforcement decisions are made. My involvement 
+here is mainly around validation and stabilization rather than leading 
+the overall DLP program.
+
+Before this recent DLP phase, my primary responsibilities were on the 
+SIEM and EDR tracks. During the SIEM discovery and foundation phase, 
+I worked on log source identification, defining ingestion strategy, 
+onboarding telemetry into Microsoft Sentinel, and validating data quality 
+across multiple sources. I collaborated closely with SOC teams and 
+stakeholders to ensure the right security-relevant logs were ingested 
+and usable for detection and investigation.
+
+In parallel, once the SIEM foundation was established, I was involved 
+in the Microsoft Defender for Endpoint rollout. This included agent 
+onboarding, policy configuration, exclusions and allow-listing, and 
+stabilizing endpoint telemetry to ensure reliable integration with 
+Sentinel and effective detection coverage.
+
+As the SIEM and MDE environments reached a stable operational state, 
+my focus shifted temporarily to supporting the DLP audit phase.
+
+Across all phases, my role has been to ensure security platforms are 
+deployed in a controlled and scalable way, telemetry is reliable, and 
+controls are tuned in close collaboration with SOC teams and business 
+stakeholders."</code></pre>
         </div>
 
         <h2>Why Consulting? (From Security Engineering)</h2>

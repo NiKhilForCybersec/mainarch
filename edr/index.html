@@ -22,13 +22,14 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <div class="nav-section">
+                <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
           <a href="../company-profile.html" class="nav-item">Company Profile</a>
           <a href="../security-framework.html" class="nav-item">Security Framework</a>
           <a href="../program-structure.html" class="nav-item">Program Structure</a>
           <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -223,6 +224,71 @@
               <tr><td>Detection parity</td><td>MDE detects same or more than ESET</td><td>Weekly comparison report</td></tr>
               <tr><td>Onboarding success rate</td><td>>98%</td><td>Successful onboarding / attempted</td></tr>
               <tr><td>User impact</td><td><5% help desk tickets</td><td>Tickets mentioning "antivirus"</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Industry Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            EDR/XDR Best Practices
+          </div>
+          <div class="callout-content">
+            <p><strong>Microsoft & Gartner Recommendations:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>XDR Integration:</strong> Integrate EDR with SIEM for unified detection and response</li>
+              <li><strong>Active-Active Migration:</strong> Run both EDR solutions simultaneously during transition</li>
+              <li><strong>ASR Rules:</strong> Enable Attack Surface Reduction rules after EDR stabilization</li>
+              <li><strong>Tamper Protection:</strong> Enable to prevent attackers from disabling protection</li>
+              <li><strong>Cloud-Delivered Protection:</strong> Enable for latest threat intelligence</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>CIS Controls Alignment:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>CIS Control 10: Malware defenses on all endpoints</li>
+              <li>CIS Control 13: Network monitoring and defense</li>
+              <li>CIS Control 8: Audit log management (EDR telemetry)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>100% endpoint coverage</td>
+                <td>CIS Control 10, NIST 800-53 SI-3</td>
+                <td>9,000 endpoints, no exceptions</td>
+              </tr>
+              <tr>
+                <td>Active-active during migration</td>
+                <td>Microsoft EDR migration guidance</td>
+                <td>ESET + MDE parallel for 10 months</td>
+              </tr>
+              <tr>
+                <td>Enable cloud-delivered protection</td>
+                <td>Microsoft security baseline</td>
+                <td>Cloud protection enabled, block at first sight</td>
+              </tr>
+              <tr>
+                <td>Enable tamper protection</td>
+                <td>Microsoft security baseline, CIS</td>
+                <td>Org-wide tamper protection via Intune</td>
+              </tr>
+              <tr>
+                <td>ASR rules in enforcement</td>
+                <td>Microsoft security baseline</td>
+                <td>All standard ASR rules in Block mode</td>
+              </tr>
+              <tr>
+                <td>SIEM integration for telemetry</td>
+                <td>XDR architecture best practices</td>
+                <td>M365 Defender connector to Sentinel (free)</td>
+              </tr>
             </tbody>
           </table>
         </div>

@@ -22,10 +22,14 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <div class="nav-section">
+                <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="../index.html" class="nav-item">Executive Summary</a>
           <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -216,6 +220,61 @@ $exclusions = @{
         </div>
 
         <p>Run this report weekly. The goal: prove MDE catches everything ESET does (and more) before removing ESET.</p>
+
+        <h2>Industry Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            EDR Migration Best Practices
+          </div>
+          <div class="callout-content">
+            <p><strong>Microsoft & Vendor Recommendations:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Active-Active Preferred:</strong> Run both EDRs in active protection mode during transition</li>
+              <li><strong>Mutual Exclusions:</strong> Each EDR should exclude the other's processes and paths</li>
+              <li><strong>Extended Coexistence:</strong> 3-6 months minimum to validate detection parity</li>
+              <li><strong>Performance Monitoring:</strong> Track CPU/memory impact during dual-agent period</li>
+              <li><strong>Detection Comparison:</strong> Weekly reports comparing detection rates between products</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Why NOT Passive Mode:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Passive mode = no real-time protection = protection gap if primary fails</li>
+              <li>Can't accurately compare detection effectiveness</li>
+              <li>Microsoft recommends active-active for migrations</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Active-active protection</td>
+                <td>Microsoft migration guidance</td>
+                <td>Both ESET and MDE in active mode throughout</td>
+              </tr>
+              <tr>
+                <td>Mutual process exclusions</td>
+                <td>AV vendor interop guidance</td>
+                <td>MDE excludes ESET processes, ESET excludes MDE</td>
+              </tr>
+              <tr>
+                <td>Detection parity validation</td>
+                <td>Security operations best practice</td>
+                <td>Weekly detection comparison reports</td>
+              </tr>
+              <tr>
+                <td>Performance baseline</td>
+                <td>IT operations</td>
+                <td>CPU/memory monitoring during coexistence</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <nav class="page-nav">
           <a href="index.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← EDR Overview</span></a>
