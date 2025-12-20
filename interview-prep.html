@@ -495,6 +495,55 @@ RESULT:
           </div>
         </div>
 
+        <div class="interview-question">
+          <h3>7b. How do you handle data residency and GDPR requirements for Sentinel?</h3>
+          <p class="interview-context"><strong>Common for global organizations.</strong> EU data residency, compliance approach, architecture decisions.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"Our approach depends on client requirements:
+
+IF CLIENT CONTRACT MANDATES LOGS STAY IN EU:
+• Deploy a separate Sentinel workspace in an EU region (e.g., West Europe)
+• Replicate detection logic through a Git-based deployment model
+• All analytics rules, workbooks, and playbooks are stored in a central 
+  Git repository and deployed consistently across workspaces
+• Data never leaves EU boundaries — the workspace is entirely EU-resident
+• This adds operational overhead (managing multiple workspaces) but 
+  guarantees compliance with strict residency requirements
+
+IF NO STRICT RESIDENCY REQUIREMENT:
+• Centralize logging in primary workspace (typically US or closest region)
+• Rely on Standard Contractual Clauses (SCCs) for cross-border data transfers
+• SCCs are Microsoft's mechanism for GDPR-compliant data transfers to US
+• Implement additional controls to meet GDPR obligations:
+  - RBAC: Role-based access to ensure only authorized personnel access data
+  - Auditing: Log access and query activity
+  - Retention controls: Data retention policies aligned with compliance needs
+  - Data minimization: Only collect what's necessary for security use cases
+
+WHY THIS MATTERS:
+• GDPR Article 44+ governs cross-border data transfers
+• Some industries (healthcare, government, financial services) have 
+  stricter requirements beyond GDPR
+• Getting this wrong can result in regulatory penalties and contract breaches
+
+GIT-BASED DEPLOYMENT MODEL:
+When we have multi-region workspaces, we use Infrastructure-as-Code:
+• Analytics rules defined as ARM/Bicep templates or YAML
+• CI/CD pipeline deploys rules to all workspaces consistently
+• Version control for all detection logic
+• Ensures rule parity across regions without manual duplication
+
+DECISION FRAMEWORK:
+1. Check client contract for explicit residency clauses
+2. Check industry regulations (HIPAA, PCI, local laws)
+3. If strict → separate workspace in compliant region
+4. If flexible → centralize with SCCs + controls
+5. Document the decision and controls applied"</code></pre>
+          </div>
+        </div>
+
         <!-- BLOCK 3: DETECTION ENGINEERING -->
         <h2>Block 3: Detection Engineering & Use Cases</h2>
 
@@ -1395,6 +1444,71 @@ in an unfamiliar tool far outweighs the license overlap cost."</code></pre>
    Solution: Set expectations. Plan for parallel operation costs.
 
 The meta-lesson: Most challenges are organizational, not technical."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>25b. How does XDR change your SIEM and detection strategy?</h3>
+          <p class="interview-context"><strong>Shows strategic thinking.</strong> Understanding of XDR vs SIEM roles, when to enable, what changes.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"This is an important architectural decision. In our transformation, we 
+deliberately kept XDR as a planned future capability rather than enabling 
+it immediately.
+
+OUR BASELINE APPROACH:
+The baseline was to establish Sentinel as the primary SIEM with stable log 
+ingestion and validated detections, while fully deploying Microsoft Defender 
+for Endpoint across the environment for reliable endpoint telemetry.
+
+At this stage, XDR was not yet fully leveraged. We treated it as a planned 
+future capability because enabling XDR requires a deliberate shift in 
+detection and correlation strategy.
+
+The approach was: stabilize SIEM and EDR first, then enable XDR once 
+telemetry, detections, and SOC processes were mature.
+
+WHY XDR CHANGES EVERYTHING:
+XDR isn't just 'more alerts to SIEM.' It fundamentally changes the detection 
+model:
+
+1. CORRELATION SHIFTS
+   Without XDR: You write KQL rules in Sentinel to correlate endpoint, 
+   identity, and email signals manually.
+   
+   With XDR: M365 Defender automatically correlates across domains — you 
+   get unified incidents showing the full attack chain, not 50 scattered 
+   alerts.
+
+2. DETECTION OWNERSHIP SHIFTS
+   Without XDR: All detections live in Sentinel as analytics rules.
+   
+   With XDR: Microsoft telemetry detections move to M365 Defender. Sentinel 
+   handles non-Microsoft sources (firewall, custom apps, third-party SaaS).
+
+3. SOC WORKFLOW SHIFTS
+   Without XDR: SOC lives in Sentinel, drills into M365 Defender for details.
+   
+   With XDR: SOC uses unified incident queue in M365 Defender for Microsoft 
+   incidents. Sentinel becomes the data lake, compliance layer, and detection 
+   engine for non-Microsoft data.
+
+4. SENTINEL'S ROLE SHIFTS
+   From: 'Detection brain' for everything
+   To: Data lake + compliance + non-Microsoft detections + cross-platform 
+   correlation
+
+WHEN TO ENABLE XDR:
+I'd enable XDR once:
+• SIEM and EDR are stable (check)
+• SOC is trained on both portals
+• Detection strategy is documented (what stays in Sentinel, what moves to XDR)
+• MDI, MDO, MDCA are deployed (full XDR coverage)
+
+The risk of enabling too early is dual alert streams, confusion about 
+where to investigate, and duplicate detections. The benefit of waiting 
+is cleaner architecture and intentional workflow design."</code></pre>
           </div>
         </div>
 

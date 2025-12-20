@@ -115,6 +115,62 @@
           </p>
         </div>
 
+        <h2>Workspace Architecture & Data Residency</h2>
+
+        <p>
+          Before configuring log ingestion, determine the workspace architecture based on compliance requirements.
+        </p>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Data Residency & GDPR Compliance
+          </div>
+          <div class="callout-content">
+            <p>Our approach depends on client requirements:</p>
+            <p><strong>If client contract mandates logs stay in EU:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Deploy a separate Sentinel workspace in an EU region (e.g., West Europe, North Europe)</li>
+              <li>Replicate detection logic through a Git-based deployment model</li>
+              <li>Analytics rules, workbooks, and playbooks stored in Git and deployed via CI/CD</li>
+              <li>Data never leaves EU boundaries</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>If no strict residency requirement:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Centralize logging in primary workspace</li>
+              <li>Rely on Standard Contractual Clauses (SCCs) for cross-border transfers</li>
+              <li>RBAC, auditing, and retention controls to meet GDPR obligations</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Multi-Workspace Deployment Model</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Scenario</th><th>Workspace Architecture</th><th>Detection Deployment</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Single region, no residency requirements</td>
+                <td>Single centralized workspace</td>
+                <td>Direct deployment</td>
+              </tr>
+              <tr>
+                <td>EU data residency required</td>
+                <td>Separate EU workspace</td>
+                <td>Git-based CI/CD to both workspaces</td>
+              </tr>
+              <tr>
+                <td>Multi-region global deployment</td>
+                <td>Regional workspaces + Azure Lighthouse</td>
+                <td>Git-based deployment + cross-workspace queries</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <h2>Data Collection Rules (DCRs)</h2>
 
         <p>

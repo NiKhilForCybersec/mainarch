@@ -137,6 +137,7 @@
             <p><strong>Sentinel:</strong> Primary SIEM, fully operational. RSA NetWitness decommissioned.</p>
             <p><strong>Log Sources:</strong> All critical sources onboarded via built-in connectors and custom DCRs.</p>
             <p><strong>SOC:</strong> Analysts trained and operational on Sentinel + M365 Defender unified queue.</p>
+            <p><strong>XDR Status:</strong> Not yet fully leveraged. Current architecture treats Sentinel as the primary detection engine. XDR integration (M365 Defender correlation) is a planned future capability — requires deliberate shift in detection strategy.</p>
             <p><strong>Current Phase:</strong> Knowledge transfer and handover to internal security team.</p>
           </div>
         </div>
@@ -159,6 +160,28 @@
         <p>
           The SIEM migration follows a methodical approach: discover what exists, plan what moves where, engineer the ingestion, enable detections, and transition the SOC. Throughout this process, both SIEMs remained operational until cutover criteria were met.
         </p>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Data Residency & GDPR Compliance
+          </div>
+          <div class="callout-content">
+            <p>Our approach depends on client requirements:</p>
+            <p><strong>If client contract mandates logs stay in EU:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Deploy separate Sentinel workspace in EU region</li>
+              <li>Replicate detection logic through Git-based deployment model</li>
+              <li>Ensures data never leaves EU boundaries</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>If no strict residency requirement:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Centralize logging in primary workspace</li>
+              <li>Rely on Standard Contractual Clauses (SCCs) for cross-border transfers</li>
+              <li>RBAC, auditing, and retention controls to meet GDPR obligations</li>
+            </ul>
+          </div>
+        </div>
 
         <div class="flow-diagram">
           <div class="flow-step">
