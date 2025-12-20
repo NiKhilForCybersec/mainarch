@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Framework | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="index.html" class="nav-item">Executive Summary</a>
+          <a href="company-profile.html" class="nav-item">Company Profile</a>
+          <a href="security-framework.html" class="nav-item active">Security Framework</a>
+          <a href="security-framework.html" class="nav-item">Security Framework</a>
+          <a href="program-structure.html" class="nav-item">Program Structure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="siem/index.html" class="nav-item"><span class="nav-track-indicator siem"></span>SIEM: RSA → Sentinel</a>
+          <a href="edr/index.html" class="nav-item"><span class="nav-track-indicator edr"></span>EDR: ESET → MDE</a>
+          <a href="dlp/index.html" class="nav-item"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+          <a href="identity/index.html" class="nav-item"><span class="nav-track-indicator identity"></span>Identity: AD → Entra ID</a>
+          <a href="infrastructure/index.html" class="nav-item"><span class="nav-track-indicator infra"></span>Infrastructure: Azure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="operations/integration.html" class="nav-item">Integration Points</a>
+          <a href="operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="resources/timeline.html" class="nav-item">Interactive Timeline</a>
+          <a href="resources/scripts.html" class="nav-item">Scripts & Queries</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Security Framework</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>The Consultant Mental Model</h1>
+          <p class="intro-text">
+            This framework applies to <strong>every company, every engagement</strong>. Different business, different assets, same thinking. Experienced security professionals sound confident not because they memorized tools, but because the structure never changes.
+          </p>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Remember This Forever
+          </div>
+          <div class="callout-content">
+            <p style="font-size: 1.2em; font-weight: 600; font-family: var(--font-mono); text-align: center;">
+              Business → Planes → Assets → Risks → Controls → Telemetry → Detections
+            </p>
+            <p style="text-align: center; margin-top: 0.5rem;">That's it. Everything fits into this sequence.</p>
+          </div>
+        </div>
+
+        <h2>1️⃣ Business (WHY the company exists)</h2>
+        <p>This is <strong>ALWAYS</strong> the starting point. Ask yourself:</p>
+        <ul>
+          <li>What does this company sell?</li>
+          <li>How does it make money?</li>
+          <li>What would hurt the business most if compromised?</li>
+        </ul>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Question</th><th>RevFlow Analytics Answer</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>What does the company sell?</strong></td><td>Revenue intelligence, deal prediction analytics</td></tr>
+              <tr><td><strong>How does it make money?</strong></td><td>B2B SaaS subscriptions from enterprise clients</td></tr>
+              <tr><td><strong>What does it depend on?</strong></td><td>Salesforce integration, meetings data, customer CRM data</td></tr>
+              <tr><td><strong>Biggest fears?</strong></td><td>Data leakage, account takeover, customer trust loss</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Memory Hook
+          </div>
+          <div class="callout-content">
+            <p><strong>Security exists to protect how the company makes money.</strong></p>
+            <p>If you skip this step, everything else is wrong.</p>
+          </div>
+        </div>
+
+        <h2>2️⃣ Planes (HOW the company is structured)</h2>
+        <p>This is where most people get confused — but it's actually simple. There are <strong>3 planes</strong> in every company:</p>
+
+        <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="card" style="border-left: 4px solid var(--accent-blue);">
+            <div class="card-title" style="color: var(--accent-blue);">🟦 Control Plane</div>
+            <div class="card-description"><strong>Who can do what</strong></div>
+            <ul style="margin: 1rem 0; padding-left: 1.2rem; font-size: 0.9rem;">
+              <li>Identity</li>
+              <li>Access</li>
+              <li>Permissions</li>
+              <li>Cloud management</li>
+            </ul>
+            <p style="font-size: 0.85rem; color: var(--text-muted);"><strong>Examples:</strong> Entra ID, RBAC, MFA, Azure Activity Logs</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-green);">
+            <div class="card-title" style="color: var(--accent-green);">🟩 Data Plane</div>
+            <div class="card-description"><strong>Where business actually runs</strong></div>
+            <ul style="margin: 1rem 0; padding-left: 1.2rem; font-size: 0.9rem;">
+              <li>Endpoints</li>
+              <li>Applications</li>
+              <li>SaaS</li>
+              <li>Databases</li>
+              <li>Network traffic</li>
+            </ul>
+            <p style="font-size: 0.85rem; color: var(--text-muted);"><strong>Examples:</strong> MDE, Salesforce, App logs, Network flows</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-yellow);">
+            <div class="card-title" style="color: var(--accent-yellow);">🟨 Operations Plane</div>
+            <div class="card-description"><strong>How things change</strong></div>
+            <ul style="margin: 1rem 0; padding-left: 1.2rem; font-size: 0.9rem;">
+              <li>CI/CD</li>
+              <li>Automation</li>
+              <li>Admin actions</li>
+              <li>SOC workflows</li>
+            </ul>
+            <p style="font-size: 0.85rem; color: var(--text-muted);"><strong>Examples:</strong> GitHub, Azure DevOps, Service principals, Change logs</p>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Why Planes Matter
+          </div>
+          <div class="callout-content">
+            <p><strong>Control Plane:</strong> If someone abuses identity, they control everything.</p>
+            <p><strong>Data Plane:</strong> This is where value and damage happen.</p>
+            <p><strong>Operations Plane:</strong> Attackers love abusing automation.</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Memory Trick</span></div>
+          <pre><code>Control = ACCESS
+Data    = BUSINESS  
+Ops     = CHANGE</code></pre>
+        </div>
+
+        <h2>3️⃣ Assets (WHAT matters)</h2>
+        <p>Now you list important things in each plane. <strong>You don't protect everything equally.</strong></p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Plane</th><th>RevFlow Critical Assets</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Control Plane</strong></td>
+                <td>Admin roles, Global Admins, service principals, Conditional Access policies</td>
+              </tr>
+              <tr>
+                <td><strong>Data Plane</strong></td>
+                <td>Endpoints (9,000), Salesforce integration, customer records, Azure SQL databases</td>
+              </tr>
+              <tr>
+                <td><strong>Operations Plane</strong></td>
+                <td>CI/CD pipelines, automation accounts, deployment service principals</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>4️⃣ Risks (WHAT can go wrong)</h2>
+        <p>For each asset, ask: <strong>How can it be abused? What attacks are realistic?</strong></p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Asset</th><th>Risk</th><th>Attack Scenario</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Identity (Admin accounts)</strong></td>
+                <td>Account takeover</td>
+                <td>Phishing → credential theft → privilege escalation</td>
+              </tr>
+              <tr>
+                <td><strong>Endpoints</strong></td>
+                <td>Malware / credential theft</td>
+                <td>Initial access → lateral movement → data exfiltration</td>
+              </tr>
+              <tr>
+                <td><strong>Salesforce</strong></td>
+                <td>Data exfiltration</td>
+                <td>Compromised account → bulk export → customer data leak</td>
+              </tr>
+              <tr>
+                <td><strong>CI/CD Pipelines</strong></td>
+                <td>Pipeline abuse</td>
+                <td>Compromised service principal → malicious code deployment</td>
+              </tr>
+              <tr>
+                <td><strong>Customer Data</strong></td>
+                <td>Data breach</td>
+                <td>Any of the above → regulatory fines, customer churn</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Key Insight
+          </div>
+          <div class="callout-content">
+            <p><strong>Risk comes before tools.</strong> You identify what can go wrong BEFORE you pick what to deploy.</p>
+          </div>
+        </div>
+
+        <h2>5️⃣ Controls (HOW you reduce risk)</h2>
+        <p><strong>Only now do tools come in.</strong> Controls are chosen to reduce specific risks.</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Risk</th><th>Control</th><th>Tool</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Identity compromise</strong></td>
+                <td>Strong authentication, least privilege</td>
+                <td>MFA, Conditional Access, PIM</td>
+              </tr>
+              <tr>
+                <td><strong>Endpoint compromise</strong></td>
+                <td>Endpoint protection, attack surface reduction</td>
+                <td>Microsoft Defender for Endpoint, ASR rules</td>
+              </tr>
+              <tr>
+                <td><strong>Data exfiltration</strong></td>
+                <td>Data loss prevention, monitoring</td>
+                <td>Microsoft Purview DLP</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud misconfiguration</strong></td>
+                <td>Posture management, policy enforcement</td>
+                <td>Defender for Cloud, Azure Policy</td>
+              </tr>
+              <tr>
+                <td><strong>Undetected threats</strong></td>
+                <td>Centralized monitoring, correlation</td>
+                <td>Microsoft Sentinel</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>6️⃣ Telemetry (WHAT you log)</h2>
+        <p>Controls generate data. You ask: <strong>What signals prove misuse? Where does evidence come from?</strong></p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Control Area</th><th>Telemetry Source</th><th>What It Shows</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Identity</strong></td>
+                <td>Entra ID sign-in logs, audit logs</td>
+                <td>Who logged in, from where, what changed</td>
+              </tr>
+              <tr>
+                <td><strong>Endpoint</strong></td>
+                <td>MDE telemetry (process, network, file)</td>
+                <td>What ran, what connected, what was accessed</td>
+              </tr>
+              <tr>
+                <td><strong>Data</strong></td>
+                <td>DLP activity, Salesforce audit logs</td>
+                <td>What was shared, exported, modified</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud</strong></td>
+                <td>Azure Activity Logs, Defender for Cloud</td>
+                <td>What resources changed, who did it</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Critical Point
+          </div>
+          <div class="callout-content">
+            <p><strong>No telemetry = blind security.</strong> You can have the best tools, but without logs flowing to your SIEM, you can't detect anything.</p>
+          </div>
+        </div>
+
+        <h2>7️⃣ Detections (HOW you catch bad behavior)</h2>
+        <p><strong>Finally:</strong> Correlate signals, detect abuse, alert SOC.</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Detection Use Case</th><th>Signals Correlated</th><th>What It Catches</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Account Compromise</strong></td>
+                <td>Risky sign-in + endpoint anomaly</td>
+                <td>Attacker using stolen credentials</td>
+              </tr>
+              <tr>
+                <td><strong>Privilege Escalation</strong></td>
+                <td>Admin role change + unusual API calls</td>
+                <td>Insider threat or compromised admin</td>
+              </tr>
+              <tr>
+                <td><strong>Data Exfiltration</strong></td>
+                <td>Data download + external sharing</td>
+                <td>Data theft attempt</td>
+              </tr>
+              <tr>
+                <td><strong>Lateral Movement</strong></td>
+                <td>Multiple failed logins + successful login on different host</td>
+                <td>Attacker moving through network</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Key Insight
+          </div>
+          <div class="callout-content">
+            <p><strong>Detections are the final output — not the starting point.</strong></p>
+            <p>If someone asks "what detections do you have?" and you start listing rules, you're thinking backwards. Start with business, work forward.</p>
+          </div>
+        </div>
+
+        <h2>The Complete Flow (RevFlow Example)</h2>
+
+        <div class="flow-diagram">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <strong>Business</strong><br>B2B SaaS selling revenue analytics. Depends on Salesforce, customer data. Fears: data breach, account takeover.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <strong>Planes</strong><br>Control: Entra ID, RBAC. Data: Endpoints, Salesforce, databases. Ops: CI/CD, automation.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <strong>Assets</strong><br>Admin accounts, 9,000 endpoints, Salesforce integration, customer records, pipelines.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-content">
+              <strong>Risks</strong><br>Account takeover, endpoint compromise, data exfiltration, pipeline abuse.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">5</div>
+            <div class="flow-step-content">
+              <strong>Controls</strong><br>MFA + CA + PIM (identity), MDE + ASR (endpoint), Purview DLP (data), Sentinel (detection).
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">6</div>
+            <div class="flow-step-content">
+              <strong>Telemetry</strong><br>Entra ID logs, MDE telemetry, DLP activity, Azure Activity, Salesforce audit.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">7</div>
+            <div class="flow-step-content">
+              <strong>Detections</strong><br>Risky sign-in + endpoint anomaly. Role change + API abuse. Download + external share.
+            </div>
+          </div>
+        </div>
+
+        <h2>Why This Model Works Everywhere</h2>
+
+        <p>Because consultants <strong>reuse this model</strong> for every engagement:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Different Company</th><th>Same Steps</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Healthcare provider</td><td>Business (patient care) → Planes → Assets (EHR systems) → Risks (HIPAA breach) → Controls → Telemetry → Detections</td></tr>
+              <tr><td>Financial services</td><td>Business (transactions) → Planes → Assets (trading systems) → Risks (fraud) → Controls → Telemetry → Detections</td></tr>
+              <tr><td>Manufacturing</td><td>Business (production) → Planes → Assets (OT/ICS systems) → Risks (downtime) → Controls → Telemetry → Detections</td></tr>
+              <tr><td>E-commerce</td><td>Business (sales) → Planes → Assets (payment systems) → Risks (PCI breach) → Controls → Telemetry → Detections</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Why Consultants Sound Confident
+          </div>
+          <div class="callout-content">
+            <p>Not because they memorized tools, but because <strong>the structure never changes</strong>.</p>
+            <p>They apply the same framework to every client, every industry, every engagement.</p>
+          </div>
+        </div>
+
+        <h2>How to Start on Day 1 (Any Engagement)</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Timeline</th><th>Focus</th><th>Questions to Ask</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Day 1-2</strong></td>
+                <td>Business & Planes</td>
+                <td>What does the company do? Where is identity? What are the main apps?</td>
+              </tr>
+              <tr>
+                <td><strong>Day 3-5</strong></td>
+                <td>Assets & Risks</td>
+                <td>What's critical? What would attackers target? What's the crown jewels?</td>
+              </tr>
+              <tr>
+                <td><strong>Week 2</strong></td>
+                <td>Controls & Telemetry</td>
+                <td>What tools exist? What logs are available? What's missing?</td>
+              </tr>
+              <tr>
+                <td><strong>Week 3+</strong></td>
+                <td>Detections & Tuning</td>
+                <td>What can we detect now? What improves later? What's the gap?</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Interview Application</h2>
+
+        <p>When asked "Tell me about a security architecture you designed" or "How would you approach securing X company?":</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Framework Response</span></div>
+          <pre><code>"I always start by understanding the business — what they sell, how they 
+make money, and what would hurt them most. Then I map the environment 
+into three planes: control (identity/access), data (where business runs), 
+and operations (how things change).
+
+From there, I identify critical assets in each plane, assess the realistic 
+risks to those assets, and then select controls to mitigate those specific 
+risks. The controls generate telemetry, which flows to the SIEM, where we 
+build detections that correlate signals across planes.
+
+For RevFlow, a B2B SaaS company, the biggest risks were account takeover 
+and data exfiltration. So we prioritized identity controls (MFA, CA, PIM), 
+endpoint protection (MDE with ASR), and data loss prevention (Purview DLP), 
+with all telemetry flowing to a centralized Sentinel workspace for 
+correlation and detection."</code></pre>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            The Mental Model (Memorize This)
+          </div>
+          <div class="callout-content">
+            <p style="font-size: 1.3em; font-weight: 700; text-align: center; font-family: var(--font-mono);">
+              Business → Planes → Assets → Risks → Controls → Telemetry → Detections
+            </p>
+          </div>
+        </div>
+
+        <nav class="page-nav">
+          <a href="company-profile.html" class="page-nav-link prev">
+            <span class="page-nav-label">Previous</span>
+            <span class="page-nav-title">← Company Profile</span>
+          </a>
+          <a href="program-structure.html" class="page-nav-link next">
+            <span class="page-nav-label">Next</span>
+            <span class="page-nav-title">Program Structure →</span>
+          </a>
+        </nav>
+
+      </div>
+    </main>
+  </div>
+  <script src="js/main.js"></script>
+</body>
+</html>
