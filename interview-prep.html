@@ -203,18 +203,22 @@ Sentinel work."</code></pre>
           <div class="code-block">
             <div class="code-header"><span class="code-lang">Response</span></div>
             <pre><code>"Currently, I'm in the final wind-up phase of a security transformation 
-project. The main tracks — DLP, SIEM, and EDR — are all complete, and 
-I've recently moved back to the DLP track to support knowledge transfer 
+project. The main tracks — SIEM, EDR, and DLP — are all complete, and 
+I've recently moved to the DLP track to support knowledge transfer 
 and handover to the internal security team. Day-to-day right now involves 
 finalizing documentation, conducting KT sessions, and ensuring the 
 internal team is ready to take over operations.
 
 Before this handover phase, my primary focus was SIEM and EDR — I joined 
-those tracks when they started at M6. During SIEM discovery, I was meeting 
+those tracks when they started at M1. During SIEM discovery, I was meeting 
 with log source owners, configuring connectors and DCRs, validating data 
 quality, and troubleshooting ingestion issues. For MDE, I coordinated 
 deployment waves with IT, monitored onboarding status, configured ASR 
 rules, and managed exclusions based on application team requests.
+
+DLP started later at M6 due to legal constraints and cross-team 
+coordination requirements. I've recently moved to support the final 
+wind-up of that track.
 
 Throughout all phases, I collaborated closely with SOC teams — they're 
 the consumers of our telemetry and detections. I also worked with business 
@@ -240,8 +244,8 @@ I worked on. The company was a B2B SaaS provider with about 4,000 employees,
 9,000 endpoints, and global offices.
 
 CONTEXT: This was part of a larger security transformation. Identity and 
-Infrastructure were already stable. DLP migration had started earlier at 
-M1. I joined when the SIEM and EDR tracks began at M6.
+Infrastructure were already stable. SIEM and EDR started at M1, with DLP 
+joining later at M6 due to legal and cross-team dependencies.
 
 DISCOVERY: We started by documenting the existing RSA environment — what 
 log sources were configured, what parsers were in use, what detection rules 
@@ -257,10 +261,10 @@ INGESTION: For each source, I configured the appropriate connector — built-in
 where available, custom DCRs for on-prem sources. We validated data quality: 
 are fields parsing correctly? Are timestamps accurate? Is the volume expected?
 
-DETECTION ALIGNMENT: We started MDE deployment early in our phase so endpoint 
-telemetry was already flowing when we implemented detections. I enabled 
-built-in rules from Content Hub and implemented rules from our detection 
-translation catalog where we had native Sentinel equivalents.
+DETECTION ALIGNMENT: We started MDE deployment early so endpoint telemetry 
+was already flowing when we implemented detections. I enabled built-in rules 
+from Content Hub and implemented rules from our detection translation catalog 
+where we had native Sentinel equivalents.
 
 PARALLEL OPERATIONS & CUTOVER:
 We ran RSA and Sentinel in parallel for several months. Sentinel became the 

@@ -100,10 +100,10 @@
         <div class="page-header">
           <h1>DLP Migration: Symantec → Microsoft Purview</h1>
           <div class="page-header-meta">
-            <span class="page-badge dlp">Track 1</span>
+            <span class="page-badge dlp">Track 3</span>
             <span class="page-reading-time">Status: Complete — Handover in Progress</span>
           </div>
-          <p class="intro-text">Migrating from Symantec DLP to Microsoft Purview Endpoint DLP. This track started first (M1) as DLP is user-impacting and requires careful phasing. Currently in final handover phase with knowledge transfer to internal security team.</p>
+          <p class="intro-text">Migrating from Symantec DLP to Microsoft Purview Endpoint DLP. This track started later (M6) due to legal constraints and cross-team coordination requirements. Currently in final handover phase with knowledge transfer to internal security team.</p>
         </div>
 
         <div class="callout info">
@@ -112,7 +112,7 @@
             Role Scope
           </div>
           <div class="callout-content">
-            <p><strong>Context:</strong> DLP track started at M1, before SIEM and EDR tracks (which started at M6). Recently moved back to DLP to support final wind-up and handover.</p>
+            <p><strong>Context:</strong> SIEM and EDR tracks started at M1. DLP started later at M6 due to legal and cross-team dependencies. Recently moved to DLP to support final wind-up and handover.</p>
             <p><strong>My Focus:</strong> Audit mode monitoring, Activity Explorer analysis, tuning, policy validation, and currently supporting knowledge transfer to internal team.</p>
             <p><strong>DLP Team Lead:</strong> Policy translation from Symantec, sensitive information type (SIT) configuration, user communication strategy, and enforcement decisions.</p>
             <p><strong>Note:</strong> This section documents the full DLP migration approach for reference.</p>
@@ -131,23 +131,23 @@
           </div>
         </div>
 
-        <h2>Why DLP Started First (M1)</h2>
+        <h2>Why DLP Started Later (M6)</h2>
 
         <div class="callout warning">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            User-Impacting Changes Require More Time
+            Legal Constraints & Cross-Team Dependencies
           </div>
           <div class="callout-content">
-            <p>Unlike SIEM (backend logging) or EDR (mostly silent), <strong>DLP directly impacts user workflows</strong>. Users see notifications, get blocked, and must change behavior.</p>
-            <p>This makes DLP the most change-management intensive track, requiring:</p>
+            <p>Unlike SIEM (log ingestion) or EDR (agent deployment), <strong>DLP requires significant legal alignment and cross-team collaboration</strong> before policies can be implemented.</p>
+            <p>Before DLP could start, the organization needed:</p>
             <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li>Extended audit mode to baseline and tune policies</li>
-              <li>Gradual progression: Audit → Warn → Block</li>
-              <li>User training and communication campaigns</li>
+              <li>Legal review and approval of data handling policies</li>
+              <li>Data classification taxonomy agreed with business and legal</li>
+              <li>Cross-team coordination (Legal, HR, Compliance, Business Units)</li>
               <li>Executive buy-in on enforcement approach</li>
             </ul>
-            <p><strong>Result:</strong> DLP started at M1 to allow sufficient time for careful phasing before SIEM/EDR tracks began at M6.</p>
+            <p><strong>Result:</strong> DLP started at M6, after SIEM and EDR tracks were already underway. This gave time for the necessary legal and organizational groundwork.</p>
           </div>
         </div>
 
@@ -158,19 +158,19 @@
             </thead>
             <tbody>
               <tr>
-                <td><strong>DLP</strong></td>
-                <td>Data classification framework, business alignment, user training</td>
-                <td>Started first (M1) — user-impacting changes need time</td>
-              </tr>
-              <tr>
                 <td><strong>SIEM</strong></td>
                 <td>Log source availability, connector configuration</td>
-                <td>Started later (M6)</td>
+                <td>Started first (M1)</td>
               </tr>
               <tr>
                 <td><strong>EDR</strong></td>
                 <td>Endpoint access, deployment infrastructure</td>
-                <td>Started with SIEM (M6) for telemetry alignment</td>
+                <td>Started with SIEM (M1)</td>
+              </tr>
+              <tr>
+                <td><strong>DLP</strong></td>
+                <td>Legal alignment, cross-team coordination, data classification</td>
+                <td>Started later (M6) — needed legal/organizational groundwork</td>
               </tr>
               <tr>
                 <td><strong>Identity</strong></td>
