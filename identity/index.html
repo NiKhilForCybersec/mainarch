@@ -99,19 +99,19 @@
         <div class="page-header">
           <h1>Identity: Active Directory → Microsoft Entra ID</h1>
           <div class="page-header-meta">
-            <span class="page-badge identity">Pre-Existing</span>
-            <span class="page-reading-time">Status: Stable</span>
+            <span class="page-badge identity">Foundation Track</span>
+            <span class="page-reading-time">Status: Complete</span>
           </div>
-          <p class="intro-text">Identity infrastructure was already established and stable before this security transformation project began. On-premises Active Directory is synced to Microsoft Entra ID with Conditional Access and PIM in place. Future plans include decommissioning on-prem AD after complete cloud migration.</p>
+          <p class="intro-text">Identity migration started first as the cloud foundation — you can't migrate security tools until identity is in place. On-premises Active Directory is synced to Microsoft Entra ID with Conditional Access and PIM configured. Future plans include decommissioning on-prem AD after complete cloud migration.</p>
         </div>
 
         <div class="callout info">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Pre-Existing Infrastructure
+            Foundation First
           </div>
           <div class="callout-content">
-            <p><strong>Context:</strong> Identity and Infrastructure tracks were already implemented and stable before the DLP, SIEM, and EDR migrations began. This documentation is included for reference.</p>
+            <p><strong>Why Identity Started First:</strong> Identity and Infrastructure migrations began before the security tracks (SIEM, EDR, DLP). Cloud-native security tools require cloud identity foundation — Sentinel, MDE, and Purview all integrate with Entra ID.</p>
             <p><strong>Current State:</strong> Hybrid identity with on-prem AD synced to Entra ID. Conditional Access policies active. PIM configured for privileged access.</p>
             <p><strong>Future Plans:</strong> Decommission on-premises Active Directory after complete cloud migration is achieved.</p>
           </div>

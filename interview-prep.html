@@ -209,16 +209,21 @@ and handover to the internal security team. Day-to-day right now involves
 finalizing documentation, conducting KT sessions, and ensuring the 
 internal team is ready to take over operations.
 
-Before this handover phase, my primary focus was SIEM and EDR — I joined 
-those tracks when they started at M1. During SIEM discovery, I was meeting 
-with log source owners, configuring connectors and DCRs, validating data 
-quality, and troubleshooting ingestion issues. For MDE, I coordinated 
-deployment waves with IT, monitored onboarding status, configured ASR 
-rules, and managed exclusions based on application team requests.
+Before this handover phase, my primary focus was SIEM and EDR. Identity 
+and Infrastructure migrations had already started before I joined — they 
+were the cloud foundation that needed to be in place first. I joined when 
+the security tracks began at M1.
 
-DLP started later at M6 due to legal constraints and cross-team 
-coordination requirements. I've recently moved to support the final 
-wind-up of that track.
+During SIEM discovery, I was meeting with log source owners, configuring 
+connectors and DCRs, validating data quality, and troubleshooting ingestion 
+issues. For MDE, I coordinated deployment waves with IT, monitored onboarding 
+status, configured ASR rules, and managed exclusions based on application 
+team requests.
+
+DLP started later at M6 because it needs more groundwork — legal alignment, 
+cross-team coordination, data classification. We migrated Symantec Endpoint 
+DLP to Purview. Symantec Network DLP continues for now; the plan is to 
+discontinue it after complete Azure transformation.
 
 Throughout all phases, I collaborated closely with SOC teams — they're 
 the consumers of our telemetry and detections. I also worked with business 
@@ -243,9 +248,12 @@ ensuring that knowledge transfers cleanly to the team that will run it."</code><
 I worked on. The company was a B2B SaaS provider with about 4,000 employees, 
 9,000 endpoints, and global offices.
 
-CONTEXT: This was part of a larger security transformation. Identity and 
-Infrastructure were already stable. SIEM and EDR started at M1, with DLP 
-joining later at M6 due to legal and cross-team dependencies.
+CONTEXT: This was part of a larger cloud transformation. Identity and 
+Infrastructure migrations had already started — AD was being synced to 
+Entra ID, Azure landing zone was in place. Once that foundation was ready, 
+the security tracks began. I joined when SIEM and EDR started at M1. 
+DLP came later at M6 because it needs more groundwork — legal alignment, 
+cross-team coordination, data classification.
 
 DISCOVERY: We started by documenting the existing RSA environment — what 
 log sources were configured, what parsers were in use, what detection rules 

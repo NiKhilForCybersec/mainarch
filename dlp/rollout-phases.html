@@ -113,16 +113,17 @@
             Gate-Based Progression (Not Calendar-Based)
           </div>
           <div class="callout-content">
-            <p><strong>DLP started at M6</strong> (after SIEM and EDR which began at M1) due to legal constraints and cross-team coordination requirements.</p>
-            <p><strong>Purview becomes primary DLP only after:</strong></p>
+            <p><strong>DLP started at M6</strong> (after SIEM and EDR which began at M1) because DLP needs more groundwork — legal alignment, cross-team coordination, data classification.</p>
+            <p><strong>Scope:</strong> This migration covers Symantec Endpoint DLP → Purview. Symantec Network DLP continues; plan to discontinue after complete Azure transformation.</p>
+            <p><strong>Purview becomes primary Endpoint DLP only after:</strong></p>
             <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li>All Symantec policies translated to Purview</li>
+              <li>All Symantec EDLP policies translated to Purview</li>
               <li>60-90 days audit mode validation completed</li>
               <li>False positive rate &lt;10%</li>
               <li>User training and communication completed</li>
               <li>Help desk prepared for user queries</li>
             </ul>
-            <p style="margin-top: 0.5rem;">We run Symantec and Purview in parallel during transition. Symantec continues enforcing while Purview validates in audit mode. This ensures no data protection gaps during migration.</p>
+            <p style="margin-top: 0.5rem;">We run Symantec EDLP and Purview in parallel during transition. Symantec continues enforcing while Purview validates in audit mode. This ensures no data protection gaps during migration.</p>
           </div>
         </div>
 

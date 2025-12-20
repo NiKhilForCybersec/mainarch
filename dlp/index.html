@@ -98,12 +98,12 @@
         </nav>
 
         <div class="page-header">
-          <h1>DLP Migration: Symantec → Microsoft Purview</h1>
+          <h1>DLP Migration: Symantec Endpoint DLP → Microsoft Purview</h1>
           <div class="page-header-meta">
             <span class="page-badge dlp">Track 3</span>
             <span class="page-reading-time">Status: Complete — Handover in Progress</span>
           </div>
-          <p class="intro-text">Migrating from Symantec DLP to Microsoft Purview Endpoint DLP. This track started later (M6) due to legal constraints and cross-team coordination requirements. Currently in final handover phase with knowledge transfer to internal security team.</p>
+          <p class="intro-text">Migrating from Symantec Endpoint DLP to Microsoft Purview Endpoint DLP. This track started later (M6) as DLP requires more groundwork — legal alignment, cross-team coordination, and data classification. Symantec Network DLP (NDLP) continues for now, with plans to discontinue after complete Azure transformation.</p>
         </div>
 
         <div class="callout info">
@@ -112,7 +112,7 @@
             Role Scope
           </div>
           <div class="callout-content">
-            <p><strong>Context:</strong> SIEM and EDR tracks started at M1. DLP started later at M6 due to legal and cross-team dependencies. Recently moved to DLP to support final wind-up and handover.</p>
+            <p><strong>Context:</strong> SIEM and EDR tracks started at M1. DLP started later at M6 — it requires more groundwork including legal alignment and cross-team coordination. Recently moved to DLP to support final wind-up and handover.</p>
             <p><strong>My Focus:</strong> Audit mode monitoring, Activity Explorer analysis, tuning, policy validation, and currently supporting knowledge transfer to internal team.</p>
             <p><strong>DLP Team Lead:</strong> Policy translation from Symantec, sensitive information type (SIT) configuration, user communication strategy, and enforcement decisions.</p>
             <p><strong>Note:</strong> This section documents the full DLP migration approach for reference.</p>
@@ -125,10 +125,59 @@
             Current State
           </div>
           <div class="callout-content">
-            <p><strong>DLP:</strong> Enforcement mode active. Symantec DLP decommissioned.</p>
+            <p><strong>Endpoint DLP:</strong> Purview Endpoint DLP in enforcement mode. Symantec Endpoint DLP decommissioned.</p>
+            <p><strong>Network DLP:</strong> Symantec NDLP still active. Will be discontinued after complete Azure transformation.</p>
             <p><strong>SIEM & EDR:</strong> Foundationally stable. Sentinel + MDE operational.</p>
-            <p><strong>Current Phase:</strong> Knowledge transfer and final handover to internal security team. Documentation, runbooks, and operational procedures being finalized.</p>
+            <p><strong>Current Phase:</strong> Knowledge transfer and final handover to internal security team.</p>
           </div>
+        </div>
+
+        <h2>DLP Migration Strategy</h2>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Phased Approach: EDLP First, NDLP Later
+          </div>
+          <div class="callout-content">
+            <p><strong>Current Migration (This Project):</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Symantec Endpoint DLP → Microsoft Purview Endpoint DLP</li>
+              <li>Covers endpoint data protection (USB, clipboard, file operations, cloud uploads)</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Continuing (Not in Scope):</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Symantec Network DLP remains active</li>
+              <li>Covers network egress points (email gateway, web proxy, CASB integration)</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Future Plan:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>After complete Azure transformation, discontinue Symantec NDLP</li>
+              <li>Purview + Defender for Cloud Apps will cover network/cloud DLP use cases</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>DLP Component</th><th>Legacy</th><th>Target</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Endpoint DLP</strong></td>
+                <td>Symantec EDLP</td>
+                <td>Purview Endpoint DLP</td>
+                <td><span class="status-badge complete">Complete</span></td>
+              </tr>
+              <tr>
+                <td><strong>Network DLP</strong></td>
+                <td>Symantec NDLP</td>
+                <td>Purview + Defender for Cloud Apps</td>
+                <td><span class="status-badge in-progress">Future (Post-Azure)</span></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <h2>Why DLP Started Later (M6)</h2>
@@ -136,18 +185,17 @@
         <div class="callout warning">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            Legal Constraints & Cross-Team Dependencies
+            DLP Requires More Groundwork
           </div>
           <div class="callout-content">
-            <p>Unlike SIEM (log ingestion) or EDR (agent deployment), <strong>DLP requires significant legal alignment and cross-team collaboration</strong> before policies can be implemented.</p>
-            <p>Before DLP could start, the organization needed:</p>
+            <p>Unlike SIEM (log ingestion) or EDR (agent deployment), <strong>DLP requires significant groundwork before implementation can begin</strong>:</p>
             <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li>Legal review and approval of data handling policies</li>
-              <li>Data classification taxonomy agreed with business and legal</li>
-              <li>Cross-team coordination (Legal, HR, Compliance, Business Units)</li>
-              <li>Executive buy-in on enforcement approach</li>
+              <li><strong>Legal alignment</strong> — Privacy regulations, data handling policies, employee monitoring laws</li>
+              <li><strong>Cross-team coordination</strong> — Legal, HR, Compliance, Business Units must all be aligned</li>
+              <li><strong>Data classification</strong> — What data is sensitive? What are the business workflows?</li>
+              <li><strong>Executive buy-in</strong> — DLP blocks users, so leadership must approve enforcement approach</li>
             </ul>
-            <p><strong>Result:</strong> DLP started at M6, after SIEM and EDR tracks were already underway. This gave time for the necessary legal and organizational groundwork.</p>
+            <p style="margin-top: 0.5rem;"><strong>Result:</strong> DLP started at M6, after SIEM and EDR tracks were underway. This gave time for the necessary legal and organizational groundwork.</p>
           </div>
         </div>
 
@@ -158,29 +206,34 @@
             </thead>
             <tbody>
               <tr>
-                <td><strong>SIEM</strong></td>
-                <td>Log source availability, connector configuration</td>
-                <td>Started first (M1)</td>
-              </tr>
-              <tr>
-                <td><strong>EDR</strong></td>
-                <td>Endpoint access, deployment infrastructure</td>
-                <td>Started with SIEM (M1)</td>
-              </tr>
-              <tr>
-                <td><strong>DLP</strong></td>
-                <td>Legal alignment, cross-team coordination, data classification</td>
-                <td>Started later (M6) — needed legal/organizational groundwork</td>
-              </tr>
-              <tr>
                 <td><strong>Identity</strong></td>
                 <td>AD infrastructure, Entra ID tenant</td>
-                <td>Pre-existing (stable before project)</td>
+                <td>Started first — cloud foundation required</td>
               </tr>
               <tr>
                 <td><strong>Infrastructure</strong></td>
                 <td>Azure subscription, network architecture</td>
-                <td>Pre-existing (stable before project)</td>
+                <td>Started first — cloud foundation required</td>
+              </tr>
+              <tr>
+                <td><strong>SIEM</strong></td>
+                <td>Log source availability, connector configuration</td>
+                <td>M1 — after foundation ready</td>
+              </tr>
+              <tr>
+                <td><strong>EDR</strong></td>
+                <td>Endpoint access, deployment infrastructure</td>
+                <td>M1 — started with SIEM</td>
+              </tr>
+              <tr>
+                <td><strong>DLP (EDLP)</strong></td>
+                <td>Legal alignment, cross-team coordination, data classification</td>
+                <td>M6 — needs more groundwork</td>
+              </tr>
+              <tr>
+                <td><strong>DLP (NDLP)</strong></td>
+                <td>Complete Azure transformation</td>
+                <td>Future — decom after cloud migration complete</td>
               </tr>
             </tbody>
           </table>

@@ -182,8 +182,9 @@
               <tr><td><strong>Microsoft Sentinel</strong></td><td>Primary SIEM</td><td><span class="status-badge complete">Active</span></td><td>Fully operational</td></tr>
               <tr><td><strong>ESET Protect</strong></td><td>Legacy EPP/EDR</td><td><span class="status-badge complete">Decommissioned</span></td><td>Replaced by MDE</td></tr>
               <tr><td><strong>M365 Defender</strong></td><td>Primary XDR</td><td><span class="status-badge complete">Active</span></td><td>Fully deployed</td></tr>
-              <tr><td><strong>Symantec DLP</strong></td><td>Legacy DLP</td><td><span class="status-badge complete">Decommissioned</span></td><td>Replaced by Purview</td></tr>
-              <tr><td><strong>Microsoft Purview</strong></td><td>Primary DLP</td><td><span class="status-badge complete">Active</span></td><td>Enforcement mode</td></tr>
+              <tr><td><strong>Symantec EDLP</strong></td><td>Legacy Endpoint DLP</td><td><span class="status-badge complete">Decommissioned</span></td><td>Replaced by Purview Endpoint DLP</td></tr>
+              <tr><td><strong>Symantec NDLP</strong></td><td>Network DLP</td><td><span class="status-badge in-progress">Active</span></td><td>Continues; decom after Azure transformation</td></tr>
+              <tr><td><strong>Microsoft Purview</strong></td><td>Primary Endpoint DLP</td><td><span class="status-badge complete">Active</span></td><td>Enforcement mode</td></tr>
             </tbody>
           </table>
         </div>
@@ -191,10 +192,12 @@
         <div class="callout success">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            Transformation Complete
+            Current State
           </div>
           <div class="callout-content">
-            <p>All legacy platforms have been decommissioned. Microsoft security stack is fully operational. Currently in knowledge transfer phase with handover to internal security team.</p>
+            <p><strong>Completed:</strong> RSA → Sentinel, ESET → MDE, Symantec EDLP → Purview. All legacy platforms decommissioned.</p>
+            <p><strong>Continuing:</strong> Symantec Network DLP remains active. Plan to discontinue after complete Azure transformation.</p>
+            <p><strong>Current Phase:</strong> Knowledge transfer and handover to internal security team.</p>
           </div>
         </div>
 
