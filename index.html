@@ -123,8 +123,22 @@
         <div class="page-header">
           <h1>Enterprise Security Transformation</h1>
           <p class="intro-text">
-            A comprehensive guide to migrating from legacy security infrastructure to a modern, cloud-native Microsoft security stack. This documentation covers the parallel migration of SIEM, EDR, DLP, Identity, and Infrastructure over an 18-month transformation program.
+            A multi-year enterprise security transformation for RevFlow Analytics (Siemens subsidiary). This documentation covers platform engineering work across SIEM, EDR, and DLP tracks — from log source discovery through operational stabilization. Trust boundaries were established first by Infra/Identity teams, enabling stable detection logic as telemetry sources evolved.
           </p>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Role Scope (Security Engineer)
+          </div>
+          <div class="callout-content">
+            <p><strong>SIEM Track (Started Here):</strong> Log source identification, stakeholder coordination, ingestion strategy, Sentinel workspace setup, connector configuration, custom log onboarding. Also worked on detection engineering — implementing built-in detection rules from the translation catalog, enabling native equivalents in Sentinel and M365 Defender, and aligning endpoint telemetry correlation between MDE, identity, and network signals.</p>
+            <p><strong>EDR Track (Transitioned to Lead):</strong> MDE deployment, policy configuration, ASR rollout, exclusions management, coexistence handling, operational tuning across 9,000 endpoints.</p>
+            <p><strong>Parallel Support:</strong> Worked both SIEM and EDR tracks in parallel — ensuring consistent telemetry flow and detection alignment across platforms.</p>
+            <p><strong>DLP Track (Current):</strong> Supporting audit mode monitoring, tuning, and validating policy behavior after SIEM/EDR stabilized.</p>
+            <p><strong>Detection Engineering Handoff:</strong> Detailed custom detection development and ongoing fine-tuning handled by SOC analysts and dedicated detection engineers.</p>
+          </div>
         </div>
 
         <h2>The Challenge</h2>

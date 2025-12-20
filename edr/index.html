@@ -65,9 +65,33 @@
           <h1>EDR Migration: ESET → Microsoft Defender for Endpoint</h1>
           <div class="page-header-meta">
             <span class="page-badge edr">Track 2</span>
-            <span class="page-reading-time">10 months active-active</span>
+            <span class="page-reading-time">Status: Foundationally Stable</span>
           </div>
-          <p class="intro-text">Migrating from ESET Protect + ESET Inspect to Microsoft Defender for Endpoint (MDE). Both solutions run in active-active mode to ensure continuous protection and enable detection comparison.</p>
+          <p class="intro-text">Microsoft Defender for Endpoint deployed across 9,000 endpoints. Transitioned to lead this track after SIEM foundation was established. Focus: endpoint onboarding, MDE policy configuration, ASR rollout, exclusions management, and operational tuning.</p>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Role Scope (Track Lead)
+          </div>
+          <div class="callout-content">
+            <p><strong>Platform Engineering:</strong> Endpoint onboarding and stabilization, MDE policy configuration, agent rollouts via Intune/SCCM, attack surface reduction (ASR) policy deployment, exclusions and allow-listing, coexistence management, and operational tuning to minimize business impact.</p>
+            <p><strong>Detection Alignment:</strong> Ensured consistent telemetry flow from MDE into Sentinel. Aligned endpoint detection use cases with identity and network signals. Worked both SIEM and EDR tracks in parallel after MDE rollout began.</p>
+            <p><strong>Detection Engineering Team:</strong> Custom endpoint detection development and ongoing tuning handled by SOC analysts and detection engineers. Leveraged Microsoft's extensive built-in detection library.</p>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Current State
+          </div>
+          <div class="callout-content">
+            <p><strong>MDE:</strong> Fully deployed to all 9,000 endpoints. ASR rules in enforcement mode.</p>
+            <p><strong>Integration:</strong> M365 Defender → Sentinel connector active. XDR incidents appear in unified queue.</p>
+            <p><strong>Legacy:</strong> ESET removed from endpoints. Protect server decommissioned.</p>
+          </div>
         </div>
 
         <h2>Migration Approach: Active-Active</h2>
@@ -100,8 +124,8 @@
             </thead>
             <tbody>
               <tr><td><strong>Preparation</strong></td><td>1</td><td>Exclusions configured, pilot group selected, deployment package ready</td></tr>
-              <tr><td><strong>Pilot Deployment</strong></td><td>2</td><td>Deploy MDE to IT department (50 endpoints), validate coexistence</td></tr>
-              <tr><td><strong>Broad Deployment</strong></td><td>3-6</td><td>Roll out to all endpoints in waves, ASR rules in Audit mode</td></tr>
+              <tr><td><strong>Pilot Deployment</strong></td><td>2</td><td>Deploy MDE to IT + Security teams (500 endpoints), validate coexistence</td></tr>
+              <tr><td><strong>Broad Deployment</strong></td><td>3-6</td><td>Roll out to all 9,000 endpoints in waves (by region/department), ASR rules in Audit mode</td></tr>
               <tr><td><strong>Detection Comparison</strong></td><td>4-8</td><td>Weekly comparison reports, prove MDE efficacy</td></tr>
               <tr><td><strong>ASR Enforcement</strong></td><td>7-9</td><td>Move ASR rules from Audit → Warn → Block</td></tr>
               <tr><td><strong>ESET Removal</strong></td><td>8-10</td><td>Phased uninstall starting with IT, then departments</td></tr>

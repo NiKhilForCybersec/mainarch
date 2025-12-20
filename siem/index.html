@@ -127,17 +127,41 @@
           <h1>SIEM Migration: RSA NetWitness → Microsoft Sentinel</h1>
           <div class="page-header-meta">
             <span class="page-badge siem">Track 1</span>
-            <span class="page-reading-time">12 months parallel operation</span>
+            <span class="page-reading-time">Status: Foundationally Stable</span>
           </div>
           <p class="intro-text">
-            The SIEM migration is the most complex track, requiring careful log source identification, ingestion strategy, detection engineering, and SOC transition. RSA NetWitness and Microsoft Sentinel run in parallel for 12 months to ensure zero detection gaps.
+            The SIEM track is foundationally complete. Sentinel is operational, log sources are onboarded, and the SOC is running on the new platform. This documentation covers the platform engineering work — log source identification, ingestion strategy, connector configuration, and operational readiness.
           </p>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Role Scope
+          </div>
+          <div class="callout-content">
+            <p><strong>Platform Engineering:</strong> Log source discovery, stakeholder coordination, ingestion strategy, Sentinel workspace setup, connector configuration, custom log onboarding, and operational readiness.</p>
+            <p><strong>Detection Engineering:</strong> Implemented and enabled built-in detection rules identified in the detection translation catalog — specifically those with direct native equivalents in Sentinel and M365 Defender. Translated and aligned detection use cases around endpoint telemetry, ensuring proper correlation between MDE, identity, and network signals within the SIEM.</p>
+            <p><strong>Detection Engineering Team:</strong> Detailed custom KQL detection development, complex rule translation, ongoing threshold tuning, and fine-tuning handled by SOC analysts and dedicated detection engineers.</p>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Current State
+          </div>
+          <div class="callout-content">
+            <p><strong>Sentinel:</strong> Primary SIEM, fully operational with identity, cloud, endpoint, and network telemetry.</p>
+            <p><strong>Log Sources:</strong> All critical sources onboarded via built-in connectors and custom DCRs.</p>
+            <p><strong>SOC:</strong> Analysts trained and operational on Sentinel + M365 Defender unified queue.</p>
+          </div>
         </div>
 
         <h2>Migration Overview</h2>
 
         <p>
-          The SIEM migration follows a methodical approach: discover what exists, plan what moves where, engineer the ingestion, translate the detections, and transition the SOC. Throughout this process, both SIEMs remain operational.
+          The SIEM migration follows a methodical approach: discover what exists, plan what moves where, engineer the ingestion, enable detections, and transition the SOC. Throughout this process, both SIEMs remain operational.
         </p>
 
         <div class="flow-diagram">
@@ -158,14 +182,14 @@
           <div class="flow-step">
             <div class="flow-step-number">3</div>
             <div class="flow-step-content">
-              <strong>Log Engineering</strong> — Configure connectors, DCRs, and ingestion transformations
+              <strong>Log Engineering</strong> — Configure connectors, DCRs, and ingestion transformations <span style="color: var(--accent-blue);">(My Primary Focus)</span>
             </div>
           </div>
           <div class="flow-connector">↓</div>
           <div class="flow-step">
             <div class="flow-step-number">4</div>
             <div class="flow-step-content">
-              <strong>Detection Engineering</strong> — Translate RSA ESA rules to Sentinel KQL analytics rules
+              <strong>Detection Engineering</strong> — Enable built-in content, translate custom rules <span style="color: var(--text-muted);">(Detection Engineering Team)</span>
             </div>
           </div>
           <div class="flow-connector">↓</div>

@@ -135,10 +135,11 @@ Invoke-WebRequest -Uri "https://www.eicar.org/download/eicar.com.txt" -OutFile "
      HKLM\SOFTWARE\Microsoft\Windows Advanced Threat Protection\Status\OnboardingState = 1
 
 3. Deploy to collection with phased rollout:
-   - Week 1: IT Department (50 devices)
-   - Week 2: Engineering (150 devices)
-   - Week 3: Sales + Marketing (200 devices)
-   - Week 4: All remaining</code></pre>
+   - Week 1: IT + Security Department (500 devices)
+   - Week 2-3: Engineering (1,500 devices)
+   - Week 4-5: Sales + Customer Success (2,000 devices)
+   - Week 6-7: All remaining workstations
+   - Week 8: Servers + VDI</code></pre>
         </div>
 
         <h2>Deployment Waves</h2>
@@ -148,14 +149,22 @@ Invoke-WebRequest -Uri "https://www.eicar.org/download/eicar.com.txt" -OutFile "
               <tr><th>Wave</th><th>Target Group</th><th>Devices</th><th>Duration</th><th>Success Gate</th></tr>
             </thead>
             <tbody>
-              <tr><td>Pilot</td><td>IT Security Team</td><td>20</td><td>1 week</td><td>100% onboarded, no issues</td></tr>
-              <tr><td>Wave 1</td><td>IT Department</td><td>50</td><td>1 week</td><td>>95% success, &lt;3 tickets</td></tr>
-              <tr><td>Wave 2</td><td>Engineering</td><td>150</td><td>2 weeks</td><td>>95% success</td></tr>
-              <tr><td>Wave 3</td><td>Sales + Marketing</td><td>200</td><td>2 weeks</td><td>>95% success</td></tr>
-              <tr><td>Wave 4</td><td>Finance + HR</td><td>100</td><td>1 week</td><td>>95% success</td></tr>
-              <tr><td>Wave 5</td><td>All Remaining + Servers</td><td>280</td><td>2 weeks</td><td>100% coverage</td></tr>
+              <tr><td>Pilot</td><td>IT Security Team</td><td>100</td><td>1 week</td><td>100% onboarded, no issues</td></tr>
+              <tr><td>Wave 1</td><td>IT Department</td><td>400</td><td>1 week</td><td>>95% success, &lt;10 tickets</td></tr>
+              <tr><td>Wave 2</td><td>Engineering (NA)</td><td>800</td><td>2 weeks</td><td>>95% success</td></tr>
+              <tr><td>Wave 3</td><td>Engineering (EMEA/APAC)</td><td>700</td><td>2 weeks</td><td>>95% success</td></tr>
+              <tr><td>Wave 4</td><td>Sales + Customer Success</td><td>2,000</td><td>2 weeks</td><td>>95% success</td></tr>
+              <tr><td>Wave 5</td><td>Operations + Support</td><td>1,500</td><td>2 weeks</td><td>>95% success</td></tr>
+              <tr><td>Wave 6</td><td>Finance + HR + Legal</td><td>500</td><td>1 week</td><td>>95% success</td></tr>
+              <tr><td>Wave 7</td><td>Servers + VDI</td><td>1,200</td><td>2 weeks</td><td>100% coverage</td></tr>
+              <tr><td>Wave 8</td><td>Remaining + Remediation</td><td>1,800</td><td>2 weeks</td><td>100% fleet coverage</td></tr>
             </tbody>
           </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Regional Considerations</div>
+          <div class="callout-content"><p>With global offices, schedule deployments during regional business hours. EMEA and APAC waves run concurrently with NA to compress timeline.</p></div>
         </div>
 
         <h2>Onboarding Validation Query</h2>

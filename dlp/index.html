@@ -62,9 +62,33 @@
           <h1>DLP Migration: Symantec → Microsoft Purview</h1>
           <div class="page-header-meta">
             <span class="page-badge dlp">Track 3</span>
-            <span class="page-reading-time">12 months: Audit → Warn → Block</span>
+            <span class="page-reading-time">Current: Audit Mode Monitoring</span>
           </div>
-          <p class="intro-text">Migrating from Symantec DLP to Microsoft Purview Endpoint DLP. This migration is user-impacting — careful phasing and communication prevent business disruption and user backlash.</p>
+          <p class="intro-text">Migrating from Symantec DLP to Microsoft Purview Endpoint DLP. Currently supporting audit mode monitoring and tuning after SIEM and EDR tracks stabilized. DLP is user-impacting — careful phasing prevents business disruption.</p>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Role Scope (Supporting)
+          </div>
+          <div class="callout-content">
+            <p><strong>Context:</strong> Joined DLP track to provide support after SIEM and EDR foundations were stable.</p>
+            <p><strong>My Focus:</strong> Audit mode monitoring, Activity Explorer analysis, tuning, and validating policy behavior prior to enforcement rollout.</p>
+            <p><strong>DLP Team Lead:</strong> Policy translation from Symantec, sensitive information type (SIT) configuration, user communication strategy, and enforcement decisions.</p>
+            <p><strong>Note:</strong> This section documents the full DLP migration approach for reference, including work led by the DLP team.</p>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Current State
+          </div>
+          <div class="callout-content">
+            <p><strong>SIEM & EDR:</strong> Foundationally stable. Sentinel + MDE operational.</p>
+            <p><strong>DLP:</strong> In audit mode. Policies deployed and logging. Currently monitoring Activity Explorer, tuning sensitive info types, reducing false positives before enforcement.</p>
+          </div>
         </div>
 
         <h2>Why DLP Migration is Different</h2>
