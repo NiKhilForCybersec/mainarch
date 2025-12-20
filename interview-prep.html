@@ -195,33 +195,45 @@ The key was sequencing — telemetry first, then detections, then SOC transition
           
           <div class="code-block">
             <div class="code-header"><span class="code-lang">Response</span></div>
-            <pre><code>"I prioritize based on detection value, not volume. My framework is:
+            <pre><code>"I prioritize based on detection value, not volume. We use a tiered approach:
 
-1. IDENTITY FIRST (Detection Anchor #1)
-   Entra ID sign-in and audit logs. Identity is the foundation for 
-   correlation — every detection eventually ties back to a user or 
-   service principal. This is also free tier in Sentinel.
+PRIORITY 1 — DETECTION ANCHORS (~70% of detection coverage)
+These are our primary focus because they cover the majority of detection 
+use cases and are often free or low-cost:
 
-2. ENDPOINT SECOND (Detection Anchor #2)
-   MDE telemetry through the M365 Defender connector. This gives us 
-   process execution, network connections, credential access — high-
-   confidence behavioral signals. And it's free ingestion through XDR.
+  1. IDENTITY (Entra ID)
+     Sign-in and audit logs. Identity is the foundation for correlation — 
+     every detection eventually ties back to a user or service principal. 
+     Free tier in Sentinel.
 
-3. CLOUD CONTROL PLANE (Detection Anchor #3)
-   Azure Activity Logs, Defender for Cloud alerts. High security value, 
-   low personal data, mostly free.
+  2. ENDPOINT (MDE via M365 Defender)
+     Process execution, network connections, credential access — high-
+     confidence behavioral signals. Free ingestion through XDR connector.
 
-4. NETWORK AND PERIMETER
-   Firewall logs, DNS, NSG flows. Important for lateral movement and 
-   exfiltration detection, but higher volume so we're selective.
+  3. CLOUD CONTROL PLANE
+     Azure Activity Logs, Defender for Cloud alerts. High security value, 
+     low personal data, mostly free.
 
-5. SAAS AND CUSTOM APPLICATIONS
-   Salesforce audit logs, custom app logs. Important for business-specific 
-   detections but lower priority than the anchors.
+We prioritized P1 initially because these three anchors alone covered 
+roughly 70% of our detection use cases — and they're largely free.
 
-Cost is always a factor. With Sentinel, MDE telemetry is free through the 
-XDR connector — that's 150+ GB/day we don't pay for. I focus billable 
-ingestion on sources that add detection value the free data doesn't cover."</code></pre>
+PRIORITY 2 — NETWORK AND PERIMETER
+  • Firewall logs, DNS, NSG flows
+  • Important for lateral movement and exfiltration detection
+  • Higher volume, so we're selective — filter at ingestion
+
+PRIORITY 3 — SAAS AND CUSTOM APPLICATIONS
+  • Salesforce audit logs, custom app logs
+  • Important for business-specific detections
+  • Lower priority than anchors, often require custom onboarding
+
+COST AWARENESS:
+With Sentinel's per-GB pricing, we get P1 sources largely free (~150 GB/day 
+of MDE telemetry alone). We focus billable ingestion on P2/P3 sources that 
+add detection value the free data doesn't already cover.
+
+The key insight: Don't try to ingest everything. Start with sources that 
+enable the most detections per dollar spent."</code></pre>
           </div>
         </div>
 
@@ -231,36 +243,49 @@ ingestion on sources that add detection value the free data doesn't cover."</cod
           
           <div class="code-block">
             <div class="code-header"><span class="code-lang">Response</span></div>
-            <pre><code>"Here are specific examples from my recent project:
+            <pre><code>"In my recent project, I worked with both built-in Sentinel connectors 
+and custom log onboarding, depending on the source and complexity.
 
-BUILT-IN CONNECTORS (Simple):
-• Microsoft Entra ID — Diagnostic settings to workspace, instant data flow
-• M365 Defender — Content Hub solution, XDR connector for all Device* tables
-• Azure Activity — Subscription-level diagnostic settings
-• AWS CloudTrail — S3 connector with SQS notifications
+BUILT-IN CONNECTORS (Straightforward):
+• Microsoft Entra ID — Diagnostic settings to Log Analytics workspace, 
+  immediate well-structured telemetry
+• Microsoft 365 Defender — Content Hub XDR solution for Device* tables, 
+  free ingestion
+• Azure Activity Logs — Subscription-level diagnostic settings
+• AWS CloudTrail — S3 connector with SQS notifications for reliable ingestion
 
-CUSTOM LOG ONBOARDING (More Complex):
-• Windows Security Events — Azure Monitor Agent with Data Collection Rules. 
-  We filtered to specific Event IDs (4624, 4625, 4688, etc.) to control volume.
-  
-• Linux Auth Logs — AMA with Syslog DCR. Had to troubleshoot rsyslog 
-  configuration on older servers.
-  
-• On-prem Firewall (CEF) — CEF via AMA. Required working with network team 
-  to configure syslog forwarding. Parsing issues with non-standard CEF fields 
-  that needed custom parsing functions.
-  
-• Custom Application Logs — HTTP Data Collector API initially, then migrated 
-  to DCR-based ingestion. Had to work with dev teams to standardize log format.
+These provided immediate, well-structured telemetry with minimal configuration.
 
-PARSING ISSUES I'VE ENCOUNTERED:
-• Timestamp format mismatches — logs in local time vs UTC
-• Multi-line log events not grouping correctly
-• CEF extensions with vendor-specific fields not mapping to CommonSecurityLog
-• JSON logs with nested objects requiring mv-expand
+CUSTOM ONBOARDING (More Involved):
 
-For each source, I validate: Is data flowing? Are fields parsing? Is volume 
-expected? Can we build detections on it?"</code></pre>
+Windows Servers:
+• Azure Monitor Agent with Data Collection Rules
+• Filtered to specific security Event IDs (4624, 4625, 4688) to control 
+  volume and focus on detection-relevant telemetry
+
+Linux Servers:
+• Cloud-connected: AMA with syslog DCRs
+• Legacy/constrained environments: Dedicated syslog aggregation server, 
+  forwarded logs centrally rather than installing agents everywhere
+• Required troubleshooting rsyslog configurations and normalizing formats
+
+On-Prem Firewalls (CEF):
+• CEF logs via AMA
+• Worked closely with network team to configure syslog forwarding
+• Encountered non-standard CEF extensions requiring custom parsing and 
+  field normalization to align with CommonSecurityLog
+
+Custom Application Logs:
+• Initially used HTTP Data Collector API
+• Later migrated to DCR-based ingestion once formats were standardized
+• Required coordination with dev teams to ensure consistent JSON structures
+
+VALIDATION APPROACH (Same for All Sources):
+• Confirm data flow (is it arriving?)
+• Verify field parsing (are fields populated correctly?)
+• Check volume against expectations
+• Ensure data is usable for detection and correlation — not just present 
+  in the workspace"</code></pre>
           </div>
         </div>
 
@@ -325,35 +350,47 @@ the source production-ready."</code></pre>
    • M365 Defender connector — all Device* tables are free (~150 GB/day for us)
    • Azure Activity Logs — free
    • Defender for Cloud alerts — free
+   • Microsoft Sentinel benefit with M365 E5 — 5 MB/user/day free grant
    • This alone saved us roughly $12,000/month vs paying for that telemetry
 
-2. FILTER AT INGESTION, NOT AFTER
-   • Data Collection Rules to filter Windows events to security-relevant IDs only
+2. COMMITMENT TIERS (Major Savings)
+   Sentinel offers tiered pricing with significant discounts:
+   
+   | Tier         | Discount vs Pay-As-You-Go |
+   |--------------|---------------------------|
+   | 100 GB/day   | ~50% savings              |
+   | 200 GB/day   | ~55% savings              |
+   | 400 GB/day   | ~60% savings              |
+   | 500+ GB/day  | ~65% savings              |
+   
+   We use 100 GB/day commitment tier. Key: monitor actual usage weekly 
+   and right-size the commitment. Over-committing wastes money; under-
+   committing means paying higher pay-as-you-go rates for overflow.
+
+3. FILTER AT INGESTION, NOT AFTER
+   • Data Collection Rules to filter Windows events to security-relevant IDs
    • Don't ingest verbose debug logs — filter at source
-   • NSG flow logs: selective, not all subnets
+   • NSG flow logs: selective subnets, not everything
 
-3. USE APPROPRIATE LOG TIERS
-   • Analytics tier for data you query frequently
-   • Basic tier for high-volume, low-query data (50% cheaper)
-   • Archive tier for long-term retention (compliance)
-
-4. COMMITMENT TIERS
-   • We use 100 GB/day commitment tier — 50% discount vs pay-as-you-go
-   • Monitor actual usage to right-size the commitment
+4. USE APPROPRIATE LOG TIERS
+   • Analytics tier: Data you query frequently (detections, investigations)
+   • Basic tier: High-volume, low-query data — 50% cheaper than Analytics
+   • Archive tier: Long-term retention for compliance — cheapest storage
 
 5. RETENTION STRATEGY
-   • 90 days hot retention for most tables
-   • Archive beyond that for compliance
-   • Some high-volume tables: 30 days only
+   • 90 days hot retention for most tables (default)
+   • Archive beyond 90 days for compliance requirements
+   • Some high-volume tables (NSG flows): 30 days only
 
 6. COST MONITORING
-   • Weekly review of ingestion by table
-   • Alert on unexpected volume spikes
-   • Usage workbook to identify optimization opportunities
+   • Weekly review of ingestion by table using Usage workbook
+   • Alert on unexpected volume spikes (>20% above baseline)
+   • Identify tables growing faster than expected
 
-Our Sentinel cost is roughly $12,000/month. The legacy RSA NetWitness was 
-$35,000/month — that's 66% reduction while actually improving detection 
-coverage through the free XDR data."</code></pre>
+RESULT:
+• Sentinel cost: ~$12,000/month (with commitment tier)
+• Legacy RSA NetWitness: ~$35,000/month
+• Savings: 66% cost reduction with improved detection coverage"</code></pre>
           </div>
         </div>
 

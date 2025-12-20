@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Architecture | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="../siem/index.html" class="nav-item"><span class="nav-track-indicator siem"></span>SIEM: RSA → Sentinel</a>
+          <a href="../edr/index.html" class="nav-item"><span class="nav-track-indicator edr"></span>EDR: ESET → MDE</a>
+          <a href="../dlp/index.html" class="nav-item"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+          <a href="../identity/index.html" class="nav-item"><span class="nav-track-indicator identity"></span>Identity: AD → Entra ID</a>
+          <a href="index.html" class="nav-item"><span class="nav-track-indicator infra"></span>Infrastructure: Azure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="network-architecture.html" class="nav-item active">Network Architecture</a>
+          <a href="workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Interactive Timeline</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">Infrastructure</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Network Architecture</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Enterprise Network Architecture</h1>
+          <p class="intro-text">
+            Understanding the evolution from traditional WAN (MPLS, VPN) to modern architectures (SD-WAN, SASE, ZTNA). This reference covers when to use each technology, how they interconnect, and security implications.
+          </p>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            The Big Picture
+          </div>
+          <div class="callout-content">
+            <p><strong>Traditional:</strong> MPLS for private WAN, VPN for remote access, traffic backhauled to data center</p>
+            <p><strong>Modern:</strong> SD-WAN for intelligent routing, SASE for cloud-delivered security, ZTNA for identity-based access</p>
+            <p><strong>Hybrid Reality:</strong> Most enterprises run both — ExpressRoute/MPLS for critical workloads, SD-WAN/SASE for internet and SaaS</p>
+          </div>
+        </div>
+
+        <h2>Technology Evolution Timeline</h2>
+
+        <div class="flow-diagram">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <strong>MPLS Era (2000s-2010s)</strong><br>
+              Private WAN circuits between sites. All traffic backhauled to data center. Expensive but reliable and secure.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <strong>VPN + Internet (2010s)</strong><br>
+              Remote users connect via VPN. Site-to-site VPN as cheaper MPLS alternative. Still requires data center hairpin.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <strong>SD-WAN (2015+)</strong><br>
+              Intelligent routing across multiple links (MPLS + Internet). Direct cloud access. Lower cost, better performance.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-content">
+              <strong>SASE + ZTNA (2020+)</strong><br>
+              Security delivered from cloud. Identity-based access replacing network-based. "Never trust, always verify."
+            </div>
+          </div>
+        </div>
+
+        <h2>Traditional WAN Technologies</h2>
+
+        <h3>MPLS (Multiprotocol Label Switching)</h3>
+        
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Aspect</th><th>Details</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>What It Is</strong></td><td>Private WAN service from telcos. Traffic labeled and routed through carrier's private network — never touches public internet.</td></tr>
+              <tr><td><strong>How It Works</strong></td><td>Carrier assigns labels to packets at ingress, routes based on labels (not IP), strips labels at egress. Creates virtual private network across carrier infrastructure.</td></tr>
+              <tr><td><strong>Security Model</strong></td><td>Inherently private — your traffic is isolated from other customers. No encryption needed (though often added). Carrier manages routing.</td></tr>
+              <tr><td><strong>Use Cases</strong></td><td>Branch-to-datacenter connectivity, latency-sensitive apps (VoIP, video), guaranteed bandwidth requirements, regulatory compliance.</td></tr>
+              <tr><td><strong>Pros</strong></td><td>Reliable, predictable latency, SLA-backed, carrier-managed, QoS built-in</td></tr>
+              <tr><td><strong>Cons</strong></td><td>Expensive ($500-$2000/site/month), slow provisioning (weeks), inflexible, doesn't help with cloud/SaaS</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">MPLS Traffic Flow</span></div>
+          <pre><code>┌─────────────┐          ┌─────────────────────────────┐          ┌─────────────┐
+│  Branch A   │──────────│     Carrier MPLS Network    │──────────│  Data Center│
+│  (Chicago)  │  Label   │  (Private, SLA-backed)      │  Label   │  (Virginia) │
+└─────────────┘  Push    │                             │  Pop     └─────────────┘
+                         │   ┌───┐     ┌───┐     ┌───┐ │
+                         │   │ P │─────│ P │─────│ P │ │   P = Provider Router
+                         │   └───┘     └───┘     └───┘ │   Labels route traffic
+                         └─────────────────────────────┘
+                         
+Traffic stays within carrier network — never hits public internet</code></pre>
+        </div>
+
+        <h3>VPN (Virtual Private Network)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>VPN Type</th><th>Use Case</th><th>How It Works</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Remote Access VPN</strong></td>
+                <td>Employees working from home/travel</td>
+                <td>Client software on laptop connects to VPN concentrator at data center. All traffic tunneled through encrypted connection.</td>
+              </tr>
+              <tr>
+                <td><strong>Site-to-Site VPN</strong></td>
+                <td>Connecting branch offices over internet</td>
+                <td>Firewall/router at each site establishes IPsec tunnel. Cheaper than MPLS but no SLA guarantees.</td>
+              </tr>
+              <tr>
+                <td><strong>SSL VPN</strong></td>
+                <td>Clientless access to web apps</td>
+                <td>Browser-based access through reverse proxy. No client install needed. Limited to web applications.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            VPN Limitations (Why ZTNA Emerged)
+          </div>
+          <div class="callout-content">
+            <ul style="margin: 0; padding-left: 1.5rem;">
+              <li><strong>Full network access:</strong> Once connected, user has broad network access — lateral movement risk</li>
+              <li><strong>Backhauling:</strong> All traffic routes through data center, even for cloud apps — latency</li>
+              <li><strong>Implicit trust:</strong> If you're on VPN, you're "trusted" — no continuous verification</li>
+              <li><strong>Scalability:</strong> VPN concentrators become bottlenecks with many remote users</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>Azure ExpressRoute</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            What is ExpressRoute?
+          </div>
+          <div class="callout-content">
+            <p><strong>ExpressRoute = Private connection to Azure (and M365).</strong></p>
+            <p>Instead of going over public internet to reach Azure, you have a dedicated circuit through a connectivity provider. Think of it as "MPLS to Azure."</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Aspect</th><th>Details</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>How It Works</strong></td><td>You connect to a Microsoft Enterprise Edge (MSEE) router at an ExpressRoute peering location (colocation facility). Your traffic never traverses public internet to reach Azure.</td></tr>
+              <tr><td><strong>Connectivity Models</strong></td><td>
+                <ul style="margin: 0; padding-left: 1.2rem;">
+                  <li><strong>Colocation:</strong> Your equipment in same facility as MSEE</li>
+                  <li><strong>Point-to-Point:</strong> Dedicated circuit from your DC to peering location</li>
+                  <li><strong>Any-to-Any (IPVPN):</strong> Connect via your existing MPLS provider</li>
+                </ul>
+              </td></tr>
+              <tr><td><strong>Peering Types</strong></td><td>
+                <ul style="margin: 0; padding-left: 1.2rem;">
+                  <li><strong>Azure Private Peering:</strong> Access VNets, VMs, private endpoints</li>
+                  <li><strong>Microsoft Peering:</strong> Access M365, Dynamics, Azure public services</li>
+                </ul>
+              </td></tr>
+              <tr><td><strong>Bandwidth Options</strong></td><td>50 Mbps to 100 Gbps depending on provider and location</td></tr>
+              <tr><td><strong>Redundancy</strong></td><td>Each circuit has 2 connections (active-active). For full redundancy, deploy 2 circuits in different peering locations.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">ExpressRoute Architecture</span></div>
+          <pre><code>┌─────────────┐     ┌─────────────────┐     ┌─────────────────┐     ┌─────────────┐
+│  Your Data  │─────│  Connectivity   │─────│   ExpressRoute  │─────│    Azure    │
+│   Center    │     │    Provider     │     │  Peering Loc    │     │   Region    │
+└─────────────┘     └─────────────────┘     └─────────────────┘     └─────────────┘
+       │                    │                       │                      │
+       │     MPLS/Fiber     │    Cross-Connect      │    Microsoft Edge    │
+       │◄──────────────────►│◄─────────────────────►│◄────────────────────►│
+                                                    
+                    ┌───────────────────────────────────────────┐
+                    │  Traffic never touches public internet    │
+                    │  Predictable latency, private connection  │
+                    └───────────────────────────────────────────┘
+
+Peering Locations: Equinix, Megaport, AT&T, Verizon, etc.
+Example: Chicago (Equinix CH1) → Azure East US 2</code></pre>
+        </div>
+
+        <h3>ExpressRoute vs VPN to Azure</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Aspect</th><th>ExpressRoute</th><th>Site-to-Site VPN</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Connection</strong></td><td>Private circuit via provider</td><td>IPsec over public internet</td></tr>
+              <tr><td><strong>Bandwidth</strong></td><td>Up to 100 Gbps</td><td>Up to 10 Gbps aggregate</td></tr>
+              <tr><td><strong>Latency</strong></td><td>Predictable, low</td><td>Variable (internet dependent)</td></tr>
+              <tr><td><strong>Cost</strong></td><td>$$$ (circuit + Azure egress)</td><td>$ (just VPN gateway)</td></tr>
+              <tr><td><strong>Use Case</strong></td><td>Production workloads, large data transfer</td><td>Dev/test, backup, small sites</td></tr>
+              <tr><td><strong>Setup Time</strong></td><td>Weeks (provider provisioning)</td><td>Hours</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            When to Use ExpressRoute
+          </div>
+          <div class="callout-content">
+            <ul style="margin: 0; padding-left: 1.5rem;">
+              <li><strong>Large data transfers:</strong> Migrating TBs to Azure, backup/DR replication</li>
+              <li><strong>Latency-sensitive apps:</strong> Real-time apps, trading systems</li>
+              <li><strong>Compliance:</strong> Regulatory requirements for private connectivity</li>
+              <li><strong>High bandwidth:</strong> Consistent throughput requirements >1 Gbps</li>
+              <li><strong>Hybrid workloads:</strong> Tight integration between on-prem and Azure</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>SD-WAN (Software-Defined WAN)</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            What is SD-WAN?
+          </div>
+          <div class="callout-content">
+            <p><strong>SD-WAN = Intelligent routing across multiple WAN links.</strong></p>
+            <p>Instead of single MPLS circuit, use multiple connections (MPLS + broadband + LTE) and route traffic based on application requirements, link quality, and cost.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Capability</th><th>How It Helps</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Multi-Link Aggregation</strong></td>
+                <td>Combine MPLS + Internet + LTE. Use all links simultaneously. Failover if one fails.</td>
+              </tr>
+              <tr>
+                <td><strong>Application-Aware Routing</strong></td>
+                <td>Route M365 over internet (fast), SAP over MPLS (reliable), backup over LTE (resilience).</td>
+              </tr>
+              <tr>
+                <td><strong>Direct Cloud Access</strong></td>
+                <td>Branch users access SaaS directly — no backhaul to data center. Lower latency.</td>
+              </tr>
+              <tr>
+                <td><strong>Centralized Management</strong></td>
+                <td>Configure all sites from single console. Push policies, monitor health, deploy changes.</td>
+              </tr>
+              <tr>
+                <td><strong>WAN Optimization</strong></td>
+                <td>Deduplication, compression, caching. Improve performance over limited links.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">SD-WAN vs Traditional WAN</span></div>
+          <pre><code>TRADITIONAL WAN (MPLS Only):
+┌─────────┐                    ┌─────────────┐                    ┌─────────┐
+│ Branch  │───── MPLS ────────│ Data Center │──── Internet ──────│  M365   │
+└─────────┘                    └─────────────┘                    └─────────┘
+                                     │
+                All traffic backhauled through DC (even cloud traffic)
+
+
+SD-WAN (Intelligent Routing):
+┌─────────┐     ┌─────────────────────────────────────────────────┐
+│ Branch  │─────│                  SD-WAN Edge                    │
+└─────────┘     │  ┌─────────┐  ┌─────────┐  ┌─────────┐          │
+                │  │  MPLS   │  │Internet │  │   LTE   │          │
+                │  └────┬────┘  └────┬────┘  └────┬────┘          │
+                │       │            │            │               │
+                │       ▼            ▼            ▼               │
+                │  ┌─────────────────────────────────────────┐    │
+                │  │        Application-Aware Routing        │    │
+                │  │  SAP → MPLS | M365 → Internet | Backup  │    │
+                │  └─────────────────────────────────────────┘    │
+                └─────────────────────────────────────────────────┘
+                         │                │
+                         ▼                ▼
+                  ┌─────────────┐   ┌─────────┐
+                  │ Data Center │   │  M365   │  ← Direct cloud access
+                  └─────────────┘   └─────────┘</code></pre>
+        </div>
+
+        <h3>SD-WAN Vendors</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Vendor</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Cisco Viptela/Meraki</strong></td><td>Enterprise leader, integrates with Cisco security stack</td></tr>
+              <tr><td><strong>VMware VeloCloud</strong></td><td>Strong cloud integration, acquired by Broadcom</td></tr>
+              <tr><td><strong>Fortinet Secure SD-WAN</strong></td><td>Integrated security (NGFW built-in)</td></tr>
+              <tr><td><strong>Palo Alto Prisma SD-WAN</strong></td><td>Part of SASE offering</td></tr>
+              <tr><td><strong>Zscaler</strong></td><td>Cloud-first, pairs with ZIA/ZPA for SASE</td></tr>
+              <tr><td><strong>Microsoft Azure Virtual WAN</strong></td><td>Native Azure SD-WAN, integrates with ExpressRoute</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>SASE (Secure Access Service Edge)</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            What is SASE?
+          </div>
+          <div class="callout-content">
+            <p><strong>SASE = SD-WAN + Cloud-Delivered Security (combined).</strong></p>
+            <p>Gartner term (2019). Instead of backhauling traffic to data center for security inspection, security services are delivered from the cloud — closer to users and applications.</p>
+          </div>
+        </div>
+
+        <h3>SASE Components</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">SASE Architecture</span></div>
+          <pre><code>                         ┌─────────────────────────────────────────┐
+                         │              SASE Cloud                 │
+                         │  ┌─────────────────────────────────┐    │
+                         │  │     Security Services (SSE)     │    │
+                         │  │  ┌───────┐ ┌───────┐ ┌───────┐  │    │
+                         │  │  │  SWG  │ │ CASB  │ │  FWaaS│  │    │
+                         │  │  └───────┘ └───────┘ └───────┘  │    │
+                         │  │  ┌───────┐ ┌───────┐ ┌───────┐  │    │
+                         │  │  │ ZTNA  │ │  DLP  │ │Sandbox│  │    │
+                         │  │  └───────┘ └───────┘ └───────┘  │    │
+                         │  └─────────────────────────────────┘    │
+                         │  ┌─────────────────────────────────┐    │
+                         │  │           SD-WAN                │    │
+                         │  │   Intelligent routing, QoS      │    │
+                         │  └─────────────────────────────────┘    │
+                         └────────────────────┬────────────────────┘
+                                              │
+              ┌───────────────────────────────┼───────────────────────────────┐
+              │                               │                               │
+              ▼                               ▼                               ▼
+        ┌───────────┐                  ┌───────────┐                   ┌───────────┐
+        │  Branch   │                  │  Remote   │                   │  Mobile   │
+        │  Office   │                  │  Worker   │                   │  User     │
+        └───────────┘                  └───────────┘                   └───────────┘</code></pre>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Component</th><th>What It Does</th><th>Replaces</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SWG (Secure Web Gateway)</strong></td>
+                <td>URL filtering, malware scanning, SSL inspection for web traffic</td>
+                <td>On-prem web proxy (Bluecoat, McAfee)</td>
+              </tr>
+              <tr>
+                <td><strong>CASB (Cloud Access Security Broker)</strong></td>
+                <td>Visibility and control over SaaS usage, shadow IT detection</td>
+                <td>Standalone CASB appliances</td>
+              </tr>
+              <tr>
+                <td><strong>FWaaS (Firewall as a Service)</strong></td>
+                <td>L3-L7 firewall in cloud, application control, IPS</td>
+                <td>Branch firewalls, DC firewall hairpinning</td>
+              </tr>
+              <tr>
+                <td><strong>ZTNA (Zero Trust Network Access)</strong></td>
+                <td>Identity-based access to applications (see next section)</td>
+                <td>VPN for remote access</td>
+              </tr>
+              <tr>
+                <td><strong>DLP</strong></td>
+                <td>Data loss prevention for web and cloud traffic</td>
+                <td>Network DLP appliances</td>
+              </tr>
+              <tr>
+                <td><strong>Sandboxing</strong></td>
+                <td>Detonate suspicious files in cloud sandbox</td>
+                <td>On-prem sandbox appliances</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>SASE Vendors</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Vendor</th><th>Product</th><th>Strength</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Zscaler</strong></td><td>ZIA (SWG) + ZPA (ZTNA)</td><td>Cloud-native leader, massive PoP network</td></tr>
+              <tr><td><strong>Palo Alto</strong></td><td>Prisma Access + Prisma SD-WAN</td><td>Unified platform, strong NGFW heritage</td></tr>
+              <tr><td><strong>Cisco</strong></td><td>Umbrella + Viptela SD-WAN</td><td>Enterprise integration, SD-WAN leader</td></tr>
+              <tr><td><strong>Netskope</strong></td><td>Netskope One</td><td>CASB leader, data-centric security</td></tr>
+              <tr><td><strong>Cloudflare</strong></td><td>Cloudflare One</td><td>Developer-friendly, edge network</td></tr>
+              <tr><td><strong>Microsoft</strong></td><td>Global Secure Access (Entra)</td><td>Native M365 integration (new entrant)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>ZTNA (Zero Trust Network Access)</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            What is ZTNA?
+          </div>
+          <div class="callout-content">
+            <p><strong>ZTNA = Application-level access based on identity, not network location.</strong></p>
+            <p>"Never trust, always verify." Users are granted access to specific applications — not the entire network — after verifying identity, device posture, and context.</p>
+          </div>
+        </div>
+
+        <h3>VPN vs ZTNA</h3>
+
+        <div class="comparison-grid">
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(248, 81, 73, 0.15); color: var(--accent-red);">Traditional VPN</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Connect to network, then access apps</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Broad network access once connected</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Implicit trust after authentication</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Lateral movement possible</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Traffic backhauled through DC</span></div>
+            </div>
+          </div>
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(63, 185, 80, 0.15); color: var(--accent-green);">ZTNA</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Authenticate, then connect to specific app</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Access only to authorized applications</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Continuous verification (every request)</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Apps invisible to unauthorized users</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Direct-to-app via cloud broker</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">ZTNA Access Flow</span></div>
+          <pre><code>VPN MODEL:
+User → VPN Concentrator → [FULL NETWORK ACCESS] → Find App → Access App
+         └── "You're in the building, go wherever you want"
+
+
+ZTNA MODEL:
+User → ZTNA Broker → Identity Check → Device Posture Check → Context Check
+                                                                    │
+                        ┌───────────────────────────────────────────┘
+                        │
+                        ▼
+              ┌─────────────────────┐
+              │  Policy Decision:   │
+              │  User: john@corp    │
+              │  Device: Compliant  │
+              │  Location: Home     │
+              │  App: Salesforce    │  → ALLOW (direct connection to app only)
+              │  Time: Business hrs │
+              │  Risk: Low          │
+              └─────────────────────┘
+              
+        └── "You're authorized for this specific app, nothing else visible"</code></pre>
+        </div>
+
+        <h3>ZTNA Architecture Types</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Type</th><th>How It Works</th><th>Example Vendors</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Agent-Based (Endpoint-Initiated)</strong></td>
+                <td>Lightweight agent on device connects to broker. Broker authenticates and establishes connection to app. App doesn't need to be internet-exposed.</td>
+                <td>Zscaler ZPA, Palo Alto Prisma Access, Cloudflare Access</td>
+              </tr>
+              <tr>
+                <td><strong>Service-Initiated (Reverse Proxy)</strong></td>
+                <td>Connector installed in front of app creates outbound tunnel to broker. User accesses via browser — no agent needed.</td>
+                <td>Zscaler ZPA, Entra Private Access, Cloudflare Access</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Microsoft Entra Private Access (ZTNA)</h3>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Microsoft's ZTNA Solution
+          </div>
+          <div class="callout-content">
+            <p><strong>Entra Private Access</strong> (part of Global Secure Access) provides ZTNA for on-premises and private apps:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Deploy connectors in front of private apps (no public exposure needed)</li>
+              <li>Users access apps through Entra — Conditional Access policies apply</li>
+              <li>Integrates with existing Entra ID, MFA, device compliance</li>
+              <li>Replaces VPN for private app access</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>Putting It All Together: Hybrid Architecture</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Modern Enterprise Network Architecture</span></div>
+          <pre><code>
+┌────────────────────────────────────────────────────────────────────────────────┐
+│                              ENTERPRISE NETWORK                                 │
+├────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐           │
+│  │  Headquarters   │     │  Branch Office  │     │   Remote User   │           │
+│  │                 │     │                 │     │                 │           │
+│  │  ┌───────────┐  │     │  ┌───────────┐  │     │  ┌───────────┐  │           │
+│  │  │ SD-WAN    │  │     │  │ SD-WAN    │  │     │  │ ZTNA      │  │           │
+│  │  │ Appliance │  │     │  │ Appliance │  │     │  │ Agent     │  │           │
+│  │  └─────┬─────┘  │     │  └─────┬─────┘  │     │  └─────┬─────┘  │           │
+│  └────────┼────────┘     └────────┼────────┘     └────────┼────────┘           │
+│           │                       │                       │                     │
+│           │ ExpressRoute/MPLS     │ Internet + LTE        │ Internet            │
+│           │ (Critical Apps)       │ (Best Effort)         │ (Always)            │
+│           │                       │                       │                     │
+│           ▼                       ▼                       ▼                     │
+│  ┌────────────────────────────────────────────────────────────────────────┐    │
+│  │                         SASE CLOUD                                      │    │
+│  │  ┌──────────────────────────────────────────────────────────────────┐  │    │
+│  │  │  Security Services (SSE)                                         │  │    │
+│  │  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐    │  │    │
+│  │  │  │   SWG   │ │  CASB   │ │  ZTNA   │ │  DLP    │ │  FWaaS  │    │  │    │
+│  │  │  └─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘    │  │    │
+│  │  └──────────────────────────────────────────────────────────────────┘  │    │
+│  └─────────────────────────────────┬──────────────────────────────────────┘    │
+│                                    │                                            │
+└────────────────────────────────────┼────────────────────────────────────────────┘
+                                     │
+         ┌───────────────────────────┼───────────────────────────┐
+         │                           │                           │
+         ▼                           ▼                           ▼
+┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐
+│   Azure Cloud   │       │   SaaS Apps     │       │  Private Apps   │
+│                 │       │                 │       │  (On-Prem)      │
+│  ExpressRoute   │       │  M365, SFDC     │       │                 │
+│  + Private Link │       │  (via SASE)     │       │  ZTNA Connector │
+└─────────────────┘       └─────────────────┘       └─────────────────┘
+
+
+ROUTING DECISIONS:
+┌─────────────────────────────────────────────────────────────────────────┐
+│  Traffic Type              │  Path                  │  Reason           │
+├────────────────────────────┼────────────────────────┼───────────────────┤
+│  Azure Production VMs      │  ExpressRoute          │  Low latency, SLA │
+│  M365 (Teams, Outlook)     │  SASE → Direct         │  Optimized path   │
+│  Salesforce                │  SASE (CASB inspect)   │  Shadow IT control│
+│  Private ERP App           │  ZTNA → Connector      │  No VPN needed    │
+│  General Internet          │  SASE (SWG inspect)    │  Security scan    │
+│  Backup Replication        │  ExpressRoute          │  Bandwidth        │
+└─────────────────────────────────────────────────────────────────────────┘</code></pre>
+        </div>
+
+        <h2>Decision Framework: When to Use What</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Scenario</th><th>Recommended Technology</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Branch office to data center (critical apps)</td>
+                <td>MPLS or ExpressRoute</td>
+                <td>SLA-backed, predictable latency</td>
+              </tr>
+              <tr>
+                <td>Branch office to cloud (SaaS)</td>
+                <td>SD-WAN + SASE</td>
+                <td>Direct cloud access, no backhaul</td>
+              </tr>
+              <tr>
+                <td>Remote worker to M365</td>
+                <td>SASE (SWG + CASB)</td>
+                <td>Security inspection, optimized routing</td>
+              </tr>
+              <tr>
+                <td>Remote worker to private app</td>
+                <td>ZTNA</td>
+                <td>No VPN, identity-based access</td>
+              </tr>
+              <tr>
+                <td>Hybrid cloud connectivity</td>
+                <td>ExpressRoute + VPN backup</td>
+                <td>Private + redundancy</td>
+              </tr>
+              <tr>
+                <td>Multi-cloud connectivity</td>
+                <td>SD-WAN with cloud gateways</td>
+                <td>Unified policy across clouds</td>
+              </tr>
+              <tr>
+                <td>Small branch / retail</td>
+                <td>SD-WAN (Internet only)</td>
+                <td>Cost-effective, simple</td>
+              </tr>
+              <tr>
+                <td>High-security environment</td>
+                <td>ExpressRoute + Private Link</td>
+                <td>No internet exposure</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Security Telemetry Implications</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            SIEM Integration Considerations
+          </div>
+          <div class="callout-content">
+            <p>Each network technology generates different telemetry for your SIEM:</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Technology</th><th>Log Sources</th><th>Detection Value</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>MPLS/VPN</strong></td>
+                <td>Firewall logs, VPN concentrator logs</td>
+                <td>Connection events, but limited app visibility</td>
+              </tr>
+              <tr>
+                <td><strong>ExpressRoute</strong></td>
+                <td>Azure Activity, NSG Flow Logs, Azure Firewall</td>
+                <td>Full visibility into Azure-bound traffic</td>
+              </tr>
+              <tr>
+                <td><strong>SD-WAN</strong></td>
+                <td>SD-WAN controller logs, application analytics</td>
+                <td>App-level visibility, routing decisions</td>
+              </tr>
+              <tr>
+                <td><strong>SASE/SSE</strong></td>
+                <td>SWG logs, CASB alerts, FWaaS logs</td>
+                <td>Rich — URL, app, user, threat, DLP events</td>
+              </tr>
+              <tr>
+                <td><strong>ZTNA</strong></td>
+                <td>Access logs, policy decisions, device posture</td>
+                <td>Identity-based access attempts, context</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Industry Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Network Architecture Best Practices
+          </div>
+          <div class="callout-content">
+            <p><strong>Gartner SASE Recommendations:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Converge networking and security — avoid point products</li>
+              <li>Adopt ZTNA to replace VPN for remote access</li>
+              <li>Use cloud-delivered security for distributed workforces</li>
+              <li>Prioritize vendors with global PoP coverage</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Microsoft Zero Trust Network Guidance:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Segment networks — never flat network architecture</li>
+              <li>Encrypt all traffic, even internal</li>
+              <li>Use identity as primary security perimeter</li>
+              <li>Implement micro-segmentation for critical workloads</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Best Practice</th><th>Standard/Source</th><th>Implementation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Replace VPN with ZTNA</td>
+                <td>Gartner, NIST Zero Trust</td>
+                <td>Entra Private Access or third-party ZTNA</td>
+              </tr>
+              <tr>
+                <td>Direct cloud access for SaaS</td>
+                <td>Gartner SASE, Microsoft M365 guidance</td>
+                <td>SD-WAN local breakout or SASE</td>
+              </tr>
+              <tr>
+                <td>Private connectivity to cloud</td>
+                <td>Azure Well-Architected, security baselines</td>
+                <td>ExpressRoute for production workloads</td>
+              </tr>
+              <tr>
+                <td>Inspect all internet traffic</td>
+                <td>CIS Control 13, NIST 800-53 SC-7</td>
+                <td>SASE SWG with SSL inspection</td>
+              </tr>
+              <tr>
+                <td>Redundant connectivity</td>
+                <td>Business continuity, Azure SLA</td>
+                <td>Dual ExpressRoute + VPN backup</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="landing-zone.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Landing Zone</span></a>
+          <a href="workload-migration.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Workload Migration →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>
