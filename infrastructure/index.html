@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infrastructure Overview | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="../siem/index.html" class="nav-item"><span class="nav-track-indicator siem"></span>SIEM: RSA → Sentinel</a>
+          <a href="../edr/index.html" class="nav-item"><span class="nav-track-indicator edr"></span>EDR: ESET → MDE</a>
+          <a href="../dlp/index.html" class="nav-item"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+          <a href="../identity/index.html" class="nav-item"><span class="nav-track-indicator identity"></span>Identity: AD → Entra ID</a>
+          <a href="index.html" class="nav-item active"><span class="nav-track-indicator infra"></span>Infrastructure: Azure</a>
+          <a href="landing-zone.html" class="nav-item nav-item-sub">Landing Zone</a>
+          <a href="workload-migration.html" class="nav-item nav-item-sub">Workload Migration</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Infrastructure</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Infrastructure: Azure Migration</h1>
+          <div class="page-header-meta">
+            <span class="page-badge infra">Track 5</span>
+            <span class="page-reading-time">12 months</span>
+          </div>
+          <p class="intro-text">Migrating on-premises data center workloads to Azure. Covers landing zone architecture, network design, and phased workload migration.</p>
+        </div>
+
+        <h2>Migration Scope</h2>
+        <div class="comparison-grid">
+          <div class="comparison-column">
+            <div class="comparison-header before">On-Premises (Before)</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">🖥️</span><span>30 physical servers</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">💾</span><span>SAN storage (50TB)</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">🔌</span><span>Network switches, firewalls</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">🏢</span><span>Colocation facility</span></div>
+            </div>
+          </div>
+          <div class="comparison-column">
+            <div class="comparison-header after">Azure (After)</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">☁️</span><span>Azure App Services, VMs</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">💾</span><span>Azure SQL, Storage Accounts</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">🔐</span><span>Azure Firewall, NSGs</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">🌐</span><span>Hub-spoke network</span></div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Timeline</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Phase</th><th>Months</th><th>Activities</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Landing Zone</strong></td><td>1-3</td><td>Hub network, Azure Firewall, connectivity, governance</td></tr>
+              <tr><td><strong>Pilot Migration</strong></td><td>4-5</td><td>Non-critical workloads, validate process</td></tr>
+              <tr><td><strong>App Services</strong></td><td>6-8</td><td>Web apps, APIs to Azure App Services</td></tr>
+              <tr><td><strong>Databases</strong></td><td>7-9</td><td>SQL Server to Azure SQL/MI</td></tr>
+              <tr><td><strong>Remaining</strong></td><td>9-11</td><td>File servers, remaining VMs</td></tr>
+              <tr><td><strong>Decommission</strong></td><td>12</td><td>On-prem cleanup, colo exit</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Section Guide</h2>
+        <div class="card-grid">
+          <a href="landing-zone.html" class="card" style="text-decoration: none;">
+            <div class="card-icon cyan">🏗️</div>
+            <div class="card-title">Landing Zone</div>
+            <div class="card-description">Hub-spoke network architecture, Azure Firewall, governance policies.</div>
+            <span class="card-link">View section →</span>
+          </a>
+          <a href="workload-migration.html" class="card" style="text-decoration: none;">
+            <div class="card-icon cyan">📦</div>
+            <div class="card-title">Workload Migration</div>
+            <div class="card-description">Migration order, methods (rehost, refactor, rebuild), database migration.</div>
+            <span class="card-link">View section →</span>
+          </a>
+        </div>
+
+        <nav class="page-nav">
+          <a href="../identity/pim.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← PIM</span></a>
+          <a href="landing-zone.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Landing Zone →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

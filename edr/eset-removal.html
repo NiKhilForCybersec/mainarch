@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESET Decommission | EDR Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="index.html" class="nav-item"><span class="nav-track-indicator edr"></span>EDR: ESET → MDE</a>
+          <a href="coexistence.html" class="nav-item nav-item-sub">Coexistence Strategy</a>
+          <a href="deployment.html" class="nav-item nav-item-sub">MDE Deployment</a>
+          <a href="asr-rules.html" class="nav-item nav-item-sub">ASR Rules Rollout</a>
+          <a href="eset-removal.html" class="nav-item nav-item-sub active">ESET Decommission</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">EDR Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">ESET Decommission</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>ESET Decommission</h1>
+          <div class="page-header-meta">
+            <span class="page-badge edr">EDR Track</span>
+            <span class="page-reading-time">Months 8-12</span>
+          </div>
+          <p class="intro-text">Phased removal of ESET Protect and ESET Inspect from all endpoints after confirming MDE protection is fully operational.</p>
+        </div>
+
+        <h2>Removal Prerequisites</h2>
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>Do Not Proceed Until</div>
+          <div class="callout-content">
+            <ul>
+              <li>☑ MDE deployed to 100% of endpoints</li>
+              <li>☑ MDE sensor healthy on all devices</li>
+              <li>☑ Detection comparison shows MDE parity or better</li>
+              <li>☑ ASR rules in Block mode (critical rules)</li>
+              <li>☑ SOC fully trained on M365 Defender console</li>
+              <li>☑ 30-day burn-in with no critical issues</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>Removal Waves</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Wave</th><th>Target</th><th>Devices</th><th>Timing</th><th>Rollback Window</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Wave 1</strong></td><td>IT Department</td><td>50</td><td>Week 1</td><td>48 hours</td></tr>
+              <tr><td><strong>Wave 2</strong></td><td>Engineering</td><td>150</td><td>Week 2</td><td>48 hours</td></tr>
+              <tr><td><strong>Wave 3</strong></td><td>Sales + Marketing</td><td>200</td><td>Week 3</td><td>24 hours</td></tr>
+              <tr><td><strong>Wave 4</strong></td><td>All Remaining</td><td>400</td><td>Week 4</td><td>24 hours</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>ESET Uninstall Methods</h2>
+
+        <h3>Method 1: ESET Protect Console (Recommended)</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">ESET Protect Steps</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>1. ESET Protect → Computers → Select target group
+2. Tasks → New Task → Software Uninstall
+3. Select: ESET Endpoint Security / ESET Inspect
+4. Options:
+   ☑ Automatically reboot if required
+   ☑ Remove ESET Management Agent after uninstall
+5. Schedule: Immediate or maintenance window
+6. Deploy to selected group</code></pre>
+        </div>
+
+        <h3>Method 2: SCCM/Intune Application Removal</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell Script</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Silent uninstall ESET Endpoint Security
+$ESETPath = "C:\Program Files\ESET\ESET Security\esetuninstall.exe"
+if (Test-Path $ESETPath) {
+    Start-Process -FilePath $ESETPath -ArgumentList "/SILENT /FORCE" -Wait
+}
+
+# Remove ESET Management Agent
+$AgentPath = "C:\Program Files\ESET\RemoteAdministrator\Agent\ERAAgent.exe"
+if (Test-Path $AgentPath) {
+    Start-Process -FilePath "msiexec.exe" -ArgumentList "/x {ESET_AGENT_GUID} /qn" -Wait
+}
+
+# Cleanup registry
+Remove-Item -Path "HKLM:\SOFTWARE\ESET" -Recurse -Force -ErrorAction SilentlyContinue
+
+# Reboot
+Restart-Computer -Force</code></pre>
+        </div>
+
+        <h3>Method 3: Manual Removal (Last Resort)</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Steps</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>1. Download ESET Uninstaller from ESET website
+2. Boot into Safe Mode
+3. Run ESETUninstaller.exe
+4. Select product to remove
+5. Reboot into normal mode
+6. Verify removal: Check Programs and Features</code></pre>
+        </div>
+
+        <h2>Post-Removal Validation</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell - Verify Clean Removal</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Check no ESET services running
+Get-Service | Where-Object {$_.Name -like "*eset*" -or $_.Name -like "*ekrn*"}
+
+# Check no ESET processes
+Get-Process | Where-Object {$_.Name -like "*eset*" -or $_.Name -like "*egui*"}
+
+# Check MDE is primary AV
+Get-MpComputerStatus | Select-Object AMServiceEnabled, AntispywareEnabled, AntivirusEnabled
+
+# Verify MDE exclusions for ESET are removed (no longer needed)
+Get-MpPreference | Select-Object -ExpandProperty ExclusionPath | Where-Object {$_ -like "*ESET*"}</code></pre>
+        </div>
+
+        <h2>ESET Protect Server Decommission</h2>
+        <p>After all agents removed:</p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Step</th><th>Action</th><th>Owner</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Export final reports and detection history</td><td>Security Team</td></tr>
+              <tr><td>2</td><td>Backup ESET Protect database</td><td>DBA</td></tr>
+              <tr><td>3</td><td>Remove ESET Protect server role</td><td>Server Team</td></tr>
+              <tr><td>4</td><td>Decommission VM/server</td><td>Infrastructure</td></tr>
+              <tr><td>5</td><td>Cancel ESET license renewal</td><td>Procurement</td></tr>
+              <tr><td>6</td><td>Update asset inventory</td><td>IT Ops</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>EDR Migration Complete</div>
+          <div class="callout-content"><p>Upon completing ESET decommission, the EDR migration track is complete. All endpoint protection is now provided by Microsoft Defender for Endpoint with full XDR integration into Sentinel.</p></div>
+        </div>
+
+        <nav class="page-nav">
+          <a href="asr-rules.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← ASR Rules Rollout</span></a>
+          <a href="../dlp/index.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">DLP Migration →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

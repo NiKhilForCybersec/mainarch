@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log Source Strategy | SIEM Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="index.html" class="nav-item"><span class="nav-track-indicator siem"></span>SIEM: RSA → Sentinel</a>
+          <a href="discovery.html" class="nav-item nav-item-sub">Discovery & Assessment</a>
+          <a href="log-sources.html" class="nav-item nav-item-sub active">Log Source Strategy</a>
+          <a href="log-engineering.html" class="nav-item nav-item-sub">Log Engineering</a>
+          <a href="detection-engineering.html" class="nav-item nav-item-sub">Detection Engineering</a>
+          <a href="soc-transition.html" class="nav-item nav-item-sub">SOC Transition</a>
+          <a href="../edr/index.html" class="nav-item"><span class="nav-track-indicator edr"></span>EDR: ESET → MDE</a>
+          <a href="../dlp/index.html" class="nav-item"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+          <a href="../identity/index.html" class="nav-item"><span class="nav-track-indicator identity"></span>Identity: AD → Entra ID</a>
+          <a href="../infrastructure/index.html" class="nav-item"><span class="nav-track-indicator infra"></span>Infrastructure: Azure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/integration.html" class="nav-item">Integration Points</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Overview</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">Sentinel Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Interactive Timeline</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">SIEM Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Log Source Strategy</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Log Source Strategy</h1>
+          <div class="page-header-meta">
+            <span class="page-badge siem">SIEM Track</span>
+            <span class="page-reading-time">Core Planning Document</span>
+          </div>
+          <p class="intro-text">Not all logs belong in Sentinel. This document defines what goes where, why, and how. The key principle: <strong>Sentinel for security, Splunk for operations</strong>.</p>
+        </div>
+
+        <h2>The Two-Platform Architecture</h2>
+        <p>RevFlow already operates Splunk Cloud for application monitoring and business analytics. Rather than migrate everything to Sentinel, we maintain clear separation of concerns:</p>
+
+        <div class="comparison-grid">
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(56, 139, 253, 0.15); color: var(--accent-blue);">Microsoft Sentinel (Security)</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Threat detection & hunting</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Incident response workflows</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Compliance monitoring</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Identity threat analytics</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Cloud security posture</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>SOC operations</span></div>
+            </div>
+          </div>
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(57, 211, 83, 0.15); color: var(--accent-cyan);">Splunk Cloud (Operations)</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Application performance</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Business transaction logs</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>SRE dashboards</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>API metrics & debugging</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Infrastructure metrics</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Engineering troubleshooting</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Why Not Consolidate?</div>
+          <div class="callout-content">
+            <p><strong>Cost:</strong> Sentinel charges ~$2.76/GB. Sending all app logs would be prohibitively expensive.</p>
+            <p><strong>Ownership:</strong> Engineering owns their Splunk dashboards. Migrating them adds months of work.</p>
+            <p><strong>Focus:</strong> Clear boundaries mean clear accountability. Security owns Sentinel, Engineering owns Splunk.</p>
+          </div>
+        </div>
+
+        <h2>Complete Log Source Mapping</h2>
+
+        <h3>Identity & Access Logs → Sentinel</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Sentinel Table</th><th>Connector</th><th>Volume/Day</th><th>Cost</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Entra ID Sign-in Logs</strong></td><td><code>SigninLogs</code></td><td>Microsoft Entra ID</td><td>10-30 GB</td><td>Free*</td></tr>
+              <tr><td><strong>Entra ID Audit Logs</strong></td><td><code>AuditLogs</code></td><td>Microsoft Entra ID</td><td>1-5 GB</td><td>Free*</td></tr>
+              <tr><td><strong>Non-Interactive Sign-ins</strong></td><td><code>AADNonInteractiveUserSignInLogs</code></td><td>Microsoft Entra ID</td><td>5-20 GB</td><td>Analytics</td></tr>
+              <tr><td><strong>Service Principal Sign-ins</strong></td><td><code>AADServicePrincipalSignInLogs</code></td><td>Microsoft Entra ID</td><td>1-5 GB</td><td>Analytics</td></tr>
+              <tr><td><strong>Identity Protection Events</strong></td><td><code>AADUserRiskEvents</code></td><td>Microsoft Entra ID</td><td>&lt;500 MB</td><td>Free</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>How to Enable: Entra ID Diagnostic Settings</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Azure Portal Steps</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>1. Azure Portal → Microsoft Entra ID → Diagnostic settings
+2. Click "+ Add diagnostic setting"
+3. Name: "SendToSentinel"
+4. Select log categories:
+   ☑ SignInLogs
+   ☑ AuditLogs
+   ☑ NonInteractiveUserSignInLogs
+   ☑ ServicePrincipalSignInLogs
+   ☑ ManagedIdentitySignInLogs
+   ☑ RiskyUsers
+   ☑ UserRiskEvents
+5. Destination: "Send to Log Analytics workspace"
+6. Select your Sentinel workspace
+7. Save
+
+Verify: SigninLogs | take 10</code></pre>
+        </div>
+
+        <h3>Microsoft 365 & Defender → Sentinel</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Sentinel Table</th><th>Connector</th><th>Volume/Day</th><th>Cost</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>M365 Defender Alerts</strong></td><td><code>SecurityAlert</code></td><td>M365 Defender</td><td>&lt;1 GB</td><td>Free</td></tr>
+              <tr><td><strong>MDE Device Events</strong></td><td><code>DeviceEvents</code></td><td>M365 Defender XDR</td><td>20-50 GB</td><td>Free (XDR)</td></tr>
+              <tr><td><strong>MDE Process Events</strong></td><td><code>DeviceProcessEvents</code></td><td>M365 Defender XDR</td><td>30-80 GB</td><td>Free (XDR)</td></tr>
+              <tr><td><strong>MDE Network Events</strong></td><td><code>DeviceNetworkEvents</code></td><td>M365 Defender XDR</td><td>20-60 GB</td><td>Free (XDR)</td></tr>
+              <tr><td><strong>MDE File Events</strong></td><td><code>DeviceFileEvents</code></td><td>M365 Defender XDR</td><td>15-40 GB</td><td>Free (XDR)</td></tr>
+              <tr><td><strong>MDE Logon Events</strong></td><td><code>DeviceLogonEvents</code></td><td>M365 Defender XDR</td><td>5-15 GB</td><td>Free (XDR)</td></tr>
+              <tr><td><strong>Email Events</strong></td><td><code>EmailEvents</code></td><td>M365 Defender</td><td>5-20 GB</td><td>Free (XDR)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Free XDR Data</div>
+          <div class="callout-content"><p>When you connect M365 Defender to Sentinel, endpoint telemetry tables (DeviceEvents, DeviceProcessEvents, etc.) are <strong>free to ingest</strong>. This can be 100+ GB/day in large environments — massive cost savings.</p></div>
+        </div>
+
+        <h4>How to Enable: M365 Defender Connector</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Steps</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>1. Sentinel → Content Hub → "Microsoft 365 Defender" → Install
+2. Data Connectors → Microsoft 365 Defender → Open connector page
+3. Prerequisites: Verify M365 Defender tenant access
+4. Configuration:
+   ☑ Connect incidents & alerts
+   ☑ Connect entities
+5. Under "Connect events" (Advanced Hunting):
+   ☑ DeviceEvents
+   ☑ DeviceProcessEvents
+   ☑ DeviceNetworkEvents
+   ☑ DeviceFileEvents
+   ☑ DeviceLogonEvents
+   ☑ DeviceRegistryEvents
+   ☑ DeviceImageLoadEvents
+   ☑ EmailEvents (if using Defender for Office)
+6. Click "Apply Changes"
+
+Verify: DeviceProcessEvents | take 10</code></pre>
+        </div>
+
+        <h3>Azure Cloud Logs → Sentinel</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Sentinel Table</th><th>Connector</th><th>Volume/Day</th><th>Cost</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Azure Activity Log</strong></td><td><code>AzureActivity</code></td><td>Azure Activity</td><td>1-5 GB</td><td>Free</td></tr>
+              <tr><td><strong>Defender for Cloud Alerts</strong></td><td><code>SecurityAlert</code></td><td>Defender for Cloud</td><td>&lt;1 GB</td><td>Free</td></tr>
+              <tr><td><strong>Azure Key Vault</strong></td><td><code>AzureDiagnostics</code></td><td>Diagnostic Settings</td><td>0.5-2 GB</td><td>Analytics</td></tr>
+              <tr><td><strong>Azure Firewall</strong></td><td><code>AzureDiagnostics</code></td><td>Diagnostic Settings</td><td>10-50 GB</td><td>Basic</td></tr>
+              <tr><td><strong>NSG Flow Logs</strong></td><td><code>AzureNetworkAnalytics_CL</code></td><td>NSG Flow Logs</td><td>50-200 GB</td><td>Basic</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>AWS Logs → Sentinel</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Sentinel Table</th><th>Connector</th><th>Volume/Day</th><th>Cost</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>AWS CloudTrail</strong></td><td><code>AWSCloudTrail</code></td><td>AWS S3 Connector</td><td>5-20 GB</td><td>Analytics</td></tr>
+              <tr><td><strong>AWS VPC Flow Logs</strong></td><td><code>AWSVPCFlow</code></td><td>AWS S3 Connector</td><td>20-100 GB</td><td>Basic</td></tr>
+              <tr><td><strong>AWS GuardDuty</strong></td><td><code>AWSGuardDuty</code></td><td>AWS S3 Connector</td><td>&lt;1 GB</td><td>Analytics</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>How to Enable: AWS CloudTrail</h4>
+        <div class="flow-diagram">
+          <div class="flow-step"><div class="flow-step-number">1</div><div class="flow-step-content"><strong>AWS: Enable CloudTrail → S3</strong><br>Configure CloudTrail to log to S3 bucket with SQS notifications</div></div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step"><div class="flow-step-number">2</div><div class="flow-step-content"><strong>AWS: Create IAM Role</strong><br>Create role with S3 read and SQS permissions for Sentinel</div></div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step"><div class="flow-step-number">3</div><div class="flow-step-content"><strong>Sentinel: Install AWS Connector</strong><br>Content Hub → Amazon Web Services → Configure with Role ARN</div></div>
+        </div>
+
+        <h3>On-Premises & Network → Sentinel</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Sentinel Table</th><th>Collection Method</th><th>Volume/Day</th><th>Cost</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Windows Security Events</strong></td><td><code>SecurityEvent</code></td><td>Azure Monitor Agent + DCR</td><td>10-50 GB</td><td>Analytics</td></tr>
+              <tr><td><strong>Windows Sysmon</strong></td><td><code>Event</code></td><td>Azure Monitor Agent + DCR</td><td>5-20 GB</td><td>Analytics</td></tr>
+              <tr><td><strong>Linux Auth Logs</strong></td><td><code>Syslog</code></td><td>Azure Monitor Agent + DCR</td><td>1-5 GB</td><td>Analytics</td></tr>
+              <tr><td><strong>DNS Server Logs</strong></td><td><code>DnsEvents</code></td><td>DNS Analytics</td><td>10-50 GB</td><td>Basic</td></tr>
+              <tr><td><strong>Firewall (CEF)</strong></td><td><code>CommonSecurityLog</code></td><td>CEF via AMA</td><td>20-100 GB</td><td>Basic</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>SaaS Applications → Sentinel</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Sentinel Table</th><th>Connector</th><th>Volume/Day</th><th>Cost</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Salesforce Event Monitoring</strong></td><td><code>SalesforceServiceCloud_CL</code></td><td>Salesforce Connector</td><td>1-10 GB</td><td>Analytics</td></tr>
+              <tr><td><strong>GitHub Audit Logs</strong></td><td><code>GitHubAuditLogPolling_CL</code></td><td>GitHub Connector</td><td>0.5-2 GB</td><td>Analytics</td></tr>
+              <tr><td><strong>Zoom Audit Logs</strong></td><td><code>Zoom_CL</code></td><td>Custom Function App</td><td>&lt;500 MB</td><td>Analytics</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Salesforce Shield Required</div>
+          <div class="callout-content"><p>Full Salesforce Event Monitoring requires Shield license (~$10/user/month). Without it, only basic login history is available. Verify licensing before planning detections.</p></div>
+        </div>
+
+        <hr>
+
+        <h2>What Stays in Splunk (Operations)</h2>
+        <p>These logs remain in Splunk Cloud. Engineering owns these workflows.</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Splunk Index</th><th>Owner</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Application Performance</strong></td><td><code>app_perf</code></td><td>SRE</td><td>Response times, errors, throughput</td></tr>
+              <tr><td><strong>RevFlow API Logs</strong></td><td><code>api_logs</code></td><td>Engineering</td><td>API debugging, call patterns</td></tr>
+              <tr><td><strong>Salesforce Integration</strong></td><td><code>sf_integration</code></td><td>Engineering</td><td>Data sync, quota usage</td></tr>
+              <tr><td><strong>Data Pipeline</strong></td><td><code>data_pipeline</code></td><td>Data Eng</td><td>ETL jobs, data quality</td></tr>
+              <tr><td><strong>Kubernetes Logs</strong></td><td><code>k8s_logs</code></td><td>SRE</td><td>Container logs, scaling</td></tr>
+              <tr><td><strong>Business Transactions</strong></td><td><code>business_txn</code></td><td>Product</td><td>Feature usage, funnels</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr>
+
+        <h2>Cost Optimization: Analytics vs Basic Logs</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Feature</th><th>Analytics Logs</th><th>Basic Logs</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Price</strong></td><td>~$2.76/GB</td><td>~$0.50/GB</td></tr>
+              <tr><td><strong>Interactive Retention</strong></td><td>90 days</td><td>8 days</td></tr>
+              <tr><td><strong>Analytics Rules</strong></td><td>✓ Supported</td><td>✗ Not supported</td></tr>
+              <tr><td><strong>Use Case</strong></td><td>Active detection & hunting</td><td>Compliance, forensics</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Recommended Tier Assignments</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Type</th><th>Tier</th><th>Rationale</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Entra ID Sign-ins</td><td><span class="status-badge complete">Analytics</span></td><td>Critical for identity detection</td></tr>
+              <tr><td>MDE Telemetry</td><td><span class="status-badge complete">Free (XDR)</span></td><td>Free via M365 Defender</td></tr>
+              <tr><td>AWS CloudTrail</td><td><span class="status-badge complete">Analytics</span></td><td>Cloud security detection</td></tr>
+              <tr><td>NSG Flow Logs</td><td><span class="status-badge in-progress">Basic</span></td><td>High volume, forensics only</td></tr>
+              <tr><td>Firewall Logs</td><td><span class="status-badge in-progress">Basic</span></td><td>High volume, selective queries</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Monthly Cost Projection</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Category</th><th>Monthly Volume</th><th>Tier</th><th>Monthly Cost</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Identity (Entra ID)</td><td>600 GB</td><td>Analytics</td><td>$1,656</td></tr>
+              <tr><td>MDE Telemetry</td><td>3,000 GB</td><td>Free (XDR)</td><td>$0</td></tr>
+              <tr><td>Azure Activity</td><td>90 GB</td><td>Free</td><td>$0</td></tr>
+              <tr><td>AWS CloudTrail</td><td>300 GB</td><td>Analytics</td><td>$828</td></tr>
+              <tr><td>Windows Security</td><td>450 GB</td><td>Analytics</td><td>$1,242</td></tr>
+              <tr><td>Network Logs</td><td>2,400 GB</td><td>Basic</td><td>$1,200</td></tr>
+              <tr><td>SaaS Apps</td><td>210 GB</td><td>Analytics</td><td>$580</td></tr>
+              <tr style="background-color: var(--bg-tertiary); font-weight: 600;"><td><strong>Total</strong></td><td><strong>~7,000 GB</strong></td><td></td><td><strong>~$5,500/mo</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Cost Savings</div>
+          <div class="callout-content"><p>RSA NetWitness: ~$15,000/month. Sentinel: ~$5,500/month. <strong>63% reduction</strong> with improved cloud-native capabilities.</p></div>
+        </div>
+
+        <nav class="page-nav">
+          <a href="discovery.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Discovery & Assessment</span></a>
+          <a href="log-engineering.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Log Engineering →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

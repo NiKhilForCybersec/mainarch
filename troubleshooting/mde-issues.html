@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MDE Issues | Troubleshooting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="index.html" class="nav-item">Overview</a>
+          <a href="siem-issues.html" class="nav-item">Sentinel Issues</a>
+          <a href="mde-issues.html" class="nav-item active">MDE Issues</a>
+          <a href="dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">Troubleshooting</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">MDE Issues</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>MDE Issues</h1>
+          <p class="intro-text">Common Microsoft Defender for Endpoint problems and solutions.</p>
+        </div>
+
+        <h2>Onboarding Failures</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symptom</th><th>Possible Cause</th><th>Solution</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Sense service not starting</td><td>Missing license or prerequisites</td><td>Verify M365 E5/E3+MDE P1/P2 license assigned</td></tr>
+              <tr><td>Device not appearing in portal</td><td>Network connectivity</td><td>Check *.securitycenter.windows.com access</td></tr>
+              <tr><td>Onboarding script fails</td><td>Script already ran or permissions</td><td>Check OnboardingState registry, run as admin</td></tr>
+              <tr><td>Intune policy not applying</td><td>Device not Intune enrolled</td><td>Verify Entra ID join and Intune enrollment</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Verify Onboarding Status</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Check onboarding state
+$reg = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Advanced Threat Protection\Status" -ErrorAction SilentlyContinue
+if ($reg.OnboardingState -eq 1) {
+    Write-Host "Device is onboarded" -ForegroundColor Green
+} else {
+    Write-Host "Device NOT onboarded" -ForegroundColor Red
+}
+
+# Check Sense service
+Get-Service -Name Sense | Format-Table Name, Status, StartType
+
+# Test connectivity
+& "C:\Program Files\Windows Defender Advanced Threat Protection\MsSense.exe" -t</code></pre>
+        </div>
+
+        <h2>Sensor Health Issues</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symptom</th><th>Possible Cause</th><th>Solution</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Sensor health: Inactive</td><td>No data sent in 7 days</td><td>Check device power state, network</td></tr>
+              <tr><td>Sensor health: Misconfigured</td><td>Conflicting security software</td><td>Review exclusions, check ESET coexistence</td></tr>
+              <tr><td>High CPU from MsSense.exe</td><td>Scan conflict or bug</td><td>Add exclusions, update to latest version</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>ASR Rule Conflicts</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symptom</th><th>Possible Cause</th><th>Solution</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Application blocked unexpectedly</td><td>ASR rule too aggressive</td><td>Add exclusion for legitimate app path</td></tr>
+              <tr><td>Office macros blocked</td><td>"Block macros" rule enabled</td><td>Exclude trusted macro locations</td></tr>
+              <tr><td>Scripts blocked from running</td><td>Script blocking rules</td><td>Audit mode first, then add exclusions</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Check ASR Events</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// ASR blocks in last 24 hours
+DeviceEvents
+| where Timestamp > ago(24h)
+| where ActionType startswith "Asr"
+| summarize BlockCount = count() by ActionType, FileName, FolderPath
+| order by BlockCount desc</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="siem-issues.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Sentinel Issues</span></a>
+          <a href="dlp-issues.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">DLP Issues →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

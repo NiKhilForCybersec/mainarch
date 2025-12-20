@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Policy Translation | DLP Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="index.html" class="nav-item"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+          <a href="policy-translation.html" class="nav-item nav-item-sub active">Policy Translation</a>
+          <a href="rollout-phases.html" class="nav-item nav-item-sub">Rollout Phases</a>
+          <a href="user-communication.html" class="nav-item nav-item-sub">User Communication</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">DLP Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Policy Translation</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Policy Translation</h1>
+          <div class="page-header-meta">
+            <span class="page-badge dlp">DLP Track</span>
+          </div>
+          <p class="intro-text">Mapping Symantec DLP policies to Microsoft Purview. This involves translating detection rules, creating Sensitive Information Types, and configuring policy actions.</p>
+        </div>
+
+        <h2>Symantec vs Purview Concepts</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symantec Concept</th><th>Purview Equivalent</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Data Identifier</td><td>Sensitive Information Type (SIT)</td><td>Built-in + custom</td></tr>
+              <tr><td>Policy</td><td>DLP Policy</td><td>Similar structure</td></tr>
+              <tr><td>Response Rule</td><td>Policy Rule Actions</td><td>Block, Notify, Override</td></tr>
+              <tr><td>Exception</td><td>Exclusion / Condition</td><td>Per-policy basis</td></tr>
+              <tr><td>Endpoint Prevent</td><td>Endpoint DLP</td><td>Requires MDE onboarding</td></tr>
+              <tr><td>Network Prevent</td><td>Exchange/SharePoint DLP</td><td>Cloud-native</td></tr>
+              <tr><td>Incident</td><td>DLP Alert</td><td>Activity Explorer</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Policy Mapping: RevFlow Policies</h2>
+        <p>Current Symantec policies and their Purview translations:</p>
+
+        <h3>P1: Customer CRM Data</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symantec</th><th>Purview</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Data Identifier:</strong> Customer Contact Info<br>
+                  <strong>Detection:</strong> Regex + keyword<br>
+                  <strong>Action:</strong> Block + notify manager
+                </td>
+                <td>
+                  <strong>SIT:</strong> Custom - "RevFlow Customer Data"<br>
+                  <strong>Detection:</strong> Keyword list + regex patterns<br>
+                  <strong>Action:</strong> Block with override + email incident owner
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Custom SIT: RevFlow Customer Data</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell - Create Custom SIT</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Connect to Security & Compliance PowerShell
+Connect-IPPSSession -UserPrincipalName admin@revflow.com
+
+# Create keyword dictionary for customer terms
+$keywords = @(
+    "customer list",
+    "contact export",
+    "salesforce export",
+    "deal pipeline",
+    "opportunity data",
+    "account list",
+    "revenue forecast"
+)
+
+# Create the SIT
+New-DlpSensitiveInformationType -Name "RevFlow Customer Data" `
+    -Description "Customer CRM data from Salesforce integrations" `
+    -ClassificationRuleXml @"
+<RulePackage xmlns="http://schemas.microsoft.com/office/2020/contentclassification">
+  <RulePack id="RevFlow-Customer-Data-Pack">
+    <Version major="1" minor="0" build="0" revision="0"/>
+  </RulePack>
+  <Rules>
+    <Entity id="revflow-customer-01" patternsProximity="300" recommendedConfidence="75">
+      <Pattern confidenceLevel="85">
+        <IdMatch idRef="Keywords_Customer_Data"/>
+        <Match idRef="Regex_Salesforce_ID"/>
+      </Pattern>
+      <Pattern confidenceLevel="75">
+        <IdMatch idRef="Keywords_Customer_Data"/>
+      </Pattern>
+    </Entity>
+    <Keyword id="Keywords_Customer_Data">
+      <Group matchStyle="word">
+        <Term>customer list</Term>
+        <Term>contact export</Term>
+        <Term>salesforce export</Term>
+        <Term>deal pipeline</Term>
+        <Term>opportunity data</Term>
+        <Term>account list</Term>
+      </Group>
+    </Keyword>
+    <Regex id="Regex_Salesforce_ID">[0-9a-zA-Z]{15,18}</Regex>
+  </Rules>
+</RulePackage>
+"@</code></pre>
+        </div>
+
+        <h3>P2: Financial Data</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symantec</th><th>Purview</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Data Identifier:</strong> Credit Card, Bank Account<br>
+                  <strong>Detection:</strong> Built-in patterns<br>
+                  <strong>Action:</strong> Block + encrypt
+                </td>
+                <td>
+                  <strong>SIT:</strong> Built-in Credit Card, Bank Account<br>
+                  <strong>Detection:</strong> Use Purview built-in SITs<br>
+                  <strong>Action:</strong> Block + Sensitivity Label (encrypt)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Built-In SITs</div>
+          <div class="callout-content"><p>Purview includes 300+ built-in Sensitive Information Types. Use these before creating custom SITs. Common ones: Credit Card Number, U.S. Social Security Number, Bank Account Number, SWIFT Code.</p></div>
+        </div>
+
+        <h3>P3: Employee PII</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell - DLP Policy</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Create DLP Policy for Employee PII
+New-DlpCompliancePolicy -Name "Employee PII Protection" `
+    -Mode "TestWithNotifications" `  # Audit mode first
+    -ExchangeLocation All `
+    -SharePointLocation All `
+    -OneDriveLocation All `
+    -TeamsLocation All
+
+# Add rule to policy
+New-DlpComplianceRule -Name "Block SSN sharing" `
+    -Policy "Employee PII Protection" `
+    -ContentContainsSensitiveInformation @{
+        Name = "U.S. Social Security Number (SSN)"
+        MinCount = 1
+        MaxConfidence = 100
+        MinConfidence = 75
+    } `
+    -BlockAccess $true `
+    -NotifyUser "SiteAdmin,LastModifier,Owner" `
+    -NotifyEmailCustomText "This document contains SSN data and cannot be shared externally."</code></pre>
+        </div>
+
+        <h2>Endpoint DLP Configuration</h2>
+        <p>For endpoint protection (USB, printing, clipboard), Purview Endpoint DLP requires MDE onboarding:</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Endpoint DLP Policy</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Enable Endpoint DLP for devices
+Set-PolicyConfig -EndpointDlpEnabled $true
+
+# Create Endpoint DLP rule
+New-DlpComplianceRule -Name "Block USB for Customer Data" `
+    -Policy "Customer Data Protection" `
+    -ContentContainsSensitiveInformation @{
+        Name = "RevFlow Customer Data"
+        MinCount = 1
+    } `
+    -EndpointDlpRestrictions @{
+        # Actions and their modes
+        CopyToRemovableMedia = "Block"
+        CopyToNetworkShare = "Warn"
+        CopyToClipboard = "Audit"
+        Print = "Warn"
+        UploadToCloudService = "Block"
+    }</code></pre>
+        </div>
+
+        <h2>Testing Policies</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Test Case</th><th>Method</th><th>Expected Result</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Email with SSN</td><td>Send email with test SSN to external</td><td>Blocked in Block mode, logged in Audit</td></tr>
+              <tr><td>SharePoint upload</td><td>Upload file with customer keywords</td><td>Policy tip shown</td></tr>
+              <tr><td>USB copy</td><td>Copy sensitive file to USB drive</td><td>Blocked (if Endpoint DLP enabled)</td></tr>
+              <tr><td>Teams chat</td><td>Paste credit card number in Teams</td><td>Message blocked or warned</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Policy Migration Checklist</h2>
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Translation Complete When</div>
+          <div class="callout-content">
+            <ul>
+              <li>☐ All Symantec Data Identifiers mapped to SITs</li>
+              <li>☐ Custom SITs created and tested</li>
+              <li>☐ DLP policies created in Audit mode</li>
+              <li>☐ Endpoint DLP rules configured</li>
+              <li>☐ Email notification templates customized</li>
+              <li>☐ Exception groups documented</li>
+              <li>☐ Test cases passed</li>
+            </ul>
+          </div>
+        </div>
+
+        <nav class="page-nav">
+          <a href="index.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← DLP Overview</span></a>
+          <a href="rollout-phases.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Rollout Phases →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

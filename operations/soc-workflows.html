@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOC Workflows | Operations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="integration.html" class="nav-item">Integration Points</a>
+          <a href="soc-workflows.html" class="nav-item active">SOC Workflows</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="parallel-ops.html">Operations</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">SOC Workflows</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>SOC Workflows</h1>
+          <p class="intro-text">Standard operating procedures for incident triage, investigation, and response in the new Sentinel-based SOC.</p>
+        </div>
+
+        <h2>Incident Triage Workflow</h2>
+        <div class="flow-diagram">
+          <div class="flow-step"><div class="flow-step-number">1</div><div class="flow-step-content"><strong>New Incident</strong><br>Sentinel creates incident from analytics rule</div></div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step"><div class="flow-step-number">2</div><div class="flow-step-content"><strong>Auto-Enrichment</strong><br>Playbook adds IP reputation, user risk score</div></div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step"><div class="flow-step-number">3</div><div class="flow-step-content"><strong>Analyst Assignment</strong><br>SOC analyst takes ownership within 15 min</div></div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step"><div class="flow-step-number">4</div><div class="flow-step-content"><strong>Initial Triage</strong><br>Determine true/false positive, severity</div></div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step"><div class="flow-step-number">5</div><div class="flow-step-content"><strong>Investigation / Response</strong><br>Deep analysis, containment if needed</div></div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step"><div class="flow-step-number">6</div><div class="flow-step-content"><strong>Resolution</strong><br>Document, close, update detection if needed</div></div>
+        </div>
+
+        <h2>SLA Targets</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Severity</th><th>Acknowledge</th><th>Initial Triage</th><th>Resolution</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="status-badge critical">Critical</span></td><td>5 minutes</td><td>15 minutes</td><td>4 hours</td></tr>
+              <tr><td><span class="status-badge critical" style="background-color: rgba(248, 81, 73, 0.2);">High</span></td><td>15 minutes</td><td>30 minutes</td><td>8 hours</td></tr>
+              <tr><td><span class="status-badge in-progress">Medium</span></td><td>1 hour</td><td>2 hours</td><td>24 hours</td></tr>
+              <tr><td><span class="status-badge not-started">Low</span></td><td>4 hours</td><td>8 hours</td><td>72 hours</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Common Investigation Queries</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - User Activity Timeline</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Get all activity for a user in last 24 hours
+let targetUser = "user@revflow.com";
+union SigninLogs, AuditLogs, DeviceLogonEvents
+| where TimeGenerated > ago(24h)
+| where UserPrincipalName =~ targetUser 
+    or TargetUserName =~ targetUser
+    or AccountUpn =~ targetUser
+| project TimeGenerated, 
+    Source = $table, 
+    Activity = coalesce(OperationName, ActionType),
+    Details = coalesce(ResultDescription, AdditionalDetails)
+| order by TimeGenerated desc</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - IP Reputation Check</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Check if IP appears in threat intel
+let suspiciousIP = "1.2.3.4";
+ThreatIntelligenceIndicator
+| where NetworkIP == suspiciousIP or NetworkSourceIP == suspiciousIP
+| project TimeGenerated, ThreatType, Description, ConfidenceScore</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="integration.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Integration Points</span></a>
+          <a href="../troubleshooting/index.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Troubleshooting →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DLP Issues | Troubleshooting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="index.html" class="nav-item">Overview</a>
+          <a href="siem-issues.html" class="nav-item">Sentinel Issues</a>
+          <a href="mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="dlp-issues.html" class="nav-item active">DLP Issues</a>
+          <a href="agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">Troubleshooting</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">DLP Issues</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>DLP Issues</h1>
+          <p class="intro-text">Common Microsoft Purview DLP problems and solutions.</p>
+        </div>
+
+        <h2>Policy Not Triggering</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symptom</th><th>Possible Cause</th><th>Solution</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Policy shows no matches</td><td>Wrong location selected</td><td>Verify policy applies to Exchange, OneDrive, Endpoints, etc.</td></tr>
+              <tr><td>Sensitive info not detected</td><td>SIT confidence too high</td><td>Lower confidence threshold or use custom SIT</td></tr>
+              <tr><td>Endpoint DLP not working</td><td>Device not onboarded</td><td>Check MDE onboarding status (required for Endpoint DLP)</td></tr>
+              <tr><td>Policy in test mode</td><td>Not yet enforcing</td><td>Move from "Test" to "Turn it on" in policy settings</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>False Positives</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symptom</th><th>Possible Cause</th><th>Solution</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Too many alerts for legitimate business data</td><td>SIT too broad</td><td>Create custom SIT with more specific patterns</td></tr>
+              <tr><td>Internal documents flagged</td><td>No sender/recipient exceptions</td><td>Add exceptions for internal domains</td></tr>
+              <tr><td>Test data triggering alerts</td><td>Dev/test content matches patterns</td><td>Exclude test/dev locations or use content exceptions</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>User Complaints</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Complaint</th><th>Response</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>"I can't send this email!"</td><td>Review policy match, add override option if appropriate</td></tr>
+              <tr><td>"My file was blocked"</td><td>Check Activity Explorer, verify legitimate business need</td></tr>
+              <tr><td>"Too many popups"</td><td>Reduce to Warn instead of Block, or tune thresholds</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Check DLP Activity</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Purview Portal</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>Microsoft Purview → Data Loss Prevention → Activity Explorer
+
+Filters:
+- Date range: Last 7 days
+- Activity type: DLP policy matched
+- Policy name: [Your policy]
+
+Review matches to identify false positive patterns</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="mde-issues.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← MDE Issues</span></a>
+          <a href="agent-conflicts.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Agent Conflicts →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

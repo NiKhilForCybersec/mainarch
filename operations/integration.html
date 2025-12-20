@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integration Points | Operations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="integration.html" class="nav-item active">Integration Points</a>
+          <a href="soc-workflows.html" class="nav-item">SOC Workflows</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="parallel-ops.html">Operations</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Integration Points</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Integration Points</h1>
+          <p class="intro-text">How Microsoft security products connect to Sentinel for unified visibility and correlation.</p>
+        </div>
+
+        <h2>Data Flow Architecture</h2>
+        <div class="architecture-diagram">
+          <div class="arch-container">
+            <div class="arch-layer">
+              <div class="arch-layer-title">Data Sources</div>
+              <div class="arch-layer-content">
+                <div class="arch-box green">MDE</div>
+                <div class="arch-box purple">Purview DLP</div>
+                <div class="arch-box orange">Entra ID</div>
+                <div class="arch-box cyan">Defender for Cloud</div>
+              </div>
+            </div>
+            <div class="arch-arrow">↓ Native Connectors</div>
+            <div class="arch-layer">
+              <div class="arch-layer-title">Microsoft Sentinel</div>
+              <div class="arch-layer-content">
+                <div class="arch-box blue">Unified Incidents</div>
+                <div class="arch-box blue">Cross-Product Correlation</div>
+                <div class="arch-box blue">SOAR Playbooks</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Key Integrations</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Integration</th><th>Data Flow</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>M365 Defender → Sentinel</strong></td><td>Incidents + raw events</td><td>Unified incident queue, endpoint telemetry in KQL</td></tr>
+              <tr><td><strong>Purview → Sentinel</strong></td><td>DLP alerts</td><td>Correlate data exfiltration with identity events</td></tr>
+              <tr><td><strong>Entra ID → Sentinel</strong></td><td>Sign-in + audit logs</td><td>Identity threat detection base data</td></tr>
+              <tr><td><strong>Defender for Cloud → Sentinel</strong></td><td>Security alerts + recommendations</td><td>Cloud misconfig visibility</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Bi-directional Sync</h2>
+        <p>M365 Defender incidents synced to Sentinel maintain bi-directional status updates:</p>
+        <ul>
+          <li>Close incident in Defender → Auto-closes in Sentinel</li>
+          <li>Add comment in Sentinel → Appears in Defender</li>
+          <li>Change severity in either → Syncs to other</li>
+        </ul>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Work in One Console</div>
+          <div class="callout-content"><p>Most analysts work primarily in Sentinel. The XDR incidents appear there automatically. Only drill into M365 Defender portal for deep endpoint investigation.</p></div>
+        </div>
+
+        <nav class="page-nav">
+          <a href="parallel-ops.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Parallel Operations</span></a>
+          <a href="soc-workflows.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">SOC Workflows →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parallel Operations | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="parallel-ops.html" class="nav-item active">Parallel Operations</a>
+          <a href="integration.html" class="nav-item">Integration Points</a>
+          <a href="soc-workflows.html" class="nav-item">SOC Workflows</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Parallel Operations</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Parallel Operations</h1>
+          <p class="intro-text">Managing 6+ security consoles simultaneously during the 12-month transition period. Procedures for alert handling, incident management, and console prioritization.</p>
+        </div>
+
+        <h2>Console Inventory During Transition</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Console</th><th>Purpose</th><th>Status</th><th>Primary/Secondary</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>RSA NetWitness</strong></td><td>Legacy SIEM</td><td><span class="status-badge in-progress">Parallel</span></td><td>Secondary → Decom</td></tr>
+              <tr><td><strong>Microsoft Sentinel</strong></td><td>New SIEM</td><td><span class="status-badge complete">Active</span></td><td>Primary</td></tr>
+              <tr><td><strong>ESET Protect</strong></td><td>Legacy EPP/EDR</td><td><span class="status-badge in-progress">Parallel</span></td><td>Secondary → Decom</td></tr>
+              <tr><td><strong>M365 Defender</strong></td><td>New XDR</td><td><span class="status-badge complete">Active</span></td><td>Primary</td></tr>
+              <tr><td><strong>Symantec DLP</strong></td><td>Legacy DLP</td><td><span class="status-badge in-progress">Parallel</span></td><td>Secondary → Decom</td></tr>
+              <tr><td><strong>Microsoft Purview</strong></td><td>New DLP</td><td><span class="status-badge complete">Active</span></td><td>Primary</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Alert Routing Matrix</h2>
+        <p>When an alert fires, which console takes priority:</p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Alert Type</th><th>Investigate In</th><th>Acknowledge In</th><th>Document In</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Identity anomaly</td><td>Sentinel</td><td>Both</td><td>Sentinel incident</td></tr>
+              <tr><td>Endpoint malware</td><td>M365 Defender</td><td>Both (MDE + ESET)</td><td>M365 Defender</td></tr>
+              <tr><td>Firewall block</td><td>RSA (until migrated)</td><td>RSA</td><td>Sentinel (if available)</td></tr>
+              <tr><td>DLP violation</td><td>Purview</td><td>Both</td><td>Purview Activity Explorer</td></tr>
+              <tr><td>Cloud misconfig</td><td>Defender for Cloud</td><td>Defender for Cloud</td><td>Sentinel incident</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Deduplication Procedure</h2>
+        <p>When the same event generates alerts in multiple consoles:</p>
+        <ol>
+          <li>Acknowledge in <strong>primary</strong> console first</li>
+          <li>Open corresponding alert in secondary console</li>
+          <li>Link or reference (add incident number in notes)</li>
+          <li>Investigate in primary only</li>
+          <li>Close both with same resolution and notes</li>
+        </ol>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Avoid Double Investigation</div>
+          <div class="callout-content"><p>Two analysts investigating the same alert in different consoles wastes time. The shift lead assigns ownership in the primary console; secondary console alerts are acknowledged as "duplicate."</p></div>
+        </div>
+
+        <h2>Shift Handoff Template</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Handoff Notes</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>## SOC Shift Handoff - [Date] [Shift]
+
+### Open Incidents (Sentinel)
+- INC-1234: Brute force - investigating, assigned to [Analyst]
+- INC-1235: Suspicious PowerShell - pending user verification
+
+### Open Alerts (Legacy - RSA/ESET)  
+- RSA-5678: Firewall anomaly - acknowledged, Sentinel incident pending
+- ESET-9012: PUA detected - cleaned, pending close in both consoles
+
+### In Progress
+- Detection tuning: Brute force threshold adjusted
+- Log source: AWS CloudTrail delayed, networking investigating
+
+### Notes for Next Shift
+- Maintenance window tonight 2-4 AM - expect false positives
+- New detection rule going live at 6 AM</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="../infrastructure/workload-migration.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Workload Migration</span></a>
+          <a href="integration.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Integration Points →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

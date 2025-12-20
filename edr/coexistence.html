@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coexistence Strategy | EDR Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="../siem/index.html" class="nav-item"><span class="nav-track-indicator siem"></span>SIEM: RSA → Sentinel</a>
+          <a href="index.html" class="nav-item"><span class="nav-track-indicator edr"></span>EDR: ESET → MDE</a>
+          <a href="coexistence.html" class="nav-item nav-item-sub active">Coexistence Strategy</a>
+          <a href="deployment.html" class="nav-item nav-item-sub">MDE Deployment</a>
+          <a href="asr-rules.html" class="nav-item nav-item-sub">ASR Rules Rollout</a>
+          <a href="eset-removal.html" class="nav-item nav-item-sub">ESET Decommission</a>
+          <a href="../dlp/index.html" class="nav-item"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">EDR Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Coexistence Strategy</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Coexistence Strategy</h1>
+          <div class="page-header-meta">
+            <span class="page-badge edr">EDR Track</span>
+          </div>
+          <p class="intro-text">Configuring ESET and MDE to run simultaneously without conflicts. Mutual exclusions prevent scanning loops and performance degradation.</p>
+        </div>
+
+        <h2>Exclusion Architecture</h2>
+        <p>Both products must exclude the other's processes and folders. This is a bidirectional configuration:</p>
+
+        <div class="architecture-diagram">
+          <div class="arch-container">
+            <div class="arch-layer" style="display: flex; gap: 2rem;">
+              <div style="flex: 1;">
+                <div class="arch-layer-title">ESET Protect</div>
+                <div class="arch-layer-content" style="flex-direction: column;">
+                  <div class="arch-box orange">Exclude MDE processes</div>
+                  <div class="arch-box orange">Exclude MDE folders</div>
+                </div>
+              </div>
+              <div style="flex: 1;">
+                <div class="arch-layer-title">Microsoft Defender</div>
+                <div class="arch-layer-content" style="flex-direction: column;">
+                  <div class="arch-box green">Exclude ESET processes</div>
+                  <div class="arch-box green">Exclude ESET folders</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>ESET Exclusions for MDE</h2>
+        <p>Configure these exclusions in ESET Protect console under Policy → Antivirus → Exclusions:</p>
+
+        <h3>Process Exclusions</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Processes to Exclude in ESET</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>MsSense.exe
+MsMpEng.exe
+NisSrv.exe
+MpCmdRun.exe
+ConfigSecurityPolicy.exe
+MpDlpService.exe
+SenseCncProxy.exe
+SenseIR.exe
+SenseSampleUploader.exe</code></pre>
+        </div>
+
+        <h3>Folder Exclusions</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Folders to Exclude in ESET</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>C:\Program Files\Windows Defender\
+C:\Program Files\Windows Defender Advanced Threat Protection\
+C:\ProgramData\Microsoft\Windows Defender\
+C:\ProgramData\Microsoft\Windows Defender Advanced Threat Protection\
+C:\Windows\System32\drivers\wd\</code></pre>
+        </div>
+
+        <h2>MDE Exclusions for ESET</h2>
+        <p>Configure via Intune, GPO, or MDE Security Settings Management:</p>
+
+        <h3>Process Exclusions</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Processes to Exclude in MDE</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>ekrn.exe
+egui.exe
+eguiProxy.exe
+eamsi.exe
+edevmon.exe
+einspector.exe
+eplghost.exe
+epintegrator.exe</code></pre>
+        </div>
+
+        <h3>Folder Exclusions</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Folders to Exclude in MDE</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>C:\Program Files\ESET\
+C:\ProgramData\ESET\
+C:\Users\*\AppData\Local\ESET\</code></pre>
+        </div>
+
+        <h3>Intune Configuration</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Intune PowerShell</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Create MDE exclusions policy via Intune
+# Endpoint Security → Antivirus → Create Policy
+
+$exclusions = @{
+    "ProcessExclusions" = @(
+        "C:\Program Files\ESET\ESET Security\ekrn.exe",
+        "C:\Program Files\ESET\ESET Security\egui.exe"
+    )
+    "PathExclusions" = @(
+        "C:\Program Files\ESET\",
+        "C:\ProgramData\ESET\"
+    )
+}
+
+# Apply via Intune Antivirus policy</code></pre>
+        </div>
+
+        <h2>Validation</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Check</th><th>Command</th><th>Expected Result</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>MDE exclusions applied</td>
+                <td><code>Get-MpPreference | Select-Object -ExpandProperty ExclusionPath</code></td>
+                <td>Lists ESET paths</td>
+              </tr>
+              <tr>
+                <td>Both services running</td>
+                <td><code>Get-Service -Name "ekrn","WinDefend","Sense"</code></td>
+                <td>All services "Running"</td>
+              </tr>
+              <tr>
+                <td>No scanning loops</td>
+                <td>Check CPU usage during file operations</td>
+                <td>CPU &lt;30% during normal use</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Performance Impact</h2>
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Expected Overhead</div>
+          <div class="callout-content">
+            <p>Running two EDR agents increases resource usage:</p>
+            <ul>
+              <li><strong>RAM:</strong> Additional 500MB - 1GB per endpoint</li>
+              <li><strong>CPU:</strong> 5-10% increase during scans</li>
+              <li><strong>Disk I/O:</strong> Minimal with proper exclusions</li>
+            </ul>
+            <p>This is acceptable for the 8-10 month coexistence period. Monitor and add exclusions if specific applications struggle.</p>
+          </div>
+        </div>
+
+        <h2>Detection Comparison Framework</h2>
+        <p>Use the coexistence period to compare detection capabilities:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Metric</th><th>ESET</th><th>MDE</th><th>Both</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Malware blocked</td><td>Count</td><td>Count</td><td>Overlap %</td></tr>
+              <tr><td>PUA blocked</td><td>Count</td><td>Count</td><td>Overlap %</td></tr>
+              <tr><td>Exploits stopped</td><td>Count</td><td>Count</td><td>—</td></tr>
+              <tr><td>Ransomware</td><td>Count</td><td>Count</td><td>—</td></tr>
+              <tr><td>Fileless attacks</td><td>Count</td><td>Count</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Run this report weekly. The goal: prove MDE catches everything ESET does (and more) before removing ESET.</p>
+
+        <nav class="page-nav">
+          <a href="index.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← EDR Overview</span></a>
+          <a href="deployment.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">MDE Deployment →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

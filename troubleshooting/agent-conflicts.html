@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Conflicts | Troubleshooting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="index.html" class="nav-item">Overview</a>
+          <a href="siem-issues.html" class="nav-item">Sentinel Issues</a>
+          <a href="mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="agent-conflicts.html" class="nav-item active">Agent Conflicts</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">Troubleshooting</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Agent Conflicts</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Agent Conflicts</h1>
+          <p class="intro-text">Resolving conflicts between ESET and MDE during the coexistence period, plus AMA agent issues.</p>
+        </div>
+
+        <h2>ESET + MDE Conflicts</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symptom</th><th>Cause</th><th>Solution</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>High CPU usage</td><td>Scanning each other's files</td><td>Add mutual exclusions (see <a href="../edr/coexistence.html">Coexistence</a>)</td></tr>
+              <tr><td>Both quarantine same file</td><td>Race condition</td><td>Set one to alert-only for malware, or accept first-wins</td></tr>
+              <tr><td>ESET blocking MDE updates</td><td>ESET detecting Defender as threat</td><td>Add MDE paths to ESET exclusions immediately</td></tr>
+              <tr><td>Application crashes</td><td>Both hooking same processes</td><td>Add application to exclusions in both products</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Verify Exclusions Applied</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Check MDE exclusions
+Get-MpPreference | Select-Object -ExpandProperty ExclusionPath
+Get-MpPreference | Select-Object -ExpandProperty ExclusionProcess
+
+# Verify both services running
+Get-Service -Name "ekrn","WinDefend","Sense" | Format-Table Name, Status
+
+# Check for conflicts in event log
+Get-WinEvent -LogName "Microsoft-Windows-Windows Defender/Operational" -MaxEvents 50 | 
+    Where-Object { $_.Message -like "*conflict*" -or $_.Message -like "*exclusion*" }</code></pre>
+        </div>
+
+        <h2>Performance Issues</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Metric</th><th>Acceptable During Coexistence</th><th>Action if Exceeded</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Baseline CPU</td><td>+5-10%</td><td>Add exclusions for heavy I/O apps</td></tr>
+              <tr><td>RAM overhead</td><td>+500MB - 1GB</td><td>Acceptable, no action</td></tr>
+              <tr><td>Boot time</td><td>+10-20 seconds</td><td>Acceptable, no action</td></tr>
+              <tr><td>Scan time</td><td>2x baseline</td><td>Stagger scheduled scans</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>AMA Agent Conflicts</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symptom</th><th>Cause</th><th>Solution</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>AMA and MMA both installed</td><td>Migration in progress</td><td>Remove MMA after DCR validated</td></tr>
+              <tr><td>Duplicate events in Sentinel</td><td>Both agents sending same logs</td><td>Disable collection in MMA, rely on AMA only</td></tr>
+              <tr><td>AMA not collecting</td><td>DCR not associated</td><td>Verify DCR association with VM</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>MMA Deprecation</div>
+          <div class="callout-content"><p>Microsoft Monitoring Agent (MMA) is deprecated. Migrate all collection to Azure Monitor Agent (AMA) before August 2024 deadline.</p></div>
+        </div>
+
+        <nav class="page-nav">
+          <a href="dlp-issues.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← DLP Issues</span></a>
+          <a href="../resources/timeline.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Timeline →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

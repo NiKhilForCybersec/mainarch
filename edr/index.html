@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDR Migration Overview | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="../siem/index.html" class="nav-item"><span class="nav-track-indicator siem"></span>SIEM: RSA → Sentinel</a>
+          <a href="index.html" class="nav-item active"><span class="nav-track-indicator edr"></span>EDR: ESET → MDE</a>
+          <a href="coexistence.html" class="nav-item nav-item-sub">Coexistence Strategy</a>
+          <a href="deployment.html" class="nav-item nav-item-sub">MDE Deployment</a>
+          <a href="asr-rules.html" class="nav-item nav-item-sub">ASR Rules Rollout</a>
+          <a href="eset-removal.html" class="nav-item nav-item-sub">ESET Decommission</a>
+          <a href="../dlp/index.html" class="nav-item"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+          <a href="../identity/index.html" class="nav-item"><span class="nav-track-indicator identity"></span>Identity: AD → Entra ID</a>
+          <a href="../infrastructure/index.html" class="nav-item"><span class="nav-track-indicator infra"></span>Infrastructure: Azure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">EDR Migration</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>EDR Migration: ESET → Microsoft Defender for Endpoint</h1>
+          <div class="page-header-meta">
+            <span class="page-badge edr">Track 2</span>
+            <span class="page-reading-time">10 months active-active</span>
+          </div>
+          <p class="intro-text">Migrating from ESET Protect + ESET Inspect to Microsoft Defender for Endpoint (MDE). Both solutions run in active-active mode to ensure continuous protection and enable detection comparison.</p>
+        </div>
+
+        <h2>Migration Approach: Active-Active</h2>
+        <p>Unlike SIEM where parallel means "both logging," EDR active-active means <strong>both engines actively protecting</strong>. This requires careful exclusion management but provides zero protection gaps.</p>
+
+        <div class="comparison-grid">
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(248, 81, 73, 0.15); color: var(--accent-red);">Passive Mode (Not Recommended)</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>MDE in passive = no real-time protection</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Can't compare detection effectiveness</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Protection gap during switchover</span></div>
+            </div>
+          </div>
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(63, 185, 80, 0.15); color: var(--accent-green);">Active-Active (Recommended)</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Both engines protecting simultaneously</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Real detection comparison data</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Zero protection gap at any point</span></div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Timeline</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Phase</th><th>Months</th><th>Activities</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Preparation</strong></td><td>1</td><td>Exclusions configured, pilot group selected, deployment package ready</td></tr>
+              <tr><td><strong>Pilot Deployment</strong></td><td>2</td><td>Deploy MDE to IT department (50 endpoints), validate coexistence</td></tr>
+              <tr><td><strong>Broad Deployment</strong></td><td>3-6</td><td>Roll out to all endpoints in waves, ASR rules in Audit mode</td></tr>
+              <tr><td><strong>Detection Comparison</strong></td><td>4-8</td><td>Weekly comparison reports, prove MDE efficacy</td></tr>
+              <tr><td><strong>ASR Enforcement</strong></td><td>7-9</td><td>Move ASR rules from Audit → Warn → Block</td></tr>
+              <tr><td><strong>ESET Removal</strong></td><td>8-10</td><td>Phased uninstall starting with IT, then departments</td></tr>
+              <tr><td><strong>Cleanup</strong></td><td>11-12</td><td>ESET Protect server decommission, license termination</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Key Challenges</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Challenge</th><th>Impact</th><th>Mitigation</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Performance overhead</strong></td><td>Two AV engines = higher CPU/RAM</td><td>Acceptable trade-off; monitor and exclude if needed</td></tr>
+              <tr><td><strong>Double alerts</strong></td><td>SOC sees same threat twice</td><td>Procedure: acknowledge both, investigate once</td></tr>
+              <tr><td><strong>Quarantine conflicts</strong></td><td>Both try to quarantine same file</td><td>First-wins; or set one to alert-only</td></tr>
+              <tr><td><strong>User confusion</strong></td><td>Two tray icons, different notifications</td><td>Communication campaign, hide ESET UI where possible</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Section Guide</h2>
+        <div class="card-grid">
+          <a href="coexistence.html" class="card" style="text-decoration: none;">
+            <div class="card-icon green">⚙️</div>
+            <div class="card-title">Coexistence Strategy</div>
+            <div class="card-description">Mutual exclusions configuration for ESET and MDE to run together without conflicts.</div>
+            <span class="card-link">View section →</span>
+          </a>
+          <a href="deployment.html" class="card" style="text-decoration: none;">
+            <div class="card-icon green">📦</div>
+            <div class="card-title">MDE Deployment</div>
+            <div class="card-description">Deployment methods via Intune, SCCM, and GPO. Onboarding validation.</div>
+            <span class="card-link">View section →</span>
+          </a>
+          <a href="asr-rules.html" class="card" style="text-decoration: none;">
+            <div class="card-icon green">🛡️</div>
+            <div class="card-title">ASR Rules Rollout</div>
+            <div class="card-description">Attack Surface Reduction rules progression from Audit to Block mode.</div>
+            <span class="card-link">View section →</span>
+          </a>
+          <a href="eset-removal.html" class="card" style="text-decoration: none;">
+            <div class="card-icon green">🗑️</div>
+            <div class="card-title">ESET Decommission</div>
+            <div class="card-description">Phased removal waves and ESET Protect server decommission.</div>
+            <span class="card-link">View section →</span>
+          </a>
+        </div>
+
+        <h2>Success Metrics</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Metric</th><th>Target</th><th>Measurement</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Endpoint coverage</td><td>100% of managed devices</td><td>MDE device inventory vs CMDB</td></tr>
+              <tr><td>Detection parity</td><td>MDE detects same or more than ESET</td><td>Weekly comparison report</td></tr>
+              <tr><td>Onboarding success rate</td><td>>98%</td><td>Successful onboarding / attempted</td></tr>
+              <tr><td>User impact</td><td><5% help desk tickets</td><td>Tickets mentioning "antivirus"</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="../siem/soc-transition.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← SOC Transition</span></a>
+          <a href="coexistence.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Coexistence Strategy →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

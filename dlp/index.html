@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DLP Migration Overview | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="../siem/index.html" class="nav-item"><span class="nav-track-indicator siem"></span>SIEM: RSA → Sentinel</a>
+          <a href="../edr/index.html" class="nav-item"><span class="nav-track-indicator edr"></span>EDR: ESET → MDE</a>
+          <a href="index.html" class="nav-item active"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+          <a href="policy-translation.html" class="nav-item nav-item-sub">Policy Translation</a>
+          <a href="rollout-phases.html" class="nav-item nav-item-sub">Rollout Phases</a>
+          <a href="user-communication.html" class="nav-item nav-item-sub">User Communication</a>
+          <a href="../identity/index.html" class="nav-item"><span class="nav-track-indicator identity"></span>Identity: AD → Entra ID</a>
+          <a href="../infrastructure/index.html" class="nav-item"><span class="nav-track-indicator infra"></span>Infrastructure: Azure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">DLP Migration</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>DLP Migration: Symantec → Microsoft Purview</h1>
+          <div class="page-header-meta">
+            <span class="page-badge dlp">Track 3</span>
+            <span class="page-reading-time">12 months: Audit → Warn → Block</span>
+          </div>
+          <p class="intro-text">Migrating from Symantec DLP to Microsoft Purview Endpoint DLP. This migration is user-impacting — careful phasing and communication prevent business disruption and user backlash.</p>
+        </div>
+
+        <h2>Why DLP Migration is Different</h2>
+        <p>Unlike SIEM (backend) or EDR (silent), DLP directly impacts user workflows. Users see notifications, get blocked, and must change behavior. This makes DLP the most change-management intensive track.</p>
+
+        <div class="comparison-grid">
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(248, 81, 73, 0.15); color: var(--accent-red);">What Goes Wrong</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Block mode on day 1 = help desk flood</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>No user training = shadow IT workarounds</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>False positives = user trust erosion</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Blocking executives = political disaster</span></div>
+            </div>
+          </div>
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(63, 185, 80, 0.15); color: var(--accent-green);">What We Do Instead</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>12-month progression: Audit → Warn → Block</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>User training before enforcement</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Policy tuning during audit phase</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Executive communication and buy-in</span></div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Timeline</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Phase</th><th>Months</th><th>Purview Mode</th><th>Symantec</th><th>User Impact</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Policy Translation</strong></td><td>1-2</td><td>—</td><td>Active</td><td>None</td></tr>
+              <tr><td><strong>Audit Mode</strong></td><td>3-6</td><td>Audit</td><td>Active</td><td>None (silent logging)</td></tr>
+              <tr><td><strong>Warn Mode</strong></td><td>7-9</td><td>Warn</td><td>Active</td><td>User sees tips, can override</td></tr>
+              <tr><td><strong>Block + Override</strong></td><td>10-11</td><td>Block with override</td><td>Disabled</td><td>Must justify to proceed</td></tr>
+              <tr><td><strong>Full Block</strong></td><td>12+</td><td>Block</td><td>Decommissioned</td><td>Hard block on violations</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>RevFlow's Sensitive Data Categories</h2>
+        <p>Based on RevFlow's business model (Salesforce CRM integration, revenue analytics), these are the primary data types to protect:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Data Category</th><th>Examples</th><th>Risk</th><th>Policy Priority</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Customer CRM Data</strong></td><td>Salesforce exports, deal information, contact lists</td><td><span class="status-badge critical">Critical</span></td><td>P1</td></tr>
+              <tr><td><strong>Revenue/Financial Data</strong></td><td>Forecasts, pricing, contracts, invoices</td><td><span class="status-badge critical">Critical</span></td><td>P1</td></tr>
+              <tr><td><strong>Employee PII</strong></td><td>SSN, bank details, HR records</td><td><span class="status-badge critical">Critical</span></td><td>P1</td></tr>
+              <tr><td><strong>Source Code</strong></td><td>RevFlow platform code, APIs</td><td><span class="status-badge in-progress">High</span></td><td>P2</td></tr>
+              <tr><td><strong>Internal Strategy</strong></td><td>Board decks, M&A, roadmaps</td><td><span class="status-badge in-progress">High</span></td><td>P2</td></tr>
+              <tr><td><strong>Credentials</strong></td><td>API keys, passwords, tokens</td><td><span class="status-badge in-progress">High</span></td><td>P2</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Purview DLP Components</h2>
+        <div class="architecture-diagram">
+          <div class="arch-container">
+            <div class="arch-layer">
+              <div class="arch-layer-title">Policy Components</div>
+              <div class="arch-layer-content">
+                <div class="arch-box purple">Sensitive Info Types (SIT)</div>
+                <div class="arch-box purple">Sensitivity Labels</div>
+                <div class="arch-box purple">DLP Policies</div>
+              </div>
+            </div>
+            <div class="arch-arrow">↓ Applied To</div>
+            <div class="arch-layer">
+              <div class="arch-layer-title">Locations</div>
+              <div class="arch-layer-content">
+                <div class="arch-box blue">Exchange Email</div>
+                <div class="arch-box blue">SharePoint/OneDrive</div>
+                <div class="arch-box blue">Teams</div>
+                <div class="arch-box green">Endpoints (MDE)</div>
+              </div>
+            </div>
+            <div class="arch-arrow">↓ Generates</div>
+            <div class="arch-layer">
+              <div class="arch-layer-title">Monitoring</div>
+              <div class="arch-layer-content">
+                <div class="arch-box cyan">Activity Explorer</div>
+                <div class="arch-box cyan">DLP Alerts</div>
+                <div class="arch-box cyan">Sentinel Integration</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Section Guide</h2>
+        <div class="card-grid">
+          <a href="policy-translation.html" class="card" style="text-decoration: none;">
+            <div class="card-icon purple">📋</div>
+            <div class="card-title">Policy Translation</div>
+            <div class="card-description">Mapping Symantec DLP policies to Purview. Sensitive Info Types, custom classifiers, and policy rules.</div>
+            <span class="card-link">View section →</span>
+          </a>
+          <a href="rollout-phases.html" class="card" style="text-decoration: none;">
+            <div class="card-icon purple">📈</div>
+            <div class="card-title">Rollout Phases</div>
+            <div class="card-description">Detailed progression from Audit through Warn to Block mode with validation gates.</div>
+            <span class="card-link">View section →</span>
+          </a>
+          <a href="user-communication.html" class="card" style="text-decoration: none;">
+            <div class="card-icon purple">📣</div>
+            <div class="card-title">User Communication</div>
+            <div class="card-description">Training materials, notification templates, and change management strategy.</div>
+            <span class="card-link">View section →</span>
+          </a>
+        </div>
+
+        <h2>Success Metrics</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Metric</th><th>Target</th><th>Measurement</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Policy coverage</td><td>All Symantec rules migrated</td><td>Policy mapping spreadsheet</td></tr>
+              <tr><td>False positive rate</td><td>&lt;10% after tuning</td><td>Activity Explorer review</td></tr>
+              <tr><td>User override rate</td><td>&lt;5% in Block mode</td><td>DLP reports</td></tr>
+              <tr><td>Help desk tickets</td><td>&lt;20/week during rollout</td><td>ServiceNow metrics</td></tr>
+              <tr><td>Training completion</td><td>100% of users</td><td>LMS completion</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="../edr/eset-removal.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← ESET Decommission</span></a>
+          <a href="policy-translation.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Policy Translation →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

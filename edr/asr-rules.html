@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASR Rules Rollout | EDR Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="index.html" class="nav-item"><span class="nav-track-indicator edr"></span>EDR: ESET → MDE</a>
+          <a href="coexistence.html" class="nav-item nav-item-sub">Coexistence Strategy</a>
+          <a href="deployment.html" class="nav-item nav-item-sub">MDE Deployment</a>
+          <a href="asr-rules.html" class="nav-item nav-item-sub active">ASR Rules Rollout</a>
+          <a href="eset-removal.html" class="nav-item nav-item-sub">ESET Decommission</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">EDR Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">ASR Rules Rollout</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>ASR Rules Rollout</h1>
+          <div class="page-header-meta">
+            <span class="page-badge edr">EDR Track</span>
+          </div>
+          <p class="intro-text">Attack Surface Reduction (ASR) rules block common attack techniques. Rolling them out requires careful progression: Audit → Warn → Block to avoid breaking business applications.</p>
+        </div>
+
+        <h2>ASR Rule Progression</h2>
+        <div class="flow-diagram">
+          <div class="flow-step"><div class="flow-step-number">1</div><div class="flow-step-content"><strong>Audit Mode (4-6 weeks)</strong><br>Rules log events but don't block. Analyze impact.</div></div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step"><div class="flow-step-number">2</div><div class="flow-step-content"><strong>Warn Mode (2-4 weeks)</strong><br>Users see warning but can bypass. Build awareness.</div></div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step"><div class="flow-step-number">3</div><div class="flow-step-content"><strong>Block Mode</strong><br>Full enforcement. Actions are blocked.</div></div>
+        </div>
+
+        <h2>ASR Rules Priority</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Rule</th><th>GUID</th><th>Risk</th><th>Priority</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Block executable content from email client and webmail</td><td><code>be9ba2d9-53ea-4cdc-84e5-9b1eeee46550</code></td><td>Low</td><td><span class="status-badge complete">Week 1</span></td></tr>
+              <tr><td>Block all Office applications from creating child processes</td><td><code>d4f940ab-401b-4efc-aadc-ad5f3c50688a</code></td><td>Medium</td><td><span class="status-badge complete">Week 2</span></td></tr>
+              <tr><td>Block Office applications from creating executable content</td><td><code>3b576869-a4ec-4529-8536-b80a7769e899</code></td><td>Low</td><td><span class="status-badge complete">Week 2</span></td></tr>
+              <tr><td>Block JavaScript or VBScript from launching downloaded executable</td><td><code>d3e037e1-3eb8-44c8-a917-57927947596d</code></td><td>Low</td><td><span class="status-badge complete">Week 3</span></td></tr>
+              <tr><td>Block execution of potentially obfuscated scripts</td><td><code>5beb7efe-fd9a-4556-801d-275e5ffc04cc</code></td><td>Medium</td><td><span class="status-badge in-progress">Week 4</span></td></tr>
+              <tr><td>Block Win32 API calls from Office macros</td><td><code>92e97fa1-2edf-4476-bdd6-9dd0b4dddc7b</code></td><td>High</td><td><span class="status-badge in-progress">Week 5</span></td></tr>
+              <tr><td>Block credential stealing from LSASS</td><td><code>9e6c4e1f-7d60-472f-ba1a-a39ef669e4b2</code></td><td>Low</td><td><span class="status-badge complete">Week 1</span></td></tr>
+              <tr><td>Block process creations from PSExec and WMI commands</td><td><code>d1e49aac-8f56-4280-b9ba-993a6d77406c</code></td><td>High</td><td><span class="status-badge critical">Week 6+</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Intune Configuration</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Intune Policy</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>Endpoint Security → Attack surface reduction → Create Policy
+
+Platform: Windows 10 and later
+Profile: Attack Surface Reduction Rules
+
+Rule Configuration (Audit Mode First):
+- Block executable content from email: Audit
+- Block Office child processes: Audit
+- Block Office executable content creation: Audit
+- Block JS/VBS launching executables: Audit
+- Block obfuscated scripts: Audit
+- Block Win32 API from Office macros: Audit
+- Block credential stealing from LSASS: Audit
+- Block PSExec and WMI: Audit
+
+Assignments: Deploy to pilot group first</code></pre>
+        </div>
+
+        <h2>Monitoring ASR Events</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Advanced Hunting</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// ASR rule audit events - analyze before enabling block
+DeviceEvents
+| where Timestamp > ago(7d)
+| where ActionType startswith "Asr"
+| summarize 
+    TotalEvents = count(),
+    UniqueDevices = dcount(DeviceName),
+    UniqueUsers = dcount(AccountName)
+    by ActionType
+| order by TotalEvents desc
+
+// Detailed breakdown for specific rule
+DeviceEvents
+| where Timestamp > ago(7d)
+| where ActionType == "AsrOfficeChildProcessAudited"
+| project 
+    Timestamp,
+    DeviceName,
+    AccountName,
+    FileName,
+    FolderPath,
+    ProcessCommandLine
+| order by Timestamp desc</code></pre>
+        </div>
+
+        <h2>Exclusions</h2>
+        <p>When audit shows legitimate business processes blocked, add exclusions:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Add ASR exclusion for specific path
+Add-MpPreference -AttackSurfaceReductionOnlyExclusions "C:\Program Files\BusinessApp\helper.exe"
+
+# View current exclusions
+Get-MpPreference | Select-Object -ExpandProperty AttackSurfaceReductionOnlyExclusions</code></pre>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>High-Risk Rules</div>
+          <div class="callout-content">
+            <p><strong>Block PSExec and WMI</strong> and <strong>Block Win32 API from macros</strong> commonly break legitimate admin tools and business processes. Expect longer audit periods (6-8 weeks) and more exclusions for these rules.</p>
+          </div>
+        </div>
+
+        <nav class="page-nav">
+          <a href="deployment.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← MDE Deployment</span></a>
+          <a href="eset-removal.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">ESET Decommission →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Timeline | Resources</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .gantt-container { overflow-x: auto; margin: 2rem 0; }
+    .gantt { min-width: 900px; background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; border: 1px solid var(--border-primary); }
+    .gantt-header { display: flex; border-bottom: 1px solid var(--border-primary); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+    .gantt-track-label { width: 140px; flex-shrink: 0; font-weight: 600; font-size: 0.875rem; }
+    .gantt-months { flex: 1; display: flex; }
+    .gantt-month { flex: 1; text-align: center; font-size: 0.75rem; color: var(--text-muted); }
+    .gantt-row { display: flex; align-items: center; margin: 0.75rem 0; }
+    .gantt-bar-container { flex: 1; display: flex; height: 32px; position: relative; }
+    .gantt-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: white; font-weight: 500; cursor: pointer; transition: transform 0.2s; position: absolute; }
+    .gantt-bar:hover { transform: scaleY(1.15); z-index: 10; }
+    .gantt-bar.siem { background: linear-gradient(90deg, var(--accent-blue), #5ba3fc); }
+    .gantt-bar.edr { background: linear-gradient(90deg, var(--accent-green), #5fcf6d); }
+    .gantt-bar.dlp { background: linear-gradient(90deg, var(--accent-purple), #b88bfa); }
+    .gantt-bar.identity { background: linear-gradient(90deg, var(--accent-orange), #e8894a); }
+    .gantt-bar.infra { background: linear-gradient(90deg, var(--accent-cyan), #5be36b); }
+    .gantt-bar.faded { opacity: 0.5; }
+    .milestone { position: absolute; width: 12px; height: 12px; background: var(--accent-yellow); transform: rotate(45deg); top: 10px; }
+    .legend { display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; }
+    .legend-color { width: 16px; height: 16px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="timeline.html" class="nav-item active">Interactive Timeline</a>
+          <a href="raci.html" class="nav-item">RACI Matrix</a>
+          <a href="scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="templates.html" class="nav-item">Templates</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Interactive Timeline</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Interactive Timeline</h1>
+          <p class="intro-text">Visual representation of all migration tracks across the 18-month transformation program. Hover over bars for details.</p>
+        </div>
+
+        <div class="gantt-container">
+          <div class="gantt">
+            <div class="gantt-header">
+              <div class="gantt-track-label">Track</div>
+              <div class="gantt-months">
+                <div class="gantt-month">M1</div>
+                <div class="gantt-month">M2</div>
+                <div class="gantt-month">M3</div>
+                <div class="gantt-month">M4</div>
+                <div class="gantt-month">M5</div>
+                <div class="gantt-month">M6</div>
+                <div class="gantt-month">M7</div>
+                <div class="gantt-month">M8</div>
+                <div class="gantt-month">M9</div>
+                <div class="gantt-month">M10</div>
+                <div class="gantt-month">M11</div>
+                <div class="gantt-month">M12</div>
+                <div class="gantt-month">M13</div>
+                <div class="gantt-month">M14</div>
+                <div class="gantt-month">M15</div>
+                <div class="gantt-month">M16</div>
+                <div class="gantt-month">M17</div>
+                <div class="gantt-month">M18</div>
+              </div>
+            </div>
+            
+            <div class="gantt-row">
+              <div class="gantt-track-label">SIEM</div>
+              <div class="gantt-bar-container">
+                <div class="gantt-bar siem" style="left: 0%; width: 100%;" title="RSA + Sentinel parallel (12 months), then decommission">RSA + Sentinel Parallel Operation</div>
+              </div>
+            </div>
+            
+            <div class="gantt-row">
+              <div class="gantt-track-label">EDR</div>
+              <div class="gantt-bar-container">
+                <div class="gantt-bar edr" style="left: 0%; width: 83%;" title="ESET + MDE active-active coexistence">ESET + MDE Active-Active</div>
+                <div class="gantt-bar edr faded" style="left: 83%; width: 17%;" title="ESET removal and cleanup">Removal</div>
+              </div>
+            </div>
+            
+            <div class="gantt-row">
+              <div class="gantt-track-label">DLP</div>
+              <div class="gantt-bar-container">
+                <div class="gantt-bar dlp" style="left: 0%; width: 100%;" title="Symantec + Purview parallel, Audit → Warn → Block">Symantec + Purview Parallel</div>
+              </div>
+            </div>
+            
+            <div class="gantt-row">
+              <div class="gantt-track-label">Identity</div>
+              <div class="gantt-bar-container">
+                <div class="gantt-bar identity" style="left: 0%; width: 55%;" title="AD to Entra ID migration, hybrid setup">AD → Entra ID Migration</div>
+                <div class="gantt-bar identity faded" style="left: 55%; width: 45%;" title="Entra ID primary, optimization">Entra ID Primary</div>
+              </div>
+            </div>
+            
+            <div class="gantt-row">
+              <div class="gantt-track-label">Infrastructure</div>
+              <div class="gantt-bar-container">
+                <div class="gantt-bar infra" style="left: 0%; width: 88%;" title="Azure landing zone and workload migration">Azure Cloud Migration</div>
+                <div class="gantt-bar infra faded" style="left: 88%; width: 12%;" title="On-prem decommission">Cleanup</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item"><div class="legend-color" style="background: var(--accent-blue);"></div> SIEM: RSA → Sentinel</div>
+          <div class="legend-item"><div class="legend-color" style="background: var(--accent-green);"></div> EDR: ESET → MDE</div>
+          <div class="legend-item"><div class="legend-color" style="background: var(--accent-purple);"></div> DLP: Symantec → Purview</div>
+          <div class="legend-item"><div class="legend-color" style="background: var(--accent-orange);"></div> Identity: AD → Entra ID</div>
+          <div class="legend-item"><div class="legend-color" style="background: var(--accent-cyan);"></div> Infrastructure: Azure</div>
+        </div>
+
+        <h2>Key Milestones</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Month</th><th>Milestone</th><th>Track</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>3</td><td>Sentinel receiving all cloud logs</td><td>SIEM</td></tr>
+              <tr><td>4</td><td>MDE deployed to 100% endpoints</td><td>EDR</td></tr>
+              <tr><td>6</td><td>Critical detections live in Sentinel</td><td>SIEM</td></tr>
+              <tr><td>6</td><td>Purview Warn mode enabled</td><td>DLP</td></tr>
+              <tr><td>8</td><td>Purview Block mode enabled</td><td>DLP</td></tr>
+              <tr><td>9</td><td>Sentinel becomes primary SIEM</td><td>SIEM</td></tr>
+              <tr><td>10</td><td>ESET fully removed</td><td>EDR</td></tr>
+              <tr><td>12</td><td>RSA decommissioned</td><td>SIEM</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="../troubleshooting/agent-conflicts.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Agent Conflicts</span></a>
+          <a href="raci.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">RACI Matrix →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

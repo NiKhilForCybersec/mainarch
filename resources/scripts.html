@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scripts & Queries | Resources</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="timeline.html" class="nav-item">Interactive Timeline</a>
+          <a href="raci.html" class="nav-item">RACI Matrix</a>
+          <a href="scripts.html" class="nav-item active">Scripts & Queries</a>
+          <a href="templates.html" class="nav-item">Templates</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Scripts & Queries</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Scripts & Queries</h1>
+          <p class="intro-text">Production-ready KQL queries, PowerShell scripts, and CLI commands used throughout the migration.</p>
+        </div>
+
+        <h2>KQL Queries</h2>
+
+        <h3>Ingestion Health Check</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Check data freshness across all tables
+union withsource=TableName *
+| where TimeGenerated > ago(24h)
+| summarize 
+    EventCount = count(), 
+    LastEvent = max(TimeGenerated),
+    FirstEvent = min(TimeGenerated)
+    by TableName
+| extend HoursSinceLastEvent = datetime_diff('hour', now(), LastEvent)
+| order by HoursSinceLastEvent desc</code></pre>
+        </div>
+
+        <h3>Cost Analysis by Table</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Monthly cost breakdown by data type
+Usage
+| where TimeGenerated > ago(30d)
+| where IsBillable == true
+| summarize 
+    TotalGB = sum(Quantity) / 1000,
+    EstimatedCost = sum(Quantity) / 1000 * 2.76
+    by DataType
+| order by TotalGB desc
+| extend TotalGB = round(TotalGB, 2), EstimatedCost = round(EstimatedCost, 2)</code></pre>
+        </div>
+
+        <h3>Failed Sign-ins by User</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>SigninLogs
+| where TimeGenerated > ago(24h)
+| where ResultType != "0"
+| summarize 
+    FailedCount = count(),
+    FailureCodes = make_set(ResultType),
+    IPAddresses = make_set(IPAddress)
+    by UserPrincipalName
+| where FailedCount > 5
+| order by FailedCount desc</code></pre>
+        </div>
+
+        <h3>User Activity Timeline</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Comprehensive user activity for investigation
+let targetUser = "user@revflow.com";
+let timeRange = 24h;
+union SigninLogs, AuditLogs, OfficeActivity
+| where TimeGenerated > ago(timeRange)
+| where UserPrincipalName =~ targetUser or UserId =~ targetUser
+| project TimeGenerated, 
+    Source = $table,
+    Activity = coalesce(OperationName, Operation, "Sign-in"),
+    Result = coalesce(ResultType, ResultStatus, "Success"),
+    Details = coalesce(ResultDescription, "")
+| order by TimeGenerated desc</code></pre>
+        </div>
+
+        <h2>PowerShell Scripts</h2>
+
+        <h3>Check MDE Onboarding Status</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Check if device is onboarded to MDE
+function Get-MDEOnboardingStatus {
+    $regPath = "HKLM:\SOFTWARE\Microsoft\Windows Advanced Threat Protection\Status"
+    
+    try {
+        $status = Get-ItemProperty -Path $regPath -ErrorAction Stop
+        
+        if ($status.OnboardingState -eq 1) {
+            Write-Host "✓ Device is onboarded to MDE" -ForegroundColor Green
+            Write-Host "  Organization ID: $($status.OrgId)"
+        } else {
+            Write-Host "✗ Device is NOT onboarded" -ForegroundColor Red
+        }
+    }
+    catch {
+        Write-Host "✗ MDE not installed or not configured" -ForegroundColor Red
+    }
+    
+    # Check Sense service
+    $sense = Get-Service -Name Sense -ErrorAction SilentlyContinue
+    if ($sense) {
+        Write-Host "  Sense Service: $($sense.Status)"
+    }
+}
+
+Get-MDEOnboardingStatus</code></pre>
+        </div>
+
+        <h3>Bulk DCR Association</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Associate DCR with multiple VMs
+$dcrId = "/subscriptions/xxx/resourceGroups/rg-sentinel/providers/Microsoft.Insights/dataCollectionRules/DCR-WindowsSecurity"
+$vms = Get-AzVM -ResourceGroupName "rg-servers"
+
+foreach ($vm in $vms) {
+    $associationName = "assoc-$($vm.Name)"
+    
+    New-AzDataCollectionRuleAssociation `
+        -TargetResourceId $vm.Id `
+        -AssociationName $associationName `
+        -RuleId $dcrId
+    
+    Write-Host "Associated DCR with $($vm.Name)"
+}</code></pre>
+        </div>
+
+        <h2>Azure CLI Commands</h2>
+
+        <h3>Enable Diagnostic Settings</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Azure CLI</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Enable Azure Activity Log to Sentinel
+az monitor diagnostic-settings subscription create \
+  --name "SendToSentinel" \
+  --subscription "YOUR_SUB_ID" \
+  --workspace "/subscriptions/xxx/resourceGroups/rg-sentinel/providers/Microsoft.OperationalInsights/workspaces/sentinel-workspace" \
+  --logs '[{"category": "Administrative", "enabled": true},{"category": "Security", "enabled": true},{"category": "Alert", "enabled": true}]'</code></pre>
+        </div>
+
+        <h3>List Sentinel Connectors</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Azure CLI</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># List all data connectors in Sentinel workspace
+az rest --method get \
+  --url "https://management.azure.com/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.OperationalInsights/workspaces/{workspace}/providers/Microsoft.SecurityInsights/dataConnectors?api-version=2023-02-01"</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="raci.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← RACI Matrix</span></a>
+          <a href="templates.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Templates →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

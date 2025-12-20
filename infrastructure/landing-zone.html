@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Zone | Infrastructure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="index.html" class="nav-item"><span class="nav-track-indicator infra"></span>Infrastructure: Azure</a>
+          <a href="landing-zone.html" class="nav-item nav-item-sub active">Landing Zone</a>
+          <a href="workload-migration.html" class="nav-item nav-item-sub">Workload Migration</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">Infrastructure</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Landing Zone</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Azure Landing Zone</h1>
+          <div class="page-header-meta">
+            <span class="page-badge infra">Infrastructure Track</span>
+          </div>
+          <p class="intro-text">The foundation for all Azure workloads. Hub-spoke network topology with centralized security controls and governance.</p>
+        </div>
+
+        <h2>Hub-Spoke Architecture</h2>
+        <div class="architecture-diagram">
+          <div class="arch-container">
+            <div class="arch-layer">
+              <div class="arch-layer-title">Hub VNet (10.0.0.0/16)</div>
+              <div class="arch-layer-content">
+                <div class="arch-box cyan">Azure Firewall</div>
+                <div class="arch-box cyan">VPN Gateway</div>
+                <div class="arch-box cyan">Bastion Host</div>
+                <div class="arch-box cyan">DNS Servers</div>
+              </div>
+            </div>
+            <div class="arch-arrow">↓ VNet Peering</div>
+            <div class="arch-layer" style="display: flex; gap: 1rem;">
+              <div style="flex: 1;">
+                <div class="arch-layer-title">Production Spoke (10.1.0.0/16)</div>
+                <div class="arch-layer-content" style="flex-direction: column;">
+                  <div class="arch-box green">App Services</div>
+                  <div class="arch-box green">Azure SQL</div>
+                </div>
+              </div>
+              <div style="flex: 1;">
+                <div class="arch-layer-title">Dev Spoke (10.2.0.0/16)</div>
+                <div class="arch-layer-content" style="flex-direction: column;">
+                  <div class="arch-box blue">Dev VMs</div>
+                  <div class="arch-box blue">Test DBs</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Subscription Structure</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Subscription</th><th>Purpose</th><th>Owner</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>RF-Platform</strong></td><td>Hub network, shared services, security tools</td><td>Cloud Platform Team</td></tr>
+              <tr><td><strong>RF-Production</strong></td><td>Production workloads</td><td>Engineering</td></tr>
+              <tr><td><strong>RF-Development</strong></td><td>Dev/test environments</td><td>Engineering</td></tr>
+              <tr><td><strong>RF-Security</strong></td><td>Sentinel, Defender for Cloud</td><td>Security Team</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Azure Firewall Rules</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Azure CLI</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Application rules - allow outbound HTTPS
+az network firewall application-rule create \
+  --firewall-name "fw-hub-prod" \
+  --resource-group "rg-platform" \
+  --collection-name "Allow-Web" \
+  --name "AllowMicrosoft" \
+  --protocols Https=443 \
+  --source-addresses "10.0.0.0/8" \
+  --target-fqdns "*.microsoft.com" "*.azure.com" "*.windows.net" \
+  --action Allow \
+  --priority 100
+
+# Network rules - allow DNS
+az network firewall network-rule create \
+  --firewall-name "fw-hub-prod" \
+  --resource-group "rg-platform" \
+  --collection-name "Allow-DNS" \
+  --name "AllowDNS" \
+  --protocols UDP \
+  --source-addresses "10.0.0.0/8" \
+  --destination-addresses "168.63.129.16" \
+  --destination-ports 53 \
+  --action Allow \
+  --priority 100</code></pre>
+        </div>
+
+        <h2>Governance Policies</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Policy</th><th>Effect</th><th>Scope</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Allowed locations</td><td>Deny</td><td>All subscriptions - East US, East US 2 only</td></tr>
+              <tr><td>Require tags (CostCenter, Environment)</td><td>Deny</td><td>All resource groups</td></tr>
+              <tr><td>Allowed VM SKUs</td><td>Deny</td><td>Production - no B-series</td></tr>
+              <tr><td>Storage HTTPS only</td><td>Deny</td><td>All subscriptions</td></tr>
+              <tr><td>Defender for Cloud</td><td>DeployIfNotExists</td><td>All subscriptions</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="index.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Infrastructure Overview</span></a>
+          <a href="workload-migration.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Workload Migration →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

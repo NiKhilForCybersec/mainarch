@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Communication | DLP Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="index.html" class="nav-item"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+          <a href="policy-translation.html" class="nav-item nav-item-sub">Policy Translation</a>
+          <a href="rollout-phases.html" class="nav-item nav-item-sub">Rollout Phases</a>
+          <a href="user-communication.html" class="nav-item nav-item-sub active">User Communication</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">DLP Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">User Communication</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>User Communication</h1>
+          <div class="page-header-meta">
+            <span class="page-badge dlp">DLP Track</span>
+          </div>
+          <p class="intro-text">DLP success depends on user awareness and acceptance. This section covers training, communication templates, and change management strategy.</p>
+        </div>
+
+        <h2>Communication Timeline</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Timing</th><th>Audience</th><th>Message</th><th>Channel</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Week -4</td><td>All Staff</td><td>Awareness: DLP changes coming</td><td>All-hands, Email</td></tr>
+              <tr><td>Week -2</td><td>Managers</td><td>Manager briefing: what to expect</td><td>Manager meeting</td></tr>
+              <tr><td>Week -1</td><td>All Staff</td><td>Training module available</td><td>LMS, Email</td></tr>
+              <tr><td>Go-Live</td><td>All Staff</td><td>Warn mode active today</td><td>Teams, Email</td></tr>
+              <tr><td>Week +2</td><td>All Staff</td><td>Reminder + FAQ</td><td>Intranet, Email</td></tr>
+              <tr><td>Block Go-Live</td><td>All Staff</td><td>Block mode active</td><td>Teams, Email</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Email Templates</h2>
+
+        <h3>Initial Awareness Email</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Email Template</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>Subject: Important: Data Protection Updates Coming
+
+Hi Team,
+
+Starting [DATE], we're upgrading our data protection systems to better protect 
+RevFlow and our customers' information.
+
+What's changing:
+• New Microsoft Purview DLP will replace Symantec DLP
+• You may see policy tips when working with sensitive data
+• Initially, you'll just see warnings (no blocking)
+
+What you need to do:
+• Complete the Data Handling training by [DATE] (15 minutes)
+• Reach out to Security if you have questions
+
+Why this matters:
+Our customers trust us with their data. These protections ensure we maintain 
+that trust and meet our compliance obligations.
+
+Questions? Contact security@revflow.com
+
+Thanks,
+RevFlow Security Team</code></pre>
+        </div>
+
+        <h3>Block Mode Announcement</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Email Template</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>Subject: Action Required: Data Protection Now Enforcing
+
+Hi Team,
+
+As announced, our data protection system is now actively blocking 
+sensitive data from being shared inappropriately.
+
+What this means:
+• Emails with customer data to external addresses will be blocked
+• Uploads of sensitive files to personal cloud storage will be stopped
+• You can request an override if blocked action is legitimate
+
+If you're blocked:
+1. Review if the data really needs to be shared externally
+2. If yes, click "Override" and provide business justification
+3. If unsure, contact your manager or security@revflow.com
+
+Remember: These controls protect our customers and our company.
+
+Quick Links:
+• DLP FAQ: [link]
+• Request Exception: [link]
+• Security Contact: security@revflow.com
+
+Thanks for your cooperation,
+RevFlow Security Team</code></pre>
+        </div>
+
+        <h2>Training Content</h2>
+        <h3>Training Module Outline (15 min)</h3>
+        <ol>
+          <li><strong>Why Data Protection Matters</strong> (3 min) — Customer trust, compliance, breach impact</li>
+          <li><strong>What's Protected</strong> (3 min) — Customer data, financials, PII examples</li>
+          <li><strong>What You'll See</strong> (4 min) — Policy tips, warnings, blocks demo</li>
+          <li><strong>How to Handle Blocks</strong> (3 min) — Override process, when to escalate</li>
+          <li><strong>Quiz</strong> (2 min) — 5 questions to confirm understanding</li>
+        </ol>
+
+        <h2>Help Desk Preparation</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Scenario</th><th>Help Desk Response</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>"I can't send this email"</td><td>Check if it contains sensitive data. If legitimate, use Override with justification.</td></tr>
+              <tr><td>"False positive"</td><td>Document details, escalate to Security for policy tuning.</td></tr>
+              <tr><td>"Need permanent exception"</td><td>Complete exception request form, requires manager approval.</td></tr>
+              <tr><td>"Policy tip is wrong"</td><td>Screenshot and submit feedback. Security will review.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Executive Communication</h2>
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Executive Handling</div>
+          <div class="callout-content">
+            <p>Executives are high-risk for DLP friction. Pre-brief them individually:</p>
+            <ul>
+              <li>1:1 meeting with CISO or Security Lead</li>
+              <li>Explain what they might encounter</li>
+              <li>Provide direct security contact for issues</li>
+              <li>Consider temporary exclusion for critical deal periods (documented, time-limited)</li>
+            </ul>
+          </div>
+        </div>
+
+        <nav class="page-nav">
+          <a href="rollout-phases.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Rollout Phases</span></a>
+          <a href="../identity/index.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Identity Migration →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workload Migration | Infrastructure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="index.html" class="nav-item"><span class="nav-track-indicator infra"></span>Infrastructure: Azure</a>
+          <a href="landing-zone.html" class="nav-item nav-item-sub">Landing Zone</a>
+          <a href="workload-migration.html" class="nav-item nav-item-sub active">Workload Migration</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">Infrastructure</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Workload Migration</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Workload Migration</h1>
+          <div class="page-header-meta">
+            <span class="page-badge infra">Infrastructure Track</span>
+          </div>
+          <p class="intro-text">Phased migration of on-premises workloads to Azure. Each workload is assessed for the appropriate migration strategy.</p>
+        </div>
+
+        <h2>Migration Strategies</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Strategy</th><th>Description</th><th>When to Use</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Rehost (Lift & Shift)</strong></td><td>Move VM as-is to Azure</td><td>Quick migration, minimal changes</td></tr>
+              <tr><td><strong>Refactor</strong></td><td>Minor modifications for cloud</td><td>Use PaaS where possible</td></tr>
+              <tr><td><strong>Rearchitect</strong></td><td>Significant redesign</td><td>Performance/scale requirements</td></tr>
+              <tr><td><strong>Rebuild</strong></td><td>Build new from scratch</td><td>Legacy systems, technical debt</td></tr>
+              <tr><td><strong>Replace</strong></td><td>Switch to SaaS</td><td>Commodity workloads</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Migration Order</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Wave</th><th>Workload</th><th>Strategy</th><th>Target</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>1</strong></td><td>Dev/Test environments</td><td>Rehost</td><td>Azure VMs</td></tr>
+              <tr><td><strong>2</strong></td><td>Internal web apps</td><td>Refactor</td><td>App Services</td></tr>
+              <tr><td><strong>3</strong></td><td>RevFlow API (non-prod)</td><td>Refactor</td><td>App Services</td></tr>
+              <tr><td><strong>4</strong></td><td>SQL databases</td><td>Refactor</td><td>Azure SQL MI</td></tr>
+              <tr><td><strong>5</strong></td><td>RevFlow API (prod)</td><td>Refactor</td><td>App Services</td></tr>
+              <tr><td><strong>6</strong></td><td>File servers</td><td>Replace</td><td>Azure Files / SharePoint</td></tr>
+              <tr><td><strong>7</strong></td><td>Domain controllers</td><td>Hybrid</td><td>Entra DS + on-prem sync</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Database Migration</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Azure Database Migration Service</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Create DMS instance
+az dms create \
+  --resource-group "rg-migration" \
+  --name "dms-revflow" \
+  --location "eastus" \
+  --sku-name "Premium_4vCores"
+
+# Migration workflow:
+1. Assess source SQL Server with Data Migration Assistant
+2. Create Azure SQL MI target
+3. Configure DMS project
+4. Run online migration (minimal downtime)
+5. Cutover during maintenance window</code></pre>
+        </div>
+
+        <h2>Validation Checklist</h2>
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Post-Migration Validation</div>
+          <div class="callout-content">
+            <ul>
+              <li>☐ Application health checks passing</li>
+              <li>☐ Database connectivity verified</li>
+              <li>☐ Performance baseline established</li>
+              <li>☐ Monitoring configured (Application Insights)</li>
+              <li>☐ Backup policies applied</li>
+              <li>☐ Defender for Cloud recommendations addressed</li>
+              <li>☐ DNS cutover complete</li>
+            </ul>
+          </div>
+        </div>
+
+        <nav class="page-nav">
+          <a href="landing-zone.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Landing Zone</span></a>
+          <a href="../operations/parallel-ops.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Parallel Operations →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

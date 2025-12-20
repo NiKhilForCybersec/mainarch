@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Profile | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="index.html" class="nav-item">Executive Summary</a>
+          <a href="company-profile.html" class="nav-item active">Company Profile</a>
+          <a href="program-structure.html" class="nav-item">Program Structure</a>
+        </div>
+        
+        <div class="nav-divider"></div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          
+          <a href="siem/index.html" class="nav-item">
+            <span class="nav-track-indicator siem"></span>SIEM: RSA → Sentinel
+          </a>
+          <a href="siem/discovery.html" class="nav-item nav-item-sub">Discovery & Assessment</a>
+          <a href="siem/log-sources.html" class="nav-item nav-item-sub">Log Source Strategy</a>
+          <a href="siem/log-engineering.html" class="nav-item nav-item-sub">Log Engineering</a>
+          <a href="siem/detection-engineering.html" class="nav-item nav-item-sub">Detection Engineering</a>
+          <a href="siem/soc-transition.html" class="nav-item nav-item-sub">SOC Transition</a>
+          
+          <a href="edr/index.html" class="nav-item">
+            <span class="nav-track-indicator edr"></span>EDR: ESET → MDE
+          </a>
+          <a href="edr/coexistence.html" class="nav-item nav-item-sub">Coexistence Strategy</a>
+          <a href="edr/deployment.html" class="nav-item nav-item-sub">MDE Deployment</a>
+          <a href="edr/asr-rules.html" class="nav-item nav-item-sub">ASR Rules Rollout</a>
+          <a href="edr/eset-removal.html" class="nav-item nav-item-sub">ESET Decommission</a>
+          
+          <a href="dlp/index.html" class="nav-item">
+            <span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview
+          </a>
+          <a href="dlp/policy-translation.html" class="nav-item nav-item-sub">Policy Translation</a>
+          <a href="dlp/rollout-phases.html" class="nav-item nav-item-sub">Rollout Phases</a>
+          <a href="dlp/user-communication.html" class="nav-item nav-item-sub">User Communication</a>
+          
+          <a href="identity/index.html" class="nav-item">
+            <span class="nav-track-indicator identity"></span>Identity: AD → Entra ID
+          </a>
+          <a href="identity/hybrid-setup.html" class="nav-item nav-item-sub">Hybrid Setup</a>
+          <a href="identity/conditional-access.html" class="nav-item nav-item-sub">Conditional Access</a>
+          <a href="identity/pim.html" class="nav-item nav-item-sub">PIM</a>
+          
+          <a href="infrastructure/index.html" class="nav-item">
+            <span class="nav-track-indicator infra"></span>Infrastructure: Azure
+          </a>
+          <a href="infrastructure/landing-zone.html" class="nav-item nav-item-sub">Landing Zone</a>
+          <a href="infrastructure/workload-migration.html" class="nav-item nav-item-sub">Workload Migration</a>
+        </div>
+        
+        <div class="nav-divider"></div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="operations/integration.html" class="nav-item">Integration Points</a>
+          <a href="operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+        </div>
+        
+        <div class="nav-divider"></div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="troubleshooting/index.html" class="nav-item">Overview</a>
+          <a href="troubleshooting/siem-issues.html" class="nav-item">Sentinel Issues</a>
+          <a href="troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        
+        <div class="nav-divider"></div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="resources/timeline.html" class="nav-item">Interactive Timeline</a>
+          <a href="resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="resources/templates.html" class="nav-item">Templates</a>
+        </div>
+      </nav>
+    </aside>
+
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 12h18M3 6h18M3 18h18"></path>
+      </svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        
+        <nav class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Company Profile</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Company Profile</h1>
+          <p class="intro-text">
+            Understanding RevFlow Analytics' business model, data flows, and operational characteristics is essential for designing the right security architecture. The security stack must align with how the business actually operates.
+          </p>
+        </div>
+
+        <h2>Business Overview</h2>
+        
+        <p>
+          <strong>RevFlow Analytics</strong> is a B2B SaaS company providing revenue intelligence, deal prediction, and business trend analytics to enterprise sales organizations. The platform helps companies forecast revenue, identify deal risks, and optimize their sales pipeline.
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Company Type</strong></td>
+                <td>B2B SaaS (Revenue Intelligence)</td>
+              </tr>
+              <tr>
+                <td><strong>Primary Data Source</strong></td>
+                <td>Salesforce CRM integration</td>
+              </tr>
+              <tr>
+                <td><strong>Employees</strong></td>
+                <td>~500 (Engineering, Sales, Operations)</td>
+              </tr>
+              <tr>
+                <td><strong>Endpoints</strong></td>
+                <td>~800 (Workstations, Laptops, Servers)</td>
+              </tr>
+              <tr>
+                <td><strong>Customers</strong></td>
+                <td>Enterprise B2B (Fortune 500 clients)</td>
+              </tr>
+              <tr>
+                <td><strong>Compliance Requirements</strong></td>
+                <td>SOC 2 Type II, GDPR</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Core Business Operations</h2>
+
+        <h3>What RevFlow Does</h3>
+        <p>
+          The platform integrates deeply with customers' Salesforce CRM instances to pull sales activity data:
+        </p>
+        <ul>
+          <li><strong>Emails</strong> — Sales communication patterns and engagement</li>
+          <li><strong>Calendar events</strong> — Meeting frequency and stakeholder coverage</li>
+          <li><strong>Meetings</strong> — Call recordings and meeting outcomes</li>
+          <li><strong>Calls</strong> — Phone activity and conversation analytics</li>
+        </ul>
+
+        <p>This data is then enriched with:</p>
+        <ul>
+          <li><strong>Engagement signals</strong> — How actively prospects are responding</li>
+          <li><strong>Pipeline activity</strong> — Deal movement and stage progression</li>
+          <li><strong>Deal velocity indicators</strong> — Speed and likelihood of close</li>
+        </ul>
+
+        <h3>Deliverables to Customers</h3>
+        <ul>
+          <li>Forecasting dashboards with AI-driven predictions</li>
+          <li>Deal risk insights and early warning alerts</li>
+          <li>Executive reporting for board and investor updates</li>
+          <li>Pipeline health metrics and recommendations</li>
+        </ul>
+
+        <h2>Operational Characteristics</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Characteristic</th>
+                <th>Implication for Security</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Heavy SaaS integration usage</td>
+                <td>SaaS audit logs are critical; need visibility into connected apps</td>
+              </tr>
+              <tr>
+                <td>API-driven data ingestion</td>
+                <td>API security, token management, and abuse detection are priorities</td>
+              </tr>
+              <tr>
+                <td>Cloud-hosted application</td>
+                <td>Cloud security posture management (CSPM) required</td>
+              </tr>
+              <tr>
+                <td>Customer CRM data processed</td>
+                <td>Data protection (DLP) for customer information essential</td>
+              </tr>
+              <tr>
+                <td>Sales team with external access</td>
+                <td>Identity security and Conditional Access critical</td>
+              </tr>
+              <tr>
+                <td>No custom ML pipelines (analytics is product-side)</td>
+                <td>Security team doesn't need to secure ML infrastructure</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Primary Security Risks</h2>
+
+        <p>
+          Based on the business model, these are the highest-priority security concerns:
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Risk</th>
+                <th>Description</th>
+                <th>Detection Priority</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Salesforce Data Exposure</strong></td>
+                <td>Unauthorized access to customer CRM data through RevFlow's integration</td>
+                <td><span class="status-badge critical">Critical</span></td>
+              </tr>
+              <tr>
+                <td><strong>API Token Abuse</strong></td>
+                <td>Stolen or leaked API credentials used for data exfiltration</td>
+                <td><span class="status-badge critical">Critical</span></td>
+              </tr>
+              <tr>
+                <td><strong>Identity Compromise</strong></td>
+                <td>Account takeover leading to internal system access</td>
+                <td><span class="status-badge critical">Critical</span></td>
+              </tr>
+              <tr>
+                <td><strong>Data Exfiltration</strong></td>
+                <td>Insider threat or external attacker stealing customer/revenue data</td>
+                <td><span class="status-badge critical">Critical</span></td>
+              </tr>
+              <tr>
+                <td><strong>SaaS Misconfiguration</strong></td>
+                <td>Insecure settings in Salesforce, M365, or other SaaS apps</td>
+                <td><span class="status-badge in-progress">High</span></td>
+              </tr>
+              <tr>
+                <td><strong>Cloud Control-Plane Misuse</strong></td>
+                <td>Unauthorized Azure/AWS configuration changes</td>
+                <td><span class="status-badge in-progress">High</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Key Insight
+          </div>
+          <div class="callout-content">
+            <p>The security architecture is designed around these risks. Traditional perimeter security is less relevant—the focus is on identity, SaaS visibility, API monitoring, and data protection.</p>
+          </div>
+        </div>
+
+        <h2>Before Architecture (Legacy State)</h2>
+
+        <p>
+          Prior to transformation, RevFlow operated a hybrid environment with security tooling optimized for on-premises visibility:
+        </p>
+
+        <div class="architecture-diagram">
+          <div class="arch-container">
+            <div class="arch-layer">
+              <div class="arch-layer-title">Business & SaaS Layer</div>
+              <div class="arch-layer-content">
+                <div class="arch-box blue">Salesforce CRM</div>
+                <div class="arch-box blue">Microsoft 365</div>
+                <div class="arch-box blue">Slack</div>
+                <div class="arch-box blue">Zoom</div>
+                <div class="arch-box blue">Customer APIs</div>
+              </div>
+            </div>
+            
+            <div class="arch-arrow">↓</div>
+            
+            <div class="arch-layer">
+              <div class="arch-layer-title">On-Premises Data Center</div>
+              <div class="arch-layer-content">
+                <div class="arch-box gray">Application Servers</div>
+                <div class="arch-box gray">Databases</div>
+                <div class="arch-box gray">Active Directory DS</div>
+                <div class="arch-box gray">Network Devices</div>
+              </div>
+            </div>
+            
+            <div class="arch-arrow">↓</div>
+            
+            <div class="arch-layer">
+              <div class="arch-layer-title">Legacy Security Stack</div>
+              <div class="arch-layer-content">
+                <div class="arch-box orange">RSA NetWitness (SIEM)</div>
+                <div class="arch-box orange">ESET Protect + Inspect</div>
+                <div class="arch-box orange">Symantec DLP</div>
+                <div class="arch-box orange">On-Prem Firewalls</div>
+              </div>
+            </div>
+            
+            <div class="arch-arrow">↓</div>
+            
+            <div class="arch-layer">
+              <div class="arch-layer-title">Operational Analytics (Unchanged)</div>
+              <div class="arch-layer-content">
+                <div class="arch-box cyan">Splunk Cloud</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3>Limitations of the Before State</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Limitation</th>
+                <th>Impact</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SIEM optimized for on-prem visibility</td>
+                <td>Cloud and SaaS logs difficult to onboard and normalize</td>
+              </tr>
+              <tr>
+                <td>High operational overhead</td>
+                <td>Maintaining on-prem SIEM infrastructure requires dedicated resources</td>
+              </tr>
+              <tr>
+                <td>Limited automation</td>
+                <td>Manual investigation and response workflows</td>
+              </tr>
+              <tr>
+                <td>Growing visibility gap</td>
+                <td>Business moved to SaaS faster than security tooling could follow</td>
+              </tr>
+              <tr>
+                <td>Multiple console fragmentation</td>
+                <td>SOC juggling RSA, ESET, Symantec consoles separately</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>After Architecture (Target State)</h2>
+
+        <p>
+          The target architecture is Azure-centric with Microsoft's security stack providing unified visibility:
+        </p>
+
+        <div class="architecture-diagram">
+          <div class="arch-container">
+            <div class="arch-layer">
+              <div class="arch-layer-title">Business & SaaS Layer (Unchanged)</div>
+              <div class="arch-layer-content">
+                <div class="arch-box blue">Salesforce CRM</div>
+                <div class="arch-box blue">Microsoft 365</div>
+                <div class="arch-box blue">Slack</div>
+                <div class="arch-box blue">Zoom</div>
+                <div class="arch-box blue">Customer APIs</div>
+              </div>
+            </div>
+            
+            <div class="arch-arrow">↓</div>
+            
+            <div class="arch-layer">
+              <div class="arch-layer-title">Identity Layer</div>
+              <div class="arch-layer-content">
+                <div class="arch-box purple">Microsoft Entra ID</div>
+                <div class="arch-box purple">Conditional Access</div>
+                <div class="arch-box purple">PIM</div>
+                <div class="arch-box gray">Hybrid AD (Sync)</div>
+              </div>
+            </div>
+            
+            <div class="arch-arrow">↓</div>
+            
+            <div class="arch-layer">
+              <div class="arch-layer-title">Cloud Workloads</div>
+              <div class="arch-layer-content">
+                <div class="arch-box cyan">Azure App Services</div>
+                <div class="arch-box cyan">Azure SQL</div>
+                <div class="arch-box cyan">Azure Storage</div>
+                <div class="arch-box cyan">Azure Key Vault</div>
+                <div class="arch-box gray">AWS (Residual)</div>
+              </div>
+            </div>
+            
+            <div class="arch-arrow">↓</div>
+            
+            <div class="arch-layer">
+              <div class="arch-layer-title">Modern Security Stack</div>
+              <div class="arch-layer-content">
+                <div class="arch-box green">Microsoft Sentinel (SIEM)</div>
+                <div class="arch-box green">Microsoft Defender XDR</div>
+                <div class="arch-box green">Microsoft Purview DLP</div>
+                <div class="arch-box green">Defender for Cloud</div>
+              </div>
+            </div>
+            
+            <div class="arch-arrow">↓</div>
+            
+            <div class="arch-layer">
+              <div class="arch-layer-title">Operational Analytics (Unchanged)</div>
+              <div class="arch-layer-content">
+                <div class="arch-box cyan">Splunk Cloud</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Why This Architecture</h2>
+
+        <h3>A. Aligns Security With Business Reality</h3>
+        <p>
+          The business runs on Salesforce + SaaS. Security monitoring prioritizes:
+        </p>
+        <ul>
+          <li>CRM access patterns</li>
+          <li>API usage anomalies</li>
+          <li>Identity behavior</li>
+          <li>Data movement</li>
+        </ul>
+        <p>
+          Sentinel is better positioned for SaaS-first detection than legacy on-prem SIEM.
+        </p>
+
+        <h3>B. Separates Operational vs Security Concerns</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Platform</th>
+                <th>Purpose</th>
+                <th>Ownership</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Splunk Cloud</strong></td>
+                <td>Application logs, business analytics, engineering dashboards, troubleshooting</td>
+                <td>Engineering / SRE</td>
+              </tr>
+              <tr>
+                <td><strong>Microsoft Sentinel</strong></td>
+                <td>Threat detection, incident response, SOC workflows, compliance</td>
+                <td>Security Team</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>This avoids noise and ownership confusion. Each team has a clear platform.</p>
+
+        <h3>C. Supports Cloud & Hybrid Operations</h3>
+        <ul>
+          <li>Azure-native security for Azure workloads</li>
+          <li>Native connectors for Entra ID, M365, Defender</li>
+          <li>AWS logs still integrated for centralized visibility</li>
+          <li>On-prem residual systems monitored via agents</li>
+        </ul>
+
+        <h3>D. Reduces Operational Overhead</h3>
+        <ul>
+          <li>No on-prem SIEM infrastructure to maintain</li>
+          <li>Built-in connectors replace custom collectors</li>
+          <li>Automation via Logic Apps reduces manual effort</li>
+          <li>Microsoft handles platform scalability</li>
+        </ul>
+
+        <h2>Detection Strategy</h2>
+
+        <p>
+          Based on the business model and risk profile, detection engineering focuses on:
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Detection Category</th>
+                <th>Examples</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Salesforce Data Access Anomalies</strong></td>
+                <td>Unusual export volumes, access from new locations, bulk record retrieval</td>
+              </tr>
+              <tr>
+                <td><strong>API Usage Patterns</strong></td>
+                <td>Excessive API calls, calls from unexpected sources, token reuse</td>
+              </tr>
+              <tr>
+                <td><strong>Identity Compromise Indicators</strong></td>
+                <td>Impossible travel, MFA fatigue attacks, unusual sign-in patterns</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud Privilege Escalation</strong></td>
+                <td>Role assignments, permission changes, resource creation</td>
+              </tr>
+              <tr>
+                <td><strong>SaaS Configuration Changes</strong></td>
+                <td>Connected app additions, permission grants, sharing settings</td>
+              </tr>
+              <tr>
+                <td><strong>Data Exfiltration Indicators</strong></td>
+                <td>Large file uploads, email forwarding rules, cloud sync to personal accounts</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Business-Aligned Security
+          </div>
+          <div class="callout-content">
+            <p>These are high-value, business-aligned detections—not generic "detect everything" rules. The security team focuses on what actually matters to RevFlow's business and customers.</p>
+          </div>
+        </div>
+
+        <!-- Page Navigation -->
+        <nav class="page-nav">
+          <a href="index.html" class="page-nav-link prev">
+            <span class="page-nav-label">Previous</span>
+            <span class="page-nav-title">← Executive Summary</span>
+          </a>
+          <a href="program-structure.html" class="page-nav-link next">
+            <span class="page-nav-label">Next</span>
+            <span class="page-nav-title">Program Structure →</span>
+          </a>
+        </nav>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

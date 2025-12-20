@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RACI Matrix | Resources</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .raci-r { background-color: rgba(56, 139, 253, 0.2); color: var(--accent-blue); font-weight: 600; }
+    .raci-a { background-color: rgba(248, 81, 73, 0.2); color: var(--accent-red); font-weight: 600; }
+    .raci-c { background-color: rgba(210, 153, 34, 0.2); color: var(--accent-yellow); font-weight: 600; }
+    .raci-i { background-color: rgba(110, 118, 129, 0.2); color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="timeline.html" class="nav-item">Interactive Timeline</a>
+          <a href="raci.html" class="nav-item active">RACI Matrix</a>
+          <a href="scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="templates.html" class="nav-item">Templates</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">RACI Matrix</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>RACI Matrix</h1>
+          <p class="intro-text">Responsibility assignment matrix for the security transformation program. R=Responsible, A=Accountable, C=Consulted, I=Informed.</p>
+        </div>
+
+        <h2>SIEM Track</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>SIEM Lead</th>
+                <th>Sentinel Eng</th>
+                <th>SOC Mgr</th>
+                <th>Security Arch</th>
+                <th>PM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Sentinel workspace setup</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-i">I</td><td class="raci-a">A</td><td class="raci-i">I</td></tr>
+              <tr><td>Log source discovery</td><td class="raci-a">A</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-i">I</td></tr>
+              <tr><td>Connector configuration</td><td class="raci-c">C</td><td class="raci-r">R</td><td class="raci-i">I</td><td class="raci-a">A</td><td class="raci-i">I</td></tr>
+              <tr><td>Detection rule translation</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-a">A</td><td class="raci-i">I</td></tr>
+              <tr><td>SOC training</td><td class="raci-c">C</td><td class="raci-r">R</td><td class="raci-a">A</td><td class="raci-i">I</td><td class="raci-i">I</td></tr>
+              <tr><td>RSA decommission</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-a">A</td><td class="raci-i">I</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>EDR Track</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Endpoint Lead</th>
+                <th>MDE Eng</th>
+                <th>Deploy Eng</th>
+                <th>Security Arch</th>
+                <th>PM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Coexistence configuration</td><td class="raci-a">A</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-i">I</td></tr>
+              <tr><td>MDE deployment</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-r">R</td><td class="raci-a">A</td><td class="raci-i">I</td></tr>
+              <tr><td>ASR rules rollout</td><td class="raci-a">A</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-i">I</td></tr>
+              <tr><td>Detection comparison</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-i">I</td><td class="raci-a">A</td><td class="raci-i">I</td></tr>
+              <tr><td>ESET removal</td><td class="raci-a">A</td><td class="raci-c">C</td><td class="raci-r">R</td><td class="raci-i">I</td><td class="raci-i">I</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>DLP Track</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>DLP Lead</th>
+                <th>Purview Eng</th>
+                <th>Compliance</th>
+                <th>Security Arch</th>
+                <th>PM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Policy translation</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-a">A</td><td class="raci-i">I</td></tr>
+              <tr><td>SIT configuration</td><td class="raci-c">C</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-a">A</td><td class="raci-i">I</td></tr>
+              <tr><td>Audit → Warn → Block rollout</td><td class="raci-a">A</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-i">I</td></tr>
+              <tr><td>User communication</td><td class="raci-c">C</td><td class="raci-i">I</td><td class="raci-r">R</td><td class="raci-i">I</td><td class="raci-a">A</td></tr>
+              <tr><td>Symantec decommission</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-i">I</td><td class="raci-a">A</td><td class="raci-i">I</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Legend</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Letter</th><th>Meaning</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="raci-r">R</td><td>Responsible</td><td>Does the work</td></tr>
+              <tr><td class="raci-a">A</td><td>Accountable</td><td>Ultimately answerable, approves work</td></tr>
+              <tr><td class="raci-c">C</td><td>Consulted</td><td>Provides input before decision</td></tr>
+              <tr><td class="raci-i">I</td><td>Informed</td><td>Notified after decision</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="timeline.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Timeline</span></a>
+          <a href="scripts.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Scripts & Queries →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

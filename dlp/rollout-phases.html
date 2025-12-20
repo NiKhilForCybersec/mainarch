@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rollout Phases | DLP Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="index.html" class="nav-item"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+          <a href="policy-translation.html" class="nav-item nav-item-sub">Policy Translation</a>
+          <a href="rollout-phases.html" class="nav-item nav-item-sub active">Rollout Phases</a>
+          <a href="user-communication.html" class="nav-item nav-item-sub">User Communication</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">DLP Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Rollout Phases</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Rollout Phases</h1>
+          <div class="page-header-meta">
+            <span class="page-badge dlp">DLP Track</span>
+          </div>
+          <p class="intro-text">The 12-month progression from Audit to full Block mode. Each phase has specific goals, validation gates, and success criteria before advancing.</p>
+        </div>
+
+        <h2>Phase Overview</h2>
+        <div class="timeline">
+          <div class="timeline-header">
+            <span class="timeline-month">M1</span>
+            <span class="timeline-month">M3</span>
+            <span class="timeline-month">M6</span>
+            <span class="timeline-month">M9</span>
+            <span class="timeline-month">M12</span>
+          </div>
+          <div class="timeline-track">
+            <span class="timeline-track-label">Purview Mode</span>
+            <div class="timeline-track-bar">
+              <div class="timeline-segment dlp" style="width: 15%;">Translate</div>
+              <div class="timeline-segment dlp" style="width: 35%;">Audit</div>
+              <div class="timeline-segment dlp" style="width: 25%;">Warn</div>
+              <div class="timeline-segment dlp" style="width: 15%;">Block+OVR</div>
+              <div class="timeline-segment dlp" style="width: 10%;">Block</div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Phase 1: Audit Mode (Months 3-6)</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Aspect</th><th>Details</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Policy Mode</strong></td><td><code>TestWithoutNotifications</code> (silent audit)</td></tr>
+              <tr><td><strong>User Impact</strong></td><td>None — users don't see anything</td></tr>
+              <tr><td><strong>Goal</strong></td><td>Baseline data, identify false positives, tune policies</td></tr>
+              <tr><td><strong>Symantec</strong></td><td>Still active and enforcing</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Audit Mode Activities</h3>
+        <ul>
+          <li>Deploy all policies in audit mode across all locations</li>
+          <li>Weekly review of Activity Explorer for false positives</li>
+          <li>Adjust SIT confidence levels based on data</li>
+          <li>Add exclusions for legitimate business processes</li>
+          <li>Document baseline metrics</li>
+        </ul>
+
+        <h3>KQL: Audit Mode Analysis</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - DLP Activity</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// DLP policy matches in audit mode
+InformationProtectionLogs_CL
+| where TimeGenerated > ago(7d)
+| where PolicyMode_s == "Audit"
+| summarize 
+    Matches = count(),
+    UniqueUsers = dcount(UserId_s),
+    UniqueFiles = dcount(ObjectId_s)
+    by PolicyName_s, SensitiveInfoType_s
+| order by Matches desc
+
+// Potential false positives (high volume, single user pattern)
+InformationProtectionLogs_CL
+| where TimeGenerated > ago(7d)
+| summarize Matches = count() by UserId_s, PolicyName_s
+| where Matches > 50  // High-volume users to investigate
+| order by Matches desc</code></pre>
+        </div>
+
+        <h3>Gate: Exit Audit Mode</h3>
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Proceed to Warn When</div>
+          <div class="callout-content">
+            <ul>
+              <li>☐ 4+ weeks of audit data collected</li>
+              <li>☐ False positive rate &lt;20% (after tuning)</li>
+              <li>☐ No critical business processes flagged incorrectly</li>
+              <li>☐ User training materials ready</li>
+              <li>☐ Help desk briefed</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>Phase 2: Warn Mode (Months 7-9)</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Aspect</th><th>Details</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Policy Mode</strong></td><td><code>TestWithNotifications</code> (warn)</td></tr>
+              <tr><td><strong>User Impact</strong></td><td>Policy tips shown, users can override</td></tr>
+              <tr><td><strong>Goal</strong></td><td>Build awareness, gather feedback, final tuning</td></tr>
+              <tr><td><strong>Symantec</strong></td><td>Still active (backup protection)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>User Experience in Warn Mode</h3>
+        <p>Users see policy tips but can proceed:</p>
+        <ul>
+          <li><strong>Email:</strong> MailTip appears before sending, user can override</li>
+          <li><strong>SharePoint:</strong> Warning banner on upload, sharing still works</li>
+          <li><strong>Teams:</strong> Message flagged with policy tip</li>
+          <li><strong>Endpoint:</strong> Toast notification, action proceeds</li>
+        </ul>
+
+        <h3>Gate: Exit Warn Mode</h3>
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Proceed to Block When</div>
+          <div class="callout-content">
+            <ul>
+              <li>☐ 8+ weeks in Warn mode</li>
+              <li>☐ Override rate &lt;15%</li>
+              <li>☐ User training 100% complete</li>
+              <li>☐ False positive rate &lt;10%</li>
+              <li>☐ Executive sign-off obtained</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>Phase 3: Block with Override (Months 10-11)</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Aspect</th><th>Details</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Policy Mode</strong></td><td><code>Enable</code> with override allowed</td></tr>
+              <tr><td><strong>User Impact</strong></td><td>Blocked by default, business justification to proceed</td></tr>
+              <tr><td><strong>Goal</strong></td><td>Near-full enforcement with escape valve</td></tr>
+              <tr><td><strong>Symantec</strong></td><td>Disabled (Purview is primary)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Override Configuration</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Update policy to Block with Override
+Set-DlpComplianceRule -Identity "Block Customer Data" `
+    -BlockAccess $true `
+    -AllowOverride "WithJustification" `
+    -OverrideOptions @(
+        "FalsePositive",
+        "BusinessJustification"
+    )</code></pre>
+        </div>
+
+        <h2>Phase 4: Full Block (Month 12+)</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Aspect</th><th>Details</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Policy Mode</strong></td><td><code>Enable</code> - hard block</td></tr>
+              <tr><td><strong>User Impact</strong></td><td>Action blocked, no override available</td></tr>
+              <tr><td><strong>Goal</strong></td><td>Full data protection enforcement</td></tr>
+              <tr><td><strong>Symantec</strong></td><td>Decommissioned</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Executive Exception Process</div>
+          <div class="callout-content"><p>Even in full Block mode, establish an emergency exception process for legitimate business needs. This should require manager + security approval and be time-limited.</p></div>
+        </div>
+
+        <h2>Monitoring Dashboard</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - DLP Dashboard Queries</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// DLP violations by policy and action
+InformationProtectionLogs_CL
+| where TimeGenerated > ago(30d)
+| summarize 
+    Blocked = countif(ActionTaken_s == "Block"),
+    Warned = countif(ActionTaken_s == "Warn"),
+    Overridden = countif(ActionTaken_s == "Override"),
+    Audited = countif(ActionTaken_s == "Audit")
+    by PolicyName_s
+| render barchart
+
+// Override justifications review
+InformationProtectionLogs_CL
+| where TimeGenerated > ago(7d)
+| where ActionTaken_s == "Override"
+| project TimeGenerated, UserId_s, PolicyName_s, Justification_s
+| order by TimeGenerated desc</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="policy-translation.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Policy Translation</span></a>
+          <a href="user-communication.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">User Communication →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

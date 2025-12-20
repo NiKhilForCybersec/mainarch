@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Identity Migration | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="../siem/index.html" class="nav-item"><span class="nav-track-indicator siem"></span>SIEM: RSA → Sentinel</a>
+          <a href="../edr/index.html" class="nav-item"><span class="nav-track-indicator edr"></span>EDR: ESET → MDE</a>
+          <a href="../dlp/index.html" class="nav-item"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+          <a href="index.html" class="nav-item active"><span class="nav-track-indicator identity"></span>Identity: AD → Entra ID</a>
+          <a href="hybrid-setup.html" class="nav-item nav-item-sub">Hybrid Setup</a>
+          <a href="conditional-access.html" class="nav-item nav-item-sub">Conditional Access</a>
+          <a href="pim.html" class="nav-item nav-item-sub">PIM</a>
+          <a href="../infrastructure/index.html" class="nav-item"><span class="nav-track-indicator infra"></span>Infrastructure: Azure</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Identity Migration</span>
+        </nav>
+        <div class="page-header">
+          <h1>Identity: Active Directory → Microsoft Entra ID</h1>
+          <div class="page-header-meta">
+            <span class="page-badge identity">Track 4</span>
+          </div>
+          <p class="intro-text">Modernizing identity from on-premises Active Directory to cloud-native Microsoft Entra ID with hybrid coexistence, Conditional Access, and Privileged Identity Management.</p>
+        </div>
+
+        <h2>Identity Strategy</h2>
+        <p>RevFlow's cloud-first business requires cloud-native identity. The approach:</p>
+        <ul>
+          <li><strong>Hybrid Sync</strong> — Entra Connect syncs on-prem AD to Entra ID</li>
+          <li><strong>Conditional Access</strong> — Zero Trust access policies</li>
+          <li><strong>PIM</strong> — Just-in-time privileged access</li>
+          <li><strong>SSO</strong> — All SaaS apps federated to Entra ID</li>
+        </ul>
+
+        <h2>Timeline</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Phase</th><th>Months</th><th>Activities</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Hybrid Setup</td><td>1-2</td><td>Entra Connect, Password Hash Sync, SSO</td></tr>
+              <tr><td>Conditional Access</td><td>3-4</td><td>MFA policies, device compliance, risk-based access</td></tr>
+              <tr><td>PIM</td><td>5-6</td><td>Admin role governance, JIT activation</td></tr>
+              <tr><td>SaaS Integration</td><td>4-8</td><td>Federate all apps to Entra ID</td></tr>
+              <tr><td>Optimization</td><td>9-12</td><td>Cloud-only accounts, reduce AD dependency</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Section Guide</h2>
+        <div class="card-grid">
+          <a href="hybrid-setup.html" class="card" style="text-decoration: none;">
+            <div class="card-icon orange">🔗</div>
+            <div class="card-title">Hybrid Setup</div>
+            <div class="card-description">Entra Connect configuration, sync options, and Password Hash Sync.</div>
+            <span class="card-link">View section →</span>
+          </a>
+          <a href="conditional-access.html" class="card" style="text-decoration: none;">
+            <div class="card-icon orange">🔐</div>
+            <div class="card-title">Conditional Access</div>
+            <div class="card-description">Zero Trust policies for MFA, device compliance, and risk-based access.</div>
+            <span class="card-link">View section →</span>
+          </a>
+          <a href="pim.html" class="card" style="text-decoration: none;">
+            <div class="card-icon orange">👑</div>
+            <div class="card-title">PIM</div>
+            <div class="card-description">Privileged Identity Management for just-in-time admin access.</div>
+            <span class="card-link">View section →</span>
+          </a>
+        </div>
+
+        <nav class="page-nav">
+          <a href="../dlp/user-communication.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← User Communication</span></a>
+          <a href="hybrid-setup.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Hybrid Setup →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

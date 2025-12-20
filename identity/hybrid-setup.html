@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hybrid Setup | Identity Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="index.html" class="nav-item"><span class="nav-track-indicator identity"></span>Identity: AD → Entra ID</a>
+          <a href="hybrid-setup.html" class="nav-item nav-item-sub active">Hybrid Setup</a>
+          <a href="conditional-access.html" class="nav-item nav-item-sub">Conditional Access</a>
+          <a href="pim.html" class="nav-item nav-item-sub">PIM</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">Identity</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Hybrid Setup</span>
+        </nav>
+        <div class="page-header">
+          <h1>Hybrid Identity Setup</h1>
+          <div class="page-header-meta">
+            <span class="page-badge identity">Identity Track</span>
+          </div>
+          <p class="intro-text">Microsoft Entra Connect synchronizes on-premises Active Directory with Entra ID. This enables hybrid identity where users have one identity that works for both on-prem and cloud resources.</p>
+        </div>
+
+        <h2>What Hybrid Identity Means for Users</h2>
+        <p>With hybrid identity configured, users experience seamless authentication:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Scenario</th><th>User Experience</th><th>What Happens Behind the Scenes</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Sign into domain-joined PC</strong></td>
+                <td>Enter AD password at Windows login</td>
+                <td>Authenticates against on-prem AD domain controller</td>
+              </tr>
+              <tr>
+                <td><strong>Open Outlook (M365)</strong></td>
+                <td>No password prompt (SSO)</td>
+                <td>Kerberos ticket from AD login used for cloud auth</td>
+              </tr>
+              <tr>
+                <td><strong>Sign into Azure Portal</strong></td>
+                <td>Enter email → No password if SSO</td>
+                <td>Seamless SSO uses Kerberos, or PHS validates hash</td>
+              </tr>
+              <tr>
+                <td><strong>Reset password in AD</strong></td>
+                <td>Change password on-prem</td>
+                <td>New hash syncs to Entra ID within 2 minutes</td>
+              </tr>
+              <tr>
+                <td><strong>Reset password in cloud</strong></td>
+                <td>Use aka.ms/sspr</td>
+                <td>Password Writeback updates on-prem AD</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Sync Architecture</h2>
+        <div class="architecture-diagram">
+          <div class="arch-container">
+            <div class="arch-layer">
+              <div class="arch-layer-title">On-Premises</div>
+              <div class="arch-layer-content">
+                <div class="arch-box gray">Active Directory<br><small>Users, Groups, Devices</small></div>
+                <div class="arch-box orange">Entra Connect Server<br><small>Runs sync every 30 min</small></div>
+              </div>
+            </div>
+            <div class="arch-arrow">↓ Password Hash Sync (PHS)<br>↓ User/Group objects sync</div>
+            <div class="arch-layer">
+              <div class="arch-layer-title">Cloud</div>
+              <div class="arch-layer-content">
+                <div class="arch-box purple">Microsoft Entra ID<br><small>Cloud identity platform</small></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Sync Methods Compared</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Method</th><th>How It Works</th><th>Pros</th><th>Cons</th><th>Recommendation</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Password Hash Sync (PHS)</strong></td>
+                <td>Hash of password hash synced to cloud</td>
+                <td>Simple, works if on-prem down, enables leaked credential detection</td>
+                <td>Passwords in cloud (hashed)</td>
+                <td><span class="status-badge complete">Recommended</span></td>
+              </tr>
+              <tr>
+                <td><strong>Pass-through Auth (PTA)</strong></td>
+                <td>Cloud calls on-prem agent to validate password</td>
+                <td>Password never leaves on-prem</td>
+                <td>Requires on-prem connectivity, complex HA</td>
+                <td>For regulatory requirements</td>
+              </tr>
+              <tr>
+                <td><strong>Federation (ADFS)</strong></td>
+                <td>On-prem ADFS servers handle all auth</td>
+                <td>Full control, smart card support</td>
+                <td>Complex, expensive, single point of failure</td>
+                <td>Legacy, migrate away</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>RevFlow Uses PHS + Seamless SSO</div>
+          <div class="callout-content">
+            <p>Password Hash Sync is deployed with Seamless SSO enabled. This provides the best balance of simplicity, resilience, and security features (leaked credential detection, risk-based Conditional Access).</p>
+          </div>
+        </div>
+
+        <h2>Entra Connect Installation</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Step-by-Step Installation</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>Prerequisites:
+- Dedicated Windows Server (not a Domain Controller)
+- .NET Framework 4.7.2+
+- Global Administrator account for Entra ID
+- Enterprise Administrator account for on-prem AD
+- Outbound HTTPS connectivity to Azure
+
+Installation Steps:
+1. Download Microsoft Entra Connect from:
+   https://www.microsoft.com/en-us/download/details.aspx?id=47594
+
+2. Run AzureADConnect.msi as Administrator
+
+3. Welcome screen → Click "I agree" → "Continue"
+
+4. Select "Use express settings" (recommended)
+   - This enables: PHS, Seamless SSO, Auto-upgrade
+
+5. Connect to Entra ID
+   - Enter Global Admin credentials
+   - Complete MFA if prompted
+
+6. Connect to AD DS
+   - Enter Enterprise Admin credentials
+   - Entra Connect creates a sync service account
+
+7. Entra ID sign-in configuration
+   - Verify UPN suffix matches (e.g., @revflow.com)
+   - If UPN doesn't match, users will have different cloud UPN
+
+8. Ready to configure
+   - ☑ Start synchronization when configuration completes
+   - ☑ Enable single sign-on
+   - Click "Install"
+
+9. Installation completes (5-10 minutes)
+   - Initial sync begins automatically
+   - Full sync can take hours for large directories</code></pre>
+        </div>
+
+        <h2>What Gets Synced</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Object Type</th><th>Synced?</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Users</td><td>✓ Yes</td><td>Selected OUs only. Service accounts can be filtered.</td></tr>
+              <tr><td>Groups</td><td>✓ Yes</td><td>Security groups and distribution lists</td></tr>
+              <tr><td>Contacts</td><td>✓ Yes</td><td>Mail contacts for GAL</td></tr>
+              <tr><td>Devices</td><td>✓ Yes</td><td>Hybrid Azure AD Join requires this</td></tr>
+              <tr><td>Passwords</td><td>✓ Yes (PHS)</td><td>Hash of hash synced, not plaintext</td></tr>
+              <tr><td>Group memberships</td><td>✓ Yes</td><td>Including nested groups</td></tr>
+              <tr><td>User attributes</td><td>✓ Yes</td><td>Name, email, phone, manager, etc.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Seamless SSO Configuration</h2>
+        <p>Seamless SSO allows domain-joined users to access cloud apps without entering passwords:</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">GPO Configuration</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>Seamless SSO requires adding Azure URLs to the Intranet zone:
+
+1. Create/Edit GPO: "Entra Seamless SSO"
+
+2. Navigate to:
+   User Configuration → Policies → Administrative Templates → 
+   Windows Components → Internet Explorer → Internet Control Panel → 
+   Security Page → Site to Zone Assignment List
+
+3. Enable and add:
+   https://autologon.microsoftazuread-sso.com = 1 (Intranet)
+   https://aadg.windows.net.nsatc.net = 1 (Intranet)
+
+4. Also enable:
+   "Allow updates to status bar via script" = Enabled
+   (Same path → Intranet Zone)
+
+5. Link GPO to user OUs
+
+6. Users may need to log off/on for GPO to apply</code></pre>
+        </div>
+
+        <h2>Monitoring Sync Health</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell - Sync Status</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Connect to Entra Connect (run on sync server)
+Import-Module ADSync
+
+# Check sync scheduler status
+Get-ADSyncScheduler
+
+# Expected output:
+# AllowedSyncCycleInterval : 00:30:00
+# CurrentlyEffectiveSyncCycleInterval : 00:30:00
+# SyncCycleEnabled : True
+# NextSyncCycleStartTimeInUTC : [timestamp]
+
+# Check last sync result
+Get-ADSyncConnectorRunStatus
+
+# Force a delta sync (only changed objects)
+Start-ADSyncSyncCycle -PolicyType Delta
+
+# Force a full sync (use sparingly - can take hours)
+Start-ADSyncSyncCycle -PolicyType Initial
+
+# Check for sync errors
+Get-ADSyncConnectorStatistics
+
+# View export errors
+Get-ADSyncExportDeletionThreshold</code></pre>
+        </div>
+
+        <h2>Troubleshooting Common Issues</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Issue</th><th>Symptom</th><th>Resolution</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>User not syncing</strong></td>
+                <td>User exists in AD but not in Entra ID</td>
+                <td>Check if user is in a synced OU, check for UPN conflicts</td>
+              </tr>
+              <tr>
+                <td><strong>Password not syncing</strong></td>
+                <td>User can't sign in with correct password</td>
+                <td>Force delta sync, check password hash sync is enabled</td>
+              </tr>
+              <tr>
+                <td><strong>Sync service stopped</strong></td>
+                <td>No sync for hours</td>
+                <td>Check Windows Services, restart "Microsoft Azure AD Sync"</td>
+              </tr>
+              <tr>
+                <td><strong>UPN mismatch</strong></td>
+                <td>User has different cloud vs on-prem email</td>
+                <td>Add UPN suffix to AD, update user's UPN</td>
+              </tr>
+              <tr>
+                <td><strong>Attribute sync error</strong></td>
+                <td>Specific attribute not syncing</td>
+                <td>Check attribute flow rules in Sync Rules Editor</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Monitoring in Entra Portal</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Portal Steps</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>1. Navigate to Entra Connect Health
+   https://entra.microsoft.com → Hybrid management → Microsoft Entra Connect → Connect Sync
+
+2. Check Sync Status
+   - Last sync time
+   - Export errors count
+   - Import errors count
+
+3. Review Sync Errors
+   Click "Sync errors" to see objects with issues
+   Common: duplicate attributes, invalid characters
+
+4. Set up Alerts
+   Entra Connect Health can email alerts for:
+   - Sync not running for X hours
+   - Export errors exceed threshold
+   - Password hash sync failure</code></pre>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Staging Mode</div>
+          <div class="callout-content">
+            <p>If you need to replace the Entra Connect server, install the new server in <strong>staging mode</strong>. It will import from AD but not export to Entra ID. This lets you validate before cutover.</p>
+          </div>
+        </div>
+
+        <nav class="page-nav">
+          <a href="index.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Identity Overview</span></a>
+          <a href="conditional-access.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Conditional Access →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

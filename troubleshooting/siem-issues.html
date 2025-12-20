@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentinel Issues | Troubleshooting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="index.html" class="nav-item">Overview</a>
+          <a href="siem-issues.html" class="nav-item active">Sentinel Issues</a>
+          <a href="mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">Troubleshooting</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Sentinel Issues</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Sentinel Issues</h1>
+          <p class="intro-text">Common Microsoft Sentinel problems and their solutions.</p>
+        </div>
+
+        <h2>Connector Not Ingesting Data</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symptom</th><th>Possible Cause</th><th>Solution</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Table empty after connector enabled</td><td>Permissions issue</td><td>Verify connector has required Graph/Azure permissions</td></tr>
+              <tr><td>Data delayed 30+ minutes</td><td>Source lag or workspace throttling</td><td>Check source system, review workspace health</td></tr>
+              <tr><td>Partial data (some events missing)</td><td>DCR filtering too aggressive</td><td>Review DCR XPath queries, broaden if needed</td></tr>
+              <tr><td>AWS connector fails</td><td>SQS permissions or queue empty</td><td>Verify IAM role, check S3 notifications to SQS</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Check Ingestion Health</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Check if data is flowing for each table
+union withsource=TableName *
+| where TimeGenerated > ago(1h)
+| summarize EventCount = count(), LastEvent = max(TimeGenerated) by TableName
+| order by LastEvent asc</code></pre>
+        </div>
+
+        <h2>High Ingestion Costs</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symptom</th><th>Possible Cause</th><th>Solution</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Unexpected cost spike</td><td>New log source or misconfiguration</td><td>Check Usage table, identify source, add filtering</td></tr>
+              <tr><td>Firewall logs too expensive</td><td>Logging all traffic</td><td>Move to Basic Logs tier, filter informational</td></tr>
+              <tr><td>NSG flow logs expensive</td><td>High network activity</td><td>Use Basic Logs tier, aggregate or sample</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Identify Cost Drivers</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>Usage
+| where TimeGenerated > ago(7d)
+| where IsBillable == true
+| summarize TotalGB = sum(Quantity)/1000 by DataType
+| order by TotalGB desc
+| take 10</code></pre>
+        </div>
+
+        <h2>Analytics Rule Not Firing</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symptom</th><th>Possible Cause</th><th>Solution</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Rule enabled but no incidents</td><td>Query returns no results</td><td>Test query manually in Log Analytics</td></tr>
+              <tr><td>Query works but rule doesn't fire</td><td>Threshold not met</td><td>Check trigger threshold configuration</td></tr>
+              <tr><td>Duplicate incidents not created</td><td>Suppression or grouping active</td><td>Review incident grouping settings</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="index.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Troubleshooting Overview</span></a>
+          <a href="mde-issues.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">MDE Issues →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Templates | Resources</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="timeline.html" class="nav-item">Interactive Timeline</a>
+          <a href="raci.html" class="nav-item">RACI Matrix</a>
+          <a href="scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="templates.html" class="nav-item active">Templates</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Templates</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Templates</h1>
+          <p class="intro-text">Document templates for migration planning, stakeholder communication, and operational procedures.</p>
+        </div>
+
+        <h2>Log Source Intake Template</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Markdown</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>## Log Source Discovery - [Team Name]
+**Date:** [Date]
+**Attendees:** [Names]
+
+### Systems Owned by This Team
+| System Name | Type | Log Destination | Security Relevant? |
+|-------------|------|-----------------|-------------------|
+|             |      |                 |                   |
+
+### Current State Questions
+1. What systems does your team own/manage?
+2. Where do these systems send logs today?
+3. Are there any systems that should be logging but aren't?
+4. What compliance requirements apply?
+
+### RSA NetWitness Findings
+- We currently see logs from: [list]
+- We don't see logs from: [list]
+
+### Action Items
+- [ ] [Team] to provide updated inventory
+- [ ] [Security] to validate configuration
+- [ ] Follow-up: [date]</code></pre>
+        </div>
+
+        <h2>Weekly Status Report Template</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Markdown</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>## Security Transformation - Week [N] Status
+
+### Overall Status: 🟢 On Track / 🟡 At Risk / 🔴 Blocked
+
+### SIEM Track
+- **Status:** [status]
+- **Completed:** [items]
+- **In Progress:** [items]
+- **Blockers:** [items]
+
+### EDR Track
+- **Status:** [status]
+- **Endpoints Onboarded:** [X] / [Total]
+- **Completed:** [items]
+- **Blockers:** [items]
+
+### DLP Track
+- **Status:** [status]
+- **Mode:** Audit / Warn / Block
+- **Completed:** [items]
+- **Blockers:** [items]
+
+### Key Decisions Needed
+1. [Decision needed]
+
+### Next Week Focus
+- [Priority 1]
+- [Priority 2]</code></pre>
+        </div>
+
+        <h2>Change Request Template</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Markdown</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>## Change Request: [Title]
+
+### Summary
+[Brief description of the change]
+
+### Justification
+[Why this change is needed]
+
+### Scope
+- **Systems Affected:** [list]
+- **Users Affected:** [number/groups]
+- **Estimated Duration:** [time]
+
+### Implementation Plan
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+### Rollback Plan
+1. [Rollback step 1]
+2. [Rollback step 2]
+
+### Risk Assessment
+| Risk | Likelihood | Impact | Mitigation |
+|------|------------|--------|------------|
+|      |            |        |            |
+
+### Approvals
+- [ ] Security Architect
+- [ ] Change Advisory Board
+- [ ] Impacted Team Lead</code></pre>
+        </div>
+
+        <h2>Incident Runbook Template</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Markdown</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>## Runbook: [Incident Type]
+
+### Description
+[What this runbook covers]
+
+### Severity Mapping
+| Indicator | Severity |
+|-----------|----------|
+| [condition] | Critical |
+| [condition] | High |
+| [condition] | Medium |
+
+### Triage Steps
+1. [ ] Verify alert is not false positive
+2. [ ] Identify affected user/system
+3. [ ] Check for related alerts
+4. [ ] Determine scope of impact
+
+### Investigation Queries
+```kql
+// [Description]
+[Query here]
+```
+
+### Containment Actions
+- [ ] [Action 1]
+- [ ] [Action 2]
+
+### Escalation Criteria
+- Escalate to [team] if [condition]
+
+### Resolution Steps
+1. [Step 1]
+2. [Step 2]
+
+### Post-Incident
+- [ ] Document timeline
+- [ ] Update detection if needed
+- [ ] Close incident with full notes</code></pre>
+        </div>
+
+        <h2>User Communication Template (DLP)</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Email Template</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>Subject: Important: Changes to Data Protection Tools
+
+Hi Team,
+
+As part of our security enhancement initiative, we're updating our data protection tools. Here's what you need to know:
+
+**What's Changing**
+We're transitioning from Symantec DLP to Microsoft Purview DLP for better integration with our Microsoft 365 environment.
+
+**What This Means for You**
+- You may see new pop-up notifications when sharing sensitive data
+- Initially, these are informational only (no blocking)
+- Starting [date], some actions may require additional confirmation
+
+**No Action Needed**
+The transition happens automatically. Just be aware of new notifications.
+
+**Questions?**
+Contact the Security Team at security@revflow.com
+
+Thank you for helping keep our data safe!
+
+Security Team</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="scripts.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Scripts & Queries</span></a>
+          <a href="../index.html" class="page-nav-link next"><span class="page-nav-label">Back to Start</span><span class="page-nav-title">Executive Summary →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

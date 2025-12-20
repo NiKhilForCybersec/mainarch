@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise Security Transformation | RevFlow Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="index.html" class="nav-item active">Executive Summary</a>
+          <a href="company-profile.html" class="nav-item">Company Profile</a>
+          <a href="program-structure.html" class="nav-item">Program Structure</a>
+        </div>
+        
+        <div class="nav-divider"></div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          
+          <a href="siem/index.html" class="nav-item">
+            <span class="nav-track-indicator siem"></span>SIEM: RSA → Sentinel
+          </a>
+          <a href="siem/discovery.html" class="nav-item nav-item-sub">Discovery & Assessment</a>
+          <a href="siem/log-sources.html" class="nav-item nav-item-sub">Log Source Strategy</a>
+          <a href="siem/log-engineering.html" class="nav-item nav-item-sub">Log Engineering</a>
+          <a href="siem/detection-engineering.html" class="nav-item nav-item-sub">Detection Engineering</a>
+          <a href="siem/soc-transition.html" class="nav-item nav-item-sub">SOC Transition</a>
+          
+          <a href="edr/index.html" class="nav-item">
+            <span class="nav-track-indicator edr"></span>EDR: ESET → MDE
+          </a>
+          <a href="edr/coexistence.html" class="nav-item nav-item-sub">Coexistence Strategy</a>
+          <a href="edr/deployment.html" class="nav-item nav-item-sub">MDE Deployment</a>
+          <a href="edr/asr-rules.html" class="nav-item nav-item-sub">ASR Rules Rollout</a>
+          <a href="edr/eset-removal.html" class="nav-item nav-item-sub">ESET Decommission</a>
+          
+          <a href="dlp/index.html" class="nav-item">
+            <span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview
+          </a>
+          <a href="dlp/policy-translation.html" class="nav-item nav-item-sub">Policy Translation</a>
+          <a href="dlp/rollout-phases.html" class="nav-item nav-item-sub">Rollout Phases</a>
+          <a href="dlp/user-communication.html" class="nav-item nav-item-sub">User Communication</a>
+          
+          <a href="identity/index.html" class="nav-item">
+            <span class="nav-track-indicator identity"></span>Identity: AD → Entra ID
+          </a>
+          <a href="identity/hybrid-setup.html" class="nav-item nav-item-sub">Hybrid Setup</a>
+          <a href="identity/conditional-access.html" class="nav-item nav-item-sub">Conditional Access</a>
+          <a href="identity/pim.html" class="nav-item nav-item-sub">PIM</a>
+          
+          <a href="infrastructure/index.html" class="nav-item">
+            <span class="nav-track-indicator infra"></span>Infrastructure: Azure
+          </a>
+          <a href="infrastructure/landing-zone.html" class="nav-item nav-item-sub">Landing Zone</a>
+          <a href="infrastructure/workload-migration.html" class="nav-item nav-item-sub">Workload Migration</a>
+        </div>
+        
+        <div class="nav-divider"></div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="operations/integration.html" class="nav-item">Integration Points</a>
+          <a href="operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+        </div>
+        
+        <div class="nav-divider"></div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="troubleshooting/index.html" class="nav-item">Overview</a>
+          <a href="troubleshooting/siem-issues.html" class="nav-item">Sentinel Issues</a>
+          <a href="troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        
+        <div class="nav-divider"></div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="resources/timeline.html" class="nav-item">Interactive Timeline</a>
+          <a href="resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="resources/templates.html" class="nav-item">Templates</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 12h18M3 6h18M3 18h18"></path>
+      </svg>
+    </button>
+    
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        
+        <div class="page-header">
+          <h1>Enterprise Security Transformation</h1>
+          <p class="intro-text">
+            A comprehensive guide to migrating from legacy security infrastructure to a modern, cloud-native Microsoft security stack. This documentation covers the parallel migration of SIEM, EDR, DLP, Identity, and Infrastructure over an 18-month transformation program.
+          </p>
+        </div>
+
+        <h2>The Challenge</h2>
+        <p>
+          RevFlow Analytics, a B2B SaaS company providing revenue intelligence and deal prediction analytics, operated with a legacy security stack that was increasingly misaligned with their cloud-first business model. The existing infrastructure included:
+        </p>
+        
+        <div class="comparison-grid">
+          <div class="comparison-column">
+            <div class="comparison-header before">Legacy Stack (Before)</div>
+            <div class="comparison-content">
+              <div class="comparison-item">
+                <span class="comparison-item-icon">📊</span>
+                <span>RSA NetWitness for SIEM</span>
+              </div>
+              <div class="comparison-item">
+                <span class="comparison-item-icon">🛡️</span>
+                <span>ESET Protect + Inspect for EPP/EDR</span>
+              </div>
+              <div class="comparison-item">
+                <span class="comparison-item-icon">🔒</span>
+                <span>Symantec DLP for data protection</span>
+              </div>
+              <div class="comparison-item">
+                <span class="comparison-item-icon">👤</span>
+                <span>On-premises Active Directory</span>
+              </div>
+              <div class="comparison-item">
+                <span class="comparison-item-icon">🏢</span>
+                <span>On-premises data center</span>
+              </div>
+            </div>
+          </div>
+          <div class="comparison-column">
+            <div class="comparison-header after">Modern Stack (After)</div>
+            <div class="comparison-content">
+              <div class="comparison-item">
+                <span class="comparison-item-icon">📊</span>
+                <span>Microsoft Sentinel for SIEM</span>
+              </div>
+              <div class="comparison-item">
+                <span class="comparison-item-icon">🛡️</span>
+                <span>Microsoft Defender for Endpoint</span>
+              </div>
+              <div class="comparison-item">
+                <span class="comparison-item-icon">🔒</span>
+                <span>Microsoft Purview DLP</span>
+              </div>
+              <div class="comparison-item">
+                <span class="comparison-item-icon">👤</span>
+                <span>Microsoft Entra ID</span>
+              </div>
+              <div class="comparison-item">
+                <span class="comparison-item-icon">☁️</span>
+                <span>Microsoft Azure cloud</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>The Approach: Parallel Migration</h2>
+        <p>
+          Enterprise security transformations cannot be done sequentially—waiting 4+ years to complete each migration one at a time is impractical. Instead, all five migration tracks run <strong>in parallel</strong> with extended periods of dual operation to ensure zero security gaps.
+        </p>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Key Principle
+          </div>
+          <div class="callout-content">
+            <p>All legacy and modern systems run simultaneously for 12+ months. This allows for validation, comparison, SOC training, and risk-free transition. The cost of parallel operation is justified by the risk mitigation it provides.</p>
+          </div>
+        </div>
+
+        <h2>Timeline Overview</h2>
+        <p>The transformation spans 18 months with all tracks progressing simultaneously:</p>
+
+        <div class="timeline">
+          <div class="timeline-header">
+            <span class="timeline-month">M1</span>
+            <span class="timeline-month">M3</span>
+            <span class="timeline-month">M6</span>
+            <span class="timeline-month">M9</span>
+            <span class="timeline-month">M12</span>
+            <span class="timeline-month">M15</span>
+            <span class="timeline-month">M18</span>
+          </div>
+          
+          <div class="timeline-track">
+            <span class="timeline-track-label">SIEM</span>
+            <div class="timeline-track-bar">
+              <div class="timeline-segment siem" style="width: 100%;" data-track="siem">
+                <span class="timeline-tooltip">RSA NetWitness → Microsoft Sentinel (12 months parallel)</span>
+                RSA + Sentinel Parallel
+              </div>
+            </div>
+          </div>
+          
+          <div class="timeline-track">
+            <span class="timeline-track-label">EDR</span>
+            <div class="timeline-track-bar">
+              <div class="timeline-segment edr" style="width: 85%;" data-track="edr">
+                <span class="timeline-tooltip">ESET Protect + Inspect → MDE (Active-Active)</span>
+                ESET + MDE Active-Active
+              </div>
+              <div class="timeline-segment edr faded" style="width: 15%;" data-track="edr">
+                <span class="timeline-tooltip">ESET Removal & Cleanup</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="timeline-track">
+            <span class="timeline-track-label">DLP</span>
+            <div class="timeline-track-bar">
+              <div class="timeline-segment dlp" style="width: 100%;" data-track="dlp">
+                <span class="timeline-tooltip">Symantec DLP → Microsoft Purview (12 months)</span>
+                Symantec + Purview Parallel
+              </div>
+            </div>
+          </div>
+          
+          <div class="timeline-track">
+            <span class="timeline-track-label">Identity</span>
+            <div class="timeline-track-bar">
+              <div class="timeline-segment identity" style="width: 55%;" data-track="identity">
+                <span class="timeline-tooltip">AD → Entra ID Hybrid + Full Cloud</span>
+                AD → Entra ID
+              </div>
+              <div class="timeline-segment identity faded" style="width: 45%;" data-track="identity">
+                <span class="timeline-tooltip">Entra ID Primary, Optimization</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="timeline-track">
+            <span class="timeline-track-label">Infrastructure</span>
+            <div class="timeline-track-bar">
+              <div class="timeline-segment infra" style="width: 90%;" data-track="infra">
+                <span class="timeline-tooltip">On-Prem → Azure Cloud Migration</span>
+                Azure Migration
+              </div>
+              <div class="timeline-segment infra faded" style="width: 10%;" data-track="infra">
+                <span class="timeline-tooltip">Cleanup</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Migration Tracks</h2>
+        <p>Each track addresses a specific domain of the security stack. Click on any track to explore the detailed migration guide.</p>
+
+        <div class="card-grid">
+          <a href="siem/index.html" class="card" style="text-decoration: none;">
+            <div class="card-icon blue">📊</div>
+            <div class="card-title">SIEM Migration</div>
+            <div class="card-description">RSA NetWitness to Microsoft Sentinel. Log source identification, ingestion strategy, detection engineering, and SOC transition.</div>
+            <span class="card-link">Explore SIEM track →</span>
+          </a>
+          
+          <a href="edr/index.html" class="card" style="text-decoration: none;">
+            <div class="card-icon green">🛡️</div>
+            <div class="card-title">EDR Migration</div>
+            <div class="card-description">ESET Protect + Inspect to Microsoft Defender for Endpoint. Active-active deployment, ASR rules, and phased removal.</div>
+            <span class="card-link">Explore EDR track →</span>
+          </a>
+          
+          <a href="dlp/index.html" class="card" style="text-decoration: none;">
+            <div class="card-icon purple">🔒</div>
+            <div class="card-title">DLP Migration</div>
+            <div class="card-description">Symantec DLP to Microsoft Purview. Policy translation, audit-warn-block progression, and user change management.</div>
+            <span class="card-link">Explore DLP track →</span>
+          </a>
+          
+          <a href="identity/index.html" class="card" style="text-decoration: none;">
+            <div class="card-icon orange">👤</div>
+            <div class="card-title">Identity Modernization</div>
+            <div class="card-description">On-premises AD to Microsoft Entra ID. Hybrid setup, Conditional Access policies, and Privileged Identity Management.</div>
+            <span class="card-link">Explore Identity track →</span>
+          </a>
+          
+          <a href="infrastructure/index.html" class="card" style="text-decoration: none;">
+            <div class="card-icon cyan">☁️</div>
+            <div class="card-title">Azure Infrastructure</div>
+            <div class="card-description">On-premises data center to Azure cloud. Landing zone architecture, workload migration order, and network design.</div>
+            <span class="card-link">Explore Infrastructure track →</span>
+          </a>
+          
+          <a href="troubleshooting/index.html" class="card" style="text-decoration: none;">
+            <div class="card-icon" style="background-color: rgba(248, 81, 73, 0.2);">🔧</div>
+            <div class="card-title">Troubleshooting</div>
+            <div class="card-description">Common issues and solutions across all migration tracks. Agent conflicts, ingestion problems, and deployment failures.</div>
+            <span class="card-link">Explore Troubleshooting →</span>
+          </a>
+        </div>
+
+        <h2>Key Success Factors</h2>
+        
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Factor</th>
+                <th>Why It Matters</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>12+ Month Parallel Operation</strong></td>
+                <td>Allows validation of new detections, SOC training, and risk-free transition</td>
+              </tr>
+              <tr>
+                <td><strong>Active-Active EDR</strong></td>
+                <td>Both ESET and MDE actively protecting endpoints enables true comparison without protection gaps</td>
+              </tr>
+              <tr>
+                <td><strong>Audit → Warn → Block</strong></td>
+                <td>DLP progression builds user awareness and reduces false positive impact</td>
+              </tr>
+              <tr>
+                <td><strong>Splunk Cloud Unchanged</strong></td>
+                <td>Operational analytics stays in Splunk; security moves to Sentinel. Clear ownership separation.</td>
+              </tr>
+              <tr>
+                <td><strong>Stakeholder Collaboration</strong></td>
+                <td>Discovery requires extensive collaboration with IT, App Owners, Network, and Business teams</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>How to Use This Guide</h2>
+        <p>
+          This documentation is organized by migration track. Each track contains:
+        </p>
+        <ul>
+          <li><strong>Overview</strong> — High-level timeline and approach</li>
+          <li><strong>Technical Details</strong> — Step-by-step implementation guides</li>
+          <li><strong>Scripts & Queries</strong> — Production-ready code examples</li>
+          <li><strong>Troubleshooting</strong> — Common problems and solutions</li>
+        </ul>
+
+        <p>
+          Use the sidebar navigation to explore specific topics, or follow the sequential flow using the Previous/Next links at the bottom of each page.
+        </p>
+
+        <!-- Page Navigation -->
+        <nav class="page-nav">
+          <div></div>
+          <a href="company-profile.html" class="page-nav-link next">
+            <span class="page-nav-label">Next</span>
+            <span class="page-nav-title">Company Profile →</span>
+          </a>
+        </nav>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

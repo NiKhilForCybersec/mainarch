@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Troubleshooting | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="index.html" class="nav-item active">Overview</a>
+          <a href="siem-issues.html" class="nav-item">Sentinel Issues</a>
+          <a href="mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Troubleshooting</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Troubleshooting</h1>
+          <p class="intro-text">Common issues and solutions encountered during the security transformation. Organized by product/track for quick reference.</p>
+        </div>
+
+        <h2>Quick Links</h2>
+        <div class="card-grid">
+          <a href="siem-issues.html" class="card" style="text-decoration: none;">
+            <div class="card-icon blue">📊</div>
+            <div class="card-title">Sentinel Issues</div>
+            <div class="card-description">Connector failures, ingestion delays, DCR problems, cost spikes.</div>
+            <span class="card-link">View issues →</span>
+          </a>
+          <a href="mde-issues.html" class="card" style="text-decoration: none;">
+            <div class="card-icon green">🛡️</div>
+            <div class="card-title">MDE Issues</div>
+            <div class="card-description">Onboarding failures, sensor health, ASR conflicts.</div>
+            <span class="card-link">View issues →</span>
+          </a>
+          <a href="dlp-issues.html" class="card" style="text-decoration: none;">
+            <div class="card-icon purple">🔒</div>
+            <div class="card-title">DLP Issues</div>
+            <div class="card-description">Policy not triggering, false positives, user complaints.</div>
+            <span class="card-link">View issues →</span>
+          </a>
+          <a href="agent-conflicts.html" class="card" style="text-decoration: none;">
+            <div class="card-icon" style="background-color: rgba(248, 81, 73, 0.2);">⚠️</div>
+            <div class="card-title">Agent Conflicts</div>
+            <div class="card-description">ESET + MDE coexistence issues, AMA conflicts, performance.</div>
+            <span class="card-link">View issues →</span>
+          </a>
+        </div>
+
+        <h2>Escalation Contacts</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Issue Type</th><th>First Contact</th><th>Escalation</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Sentinel</td><td>SIEM Engineer</td><td>Microsoft Support</td></tr>
+              <tr><td>MDE</td><td>Endpoint Engineer</td><td>Microsoft Support</td></tr>
+              <tr><td>Purview DLP</td><td>DLP Engineer</td><td>Microsoft Support</td></tr>
+              <tr><td>Agent conflicts</td><td>Endpoint Engineer</td><td>Both vendors</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="../operations/soc-workflows.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← SOC Workflows</span></a>
+          <a href="siem-issues.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Sentinel Issues →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conditional Access | Identity Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo"><div class="sidebar-logo-icon">RF</div><div class="sidebar-logo-text"><span class="sidebar-logo-title">Security Transformation</span><span class="sidebar-logo-subtitle">RevFlow Analytics</span></div></div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="index.html" class="nav-item"><span class="nav-track-indicator identity"></span>Identity: AD → Entra ID</a>
+          <a href="hybrid-setup.html" class="nav-item nav-item-sub">Hybrid Setup</a>
+          <a href="conditional-access.html" class="nav-item nav-item-sub active">Conditional Access</a>
+          <a href="pim.html" class="nav-item nav-item-sub">PIM</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg></button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="index.html">Identity</a><span class="breadcrumb-separator">/</span><span class="breadcrumb-current">Conditional Access</span></nav>
+        <div class="page-header">
+          <h1>Conditional Access Policies</h1>
+          <div class="page-header-meta"><span class="page-badge identity">Identity Track</span></div>
+          <p class="intro-text">Zero Trust access policies that enforce MFA, device compliance, and risk-based access controls. These policies are the gatekeepers that evaluate every authentication and decide: allow, block, or require additional verification.</p>
+        </div>
+
+        <h2>How Conditional Access Works</h2>
+        <p>Every time a user signs in, Entra ID evaluates all applicable Conditional Access policies. The policies check conditions (who, where, what device, what app) and enforce controls (MFA, block, require compliant device).</p>
+
+        <div class="flow-diagram">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <strong>User Attempts Sign-in</strong><br>
+              User enters username/password for Microsoft 365, Azure Portal, or any Entra ID integrated app
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <strong>Entra ID Evaluates Policies</strong><br>
+              Checks: Which user? What app? Which device? From where? Current risk level?
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <strong>Policy Match Found</strong><br>
+              If conditions match a policy, the grant/session controls are enforced
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-content">
+              <strong>User Sees Result</strong><br>
+              <em>Allow:</em> Access granted<br>
+              <em>MFA Required:</em> Prompted for Authenticator/phone<br>
+              <em>Block:</em> "You cannot access this" error
+            </div>
+          </div>
+        </div>
+
+        <h2>User Experience: What Users See</h2>
+
+        <h3>Scenario 1: MFA Required</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Step</th><th>What User Sees</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Signs into Outlook Web (outlook.office.com)</td></tr>
+              <tr><td>2</td><td>Enters email and password</td></tr>
+              <tr><td>3</td><td><strong>"More information required"</strong> screen appears</td></tr>
+              <tr><td>4</td><td>Prompt to approve via Authenticator app OR enter SMS code</td></tr>
+              <tr><td>5</td><td>User approves on phone → Access granted</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Scenario 2: Device Not Compliant</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Step</th><th>What User Sees</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Signs into SharePoint from personal laptop</td></tr>
+              <tr><td>2</td><td>Enters email and password, completes MFA</td></tr>
+              <tr><td>3</td><td><strong>"You can't get there from here"</strong> error page</td></tr>
+              <tr><td>4</td><td>Message: "Your device doesn't meet compliance requirements"</td></tr>
+              <tr><td>5</td><td>Options: Enroll device in Intune OR use compliant corporate device</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Scenario 3: High Risk Sign-in Blocked</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Step</th><th>What User Sees</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Signs in from unusual location (e.g., new country while traveling)</td></tr>
+              <tr><td>2</td><td>Entra ID detects high risk (impossible travel, new location)</td></tr>
+              <tr><td>3</td><td><strong>"Your sign-in was blocked"</strong> error</td></tr>
+              <tr><td>4</td><td>User must contact IT helpdesk OR reset password to clear risk</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Baseline Policies (Deployed)</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Policy Name</th><th>Who</th><th>Condition</th><th>Control</th><th>User Impact</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>CA001: Require MFA for all users</strong></td>
+                <td>All users</td>
+                <td>All cloud apps</td>
+                <td>Require MFA</td>
+                <td>MFA prompt on sign-in (1-hour token cache)</td>
+              </tr>
+              <tr>
+                <td><strong>CA002: Block legacy authentication</strong></td>
+                <td>All users</td>
+                <td>Legacy protocols (IMAP, POP3, SMTP, EWS)</td>
+                <td>Block</td>
+                <td>Old email clients stop working</td>
+              </tr>
+              <tr>
+                <td><strong>CA003: Require compliant device for O365</strong></td>
+                <td>All users</td>
+                <td>Office 365 apps</td>
+                <td>Require compliant device</td>
+                <td>Personal devices blocked from O365</td>
+              </tr>
+              <tr>
+                <td><strong>CA004: Block high risk sign-ins</strong></td>
+                <td>All users</td>
+                <td>Sign-in risk = High</td>
+                <td>Block</td>
+                <td>Suspicious sign-ins blocked</td>
+              </tr>
+              <tr>
+                <td><strong>CA005: Require MFA for admins (always)</strong></td>
+                <td>Admin roles</td>
+                <td>All cloud apps</td>
+                <td>Require MFA + No token caching</td>
+                <td>Admins prompted every sign-in</td>
+              </tr>
+              <tr>
+                <td><strong>CA006: Block countries</strong></td>
+                <td>All users</td>
+                <td>Named location = Blocked countries</td>
+                <td>Block</td>
+                <td>Sign-ins from Russia, China, NK blocked</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Admin: Creating a Conditional Access Policy</h2>
+        <p>Step-by-step walkthrough to create a policy in the Entra admin center:</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Entra Portal Steps</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>1. Navigate to Conditional Access
+   https://entra.microsoft.com → Protection → Conditional Access → Policies
+
+2. Click "+ New policy"
+
+3. Name the Policy
+   Example: "CA007: Require compliant device for Salesforce"
+
+4. Configure Assignments - Users
+   ├── Include: All users
+   └── Exclude: Emergency access accounts (break-glass)
+   
+   IMPORTANT: Always exclude break-glass accounts!
+
+5. Configure Assignments - Target Resources
+   ├── Cloud apps or actions: Select apps
+   └── Select: "Salesforce" (or search for the app)
+
+6. Configure Conditions (optional filters)
+   ├── Device platforms: Any device (or specify iOS, Android, Windows)
+   ├── Locations: Any location (or named locations)
+   ├── Client apps: Browser, Mobile apps and desktop clients
+   └── Device state: Not configured (or filter to unmanaged devices)
+
+7. Configure Access Controls - Grant
+   ├── Grant access
+   ├── ☑ Require device to be marked as compliant
+   └── For multiple controls: Require all selected controls
+
+8. Configure Session Controls (optional)
+   ├── Sign-in frequency: 1 hour (force re-auth)
+   ├── Persistent browser session: Never persistent
+   └── Use app enforced restrictions: If Salesforce supports
+
+9. Enable Policy
+   ├── Report-only: Test first (recommended)
+   ├── On: Enforce immediately
+   └── Off: Disabled
+
+10. Click "Create"</code></pre>
+        </div>
+
+        <h2>Testing in Report-Only Mode</h2>
+        <p>Always deploy new policies in Report-only mode first. This logs what <em>would</em> happen without affecting users.</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Report-Only Impact</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// See what Report-only policies would block/require
+SigninLogs
+| where TimeGenerated > ago(7d)
+| mv-expand ConditionalAccessPolicies
+| extend PolicyName = tostring(ConditionalAccessPolicies.displayName)
+| extend PolicyResult = tostring(ConditionalAccessPolicies.result)
+| where PolicyResult == "reportOnlyFailure"  // Would have blocked
+| summarize BlockedCount = count() by PolicyName, UserPrincipalName
+| order by BlockedCount desc
+
+// Breakdown by policy
+SigninLogs
+| where TimeGenerated > ago(7d)
+| mv-expand ConditionalAccessPolicies
+| extend PolicyName = tostring(ConditionalAccessPolicies.displayName)
+| extend PolicyResult = tostring(ConditionalAccessPolicies.result)
+| where PolicyName contains "CA007"  // Your new policy
+| summarize 
+    Success = countif(PolicyResult == "reportOnlySuccess"),
+    Failure = countif(PolicyResult == "reportOnlyFailure"),
+    NotApplied = countif(PolicyResult == "reportOnlyNotApplied")
+    by bin(TimeGenerated, 1d)</code></pre>
+        </div>
+
+        <h2>Named Locations</h2>
+        <p>Define trusted or blocked locations for use in policies:</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Configuration Steps</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>1. Navigate to Named Locations
+   Entra ID → Protection → Conditional Access → Named locations
+
+2. Create Trusted Location (Corporate Office)
+   ├── Name: "RevFlow HQ"
+   ├── Mark as trusted location: ☑ Yes
+   └── Define by IP ranges:
+       ├── 203.0.113.0/24 (Office public IP range)
+       └── 198.51.100.0/24 (VPN exit IP range)
+
+3. Create Blocked Location (High-Risk Countries)
+   ├── Name: "Blocked Countries"
+   ├── Define by countries/regions:
+       ├── Russia
+       ├── China
+       ├── North Korea
+       └── Iran
+
+4. Use in Policy Conditions
+   Policy → Conditions → Locations
+   ├── Include: Any location
+   └── Exclude: "RevFlow HQ" (skip MFA from office)</code></pre>
+        </div>
+
+        <h2>Break-Glass (Emergency Access) Accounts</h2>
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Critical: Always Exclude Break-Glass Accounts</div>
+          <div class="callout-content">
+            <p>Every Conditional Access policy must exclude emergency access accounts. If MFA fails globally (Authenticator outage), you need accounts that can still sign in.</p>
+            <p><strong>Break-glass accounts:</strong> 2 cloud-only accounts with long random passwords stored in a safe. No MFA. Excluded from all CA policies. Usage is monitored with alerts.</p>
+          </div>
+        </div>
+
+        <h2>Policy Deployment Order</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Phase</th><th>Policy</th><th>Mode</th><th>Duration</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1</strong></td><td>Block legacy auth</td><td>Report-only → Enabled</td><td>2 weeks test, then enforce</td></tr>
+              <tr><td><strong>2</strong></td><td>Require MFA for admins</td><td>Report-only → Enabled</td><td>1 week test, then enforce</td></tr>
+              <tr><td><strong>3</strong></td><td>Block high-risk sign-ins</td><td>Report-only → Enabled</td><td>1 week test, then enforce</td></tr>
+              <tr><td><strong>4</strong></td><td>Require MFA for all users</td><td>Report-only → Pilot → All</td><td>2 weeks pilot, then all users</td></tr>
+              <tr><td><strong>5</strong></td><td>Require compliant device</td><td>Report-only → Pilot → All</td><td>4 weeks (coordinate with Intune)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Troubleshooting: "Why Was I Blocked?"</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Investigate User Sign-in</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Find why a specific user was blocked
+let targetUser = "jane.doe@revflow.com";
+SigninLogs
+| where TimeGenerated > ago(24h)
+| where UserPrincipalName =~ targetUser
+| where ResultType != "0"  // Failed sign-ins
+| mv-expand ConditionalAccessPolicies
+| extend PolicyName = tostring(ConditionalAccessPolicies.displayName)
+| extend PolicyResult = tostring(ConditionalAccessPolicies.result)
+| extend GrantControls = tostring(ConditionalAccessPolicies.enforcedGrantControls)
+| project TimeGenerated, 
+    AppDisplayName, 
+    PolicyName, 
+    PolicyResult, 
+    GrantControls,
+    ResultType,
+    ResultDescription,
+    IPAddress,
+    DeviceDetail.operatingSystem
+| order by TimeGenerated desc</code></pre>
+        </div>
+
+        <h2>Common User Issues</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>User Says</th><th>Likely Cause</th><th>Solution</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>"I keep getting MFA prompts"</td>
+                <td>Token expired or policy requires frequent auth</td>
+                <td>Check sign-in frequency setting, use Authenticator app</td>
+              </tr>
+              <tr>
+                <td>"My phone doesn't work for MFA"</td>
+                <td>Authenticator app issue or phone number changed</td>
+                <td>User resets MFA methods at aka.ms/mfasetup</td>
+              </tr>
+              <tr>
+                <td>"I can't access from my personal laptop"</td>
+                <td>Device compliance policy blocking unmanaged devices</td>
+                <td>Use company device OR enroll in Intune</td>
+              </tr>
+              <tr>
+                <td>"I'm blocked when traveling"</td>
+                <td>Location policy or risk detection (impossible travel)</td>
+                <td>User notifies IT before travel, risk dismissed by admin</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="hybrid-setup.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Hybrid Setup</span></a>
+          <a href="pim.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">PIM →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privileged Identity Management | Identity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="../siem/index.html" class="nav-item"><span class="nav-track-indicator siem"></span>SIEM: RSA → Sentinel</a>
+          <a href="../edr/index.html" class="nav-item"><span class="nav-track-indicator edr"></span>EDR: ESET → MDE</a>
+          <a href="../dlp/index.html" class="nav-item"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+          <a href="index.html" class="nav-item"><span class="nav-track-indicator identity"></span>Identity: AD → Entra ID</a>
+          <a href="hybrid-setup.html" class="nav-item nav-item-sub">Hybrid Setup</a>
+          <a href="conditional-access.html" class="nav-item nav-item-sub">Conditional Access</a>
+          <a href="pim.html" class="nav-item nav-item-sub active">PIM</a>
+          <a href="../infrastructure/index.html" class="nav-item"><span class="nav-track-indicator infra"></span>Infrastructure: Azure</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">Identity</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Privileged Identity Management</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Privileged Identity Management (PIM)</h1>
+          <div class="page-header-meta">
+            <span class="page-badge identity">Identity Track</span>
+          </div>
+          <p class="intro-text">Implementing just-in-time privileged access with Microsoft Entra PIM. Eliminates standing admin privileges and provides audit trails for all elevated access.</p>
+        </div>
+
+        <h2>Why PIM</h2>
+        <p>Standing admin privileges are a security risk. If an admin account is compromised, attackers have immediate access. With PIM, privileges are activated on-demand and expire automatically.</p>
+
+        <div class="comparison-grid">
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(248, 81, 73, 0.15); color: var(--accent-red);">Without PIM (Always-On)</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Admin is Global Admin 24/7/365</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Compromised account = immediate full access</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>No audit trail of "why" access was used</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✗</span><span>Privilege creep over time</span></div>
+            </div>
+          </div>
+          <div class="comparison-column">
+            <div class="comparison-header" style="background-color: rgba(63, 185, 80, 0.15); color: var(--accent-green);">With PIM (Just-In-Time)</div>
+            <div class="comparison-content">
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Admin activates role only when needed</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Access expires automatically (1-8 hours)</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Justification required and logged</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Approval workflow for sensitive roles</span></div>
+            </div>
+          </div>
+        </div>
+
+        <h2>User Walkthrough: Activating an Entra ID Role</h2>
+        <p>Example scenario: An IT admin needs to reset a user's MFA. They need the <strong>Authentication Administrator</strong> role.</p>
+
+        <div class="flow-diagram">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <strong>Navigate to PIM Portal</strong><br>
+              Go to: <code>https://entra.microsoft.com</code> → Identity Governance → Privileged Identity Management<br>
+              Or direct: <code>https://entra.microsoft.com/#view/Microsoft_Azure_PIMCommon/ActivationMenuBlade/~/aadmigratedroles</code>
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <strong>Click "My roles"</strong><br>
+              You'll see a list of roles you're <em>eligible</em> for (not currently active).<br>
+              Find <strong>Authentication Administrator</strong> in the list.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <strong>Click "Activate"</strong><br>
+              A side panel opens with activation options.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-content">
+              <strong>Set Duration</strong><br>
+              Choose how long you need the role (e.g., 1 hour, 4 hours).<br>
+              Cannot exceed the maximum configured by admin.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">5</div>
+            <div class="flow-step-content">
+              <strong>Enter Justification</strong><br>
+              Required field. Example: <em>"INC-4521: Reset MFA for user john.doe@revflow.com per helpdesk ticket"</em><br>
+              This is logged and auditable.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">6</div>
+            <div class="flow-step-content">
+              <strong>Complete MFA Challenge</strong><br>
+              If not recently authenticated, you'll be prompted for MFA (Authenticator app, phone, etc.)
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">7</div>
+            <div class="flow-step-content">
+              <strong>Wait for Activation</strong><br>
+              If <em>no approval required</em>: Role activates immediately (30-60 seconds).<br>
+              If <em>approval required</em>: Request goes to approver queue. You'll get email when approved/denied.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">8</div>
+            <div class="flow-step-content">
+              <strong>Role is Now Active</strong><br>
+              Status changes to "Active". You can now perform admin tasks.<br>
+              Role auto-expires after the duration you selected.
+            </div>
+          </div>
+        </div>
+
+        <h2>User Walkthrough: Activating Azure Resource Access</h2>
+        <p>Example scenario: A DevOps engineer needs <strong>Owner</strong> access to the production subscription to modify a resource lock.</p>
+
+        <div class="flow-diagram">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <strong>Navigate to PIM for Azure Resources</strong><br>
+              Go to: <code>https://portal.azure.com</code> → Search "Privileged Identity Management" → Click "Azure resources"
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <strong>Select the Resource Scope</strong><br>
+              Expand the hierarchy: Management Group → Subscription → Resource Group → Resource<br>
+              Click on the specific scope you need (e.g., <strong>RF-Production</strong> subscription)
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <strong>View Eligible Roles</strong><br>
+              Click "My roles" for that resource. You'll see roles you can activate.<br>
+              Find <strong>Owner</strong> in the eligible roles list.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-content">
+              <strong>Click "Activate"</strong><br>
+              Same flow as Entra ID roles: set duration, enter justification, complete MFA.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">5</div>
+            <div class="flow-step-content">
+              <strong>Approval Required for Owner</strong><br>
+              High-privilege roles like Owner typically require approval.<br>
+              Request is sent to designated approvers (e.g., Cloud Platform Team Lead).<br>
+              Approver sees: who requested, what role, what resource, justification provided.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">6</div>
+            <div class="flow-step-content">
+              <strong>Approver Actions</strong><br>
+              Approver goes to PIM → "Approve requests" → Reviews the request.<br>
+              Options: <strong>Approve</strong> (with optional comment) or <strong>Deny</strong> (must provide reason).
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">7</div>
+            <div class="flow-step-content">
+              <strong>Notification & Activation</strong><br>
+              Requestor receives email: "Your request for Owner on RF-Production was approved".<br>
+              Role is now active. Go to Azure Portal and perform the task.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">8</div>
+            <div class="flow-step-content">
+              <strong>Auto-Expiration</strong><br>
+              After 2 hours (or configured duration), role automatically deactivates.<br>
+              No action needed. Next time, repeat the activation process.
+            </div>
+          </div>
+        </div>
+
+        <h2>Approver Walkthrough</h2>
+        <p>If you're designated as an approver for a role, here's what happens when someone requests access:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Step</th><th>Action</th><th>Details</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Notification</strong></td>
+                <td>Receive email alert</td>
+                <td>Subject: "PIM: [User] is requesting [Role] on [Resource]"<br>Contains link to approve/deny</td>
+              </tr>
+              <tr>
+                <td><strong>2. Review</strong></td>
+                <td>Open PIM → Approve requests</td>
+                <td>See requestor, role, scope, duration, justification provided</td>
+              </tr>
+              <tr>
+                <td><strong>3. Verify</strong></td>
+                <td>Check justification is legitimate</td>
+                <td>Cross-reference ticket number, verify business need</td>
+              </tr>
+              <tr>
+                <td><strong>4. Approve/Deny</strong></td>
+                <td>Click Approve or Deny</td>
+                <td>Approve: optional comment. Deny: reason required.</td>
+              </tr>
+              <tr>
+                <td><strong>5. Requestor notified</strong></td>
+                <td>Automatic email sent</td>
+                <td>Requestor informed of decision</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Approval SLA</div>
+          <div class="callout-content"><p>Requests pending approval for more than 24 hours expire automatically. Approvers should respond within 1-2 hours for production access requests.</p></div>
+        </div>
+
+        <h2>Role Configuration by Risk Level</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Role</th><th>Max Duration</th><th>Approval</th><th>MFA</th><th>Justification</th></tr>
+            </thead>
+            <tbody>
+              <tr style="background-color: rgba(248, 81, 73, 0.1);">
+                <td><strong>Global Administrator</strong></td>
+                <td>1 hour</td>
+                <td>Yes (Security Lead + CTO)</td>
+                <td>Yes</td>
+                <td>Required + Ticket #</td>
+              </tr>
+              <tr style="background-color: rgba(248, 81, 73, 0.1);">
+                <td><strong>Security Administrator</strong></td>
+                <td>4 hours</td>
+                <td>Yes (Security Lead)</td>
+                <td>Yes</td>
+                <td>Required</td>
+              </tr>
+              <tr style="background-color: rgba(248, 81, 73, 0.1);">
+                <td><strong>Azure Owner</strong></td>
+                <td>2 hours</td>
+                <td>Yes (Platform Lead)</td>
+                <td>Yes</td>
+                <td>Required + Ticket #</td>
+              </tr>
+              <tr>
+                <td><strong>Exchange Administrator</strong></td>
+                <td>4 hours</td>
+                <td>No</td>
+                <td>Yes</td>
+                <td>Required</td>
+              </tr>
+              <tr>
+                <td><strong>Intune Administrator</strong></td>
+                <td>8 hours</td>
+                <td>No</td>
+                <td>Yes</td>
+                <td>Required</td>
+              </tr>
+              <tr>
+                <td><strong>User Administrator</strong></td>
+                <td>8 hours</td>
+                <td>No</td>
+                <td>Yes</td>
+                <td>Optional</td>
+              </tr>
+              <tr>
+                <td><strong>Azure Contributor</strong></td>
+                <td>8 hours</td>
+                <td>No</td>
+                <td>Yes</td>
+                <td>Required</td>
+              </tr>
+              <tr>
+                <td><strong>Helpdesk Administrator</strong></td>
+                <td>8 hours</td>
+                <td>No</td>
+                <td>Yes</td>
+                <td>No</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Admin: Configuring a Role in PIM</h2>
+        <p>Step-by-step for PIM administrators to configure role settings:</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Entra Portal Steps</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>1. Navigate to PIM
+   https://entra.microsoft.com → Identity Governance → Privileged Identity Management
+
+2. Select Role Type
+   - "Microsoft Entra roles" for Entra ID roles (Global Admin, User Admin, etc.)
+   - "Azure resources" for Azure RBAC roles (Owner, Contributor, etc.)
+
+3. Choose the Role to Configure
+   Click "Roles" → Find and click the role (e.g., "Security Administrator")
+
+4. Edit Role Settings
+   Click "Settings" → "Edit"
+   
+   Activation tab:
+   ├── Activation maximum duration: 4 hours (slider)
+   ├── On activation, require: ☑ Azure MFA
+   ├── Require justification on activation: ☑ Yes
+   ├── Require ticket information on activation: ☐ Optional
+   ├── Require approval to activate: ☑ Yes
+   └── Select approver(s): Click "Select members" → Add Security Lead
+   
+   Assignment tab:
+   ├── Allow permanent eligible assignment: ☑ Yes
+   ├── Expire eligible assignments after: Never / or set expiry
+   ├── Allow permanent active assignment: ☐ No (enforce PIM)
+   └── Expire active assignments after: N/A
+   
+   Notification tab:
+   ├── Send notifications when members are assigned as eligible: ☑ Admin, Assignee
+   ├── Send notifications when members are assigned as active: ☑ Admin, Assignee
+   └── Send notifications when eligible members activate: ☑ Admin
+
+5. Save Settings
+
+6. Add Eligible Members
+   Click "Assignments" → "Add assignments"
+   - Select member(s): Choose users who should be eligible
+   - Assignment type: Eligible (NOT Active)
+   - Assignment starts: Now
+   - Assignment ends: Permanent or date-bound
+   
+   Click "Assign"</code></pre>
+        </div>
+
+        <h2>Admin: Configuring Azure Resource PIM</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Azure Portal Steps</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>1. Navigate to PIM for Azure Resources
+   Azure Portal → Search "Privileged Identity Management" → Azure resources
+
+2. Discover Resources (first time only)
+   Click "Discover resources" → Select subscriptions → Click "Manage resource"
+   This onboards the subscription to PIM management.
+
+3. Select Subscription/Resource Group
+   Click on the resource scope (e.g., "RF-Production" subscription)
+
+4. Configure Role Settings
+   Click "Settings" → Select role (e.g., "Owner") → "Edit"
+   
+   Same options as Entra roles:
+   - Max duration: 2 hours
+   - Require MFA: Yes
+   - Require justification: Yes
+   - Require approval: Yes
+   - Select approvers: Platform Team Lead
+
+5. Add Eligible Assignments
+   Click "Assignments" → "Add assignments"
+   - Role: Owner
+   - Members: DevOps engineers who may need Owner
+   - Assignment type: Eligible
+   - Scope: This subscription (or specific resource group)
+
+6. Remove Standing Assignments
+   Review "Active assignments" → Remove any permanent Owner/Contributor
+   These users should be moved to Eligible only</code></pre>
+        </div>
+
+        <h2>Monitoring PIM Activity</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - PIM Activations</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// All PIM role activations in last 7 days
+AuditLogs
+| where TimeGenerated > ago(7d)
+| where OperationName == "Add member to role completed (PIM activation)"
+| extend RoleName = tostring(TargetResources[0].displayName)
+| extend ActivatedBy = tostring(InitiatedBy.user.userPrincipalName)
+| project TimeGenerated, ActivatedBy, RoleName, Result
+| order by TimeGenerated desc
+
+// Global Admin activations - HIGH PRIORITY MONITORING
+AuditLogs
+| where TimeGenerated > ago(7d)
+| where OperationName contains "PIM"
+| where TargetResources[0].displayName == "Global Administrator"
+| project TimeGenerated, 
+    User = InitiatedBy.user.userPrincipalName,
+    Operation = OperationName,
+    Result
+
+// PIM activations outside business hours (suspicious)
+AuditLogs
+| where TimeGenerated > ago(7d)
+| where OperationName == "Add member to role completed (PIM activation)"
+| extend Hour = datetime_part("hour", TimeGenerated)
+| where Hour < 6 or Hour > 22  // Outside 6 AM - 10 PM
+| extend RoleName = tostring(TargetResources[0].displayName)
+| extend ActivatedBy = tostring(InitiatedBy.user.userPrincipalName)
+| project TimeGenerated, ActivatedBy, RoleName
+
+// Failed PIM activations (denied or expired)
+AuditLogs
+| where TimeGenerated > ago(7d)
+| where OperationName contains "PIM"
+| where Result == "failure"
+| project TimeGenerated, 
+    User = InitiatedBy.user.userPrincipalName,
+    Operation = OperationName,
+    FailureReason = ResultReason</code></pre>
+        </div>
+
+        <h2>Common User Questions</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Question</th><th>Answer</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>"My role expired while I was working"</strong></td>
+                <td>Go back to PIM and activate again. Consider requesting longer duration next time (within policy limits).</td>
+              </tr>
+              <tr>
+                <td><strong>"I can't find the role I need"</strong></td>
+                <td>You may not be eligible for it. Contact your manager to request eligibility assignment from a PIM admin.</td>
+              </tr>
+              <tr>
+                <td><strong>"My request is stuck in pending"</strong></td>
+                <td>Approver hasn't responded yet. Contact the approver directly or wait (requests expire after 24h).</td>
+              </tr>
+              <tr>
+                <td><strong>"I need permanent access for my job"</strong></td>
+                <td>Zero standing privilege policy. Even daily tasks should use PIM. Request longer activation duration if needed.</td>
+              </tr>
+              <tr>
+                <td><strong>"Can I extend my active role?"</strong></td>
+                <td>No. You must wait for it to expire and activate again. Plan your duration accordingly.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Zero Standing Privilege Goal</div>
+          <div class="callout-content">
+            <p><strong>Target:</strong> No user has permanent Global Admin, Security Admin, or Azure Owner. 100% of privileged access through PIM with time-limited activations.</p>
+            <p><strong>Audit check:</strong> Monthly review of any active (non-eligible) assignments. Any standing privilege requires documented exception.</p>
+          </div>
+        </div>
+
+        <nav class="page-nav">
+          <a href="conditional-access.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Conditional Access</span></a>
+          <a href="../infrastructure/index.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Infrastructure →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>
