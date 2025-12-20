@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Splunk Reference | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+                  <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Preparation</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Migration Tracks</div>
+          <a href="../siem/index.html" class="nav-item"><span class="nav-track-indicator siem"></span>SIEM: RSA → Sentinel</a>
+          <a href="../siem/discovery.html" class="nav-item nav-item-sub">Discovery &amp; Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item nav-item-sub">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item nav-item-sub">Log Engineering</a>
+          <a href="../siem/detection-engineering.html" class="nav-item nav-item-sub">Detection Engineering</a>
+          <a href="../siem/soc-transition.html" class="nav-item nav-item-sub">SOC Transition</a>
+          <a href="../edr/index.html" class="nav-item"><span class="nav-track-indicator edr"></span>EDR: ESET → MDE</a>
+          <a href="../edr/coexistence.html" class="nav-item nav-item-sub">Coexistence Strategy</a>
+          <a href="../edr/deployment.html" class="nav-item nav-item-sub">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item nav-item-sub">ASR Rules Rollout</a>
+          <a href="../edr/eset-removal.html" class="nav-item nav-item-sub">ESET Decommission</a>
+          <a href="../dlp/index.html" class="nav-item"><span class="nav-track-indicator dlp"></span>DLP: Symantec → Purview</a>
+          <a href="../dlp/policy-translation.html" class="nav-item nav-item-sub">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item nav-item-sub">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item nav-item-sub">User Communication</a>
+          <a href="../identity/index.html" class="nav-item"><span class="nav-track-indicator identity"></span>Identity: AD → Entra ID</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item nav-item-sub">Hybrid Setup</a>
+          <a href="../identity/conditional-access.html" class="nav-item nav-item-sub">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item nav-item-sub">PIM</a>
+          <a href="../infrastructure/index.html" class="nav-item"><span class="nav-track-indicator infra"></span>Infrastructure: Azure</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item nav-item-sub">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item nav-item-sub">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item nav-item-sub">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/integration.html" class="nav-item">Integration Points</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Overview</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">Sentinel Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Interactive Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts &amp; Queries</a>
+          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="../resources/templates.html" class="nav-item">Templates</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="scripts.html">Resources</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Splunk Reference</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Splunk Knowledge Reference</h1>
+          <p class="intro-text">
+            Comprehensive reference for Splunk architecture, SPL queries, and deployment concepts. Organized to build conceptual understanding and demonstrate knowledge during interviews.
+          </p>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Purpose
+          </div>
+          <div class="callout-content">
+            <p>This page serves as a learning reference and interview preparation aid. It maps Splunk concepts to your existing Sentinel/SIEM knowledge to accelerate understanding.</p>
+          </div>
+        </div>
+
+        <h2>Splunk Architecture Overview</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Splunk Data Flow</span></div>
+          <pre><code>┌─────────────────────────────────────────────────────────────────────────────┐
+│                         SPLUNK ARCHITECTURE                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  DATA SOURCES                     COLLECTION                   PROCESSING   │
+│  ┌─────────────┐                 ┌─────────────┐             ┌─────────────┐│
+│  │ Windows     │────────────────▶│ Universal   │────────────▶│             ││
+│  │ Servers     │                 │ Forwarder   │             │             ││
+│  └─────────────┘                 └─────────────┘             │             ││
+│                                                               │             ││
+│  ┌─────────────┐                 ┌─────────────┐             │  INDEXERS   ││
+│  │ Linux       │────────────────▶│ Universal   │────────────▶│             ││
+│  │ Servers     │                 │ Forwarder   │             │  (Storage   ││
+│  └─────────────┘                 └─────────────┘             │   + Index)  ││
+│                                                               │             ││
+│  ┌─────────────┐                 ┌─────────────┐             │             ││
+│  │ Network     │────────────────▶│ Heavy       │────────────▶│             ││
+│  │ Devices     │  (Syslog)       │ Forwarder   │  (Parse)    │             ││
+│  └─────────────┘                 └─────────────┘             └──────┬──────┘│
+│                                                                      │       │
+│  ┌─────────────┐                                                     │       │
+│  │ Cloud/API   │─────────────────────────────────────────────────────┤       │
+│  │ Sources     │  (HTTP Event Collector - HEC)                       │       │
+│  └─────────────┘                                                     │       │
+│                                                                      │       │
+│                              SEARCH & VISUALIZATION                  │       │
+│                             ┌─────────────────────┐                  │       │
+│                             │    SEARCH HEADS     │◀─────────────────┘       │
+│                             │                     │                          │
+│                             │  • SPL Queries      │                          │
+│                             │  • Dashboards       │                          │
+│                             │  • Alerts           │                          │
+│                             │  • Reports          │                          │
+│                             └─────────────────────┘                          │
+│                                                                              │
+│                              MANAGEMENT                                      │
+│                             ┌─────────────────────┐                          │
+│                             │  DEPLOYMENT SERVER  │                          │
+│                             │  (Config Management)│                          │
+│                             └─────────────────────┘                          │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+        </div>
+
+        <h3>Core Components</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Component</th><th>Function</th><th>Sentinel Equivalent</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Universal Forwarder (UF)</strong></td>
+                <td>Lightweight agent that collects and forwards data. Minimal processing, low resource usage. Most common deployment.</td>
+                <td>Azure Monitor Agent (AMA)</td>
+              </tr>
+              <tr>
+                <td><strong>Heavy Forwarder (HF)</strong></td>
+                <td>Full Splunk instance that can parse, filter, and route data before forwarding. Used for syslog aggregation, data transformation.</td>
+                <td>Log Analytics Gateway, DCR transformations</td>
+              </tr>
+              <tr>
+                <td><strong>Indexer</strong></td>
+                <td>Processes incoming data, creates indexes, stores events, handles search requests for its data.</td>
+                <td>Log Analytics workspace (backend)</td>
+              </tr>
+              <tr>
+                <td><strong>Search Head</strong></td>
+                <td>User interface for searching, dashboards, alerts. Coordinates distributed searches across indexers.</td>
+                <td>Sentinel portal, Log Analytics query UI</td>
+              </tr>
+              <tr>
+                <td><strong>Deployment Server</strong></td>
+                <td>Centrally manages forwarder configurations. Pushes apps and settings to forwarders.</td>
+                <td>Intune policies, DCR assignments</td>
+              </tr>
+              <tr>
+                <td><strong>Cluster Master / Manager</strong></td>
+                <td>Coordinates indexer clustering for replication and high availability.</td>
+                <td>Azure's built-in HA (managed)</td>
+              </tr>
+              <tr>
+                <td><strong>License Master</strong></td>
+                <td>Manages and enforces Splunk licensing across deployment.</td>
+                <td>Azure subscription/billing</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Splunk Deployment Models</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Model</th><th>Description</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Splunk Cloud</strong></td>
+                <td>Fully managed SaaS. Splunk manages indexers, search heads, infrastructure. You manage forwarders and content.</td>
+                <td>Most new deployments, cloud-first orgs. Similar to Sentinel.</td>
+              </tr>
+              <tr>
+                <td><strong>Splunk Enterprise (On-Prem)</strong></td>
+                <td>Self-managed deployment. Full control over all components. You manage infrastructure, updates, scaling.</td>
+                <td>Air-gapped environments, strict data residency, existing investment.</td>
+              </tr>
+              <tr>
+                <td><strong>Hybrid</strong></td>
+                <td>Some data in Splunk Cloud, some on-prem. Federated search across both.</td>
+                <td>Transition scenarios, specific data sovereignty needs.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>SPL (Search Processing Language)</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            SPL vs KQL
+          </div>
+          <div class="callout-content">
+            <p>SPL uses pipe-based syntax like Unix commands. KQL uses a more SQL-like syntax. Both achieve similar results with different approaches.</p>
+          </div>
+        </div>
+
+        <h3>Basic SPL Syntax</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">SPL Basics</span></div>
+          <pre><code># Basic search (implicit AND)
+index=main sourcetype=WinEventLog EventCode=4625
+
+# Time range
+index=main earliest=-24h latest=now
+
+# Field extraction
+index=main | fields host, source, _time, user
+
+# Filtering with where
+index=main | where status="failed"
+
+# Counting
+index=main | stats count by host
+
+# Multiple conditions
+index=main sourcetype=WinEventLog (EventCode=4624 OR EventCode=4625)</code></pre>
+        </div>
+
+        <h3>SPL ↔ KQL Comparison</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Operation</th><th>SPL (Splunk)</th><th>KQL (Sentinel)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Basic search</strong></td>
+                <td><code>index=main error</code></td>
+                <td><code>search "error"</code></td>
+              </tr>
+              <tr>
+                <td><strong>Filter by field</strong></td>
+                <td><code>index=main status=500</code></td>
+                <td><code>| where status == 500</code></td>
+              </tr>
+              <tr>
+                <td><strong>Time filter</strong></td>
+                <td><code>earliest=-1h latest=now</code></td>
+                <td><code>| where TimeGenerated > ago(1h)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Count by field</strong></td>
+                <td><code>| stats count by host</code></td>
+                <td><code>| summarize count() by Computer</code></td>
+              </tr>
+              <tr>
+                <td><strong>Unique values</strong></td>
+                <td><code>| stats dc(user) as unique_users</code></td>
+                <td><code>| summarize dcount(user)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Top N</strong></td>
+                <td><code>| top 10 user</code></td>
+                <td><code>| top 10 by user</code></td>
+              </tr>
+              <tr>
+                <td><strong>Table output</strong></td>
+                <td><code>| table _time, host, message</code></td>
+                <td><code>| project TimeGenerated, Computer, Message</code></td>
+              </tr>
+              <tr>
+                <td><strong>Rename field</strong></td>
+                <td><code>| rename src_ip as SourceIP</code></td>
+                <td><code>| extend SourceIP = src_ip</code></td>
+              </tr>
+              <tr>
+                <td><strong>Sort</strong></td>
+                <td><code>| sort - _time</code></td>
+                <td><code>| order by TimeGenerated desc</code></td>
+              </tr>
+              <tr>
+                <td><strong>Join</strong></td>
+                <td><code>| join type=inner host [search index=assets]</code></td>
+                <td><code>| join kind=inner (Assets) on Computer</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Common SPL Commands</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">SPL Commands Reference</span></div>
+          <pre><code># STATS - Aggregate data
+| stats count, avg(response_time), max(bytes) by host
+
+# TIMECHART - Time-based aggregation (for dashboards)
+| timechart span=1h count by status
+
+# EVAL - Create/modify fields
+| eval status_category=if(status>=400, "error", "success")
+
+# REX - Regex field extraction
+| rex field=message "user=(?&lt;username&gt;\w+)"
+
+# TRANSACTION - Group related events
+| transaction session_id maxspan=30m
+
+# LOOKUP - Enrich with external data
+| lookup threat_intel ip as src_ip OUTPUT threat_type, severity
+
+# DEDUP - Remove duplicates
+| dedup host, user
+
+# EVENTSTATS - Stats without reducing rows
+| eventstats avg(response_time) as avg_rt by host
+
+# STREAMSTATS - Running calculations
+| streamstats count as event_number by session_id
+
+# TSTATS - Fast indexed field searches
+| tstats count where index=main by host, sourcetype</code></pre>
+        </div>
+
+        <h3>Security-Focused SPL Examples</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">SPL - Failed Login Detection</span></div>
+          <pre><code># Failed Windows logins in last 24 hours
+index=wineventlog sourcetype=WinEventLog:Security EventCode=4625 earliest=-24h
+| stats count by src_ip, user, host
+| where count > 5
+| sort - count
+
+# KQL equivalent:
+SecurityEvent
+| where TimeGenerated > ago(24h)
+| where EventID == 4625
+| summarize count() by IpAddress, Account, Computer
+| where count_ > 5
+| order by count_ desc</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">SPL - Process Execution</span></div>
+          <pre><code># Suspicious process execution (encoded PowerShell)
+index=wineventlog sourcetype=WinEventLog:Security EventCode=4688
+| search CommandLine="*-enc*" OR CommandLine="*-encoded*"
+| table _time, host, user, CommandLine
+| sort - _time
+
+# KQL equivalent:
+SecurityEvent
+| where EventID == 4688
+| where CommandLine contains "-enc" or CommandLine contains "-encoded"
+| project TimeGenerated, Computer, Account, CommandLine
+| order by TimeGenerated desc</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">SPL - Outbound Connection Anomaly</span></div>
+          <pre><code># Unusual outbound connections by volume
+index=network sourcetype=firewall action=allowed direction=outbound
+| stats sum(bytes_out) as total_bytes, count by src_ip, dest_ip
+| where total_bytes > 1000000000
+| sort - total_bytes
+| lookup geo_ip ip as dest_ip OUTPUT country
+
+# KQL equivalent:
+CommonSecurityLog
+| where DeviceAction == "Allow"
+| summarize TotalBytes=sum(SentBytes), Count=count() by SourceIP, DestinationIP
+| where TotalBytes > 1000000000
+| order by TotalBytes desc</code></pre>
+        </div>
+
+        <h2>Splunk Enterprise Security (ES)</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            What is Splunk ES?
+          </div>
+          <div class="callout-content">
+            <p>Splunk Enterprise Security is a premium SIEM application that runs on top of Splunk. It provides security-specific features like Notable Events, Risk Scoring, and pre-built content. Similar to how Sentinel's SIEM features are built into the platform.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Splunk ES Feature</th><th>Description</th><th>Sentinel Equivalent</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Notable Events</strong></td>
+                <td>Security alerts from correlation searches. Triaged in Incident Review dashboard.</td>
+                <td>Incidents</td>
+              </tr>
+              <tr>
+                <td><strong>Correlation Searches</strong></td>
+                <td>Scheduled searches that generate Notable Events when conditions are met.</td>
+                <td>Analytics Rules</td>
+              </tr>
+              <tr>
+                <td><strong>Risk-Based Alerting (RBA)</strong></td>
+                <td>Assigns risk scores to entities. Alerts when cumulative risk exceeds threshold.</td>
+                <td>UEBA, Entity behavior</td>
+              </tr>
+              <tr>
+                <td><strong>Asset & Identity Framework</strong></td>
+                <td>Enrich events with asset/identity context from HR, CMDB.</td>
+                <td>Watchlists, Entity mapping</td>
+              </tr>
+              <tr>
+                <td><strong>Threat Intelligence Framework</strong></td>
+                <td>Ingest and correlate IOCs from threat intel feeds.</td>
+                <td>Threat Intelligence connectors</td>
+              </tr>
+              <tr>
+                <td><strong>Security Posture Dashboard</strong></td>
+                <td>Executive view of security metrics and trends.</td>
+                <td>Workbooks, Overview dashboard</td>
+              </tr>
+              <tr>
+                <td><strong>Adaptive Response</strong></td>
+                <td>Automated response actions triggered by alerts.</td>
+                <td>Playbooks (Logic Apps)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Configuration Files</h2>
+
+        <p>Splunk configuration is file-based. Understanding these files helps with troubleshooting and deployment:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>File</th><th>Purpose</th><th>Location</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>inputs.conf</strong></td>
+                <td>Define data inputs (files, network ports, scripts)</td>
+                <td>$SPLUNK_HOME/etc/system/local/ or apps</td>
+              </tr>
+              <tr>
+                <td><strong>outputs.conf</strong></td>
+                <td>Define where forwarders send data (indexers)</td>
+                <td>Forwarders</td>
+              </tr>
+              <tr>
+                <td><strong>props.conf</strong></td>
+                <td>Define sourcetype properties, field extractions, timestamp parsing</td>
+                <td>Search heads, indexers</td>
+              </tr>
+              <tr>
+                <td><strong>transforms.conf</strong></td>
+                <td>Define field extractions, lookups, routing rules</td>
+                <td>Works with props.conf</td>
+              </tr>
+              <tr>
+                <td><strong>indexes.conf</strong></td>
+                <td>Define index settings (retention, storage paths)</td>
+                <td>Indexers</td>
+              </tr>
+              <tr>
+                <td><strong>savedsearches.conf</strong></td>
+                <td>Define alerts, scheduled searches, reports</td>
+                <td>Search heads</td>
+              </tr>
+              <tr>
+                <td><strong>server.conf</strong></td>
+                <td>Server settings (clustering, SSL, general config)</td>
+                <td>All components</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Data Onboarding Process</h2>
+
+        <div class="flow-diagram">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <strong>Identify Source</strong><br>
+              What data? Where is it? Format? Volume expected?
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <strong>Choose Collection Method</strong><br>
+              Universal Forwarder (files) | HEC (API) | Syslog (network) | DB Connect (databases)
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <strong>Configure Inputs</strong><br>
+              inputs.conf or Add Data wizard. Define sourcetype, index, host.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-content">
+              <strong>Configure Parsing</strong><br>
+              props.conf/transforms.conf. Timestamp extraction, field extraction, line breaking.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">5</div>
+            <div class="flow-step-content">
+              <strong>Validate</strong><br>
+              Search for data. Check field extraction. Verify timestamp. Test volume.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">6</div>
+            <div class="flow-step-content">
+              <strong>Build Content</strong><br>
+              Dashboards, alerts, reports. Enable ES content if applicable.
+            </div>
+          </div>
+        </div>
+
+        <h2>Splunk Licensing</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>License Type</th><th>Model</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Ingest-Based</strong></td>
+                <td>GB/day indexed</td>
+                <td>Traditional model. Pay for data volume ingested.</td>
+              </tr>
+              <tr>
+                <td><strong>Workload-Based (SVCs)</strong></td>
+                <td>Splunk Virtual Compute Units</td>
+                <td>Newer model. Based on compute used, not just volume.</td>
+              </tr>
+              <tr>
+                <td><strong>Splunk Cloud</strong></td>
+                <td>GB/day or workload</td>
+                <td>SaaS pricing, includes infrastructure.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            License Violations
+          </div>
+          <div class="callout-content">
+            <p>If you exceed your daily ingest license, Splunk will warn you. Multiple violations in a rolling window can disable search capabilities until resolved. Monitor license usage proactively.</p>
+          </div>
+        </div>
+
+        <h2>Best Practices</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Splunk Deployment Best Practices
+          </div>
+          <div class="callout-content">
+            <ul style="margin: 0; padding-left: 1.5rem;">
+              <li><strong>Use Universal Forwarders:</strong> Lightweight, easier to manage than Heavy Forwarders</li>
+              <li><strong>Index strategy:</strong> Separate indexes by sourcetype/retention needs</li>
+              <li><strong>Use apps:</strong> Package configurations as apps for portability</li>
+              <li><strong>Deployment Server:</strong> Centrally manage forwarder configs, don't manually configure each</li>
+              <li><strong>Test parsing:</strong> Validate props/transforms in dev before production</li>
+              <li><strong>Monitor license:</strong> Set up alerts for license usage approaching limits</li>
+              <li><strong>Use tstats:</strong> For high-volume searches, use accelerated data models</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>Certifications & Learning Path</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Certification</th><th>Focus</th><th>Relevance</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Splunk Core Certified User</strong></td>
+                <td>Basic SPL, navigation, dashboards</td>
+                <td>Foundation — validates your SOC analyst experience level</td>
+              </tr>
+              <tr>
+                <td><strong>Splunk Core Certified Power User</strong></td>
+                <td>Advanced SPL, reports, data models</td>
+                <td>Good target — shows depth beyond basic usage</td>
+              </tr>
+              <tr>
+                <td><strong>Splunk Enterprise Certified Admin</strong></td>
+                <td>Installation, configuration, management</td>
+                <td>Platform engineering focus — deployment experience</td>
+              </tr>
+              <tr>
+                <td><strong>Splunk Enterprise Security Certified Admin</strong></td>
+                <td>Splunk ES deployment and management</td>
+                <td>SIEM-specific — most relevant for security consulting</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Resources</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Resource</th><th>URL</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Splunk Docs</strong></td>
+                <td>docs.splunk.com</td>
+                <td>Official documentation — comprehensive</td>
+              </tr>
+              <tr>
+                <td><strong>Splunk Education</strong></td>
+                <td>education.splunk.com</td>
+                <td>Free training courses, certification paths</td>
+              </tr>
+              <tr>
+                <td><strong>Splunk Lantern</strong></td>
+                <td>lantern.splunk.com</td>
+                <td>Use case guidance, best practices</td>
+              </tr>
+              <tr>
+                <td><strong>Splunkbase</strong></td>
+                <td>splunkbase.splunk.com</td>
+                <td>Apps and add-ons marketplace</td>
+              </tr>
+              <tr>
+                <td><strong>Splunk Community</strong></td>
+                <td>community.splunk.com</td>
+                <td>Forums, Q&A, user discussions</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="scripts.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Scripts & Queries</span></a>
+          <a href="templates.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Templates →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

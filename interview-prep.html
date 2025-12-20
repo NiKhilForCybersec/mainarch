@@ -21,7 +21,7 @@
           </div>
         </div>
       </div>
-            <nav class="sidebar-nav">
+                        <nav class="sidebar-nav">
         <div class="nav-section">
           <div class="nav-section-title">Overview</div>
           <a href="index.html" class="nav-item">Executive Summary</a>
@@ -80,6 +80,7 @@
           <a href="resources/timeline.html" class="nav-item">Interactive Timeline</a>
           <a href="resources/raci.html" class="nav-item">RACI Matrix</a>
           <a href="resources/scripts.html" class="nav-item">Scripts &amp; Queries</a>
+          <a href="resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
           <a href="resources/templates.html" class="nav-item">Templates</a>
         </div>
       </nav>
@@ -138,7 +139,10 @@ I started my career as a SOC Analyst at Cognizant, where I worked with
 Splunk on alert triage, incident investigations, and log analysis. That 
 role gave me a strong foundation in how detections are used operationally, 
 what analysts need to investigate alerts efficiently, and how noisy 
-detections impact a SOC.
+detections impact a SOC. While my Splunk experience there was primarily 
+from the analyst and consumer side rather than platform administration, 
+it gave me solid foundational knowledge of SPL, dashboards, and how 
+Splunk fits into security operations.
 
 I then moved into security engineering at Infosys, where I worked with 
 enterprise security platforms such as the FireEye stack — HX, NX, and EX — 
@@ -162,9 +166,12 @@ Microsoft Purview, mainly around policy translation and audit-mode
 validation.
 
 Overall, my experience sits at the intersection of SIEM engineering, 
-endpoint security, and detection alignment, and I'm now looking to move 
-into a consulting role where I can apply this experience across different 
-client environments and security architectures."</code></pre>
+endpoint security, and detection alignment. While my hands-on SIEM 
+deployment experience is primarily with Sentinel, the core concepts — 
+log ingestion, parsing, detection engineering, SOC enablement — translate 
+directly. I'm confident in my ability to work with Splunk deployments 
+given my foundational knowledge and the transferable skills from my 
+Sentinel work."</code></pre>
           </div>
 
           <div class="callout info">
@@ -179,7 +186,7 @@ client environments and security architectures."</code></pre>
                     <tr><th>Role</th><th>Company</th><th>Focus</th><th>Key Skills</th></tr>
                   </thead>
                   <tbody>
-                    <tr><td>SOC Analyst</td><td>Cognizant</td><td>Alert triage, investigations</td><td>Splunk, log analysis, incident response</td></tr>
+                    <tr><td>SOC Analyst</td><td>Cognizant</td><td>Alert triage, investigations</td><td>Splunk (analyst/consumer), log analysis, IR</td></tr>
                     <tr><td>Security Engineer</td><td>Infosys</td><td>Platform engineering</td><td>FireEye (HX/NX/EX), Symantec DLP, EDR migrations</td></tr>
                     <tr><td>Security Engineer</td><td>Siemens subsidiary</td><td>SIEM &amp; endpoint migration</td><td>RSA→Sentinel, ESET→MDE, Symantec→Purview DLP</td></tr>
                   </tbody>
@@ -1415,6 +1422,228 @@ ABOUT CHALLENGES:
 
 Pick 2-3 based on conversation flow. Avoid questions answered earlier 
 or on their website.</code></pre>
+          </div>
+        </div>
+
+        <h2>Handling Splunk Experience Questions</h2>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Addressing the Gap Honestly
+          </div>
+          <div class="callout-content">
+            <p><strong>Your situation:</strong> Splunk experience from SOC analyst role (consumer/user), not enterprise deployment/administration. Strong conceptual knowledge and confidence in handling Splunk deployments based on transferable SIEM skills.</p>
+            <p><strong>Strategy:</strong> Be honest, demonstrate conceptual understanding, highlight transferable skills, show eagerness to ramp up.</p>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>If asked: "What's your Splunk experience?"</h3>
+          <p class="interview-context"><strong>Be honest but confident.</strong> Don't oversell, but don't undersell either.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"My Splunk experience comes from my SOC analyst role at Cognizant, where 
+I used it daily for alert triage, incident investigations, and log analysis. 
+I'm comfortable with SPL for querying and building dashboards, and I 
+understand how Splunk fits into security operations from the analyst 
+perspective.
+
+That said, I haven't done enterprise Splunk deployments or administration — 
+my hands-on SIEM platform engineering experience is primarily with Microsoft 
+Sentinel.
+
+However, I'm confident the core concepts transfer directly:
+• Log ingestion and parsing — same problem, different syntax
+• Detection engineering — correlation rules, alert tuning, use case development
+• Data onboarding — connectors, forwarders, data quality validation
+• Cost management — volume-based pricing, retention strategies
+
+I've also invested time in understanding Splunk architecture conceptually — 
+indexers, search heads, forwarders, deployment server — and I'm confident 
+I can ramp up quickly on the platform-specific details. The fundamentals 
+of SIEM engineering are the same; it's the implementation that differs."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>If asked: "Can you explain Splunk architecture?"</h3>
+          <p class="interview-context"><strong>Demonstrate conceptual knowledge.</strong> Show you understand even without hands-on deployment experience.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"At a high level, Splunk uses a distributed architecture with these 
+key components:
+
+FORWARDERS (Data Collection)
+• Universal Forwarder — lightweight agent on endpoints/servers
+• Heavy Forwarder — can parse and filter before forwarding
+• Similar to: Azure Monitor Agent, Sentinel connectors
+
+INDEXERS (Data Storage & Processing)
+• Receive data from forwarders
+• Parse, index, and store events
+• Handle search requests for their data
+• Similar to: Log Analytics workspace backend
+
+SEARCH HEADS (Query & Visualization)
+• User interface for searches, dashboards, alerts
+• Distribute searches across indexers
+• Similar to: Sentinel portal, Log Analytics query interface
+
+DEPLOYMENT SERVER (Management)
+• Centrally manage forwarder configurations
+• Push apps and configurations to forwarders
+• Similar to: Intune for agent policies, DCR management
+
+CLUSTER ARCHITECTURE (Enterprise Scale)
+• Indexer clustering for high availability and replication
+• Search head clustering for load balancing
+• Similar to: Azure's built-in HA for Sentinel
+
+The data flow is:
+Source → Forwarder → Indexer → Search Head → User
+
+For cloud deployments, Splunk Cloud abstracts much of this — similar to 
+how Sentinel is fully managed. But understanding the architecture helps 
+when troubleshooting data flow issues or planning capacity."</code></pre>
+          </div>
+        </div>
+
+        <h3>Splunk ↔ Sentinel Concept Mapping</h3>
+        <p>Demonstrating you understand the conceptual equivalents:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Concept</th><th>Splunk</th><th>Microsoft Sentinel</th><th>Your Experience</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Query Language</strong></td>
+                <td>SPL (Search Processing Language)</td>
+                <td>KQL (Kusto Query Language)</td>
+                <td>Comfortable with SPL basics, proficient in KQL</td>
+              </tr>
+              <tr>
+                <td><strong>Data Collection</strong></td>
+                <td>Universal/Heavy Forwarders, HEC</td>
+                <td>AMA, DCRs, Data Connectors</td>
+                <td>Hands-on with AMA, DCRs, custom connectors</td>
+              </tr>
+              <tr>
+                <td><strong>Data Storage</strong></td>
+                <td>Indexes</td>
+                <td>Log Analytics Tables</td>
+                <td>Designed table strategies for Sentinel</td>
+              </tr>
+              <tr>
+                <td><strong>Parsing</strong></td>
+                <td>props.conf, transforms.conf</td>
+                <td>DCR transformations, KQL functions</td>
+                <td>Built custom parsing in DCRs</td>
+              </tr>
+              <tr>
+                <td><strong>Detection Rules</strong></td>
+                <td>Correlation Searches, Alerts</td>
+                <td>Analytics Rules</td>
+                <td>Built and tuned analytics rules</td>
+              </tr>
+              <tr>
+                <td><strong>SOAR</strong></td>
+                <td>Splunk SOAR (Phantom)</td>
+                <td>Logic Apps, Playbooks</td>
+                <td>Experience with Sentinel playbooks</td>
+              </tr>
+              <tr>
+                <td><strong>Dashboards</strong></td>
+                <td>Splunk Dashboards</td>
+                <td>Workbooks</td>
+                <td>Built operational workbooks</td>
+              </tr>
+              <tr>
+                <td><strong>Cost Model</strong></td>
+                <td>Ingestion volume (GB/day)</td>
+                <td>Ingestion volume (GB/day)</td>
+                <td>Managed Sentinel cost optimization</td>
+              </tr>
+              <tr>
+                <td><strong>Enterprise Security</strong></td>
+                <td>Splunk ES (Premium App)</td>
+                <td>Built into Sentinel</td>
+                <td>Used Sentinel's native SIEM features</td>
+              </tr>
+              <tr>
+                <td><strong>Threat Intelligence</strong></td>
+                <td>Threat Intel Framework</td>
+                <td>TI Connectors, MDTI</td>
+                <td>Integrated TI feeds in Sentinel</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="interview-question">
+          <h3>If asked: "How would you approach a Splunk deployment for a new client?"</h3>
+          <p class="interview-context"><strong>Show methodology transfers.</strong> The approach is the same; tools differ.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"My approach would follow the same SIEM deployment methodology I used 
+with Sentinel:
+
+1. DISCOVERY
+   • Inventory existing log sources and security tools
+   • Understand detection requirements and compliance needs
+   • Assess current SOC maturity and workflows
+   • Identify quick wins and critical gaps
+
+2. ARCHITECTURE DESIGN
+   • Size the deployment based on expected ingest volume
+   • Decide: Splunk Cloud vs on-prem vs hybrid
+   • Plan forwarder deployment strategy
+   • Design index strategy for retention and performance
+
+3. DATA ONBOARDING (Prioritized)
+   • Priority 1: Identity, endpoint, cloud (detection anchors)
+   • Priority 2: Network and perimeter
+   • Priority 3: Application-specific sources
+   • Validate data quality at each stage
+
+4. DETECTION IMPLEMENTATION
+   • Enable Splunk ES content where applicable
+   • Translate existing rules or build new based on requirements
+   • Tune thresholds for the environment
+   • Validate with SOC before production
+
+5. SOC ENABLEMENT
+   • Build operational dashboards
+   • Create investigation playbooks
+   • Train analysts on SPL and workflows
+   • Establish feedback loop for continuous improvement
+
+The platform is different, but the methodology is the same. I'd lean on 
+Splunk documentation and potentially team members for platform-specific 
+implementation details while applying my SIEM engineering experience to 
+drive the overall approach."</code></pre>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Key Messages for Splunk Questions
+          </div>
+          <div class="callout-content">
+            <ul style="margin: 0; padding-left: 1.5rem;">
+              <li><strong>Be honest:</strong> "My hands-on deployment experience is with Sentinel, but..."</li>
+              <li><strong>Show understanding:</strong> Demonstrate conceptual knowledge of Splunk architecture</li>
+              <li><strong>Highlight transfer:</strong> "The core SIEM concepts are identical"</li>
+              <li><strong>Show confidence:</strong> "I'm confident I can ramp up quickly"</li>
+              <li><strong>Add value:</strong> "My Sentinel experience brings cross-platform perspective"</li>
+              <li><strong>Be eager:</strong> "I'm excited to deepen my Splunk skills in this role"</li>
+            </ul>
           </div>
         </div>
 
