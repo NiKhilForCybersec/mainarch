@@ -237,8 +237,42 @@ strong {
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.75px;
+  letter-spacing: 0.05em;
   color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  border-radius: 4px;
+  margin: 0 0.5rem;
+}
+
+.nav-section-title:hover {
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+}
+
+/* Chevron icon */
+.nav-section-chevron {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.nav-section.expanded .nav-section-chevron {
+  transform: rotate(180deg);
+}
+
+/* Items wrapper for collapse animation */
+.nav-items-wrapper {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.nav-section:not(.expanded) .nav-items-wrapper {
+  max-height: 0;
 }
 
 .nav-item {

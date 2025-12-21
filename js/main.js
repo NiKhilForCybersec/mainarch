@@ -3,12 +3,6 @@
    Main JavaScript
    ============================================ */
 
-// Prevent browser's automatic scroll restoration for the sidebar
-if ('scrollRestoration' in history) {
-  // We handle scroll restoration ourselves via sessionStorage
-  // This prevents conflicts with our sidebar scroll management
-}
-
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize all components
   initCodeCopy();
@@ -16,69 +10,84 @@ document.addEventListener('DOMContentLoaded', function() {
   initMobileMenu();
   setActiveNavItem();
   
-  // Initialize sidebar scroll LAST (after active item is set)
-  initSidebarScroll();
+  // Initialize collapsible sidebar sections
+  initCollapsibleSidebar();
 });
 
 /* ============================================
-   SIDEBAR SCROLL MANAGEMENT
-   Maintains scroll position when navigating
+   COLLAPSIBLE SIDEBAR SECTIONS
+   Click section titles to expand/collapse
    ============================================ */
 
-function initSidebarScroll() {
-  const sidebarNav = document.querySelector('.sidebar-nav');
-  if (!sidebarNav) return;
+function initCollapsibleSidebar() {
+  const sectionTitles = document.querySelectorAll('.nav-section-title');
   
-  // Step 1: Try to restore saved scroll position
-  const savedPosition = sessionStorage.getItem('sidebarScrollPos');
+  // Load saved state from localStorage
+  const savedState = JSON.parse(localStorage.getItem('sidebarState') || '{}');
   
-  if (savedPosition && parseInt(savedPosition) > 0) {
-    // Restore saved position immediately
-    sidebarNav.scrollTop = parseInt(savedPosition);
+  sectionTitles.forEach((title, index) => {
+    const section = title.closest('.nav-section');
+    const navItems = section.querySelectorAll('.nav-item');
+    const sectionKey = `section-${index}`;
     
-    // Also set it after a small delay in case browser resets it
-    setTimeout(() => {
-      sidebarNav.scrollTop = parseInt(savedPosition);
-    }, 50);
-  } else {
-    // No saved position, scroll active item into view after DOM is ready
-    setTimeout(() => {
-      scrollToActiveItem();
-    }, 50);
-  }
-  
-  // Step 2: Add click handlers to save position before navigation
-  const navLinks = document.querySelectorAll('.nav-item');
-  navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      // Save scroll position right before navigating
-      sessionStorage.setItem('sidebarScrollPos', sidebarNav.scrollTop.toString());
+    // Create wrapper for nav items (for animation)
+    const itemsWrapper = document.createElement('div');
+    itemsWrapper.className = 'nav-items-wrapper';
+    navItems.forEach(item => itemsWrapper.appendChild(item));
+    section.appendChild(itemsWrapper);
+    
+    // Check if this section contains the active page
+    const hasActivePage = section.querySelector('.nav-item.active') !== null;
+    
+    // Determine initial state: expand if has active page, otherwise use saved state
+    let isExpanded = hasActivePage;
+    if (!hasActivePage && savedState[sectionKey] !== undefined) {
+      isExpanded = savedState[sectionKey];
+    }
+    
+    // Set initial state
+    if (isExpanded) {
+      section.classList.add('expanded');
+      itemsWrapper.style.maxHeight = itemsWrapper.scrollHeight + 'px';
+    } else {
+      section.classList.remove('expanded');
+      itemsWrapper.style.maxHeight = '0';
+    }
+    
+    // Add click handler to toggle
+    title.addEventListener('click', function() {
+      const isCurrentlyExpanded = section.classList.contains('expanded');
+      
+      if (isCurrentlyExpanded) {
+        // Collapse
+        section.classList.remove('expanded');
+        itemsWrapper.style.maxHeight = '0';
+        savedState[sectionKey] = false;
+      } else {
+        // Expand
+        section.classList.add('expanded');
+        itemsWrapper.style.maxHeight = itemsWrapper.scrollHeight + 'px';
+        savedState[sectionKey] = true;
+      }
+      
+      // Save state
+      localStorage.setItem('sidebarState', JSON.stringify(savedState));
     });
+    
+    // Add chevron icon to title
+    const chevron = document.createElement('span');
+    chevron.className = 'nav-section-chevron';
+    chevron.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+    title.appendChild(chevron);
   });
-}
-
-/* Scroll the active item into view */
-function scrollToActiveItem() {
-  const sidebarNav = document.querySelector('.sidebar-nav');
-  const activeItem = document.querySelector('.nav-item.active');
   
-  if (!sidebarNav || !activeItem) return;
-  
-  // Calculate the position of active item relative to the sidebar-nav container
-  const sidebarNavRect = sidebarNav.getBoundingClientRect();
-  const activeItemRect = activeItem.getBoundingClientRect();
-  
-  // Calculate current scroll position and where active item is
-  const currentScroll = sidebarNav.scrollTop;
-  const activeItemTop = activeItemRect.top - sidebarNavRect.top + currentScroll;
-  const activeItemHeight = activeItem.offsetHeight;
-  const sidebarHeight = sidebarNav.clientHeight;
-  
-  // Calculate scroll position to center the active item
-  const targetScroll = activeItemTop - (sidebarHeight / 2) + (activeItemHeight / 2);
-  
-  // Apply scroll (clamped to valid range)
-  sidebarNav.scrollTop = Math.max(0, targetScroll);
+  // Scroll active item into view after sections are set up
+  setTimeout(() => {
+    const activeItem = document.querySelector('.nav-item.active');
+    if (activeItem) {
+      activeItem.scrollIntoView({ block: 'center', behavior: 'instant' });
+    }
+  }, 100);
 }
 
 /* ============================================
