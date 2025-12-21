@@ -398,12 +398,17 @@ Write-Host "Account contained. Document in SEC-INC-$IncidentNumber" -ForegroundC
         <h2>5. Phase 3: Investigation</h2>
         <h3>5.1 Investigation Queries (KQL)</h3>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - User Activity Investigation</span><button class="code-copy-btn">Copy</button></div>
+          <div class="code-header"><span class="code-lang">KQL - User Activity Investigation (Sentinel + XDR)</span><button class="code-copy-btn">Copy</button></div>
           <pre><code>// RF-INV-UserActivity.kql - Investigate compromised user
 // Replace: <UPN> with user principal name, <TIMEFRAME> with lookback
+// NOTE: Run identity queries in Sentinel, device queries in XDR Advanced Hunting
 
 let TargetUser = "<UPN>";
 let TimeFrame = <TIMEFRAME>; // e.g., 7d
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SENTINEL QUERIES (Azure Portal → Sentinel → Logs)
+// ═══════════════════════════════════════════════════════════════════════════
 
 // Sign-in activity
 SigninLogs
@@ -419,63 +424,77 @@ AuditLogs
 | where InitiatedBy.user.userPrincipalName =~ TargetUser
 | project TimeGenerated, OperationName, TargetResources, Result
 
+// ═══════════════════════════════════════════════════════════════════════════
+// XDR QUERIES (security.microsoft.com → Hunting → Advanced Hunting)
+// NOTE: XDR uses "Timestamp" not "TimeGenerated"
+// ═══════════════════════════════════════════════════════════════════════════
+
 // Email activity (if mailbox compromise suspected)
 EmailEvents
-| where TimeGenerated > ago(TimeFrame)
+| where Timestamp > ago(TimeFrame)
 | where SenderFromAddress =~ TargetUser or RecipientEmailAddress =~ TargetUser
-| project TimeGenerated, Subject, SenderFromAddress, RecipientEmailAddress, 
+| project Timestamp, Subject, SenderFromAddress, RecipientEmailAddress, 
           DeliveryAction, ThreatTypes
 
 // Endpoint activity (correlate via IdentityInfo)
 let UserSID = toscalar(IdentityInfo | where AccountUPN =~ TargetUser | take 1 | project AccountSID);
 DeviceLogonEvents
-| where TimeGenerated > ago(TimeFrame)
+| where Timestamp > ago(TimeFrame)
 | where AccountSid == UserSID
-| project TimeGenerated, DeviceName, ActionType, LogonType, RemoteIP</code></pre>
+| project Timestamp, DeviceName, ActionType, LogonType, RemoteIP</code></pre>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Where to Query Device Data</div>
+          <div class="callout-content">
+            <p><strong>Device telemetry (DeviceProcessEvents, DeviceNetworkEvents, etc.) is NOT ingested to Sentinel.</strong></p>
+            <p>Query in <strong>XDR Advanced Hunting</strong> at security.microsoft.com. XDR uses <code>Timestamp</code> not <code>TimeGenerated</code>.</p>
+          </div>
         </div>
 
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - Device Investigation</span><button class="code-copy-btn">Copy</button></div>
+          <div class="code-header"><span class="code-lang">KQL - Device Investigation (XDR Advanced Hunting)</span><button class="code-copy-btn">Copy</button></div>
           <pre><code>// RF-INV-DeviceActivity.kql - Investigate compromised device
-// Replace: <DEVICENAME> with hostname
+// WHERE TO RUN: security.microsoft.com → Hunting → Advanced Hunting
+// NOTE: XDR uses "Timestamp" not "TimeGenerated"
 
 let TargetDevice = "<DEVICENAME>";
 let TimeFrame = 7d;
 
 // Process execution timeline
 DeviceProcessEvents
-| where TimeGenerated > ago(TimeFrame)
+| where Timestamp > ago(TimeFrame)
 | where DeviceName =~ TargetDevice
-| project TimeGenerated, FileName, FolderPath, ProcessCommandLine, 
+| project Timestamp, FileName, FolderPath, ProcessCommandLine, 
           AccountName, InitiatingProcessFileName
-| order by TimeGenerated desc
+| order by Timestamp desc
 
 // Network connections
 DeviceNetworkEvents
-| where TimeGenerated > ago(TimeFrame)
+| where Timestamp > ago(TimeFrame)
 | where DeviceName =~ TargetDevice
 | where RemoteIP !startswith "10." and RemoteIP !startswith "192.168."
-| project TimeGenerated, ActionType, RemoteIP, RemotePort, RemoteUrl, 
+| project Timestamp, ActionType, RemoteIP, RemotePort, RemoteUrl, 
           InitiatingProcessFileName
-| summarize ConnectionCount=count(), FirstSeen=min(TimeGenerated), 
-            LastSeen=max(TimeGenerated) by RemoteIP, RemotePort
+| summarize ConnectionCount=count(), FirstSeen=min(Timestamp), 
+            LastSeen=max(Timestamp) by RemoteIP, RemotePort
 | order by ConnectionCount desc
 
 // File modifications
 DeviceFileEvents
-| where TimeGenerated > ago(TimeFrame)
+| where Timestamp > ago(TimeFrame)
 | where DeviceName =~ TargetDevice
 | where ActionType in ("FileCreated", "FileModified")
-| project TimeGenerated, ActionType, FileName, FolderPath, 
+| project Timestamp, ActionType, FileName, FolderPath, 
           InitiatingProcessFileName, SHA256
-| order by TimeGenerated desc
+| order by Timestamp desc
 
 // Alerts on this device
 AlertEvidence
-| where TimeGenerated > ago(TimeFrame)
+| where Timestamp > ago(TimeFrame)
 | where DeviceName =~ TargetDevice
 | join kind=inner AlertInfo on AlertId
-| project TimeGenerated, AlertId, Title, Severity, Category</code></pre>
+| project Timestamp, AlertId, Title, Severity, Category</code></pre>
         </div>
 
         <h2>6. Phase 4: Eradication & Recovery</h2>

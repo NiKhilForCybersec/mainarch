@@ -162,15 +162,21 @@
         </div>
 
         <h2>Key Integrations</h2>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>XDR-First Data Flow</div>
+          <div class="callout-content"><p><strong>Critical:</strong> We ingest XDR <em>alerts and incidents</em>, NOT raw endpoint telemetry. Raw Device* tables stay in XDR and are queried via Advanced Hunting. This saves ~$15K/month.</p></div>
+        </div>
+
         <div class="table-wrapper">
           <table>
             <thead>
               <tr><th>Integration</th><th>Data Flow</th><th>Value</th></tr>
             </thead>
             <tbody>
-              <tr><td><strong>M365 Defender → Sentinel</strong></td><td>Incidents + raw events</td><td>Unified incident queue, endpoint telemetry in KQL</td></tr>
+              <tr><td><strong>M365 Defender → Sentinel</strong></td><td>Alerts + Incidents only (NOT raw telemetry)</td><td>Unified incident queue, correlation with identity/network</td></tr>
               <tr><td><strong>Purview → Sentinel</strong></td><td>DLP alerts</td><td>Correlate data exfiltration with identity events</td></tr>
-              <tr><td><strong>Entra ID → Sentinel</strong></td><td>Sign-in + audit logs</td><td>Identity threat detection base data</td></tr>
+              <tr><td><strong>Entra ID → Sentinel</strong></td><td>Sign-in + audit logs (control-plane)</td><td>Identity changes XDR doesn't capture</td></tr>
               <tr><td><strong>Defender for Cloud → Sentinel</strong></td><td>Security alerts + recommendations</td><td>Cloud misconfig visibility</td></tr>
             </tbody>
           </table>
