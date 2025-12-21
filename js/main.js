@@ -24,6 +24,7 @@ function initCollapsibleSidebar() {
   
   // Load saved state from localStorage
   const savedState = JSON.parse(localStorage.getItem('sidebarState') || '{}');
+  const hasSeenBefore = localStorage.getItem('sidebarInitialized');
   
   sectionTitles.forEach((title, index) => {
     const section = title.closest('.nav-section');
@@ -39,10 +40,15 @@ function initCollapsibleSidebar() {
     // Check if this section contains the active page
     const hasActivePage = section.querySelector('.nav-item.active') !== null;
     
-    // Determine initial state: expand if has active page, otherwise use saved state
-    let isExpanded = hasActivePage;
-    if (!hasActivePage && savedState[sectionKey] !== undefined) {
-      isExpanded = savedState[sectionKey];
+    // Determine initial state:
+    // - Section with active page: always expand
+    // - First visit: expand all sections
+    // - Return visit: use saved state (default to expanded)
+    let isExpanded = true; // Default expanded
+    if (hasActivePage) {
+      isExpanded = true; // Always expand active section
+    } else if (hasSeenBefore && savedState[sectionKey] !== undefined) {
+      isExpanded = savedState[sectionKey]; // Use saved preference
     }
     
     // Set initial state
@@ -81,6 +87,9 @@ function initCollapsibleSidebar() {
     title.appendChild(chevron);
   });
   
+  // Mark as initialized
+  localStorage.setItem('sidebarInitialized', 'true');
+  
   // Scroll active item into view after sections are set up
   setTimeout(() => {
     const activeItem = document.querySelector('.nav-item.active');
@@ -96,20 +105,44 @@ function initCollapsibleSidebar() {
    ============================================ */
 
 function setActiveNavItem() {
+  // Get current page filename
   const currentPath = window.location.pathname;
-  const currentPage = currentPath.split('/').pop() || 'index.html';
+  const pathParts = currentPath.split('/').filter(p => p.length > 0);
+  
+  // Get the last part (filename) or use index.html for directories
+  let currentPage = pathParts[pathParts.length - 1] || 'index.html';
+  if (!currentPage.includes('.html')) {
+    currentPage = 'index.html';
+  }
+  
+  // Also get the folder if we're in a subfolder
+  let currentFolder = '';
+  if (pathParts.length >= 2 && pathParts[pathParts.length - 1].includes('.html')) {
+    currentFolder = pathParts[pathParts.length - 2];
+  }
+  
   const navItems = document.querySelectorAll('.nav-item');
   
   navItems.forEach(item => {
     const href = item.getAttribute('href');
     if (!href) return;
     
-    // Get the filename from the href
-    const hrefPage = href.split('/').pop();
+    // Parse the href to get folder and page
+    const hrefParts = href.replace('../', '').split('/');
+    const hrefPage = hrefParts[hrefParts.length - 1];
+    const hrefFolder = hrefParts.length > 1 ? hrefParts[hrefParts.length - 2] : '';
     
-    // Check if this nav item matches current page
-    if (currentPage === hrefPage) {
-      item.classList.add('active');
+    // Match if both folder and page match (or just page for root-level files)
+    if (currentFolder && hrefFolder) {
+      // We're in a subfolder, match folder + page
+      if (currentFolder === hrefFolder && currentPage === hrefPage) {
+        item.classList.add('active');
+      }
+    } else if (!currentFolder && !hrefFolder) {
+      // We're at root, match just page
+      if (currentPage === hrefPage) {
+        item.classList.add('active');
+      }
     }
   });
 }
@@ -295,7 +328,7 @@ function formatDate(date) {
    ============================================ */
 
 window.SecurityDocs = {
-  scrollToActiveItem,
+  initCollapsibleSidebar,
   initCodeCopy,
   initTimeline,
   setActiveNavItem
