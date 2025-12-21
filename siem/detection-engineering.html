@@ -601,9 +601,23 @@ TOTAL COVERAGE: 312 XDR techniques + 347 Sentinel rules = 659 detections
           <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Why 347 Sentinel Rules is Correct</div>
           <div class="callout-content">
             <p><strong>RSA had 487 rules → Sentinel has 347 rules.</strong> This is NOT a reduction in coverage.</p>
-            <p>XDR handles 312 endpoint/identity/email techniques natively — those don't need Sentinel rules.</p>
-            <p>Sentinel gained 230 NEW rules that RSA never had: comprehensive SaaS coverage (Salesforce, Workday, NetSuite, GitHub), business logic correlation, SOC 2/GDPR compliance monitoring, and XDR + network correlation.</p>
-            <p><strong>Total coverage: 659 detections</strong> (312 XDR + 347 Sentinel) — appropriate for a B2B SaaS company with SOC 2/ISO 27001 requirements.</p>
+            <p><strong>XDR handles 312 techniques natively</strong> — endpoint, identity, email detections don't need Sentinel rules.</p>
+            <p><strong>230 NEW rules built from scratch</strong> — NOT migrated from RSA because RSA never had them:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>SaaS coverage: Salesforce, Workday, NetSuite, GitHub (RSA had 17 rules total for all SaaS)</li>
+              <li>Business logic: Terminated employee correlation, VIP monitoring (RSA couldn't integrate with HR)</li>
+              <li>Compliance: SOC 2 controls, GDPR data access (RSA had zero compliance rules)</li>
+              <li>XDR correlation: Higher-order detection (RSA had no XDR to correlate with)</li>
+            </ul>
+            <p><strong>Total coverage: 659 detections</strong> (312 XDR + 347 Sentinel) — this is EXPANSION, not reduction.</p>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Common Misconception</div>
+          <div class="callout-content">
+            <p><strong>Misconception:</strong> "If RSA had proper coverage, new rules should come from RSA."</p>
+            <p><strong>Reality:</strong> RSA did NOT have proper coverage. It was deployed in 2018 for an on-prem environment. By 2024, RevFlow was 90% cloud with crown jewels in SaaS apps RSA never monitored. Migration exposed the gaps; it didn't create them.</p>
           </div>
         </div>
 
@@ -677,6 +691,11 @@ SecurityAlert
             </thead>
             <tbody>
               <tr>
+                <td><strong>Assuming legacy SIEM had adequate coverage</strong></td>
+                <td>RSA was deployed for 2018 threat landscape; crown jewels moved to SaaS since then</td>
+                <td>Assess current crown jewels → build coverage for actual risks, not just what RSA had</td>
+              </tr>
+              <tr>
                 <td><strong>1:1 rule translation</strong></td>
                 <td>Ignores XDR native coverage</td>
                 <td>Evaluate outcomes, not rule logic</td>
@@ -700,6 +719,11 @@ SecurityAlert
                 <td><strong>Rebuilding XDR correlation</strong></td>
                 <td>XDR already correlates within domains</td>
                 <td>Only build cross-domain correlation in Sentinel</td>
+              </tr>
+              <tr>
+                <td><strong>Not building new coverage</strong></td>
+                <td>Migration exposes gaps legacy SIEM never addressed</td>
+                <td>Use migration as opportunity to modernize detection program</td>
               </tr>
             </tbody>
           </table>

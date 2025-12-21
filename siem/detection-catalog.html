@@ -185,12 +185,92 @@
           </div>
         </div>
 
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Why Migration ≠ Lift-and-Shift</div>
+          <div class="callout-content">
+            <p><strong>RSA NetWitness did NOT have adequate coverage.</strong> It was deployed in 2018 when RevFlow was primarily on-prem with limited cloud/SaaS adoption. The rule set reflected that era — network-centric, endpoint-focused, with minimal cloud coverage.</p>
+            <p>This migration is a <strong>detection modernization</strong>, not a translation exercise.</p>
+          </div>
+        </div>
+
         <div class="callout info">
           <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Understanding the Numbers</div>
           <div class="callout-content">
-            <p><strong>487 RSA rules evaluated</strong> → 312 retired to XDR, 117 migrated to Sentinel, 58 dropped</p>
-            <p><strong>+230 new Sentinel rules created</strong> for coverage gaps: SaaS applications, business logic, compliance monitoring, and higher-order correlation that RSA NetWitness never had.</p>
-            <p><strong>Total Sentinel detection rules: 347</strong> — appropriate for a B2B SaaS company with SOC 2/ISO 27001 requirements.</p>
+            <p><strong>487 RSA rules evaluated:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>312 retired to XDR</strong> — Endpoint, identity, email detection now handled by Microsoft Defender with superior fidelity</li>
+              <li><strong>117 migrated to Sentinel</strong> — Network, cloud infrastructure rules rewritten in KQL</li>
+              <li><strong>58 dropped</strong> — Stale IOCs, generic thresholds, single-event noise with no detection value</li>
+            </ul>
+            <p style="margin-top: 0.75rem;"><strong>+230 new Sentinel rules</strong> — NOT derived from RSA. Built from scratch to cover gaps RSA never addressed:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>SaaS application monitoring (Salesforce, Workday, NetSuite, GitHub) — RSA had no connectors</li>
+              <li>Business logic detection (terminated employee correlation, VIP monitoring) — RSA couldn't correlate with HR systems</li>
+              <li>Compliance monitoring (SOC 2 controls, GDPR data access) — RSA had no compliance framework</li>
+              <li>Higher-order XDR correlation — RSA had no XDR to correlate with</li>
+            </ul>
+            <p style="margin-top: 0.75rem;"><strong>Total Sentinel detection rules: 347</strong> — appropriate for B2B SaaS with SOC 2/ISO 27001.</p>
+          </div>
+        </div>
+
+        <h3>1.1 RSA NetWitness Coverage Gaps (Why New Rules Were Needed)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Coverage Domain</th><th>RSA State (2018-2024)</th><th>Gap</th><th>New Sentinel Rules</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SaaS Applications</strong></td>
+                <td>17 rules — basic OAuth/API abuse only</td>
+                <td>No Salesforce, Workday, NetSuite, GitHub coverage despite these being crown jewels</td>
+                <td>+70 new SaaS rules</td>
+              </tr>
+              <tr>
+                <td><strong>Business Logic</strong></td>
+                <td>14 rules — generic insider threat</td>
+                <td>No HR system integration, no terminated employee correlation, no VIP monitoring</td>
+                <td>+38 new business logic rules</td>
+              </tr>
+              <tr>
+                <td><strong>Compliance Monitoring</strong></td>
+                <td>0 rules</td>
+                <td>No SOC 2 control monitoring, no GDPR data access tracking, no admin change auditing</td>
+                <td>+45 new compliance rules</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud Infrastructure</strong></td>
+                <td>34 rules — basic AWS only</td>
+                <td>Limited Azure coverage, no IAM deep monitoring, no data plane detection</td>
+                <td>+34 new cloud rules</td>
+              </tr>
+              <tr>
+                <td><strong>DLP Correlation</strong></td>
+                <td>0 rules</td>
+                <td>Symantec DLP was not integrated with RSA — siloed alerting</td>
+                <td>+18 new DLP correlation rules</td>
+              </tr>
+              <tr>
+                <td><strong>XDR Correlation</strong></td>
+                <td>0 rules (no XDR)</td>
+                <td>ESET had no SIEM integration — no higher-order correlation possible</td>
+                <td>+19 new XDR correlation rules</td>
+              </tr>
+              <tr>
+                <td><strong>Network Security</strong></td>
+                <td>52 rules</td>
+                <td>Coverage existed but needed KQL rewrite + modernization</td>
+                <td>+6 enhanced network rules</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Interview Talking Point</div>
+          <div class="callout-content">
+            <p><em>"The RSA migration wasn't lift-and-shift — it was detection modernization. RSA was deployed in 2018 when the company was 70% on-prem. By 2024, we were 90% cloud with crown jewels in Salesforce and Workday. RSA had 17 SaaS rules total; we needed 87. It had zero compliance monitoring; we needed 45 rules for SOC 2. The 230 new rules aren't gaps we discovered — they're coverage for a threat landscape RSA was never designed to address."</em></p>
           </div>
         </div>
 
