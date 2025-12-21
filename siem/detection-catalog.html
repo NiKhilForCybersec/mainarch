@@ -8,102 +8,111 @@
 </head>
 <body>
   <div class="layout">
-    <nav class="sidebar">
+        <aside class="sidebar">
       <div class="sidebar-header">
-        <h2>Security Transformation</h2>
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
       </div>
-      <ul class="sidebar-nav">
-        <li><a href="../index.html">Overview</a></li>
-        <li><a href="../company-profile.html">Company Profile</a></li>
-        <li><a href="../program-structure.html">Program Structure</a></li>
-        <li><a href="../security-framework.html">Security Framework</a></li>
-        <li class="nav-section">
-          <span class="nav-section-title">SIEM Migration</span>
-          <ul>
-            <li><a href="index.html">SIEM Overview</a></li>
-            <li><a href="discovery.html">Discovery & Assessment</a></li>
-            <li><a href="log-sources.html">Log Source Strategy</a></li>
-            <li><a href="log-engineering.html">Log Engineering</a></li>
-            <li><a href="detection-engineering.html">Detection Engineering</a></li>
-            <li><a href="detection-catalog.html" class="active">Detection Catalog</a></li>
-            <li><a href="soc-transition.html">SOC Transition</a></li>
-          </ul>
-        </li>
-        <li class="nav-section">
-          <span class="nav-section-title">EDR Migration</span>
-          <ul>
-            <li><a href="../edr/index.html">EDR Overview</a></li>
-            <li><a href="../edr/deployment.html">MDE Deployment</a></li>
-            <li><a href="../edr/asr-rules.html">ASR Rules</a></li>
-            <li><a href="../edr/coexistence.html">Coexistence Strategy</a></li>
-            <li><a href="../edr/eset-removal.html">ESET Removal</a></li>
-          </ul>
-        </li>
-        <li class="nav-section">
-          <span class="nav-section-title">DLP Migration</span>
-          <ul>
-            <li><a href="../dlp/index.html">DLP Overview</a></li>
-            <li><a href="../dlp/policy-translation.html">Policy Translation</a></li>
-            <li><a href="../dlp/rollout-phases.html">Rollout Phases</a></li>
-            <li><a href="../dlp/user-communication.html">User Communication</a></li>
-          </ul>
-        </li>
-        <li class="nav-section">
-          <span class="nav-section-title">Identity</span>
-          <ul>
-            <li><a href="../identity/index.html">Identity Overview</a></li>
-            <li><a href="../identity/hybrid-setup.html">Hybrid Setup</a></li>
-            <li><a href="../identity/conditional-access.html">Conditional Access</a></li>
-            <li><a href="../identity/pim.html">PIM Configuration</a></li>
-          </ul>
-        </li>
-        <li class="nav-section">
-          <span class="nav-section-title">Infrastructure</span>
-          <ul>
-            <li><a href="../infrastructure/index.html">Infrastructure Overview</a></li>
-            <li><a href="../infrastructure/landing-zone.html">Landing Zone</a></li>
-            <li><a href="../infrastructure/network-architecture.html">Network Architecture</a></li>
-            <li><a href="../infrastructure/workload-migration.html">Workload Migration</a></li>
-          </ul>
-        </li>
-        <li class="nav-section">
-          <span class="nav-section-title">Operations</span>
-          <ul>
-            <li><a href="../operations/parallel-ops.html">Parallel Operations</a></li>
-            <li><a href="../operations/soc-workflows.html">SOC Workflows</a></li>
-            <li><a href="../operations/integration.html">Platform Integration</a></li>
-            <li><a href="../operations/xdr-integration.html">XDR Integration</a></li>
-          </ul>
-        </li>
-        <li class="nav-section">
-          <span class="nav-section-title">Troubleshooting</span>
-          <ul>
-            <li><a href="../troubleshooting/index.html">Common Issues</a></li>
-            <li><a href="../troubleshooting/siem-issues.html">SIEM Issues</a></li>
-            <li><a href="../troubleshooting/mde-issues.html">MDE Issues</a></li>
-            <li><a href="../troubleshooting/dlp-issues.html">DLP Issues</a></li>
-            <li><a href="../troubleshooting/agent-conflicts.html">Agent Conflicts</a></li>
-          </ul>
-        </li>
-        <li class="nav-section">
-          <span class="nav-section-title">Resources</span>
-          <ul>
-            <li><a href="../resources/timeline.html">Project Timeline</a></li>
-            <li><a href="../resources/raci.html">RACI Matrix</a></li>
-            <li><a href="../resources/scripts.html">Useful Scripts</a></li>
-            <li><a href="../resources/templates.html">Templates</a></li>
-            <li><a href="../resources/splunk-reference.html">Splunk Reference</a></li>
-          </ul>
-        </li>
-        <li class="nav-section">
-          <span class="nav-section-title">Career</span>
-          <ul>
-            <li><a href="../career-narrative.html">Career Narrative</a></li>
-            <li><a href="../interview-prep.html">Interview Prep</a></li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-catalog.html" class="nav-item active">Detection Catalog</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="../infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="../operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="../operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="../resources/templates.html" class="nav-item">Templates</a>
+          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="../resources/incident-response.html" class="nav-item">Incident Response</a>
+          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
 
     <main class="main-content">
       <div class="content-wrapper">
@@ -123,8 +132,25 @@
             <span class="page-reading-time">Comprehensive Reference</span>
           </div>
           <p class="intro-text">
-            Complete reference for detection engineering: connectors, tables, built-in rules, custom detections, Sigma-to-KQL workflow, and how the detection strategy changes with XDR. This page includes two catalogs: <strong>Catalog A (Without XDR)</strong> showing current state, and <strong>Catalog B (With XDR)</strong> showing future state after XDR integration.
+            Complete reference for detection engineering following the <strong>XDR-first approach</strong>: XDR handles endpoint, identity, and email detection natively while Sentinel owns network, Azure, custom apps, and higher-order correlation. This right-sized approach results in ~270 Sentinel rules (not 500+) from Day 1.
           </p>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            XDR-First Detection Strategy
+          </div>
+          <div class="callout-content">
+            <p><strong>Key Insight:</strong> In the Microsoft ecosystem, correlation is layered — XDR handles endpoint + identity + email correlation upstream, and Sentinel handles network + Azure + custom apps. Don't rebuild detections XDR handles natively.</p>
+            <p><strong>Result:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>XDR Handles:</strong> ~350 detection categories (endpoint, identity, email, cloud apps)</li>
+              <li><strong>Sentinel Owns:</strong> ~270 rules (network, Azure, DLP, custom, higher-order)</li>
+              <li><strong>Benefit:</strong> Right-sized effort, 12-month timeline, XDR correlation from Day 1</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">👉 <strong><a href="../operations/xdr-integration.html">Full XDR-First Strategy Documentation →</a></strong></p>
+          </div>
         </div>
 
         <div class="callout info">
@@ -133,12 +159,28 @@
             Detection Catalog Overview
           </div>
           <div class="callout-content">
-            <p><strong>Microsoft Sentinel Content Hub</strong> provides 250+ solutions with 1,050+ analytics rule templates. For our environment (4,000 employees, 9,000 endpoints), we deployed 15 solutions and enabled ~580 detection rules.</p>
-            <p><strong>Two Catalogs:</strong></p>
+            <p><strong>Microsoft Sentinel Content Hub</strong> provides 250+ solutions with 1,050+ analytics rule templates. For our environment (4,000 employees, 9,000 endpoints), we deployed 12 solutions focused on Sentinel's domain (network, Azure, DLP) and enabled <strong>~270 detection rules</strong>.</p>
+            <p><strong>Detection Ownership:</strong></p>
             <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li><strong>Catalog A:</strong> Without XDR — All detections run in Sentinel (current state)</li>
-              <li><strong>Catalog B:</strong> With XDR — Detections split between XDR and Sentinel (future state)</li>
+              <li><strong>XDR (M365 Defender):</strong> Endpoint, identity, email, cloud app detection — automatic, Microsoft-managed</li>
+              <li><strong>Sentinel:</strong> Network, Azure, DLP, custom apps, higher-order correlation — ~270 user-authored rules</li>
             </ul>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            XDR Detection Model ≠ SIEM Detection Model
+          </div>
+          <div class="callout-content">
+            <p><strong>This catalog contains Sentinel rules only — not XDR detections.</strong> XDR detections are:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Microsoft-managed</strong> — you cannot see the exact logic, cannot edit them</li>
+              <li><strong>Behavior + ML-based</strong> — continuously updated by Microsoft</li>
+              <li><strong>Automatic correlation</strong> — no correlation rules to configure</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">XDR handles ~350 detection categories automatically. This catalog documents the ~270 Sentinel rules for domains XDR doesn't cover. The phrase "XDR detection rules" is almost a misnomer — XDR has detections, but they're not rules you author.</p>
           </div>
         </div>
 
@@ -438,48 +480,58 @@
           </table>
         </div>
 
-        <h3>Connector Summary</h3>
+        <h3>Connector Summary (XDR-First Selective Ingestion)</h3>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Selective Ingestion Principle
+          </div>
+          <div class="callout-content">
+            <p><strong>With XDR enabled:</strong> We consume XDR incidents (SecurityIncident, SecurityAlert) and selectively ingest only raw tables needed for cross-domain correlation. We do NOT ingest all Device* tables — XDR handles that detection.</p>
+          </div>
+        </div>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Connector</th><th>Tables</th><th>Primary Use Cases</th><th>Volume (Est.)</th><th>Rules Enabled</th></tr>
+              <tr><th>Connector</th><th>Tables Ingested</th><th>Ingestion Strategy</th><th>Volume (Est.)</th><th>Sentinel Rules</th></tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Microsoft 365 Defender</td>
-                <td>11 tables (Device*, Alert*)</td>
-                <td>Endpoint detection, process analysis, network connections</td>
-                <td>~150 GB/day (free)</td>
-                <td>78 rules</td>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td>Microsoft 365 Defender (XDR)</td>
+                <td>SecurityIncident, SecurityAlert, DeviceNetworkEvents (selective)</td>
+                <td><strong>XDR incidents only</strong> — raw Device* tables NOT ingested except DeviceNetworkEvents for firewall correlation</td>
+                <td>~25 GB/day</td>
+                <td>0 (XDR handles)</td>
               </tr>
               <tr>
                 <td>Entra ID</td>
-                <td>7 tables</td>
-                <td>Identity detections, sign-in anomalies, privilege escalation</td>
+                <td>SigninLogs, AuditLogs, AADRiskyUsers</td>
+                <td>Identity logs for higher-order correlation (XDR + CA context)</td>
                 <td>~5 GB/day</td>
-                <td>65 rules</td>
+                <td>8 rules (edge cases)</td>
               </tr>
               <tr>
                 <td>Azure Activity</td>
-                <td>1 table</td>
-                <td>Cloud resource changes, admin actions</td>
+                <td>AzureActivity</td>
+                <td>Full ingestion — Sentinel owns Azure control plane detection</td>
                 <td>~500 MB/day (free)</td>
                 <td>28 rules</td>
               </tr>
               <tr>
                 <td>Defender for Cloud</td>
-                <td>3 tables</td>
-                <td>Cloud security alerts, recommendations</td>
+                <td>SecurityAlert</td>
+                <td>Cloud security alerts — Sentinel owns</td>
                 <td>~200 MB/day (free)</td>
-                <td>35 rules</td>
+                <td>22 rules</td>
               </tr>
               <tr>
                 <td>Windows Security Events</td>
-                <td>1 table</td>
-                <td>Domain controller logs, server authentication</td>
-                <td>~10 GB/day</td>
-                <td>42 rules</td>
+                <td>SecurityEvent (DC only)</td>
+                <td>Domain controller logs only — MDI handles most AD detection</td>
+                <td>~5 GB/day</td>
+                <td>15 rules</td>
               </tr>
               <tr>
                 <td>Syslog/CEF (Palo Alto)</td>
@@ -572,31 +624,35 @@
             <tbody>
               <tr>
                 <td><strong>Built-in (Microsoft)</strong></td>
-                <td>Sentinel Content Hub (15 solutions)</td>
-                <td>Pre-built analytics rules from Microsoft and partners</td>
-                <td>~350 enabled</td>
+                <td>Sentinel Content Hub (12 solutions)</td>
+                <td>Pre-built analytics rules for Sentinel's domain (network, Azure, DLP)</td>
+                <td>~145 enabled</td>
               </tr>
               <tr>
                 <td><strong>Custom (KQL)</strong></td>
                 <td>Internal development</td>
-                <td>Organization-specific detections</td>
-                <td>~85 rules</td>
+                <td>Organization-specific detections (non-Microsoft sources)</td>
+                <td>~65 rules</td>
               </tr>
               <tr>
                 <td><strong>Sigma-Converted</strong></td>
                 <td>SigmaHQ community rules</td>
-                <td>Community detections converted to KQL</td>
-                <td>~120 rules</td>
-              </tr>
-              <tr>
-                <td><strong>Correlation Rules</strong></td>
-                <td>Internal development</td>
-                <td>Multi-table joins for complex attack patterns</td>
+                <td>Network, cloud, and custom app detections converted to KQL</td>
                 <td>~25 rules</td>
               </tr>
+              <tr>
+                <td><strong>Higher-Order Correlation</strong></td>
+                <td>Internal development</td>
+                <td>XDR incidents + non-Microsoft context (firewall, DLP, critical assets)</td>
+                <td>~35 rules</td>
+              </tr>
               <tr style="font-weight: bold; background: rgba(139, 92, 246, 0.1);">
-                <td colspan="3"><strong>TOTAL DETECTION RULES</strong></td>
-                <td><strong>~580 rules</strong></td>
+                <td colspan="3"><strong>TOTAL SENTINEL RULES</strong></td>
+                <td><strong>~270 rules</strong></td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td colspan="3"><em>XDR handles endpoint, identity, email, cloud apps (~350 detection types) — not counted here</em></td>
+                <td></td>
               </tr>
             </tbody>
           </table>
@@ -604,39 +660,66 @@
 
         <h3>2.2 Solutions Deployed from Content Hub</h3>
 
+        <p>With XDR-first approach, Sentinel Content Hub solutions focus on network, Azure, and non-Microsoft sources. XDR-covered domains (endpoint, identity, email) are handled by M365 Defender directly.</p>
+
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Solution</th><th>Analytics Rules</th><th>Hunting Queries</th><th>Workbooks</th><th>Playbooks</th></tr>
+              <tr><th>Solution</th><th>Analytics Rules</th><th>Enabled</th><th>Domain</th></tr>
             </thead>
             <tbody>
-              <tr><td>Microsoft 365 Defender</td><td>78</td><td>45</td><td>3</td><td>8</td></tr>
-              <tr><td>Microsoft Entra ID</td><td>65</td><td>38</td><td>4</td><td>12</td></tr>
-              <tr><td>Windows Security Events</td><td>42</td><td>52</td><td>2</td><td>3</td></tr>
-              <tr><td>Palo Alto Networks</td><td>38</td><td>22</td><td>2</td><td>5</td></tr>
-              <tr><td>UEBA</td><td>35</td><td>28</td><td>3</td><td>2</td></tr>
-              <tr><td>Microsoft Defender for Cloud</td><td>35</td><td>18</td><td>2</td><td>6</td></tr>
-              <tr><td>Azure Activity</td><td>28</td><td>25</td><td>1</td><td>4</td></tr>
-              <tr><td>Threat Intelligence</td><td>25</td><td>15</td><td>2</td><td>3</td></tr>
-              <tr><td>Office 365</td><td>22</td><td>18</td><td>2</td><td>4</td></tr>
-              <tr><td>Network Session Essentials</td><td>22</td><td>12</td><td>1</td><td>2</td></tr>
-              <tr><td>DNS Essentials</td><td>18</td><td>14</td><td>1</td><td>2</td></tr>
-              <tr><td>Linux Syslog</td><td>18</td><td>12</td><td>1</td><td>1</td></tr>
-              <tr><td>Azure SQL</td><td>15</td><td>8</td><td>1</td><td>2</td></tr>
-              <tr><td>Purview DLP</td><td>12</td><td>6</td><td>1</td><td>3</td></tr>
-              <tr><td>Azure Key Vault</td><td>12</td><td>8</td><td>1</td><td>2</td></tr>
+              <tr><td>Palo Alto Networks</td><td>38</td><td>32</td><td>Network Security</td></tr>
+              <tr><td>Azure Activity</td><td>28</td><td>25</td><td>Azure Infrastructure</td></tr>
+              <tr><td>Network Session Essentials</td><td>22</td><td>18</td><td>Network Security</td></tr>
+              <tr><td>DNS Essentials</td><td>18</td><td>15</td><td>Network Security</td></tr>
+              <tr><td>Microsoft Defender for Cloud</td><td>35</td><td>22</td><td>Azure Security</td></tr>
+              <tr><td>Threat Intelligence</td><td>25</td><td>8</td><td>TI (non-Microsoft feeds)</td></tr>
+              <tr><td>Linux Syslog</td><td>18</td><td>12</td><td>Linux Servers</td></tr>
+              <tr><td>Azure SQL</td><td>15</td><td>10</td><td>Database Security</td></tr>
+              <tr><td>Purview DLP</td><td>12</td><td>12</td><td>Data Protection</td></tr>
+              <tr><td>Azure Key Vault</td><td>12</td><td>10</td><td>Secrets Management</td></tr>
+              <tr><td>UEBA</td><td>35</td><td>8</td><td>Behavior Analytics (edge cases)</td></tr>
+              <tr><td>Custom Application Connectors</td><td>—</td><td>22</td><td>Business Apps</td></tr>
               <tr style="font-weight: bold; background: rgba(139, 92, 246, 0.1);">
-                <td>TOTAL</td><td>465</td><td>321</td><td>27</td><td>59</td>
+                <td>TOTAL SENTINEL</td><td>—</td><td>~145</td><td></td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <p><em>Note: 350 of 465 available analytics rules are enabled. Remaining 115 are disabled due to: no relevant data source, high false positive rate, or covered by custom rules.</em></p>
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            What About Endpoint, Identity, Email Solutions?
+          </div>
+          <div class="callout-content">
+            <p>You may notice we did <strong>not</strong> deploy these Content Hub solutions:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Microsoft 365 Defender</strong> (78 rules) — XDR handles natively</li>
+              <li><strong>Microsoft Entra ID</strong> (65 rules) — XDR + Entra ID Protection handles</li>
+              <li><strong>Windows Security Events</strong> (42 rules) — XDR + MDE handles better</li>
+              <li><strong>Office 365</strong> (22 rules) — XDR + MDO handles</li>
+            </ul>
+            <p>These would duplicate XDR's built-in capabilities. Instead, XDR incidents flow to Sentinel for unified incident management.</p>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Threat Intelligence & Context Sources
+          </div>
+          <div class="callout-content">
+            <p><strong>TI in XDR:</strong> Microsoft global threat intel (built-in) — inline enrichment for alerts. You can't manage external feeds in XDR.</p>
+            <p><strong>TI in Sentinel:</strong> External TI feeds (MISP, commercial, open-source) are ingested and correlated with network, cloud, and XDR incidents. <strong>Sentinel is the TI management and correlation engine.</strong></p>
+            <p style="margin-top: 0.5rem;"><strong>Vulnerability context:</strong> XDR (via TVM) sees managed endpoint vulnerabilities. Sentinel correlates with external scanners (Qualys, Nessus) and broader asset context (CMDB, business criticality).</p>
+            <p style="margin-top: 0.5rem;">👉 <strong><a href="../operations/xdr-integration.html#xdr-correlation-scope">Full XDR Correlation Scope Documentation →</a></strong></p>
+          </div>
+        </div>
 
         <h3>2.3 MITRE ATT&CK Coverage</h3>
 
-        <p>Our detection catalog is mapped to MITRE ATT&CK. Current coverage across 580 rules:</p>
+        <p>Combined MITRE coverage across XDR + Sentinel. XDR handles most endpoint/identity techniques; Sentinel adds network, cloud, and higher-order correlation:</p>
 
         <div class="table-wrapper">
           <table>
@@ -1788,665 +1871,352 @@ level: medium</code></pre>
           </div>
         </div>
 
-        <!-- ==================== SECTION 7: DETECTION CATALOGS ==================== -->
-        <h2>7. Detection Catalogs</h2>
+        <!-- ==================== SECTION 7: XDR-FIRST DETECTION CATALOG ==================== -->
+        <h2>7. XDR-First Detection Catalog</h2>
 
-        <p>Below are two complete detection catalogs showing the detection landscape before and after XDR integration.</p>
+        <p>Following the XDR-first approach, detection ownership is split between Microsoft 365 Defender XDR and Microsoft Sentinel from Day 1. This right-sized catalog shows what Sentinel owns (~270 rules) vs. what XDR handles natively.</p>
 
-        <!-- ==================== CATALOG A: WITHOUT XDR ==================== -->
-        <h3 id="catalog-a">Catalog A: Without XDR (Current State)</h3>
-
-        <div class="callout info">
+        <div class="callout success">
           <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Current Architecture: SIEM-Centric
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            XDR-First Architecture: Right-Sized from Day 1
           </div>
           <div class="callout-content">
-            <p><strong>All 580 detection rules run in Microsoft Sentinel.</strong> Sentinel is the detection brain — all correlation, alerting, and incident creation happens in Sentinel. MDE/M365 Defender provides telemetry but XDR correlation features are not leveraged.</p>
+            <p><strong>Detection ownership is defined upfront, not discovered later.</strong> XDR handles endpoint, identity, email, and cloud apps with automatic cross-domain correlation. Sentinel handles network, Azure infrastructure, DLP, custom apps, and higher-order correlation that combines XDR incidents with non-Microsoft context.</p>
+            <p style="margin-top: 0.5rem;"><strong>Result:</strong> ~270 Sentinel rules (not 500+), 12-month migration, XDR benefits from Day 1.</p>
           </div>
         </div>
 
-        <h4>Catalog A: Summary by Domain</h4>
+        <h3>7.1 Detection Ownership Summary</h3>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Domain</th><th>Built-in</th><th>Custom</th><th>Sigma</th><th>Correlation</th><th>Total</th><th>Primary Tables</th></tr>
+              <tr><th>Domain</th><th>Detection Owner</th><th>Sentinel Rules</th><th>Why</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong>Endpoint Security</strong></td>
-                <td>95</td>
-                <td>22</td>
-                <td>48</td>
-                <td>5</td>
-                <td>170</td>
-                <td>DeviceProcessEvents, DeviceNetworkEvents, DeviceFileEvents, DeviceRegistryEvents</td>
+                <td><strong>Endpoint (Windows/Mac/Linux)</strong></td>
+                <td><span class="status-badge" style="background: #22c55e; color: white;">XDR (MDE)</span></td>
+                <td>0</td>
+                <td>MDE has kernel-level visibility, AMSI, behavioral analysis</td>
               </tr>
               <tr>
-                <td><strong>Identity & Access</strong></td>
+                <td><strong>Identity (Entra ID + On-Prem AD)</strong></td>
+                <td><span class="status-badge" style="background: #22c55e; color: white;">XDR (Entra + MDI)</span></td>
+                <td>0</td>
+                <td>ML-based risk detection, DC monitoring, impossible travel</td>
+              </tr>
+              <tr>
+                <td><strong>Email (M365)</strong></td>
+                <td><span class="status-badge" style="background: #22c55e; color: white;">XDR (MDO)</span></td>
+                <td>0</td>
+                <td>Content analysis, sandbox detonation, Safe Links</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud Apps (M365 SaaS)</strong></td>
+                <td><span class="status-badge" style="background: #22c55e; color: white;">XDR (MDCA)</span></td>
+                <td>0</td>
+                <td>OAuth visibility, user behavior analytics</td>
+              </tr>
+              <tr>
+                <td><strong>Network (Firewall/IDS)</strong></td>
+                <td><span class="status-badge" style="background: #3b82f6; color: white;">Sentinel</span></td>
+                <td>85</td>
+                <td>Palo Alto, DNS, network traffic not in XDR</td>
+              </tr>
+              <tr>
+                <td><strong>Azure Infrastructure</strong></td>
+                <td><span class="status-badge" style="background: #3b82f6; color: white;">Sentinel</span></td>
                 <td>65</td>
+                <td>Azure control plane not in M365 Defender</td>
+              </tr>
+              <tr>
+                <td><strong>Higher-Order Correlation</strong></td>
+                <td><span class="status-badge" style="background: #3b82f6; color: white;">Sentinel</span></td>
+                <td>35</td>
+                <td>XDR incidents + non-Microsoft context</td>
+              </tr>
+              <tr>
+                <td><strong>DLP (Purview)</strong></td>
+                <td><span class="status-badge" style="background: #3b82f6; color: white;">Sentinel</span></td>
+                <td>25</td>
+                <td>DLP alerting + exfiltration correlation</td>
+              </tr>
+              <tr>
+                <td><strong>Custom Applications</strong></td>
+                <td><span class="status-badge" style="background: #3b82f6; color: white;">Sentinel</span></td>
+                <td>22</td>
+                <td>Business-specific detection logic</td>
+              </tr>
+              <tr>
+                <td><strong>Linux Servers</strong></td>
+                <td><span class="status-badge" style="background: #3b82f6; color: white;">Sentinel</span></td>
                 <td>18</td>
+                <td>Syslog-based edge cases</td>
+              </tr>
+              <tr>
+                <td><strong>Third-Party SaaS</strong></td>
+                <td><span class="status-badge" style="background: #3b82f6; color: white;">Sentinel</span></td>
                 <td>15</td>
-                <td>6</td>
-                <td>104</td>
-                <td>SigninLogs, AuditLogs, AADRiskyUsers, SecurityEvent (DC)</td>
-              </tr>
-              <tr>
-                <td><strong>Network Security</strong></td>
-                <td>58</td>
-                <td>12</td>
-                <td>22</td>
-                <td>4</td>
-                <td>96</td>
-                <td>CommonSecurityLog, DeviceNetworkEvents, AzureNetworkAnalytics</td>
-              </tr>
-              <tr>
-                <td><strong>Cloud Security (Azure)</strong></td>
-                <td>52</td>
-                <td>15</td>
-                <td>8</td>
-                <td>3</td>
-                <td>78</td>
-                <td>AzureActivity, SecurityAlert, AzureDiagnostics</td>
-              </tr>
-              <tr>
-                <td><strong>Email & Collaboration</strong></td>
-                <td>22</td>
-                <td>5</td>
-                <td>6</td>
-                <td>2</td>
-                <td>35</td>
-                <td>OfficeActivity, EmailEvents, EmailAttachmentInfo</td>
-              </tr>
-              <tr>
-                <td><strong>Data Protection (DLP)</strong></td>
-                <td>12</td>
-                <td>6</td>
-                <td>2</td>
-                <td>1</td>
-                <td>21</td>
-                <td>PurviewDLPLogs, OfficeActivity</td>
-              </tr>
-              <tr>
-                <td><strong>User Behavior (UEBA)</strong></td>
-                <td>35</td>
-                <td>4</td>
-                <td>5</td>
-                <td>2</td>
-                <td>46</td>
-                <td>BehaviorAnalytics, IdentityInfo, UserPeerAnalytics</td>
+                <td>Non-Microsoft cloud apps</td>
               </tr>
               <tr>
                 <td><strong>Threat Intelligence</strong></td>
-                <td>25</td>
-                <td>3</td>
+                <td><span class="status-badge" style="background: #3b82f6; color: white;">Sentinel</span></td>
                 <td>8</td>
-                <td>2</td>
-                <td>38</td>
-                <td>ThreatIntelligenceIndicator, all tables (IOC matching)</td>
+                <td>Non-Microsoft TI feeds (ISAC, commercial)</td>
               </tr>
               <tr style="font-weight: bold; background: rgba(139, 92, 246, 0.1);">
-                <td>TOTAL</td>
-                <td>350</td>
-                <td>85</td>
-                <td>120</td>
-                <td>25</td>
-                <td>580</td>
+                <td colspan="2"><strong>TOTAL SENTINEL RULES</strong></td>
+                <td><strong>~270</strong></td>
                 <td></td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h4>Catalog A: Endpoint Security Rules (170 Rules)</h4>
+        <h3>7.2 Network Security Rules (85 Rules)</h3>
+
+        <p>Sentinel owns all network/firewall detections — XDR has no visibility into Palo Alto, DNS servers, or network appliances.</p>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Category</th><th>Rule Count</th><th>Example Rules</th><th>MITRE Tactics</th></tr>
+              <tr><th>Detection</th><th>MITRE</th><th>Severity</th><th>Table</th><th>Type</th></tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Process Execution</td>
-                <td>42</td>
-                <td>Encoded PowerShell, LSASS Access, Suspicious Parent-Child, LOLBins, WMI Execution</td>
-                <td>Execution, Defense Evasion</td>
-              </tr>
-              <tr>
-                <td>Persistence Mechanisms</td>
-                <td>28</td>
-                <td>Registry Run Keys, Scheduled Tasks, Services, Startup Folder, WMI Subscriptions</td>
-                <td>Persistence</td>
-              </tr>
-              <tr>
-                <td>Credential Theft</td>
-                <td>22</td>
-                <td>LSASS Dumping, SAM Access, Mimikatz Patterns, Credential Manager Access</td>
-                <td>Credential Access</td>
-              </tr>
-              <tr>
-                <td>Defense Evasion</td>
-                <td>25</td>
-                <td>AV Tampering, Log Clearing, Timestomping, Process Hollowing, Indicator Removal</td>
-                <td>Defense Evasion</td>
-              </tr>
-              <tr>
-                <td>Lateral Movement</td>
-                <td>18</td>
-                <td>PsExec, WMI Remote, RDP Hijacking, SMB Lateral, Pass-the-Hash</td>
-                <td>Lateral Movement</td>
-              </tr>
-              <tr>
-                <td>Malware Indicators</td>
-                <td>20</td>
-                <td>Known Malware Hashes, Ransomware Patterns, Webshell Detection, Rootkit Indicators</td>
-                <td>Execution, Impact</td>
-              </tr>
-              <tr>
-                <td>File Operations</td>
-                <td>15</td>
-                <td>Mass File Encryption, Suspicious Downloads, Temp File Execution, Script Drops</td>
-                <td>Collection, Impact</td>
-              </tr>
+              <tr><td>C2 Beaconing Pattern (Regular Intervals)</td><td>T1071.001</td><td>High</td><td>CommonSecurityLog</td><td>Custom</td></tr>
+              <tr><td>DNS Tunneling Detection</td><td>T1071.004</td><td>High</td><td>DnsEvents</td><td>Built-in</td></tr>
+              <tr><td>High-Entropy Domain Requests (DGA)</td><td>T1568.002</td><td>Medium</td><td>DnsEvents</td><td>Custom</td></tr>
+              <tr><td>Port Scan Detection</td><td>T1046</td><td>Medium</td><td>CommonSecurityLog</td><td>Built-in</td></tr>
+              <tr><td>Firewall Allow After Repeated Denies</td><td>T1190</td><td>High</td><td>CommonSecurityLog</td><td>Custom</td></tr>
+              <tr><td>Unusual Outbound Port Usage</td><td>T1571</td><td>Medium</td><td>CommonSecurityLog</td><td>Built-in</td></tr>
+              <tr><td>Large Data Transfer to External IP (&gt;100MB)</td><td>T1048</td><td>High</td><td>CommonSecurityLog</td><td>Custom</td></tr>
+              <tr><td>Connection to Known Bad IP (TI Match)</td><td>T1071</td><td>High</td><td>CommonSecurityLog + TI</td><td>Built-in</td></tr>
+              <tr><td>SSH Brute Force</td><td>T1110</td><td>Medium</td><td>Syslog</td><td>Built-in</td></tr>
+              <tr><td>RDP from External IP</td><td>T1021.001</td><td>High</td><td>CommonSecurityLog</td><td>Built-in</td></tr>
+              <tr><td>Non-Standard DNS Port Traffic</td><td>T1571</td><td>Medium</td><td>CommonSecurityLog</td><td>Custom</td></tr>
+              <tr><td>ICMP Tunnel Detection</td><td>T1095</td><td>Medium</td><td>CommonSecurityLog</td><td>Custom</td></tr>
+              <tr><td>Multiple Failed VPN Authentications</td><td>T1110</td><td>Medium</td><td>CommonSecurityLog</td><td>Built-in</td></tr>
+              <tr><td>Traffic to Tor Exit Nodes</td><td>T1090.003</td><td>High</td><td>CommonSecurityLog + TI</td><td>Built-in</td></tr>
+              <tr><td>Unusual Protocol on Standard Port</td><td>T1571</td><td>Medium</td><td>CommonSecurityLog</td><td>Custom</td></tr>
             </tbody>
           </table>
         </div>
+        <p><em>+ 70 additional network rules covering IDS alerts, geographic anomalies, bandwidth abuse, protocol violations</em></p>
 
-        <h4>Catalog A: Identity & Access Rules (104 Rules)</h4>
+        <h3>7.3 Azure Infrastructure Rules (65 Rules)</h3>
+
+        <p>Azure control plane activity is not in M365 Defender scope — Sentinel owns these detections.</p>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Category</th><th>Rule Count</th><th>Example Rules</th><th>MITRE Tactics</th></tr>
+              <tr><th>Detection</th><th>MITRE</th><th>Severity</th><th>Table</th><th>Type</th></tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Authentication Anomalies</td>
-                <td>28</td>
-                <td>Impossible Travel, Brute Force, Password Spray, MFA Fatigue, Token Theft</td>
-                <td>Initial Access, Credential Access</td>
-              </tr>
-              <tr>
-                <td>Privilege Escalation</td>
-                <td>22</td>
-                <td>Admin Role Assignment, PIM Activation, Privileged Group Modification</td>
-                <td>Privilege Escalation</td>
-              </tr>
-              <tr>
-                <td>Account Manipulation</td>
-                <td>18</td>
-                <td>New Admin Account, Service Principal Credentials, Guest Invites, Account Modifications</td>
-                <td>Persistence</td>
-              </tr>
-              <tr>
-                <td>Conditional Access</td>
-                <td>12</td>
-                <td>CA Policy Bypass, Legacy Auth Usage, Risky Location Sign-in</td>
-                <td>Defense Evasion</td>
-              </tr>
-              <tr>
-                <td>Application Consent</td>
-                <td>10</td>
-                <td>Illicit Consent Grant, High-Risk App Permissions, OAuth App Abuse</td>
-                <td>Persistence, Privilege Escalation</td>
-              </tr>
-              <tr>
-                <td>Kerberos Attacks</td>
-                <td>14</td>
-                <td>Kerberoasting, Golden Ticket, Silver Ticket, AS-REP Roasting, DCSync</td>
-                <td>Credential Access</td>
-              </tr>
+              <tr><td>Resource Deletion by New Principal</td><td>T1485</td><td>High</td><td>AzureActivity</td><td>Custom</td></tr>
+              <tr><td>NSG Rule Modified to Allow All</td><td>T1562.007</td><td>Critical</td><td>AzureActivity</td><td>Built-in</td></tr>
+              <tr><td>Key Vault Secret Accessed from New IP</td><td>T1552.001</td><td>High</td><td>AzureDiagnostics</td><td>Custom</td></tr>
+              <tr><td>Bulk Key Vault Secret Download</td><td>T1552.001</td><td>Critical</td><td>AzureDiagnostics</td><td>Custom</td></tr>
+              <tr><td>Azure AD Role Assignment (Global Admin)</td><td>T1098.003</td><td>Critical</td><td>AuditLogs</td><td>Built-in</td></tr>
+              <tr><td>Custom Role Created with High Privileges</td><td>T1098</td><td>High</td><td>AzureActivity</td><td>Custom</td></tr>
+              <tr><td>Storage Account Public Access Enabled</td><td>T1530</td><td>High</td><td>AzureActivity</td><td>Built-in</td></tr>
+              <tr><td>VM Run Command Execution</td><td>T1059</td><td>High</td><td>AzureActivity</td><td>Built-in</td></tr>
+              <tr><td>Diagnostic Settings Deleted</td><td>T1562.008</td><td>High</td><td>AzureActivity</td><td>Built-in</td></tr>
+              <tr><td>Subscription Transferred Out</td><td>T1537</td><td>Critical</td><td>AzureActivity</td><td>Built-in</td></tr>
+              <tr><td>Azure Policy Disabled</td><td>T1562</td><td>High</td><td>AzureActivity</td><td>Custom</td></tr>
+              <tr><td>Mass Resource Creation (Cryptomining)</td><td>T1496</td><td>High</td><td>AzureActivity</td><td>Custom</td></tr>
+              <tr><td>SQL Firewall Rule: Allow All</td><td>T1562</td><td>High</td><td>AzureDiagnostics</td><td>Built-in</td></tr>
+              <tr><td>Service Principal Secret Added</td><td>T1098.001</td><td>Medium</td><td>AuditLogs</td><td>Built-in</td></tr>
+              <tr><td>Automation Runbook Modified</td><td>T1059</td><td>Medium</td><td>AzureActivity</td><td>Built-in</td></tr>
             </tbody>
           </table>
         </div>
+        <p><em>+ 50 additional Azure rules covering AKS, App Service, Functions, Cosmos DB, networking changes</em></p>
 
-        <h4>Catalog A: Network Security Rules (96 Rules)</h4>
+        <h3>7.4 Higher-Order Correlation Rules (35 Rules)</h3>
+
+        <p>These are Sentinel's <strong>unique value-add</strong>: correlating XDR incidents with context XDR can't see (network, Azure, DLP, critical assets).</p>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Category</th><th>Rule Count</th><th>Example Rules</th><th>MITRE Tactics</th></tr>
+              <tr><th>Rule Name</th><th>Correlation</th><th>Severity</th><th>Business Value</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>Command & Control</td>
-                <td>22</td>
-                <td>Beaconing Patterns, DNS Tunneling, Rare Domain Connections, Known C2 IPs</td>
-                <td>Command & Control</td>
+                <td><strong>XDR Incident + Large Outbound Transfer</strong></td>
+                <td>SecurityIncident (XDR) + CommonSecurityLog (bytes &gt; 100MB)</td>
+                <td>Critical</td>
+                <td>Detect data exfiltration from compromised device</td>
               </tr>
               <tr>
-                <td>Data Exfiltration</td>
-                <td>15</td>
-                <td>Large Outbound Transfers, Cloud Storage Uploads, Unusual Protocols</td>
-                <td>Exfiltration</td>
+                <td><strong>XDR Incident + DLP Block</strong></td>
+                <td>SecurityIncident (XDR) + PurviewDLPLogs (block action)</td>
+                <td>Critical</td>
+                <td>Confirm exfiltration attempt from compromised user</td>
               </tr>
               <tr>
-                <td>Firewall Events</td>
-                <td>25</td>
-                <td>Repeated Denies, Port Scanning, Unusual Ports, Internal Scanning</td>
-                <td>Reconnaissance, Lateral Movement</td>
+                <td><strong>XDR Incident + Critical Asset</strong></td>
+                <td>SecurityIncident (XDR) + Watchlist (crown jewels)</td>
+                <td>Critical</td>
+                <td>Auto-escalate incidents on critical systems</td>
               </tr>
               <tr>
-                <td>DNS Anomalies</td>
-                <td>18</td>
-                <td>DGA Detection, DNS Rebinding, Suspicious TLDs, High Entropy Domains</td>
-                <td>Command & Control</td>
+                <td><strong>XDR Incident + VIP User</strong></td>
+                <td>SecurityIncident (XDR) + Watchlist (executives)</td>
+                <td>Critical</td>
+                <td>Auto-escalate incidents involving executives</td>
               </tr>
               <tr>
-                <td>Web Traffic</td>
-                <td>16</td>
-                <td>Suspicious User Agents, Malicious URLs, Drive-by Downloads, Web Shells</td>
-                <td>Initial Access, Command & Control</td>
+                <td><strong>XDR Identity Incident + Key Vault Access</strong></td>
+                <td>SecurityIncident (identity) + AzureDiagnostics (secret access)</td>
+                <td>Critical</td>
+                <td>Detect secret theft after credential compromise</td>
+              </tr>
+              <tr>
+                <td><strong>XDR Identity Incident + Azure Resource Change</strong></td>
+                <td>SecurityIncident (identity) + AzureActivity (modify/delete)</td>
+                <td>High</td>
+                <td>Detect cloud infrastructure abuse</td>
+              </tr>
+              <tr>
+                <td><strong>XDR Incident + Third-Party TI Match</strong></td>
+                <td>SecurityIncident (XDR) + ThreatIntelligenceIndicator (ISAC)</td>
+                <td>High</td>
+                <td>Enrich with non-Microsoft threat intel</td>
+              </tr>
+              <tr>
+                <td><strong>XDR Incident + After-Hours Activity</strong></td>
+                <td>SecurityIncident (XDR) + TimeGenerated outside business hours</td>
+                <td>Medium</td>
+                <td>Flag incidents outside normal working hours</td>
+              </tr>
+              <tr>
+                <td><strong>XDR Endpoint + Firewall Deny to Same Dest</strong></td>
+                <td>SecurityIncident (endpoint) + CommonSecurityLog (deny + allow)</td>
+                <td>High</td>
+                <td>Detect malware attempting blocked destinations</td>
+              </tr>
+              <tr>
+                <td><strong>XDR Email Incident + DLP Violation Same User</strong></td>
+                <td>SecurityIncident (email) + PurviewDLPLogs (same user, 1hr)</td>
+                <td>Critical</td>
+                <td>Detect BEC + data theft in progress</td>
               </tr>
             </tbody>
           </table>
         </div>
+        <p><em>+ 25 additional higher-order rules covering regulatory assets, geographic anomalies, multi-stage attacks</em></p>
 
-        <h4>Catalog A: Cloud Security Rules (78 Rules)</h4>
+        <h3>7.5 DLP Context Rules (25 Rules)</h3>
+
+        <p>Purview DLP alerting and correlation with security incidents.</p>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Category</th><th>Rule Count</th><th>Example Rules</th><th>MITRE Tactics</th></tr>
+              <tr><th>Detection</th><th>Severity</th><th>Table</th><th>Action</th></tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Resource Changes</td>
-                <td>20</td>
-                <td>Resource Deletion, NSG Modifications, Firewall Rule Changes, VM Run Commands</td>
-                <td>Impact, Defense Evasion</td>
-              </tr>
-              <tr>
-                <td>IAM & Access</td>
-                <td>18</td>
-                <td>Role Assignment, Policy Changes, Custom Role Creation, Subscription Access</td>
-                <td>Privilege Escalation</td>
-              </tr>
-              <tr>
-                <td>Storage Security</td>
-                <td>12</td>
-                <td>Public Blob Access, Storage Key Regeneration, Anonymous Access Enabled</td>
-                <td>Collection, Exfiltration</td>
-              </tr>
-              <tr>
-                <td>Key Vault</td>
-                <td>12</td>
-                <td>Secret Access from New IP, Bulk Secret Download, Key Deletion</td>
-                <td>Credential Access</td>
-              </tr>
-              <tr>
-                <td>Compute</td>
-                <td>10</td>
-                <td>Suspicious VM Extensions, Unusual VM Operations, Crypto Mining Indicators</td>
-                <td>Execution, Impact</td>
-              </tr>
-              <tr>
-                <td>Database</td>
-                <td>6</td>
-                <td>SQL Injection Attempts, Unusual Database Queries, Bulk Data Export</td>
-                <td>Collection, Exfiltration</td>
-              </tr>
+              <tr><td>PCI Data Exfiltration Attempt (Block)</td><td>Critical</td><td>PurviewDLPLogs</td><td>Alert + Legal notification</td></tr>
+              <tr><td>PHI Data Sharing External (Block)</td><td>Critical</td><td>PurviewDLPLogs</td><td>Alert + Compliance notification</td></tr>
+              <tr><td>SSN Detection in Email (Warn)</td><td>High</td><td>PurviewDLPLogs</td><td>Alert + User education</td></tr>
+              <tr><td>Bank Account Numbers External (Block)</td><td>Critical</td><td>PurviewDLPLogs</td><td>Alert + Manager notification</td></tr>
+              <tr><td>Source Code Upload to Personal Cloud</td><td>High</td><td>PurviewDLPLogs</td><td>Alert + IP protection review</td></tr>
+              <tr><td>Mass File Download from SharePoint</td><td>High</td><td>PurviewDLPLogs</td><td>Alert + Insider threat review</td></tr>
+              <tr><td>Repeat DLP Offender (3+ violations/30 days)</td><td>High</td><td>PurviewDLPLogs</td><td>Alert + HR notification</td></tr>
+              <tr><td>DLP Override Abuse (frequent)</td><td>Medium</td><td>PurviewDLPLogs</td><td>Alert + Policy review</td></tr>
             </tbody>
           </table>
         </div>
+        <p><em>+ 17 additional DLP rules covering cloud apps, USB, print, and specific sensitive info types</em></p>
 
-        <!-- ==================== CATALOG B: WITH XDR ==================== -->
-        <h3 id="catalog-b">Catalog B: With XDR Enabled (Future State)</h3>
+        <h3>7.6 Custom Application Rules (22 Rules)</h3>
 
-        <div class="callout success">
+        <p>Business-specific detections for internal applications.</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Detection</th><th>Application</th><th>Severity</th><th>Logic</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>ERP Mass Record Export</td><td>SAP</td><td>High</td><td>&gt;10,000 records exported by single user</td></tr>
+              <tr><td>CRM Bulk Contact Download</td><td>Salesforce</td><td>High</td><td>&gt;5,000 contacts downloaded</td></tr>
+              <tr><td>Financial System After-Hours Access</td><td>Oracle Financials</td><td>Medium</td><td>Access outside business hours</td></tr>
+              <tr><td>HR System Bulk Employee Lookup</td><td>Workday</td><td>Medium</td><td>&gt;100 employee records viewed</td></tr>
+              <tr><td>Database Admin Action by Non-DBA</td><td>Internal DBs</td><td>High</td><td>DDL commands by non-admin</td></tr>
+              <tr><td>API Rate Limit Abuse</td><td>Internal APIs</td><td>Medium</td><td>&gt;1000 calls/minute</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><em>+ 16 additional custom rules for internal applications</em></p>
+
+        <h3>7.7 What XDR Handles (Not in Sentinel)</h3>
+
+        <div class="callout info">
           <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            Future Architecture: XDR + SIEM
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            These Detections Are NOT Built in Sentinel
           </div>
           <div class="callout-content">
-            <p><strong>When XDR is enabled, correlation is handled natively by XDR.</strong> We don't migrate Sentinel rules into XDR. Instead, we identify overlapping endpoint and identity detections and retire or downscope them in Sentinel once XDR is validated. Sentinel then shifts focus to higher-order correlation — combining XDR incidents with network, cloud, and business context.</p>
+            <p>The following attack types are handled natively by XDR with automatic cross-domain correlation. Building these in Sentinel would duplicate XDR's built-in capabilities.</p>
           </div>
         </div>
 
-        <h4>Catalog B: Detection Ownership Split</h4>
-
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Domain</th><th>Current (Sentinel)</th><th>XDR Handles</th><th>Sentinel Keeps</th><th>New Higher-Order</th><th>Net Change</th></tr>
+              <tr><th>Detection Category</th><th>XDR Product</th><th>Why Not Sentinel</th></tr>
             </thead>
             <tbody>
-              <tr>
-                <td><strong>Endpoint Security</strong></td>
-                <td>170</td>
-                <td style="color: #ef4444;">-145</td>
-                <td>25</td>
-                <td style="color: #22c55e;">+8</td>
-                <td>33 in Sentinel</td>
-              </tr>
-              <tr>
-                <td><strong>Identity & Access</strong></td>
-                <td>104</td>
-                <td style="color: #ef4444;">-78</td>
-                <td>26</td>
-                <td style="color: #22c55e;">+6</td>
-                <td>32 in Sentinel</td>
-              </tr>
-              <tr>
-                <td><strong>Network Security</strong></td>
-                <td>96</td>
-                <td style="color: #ef4444;">-12</td>
-                <td>84</td>
-                <td style="color: #22c55e;">+5</td>
-                <td>89 in Sentinel</td>
-              </tr>
-              <tr>
-                <td><strong>Cloud Security (Azure)</strong></td>
-                <td>78</td>
-                <td style="color: #ef4444;">-8</td>
-                <td>70</td>
-                <td style="color: #22c55e;">+4</td>
-                <td>74 in Sentinel</td>
-              </tr>
-              <tr>
-                <td><strong>Email & Collaboration</strong></td>
-                <td>35</td>
-                <td style="color: #ef4444;">-28</td>
-                <td>7</td>
-                <td style="color: #22c55e;">+3</td>
-                <td>10 in Sentinel</td>
-              </tr>
-              <tr>
-                <td><strong>Data Protection (DLP)</strong></td>
-                <td>21</td>
-                <td style="color: #ef4444;">0</td>
-                <td>21</td>
-                <td style="color: #22c55e;">+4</td>
-                <td>25 in Sentinel</td>
-              </tr>
-              <tr>
-                <td><strong>User Behavior (UEBA)</strong></td>
-                <td>46</td>
-                <td style="color: #ef4444;">-22</td>
-                <td>24</td>
-                <td style="color: #22c55e;">+3</td>
-                <td>27 in Sentinel</td>
-              </tr>
-              <tr>
-                <td><strong>Threat Intelligence</strong></td>
-                <td>38</td>
-                <td style="color: #ef4444;">-15</td>
-                <td>23</td>
-                <td style="color: #22c55e;">+2</td>
-                <td>25 in Sentinel</td>
-              </tr>
-              <tr style="font-weight: bold; background: rgba(139, 92, 246, 0.1);">
-                <td>TOTAL</td>
-                <td>580</td>
-                <td style="color: #ef4444;">-308</td>
-                <td>272</td>
-                <td style="color: #22c55e;">+35</td>
-                <td>315 in Sentinel</td>
-              </tr>
+              <tr><td>LSASS Credential Dumping</td><td>MDE</td><td>Kernel-level visibility, behavioral analysis</td></tr>
+              <tr><td>Encoded PowerShell Execution</td><td>MDE</td><td>AMSI decodes in-memory, catches obfuscation</td></tr>
+              <tr><td>Ransomware Activity</td><td>MDE</td><td>Behavioral blocking (prevents, not just detects)</td></tr>
+              <tr><td>Process Hollowing</td><td>MDE</td><td>Memory analysis not in log telemetry</td></tr>
+              <tr><td>Fileless Malware</td><td>MDE</td><td>Real-time memory inspection</td></tr>
+              <tr><td>Living-off-the-Land (LOLBins)</td><td>MDE</td><td>Behavioral context, not just command line</td></tr>
+              <tr><td>Impossible Travel</td><td>Entra ID Protection</td><td>ML per user, accounts for VPN/travel patterns</td></tr>
+              <tr><td>Password Spray</td><td>Entra ID Protection</td><td>Tenant-wide ML, distributed attack detection</td></tr>
+              <tr><td>Token Theft</td><td>Entra ID Protection</td><td>Token anomaly detection</td></tr>
+              <tr><td>Kerberoasting</td><td>MDI</td><td>Domain controller monitoring</td></tr>
+              <tr><td>DCSync Attack</td><td>MDI</td><td>AD replication traffic analysis</td></tr>
+              <tr><td>Pass-the-Hash/Ticket</td><td>MDI</td><td>Authentication protocol analysis</td></tr>
+              <tr><td>Phishing Email</td><td>MDO</td><td>Content analysis, sandbox detonation</td></tr>
+              <tr><td>Business Email Compromise</td><td>MDO</td><td>ML on communication patterns</td></tr>
+              <tr><td>Malicious Attachment</td><td>MDO</td><td>Safe Attachments sandbox</td></tr>
+              <tr><td>OAuth App Abuse</td><td>MDCA</td><td>Consent grant visibility, app behavior</td></tr>
+              <tr><td>Mass File Download (M365)</td><td>MDCA</td><td>User behavior baseline</td></tr>
             </tbody>
           </table>
         </div>
 
-        <div class="callout warning">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            Key Transition Insight
-          </div>
-          <div class="callout-content">
-            <p><strong>53% of Sentinel rules retire</strong> when XDR is enabled (308 of 580). These are detections XDR handles natively with better cross-domain correlation.</p>
-            <p><strong>35 new higher-order rules</strong> are added to Sentinel — these combine XDR incidents with non-Microsoft context (firewall, DLP, business asset data).</p>
-            <p><strong>Net result:</strong> 315 rules in Sentinel (down from 580), but detection coverage improves due to XDR's automatic correlation.</p>
-          </div>
-        </div>
-
-        <h4>Catalog B: What XDR Handles (308 Rules Retired)</h4>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Category</th><th>Rules Retired</th><th>XDR Replacement</th><th>Why XDR is Better</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Endpoint Process Detection</strong></td>
-                <td>85</td>
-                <td>MDE Built-in Detections</td>
-                <td>Kernel-level visibility, behavioral analysis, automatic process tree correlation</td>
-              </tr>
-              <tr>
-                <td><strong>Endpoint Persistence</strong></td>
-                <td>28</td>
-                <td>MDE Built-in Detections</td>
-                <td>Real-time registry/file monitoring with context</td>
-              </tr>
-              <tr>
-                <td><strong>Credential Theft (Endpoint)</strong></td>
-                <td>22</td>
-                <td>MDE + MDI</td>
-                <td>LSASS protection, credential guard integration</td>
-              </tr>
-              <tr>
-                <td><strong>Identity Anomalies</strong></td>
-                <td>45</td>
-                <td>Entra ID Protection + MDI</td>
-                <td>ML-based risk scoring, impossible travel, token theft detection</td>
-              </tr>
-              <tr>
-                <td><strong>Kerberos Attacks</strong></td>
-                <td>14</td>
-                <td>Microsoft Defender for Identity</td>
-                <td>Domain controller visibility, lateral movement paths</td>
-              </tr>
-              <tr>
-                <td><strong>Privilege Escalation (Identity)</strong></td>
-                <td>19</td>
-                <td>MDI + Entra ID Protection</td>
-                <td>Real-time privilege monitoring, PIM integration</td>
-              </tr>
-              <tr>
-                <td><strong>Email Threats</strong></td>
-                <td>28</td>
-                <td>Microsoft Defender for Office 365</td>
-                <td>Email content analysis, Safe Links/Attachments, BEC detection</td>
-              </tr>
-              <tr>
-                <td><strong>Phishing → Endpoint Chain</strong></td>
-                <td>15</td>
-                <td>XDR Automatic Correlation</td>
-                <td>Links email threat to endpoint compromise automatically</td>
-              </tr>
-              <tr>
-                <td><strong>Lateral Movement Chain</strong></td>
-                <td>12</td>
-                <td>XDR Automatic Correlation</td>
-                <td>Correlates endpoint → identity → lateral movement</td>
-              </tr>
-              <tr>
-                <td><strong>UEBA (Identity Behavior)</strong></td>
-                <td>22</td>
-                <td>Entra ID Protection</td>
-                <td>ML-based anomaly detection with risk scores</td>
-              </tr>
-              <tr>
-                <td><strong>TI Matching (Microsoft feeds)</strong></td>
-                <td>15</td>
-                <td>M365 Defender TI Integration</td>
-                <td>Automatic IOC matching with Microsoft threat intel</td>
-              </tr>
-              <tr>
-                <td><strong>Defense Evasion (Endpoint)</strong></td>
-                <td>18</td>
-                <td>MDE Built-in Detections</td>
-                <td>Tamper protection, kernel-level evasion detection</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h4>Catalog B: What Sentinel Keeps (272 Rules)</h4>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Category</th><th>Rules Kept</th><th>Why Sentinel Keeps</th><th>Primary Tables</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Network/Firewall</strong></td>
-                <td>72</td>
-                <td>Not in XDR scope — network perimeter devices</td>
-                <td>CommonSecurityLog, Syslog</td>
-              </tr>
-              <tr>
-                <td><strong>Azure Cloud Security</strong></td>
-                <td>62</td>
-                <td>Azure-specific detections not in M365 Defender</td>
-                <td>AzureActivity, AzureDiagnostics</td>
-              </tr>
-              <tr>
-                <td><strong>Custom Applications</strong></td>
-                <td>28</td>
-                <td>Business-specific apps with custom logs</td>
-                <td>Custom tables</td>
-              </tr>
-              <tr>
-                <td><strong>Third-Party SaaS</strong></td>
-                <td>22</td>
-                <td>Non-Microsoft cloud apps</td>
-                <td>Various connectors</td>
-              </tr>
-              <tr>
-                <td><strong>DLP Context</strong></td>
-                <td>21</td>
-                <td>Purview DLP not fully in XDR</td>
-                <td>PurviewDLPLogs</td>
-              </tr>
-              <tr>
-                <td><strong>Azure Key Vault</strong></td>
-                <td>12</td>
-                <td>Azure-specific secret management</td>
-                <td>AzureDiagnostics</td>
-              </tr>
-              <tr>
-                <td><strong>Linux Servers</strong></td>
-                <td>15</td>
-                <td>Not covered by MDE in all cases</td>
-                <td>Syslog</td>
-              </tr>
-              <tr>
-                <td><strong>Database Security</strong></td>
-                <td>8</td>
-                <td>Azure SQL/Database-specific</td>
-                <td>AzureDiagnostics</td>
-              </tr>
-              <tr>
-                <td><strong>DNS Analytics</strong></td>
-                <td>12</td>
-                <td>Network DNS not in XDR</td>
-                <td>DnsEvents</td>
-              </tr>
-              <tr>
-                <td><strong>Endpoint Edge Cases</strong></td>
-                <td>25</td>
-                <td>Custom org-specific endpoint rules</td>
-                <td>Device* tables</td>
-              </tr>
-              <tr>
-                <td><strong>Identity Edge Cases</strong></td>
-                <td>15</td>
-                <td>Custom org-specific identity rules</td>
-                <td>SigninLogs, AuditLogs</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h4>Catalog B: New Higher-Order Correlation Rules (35 New Rules)</h4>
-
-        <p>These rules are built AFTER XDR is enabled — they enrich XDR incidents with non-Microsoft context.</p>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Rule Category</th><th>Count</th><th>Description</th><th>Tables Joined</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>XDR + Firewall Context</strong></td>
-                <td>8</td>
-                <td>Enrich XDR incidents with firewall connection data, bytes transferred, blocked attempts</td>
-                <td>SecurityIncident + CommonSecurityLog</td>
-              </tr>
-              <tr>
-                <td><strong>XDR + DLP Context</strong></td>
-                <td>6</td>
-                <td>Correlate endpoint compromise with DLP violations for exfiltration detection</td>
-                <td>SecurityIncident + PurviewDLPLogs</td>
-              </tr>
-              <tr>
-                <td><strong>XDR + Critical Asset</strong></td>
-                <td>5</td>
-                <td>Flag XDR incidents involving crown jewel systems from watchlist</td>
-                <td>SecurityIncident + Watchlist</td>
-              </tr>
-              <tr>
-                <td><strong>XDR + Azure Activity</strong></td>
-                <td>4</td>
-                <td>Correlate identity compromise with subsequent Azure resource changes</td>
-                <td>SecurityIncident + AzureActivity</td>
-              </tr>
-              <tr>
-                <td><strong>XDR + VIP Users</strong></td>
-                <td>3</td>
-                <td>Escalate XDR incidents involving executive or privileged users</td>
-                <td>SecurityIncident + Watchlist</td>
-              </tr>
-              <tr>
-                <td><strong>XDR + Key Vault Access</strong></td>
-                <td>3</td>
-                <td>Correlate identity compromise with secret access</td>
-                <td>SecurityIncident + AzureDiagnostics</td>
-              </tr>
-              <tr>
-                <td><strong>XDR + Third-Party TI</strong></td>
-                <td>4</td>
-                <td>Enrich XDR incidents with non-Microsoft threat intel</td>
-                <td>SecurityIncident + ThreatIntelligenceIndicator</td>
-              </tr>
-              <tr>
-                <td><strong>XDR + Business Context</strong></td>
-                <td>2</td>
-                <td>Add business unit, data classification, compliance context</td>
-                <td>SecurityIncident + Watchlist + Custom tables</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h4>Catalog B: Summary Comparison</h4>
+        <h3>7.8 Architecture Comparison</h3>
 
         <div class="comparison-grid">
           <div class="comparison-column">
-            <div class="comparison-header before">Without XDR (Current)</div>
+            <div class="comparison-header" style="background: #450a0a; color: #fecaca;">Anti-Pattern: Build Everything</div>
             <div class="comparison-content">
-              <div class="comparison-item"><span class="comparison-item-icon">📊</span><span>580 total rules in Sentinel</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">🔍</span><span>All detection in Sentinel</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">🔗</span><span>25 correlation rules (manual)</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">📋</span><span>Incident per rule trigger</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">🖥️</span><span>SOC primary: Sentinel</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">⚙️</span><span>Manual cross-domain correlation</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">❌</span><span>580+ rules in Sentinel</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">❌</span><span>Duplicate XDR detections</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">❌</span><span>18-month migration</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">❌</span><span>XDR benefits delayed</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">❌</span><span>Higher Sentinel compute cost</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">❌</span><span>Manual correlation in KQL</span></div>
             </div>
           </div>
           <div class="comparison-column">
-            <div class="comparison-header after">With XDR (Future)</div>
+            <div class="comparison-header" style="background: #14532d; color: #bbf7d0;">XDR-First: Right-Sized ✓</div>
             <div class="comparison-content">
-              <div class="comparison-item"><span class="comparison-item-icon">📊</span><span>315 rules in Sentinel + XDR built-in</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">🔍</span><span>XDR for Microsoft, Sentinel for rest</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">🔗</span><span>35 higher-order rules (XDR + context)</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">📋</span><span>Unified attack chain incidents</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">🖥️</span><span>SOC primary: M365 Defender portal</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">⚙️</span><span>Automatic cross-domain correlation</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>~270 rules in Sentinel</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>XDR handles Microsoft data</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>12-month migration</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>XDR benefits from Day 1</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Optimized Sentinel cost</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Automatic XDR correlation</span></div>
             </div>
           </div>
         </div>

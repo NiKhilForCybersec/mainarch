@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Incident Response Playbooks | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+        <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="../infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="../operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="../operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="../resources/templates.html" class="nav-item">Templates</a>
+          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="../resources/incident-response.html" class="nav-item active">Incident Response</a>
+          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="templates.html">Resources</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Incident Response Playbooks</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Incident Response Playbooks</h1>
+          <div class="page-header-meta">
+            <span class="page-badge siem">SOC Operations</span>
+            <span class="page-reading-time">Operational Runbook</span>
+          </div>
+          <p class="intro-text">
+            Step-by-step playbooks for common incident types. These playbooks integrate Microsoft Sentinel, MDE, and Purview workflows for unified incident response.
+          </p>
+        </div>
+
+        <!-- ==================== SECTION 1: OVERVIEW ==================== -->
+        <h2>1. Incident Response Framework</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            NIST IR Lifecycle
+          </div>
+          <div class="callout-content">
+            <p>All playbooks follow the NIST Incident Response lifecycle:</p>
+            <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Preparation</strong> - Tools, access, documentation ready</li>
+              <li><strong>Detection & Analysis</strong> - Identify and validate the incident</li>
+              <li><strong>Containment</strong> - Stop the spread, preserve evidence</li>
+              <li><strong>Eradication</strong> - Remove threat from environment</li>
+              <li><strong>Recovery</strong> - Restore normal operations</li>
+              <li><strong>Lessons Learned</strong> - Document and improve</li>
+            </ol>
+          </div>
+        </div>
+
+        <h3>1.1 Severity Levels</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Severity</th><th>Description</th><th>Response Time</th><th>Escalation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="status-badge" style="background: #7f1d1d; color: #fecaca;">Critical</span></td>
+                <td>Active breach, ransomware, data exfiltration in progress</td>
+                <td>Immediate (15 min)</td>
+                <td>CISO, Legal, Executive team</td>
+              </tr>
+              <tr>
+                <td><span class="status-badge" style="background: #991b1b; color: #fecaca;">High</span></td>
+                <td>Confirmed malware, compromised credentials, lateral movement</td>
+                <td>1 hour</td>
+                <td>Security Manager, IT Director</td>
+              </tr>
+              <tr>
+                <td><span class="status-badge" style="background: #c2410c; color: #fed7aa;">Medium</span></td>
+                <td>Suspicious activity, policy violations, potential compromise</td>
+                <td>4 hours</td>
+                <td>SOC Lead</td>
+              </tr>
+              <tr>
+                <td><span class="status-badge" style="background: #1e40af; color: #bfdbfe;">Low</span></td>
+                <td>Informational, reconnaissance, failed attacks</td>
+                <td>24 hours</td>
+                <td>Analyst handling</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== PLAYBOOK 1: PHISHING ==================== -->
+        <h2>2. Playbook: Phishing Incident</h2>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Trigger
+          </div>
+          <div class="callout-content">
+            <p><strong>Alert Sources:</strong> User report, Microsoft Defender for Office 365, Sentinel analytics rule</p>
+            <p><strong>Typical Alerts:</strong> "Phishing email delivered", "User clicked malicious link", "Credential harvesting detected"</p>
+          </div>
+        </div>
+
+        <h3>2.1 Detection & Analysis</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Identify Phishing Recipients</span></div>
+          <pre><code>// Find all recipients of the phishing email
+let SuspiciousSender = "attacker@malicious-domain.com";
+let SuspiciousSubject = "Urgent: Password Reset Required";
+
+EmailEvents
+| where TimeGenerated > ago(7d)
+| where SenderFromAddress == SuspiciousSender 
+    or Subject has SuspiciousSubject
+| summarize 
+    Recipients = make_set(RecipientEmailAddress),
+    DeliveryActions = make_set(DeliveryAction),
+    FirstSeen = min(TimeGenerated),
+    LastSeen = max(TimeGenerated)
+| extend RecipientCount = array_length(Recipients)</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Check for Link Clicks</span></div>
+          <pre><code>// Find users who clicked the malicious link
+let MaliciousURL = "https://malicious-site.com/phish";
+
+UrlClickEvents
+| where TimeGenerated > ago(7d)
+| where Url has MaliciousURL
+| project TimeGenerated, AccountUpn, Url, ActionType, NetworkMessageId
+| join kind=inner (
+    EmailEvents
+    | where TimeGenerated > ago(7d)
+) on NetworkMessageId
+| project TimeGenerated, AccountUpn, Url, SenderFromAddress, Subject</code></pre>
+        </div>
+
+        <h3>2.2 Containment Actions</h3>
+
+        <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li><strong>Block sender domain</strong> in Exchange Online Protection
+            <ul>
+              <li>Security.microsoft.com → Policies → Anti-spam → Block sender/domain</li>
+            </ul>
+          </li>
+          <li><strong>Purge emails</strong> from all mailboxes
+            <ul>
+              <li>Use Content Search in Compliance Center</li>
+              <li>Search query: <code>from:attacker@domain.com AND subject:"Urgent"</code></li>
+              <li>Delete results using: <code>New-ComplianceSearchAction -SearchName "PhishSearch" -Purge -PurgeType SoftDelete</code></li>
+            </ul>
+          </li>
+          <li><strong>Block malicious URL</strong> in Defender for Office 365
+            <ul>
+              <li>Add to Tenant Allow/Block List</li>
+            </ul>
+          </li>
+          <li><strong>Reset passwords</strong> for users who clicked
+            <ul>
+              <li>Force password reset in Entra ID</li>
+              <li>Revoke all sessions: <code>Revoke-AzureADUserAllRefreshToken</code></li>
+            </ul>
+          </li>
+        </ol>
+
+        <h3>2.3 Investigation Queries</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Check for Credential Compromise</span></div>
+          <pre><code>// Check for suspicious sign-ins from affected users
+let AffectedUsers = dynamic(["user1@company.com", "user2@company.com"]);
+let IncidentTime = datetime(2024-01-15T10:00:00Z);
+
+SigninLogs
+| where TimeGenerated between (IncidentTime .. (IncidentTime + 24h))
+| where UserPrincipalName in (AffectedUsers)
+| where ResultType == "0"  // Successful sign-ins
+| project 
+    TimeGenerated,
+    UserPrincipalName,
+    IPAddress,
+    Location = strcat(LocationDetails.city, ", ", LocationDetails.countryOrRegion),
+    AppDisplayName,
+    DeviceDetail,
+    RiskLevelDuringSignIn
+| order by TimeGenerated desc</code></pre>
+        </div>
+
+        <!-- ==================== PLAYBOOK 2: MALWARE ==================== -->
+        <h2>3. Playbook: Malware Detection</h2>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Trigger
+          </div>
+          <div class="callout-content">
+            <p><strong>Alert Sources:</strong> Microsoft Defender for Endpoint (via XDR), Sentinel analytics</p>
+            <p><strong>Typical Alerts:</strong> "Malware detected", "Suspicious process execution", "Known malware hash detected"</p>
+          </div>
+        </div>
+
+        <h3>3.1 Detection & Analysis</h3>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Where to Run These Queries
+          </div>
+          <div class="callout-content">
+            <p><strong>M365 Defender Portal:</strong> These Device* table queries run in Advanced Hunting at security.microsoft.com. With XDR-first, raw endpoint telemetry is available in Defender for hunting — we don't need to ingest it into Sentinel.</p>
+            <p><strong>XDR Incident provides context:</strong> The XDR incident already includes attack timeline, process tree, and related alerts. Use Advanced Hunting for deeper investigation when needed.</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Malware Investigation (Run in M365 Defender Advanced Hunting)</span></div>
+          <pre><code>// Get full context of malware detection
+let MalwareHash = "abc123...";  // SHA256 from alert
+let DeviceName = "WORKSTATION01";
+
+// Find the malware execution
+DeviceProcessEvents
+| where TimeGenerated > ago(7d)
+| where DeviceName == DeviceName
+| where SHA256 == MalwareHash or InitiatingProcessSHA256 == MalwareHash
+| project 
+    TimeGenerated,
+    DeviceName,
+    FileName,
+    FolderPath,
+    ProcessCommandLine,
+    AccountName,
+    InitiatingProcessFileName,
+    InitiatingProcessCommandLine,
+    SHA256
+
+// Check for persistence
+union
+(DeviceRegistryEvents
+| where TimeGenerated > ago(7d)
+| where DeviceName == DeviceName
+| where RegistryKey has_any ("Run", "RunOnce", "Services")),
+(DeviceFileEvents
+| where TimeGenerated > ago(7d)
+| where DeviceName == DeviceName
+| where FolderPath has_any ("Startup", "Tasks"))
+| project TimeGenerated, ActionType, FileName, FolderPath, RegistryKey</code></pre>
+        </div>
+
+        <h3>3.2 Containment Actions</h3>
+
+        <div class="flow-diagram">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <strong>Isolate Device</strong><br>
+              M365 Defender → Device page → "Isolate device" (allows Defender communication only)
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <strong>Stop & Quarantine</strong><br>
+              M365 Defender → Device page → "Stop and quarantine file"
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <strong>Block Hash</strong><br>
+              Settings → Endpoints → Indicators → Add file hash indicator (Block)
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-content">
+              <strong>Run AV Scan</strong><br>
+              M365 Defender → Device page → "Run antivirus scan" (Full scan)
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">5</div>
+            <div class="flow-step-content">
+              <strong>Collect Investigation Package</strong><br>
+              M365 Defender → Device page → "Collect investigation package"
+            </div>
+          </div>
+        </div>
+
+        <h3>3.3 PowerShell Response Actions</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell - MDE Response Actions via API</span></div>
+          <pre><code># Isolate device via MDE API
+$DeviceId = "device-id-from-portal"
+$TenantId = "your-tenant-id"
+$AppId = "app-id-with-machine.isolate-permission"
+$AppSecret = "app-secret"
+
+# Get access token
+$body = @{
+    Grant_Type    = "client_credentials"
+    Scope         = "https://api.securitycenter.microsoft.com/.default"
+    Client_Id     = $AppId
+    Client_Secret = $AppSecret
+}
+$token = (Invoke-RestMethod -Uri "https://login.microsoftonline.com/$TenantId/oauth2/v2.0/token" -Method POST -Body $body).access_token
+
+# Isolate device
+$isolateBody = @{
+    Comment = "Isolated due to malware detection - Incident INC-2024-001"
+    IsolationType = "Full"  # or "Selective"
+} | ConvertTo-Json
+
+$headers = @{
+    Authorization = "Bearer $token"
+    "Content-Type" = "application/json"
+}
+
+Invoke-RestMethod -Uri "https://api.securitycenter.microsoft.com/api/machines/$DeviceId/isolate" -Method POST -Headers $headers -Body $isolateBody</code></pre>
+        </div>
+
+        <!-- ==================== PLAYBOOK 3: COMPROMISED ACCOUNT ==================== -->
+        <h2>4. Playbook: Compromised Account</h2>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Trigger
+          </div>
+          <div class="callout-content">
+            <p><strong>Alert Sources:</strong> Entra ID Protection, Sentinel UEBA, Microsoft Defender for Cloud Apps</p>
+            <p><strong>Typical Alerts:</strong> "Impossible travel", "Unfamiliar sign-in properties", "Mass file download", "Inbox rule creation"</p>
+          </div>
+        </div>
+
+        <h3>4.1 Detection & Analysis</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Compromised Account Investigation</span></div>
+          <pre><code>// Comprehensive account activity review
+let SuspiciousUser = "compromised.user@company.com";
+let InvestigationWindow = 7d;
+
+// Sign-in activity
+let SignIns = SigninLogs
+| where TimeGenerated > ago(InvestigationWindow)
+| where UserPrincipalName == SuspiciousUser
+| project TimeGenerated, IPAddress, Location = LocationDetails.city, 
+    AppDisplayName, ResultType, RiskLevel = RiskLevelDuringSignIn,
+    DeviceDetail, ConditionalAccessStatus;
+
+// Audit actions
+let AuditActions = AuditLogs
+| where TimeGenerated > ago(InvestigationWindow)
+| where InitiatedBy.user.userPrincipalName == SuspiciousUser
+| project TimeGenerated, OperationName, TargetResources, Result;
+
+// Email activity
+let EmailActivity = OfficeActivity
+| where TimeGenerated > ago(InvestigationWindow)
+| where UserId == SuspiciousUser
+| where Operation in ("New-InboxRule", "Set-InboxRule", "SendAs", "SendOnBehalf")
+| project TimeGenerated, Operation, Parameters;
+
+// Combine results
+SignIns
+| summarize 
+    SignInCount = count(),
+    UniqueIPs = dcount(IPAddress),
+    UniqueLocations = dcount(Location),
+    RiskySignIns = countif(RiskLevel in ("medium", "high")),
+    FailedSignIns = countif(ResultType != "0")</code></pre>
+        </div>
+
+        <h3>4.2 Containment Actions</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell - Account Containment Script</span></div>
+          <pre><code># Compromised Account Containment Script
+# Run with appropriate admin permissions
+
+param(
+    [Parameter(Mandatory=$true)]
+    [string]$UserPrincipalName,
+    [string]$IncidentId = "INC-$(Get-Date -Format 'yyyyMMdd-HHmm')"
+)
+
+$ErrorActionPreference = "Stop"
+$LogFile = "C:\Incidents\$IncidentId\containment_$(Get-Date -Format 'yyyyMMddHHmmss').log"
+New-Item -Path (Split-Path $LogFile) -ItemType Directory -Force | Out-Null
+
+function Write-Log {
+    param([string]$Message)
+    $entry = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] $Message"
+    Write-Host $entry
+    Add-Content -Path $LogFile -Value $entry
+}
+
+Write-Log "========================================="
+Write-Log "Compromised Account Containment"
+Write-Log "User: $UserPrincipalName"
+Write-Log "Incident: $IncidentId"
+Write-Log "========================================="
+
+# Connect to required services
+Connect-MgGraph -Scopes "User.ReadWrite.All", "Directory.ReadWrite.All"
+Connect-ExchangeOnline
+
+# Step 1: Disable sign-in
+Write-Log "[1/7] Disabling user sign-in..."
+Update-MgUser -UserId $UserPrincipalName -AccountEnabled:$false
+Write-Log "Sign-in disabled"
+
+# Step 2: Revoke all sessions
+Write-Log "[2/7] Revoking all refresh tokens..."
+Revoke-MgUserSignInSession -UserId $UserPrincipalName
+Write-Log "All sessions revoked"
+
+# Step 3: Reset password
+Write-Log "[3/7] Resetting password..."
+$newPassword = [System.Web.Security.Membership]::GeneratePassword(16, 4)
+$passwordProfile = @{
+    Password = $newPassword
+    ForceChangePasswordNextSignIn = $true
+}
+Update-MgUser -UserId $UserPrincipalName -PasswordProfile $passwordProfile
+Write-Log "Password reset (new password logged separately)"
+
+# Step 4: Disable MFA methods (force re-registration)
+Write-Log "[4/7] Reviewing MFA methods..."
+$authMethods = Get-MgUserAuthenticationMethod -UserId $UserPrincipalName
+Write-Log "Found $($authMethods.Count) authentication methods"
+
+# Step 5: Check and remove suspicious inbox rules
+Write-Log "[5/7] Checking inbox rules..."
+$inboxRules = Get-InboxRule -Mailbox $UserPrincipalName
+foreach ($rule in $inboxRules) {
+    if ($rule.ForwardTo -or $rule.ForwardAsAttachmentTo -or $rule.RedirectTo) {
+        Write-Log "SUSPICIOUS: Forwarding rule found - $($rule.Name)"
+        Remove-InboxRule -Mailbox $UserPrincipalName -Identity $rule.Identity -Confirm:$false
+        Write-Log "Removed rule: $($rule.Name)"
+    }
+}
+
+# Step 6: Check OAuth app consents
+Write-Log "[6/7] Checking OAuth app consents..."
+$appConsents = Get-MgUserOAuth2PermissionGrant -UserId $UserPrincipalName
+Write-Log "Found $($appConsents.Count) app consents"
+# Review and remove suspicious consents as needed
+
+# Step 7: Document current group memberships
+Write-Log "[7/7] Documenting group memberships..."
+$groups = Get-MgUserMemberOf -UserId $UserPrincipalName
+Write-Log "User is member of $($groups.Count) groups"
+
+Write-Log "========================================="
+Write-Log "Containment complete"
+Write-Log "NEXT STEPS:"
+Write-Log "1. Investigate sign-in logs for attacker activity"
+Write-Log "2. Check for data exfiltration"
+Write-Log "3. Review email sent during compromise"
+Write-Log "4. Re-enable account after investigation"
+Write-Log "========================================="</code></pre>
+        </div>
+
+        <!-- ==================== PLAYBOOK 4: DLP VIOLATION ==================== -->
+        <h2>5. Playbook: DLP Policy Violation</h2>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Trigger
+          </div>
+          <div class="callout-content">
+            <p><strong>Alert Sources:</strong> Microsoft Purview DLP, Sentinel analytics</p>
+            <p><strong>Typical Alerts:</strong> "Sensitive data shared externally", "PII detected in email", "Large file upload to cloud storage"</p>
+          </div>
+        </div>
+
+        <h3>5.1 Detection & Analysis</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - DLP Violation Investigation</span></div>
+          <pre><code>// Investigate DLP policy matches
+let InvestigationUser = "user@company.com";
+
+PurviewDLPLogs
+| where TimeGenerated > ago(7d)
+| where User == InvestigationUser
+| project 
+    TimeGenerated,
+    User,
+    PolicyName,
+    RuleName,
+    SensitiveInfoType,
+    SensitiveInfoTypeCount,
+    ActionsTaken,
+    Workload,
+    ItemPath,
+    Recipients
+| order by TimeGenerated desc
+
+// Check for pattern of violations
+PurviewDLPLogs
+| where TimeGenerated > ago(30d)
+| summarize 
+    ViolationCount = count(),
+    UniquePolicies = dcount(PolicyName),
+    UniqueRecipients = dcount(Recipients),
+    SensitiveTypes = make_set(SensitiveInfoType)
+    by User
+| where ViolationCount > 5
+| order by ViolationCount desc</code></pre>
+        </div>
+
+        <h3>5.2 Response Actions</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Severity</th><th>Sensitive Data Type</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="status-badge" style="background: #7f1d1d; color: #fecaca;">Critical</span></td>
+                <td>PCI, PHI, classified data</td>
+                <td>Block immediately, notify Legal, preserve evidence, incident report</td>
+              </tr>
+              <tr>
+                <td><span class="status-badge" style="background: #991b1b; color: #fecaca;">High</span></td>
+                <td>PII, financial data, credentials</td>
+                <td>Block, notify manager, require justification</td>
+              </tr>
+              <tr>
+                <td><span class="status-badge" style="background: #c2410c; color: #fed7aa;">Medium</span></td>
+                <td>Internal confidential</td>
+                <td>Warn user, log for review, training reminder</td>
+              </tr>
+              <tr>
+                <td><span class="status-badge" style="background: #1e40af; color: #bfdbfe;">Low</span></td>
+                <td>General business</td>
+                <td>Log only, periodic review</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== PLAYBOOK 5: RANSOMWARE ==================== -->
+        <h2>6. Playbook: Ransomware Attack</h2>
+
+        <div class="callout" style="background: #450a0a; border-color: #dc2626;">
+          <div class="callout-title" style="color: #fecaca;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            CRITICAL INCIDENT
+          </div>
+          <div class="callout-content" style="color: #fecaca;">
+            <p><strong>Immediate escalation required.</strong> Contact CISO, Legal, and Executive team immediately.</p>
+            <p><strong>Trigger:</strong> Mass file encryption, ransom note detected, known ransomware process</p>
+          </div>
+        </div>
+
+        <h3>6.1 Immediate Actions (First 15 Minutes)</h3>
+
+        <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li><strong>ISOLATE AFFECTED SYSTEMS</strong>
+            <ul>
+              <li>Use MDE device isolation for confirmed systems</li>
+              <li>Disconnect from network if MDE unavailable</li>
+              <li>Do NOT power off (preserve memory)</li>
+            </ul>
+          </li>
+          <li><strong>IDENTIFY SCOPE</strong>
+            <ul>
+              <li>Query for ransomware indicators across all endpoints</li>
+              <li>Check file share access logs</li>
+              <li>Identify patient zero</li>
+            </ul>
+          </li>
+          <li><strong>PRESERVE EVIDENCE</strong>
+            <ul>
+              <li>Collect MDE investigation packages</li>
+              <li>Preserve ransom notes</li>
+              <li>Screenshot all artifacts</li>
+            </ul>
+          </li>
+          <li><strong>ESCALATE</strong>
+            <ul>
+              <li>Notify CISO and Security Manager</li>
+              <li>Engage incident response retainer (if applicable)</li>
+              <li>Brief Legal on potential breach notification</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h3>6.2 Detection Queries</h3>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Advanced Hunting in M365 Defender
+          </div>
+          <div class="callout-content">
+            <p>These queries run in M365 Defender Advanced Hunting (security.microsoft.com). With XDR-first, we access raw Device* tables in Defender for investigation — they're not ingested into Sentinel.</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Ransomware Detection (M365 Defender Advanced Hunting)</span></div>
+          <pre><code>// Detect mass file encryption
+DeviceFileEvents
+| where TimeGenerated > ago(1h)
+| where ActionType in ("FileModified", "FileRenamed")
+| extend FileExtension = extract(@"\.([^.]+)$", 1, FileName)
+| summarize 
+    ModifiedFiles = count(),
+    UniqueExtensions = dcount(FileExtension),
+    Devices = dcount(DeviceName),
+    Users = dcount(InitiatingProcessAccountName),
+    Processes = make_set(InitiatingProcessFileName)
+    by bin(TimeGenerated, 5m)
+| where ModifiedFiles > 500 and UniqueExtensions > 50
+| order by TimeGenerated desc
+
+// Find ransomware indicators
+DeviceProcessEvents
+| where TimeGenerated > ago(24h)
+| where ProcessCommandLine has_any (
+    "vssadmin delete shadows",
+    "wmic shadowcopy delete",
+    "bcdedit /set",
+    "wbadmin delete catalog",
+    ".onion",
+    "YOUR FILES HAVE BEEN ENCRYPTED",
+    "bitcoin",
+    "ransom"
+)
+| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine</code></pre>
+        </div>
+
+        <h3>6.3 Containment Script</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell - Mass Device Isolation</span></div>
+          <pre><code># Emergency mass device isolation for ransomware
+# CAUTION: This will isolate all specified devices
+
+param(
+    [Parameter(Mandatory=$true)]
+    [string[]]$DeviceNames,
+    [string]$Justification = "Ransomware containment"
+)
+
+# API credentials (use managed identity in production)
+$TenantId = $env:TENANT_ID
+$AppId = $env:MDE_APP_ID
+$AppSecret = $env:MDE_APP_SECRET
+
+# Get token
+$tokenBody = @{
+    Grant_Type    = "client_credentials"
+    Scope         = "https://api.securitycenter.microsoft.com/.default"
+    Client_Id     = $AppId
+    Client_Secret = $AppSecret
+}
+$token = (Invoke-RestMethod -Uri "https://login.microsoftonline.com/$TenantId/oauth2/v2.0/token" -Method POST -Body $tokenBody).access_token
+
+$headers = @{
+    Authorization = "Bearer $token"
+    "Content-Type" = "application/json"
+}
+
+foreach ($deviceName in $DeviceNames) {
+    Write-Host "Processing: $deviceName" -ForegroundColor Yellow
+    
+    # Get device ID
+    $device = Invoke-RestMethod -Uri "https://api.securitycenter.microsoft.com/api/machines?`$filter=computerDnsName eq '$deviceName'" -Headers $headers
+    
+    if ($device.value.Count -gt 0) {
+        $deviceId = $device.value[0].id
+        
+        # Isolate device
+        $isolateBody = @{
+            Comment = $Justification
+            IsolationType = "Full"
+        } | ConvertTo-Json
+        
+        try {
+            Invoke-RestMethod -Uri "https://api.securitycenter.microsoft.com/api/machines/$deviceId/isolate" -Method POST -Headers $headers -Body $isolateBody
+            Write-Host "ISOLATED: $deviceName" -ForegroundColor Green
+        } catch {
+            Write-Host "FAILED: $deviceName - $_" -ForegroundColor Red
+        }
+    } else {
+        Write-Host "NOT FOUND: $deviceName" -ForegroundColor Red
+    }
+}</code></pre>
+        </div>
+
+        <!-- ==================== SECTION: DOCUMENTATION ==================== -->
+        <h2>7. Incident Documentation Template</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Markdown - Incident Report Template</span></div>
+          <pre><code># Incident Report: [INC-YYYY-XXX]
+
+## Executive Summary
+- **Incident Type:** [Phishing/Malware/Compromised Account/DLP/Ransomware]
+- **Severity:** [Critical/High/Medium/Low]
+- **Status:** [Active/Contained/Resolved/Closed]
+- **Detection Time:** YYYY-MM-DD HH:MM UTC
+- **Resolution Time:** YYYY-MM-DD HH:MM UTC
+- **MTTR:** X hours Y minutes
+
+## Timeline
+| Time (UTC) | Event | Action Taken |
+|------------|-------|--------------|
+| HH:MM | Initial alert triggered | Analyst assigned |
+| HH:MM | Investigation started | Queries executed |
+| HH:MM | Scope identified | X devices, Y users affected |
+| HH:MM | Containment initiated | Devices isolated |
+| HH:MM | Eradication complete | Malware removed |
+| HH:MM | Recovery complete | Systems restored |
+
+## Affected Assets
+- Devices: [List]
+- Users: [List]
+- Data: [Description]
+
+## Root Cause Analysis
+[Description of how the incident occurred]
+
+## Actions Taken
+1. [Action 1]
+2. [Action 2]
+3. [Action 3]
+
+## Indicators of Compromise (IOCs)
+- File Hashes: [SHA256]
+- IP Addresses: [IPs]
+- Domains: [Domains]
+- Email Addresses: [Emails]
+
+## Lessons Learned
+- What worked well:
+- What could be improved:
+- Recommended changes:
+
+## Attachments
+- [ ] Timeline diagram
+- [ ] Investigation queries
+- [ ] Evidence screenshots
+- [ ] Communication logs</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="mde-offboarding.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← MDE Offboarding</span></a>
+          <a href="operational-procedures.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Operational Procedures →</span></a>
+        </nav>
+
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>
