@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threat Intelligence Integration — Sentinel & Splunk | SIEM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .ti-flow { background: var(--bg-tertiary); padding: 1.5rem; border-radius: 8px; margin: 1rem 0; overflow-x: auto; }
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+    .compare-card { background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 8px; padding: 1.25rem; }
+    .compare-card h4 { margin: 0 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-primary); }
+    .compare-card.splunk { border-top: 3px solid #65a637; }
+    .compare-card.sentinel { border-top: 3px solid #0078d4; }
+    @media (max-width: 900px) { .compare-grid { grid-template-columns: 1fr; } }
+    .ti-table-card { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 1rem; margin: 0.5rem 0; }
+    .ti-table-card h5 { margin: 0 0 0.5rem 0; color: #3b82f6; }
+    .indicator-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin: 2px; }
+    .indicator-badge.ip { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+    .indicator-badge.domain { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+    .indicator-badge.hash { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; }
+    .indicator-badge.url { background: rgba(249, 115, 22, 0.2); color: #fdba74; }
+    .indicator-badge.email { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/threat-intelligence.html" class="nav-item active">Threat Intelligence</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="../infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="../operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="../operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="../resources/alternative-architectures.html" class="nav-item">Alternative Architectures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">SIEM Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Threat Intelligence</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Threat Intelligence Integration — Sentinel & Splunk</h1>
+          <div class="page-header-meta">
+            <span class="page-badge siem">SIEM Track</span>
+            <span class="page-reading-time">Advanced Technical</span>
+          </div>
+          <p class="intro-text">This page explains how threat intelligence works in both platforms: where TI data is stored, how indicators are ingested, how enrichment happens in analytics rules, and where you write the integration code.</p>
+        </div>
+
+        <!-- ==================== SECTION 1: TI FUNDAMENTALS ==================== -->
+        <h2>1. Threat Intelligence Fundamentals</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>What Is Threat Intelligence?</div>
+          <div class="callout-content">
+            <p><strong>Threat Intelligence (TI)</strong> = Information about known threats: malicious IPs, domains, file hashes, URLs, email addresses, and attack patterns.</p>
+            <p>TI enables <strong>IOC matching</strong> — comparing your log data against known bad indicators to detect threats.</p>
+          </div>
+        </div>
+
+        <h3>1.1 Indicator Types</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Indicator Type</th><th>Examples</th><th>Data Sources to Match</th><th>Pyramid of Pain</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="indicator-badge ip">IP Address</span></td>
+                <td>192.168.1.100, 10.0.0.50</td>
+                <td>Firewall, DNS, Proxy, Network flow</td>
+                <td>Easy to change</td>
+              </tr>
+              <tr>
+                <td><span class="indicator-badge domain">Domain</span></td>
+                <td>evil.com, malware-c2.net</td>
+                <td>DNS, Proxy, Email</td>
+                <td>Easy to change</td>
+              </tr>
+              <tr>
+                <td><span class="indicator-badge url">URL</span></td>
+                <td>http://evil.com/malware.exe</td>
+                <td>Proxy, Email, EDR</td>
+                <td>Easy to change</td>
+              </tr>
+              <tr>
+                <td><span class="indicator-badge hash">File Hash</span></td>
+                <td>SHA256, SHA1, MD5</td>
+                <td>EDR, AV, File events</td>
+                <td>Easy to change</td>
+              </tr>
+              <tr>
+                <td><span class="indicator-badge email">Email</span></td>
+                <td>attacker@phishing.com</td>
+                <td>Email logs, O365</td>
+                <td>Easy to change</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>1.2 TI Sources</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Source Type</th><th>Examples</th><th>Cost</th><th>Quality</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Commercial Feeds</strong></td>
+                <td>Recorded Future, Anomali, Mandiant, CrowdStrike</td>
+                <td>$$$</td>
+                <td>High — curated, contextualized</td>
+              </tr>
+              <tr>
+                <td><strong>Open Source Feeds</strong></td>
+                <td>AlienVault OTX, Abuse.ch, EmergingThreats</td>
+                <td>Free</td>
+                <td>Variable — may have false positives</td>
+              </tr>
+              <tr>
+                <td><strong>ISAC/ISAO</strong></td>
+                <td>FS-ISAC, Health-ISAC, IT-ISAC</td>
+                <td>Membership fee</td>
+                <td>High — industry-specific</td>
+              </tr>
+              <tr>
+                <td><strong>Government</strong></td>
+                <td>CISA AIS, FBI InfraGard</td>
+                <td>Free (with approval)</td>
+                <td>High — vetted</td>
+              </tr>
+              <tr>
+                <td><strong>Vendor-Provided</strong></td>
+                <td>Microsoft TI, Palo Alto Unit 42</td>
+                <td>Included with product</td>
+                <td>Good — vendor-curated</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 2: SENTINEL TI ARCHITECTURE ==================== -->
+        <h2>2. Microsoft Sentinel — Threat Intelligence Architecture</h2>
+
+        <h3>2.1 TI Data Flow in Sentinel</h3>
+
+        <div class="ti-flow">
+          <pre><code>TI SOURCES                           INGESTION                        STORAGE
+────────────────────────────────────────────────────────────────────────────────
+
+┌─────────────────────┐
+│ Microsoft TI        │──────┐
+│ (Defender TI)       │      │
+└─────────────────────┘      │
+                             │     ┌───────────────────────┐
+┌─────────────────────┐      │     │                       │     ┌─────────────────────┐
+│ TAXII Server        │──────┼────▶│   TI CONNECTORS       │────▶│ ThreatIntelligence  │
+│ (STIX 2.0/2.1)      │      │     │   (Data Connectors)   │     │ IndicatorTable      │
+└─────────────────────┘      │     │                       │     └─────────────────────┘
+                             │     └───────────────────────┘              │
+┌─────────────────────┐      │                                            │
+│ Threat Intel        │──────┤                                            │
+│ Platforms (TIP)     │      │                                            ▼
+│ (Anomali, MISP)     │      │                              ┌─────────────────────────────┐
+└─────────────────────┘      │                              │   ANALYTICS RULES           │
+                             │                              │   (KQL Matching)            │
+┌─────────────────────┐      │                              │                             │
+│ Custom Indicators   │──────┘                              │   Join TI table with:       │
+│ (API Upload)        │                                     │   • CommonSecurityLog       │
+└─────────────────────┘                                     │   • SigninLogs              │
+                                                            │   • DeviceNetworkEvents     │
+                                                            │   • Syslog                  │
+                                                            └──────────────┬──────────────┘
+                                                                           │
+                                                                           ▼
+                                                            ┌─────────────────────────────┐
+                                                            │   INCIDENTS / ALERTS        │
+                                                            │   (When IOC matches)        │
+                                                            └─────────────────────────────┘</code></pre>
+        </div>
+
+        <h3>2.2 Sentinel TI Tables</h3>
+
+        <p>Sentinel stores threat intelligence in specific tables. Understanding these tables is critical for writing detection rules:</p>
+
+        <div class="ti-table-card">
+          <h5>ThreatIntelligenceIndicator</h5>
+          <p>Primary table for all threat intelligence indicators. This is where most TI data lands.</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">KQL — Explore ThreatIntelligenceIndicator</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// View indicator types and counts
+ThreatIntelligenceIndicator
+| where TimeGenerated > ago(7d)
+| where Active == true and ExpirationDateTime > now()
+| summarize Count = count() by IndicatorType = tostring(ThreatType)
+| order by Count desc
+
+// View recent indicators
+ThreatIntelligenceIndicator
+| where TimeGenerated > ago(24h)
+| project 
+    TimeGenerated,
+    IndicatorType = ThreatType,
+    Indicator = coalesce(NetworkIP, DomainName, Url, FileHashValue, EmailSenderAddress),
+    Confidence = ConfidenceScore,
+    Source = SourceSystem,
+    Description,
+    ExpirationDateTime
+| take 100</code></pre>
+          </div>
+          <p style="margin-top: 0.75rem;"><strong>Key columns:</strong></p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li><code>NetworkIP</code>, <code>NetworkSourceIP</code>, <code>NetworkDestinationIP</code> — IP indicators</li>
+            <li><code>DomainName</code> — Domain indicators</li>
+            <li><code>Url</code> — URL indicators</li>
+            <li><code>FileHashValue</code>, <code>FileHashType</code> — Hash indicators (MD5, SHA1, SHA256)</li>
+            <li><code>EmailSenderAddress</code> — Email indicators</li>
+            <li><code>ConfidenceScore</code> — 0-100 confidence level</li>
+            <li><code>ThreatType</code> — Malware, C2, Phishing, etc.</li>
+            <li><code>Active</code> — Boolean, is indicator still valid</li>
+            <li><code>ExpirationDateTime</code> — When indicator expires</li>
+          </ul>
+        </div>
+
+        <div class="ti-table-card">
+          <h5>ThreatIntelligence (Unified Table - Preview)</h5>
+          <p>Newer unified table with additional STIX 2.1 fields. Microsoft is moving toward this format.</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">KQL — ThreatIntelligence Table</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// New unified TI table (preview)
+ThreatIntelligence
+| where TimeGenerated > ago(7d)
+| where IsActive == true
+| summarize Count = count() by IndicatorType
+| order by Count desc</code></pre>
+          </div>
+        </div>
+
+        <h3>2.3 Ingesting TI into Sentinel — Step by Step</h3>
+
+        <h4>Method 1: Microsoft Threat Intelligence Connector (Built-in)</h4>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Enable Microsoft Defender TI Connector</span></div>
+          <pre><code># Steps in Azure Portal:
+1. Navigate to Sentinel → Data Connectors
+2. Search "Microsoft Defender Threat Intelligence"
+3. Click "Open connector page"
+4. Click "Connect"
+
+# What you get:
+• Microsoft's curated threat intelligence
+• Automatic updates — no maintenance
+• Integrated with Defender XDR
+• Free with Sentinel
+
+# Indicators include:
+• Malware hashes from Microsoft AV
+• C2 infrastructure from Defender for Endpoint
+• Phishing domains from Defender for Office
+• Threat actor TTPs</code></pre>
+        </div>
+
+        <h4>Method 2: TAXII Connector (STIX/TAXII Feeds)</h4>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Configure TAXII Connector for AlienVault OTX</span></div>
+          <pre><code># TAXII (Trusted Automated eXchange of Intelligence Information)
+# Standard protocol for sharing TI via STIX format
+
+# AlienVault OTX Example:
+# 1. Get API key from otx.alienvault.com
+# 2. Configure TAXII connector in Sentinel
+
+TAXII Server Settings:
+─────────────────────────────────────────────────────────────
+API Root URL:     https://otx.alienvault.com/taxii/root
+Collection ID:    Get from OTX (your subscribed pulses)
+Username:         Your OTX API key
+Password:         (leave blank for OTX)
+Polling Frequency: Every 1 hour
+
+# Other TAXII-compatible sources:
+• Anomali Limo (free): https://limo.anomali.com/api/v1/taxii2/feeds/
+• MISP (self-hosted): Your MISP server URL
+• Recorded Future: Provided with subscription
+• FS-ISAC: Membership required</code></pre>
+        </div>
+
+        <h4>Method 3: Threat Intelligence Platforms (TIP) Connector</h4>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Connect Anomali ThreatStream or MISP</span></div>
+          <pre><code># TIP connectors push indicators to Sentinel via Graph API
+
+# Anomali ThreatStream:
+1. In Sentinel → Data Connectors → "Threat Intelligence Platforms"
+2. Copy the "Tenant ID" and create Azure AD app registration
+3. In Anomali, configure Microsoft Sentinel integration
+4. Anomali pushes indicators automatically
+
+# MISP (Open Source TIP):
+1. Install MISP-to-Sentinel connector (GitHub)
+2. Configure Azure AD credentials
+3. Run connector on schedule (Logic App or Azure Function)
+
+# Graph API endpoint used:
+POST https://graph.microsoft.com/beta/security/tiIndicators
+
+# Indicator format (STIX 2.1):
+{
+    "action": "alert",
+    "activityGroupNames": ["APT29"],
+    "confidence": 85,
+    "description": "C2 server for APT29",
+    "expirationDateTime": "2024-12-31T00:00:00Z",
+    "externalId": "misp-indicator-12345",
+    "networkDestinationIPv4": "192.168.1.100",
+    "severity": "high",
+    "targetProduct": "Azure Sentinel",
+    "threatType": "C2",
+    "tlpLevel": "amber"
+}</code></pre>
+        </div>
+
+        <h4>Method 4: Upload Custom Indicators via API</h4>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Python — Upload Custom IOCs to Sentinel</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>import requests
+import json
+from datetime import datetime, timedelta
+from azure.identity import ClientSecretCredential
+
+# Azure AD App Registration credentials
+TENANT_ID = "your-tenant-id"
+CLIENT_ID = "your-client-id"
+CLIENT_SECRET = "your-client-secret"
+
+def get_access_token():
+    """Get OAuth token for Graph API"""
+    credential = ClientSecretCredential(TENANT_ID, CLIENT_ID, CLIENT_SECRET)
+    token = credential.get_token("https://graph.microsoft.com/.default")
+    return token.token
+
+def upload_ip_indicator(ip_address, threat_type, description, confidence=80):
+    """Upload a single IP indicator to Sentinel"""
+    
+    token = get_access_token()
+    
+    # Calculate expiration (30 days from now)
+    expiration = (datetime.utcnow() + timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    indicator = {
+        "action": "alert",  # or "block" for blocking action
+        "activityGroupNames": [],
+        "confidence": confidence,
+        "description": description,
+        "expirationDateTime": expiration,
+        "externalId": f"custom-{ip_address}-{datetime.utcnow().timestamp()}",
+        "killChain": [],
+        "malwareFamilyNames": [],
+        "networkDestinationIPv4": ip_address,
+        "severity": "high" if confidence > 75 else "medium",
+        "tags": ["custom-upload", "revflow-soc"],
+        "targetProduct": "Azure Sentinel",
+        "threatType": threat_type,  # "C2", "Malware", "Phishing", etc.
+        "tlpLevel": "amber"  # white, green, amber, red
+    }
+    
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    
+    response = requests.post(
+        "https://graph.microsoft.com/beta/security/tiIndicators",
+        headers=headers,
+        json=indicator
+    )
+    
+    if response.status_code == 201:
+        print(f"✅ Uploaded indicator: {ip_address}")
+        return response.json()
+    else:
+        print(f"❌ Failed: {response.status_code} - {response.text}")
+        return None
+
+def upload_indicators_from_file(filepath):
+    """Bulk upload from CSV file"""
+    import csv
+    
+    with open(filepath, 'r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            upload_ip_indicator(
+                ip_address=row['ip'],
+                threat_type=row['threat_type'],
+                description=row['description'],
+                confidence=int(row.get('confidence', 80))
+            )
+
+# Example usage
+if __name__ == "__main__":
+    # Single indicator
+    upload_ip_indicator(
+        ip_address="192.168.1.100",
+        threat_type="C2",
+        description="Known C2 server from incident IR-2024-001",
+        confidence=95
+    )
+    
+    # Bulk upload
+    # upload_indicators_from_file("custom_iocs.csv")</code></pre>
+        </div>
+
+        <h3>2.4 TI Matching in Analytics Rules (The Enrichment)</h3>
+
+        <p>This is where the magic happens — joining TI indicators with your log data to detect threats.</p>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>How TI Enrichment Works</div>
+          <div class="callout-content">
+            <p><strong>Step 1:</strong> TI connector ingests indicators into ThreatIntelligenceIndicator table</p>
+            <p><strong>Step 2:</strong> Analytics rule runs on schedule (e.g., every 5 minutes)</p>
+            <p><strong>Step 3:</strong> KQL joins log data with TI table on matching field (IP, domain, hash)</p>
+            <p><strong>Step 4:</strong> If match found, incident is created with enriched context</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — TI IP Matching (Firewall Logs)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Analytics Rule: Match Firewall IPs against Threat Intelligence
+// Schedule: Every 5 minutes, look back 5 minutes
+
+let dt_lookBack = 1h;      // How far back to look in logs
+let ioc_lookBack = 14d;    // How far back to look in TI
+
+// Step 1: Get active IP indicators from TI table
+let TI_IPList = ThreatIntelligenceIndicator
+    | where TimeGenerated >= ago(ioc_lookBack)
+    | where isnotempty(NetworkIP) or isnotempty(NetworkSourceIP) or isnotempty(NetworkDestinationIP)
+    | where Active == true and ExpirationDateTime > now()
+    | extend TI_IP = coalesce(NetworkIP, NetworkSourceIP, NetworkDestinationIP)
+    | summarize 
+        TI_Confidence = max(ConfidenceScore),
+        TI_ThreatType = take_any(ThreatType),
+        TI_Description = take_any(Description),
+        TI_Source = take_any(SourceSystem)
+        by TI_IP;
+
+// Step 2: Get firewall logs
+let FirewallLogs = CommonSecurityLog
+    | where TimeGenerated >= ago(dt_lookBack)
+    | where DeviceVendor == "Palo Alto Networks"
+    | where isnotempty(DestinationIP)
+    | extend LogIP = DestinationIP;
+
+// Step 3: Join logs with TI
+FirewallLogs
+| join kind=inner TI_IPList on $left.LogIP == $right.TI_IP
+// Step 4: Enrich with TI context
+| extend 
+    AlertTitle = strcat("TI Match: Connection to malicious IP ", TI_IP),
+    AlertSeverity = case(
+        TI_Confidence >= 80, "High",
+        TI_Confidence >= 50, "Medium",
+        "Low"
+    )
+| project 
+    TimeGenerated,
+    AlertTitle,
+    AlertSeverity,
+    SourceIP,
+    DestinationIP = TI_IP,
+    TI_ThreatType,
+    TI_Description,
+    TI_Confidence,
+    TI_Source,
+    DeviceName,
+    DeviceAction,
+    DestinationPort,
+    ApplicationProtocol
+
+// Result: Each row becomes an incident with full context</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — TI Domain Matching (DNS Logs)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Analytics Rule: Match DNS queries against TI domains
+
+let dt_lookBack = 1h;
+let ioc_lookBack = 14d;
+
+// Get domain indicators
+let TI_Domains = ThreatIntelligenceIndicator
+    | where TimeGenerated >= ago(ioc_lookBack)
+    | where isnotempty(DomainName)
+    | where Active == true and ExpirationDateTime > now()
+    | summarize 
+        TI_Confidence = max(ConfidenceScore),
+        TI_ThreatType = take_any(ThreatType),
+        TI_Description = take_any(Description)
+        by DomainName = tolower(DomainName);
+
+// Get DNS logs
+DnsEvents
+| where TimeGenerated >= ago(dt_lookBack)
+| where isnotempty(Name)
+| extend QueryDomain = tolower(Name)
+// Join on exact match
+| join kind=inner TI_Domains on $left.QueryDomain == $right.DomainName
+// Also check subdomain matches
+| union (
+    DnsEvents
+    | where TimeGenerated >= ago(dt_lookBack)
+    | extend QueryDomain = tolower(Name)
+    | extend BaseDomain = strcat(
+        split(QueryDomain, ".")[-2], ".", 
+        split(QueryDomain, ".")[-1]
+    )
+    | join kind=inner TI_Domains on $left.BaseDomain == $right.DomainName
+)
+| project 
+    TimeGenerated,
+    AlertTitle = strcat("DNS query to malicious domain: ", DomainName),
+    ClientIP,
+    QueryDomain = Name,
+    TI_DomainMatch = DomainName,
+    TI_ThreatType,
+    TI_Description,
+    TI_Confidence,
+    Computer</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — TI File Hash Matching (MDE Events)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Analytics Rule: Match file hashes against TI
+
+let dt_lookBack = 1h;
+let ioc_lookBack = 14d;
+
+// Get hash indicators
+let TI_Hashes = ThreatIntelligenceIndicator
+    | where TimeGenerated >= ago(ioc_lookBack)
+    | where isnotempty(FileHashValue)
+    | where Active == true and ExpirationDateTime > now()
+    | extend HashType = FileHashType, HashValue = tolower(FileHashValue)
+    | summarize 
+        TI_Confidence = max(ConfidenceScore),
+        TI_ThreatType = take_any(ThreatType),
+        TI_Description = take_any(Description),
+        TI_MalwareFamily = take_any(MalwareFamilyNames)
+        by HashValue;
+
+// Match against MDE file events
+DeviceFileEvents
+| where TimeGenerated >= ago(dt_lookBack)
+| where ActionType in ("FileCreated", "FileModified")
+| extend FileHash = tolower(SHA256)  // or SHA1, MD5
+| join kind=inner TI_Hashes on $left.FileHash == $right.HashValue
+| project 
+    TimeGenerated,
+    AlertTitle = strcat("Malicious file detected: ", FileName),
+    DeviceName,
+    FileName,
+    FolderPath,
+    FileHash,
+    TI_ThreatType,
+    TI_MalwareFamily,
+    TI_Description,
+    TI_Confidence,
+    InitiatingProcessFileName,
+    InitiatingProcessAccountName</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 3: SPLUNK TI ARCHITECTURE ==================== -->
+        <h2>3. Splunk — Threat Intelligence Architecture</h2>
+
+        <h3>3.1 TI Data Flow in Splunk</h3>
+
+        <div class="ti-flow">
+          <pre><code>TI SOURCES                           INGESTION                        STORAGE
+────────────────────────────────────────────────────────────────────────────────
+
+┌─────────────────────┐
+│ Commercial Feeds    │──────┐
+│ (Recorded Future)   │      │
+└─────────────────────┘      │
+                             │     ┌───────────────────────┐
+┌─────────────────────┐      │     │                       │     ┌─────────────────────┐
+│ TAXII / STIX        │──────┼────▶│   LOOKUP TABLES       │────▶│ threat_intel.csv   │
+│ Feeds               │      │     │   (KV Store or CSV)   │     │ ip_intel.csv       │
+└─────────────────────┘      │     │                       │     │ domain_intel.csv   │
+                             │     └───────────────────────┘     │ file_intel.csv     │
+┌─────────────────────┐      │                                   └─────────────────────┘
+│ Threat Intel        │──────┤                                            │
+│ Platforms           │      │                                            │
+└─────────────────────┘      │                                            ▼
+                             │                              ┌─────────────────────────────┐
+┌─────────────────────┐      │                              │   CORRELATION SEARCHES      │
+│ Custom IOCs         │──────┘                              │   (SPL with lookup)         │
+│ (CSV Upload)        │                                     │                             │
+└─────────────────────┘                                     │   | lookup threat_intel     │
+                                                            │     ip AS dest_ip           │
+                                                            │   | where isnotnull(threat) │
+                                                            └──────────────┬──────────────┘
+                                                                           │
+                                                                           ▼
+                                                            ┌─────────────────────────────┐
+                                                            │   NOTABLE EVENTS            │
+                                                            │   (Enterprise Security)     │
+                                                            └─────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════════════════
+KEY DIFFERENCE FROM SENTINEL:
+• Splunk: TI stored in LOOKUP TABLES (CSV or KV Store) — separate from indexed data
+• Sentinel: TI stored in LOG TABLES (ThreatIntelligenceIndicator) — same as other logs
+═══════════════════════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <h3>3.2 Splunk Enterprise Security Threat Intelligence Framework</h3>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Splunk ES Threat Intel Framework</div>
+          <div class="callout-content">
+            <p>Splunk Enterprise Security (ES) has a built-in threat intelligence framework that:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Downloads TI from configured sources automatically</li>
+              <li>Normalizes indicators to standard lookup format</li>
+              <li>Provides pre-built correlation searches</li>
+              <li>Manages indicator lifecycle (expiration, deduplication)</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>3.3 Creating Lookup Tables for TI</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Step 1: Create Lookup Table Definition — transforms.conf</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># /opt/splunk/etc/apps/SA-ThreatIntelligence/local/transforms.conf
+
+[ip_intel_lookup]
+filename = ip_intel.csv
+# Fields in the lookup
+fields = ip, threat_type, confidence, source, description, first_seen, last_seen, expiration
+
+[domain_intel_lookup]
+filename = domain_intel.csv
+fields = domain, threat_type, confidence, source, description, first_seen, last_seen, expiration
+
+[file_intel_lookup]
+filename = file_intel.csv
+fields = file_hash, hash_type, threat_type, malware_family, confidence, source, description
+
+[url_intel_lookup]
+filename = url_intel.csv
+fields = url, threat_type, confidence, source, description
+
+# What this does:
+# • Defines lookup table structure
+# • Maps to CSV files in $SPLUNK_HOME/etc/apps/SA-ThreatIntelligence/lookups/</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Step 2: Create Lookup CSV File</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># /opt/splunk/etc/apps/SA-ThreatIntelligence/lookups/ip_intel.csv
+
+ip,threat_type,confidence,source,description,first_seen,last_seen,expiration
+192.168.1.100,C2,95,recorded_future,"APT29 C2 server",2024-01-01,2024-01-15,2024-02-15
+10.0.0.50,Malware,80,alienvault_otx,"Emotet botnet",2024-01-10,2024-01-14,2024-02-14
+203.0.113.25,Scanner,60,internal_research,"Port scanner",2024-01-12,2024-01-12,2024-01-19
+
+# For automated updates, use:
+# 1. Splunk Enterprise Security threat intel modular inputs
+# 2. Scripted input that downloads and updates CSV
+# 3. KV Store with REST API for real-time updates</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Step 3: Use Lookup in SPL Correlation Search</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# SPL: Match Firewall IPs against TI Lookup
+# ═══════════════════════════════════════════════════════════════════════════
+
+index=network sourcetype=pan:traffic earliest=-1h
+| fields _time, src_ip, dest_ip, dest_port, action, app
+# Lookup destination IP in threat intel
+| lookup ip_intel_lookup ip AS dest_ip 
+    OUTPUT threat_type, confidence, source AS ti_source, description AS ti_description
+# Keep only matches
+| where isnotnull(threat_type)
+# Filter by confidence threshold
+| where confidence >= 70
+# Enrich for notable event
+| eval alert_severity = case(
+    confidence >= 90, "critical",
+    confidence >= 75, "high",
+    confidence >= 50, "medium",
+    1==1, "low"
+)
+| table _time, src_ip, dest_ip, dest_port, action, app, threat_type, 
+        confidence, ti_source, ti_description, alert_severity
+
+# ═══════════════════════════════════════════════════════════════════════════
+# This creates notable events in Splunk ES when:
+# • Firewall logs show connection to IP in threat intel lookup
+# • Confidence meets threshold
+# ═══════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <h3>3.4 Automated TI Ingestion with Modular Input</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Python — Modular Input for TI Feed</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># /opt/splunk/etc/apps/TA-ThreatIntel/bin/threatfeed_input.py
+"""
+Modular input that downloads TI from TAXII server and updates lookup
+"""
+
+import sys
+import json
+import csv
+from datetime import datetime
+from taxii2client.v20 import Server, Collection
+from splunklib.modularinput import Script, Scheme, Argument, Event
+
+class ThreatFeedInput(Script):
+    
+    def get_scheme(self):
+        scheme = Scheme("Threat Feed Input")
+        scheme.description = "Downloads threat intelligence from TAXII server"
+        scheme.use_external_validation = False
+        scheme.use_single_instance = True
+        
+        # Configuration arguments
+        scheme.add_argument(Argument(
+            name="taxii_url",
+            title="TAXII Server URL",
+            data_type=Argument.data_type_string,
+            required_on_create=True
+        ))
+        scheme.add_argument(Argument(
+            name="collection_id",
+            title="Collection ID",
+            data_type=Argument.data_type_string,
+            required_on_create=True
+        ))
+        scheme.add_argument(Argument(
+            name="api_key",
+            title="API Key",
+            data_type=Argument.data_type_string,
+            required_on_create=True
+        ))
+        
+        return scheme
+    
+    def stream_events(self, inputs, ew):
+        """Download TI and update lookup table"""
+        
+        for input_name, input_config in inputs.inputs.items():
+            taxii_url = input_config["taxii_url"]
+            collection_id = input_config["collection_id"]
+            api_key = input_config["api_key"]
+            
+            # Connect to TAXII server
+            server = Server(
+                taxii_url,
+                user=api_key,
+                password=""
+            )
+            
+            # Get collection
+            collection = Collection(
+                f"{taxii_url}/collections/{collection_id}",
+                user=api_key,
+                password=""
+            )
+            
+            # Download indicators
+            indicators = collection.get_objects()
+            
+            # Parse STIX objects and write to lookup
+            ip_indicators = []
+            domain_indicators = []
+            
+            for obj in indicators.get("objects", []):
+                if obj.get("type") == "indicator":
+                    pattern = obj.get("pattern", "")
+                    
+                    # Parse IP indicators
+                    if "ipv4-addr:value" in pattern:
+                        ip = self._extract_ip(pattern)
+                        ip_indicators.append({
+                            "ip": ip,
+                            "threat_type": obj.get("labels", ["unknown"])[0],
+                            "confidence": obj.get("confidence", 50),
+                            "source": "taxii_feed",
+                            "description": obj.get("description", ""),
+                            "first_seen": obj.get("created", ""),
+                            "last_seen": obj.get("modified", ""),
+                            "expiration": obj.get("valid_until", "")
+                        })
+                    
+                    # Parse domain indicators
+                    if "domain-name:value" in pattern:
+                        domain = self._extract_domain(pattern)
+                        domain_indicators.append({
+                            "domain": domain,
+                            "threat_type": obj.get("labels", ["unknown"])[0],
+                            "confidence": obj.get("confidence", 50),
+                            "source": "taxii_feed",
+                            "description": obj.get("description", "")
+                        })
+            
+            # Write to lookup CSV files
+            self._write_lookup("ip_intel.csv", ip_indicators)
+            self._write_lookup("domain_intel.csv", domain_indicators)
+            
+            # Log event
+            event = Event()
+            event.data = json.dumps({
+                "action": "ti_update",
+                "ip_count": len(ip_indicators),
+                "domain_count": len(domain_indicators),
+                "timestamp": datetime.utcnow().isoformat()
+            })
+            ew.write_event(event)
+    
+    def _extract_ip(self, pattern):
+        # Parse STIX pattern: [ipv4-addr:value = '192.168.1.1']
+        import re
+        match = re.search(r"ipv4-addr:value\s*=\s*'([^']+)'", pattern)
+        return match.group(1) if match else None
+    
+    def _extract_domain(self, pattern):
+        import re
+        match = re.search(r"domain-name:value\s*=\s*'([^']+)'", pattern)
+        return match.group(1) if match else None
+    
+    def _write_lookup(self, filename, records):
+        lookup_path = f"/opt/splunk/etc/apps/SA-ThreatIntelligence/lookups/{filename}"
+        if records:
+            with open(lookup_path, 'w', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=records[0].keys())
+                writer.writeheader()
+                writer.writerows(records)
+
+if __name__ == "__main__":
+    sys.exit(ThreatFeedInput().run(sys.argv))</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 4: COMPARISON ==================== -->
+        <h2>4. Sentinel vs Splunk TI Comparison</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Aspect</th><th>Microsoft Sentinel</th><th>Splunk Enterprise Security</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>TI Storage</strong></td>
+                <td>Log table (ThreatIntelligenceIndicator)</td>
+                <td>Lookup table (CSV or KV Store)</td>
+              </tr>
+              <tr>
+                <td><strong>TI Ingestion</strong></td>
+                <td>Data Connectors, Graph API, TAXII</td>
+                <td>Modular inputs, scripted inputs, manual upload</td>
+              </tr>
+              <tr>
+                <td><strong>Built-in TI</strong></td>
+                <td>Microsoft Defender TI (included)</td>
+                <td>None (requires subscription)</td>
+              </tr>
+              <tr>
+                <td><strong>Matching Language</strong></td>
+                <td>KQL (join operator)</td>
+                <td>SPL (lookup command)</td>
+              </tr>
+              <tr>
+                <td><strong>Enrichment Location</strong></td>
+                <td>Analytics rules (KQL)</td>
+                <td>Correlation searches (SPL)</td>
+              </tr>
+              <tr>
+                <td><strong>TAXII Support</strong></td>
+                <td>Native connector</td>
+                <td>Add-on or custom script</td>
+              </tr>
+              <tr>
+                <td><strong>Indicator Expiration</strong></td>
+                <td>Built-in (ExpirationDateTime field)</td>
+                <td>Manual or scripted cleanup</td>
+              </tr>
+              <tr>
+                <td><strong>Upload Custom IOCs</strong></td>
+                <td>Graph API, Portal UI</td>
+                <td>CSV upload, REST API (KV Store)</td>
+              </tr>
+              <tr>
+                <td><strong>Code Location</strong></td>
+                <td>KQL in Analytics Rules, Python in Functions</td>
+                <td>SPL in Correlation Searches, Python in inputs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 5: INTERVIEW ANSWERS ==================== -->
+        <h2>5. Interview-Ready Answers</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "How does threat intelligence integration work in Sentinel?"</span></div>
+          <pre><code>"Sentinel has a multi-layered TI architecture:
+
+1. INGESTION: TI comes from three sources:
+   • Microsoft Defender TI — built-in, automatic
+   • TAXII connector — for STIX/TAXII feeds like AlienVault OTX
+   • Graph API — for custom uploads or TIP integration
+
+2. STORAGE: Indicators land in ThreatIntelligenceIndicator table
+   with fields like NetworkIP, DomainName, FileHashValue, 
+   ConfidenceScore, ThreatType, ExpirationDateTime
+
+3. MATCHING: Analytics rules join log tables with TI table
+   using KQL. For example:
+   
+   CommonSecurityLog
+   | join kind=inner (
+       ThreatIntelligenceIndicator
+       | where Active == true
+   ) on $left.DestinationIP == $right.NetworkIP
+
+4. OUTPUT: When match found, incident is created with 
+   enriched context — TI source, confidence, threat type
+
+The key advantage is Microsoft TI is included free and updates
+automatically from Defender products across their entire customer base."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "Where do you write the code for TI enrichment?"</span></div>
+          <pre><code>"It depends on the platform:
+
+SENTINEL:
+• Analytics Rules — KQL that joins logs with TI table
+• Azure Functions — Python for custom TI ingestion or enrichment
+• Logic Apps — Low-code automation for TI workflows
+• Graph API scripts — For bulk indicator upload
+
+SPLUNK:
+• Correlation Searches — SPL with lookup command
+• Modular Inputs — Python for automated TI download
+• transforms.conf — Defines lookup table structure
+• savedsearches.conf — Stores correlation search definitions
+
+The pattern is similar: both platforms use a lookup/join 
+operation to match IOCs against log data. The difference is
+Sentinel uses log tables while Splunk uses lookup tables."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "Do you create a separate table for threat intelligence?"</span></div>
+          <pre><code>"Different approach in each platform:
+
+SENTINEL: 
+No, you don't create the table. ThreatIntelligenceIndicator is 
+a pre-existing system table. When you enable TI connectors or 
+upload via API, indicators automatically land there. You can 
+also use the newer ThreatIntelligence unified table for STIX 2.1.
+
+SPLUNK:
+Yes, you create lookup tables. These are CSV files or KV Store 
+collections that you define in transforms.conf. Unlike Sentinel,
+lookup tables are NOT indexed data — they're reference tables
+joined at search time.
+
+Key difference: 
+• Sentinel TI is indexed and searchable like any log
+• Splunk TI is reference data, not indexed events
+
+This means in Sentinel you can query TI history:
+'ThreatIntelligenceIndicator | where TimeGenerated > ago(90d)'
+
+In Splunk, lookups don't have historical versioning by default."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "How do you handle indicator expiration?"</span></div>
+          <pre><code>"TI indicators have limited lifespan. Attackers change infrastructure.
+
+SENTINEL:
+Built-in expiration handling. Every indicator has ExpirationDateTime.
+In analytics rules, filter: 'where ExpirationDateTime > now()'
+Expired indicators remain in table but are flagged Active = false.
+
+SPLUNK:
+Manual or scripted. Options:
+1. Add 'expiration' field to lookup CSV
+2. Correlation search filters: '| where expiration > now()'
+3. Scheduled search to remove expired entries:
+   
+   | inputlookup ip_intel.csv
+   | where strptime(expiration, '%Y-%m-%d') > now()
+   | outputlookup ip_intel.csv
+
+For RevFlow, we set 30-day default expiration for IOCs without 
+explicit dates. Commercial feeds like Recorded Future include 
+expiration in their data."</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="parsing-deep-dive.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Parsing Deep Dive</span></a>
+          <a href="detection-engineering.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Detection Engineering →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>
