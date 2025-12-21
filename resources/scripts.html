@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scripts & Queries | Resources</title>
+  <title>Scripts & Automation | Resources</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -85,21 +85,21 @@
         <div class="nav-divider"></div>
         <div class="nav-section">
           <div class="nav-section-title">Resources</div>
-          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
-          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
-          <a href="../resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
-          <a href="../resources/scripts.html" class="nav-item active">Scripts & Queries</a>
-          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
-          <a href="../resources/templates.html" class="nav-item">Templates</a>
-          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="timeline.html" class="nav-item">Project Timeline</a>
+          <a href="raci.html" class="nav-item">RACI Matrix</a>
+          <a href="infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="scripts.html" class="nav-item active">Scripts & Automation</a>
+          <a href="data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="templates.html" class="nav-item">Templates</a>
+          <a href="splunk-reference.html" class="nav-item">Splunk Reference</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
           <div class="nav-section-title">Runbooks</div>
-          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
-          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
-          <a href="../resources/incident-response.html" class="nav-item">Incident Response</a>
-          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+          <a href="mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="incident-response.html" class="nav-item">Incident Response</a>
+          <a href="operational-procedures.html" class="nav-item">Operational Procedures</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -118,163 +118,1109 @@
         </div>
       </nav>
     </aside>
-    <button class="mobile-menu-toggle" aria-label="Toggle menu">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
-    </button>
-    <div class="sidebar-overlay"></div>
+
     <main class="main-content">
       <div class="content-wrapper">
         <nav class="breadcrumb">
           <a href="../index.html">Home</a>
           <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-current">Scripts & Queries</span>
+          <a href="infrastructure-reference.html">Resources</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Scripts & Automation</span>
         </nav>
 
         <div class="page-header">
-          <h1>Scripts & Queries</h1>
-          <p class="intro-text">Production-ready KQL queries, PowerShell scripts, and CLI commands used throughout the migration.</p>
+          <h1>Scripts & Automation</h1>
+          <div class="page-header-meta">
+            <span class="page-badge siem">SIEM</span>
+            <span class="page-badge edr" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">EDR</span>
+            <span class="page-badge dlp" style="background: rgba(139, 92, 246, 0.15); color: #8b5cf6;">DLP</span>
+          </div>
+          <p class="intro-text">Production-ready scripts and automation for the security transformation. Each script includes <strong>where it runs</strong>, <strong>prerequisites</strong>, and <strong>use case</strong>.</p>
         </div>
 
-        <h2>KQL Queries</h2>
+        <!-- ==================== SECTION 1: EXECUTION ENVIRONMENTS ==================== -->
+        <h2>1. Execution Environment Reference</h2>
 
-        <h3>Ingestion Health Check</h3>
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Where Scripts Run</div>
+          <div class="callout-content">
+            <p>Understanding execution context is critical. The same PowerShell command may behave differently depending on where it runs.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Environment</th><th>Language</th><th>Use Case</th><th>Prerequisites</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Sentinel Portal</strong></td>
+                <td>KQL</td>
+                <td>Log queries, analytics rules, workbooks</td>
+                <td>Log Analytics Reader role, Sentinel workspace access</td>
+              </tr>
+              <tr>
+                <td><strong>XDR Advanced Hunting</strong></td>
+                <td>KQL</td>
+                <td>Query MDE/MDI/MDO/MDA raw telemetry</td>
+                <td>Security Reader role, M365 Defender access</td>
+              </tr>
+              <tr>
+                <td><strong>Azure Cloud Shell</strong></td>
+                <td>PowerShell, Azure CLI, Python</td>
+                <td>Azure resource management, Sentinel config</td>
+                <td>Azure subscription access, appropriate RBAC</td>
+              </tr>
+              <tr>
+                <td><strong>Admin Workstation</strong></td>
+                <td>PowerShell</td>
+                <td>M365/Exchange/Compliance management</td>
+                <td>ExchangeOnlineManagement, Az modules installed</td>
+              </tr>
+              <tr>
+                <td><strong>Target Endpoint</strong></td>
+                <td>PowerShell, CMD</td>
+                <td>MDE diagnostics, agent troubleshooting</td>
+                <td>Local admin, run as Administrator</td>
+              </tr>
+              <tr>
+                <td><strong>Azure Function</strong></td>
+                <td>Python, PowerShell</td>
+                <td>Scheduled automation, API integrations</td>
+                <td>Function App, Managed Identity, API permissions</td>
+              </tr>
+              <tr>
+                <td><strong>Logic App</strong></td>
+                <td>Visual workflow</td>
+                <td>SOAR playbooks, incident response automation</td>
+                <td>Logic App, API connections, Sentinel integration</td>
+              </tr>
+              <tr>
+                <td><strong>Domain Controller</strong></td>
+                <td>PowerShell</td>
+                <td>AD queries, GPO management</td>
+                <td>Domain Admin or delegated permissions</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 2: KQL - SENTINEL ==================== -->
+        <h2>2. KQL Queries — Microsoft Sentinel</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Execution Context</div>
+          <div class="callout-content">
+            <p><strong>Where:</strong> Azure Portal → Microsoft Sentinel → Logs (or Workbooks, Analytics Rules)</p>
+            <p><strong>Access:</strong> Log Analytics Reader + Microsoft Sentinel Reader roles</p>
+          </div>
+        </div>
+
+        <h3>2.1 Ingestion Health & Cost Monitoring</h3>
+
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code>// Check data freshness across all tables
+          <div class="code-header"><span class="code-lang">KQL — Sentinel Logs</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// ═══════════════════════════════════════════════════════════════════════════
+// INGESTION VOLUME BY TABLE (Last 24h)
+// Use: Monitor daily ingestion, identify unexpected volume spikes
+// ═══════════════════════════════════════════════════════════════════════════
+Usage
+| where TimeGenerated > ago(24h)
+| where IsBillable == true
+| summarize 
+    TotalGB = round(sum(Quantity) / 1024, 2),
+    EstimatedCost = round(sum(Quantity) / 1024 * 2.76, 2)
+by DataType
+| order by TotalGB desc
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DATA FRESHNESS CHECK
+// Use: Verify all tables are receiving data, detect ingestion delays
+// ═══════════════════════════════════════════════════════════════════════════
 union withsource=TableName *
 | where TimeGenerated > ago(24h)
 | summarize 
     EventCount = count(), 
     LastEvent = max(TimeGenerated),
     FirstEvent = min(TimeGenerated)
-    by TableName
+by TableName
 | extend HoursSinceLastEvent = datetime_diff('hour', now(), LastEvent)
-| order by HoursSinceLastEvent desc</code></pre>
-        </div>
+| where HoursSinceLastEvent > 1
+| order by HoursSinceLastEvent desc
 
-        <h3>Cost Analysis by Table</h3>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code>// Monthly cost breakdown by data type
-Usage
-| where TimeGenerated > ago(30d)
-| where IsBillable == true
+// ═══════════════════════════════════════════════════════════════════════════
+// INGESTION LATENCY
+// Use: Check if data is arriving with acceptable delay
+// ═══════════════════════════════════════════════════════════════════════════
+SigninLogs
+| where TimeGenerated > ago(1h)
+| extend IngestionDelay = ingestion_time() - TimeGenerated
 | summarize 
-    TotalGB = sum(Quantity) / 1000,
-    EstimatedCost = sum(Quantity) / 1000 * 2.76
-    by DataType
-| order by TotalGB desc
-| extend TotalGB = round(TotalGB, 2), EstimatedCost = round(EstimatedCost, 2)</code></pre>
+    AvgDelayMinutes = round(avg(IngestionDelay) / 1m, 1),
+    MaxDelayMinutes = round(max(IngestionDelay) / 1m, 1),
+    P95DelayMinutes = round(percentile(IngestionDelay, 95) / 1m, 1)
+| extend Status = iff(P95DelayMinutes < 15, "✓ Healthy", "⚠ Review")</code></pre>
         </div>
 
-        <h3>Failed Sign-ins by User</h3>
+        <h3>2.2 Identity Investigation Queries</h3>
+
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code>SigninLogs
+          <div class="code-header"><span class="code-lang">KQL — Sentinel Logs</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// ═══════════════════════════════════════════════════════════════════════════
+// FAILED SIGN-INS BY USER (Brute Force Detection)
+// Use: Identify accounts under password spray or brute force attack
+// ═══════════════════════════════════════════════════════════════════════════
+SigninLogs
 | where TimeGenerated > ago(24h)
-| where ResultType != "0"
+| where ResultType != "0"  // Non-zero = failure
 | summarize 
     FailedCount = count(),
+    DistinctIPs = dcount(IPAddress),
     FailureCodes = make_set(ResultType),
-    IPAddresses = make_set(IPAddress)
-    by UserPrincipalName
-| where FailedCount > 5
-| order by FailedCount desc</code></pre>
-        </div>
+    IPAddresses = make_set(IPAddress, 5)
+by UserPrincipalName
+| where FailedCount > 10
+| order by FailedCount desc
 
-        <h3>User Activity Timeline</h3>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code>// Comprehensive user activity for investigation
+// ═══════════════════════════════════════════════════════════════════════════
+// USER ACTIVITY TIMELINE (Investigation)
+// Use: Build activity timeline for a specific user during incident
+// ═══════════════════════════════════════════════════════════════════════════
 let targetUser = "user@revflow.com";
 let timeRange = 24h;
 union SigninLogs, AuditLogs, OfficeActivity
 | where TimeGenerated > ago(timeRange)
 | where UserPrincipalName =~ targetUser or UserId =~ targetUser
-| project TimeGenerated, 
+| project 
+    TimeGenerated, 
     Source = $table,
     Activity = coalesce(OperationName, Operation, "Sign-in"),
-    Result = coalesce(ResultType, ResultStatus, "Success"),
+    Result = coalesce(tostring(ResultType), ResultStatus, "Success"),
+    IPAddress = coalesce(IPAddress, ClientIP, "N/A"),
     Details = coalesce(ResultDescription, "")
-| order by TimeGenerated desc</code></pre>
+| order by TimeGenerated desc
+
+// ═══════════════════════════════════════════════════════════════════════════
+// RECENT ADMIN ROLE ASSIGNMENTS
+// Use: Audit privileged role changes for compliance/investigation
+// ═══════════════════════════════════════════════════════════════════════════
+AuditLogs
+| where TimeGenerated > ago(7d)
+| where OperationName has "Add member to role"
+| where TargetResources[0].modifiedProperties[1].newValue has_any 
+    ("Global Administrator", "Security Administrator", "Exchange Administrator")
+| extend 
+    Actor = InitiatedBy.user.userPrincipalName,
+    TargetUser = TargetResources[0].userPrincipalName,
+    RoleAssigned = tostring(TargetResources[0].modifiedProperties[1].newValue)
+| project TimeGenerated, Actor, TargetUser, RoleAssigned</code></pre>
         </div>
 
-        <h2>PowerShell Scripts</h2>
+        <h3>2.3 XDR Alert Correlation</h3>
 
-        <h3>Check MDE Onboarding Status</h3>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">PowerShell</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code># Check if device is onboarded to MDE
+          <div class="code-header"><span class="code-lang">KQL — Sentinel Logs</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// ═══════════════════════════════════════════════════════════════════════════
+// XDR ALERTS WITH RECENT IDENTITY CHANGES
+// Use: Correlate XDR attack detection with identity control-plane changes
+// This is what Sentinel provides that XDR alone cannot
+// ═══════════════════════════════════════════════════════════════════════════
+let xdrAlerts = SecurityAlert
+| where TimeGenerated > ago(24h)
+| where ProductName == "Microsoft 365 Defender"
+| extend AlertUser = tostring(parse_json(ExtendedProperties).["User Account"])
+| project AlertTime = TimeGenerated, AlertName, AlertUser, Severity;
+
+let recentChanges = AuditLogs
+| where TimeGenerated > ago(48h)
+| where OperationName has_any ("Reset password", "Update user", "Add member to role", "Change user password")
+| project ChangeTime = TimeGenerated, ChangeType = OperationName, 
+    ChangedUser = TargetResources[0].userPrincipalName;
+
+xdrAlerts
+| join kind=inner (recentChanges) on $left.AlertUser == $right.ChangedUser
+| where ChangeTime between (AlertTime - 24h .. AlertTime)
+| project AlertTime, AlertName, Severity, AlertUser, ChangeTime, ChangeType
+| order by AlertTime desc
+
+// ═══════════════════════════════════════════════════════════════════════════
+// XDR ALERT + MFA METHOD CHANGE (Account Compromise Indicator)
+// Use: Detect if attacker changed MFA after compromising account
+// ═══════════════════════════════════════════════════════════════════════════
+let mfaChanges = AuditLogs
+| where TimeGenerated > ago(7d)
+| where OperationName has_any ("User registered security info", "User deleted security info")
+| extend TargetUser = TargetResources[0].userPrincipalName
+| project MFAChangeTime = TimeGenerated, TargetUser, MFAOperation = OperationName;
+
+SecurityAlert
+| where TimeGenerated > ago(7d)
+| where ProductName == "Microsoft 365 Defender"
+| extend AlertUser = tostring(parse_json(ExtendedProperties).["User Account"])
+| join kind=inner (mfaChanges) on $left.AlertUser == $right.TargetUser
+| where MFAChangeTime between (TimeGenerated - 24h .. TimeGenerated + 24h)
+| project TimeGenerated, AlertName, Severity, AlertUser, MFAChangeTime, MFAOperation</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 3: KQL - XDR ==================== -->
+        <h2>3. KQL Queries — XDR Advanced Hunting</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Execution Context</div>
+          <div class="callout-content">
+            <p><strong>Where:</strong> security.microsoft.com → Hunting → Advanced Hunting</p>
+            <p><strong>Access:</strong> Security Reader role minimum, Security Operator for actions</p>
+            <p><strong>Note:</strong> These query raw MDE/MDI/MDO/MDA telemetry — NOT ingested to Sentinel to save cost</p>
+          </div>
+        </div>
+
+        <h3>3.1 Endpoint Investigation</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — XDR Advanced Hunting</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// ═══════════════════════════════════════════════════════════════════════════
+// PROCESS TREE FOR SUSPICIOUS ACTIVITY
+// Use: Build full process ancestry during malware/attack investigation
+// Why XDR: This data stays in XDR, not ingested to Sentinel
+// ═══════════════════════════════════════════════════════════════════════════
+DeviceProcessEvents
+| where Timestamp > ago(24h)
+| where DeviceName == "WORKSTATION01"
+| where InitiatingProcessFileName in~ ("powershell.exe", "cmd.exe", "wscript.exe")
+| project 
+    Timestamp,
+    DeviceName,
+    ParentProcess = InitiatingProcessFileName,
+    ParentCommandLine = InitiatingProcessCommandLine,
+    ChildProcess = FileName,
+    ChildCommandLine = ProcessCommandLine,
+    AccountName
+| order by Timestamp desc
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ENCODED POWERSHELL DETECTION
+// Use: Find obfuscated PowerShell execution (common in attacks)
+// ═══════════════════════════════════════════════════════════════════════════
+DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where FileName =~ "powershell.exe"
+| where ProcessCommandLine has_any ("-enc", "-e ", "-encodedcommand", "frombase64")
+| project 
+    Timestamp, 
+    DeviceName, 
+    AccountName,
+    ProcessCommandLine,
+    InitiatingProcessFileName
+| order by Timestamp desc
+
+// ═══════════════════════════════════════════════════════════════════════════
+// LSASS ACCESS (Credential Theft Indicator)
+// Use: Detect credential dumping attempts
+// ═══════════════════════════════════════════════════════════════════════════
+DeviceProcessEvents
+| where Timestamp > ago(24h)
+| where FileName != "lsass.exe"
+| where ProcessCommandLine has "lsass" or InitiatingProcessCommandLine has "lsass"
+| project 
+    Timestamp,
+    DeviceName,
+    AccountName,
+    FileName,
+    ProcessCommandLine,
+    InitiatingProcessFileName
+| order by Timestamp desc</code></pre>
+        </div>
+
+        <h3>3.2 Network & Lateral Movement</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — XDR Advanced Hunting</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// ═══════════════════════════════════════════════════════════════════════════
+// OUTBOUND CONNECTIONS TO RARE DESTINATIONS
+// Use: Identify potential C2 communication
+// ═══════════════════════════════════════════════════════════════════════════
+DeviceNetworkEvents
+| where Timestamp > ago(24h)
+| where ActionType == "ConnectionSuccess"
+| where RemoteIPType == "Public"
+| summarize 
+    ConnectionCount = count(),
+    Devices = make_set(DeviceName, 5)
+by RemoteIP, RemotePort
+| where ConnectionCount < 5  // Rare = suspicious
+| order by ConnectionCount asc
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SMB LATERAL MOVEMENT DETECTION
+// Use: Identify potential lateral movement via SMB
+// ═══════════════════════════════════════════════════════════════════════════
+DeviceNetworkEvents
+| where Timestamp > ago(24h)
+| where RemotePort == 445
+| where LocalIP != RemoteIP
+| summarize 
+    TargetCount = dcount(RemoteIP),
+    Targets = make_set(RemoteIP, 10)
+by DeviceName, AccountName
+| where TargetCount > 5
+| order by TargetCount desc</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 4: POWERSHELL - ENDPOINT ==================== -->
+        <h2>4. PowerShell — Target Endpoint</h2>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Execution Context</div>
+          <div class="callout-content">
+            <p><strong>Where:</strong> Run directly on Windows endpoint (server or workstation)</p>
+            <p><strong>Access:</strong> Local Administrator, run PowerShell as Administrator</p>
+            <p><strong>Use Case:</strong> MDE troubleshooting, agent diagnostics, local configuration</p>
+          </div>
+        </div>
+
+        <h3>4.1 MDE Onboarding Diagnostics</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell — Run on Endpoint as Admin</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# MDE ONBOARDING STATUS CHECK
+# Where: Run on target Windows endpoint
+# Access: Local Administrator
+# Use: Verify MDE agent is properly onboarded and communicating
+# ═══════════════════════════════════════════════════════════════════════════
+
 function Get-MDEOnboardingStatus {
+    Write-Host "`n=== MDE ONBOARDING STATUS ===" -ForegroundColor Cyan
+    
+    # Check registry for onboarding state
     $regPath = "HKLM:\SOFTWARE\Microsoft\Windows Advanced Threat Protection\Status"
     
     try {
         $status = Get-ItemProperty -Path $regPath -ErrorAction Stop
         
         if ($status.OnboardingState -eq 1) {
-            Write-Host "✓ Device is onboarded to MDE" -ForegroundColor Green
+            Write-Host "✓ Onboarding State: ONBOARDED" -ForegroundColor Green
             Write-Host "  Organization ID: $($status.OrgId)"
+            Write-Host "  Last Connected: $($status.LastConnected)"
         } else {
-            Write-Host "✗ Device is NOT onboarded" -ForegroundColor Red
+            Write-Host "✗ Onboarding State: NOT ONBOARDED" -ForegroundColor Red
         }
     }
     catch {
-        Write-Host "✗ MDE not installed or not configured" -ForegroundColor Red
+        Write-Host "✗ MDE registry keys not found - agent may not be installed" -ForegroundColor Red
     }
     
     # Check Sense service
-    $sense = Get-Service -Name Sense -ErrorAction SilentlyContinue
-    if ($sense) {
-        Write-Host "  Sense Service: $($sense.Status)"
+    Write-Host "`n=== SERVICE STATUS ===" -ForegroundColor Cyan
+    $services = @("Sense", "WdNisSvc", "WinDefend", "SecurityHealthService")
+    
+    foreach ($svc in $services) {
+        $service = Get-Service -Name $svc -ErrorAction SilentlyContinue
+        if ($service) {
+            $color = if ($service.Status -eq "Running") { "Green" } else { "Red" }
+            Write-Host "  $($svc): $($service.Status)" -ForegroundColor $color
+        } else {
+            Write-Host "  $($svc): NOT FOUND" -ForegroundColor Yellow
+        }
+    }
+    
+    # Check connectivity
+    Write-Host "`n=== CONNECTIVITY TEST ===" -ForegroundColor Cyan
+    $endpoints = @(
+        "winatp-gw-cus.microsoft.com",
+        "winatp-gw-eus.microsoft.com", 
+        "login.microsoftonline.com"
+    )
+    
+    foreach ($endpoint in $endpoints) {
+        $result = Test-NetConnection -ComputerName $endpoint -Port 443 -WarningAction SilentlyContinue
+        $status = if ($result.TcpTestSucceeded) { "✓" } else { "✗" }
+        $color = if ($result.TcpTestSucceeded) { "Green" } else { "Red" }
+        Write-Host "  $status $endpoint" -ForegroundColor $color
     }
 }
 
 Get-MDEOnboardingStatus</code></pre>
         </div>
 
-        <h3>Bulk DCR Association</h3>
+        <h3>4.2 Run MDE Client Analyzer</h3>
+
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">PowerShell</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code># Associate DCR with multiple VMs
-$dcrId = "/subscriptions/xxx/resourceGroups/rg-sentinel/providers/Microsoft.Insights/dataCollectionRules/DCR-WindowsSecurity"
-$vms = Get-AzVM -ResourceGroupName "rg-servers"
+          <div class="code-header"><span class="code-lang">PowerShell — Run on Endpoint as Admin</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# DOWNLOAD AND RUN MDE CLIENT ANALYZER
+# Where: Run on target Windows endpoint
+# Access: Local Administrator
+# Use: Comprehensive MDE health check with detailed report
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Create working directory
+$workDir = "C:\MDEAnalyzer"
+New-Item -ItemType Directory -Force -Path $workDir | Out-Null
+Set-Location $workDir
+
+# Download latest Client Analyzer
+$downloadUrl = "https://aka.ms/MDEClientAnalyzer"
+$zipPath = "$workDir\MDEClientAnalyzer.zip"
+
+Write-Host "Downloading MDE Client Analyzer..." -ForegroundColor Cyan
+Invoke-WebRequest -Uri $downloadUrl -OutFile $zipPath
+
+# Extract
+Expand-Archive -Path $zipPath -DestinationPath $workDir -Force
+
+# Run analyzer (generates detailed HTML report)
+Write-Host "Running analyzer (this may take several minutes)..." -ForegroundColor Cyan
+& "$workDir\MDEClientAnalyzer.cmd"
+
+Write-Host "`nAnalysis complete. Check $workDir for results." -ForegroundColor Green
+Write-Host "Look for MDEClientAnalyzerResult.htm for detailed report." -ForegroundColor Yellow</code></pre>
+        </div>
+
+        <h3>4.3 Force MDE Policy Sync</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell — Run on Endpoint as Admin</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# FORCE MDE POLICY REFRESH
+# Where: Run on target Windows endpoint  
+# Access: Local Administrator
+# Use: Force device to pull latest policies from MDE cloud
+# ═══════════════════════════════════════════════════════════════════════════
+
+Write-Host "Forcing MDE policy refresh..." -ForegroundColor Cyan
+
+# Restart Sense service to force reconnection
+Restart-Service -Name Sense -Force
+
+# Trigger Intune sync if MDM managed
+$mdmNamespace = "root\cimv2\mdm\dmmap"
+try {
+    $session = New-CimSession
+    $params = New-Object Microsoft.Management.Infrastructure.CimMethodParametersCollection
+    Invoke-CimMethod -Namespace $mdmNamespace -ClassName "MDM_DeviceAction" -MethodName "SyncML" -CimSession $session
+    Write-Host "✓ Intune sync triggered" -ForegroundColor Green
+} catch {
+    Write-Host "Note: Device may not be Intune managed" -ForegroundColor Yellow
+}
+
+# Wait and verify
+Start-Sleep -Seconds 30
+$sense = Get-Service -Name Sense
+Write-Host "Sense service status: $($sense.Status)" -ForegroundColor Cyan</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 5: POWERSHELL - AZURE ==================== -->
+        <h2>5. PowerShell — Azure Management</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Execution Context</div>
+          <div class="callout-content">
+            <p><strong>Where:</strong> Azure Cloud Shell (PowerShell) OR Admin workstation with Az module</p>
+            <p><strong>Access:</strong> Appropriate Azure RBAC (Contributor, Security Admin, etc.)</p>
+            <p><strong>Prerequisites:</strong> <code>Install-Module Az -Scope CurrentUser</code></p>
+          </div>
+        </div>
+
+        <h3>5.1 Sentinel Workspace Management</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell — Azure Cloud Shell / Admin Workstation</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# SENTINEL WORKSPACE CONFIGURATION
+# Where: Azure Cloud Shell or Admin workstation with Az module
+# Access: Log Analytics Contributor + Microsoft Sentinel Contributor
+# Use: Configure workspace settings, retention, commitment tier
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Connect to Azure (skip in Cloud Shell - already authenticated)
+# Connect-AzAccount
+
+# Variables
+$resourceGroup = "rg-sentinel-prod"
+$workspaceName = "law-sentinel-prod"
+$location = "canadacentral"
+
+# Create Log Analytics Workspace
+New-AzOperationalInsightsWorkspace `
+    -ResourceGroupName $resourceGroup `
+    -Name $workspaceName `
+    -Location $location `
+    -Sku "PerGB2018" `
+    -RetentionInDays 90
+
+# Set commitment tier (100 GB/day for ~50% discount)
+Set-AzOperationalInsightsWorkspace `
+    -ResourceGroupName $resourceGroup `
+    -Name $workspaceName `
+    -CapacityReservationLevel 100
+
+# Enable Sentinel on workspace
+New-AzSentinelOnboardingState `
+    -ResourceGroupName $resourceGroup `
+    -WorkspaceName $workspaceName
+
+Write-Host "✓ Sentinel workspace configured" -ForegroundColor Green</code></pre>
+        </div>
+
+        <h3>5.2 Bulk DCR Association</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell — Azure Cloud Shell / Admin Workstation</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# ASSOCIATE DCR WITH MULTIPLE VMs
+# Where: Azure Cloud Shell or Admin workstation
+# Access: Monitoring Contributor on VMs and DCR
+# Use: Bulk associate Data Collection Rule with Azure VMs
+# ═══════════════════════════════════════════════════════════════════════════
+
+$dcrId = "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rg-sentinel-prod/providers/Microsoft.Insights/dataCollectionRules/DCR-WindowsSecurity"
+$targetResourceGroup = "rg-servers-prod"
+
+# Get all VMs in resource group
+$vms = Get-AzVM -ResourceGroupName $targetResourceGroup
+
+Write-Host "Found $($vms.Count) VMs to associate" -ForegroundColor Cyan
 
 foreach ($vm in $vms) {
-    $associationName = "assoc-$($vm.Name)"
+    $associationName = "configurationAccessEndpoint"
     
-    New-AzDataCollectionRuleAssociation `
-        -TargetResourceId $vm.Id `
-        -AssociationName $associationName `
-        -RuleId $dcrId
-    
-    Write-Host "Associated DCR with $($vm.Name)"
-}</code></pre>
+    try {
+        New-AzDataCollectionRuleAssociation `
+            -TargetResourceId $vm.Id `
+            -AssociationName $associationName `
+            -RuleId $dcrId `
+            -ErrorAction Stop
+        
+        Write-Host "✓ Associated DCR with $($vm.Name)" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "✗ Failed to associate $($vm.Name): $($_.Exception.Message)" -ForegroundColor Red
+    }
+}
+
+Write-Host "`nDCR association complete" -ForegroundColor Cyan</code></pre>
         </div>
 
-        <h2>Azure CLI Commands</h2>
+        <h3>5.3 Enable Entra ID Diagnostic Settings</h3>
 
-        <h3>Enable Diagnostic Settings</h3>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">Azure CLI</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code># Enable Azure Activity Log to Sentinel
-az monitor diagnostic-settings subscription create \
-  --name "SendToSentinel" \
-  --subscription "YOUR_SUB_ID" \
-  --workspace "/subscriptions/xxx/resourceGroups/rg-sentinel/providers/Microsoft.OperationalInsights/workspaces/sentinel-workspace" \
-  --logs '[{"category": "Administrative", "enabled": true},{"category": "Security", "enabled": true},{"category": "Alert", "enabled": true}]'</code></pre>
+          <div class="code-header"><span class="code-lang">PowerShell — Azure Cloud Shell / Admin Workstation</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# CONFIGURE ENTRA ID DIAGNOSTIC SETTINGS
+# Where: Azure Cloud Shell or Admin workstation
+# Access: Global Administrator or Security Administrator
+# Use: Send Entra ID logs to Sentinel (AuditLogs, SigninLogs, etc.)
+# ═══════════════════════════════════════════════════════════════════════════
+
+$workspaceId = "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rg-sentinel-prod/providers/Microsoft.OperationalInsights/workspaces/law-sentinel-prod"
+
+# Define log categories to enable
+$logs = @(
+    @{category = "AuditLogs"; enabled = $true}
+    @{category = "SignInLogs"; enabled = $true}
+    @{category = "NonInteractiveUserSignInLogs"; enabled = $true}
+    @{category = "ServicePrincipalSignInLogs"; enabled = $true}
+    @{category = "ManagedIdentitySignInLogs"; enabled = $true}
+    @{category = "ProvisioningLogs"; enabled = $true}
+    @{category = "RiskyUsers"; enabled = $true}
+    @{category = "UserRiskEvents"; enabled = $true}
+)
+
+# Note: This requires Microsoft.Insights RP and appropriate permissions
+# Use Azure CLI or Portal if this doesn't work:
+# az monitor diagnostic-settings create --name "EntraID-to-Sentinel" ...
+
+Write-Host "Entra ID diagnostic settings must be configured via:" -ForegroundColor Yellow
+Write-Host "  1. Azure Portal → Microsoft Entra ID → Diagnostic settings" -ForegroundColor Cyan
+Write-Host "  2. Or Azure CLI: az monitor diagnostic-settings create" -ForegroundColor Cyan</code></pre>
         </div>
 
-        <h3>List Sentinel Connectors</h3>
+        <!-- ==================== SECTION 6: POWERSHELL - M365/SECURITY ==================== -->
+        <h2>6. PowerShell — M365 & Security Administration</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Execution Context</div>
+          <div class="callout-content">
+            <p><strong>Where:</strong> Admin workstation (NOT Azure Cloud Shell for Exchange/Security)</p>
+            <p><strong>Modules:</strong> <code>Install-Module ExchangeOnlineManagement</code>, <code>Install-Module Microsoft.Graph</code></p>
+            <p><strong>Access:</strong> Global Admin, Security Admin, or Exchange Admin</p>
+          </div>
+        </div>
+
+        <h3>6.1 DLP Policy Management</h3>
+
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">Azure CLI</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code># List all data connectors in Sentinel workspace
+          <div class="code-header"><span class="code-lang">PowerShell — Admin Workstation (Security & Compliance)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# DLP POLICY AUDIT REPORT
+# Where: Admin workstation with ExchangeOnlineManagement module
+# Access: Compliance Administrator or Global Administrator
+# Use: Export all DLP policies and rules for audit/review
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Connect to Security & Compliance PowerShell
+Connect-IPPSSession -UserPrincipalName admin@revflow.com
+
+# Get all DLP policies
+$policies = Get-DlpCompliancePolicy
+
+Write-Host "Found $($policies.Count) DLP policies" -ForegroundColor Cyan
+
+# Export policy details
+$policyReport = foreach ($policy in $policies) {
+    $rules = Get-DlpComplianceRule -Policy $policy.Name
+    
+    foreach ($rule in $rules) {
+        [PSCustomObject]@{
+            PolicyName = $policy.Name
+            PolicyMode = $policy.Mode
+            RuleName = $rule.Name
+            RulePriority = $rule.Priority
+            RuleDisabled = $rule.Disabled
+            ContentContains = ($rule.ContentContainsSensitiveInformation | ConvertTo-Json -Compress)
+            Actions = $rule.BlockAccess
+        }
+    }
+}
+
+# Export to CSV
+$policyReport | Export-Csv -Path "C:\Reports\DLP_Policy_Audit.csv" -NoTypeInformation
+Write-Host "✓ Report exported to C:\Reports\DLP_Policy_Audit.csv" -ForegroundColor Green
+
+# Disconnect
+Disconnect-ExchangeOnline -Confirm:$false</code></pre>
+        </div>
+
+        <h3>6.2 Conditional Access Policy Export</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell — Admin Workstation (Microsoft Graph)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# EXPORT CONDITIONAL ACCESS POLICIES
+# Where: Admin workstation with Microsoft.Graph module
+# Access: Security Reader or Conditional Access Administrator
+# Use: Backup/audit all CA policies
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Connect to Microsoft Graph
+Connect-MgGraph -Scopes "Policy.Read.All"
+
+# Get all Conditional Access policies
+$policies = Get-MgIdentityConditionalAccessPolicy -All
+
+Write-Host "Found $($policies.Count) Conditional Access policies" -ForegroundColor Cyan
+
+# Export each policy to JSON
+$exportPath = "C:\Reports\CA_Policies"
+New-Item -ItemType Directory -Force -Path $exportPath | Out-Null
+
+foreach ($policy in $policies) {
+    $filename = "$exportPath\$($policy.DisplayName -replace '[\\/:*?"<>|]', '_').json"
+    $policy | ConvertTo-Json -Depth 10 | Out-File $filename
+    Write-Host "  Exported: $($policy.DisplayName)" -ForegroundColor Gray
+}
+
+Write-Host "✓ All policies exported to $exportPath" -ForegroundColor Green
+
+# Disconnect
+Disconnect-MgGraph</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 7: AZURE CLI ==================== -->
+        <h2>7. Azure CLI Commands</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Execution Context</div>
+          <div class="callout-content">
+            <p><strong>Where:</strong> Azure Cloud Shell (Bash) or local terminal with Azure CLI installed</p>
+            <p><strong>Install:</strong> <code>brew install azure-cli</code> (macOS) or <code>winget install Microsoft.AzureCLI</code> (Windows)</p>
+          </div>
+        </div>
+
+        <h3>7.1 Sentinel Connector Management</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Azure CLI — Cloud Shell or Local Terminal</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# LIST ALL SENTINEL DATA CONNECTORS
+# Where: Azure Cloud Shell or local with Azure CLI
+# Access: Microsoft Sentinel Reader
+# Use: Audit which connectors are enabled
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Set variables
+SUB_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+RG_NAME="rg-sentinel-prod"
+WORKSPACE="law-sentinel-prod"
+
+# List all data connectors
 az rest --method get \
-  --url "https://management.azure.com/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.OperationalInsights/workspaces/{workspace}/providers/Microsoft.SecurityInsights/dataConnectors?api-version=2023-02-01"</code></pre>
+  --url "https://management.azure.com/subscriptions/${SUB_ID}/resourceGroups/${RG_NAME}/providers/Microsoft.OperationalInsights/workspaces/${WORKSPACE}/providers/Microsoft.SecurityInsights/dataConnectors?api-version=2023-02-01" \
+  --query "value[].{Name:name, Kind:kind, State:properties.dataTypes}" \
+  --output table
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ENABLE AZURE ACTIVITY LOG CONNECTOR
+# Where: Azure Cloud Shell or local with Azure CLI
+# Access: Subscription Owner or Log Analytics Contributor
+# ═══════════════════════════════════════════════════════════════════════════
+
+az monitor diagnostic-settings subscription create \
+  --name "AzureActivity-to-Sentinel" \
+  --subscription "$SUB_ID" \
+  --workspace "/subscriptions/${SUB_ID}/resourceGroups/${RG_NAME}/providers/Microsoft.OperationalInsights/workspaces/${WORKSPACE}" \
+  --logs '[{"category": "Administrative", "enabled": true},{"category": "Security", "enabled": true},{"category": "Alert", "enabled": true},{"category": "Policy", "enabled": true}]'
+
+echo "✓ Azure Activity diagnostic settings configured"</code></pre>
+        </div>
+
+        <h3>7.2 Table Tier Management</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Azure CLI — Cloud Shell or Local Terminal</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# SET TABLE TO BASIC TIER (Cost Optimization)
+# Where: Azure Cloud Shell or local with Azure CLI
+# Access: Log Analytics Contributor
+# Use: Move high-volume tables to Basic tier for 80% cost savings
+# ═══════════════════════════════════════════════════════════════════════════
+
+RG_NAME="rg-sentinel-prod"
+WORKSPACE="law-sentinel-prod"
+
+# Set AADNonInteractiveUserSignInLogs to Basic tier
+az monitor log-analytics workspace table update \
+  --resource-group "$RG_NAME" \
+  --workspace-name "$WORKSPACE" \
+  --name "AADNonInteractiveUserSignInLogs" \
+  --plan "Basic"
+
+# Verify
+az monitor log-analytics workspace table show \
+  --resource-group "$RG_NAME" \
+  --workspace-name "$WORKSPACE" \
+  --name "AADNonInteractiveUserSignInLogs" \
+  --query "{Table:name, Plan:plan, RetentionDays:retentionInDays}"</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 8: PYTHON - AZURE FUNCTIONS ==================== -->
+        <h2>8. Python — Azure Functions & Automation</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Execution Context</div>
+          <div class="callout-content">
+            <p><strong>Where:</strong> Azure Function App (Python runtime)</p>
+            <p><strong>Authentication:</strong> Managed Identity with appropriate Graph/API permissions</p>
+            <p><strong>Use Case:</strong> Scheduled data collection, API integrations, custom connectors</p>
+          </div>
+        </div>
+
+        <h3>8.1 Salesforce Log Collector (Azure Function)</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Python — Azure Function (Timer Trigger)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# SALESFORCE EVENT LOG COLLECTOR
+# Where: Azure Function App (Python 3.9+)
+# Trigger: Timer (every 5 minutes)
+# Authentication: Salesforce Connected App credentials in Key Vault
+# Output: Sends logs to Log Analytics custom table (Salesforce_CL)
+# ═══════════════════════════════════════════════════════════════════════════
+
+import azure.functions as func
+import requests
+import json
+import os
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
+from azure.monitor.ingestion import LogsIngestionClient
+
+def main(mytimer: func.TimerRequest) -> None:
+    # Get credentials from Key Vault
+    credential = DefaultAzureCredential()
+    kv_url = os.environ["KEY_VAULT_URL"]
+    secret_client = SecretClient(vault_url=kv_url, credential=credential)
+    
+    sf_client_id = secret_client.get_secret("sf-client-id").value
+    sf_client_secret = secret_client.get_secret("sf-client-secret").value
+    sf_username = secret_client.get_secret("sf-username").value
+    sf_password = secret_client.get_secret("sf-password").value
+    
+    # Authenticate to Salesforce
+    auth_url = "https://login.salesforce.com/services/oauth2/token"
+    auth_data = {
+        "grant_type": "password",
+        "client_id": sf_client_id,
+        "client_secret": sf_client_secret,
+        "username": sf_username,
+        "password": sf_password
+    }
+    auth_response = requests.post(auth_url, data=auth_data)
+    access_token = auth_response.json()["access_token"]
+    instance_url = auth_response.json()["instance_url"]
+    
+    # Query EventLogFile API
+    query = "SELECT Id, EventType, LogDate, LogFile FROM EventLogFile WHERE LogDate = TODAY"
+    query_url = f"{instance_url}/services/data/v58.0/query?q={query}"
+    headers = {"Authorization": f"Bearer {access_token}"}
+    
+    response = requests.get(query_url, headers=headers)
+    events = response.json().get("records", [])
+    
+    # Send to Log Analytics
+    if events:
+        dce_endpoint = os.environ["DCE_ENDPOINT"]
+        dcr_id = os.environ["DCR_IMMUTABLE_ID"]
+        stream_name = "Custom-Salesforce_CL"
+        
+        logs_client = LogsIngestionClient(
+            endpoint=dce_endpoint,
+            credential=credential
+        )
+        
+        logs_client.upload(
+            rule_id=dcr_id,
+            stream_name=stream_name,
+            logs=events
+        )
+        
+    print(f"Processed {len(events)} Salesforce events")</code></pre>
+        </div>
+
+        <h3>8.2 Workday Termination Monitor</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Python — Azure Function (Timer Trigger)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# WORKDAY TERMINATION EVENT COLLECTOR
+# Where: Azure Function App
+# Trigger: Timer (every 15 minutes)
+# Use: Collect termination events for correlation with active sessions
+# ═══════════════════════════════════════════════════════════════════════════
+
+import azure.functions as func
+import requests
+from datetime import datetime, timedelta
+from azure.identity import DefaultAzureCredential
+from azure.monitor.ingestion import LogsIngestionClient
+import os
+
+def main(mytimer: func.TimerRequest) -> None:
+    credential = DefaultAzureCredential()
+    
+    # Workday API configuration
+    workday_tenant = os.environ["WORKDAY_TENANT"]
+    workday_api_url = f"https://{workday_tenant}.workday.com/ccx/api/v1/audit/logs"
+    
+    # Query for termination events in last 15 minutes
+    since = (datetime.utcnow() - timedelta(minutes=15)).isoformat() + "Z"
+    
+    params = {
+        "from": since,
+        "eventType": "TERMINATION"
+    }
+    
+    # Use Workday ISU credentials (from Key Vault in production)
+    response = requests.get(
+        workday_api_url,
+        params=params,
+        auth=(os.environ["WORKDAY_ISU_USER"], os.environ["WORKDAY_ISU_PASSWORD"])
+    )
+    
+    terminations = response.json().get("data", [])
+    
+    if terminations:
+        # Send to Sentinel for correlation rule:
+        # "Terminated employee with active session"
+        logs_client = LogsIngestionClient(
+            endpoint=os.environ["DCE_ENDPOINT"],
+            credential=credential
+        )
+        
+        logs_client.upload(
+            rule_id=os.environ["DCR_IMMUTABLE_ID"],
+            stream_name="Custom-Workday_CL",
+            logs=terminations
+        )
+    
+    print(f"Processed {len(terminations)} termination events")</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 9: SOAR PLAYBOOKS ==================== -->
+        <h2>9. SOAR Playbooks — Logic Apps</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Execution Context</div>
+          <div class="callout-content">
+            <p><strong>Where:</strong> Azure Logic Apps triggered by Sentinel incidents</p>
+            <p><strong>Configuration:</strong> Azure Portal → Sentinel → Automation → Playbooks</p>
+            <p><strong>Authentication:</strong> Managed Identity + API connections</p>
+          </div>
+        </div>
+
+        <h3>9.1 Auto-Enrich Incident with User Details</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Logic App — Sentinel Playbook (Pseudo-code)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# PLAYBOOK: ENRICH INCIDENT WITH USER DETAILS
+# Trigger: When Sentinel incident is created
+# Actions: Query Entra ID for user details, add as comment
+# ═══════════════════════════════════════════════════════════════════════════
+
+TRIGGER: Microsoft Sentinel Incident
+  → When incident is created
+
+ACTIONS:
+  1. Parse incident entities
+     → Extract Account entities (UserPrincipalName)
+  
+  2. For each user entity:
+     → Azure AD Connector: Get User
+        - User Principal Name: @{entity.UserPrincipalName}
+     
+     → Get user details:
+        - Display Name
+        - Department
+        - Manager
+        - Account Enabled status
+        - Last Sign-in (from SigninLogs)
+     
+  3. Add comment to incident:
+     → Microsoft Sentinel: Add comment
+        - Incident ARM ID: @{incident.id}
+        - Message: |
+            **User Enrichment**
+            - Display Name: @{user.displayName}
+            - Department: @{user.department}
+            - Manager: @{user.manager.displayName}
+            - Account Status: @{user.accountEnabled}
+            - Last Sign-in: @{lastSignin}
+
+# ═══════════════════════════════════════════════════════════════════════════
+# PLAYBOOK: ISOLATE DEVICE ON HIGH SEVERITY
+# Trigger: High severity MDE incident
+# Actions: Isolate device via MDE API, notify SOC
+# ═══════════════════════════════════════════════════════════════════════════
+
+TRIGGER: Microsoft Sentinel Incident
+  → When incident severity = High
+  → AND product = Microsoft Defender for Endpoint
+
+ACTIONS:
+  1. Parse incident entities
+     → Extract Device entities (DeviceId, DeviceName)
+  
+  2. HTTP Action: Call MDE API
+     → POST https://api.securitycenter.microsoft.com/api/machines/{DeviceId}/isolate
+     → Body: {"Comment": "Isolated by SOAR - Incident @{incident.number}"}
+     → Authentication: Managed Identity with WindowsDefenderATP permissions
+  
+  3. Post to Teams SOC channel:
+     → "⚠️ Device @{DeviceName} isolated due to incident @{incident.number}"
+  
+  4. Update incident:
+     → Add tag: "Device-Isolated"
+     → Add comment: "Device isolated automatically by playbook"</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 10: QUICK REFERENCE ==================== -->
+        <h2>10. Quick Reference — Script Index</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Script/Query</th><th>Language</th><th>Runs On</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ingestion Health Check</td>
+                <td>KQL</td>
+                <td>Sentinel Portal</td>
+                <td>Monitor data freshness and volume</td>
+              </tr>
+              <tr>
+                <td>XDR + Identity Change Correlation</td>
+                <td>KQL</td>
+                <td>Sentinel Portal</td>
+                <td>Detection rule for compromised accounts</td>
+              </tr>
+              <tr>
+                <td>Process Tree Investigation</td>
+                <td>KQL</td>
+                <td>XDR Advanced Hunting</td>
+                <td>Malware investigation</td>
+              </tr>
+              <tr>
+                <td>MDE Onboarding Status</td>
+                <td>PowerShell</td>
+                <td>Target Endpoint</td>
+                <td>Verify agent health</td>
+              </tr>
+              <tr>
+                <td>MDE Client Analyzer</td>
+                <td>PowerShell</td>
+                <td>Target Endpoint</td>
+                <td>Comprehensive diagnostics</td>
+              </tr>
+              <tr>
+                <td>Bulk DCR Association</td>
+                <td>PowerShell</td>
+                <td>Azure Cloud Shell</td>
+                <td>Configure log collection</td>
+              </tr>
+              <tr>
+                <td>DLP Policy Audit</td>
+                <td>PowerShell</td>
+                <td>Admin Workstation</td>
+                <td>Export DLP policies</td>
+              </tr>
+              <tr>
+                <td>CA Policy Export</td>
+                <td>PowerShell</td>
+                <td>Admin Workstation</td>
+                <td>Backup Conditional Access</td>
+              </tr>
+              <tr>
+                <td>Table Tier Change</td>
+                <td>Azure CLI</td>
+                <td>Cloud Shell</td>
+                <td>Cost optimization</td>
+              </tr>
+              <tr>
+                <td>Salesforce Collector</td>
+                <td>Python</td>
+                <td>Azure Function</td>
+                <td>SaaS log ingestion</td>
+              </tr>
+              <tr>
+                <td>Workday Termination Monitor</td>
+                <td>Python</td>
+                <td>Azure Function</td>
+                <td>HR event collection</td>
+              </tr>
+              <tr>
+                <td>User Enrichment Playbook</td>
+                <td>Logic App</td>
+                <td>Sentinel Automation</td>
+                <td>Incident enrichment</td>
+              </tr>
+              <tr>
+                <td>Device Isolation Playbook</td>
+                <td>Logic App</td>
+                <td>Sentinel Automation</td>
+                <td>Automated response</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <nav class="page-nav">
-          <a href="raci.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← RACI Matrix</span></a>
-          <a href="templates.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Templates →</span></a>
+          <a href="infrastructure-reference.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Infrastructure Reference</span></a>
+          <a href="data-dictionary.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Data Dictionary →</span></a>
         </nav>
       </div>
     </main>

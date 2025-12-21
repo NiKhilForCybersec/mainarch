@@ -163,7 +163,7 @@
             <div class="flow-step-number">1</div>
             <div class="flow-step-content">
               <strong>SIEM & EDR (Started M1)</strong><br>
-              Joined the project at the start when SIEM and EDR tracks began. Log source discovery, ingestion strategy, Sentinel workspace setup, MDE deployment, policy configuration, and operational stabilization.
+              Joined at project start. Designed XDR-first log strategy (attacks vs control-plane distinction), Sentinel workspace setup with selective ingestion, MDE deployment, XDR integration for unified detection.
             </div>
           </div>
           <div class="flow-connector">↓</div>
@@ -171,7 +171,7 @@
             <div class="flow-step-number">2</div>
             <div class="flow-step-content">
               <strong>Parallel SIEM & EDR Work</strong><br>
-              Worked both tracks in parallel. SIEM: connector configuration, detection enablement. EDR: agent onboarding, ASR rules, exclusions. Ensured telemetry integration between MDE and Sentinel.
+              Worked both tracks in parallel. SIEM: XDR alerts to Sentinel, Entra ID diagnostic logs, SaaS app connectors. EDR: agent onboarding, ASR rules, exclusions. Ensured XDR telemetry integration for unified detection.
             </div>
           </div>
           <div class="flow-connector">↓</div>
@@ -212,11 +212,12 @@
                 <td><strong>SIEM Foundation</strong></td>
                 <td>
                   <ul style="margin: 0; padding-left: 1.2rem;">
-                    <li>Meeting with log source owners to understand data</li>
-                    <li>Configuring connectors and data collection rules</li>
-                    <li>Validating log ingestion and data quality</li>
-                    <li>Troubleshooting missing or malformed logs</li>
-                    <li>Documenting ingestion status for stakeholders</li>
+                    <li>Designing XDR-first log ingestion strategy (attacks vs control-plane)</li>
+                    <li>Configuring Entra ID diagnostic settings for identity control-plane logs</li>
+                    <li>Setting up M365 Defender connector for XDR alerts/incidents</li>
+                    <li>Configuring SaaS app connectors (Salesforce, Workday, NetSuite)</li>
+                    <li>Validating log quality and data completeness</li>
+                    <li>Documenting ingestion decisions for stakeholders</li>
                   </ul>
                 </td>
               </tr>
@@ -276,17 +277,19 @@ the overall DLP program.
 
 Before this recent DLP phase, my primary responsibilities were on the 
 SIEM and EDR tracks. During the SIEM discovery and foundation phase, 
-I worked on log source identification, defining ingestion strategy, 
-onboarding telemetry into Microsoft Sentinel, and validating data quality 
-across multiple sources. I collaborated closely with SOC teams and 
-stakeholders to ensure the right security-relevant logs were ingested 
-and usable for detection and investigation.
+I designed the log ingestion strategy around an XDR-first model — 
+understanding that Defender products detect attacks while Entra ID logs 
+capture control-plane changes. This drove decisions about what to ingest: 
+XDR alerts and incidents flow to Sentinel for correlation, while raw MDE 
+telemetry stays in XDR for Advanced Hunting. Entra ID AuditLogs and 
+SigninLogs are separately ingested because XDR doesn't provide identity 
+control-plane visibility.
 
 In parallel, once the SIEM foundation was established, I was involved 
 in the Microsoft Defender for Endpoint rollout. This included agent 
-onboarding, policy configuration, exclusions and allow-listing, and 
-stabilizing endpoint telemetry to ensure reliable integration with 
-Sentinel and effective detection coverage.
+onboarding across 9,000 endpoints, policy configuration, ASR rules, 
+exclusions, and ensuring XDR integration was properly feeding Sentinel 
+with unified attack detection.
 
 As the SIEM and MDE environments reached a stable operational state, 
 my focus shifted temporarily to supporting the DLP audit phase.

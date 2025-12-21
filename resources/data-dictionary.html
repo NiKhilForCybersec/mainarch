@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Dictionary & Field Mappings | Security Transformation</title>
+  <title>Data Dictionary | Security Transformation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -85,21 +85,21 @@
         <div class="nav-divider"></div>
         <div class="nav-section">
           <div class="nav-section-title">Resources</div>
-          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
-          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
-          <a href="../resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
-          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
-          <a href="../resources/data-dictionary.html" class="nav-item active">Data Dictionary</a>
-          <a href="../resources/templates.html" class="nav-item">Templates</a>
-          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="timeline.html" class="nav-item">Project Timeline</a>
+          <a href="raci.html" class="nav-item">RACI Matrix</a>
+          <a href="infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="scripts.html" class="nav-item">Scripts & Automation</a>
+          <a href="data-dictionary.html" class="nav-item active">Data Dictionary</a>
+          <a href="templates.html" class="nav-item">Templates</a>
+          <a href="splunk-reference.html" class="nav-item">Splunk Reference</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
           <div class="nav-section-title">Runbooks</div>
-          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
-          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
-          <a href="../resources/incident-response.html" class="nav-item">Incident Response</a>
-          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+          <a href="mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="incident-response.html" class="nav-item">Incident Response</a>
+          <a href="operational-procedures.html" class="nav-item">Operational Procedures</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -124,836 +124,789 @@
         <nav class="breadcrumb">
           <a href="../index.html">Home</a>
           <span class="breadcrumb-separator">/</span>
-          <a href="templates.html">Resources</a>
+          <a href="infrastructure-reference.html">Resources</a>
           <span class="breadcrumb-separator">/</span>
           <span class="breadcrumb-current">Data Dictionary</span>
         </nav>
 
         <div class="page-header">
-          <h1>Data Dictionary & Field Mappings</h1>
+          <h1>Data Dictionary</h1>
           <div class="page-header-meta">
-            <span class="page-badge siem">SIEM Track</span>
-            <span class="page-reading-time">Reference Document</span>
+            <span class="page-badge siem">SIEM</span>
+            <span class="page-badge edr" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">XDR</span>
           </div>
-          <p class="intro-text">
-            Comprehensive field mappings from RSA NetWitness to Microsoft Sentinel. This document serves as the authoritative reference for log normalization, query translation, and detection rule migration.
-          </p>
+          <p class="intro-text">Comprehensive reference for Sentinel tables, XDR tables, key fields, and query patterns. Organized by <strong>where data lives</strong> and <strong>where to query it</strong>.</p>
         </div>
 
-        <!-- ==================== SECTION 1: OVERVIEW ==================== -->
-        <h2>1. Data Model Overview</h2>
+        <!-- ==================== SECTION 1: DATA LOCATION MODEL ==================== -->
+        <h2>1. XDR-First Data Location Model</h2>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Critical Distinction</div>
+          <div class="callout-content">
+            <p><strong>Defender products detect ATTACKS. They do NOT provide control-plane audit logs.</strong></p>
+            <p>Understanding where data lives determines where you query and what you can detect.</p>
+          </div>
+        </div>
+
+        <h3>1.1 Data Location Summary</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Data Type</th><th>Lives In</th><th>Query Location</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Identity Control-Plane</strong><br><span style="color: var(--text-muted);">User/group/role changes, CA policy</span></td>
+                <td>Sentinel</td>
+                <td>Sentinel Logs</td>
+                <td>XDR doesn't provide audit logs</td>
+              </tr>
+              <tr>
+                <td><strong>Authentication Events</strong><br><span style="color: var(--text-muted);">Sign-ins, MFA, CA evaluation</span></td>
+                <td>Sentinel</td>
+                <td>Sentinel Logs</td>
+                <td>Required for identity correlation</td>
+              </tr>
+              <tr>
+                <td><strong>XDR Alerts & Incidents</strong><br><span style="color: var(--text-muted);">Attack detections from all Defender products</span></td>
+                <td>Sentinel</td>
+                <td>Sentinel Logs</td>
+                <td>Low volume, high value, enables correlation</td>
+              </tr>
+              <tr>
+                <td><strong>MDE Raw Telemetry</strong><br><span style="color: var(--text-muted);">Process, network, file, registry events</span></td>
+                <td>XDR</td>
+                <td>XDR Advanced Hunting</td>
+                <td>High volume (~$15K/month if ingested)</td>
+              </tr>
+              <tr>
+                <td><strong>MDO Raw Telemetry</strong><br><span style="color: var(--text-muted);">Email events, URL clicks</span></td>
+                <td>XDR</td>
+                <td>XDR Advanced Hunting</td>
+                <td>MDO handles email detection</td>
+              </tr>
+              <tr>
+                <td><strong>MDI Raw Telemetry</strong><br><span style="color: var(--text-muted);">AD authentication, LDAP queries</span></td>
+                <td>XDR</td>
+                <td>XDR Advanced Hunting</td>
+                <td>MDI handles identity attacks</td>
+              </tr>
+              <tr>
+                <td><strong>Network Logs</strong><br><span style="color: var(--text-muted);">Firewall, VPN, DNS</span></td>
+                <td>Sentinel</td>
+                <td>Sentinel Logs</td>
+                <td>XDR doesn't cover network</td>
+              </tr>
+              <tr>
+                <td><strong>SaaS Logs</strong><br><span style="color: var(--text-muted);">Salesforce, Workday, NetSuite</span></td>
+                <td>Sentinel</td>
+                <td>Sentinel Logs</td>
+                <td>Outside Defender scope</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 2: SENTINEL TABLES ==================== -->
+        <h2>2. Sentinel Tables — Ingested Data</h2>
+
+        <p>These tables are ingested into the Sentinel workspace. Query them in <strong>Azure Portal → Sentinel → Logs</strong>.</p>
+
+        <h3>2.1 Entra ID Tables (Identity Control-Plane)</h3>
 
         <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Schema Differences
-          </div>
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Why Ingested</div>
           <div class="callout-content">
-            <p><strong>RSA NetWitness</strong> uses a meta-key based schema where events are parsed into standardized meta keys (e.g., <code>ip.src</code>, <code>user.dst</code>).</p>
-            <p><strong>Microsoft Sentinel</strong> uses table-based schemas where each data source has its own table with specific columns (e.g., <code>SigninLogs.IPAddress</code>, <code>DeviceProcessEvents.AccountName</code>).</p>
+            <p>XDR (MDI) detects identity <strong>attacks</strong> like Pass-the-Hash, but does NOT log who was added to Global Admins. That requires AuditLogs.</p>
           </div>
         </div>
 
-        <h3>1.1 Schema Comparison</h3>
-
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Aspect</th><th>RSA NetWitness</th><th>Microsoft Sentinel</th></tr>
+              <tr><th>Table</th><th>Tier</th><th>Key Fields</th><th>Use Case</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>Data Model</td>
-                <td>Unified meta-key schema</td>
-                <td>Table-per-source schema</td>
+                <td><strong>AuditLogs</strong></td>
+                <td>Analytics</td>
+                <td><code>OperationName</code>, <code>InitiatedBy</code>, <code>TargetResources</code>, <code>Result</code></td>
+                <td>User creation, group changes, role assignments, app registrations</td>
               </tr>
               <tr>
-                <td>Query Language</td>
-                <td>NetWitness Query Language (NWQL)</td>
-                <td>Kusto Query Language (KQL)</td>
+                <td><strong>SigninLogs</strong></td>
+                <td>Analytics</td>
+                <td><code>UserPrincipalName</code>, <code>IPAddress</code>, <code>ResultType</code>, <code>ConditionalAccessStatus</code>, <code>MfaDetail</code></td>
+                <td>Interactive sign-ins, MFA evaluation, CA policy hits</td>
               </tr>
               <tr>
-                <td>Normalization</td>
-                <td>Built-in via parsers</td>
-                <td>ASIM (Advanced Security Information Model)</td>
+                <td><strong>AADNonInteractiveUserSignInLogs</strong></td>
+                <td>Basic</td>
+                <td><code>UserPrincipalName</code>, <code>AppDisplayName</code>, <code>ResourceDisplayName</code></td>
+                <td>Token refreshes, background auth (high volume)</td>
               </tr>
               <tr>
-                <td>Time Field</td>
-                <td><code>time</code> or <code>event.time</code></td>
-                <td><code>TimeGenerated</code></td>
+                <td><strong>AADServicePrincipalSignInLogs</strong></td>
+                <td>Analytics</td>
+                <td><code>ServicePrincipalId</code>, <code>ServicePrincipalName</code>, <code>IPAddress</code></td>
+                <td>App/automation authentication</td>
               </tr>
               <tr>
-                <td>Device Identifier</td>
-                <td><code>device.type</code>, <code>device.class</code></td>
-                <td>Table name (e.g., DeviceProcessEvents)</td>
+                <td><strong>AADManagedIdentitySignInLogs</strong></td>
+                <td>Analytics</td>
+                <td><code>ServicePrincipalId</code>, <code>ResourceDisplayName</code></td>
+                <td>Managed identity usage</td>
+              </tr>
+              <tr>
+                <td><strong>AADProvisioningLogs</strong></td>
+                <td>Analytics</td>
+                <td><code>SourceIdentity</code>, <code>TargetIdentity</code>, <code>ProvisioningAction</code></td>
+                <td>HR sync from Workday, user provisioning</td>
+              </tr>
+              <tr>
+                <td><strong>AADRiskyUsers</strong></td>
+                <td>Analytics</td>
+                <td><code>UserPrincipalName</code>, <code>RiskLevel</code>, <code>RiskState</code></td>
+                <td>Identity Protection risk state</td>
+              </tr>
+              <tr>
+                <td><strong>AADUserRiskEvents</strong></td>
+                <td>Analytics</td>
+                <td><code>UserPrincipalName</code>, <code>RiskEventType</code>, <code>DetectionTimingType</code></td>
+                <td>Leaked credentials, impossible travel (from Identity Protection)</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <!-- ==================== SECTION 2: CORE FIELD MAPPINGS ==================== -->
-        <h2>2. Core Field Mappings</h2>
-
-        <h3>2.1 Network Fields</h3>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>RSA NetWitness Meta</th><th>Sentinel Table</th><th>Sentinel Column</th><th>Description</th><th>Notes</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>ip.src</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>SourceIP</code></td>
-                <td>Source IP address</td>
-                <td>Also in DeviceNetworkEvents.LocalIP</td>
-              </tr>
-              <tr>
-                <td><code>ip.dst</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>DestinationIP</code></td>
-                <td>Destination IP address</td>
-                <td>Also in DeviceNetworkEvents.RemoteIP</td>
-              </tr>
-              <tr>
-                <td><code>ip.srcport</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>SourcePort</code></td>
-                <td>Source port</td>
-                <td>Also in DeviceNetworkEvents.LocalPort</td>
-              </tr>
-              <tr>
-                <td><code>ip.dstport</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>DestinationPort</code></td>
-                <td>Destination port</td>
-                <td>Also in DeviceNetworkEvents.RemotePort</td>
-              </tr>
-              <tr>
-                <td><code>ip.proto</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>Protocol</code></td>
-                <td>IP protocol (TCP/UDP)</td>
-                <td>Numeric in some tables</td>
-              </tr>
-              <tr>
-                <td><code>eth.src</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>SourceMACAddress</code></td>
-                <td>Source MAC address</td>
-                <td>Not always available</td>
-              </tr>
-              <tr>
-                <td><code>eth.dst</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>DestinationMACAddress</code></td>
-                <td>Destination MAC address</td>
-                <td>Not always available</td>
-              </tr>
-              <tr>
-                <td><code>alias.host</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>DestinationHostName</code></td>
-                <td>Hostname</td>
-                <td>Also in DeviceNetworkEvents.RemoteUrl</td>
-              </tr>
-              <tr>
-                <td><code>tcp.flags</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>AdditionalExtensions</code></td>
-                <td>TCP flags</td>
-                <td>May require parsing</td>
-              </tr>
-              <tr>
-                <td><code>bytes.src</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>SentBytes</code></td>
-                <td>Bytes sent</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><code>bytes.dst</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>ReceivedBytes</code></td>
-                <td>Bytes received</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>2.2 Identity/User Fields</h3>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>RSA NetWitness Meta</th><th>Sentinel Table</th><th>Sentinel Column</th><th>Description</th><th>Notes</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>user.src</code></td>
-                <td>SigninLogs</td>
-                <td><code>UserPrincipalName</code></td>
-                <td>Source username</td>
-                <td>UPN format in Entra ID</td>
-              </tr>
-              <tr>
-                <td><code>user.dst</code></td>
-                <td>SigninLogs</td>
-                <td><code>UserPrincipalName</code></td>
-                <td>Target username</td>
-                <td>Same as source for sign-ins</td>
-              </tr>
-              <tr>
-                <td><code>user.all</code></td>
-                <td>Multiple</td>
-                <td><code>AccountName</code></td>
-                <td>Any user reference</td>
-                <td>Use union across tables</td>
-              </tr>
-              <tr>
-                <td><code>domain</code></td>
-                <td>SigninLogs</td>
-                <td><code>UserPrincipalName</code> (parsed)</td>
-                <td>Domain name</td>
-                <td>Extract with split()</td>
-              </tr>
-              <tr>
-                <td><code>user.role</code></td>
-                <td>AuditLogs</td>
-                <td><code>TargetResources[].modifiedProperties</code></td>
-                <td>User role</td>
-                <td>Requires JSON parsing</td>
-              </tr>
-              <tr>
-                <td><code>group</code></td>
-                <td>AuditLogs</td>
-                <td><code>TargetResources[].displayName</code></td>
-                <td>Group name</td>
-                <td>For group operations</td>
-              </tr>
-              <tr>
-                <td><code>email</code></td>
-                <td>SigninLogs</td>
-                <td><code>UserPrincipalName</code></td>
-                <td>Email address</td>
-                <td>UPN is typically email</td>
-              </tr>
-              <tr>
-                <td><code>sid</code></td>
-                <td>SecurityEvent</td>
-                <td><code>TargetUserSid</code></td>
-                <td>Security identifier</td>
-                <td>Windows events only</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>2.3 Endpoint/Host Fields</h3>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>RSA NetWitness Meta</th><th>Sentinel Table</th><th>Sentinel Column</th><th>Description</th><th>Notes</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>device.host</code></td>
-                <td>DeviceProcessEvents</td>
-                <td><code>DeviceName</code></td>
-                <td>Hostname</td>
-                <td>FQDN in most cases</td>
-              </tr>
-              <tr>
-                <td><code>device.ip</code></td>
-                <td>DeviceInfo</td>
-                <td><code>PublicIP</code></td>
-                <td>Device IP</td>
-                <td>Also DeviceNetworkInfo</td>
-              </tr>
-              <tr>
-                <td><code>device.type</code></td>
-                <td>DeviceInfo</td>
-                <td><code>DeviceType</code></td>
-                <td>Device type</td>
-                <td>Workstation, Server, etc.</td>
-              </tr>
-              <tr>
-                <td><code>os</code></td>
-                <td>DeviceInfo</td>
-                <td><code>OSPlatform</code></td>
-                <td>Operating system</td>
-                <td>Windows, Linux, macOS</td>
-              </tr>
-              <tr>
-                <td><code>version</code></td>
-                <td>DeviceInfo</td>
-                <td><code>OSVersion</code></td>
-                <td>OS version</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><code>process.src</code></td>
-                <td>DeviceProcessEvents</td>
-                <td><code>InitiatingProcessFileName</code></td>
-                <td>Parent process</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><code>process.dst</code></td>
-                <td>DeviceProcessEvents</td>
-                <td><code>FileName</code></td>
-                <td>Target process</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><code>filename.src</code></td>
-                <td>DeviceProcessEvents</td>
-                <td><code>InitiatingProcessFileName</code></td>
-                <td>Source filename</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><code>filename.dst</code></td>
-                <td>DeviceFileEvents</td>
-                <td><code>FileName</code></td>
-                <td>Target filename</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><code>directory.src</code></td>
-                <td>DeviceProcessEvents</td>
-                <td><code>InitiatingProcessFolderPath</code></td>
-                <td>Source directory</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><code>directory.dst</code></td>
-                <td>DeviceFileEvents</td>
-                <td><code>FolderPath</code></td>
-                <td>Target directory</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><code>param.src</code></td>
-                <td>DeviceProcessEvents</td>
-                <td><code>InitiatingProcessCommandLine</code></td>
-                <td>Parent command line</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><code>param.dst</code></td>
-                <td>DeviceProcessEvents</td>
-                <td><code>ProcessCommandLine</code></td>
-                <td>Process command line</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><code>checksum</code></td>
-                <td>DeviceProcessEvents</td>
-                <td><code>SHA256</code></td>
-                <td>File hash</td>
-                <td>SHA256 preferred</td>
-              </tr>
-              <tr>
-                <td><code>checksum.src</code></td>
-                <td>DeviceProcessEvents</td>
-                <td><code>InitiatingProcessSHA256</code></td>
-                <td>Parent file hash</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>2.4 Authentication Fields</h3>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>RSA NetWitness Meta</th><th>Sentinel Table</th><th>Sentinel Column</th><th>Description</th><th>Notes</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>action</code></td>
-                <td>SigninLogs</td>
-                <td><code>ResultType</code></td>
-                <td>Auth result</td>
-                <td>0 = success, others = failure codes</td>
-              </tr>
-              <tr>
-                <td><code>result</code></td>
-                <td>SigninLogs</td>
-                <td><code>ResultDescription</code></td>
-                <td>Result description</td>
-                <td>Human-readable</td>
-              </tr>
-              <tr>
-                <td><code>logon.type</code></td>
-                <td>SecurityEvent</td>
-                <td><code>LogonType</code></td>
-                <td>Logon type</td>
-                <td>2=Interactive, 3=Network, 10=RDP</td>
-              </tr>
-              <tr>
-                <td><code>auth.type</code></td>
-                <td>SigninLogs</td>
-                <td><code>AuthenticationRequirement</code></td>
-                <td>Auth method</td>
-                <td>SingleFactor, MultiFactor</td>
-              </tr>
-              <tr>
-                <td><code>client</code></td>
-                <td>SigninLogs</td>
-                <td><code>ClientAppUsed</code></td>
-                <td>Client application</td>
-                <td>Browser, Mobile App, etc.</td>
-              </tr>
-              <tr>
-                <td><code>client.app</code></td>
-                <td>SigninLogs</td>
-                <td><code>AppDisplayName</code></td>
-                <td>Target application</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><code>risk</code></td>
-                <td>SigninLogs</td>
-                <td><code>RiskLevelDuringSignIn</code></td>
-                <td>Risk level</td>
-                <td>none, low, medium, high</td>
-              </tr>
-              <tr>
-                <td><code>location</code></td>
-                <td>SigninLogs</td>
-                <td><code>LocationDetails</code></td>
-                <td>Geo location</td>
-                <td>JSON with city, country, coordinates</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>2.5 Event Classification Fields</h3>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>RSA NetWitness Meta</th><th>Sentinel Table</th><th>Sentinel Column</th><th>Description</th><th>Notes</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>event.cat</code></td>
-                <td>Multiple</td>
-                <td><code>Category</code></td>
-                <td>Event category</td>
-                <td>Table-specific</td>
-              </tr>
-              <tr>
-                <td><code>event.type</code></td>
-                <td>DeviceProcessEvents</td>
-                <td><code>ActionType</code></td>
-                <td>Event type</td>
-                <td>ProcessCreated, etc.</td>
-              </tr>
-              <tr>
-                <td><code>msg</code></td>
-                <td>Multiple</td>
-                <td><code>Message</code> or raw</td>
-                <td>Event message</td>
-                <td>Original log message</td>
-              </tr>
-              <tr>
-                <td><code>msg.id</code></td>
-                <td>SecurityEvent</td>
-                <td><code>EventID</code></td>
-                <td>Event ID</td>
-                <td>Windows Event IDs</td>
-              </tr>
-              <tr>
-                <td><code>severity</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>LogSeverity</code></td>
-                <td>Severity level</td>
-                <td>1-10 or text</td>
-              </tr>
-              <tr>
-                <td><code>vendor</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>DeviceVendor</code></td>
-                <td>Device vendor</td>
-                <td>Palo Alto, Cisco, etc.</td>
-              </tr>
-              <tr>
-                <td><code>product</code></td>
-                <td>CommonSecurityLog</td>
-                <td><code>DeviceProduct</code></td>
-                <td>Device product</td>
-                <td>Firewall model, etc.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 3: TABLE MAPPINGS ==================== -->
-        <h2>3. Log Source to Table Mappings</h2>
-
-        <h3>3.1 RSA Log Source to Sentinel Table</h3>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>RSA Log Source</th><th>RSA Parser</th><th>Sentinel Table</th><th>Sentinel Connector</th><th>Notes</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Windows Security</td>
-                <td>winevent_nic</td>
-                <td><code>SecurityEvent</code></td>
-                <td>Windows Security Events via AMA</td>
-                <td>Event IDs filtered via DCR</td>
-              </tr>
-              <tr>
-                <td>Windows System</td>
-                <td>winevent_nic</td>
-                <td><code>Event</code></td>
-                <td>Windows Forwarded Events</td>
-                <td>System/Application logs</td>
-              </tr>
-              <tr>
-                <td>Active Directory</td>
-                <td>activedirectory</td>
-                <td><code>SecurityEvent</code>, <code>AuditLogs</code></td>
-                <td>Windows + Entra ID</td>
-                <td>On-prem + cloud AD</td>
-              </tr>
-              <tr>
-                <td>Palo Alto Firewall</td>
-                <td>paloalto</td>
-                <td><code>CommonSecurityLog</code></td>
-                <td>Palo Alto Networks (CEF)</td>
-                <td>Via Log Forwarder</td>
-              </tr>
-              <tr>
-                <td>Cisco ASA</td>
-                <td>ciscoasa</td>
-                <td><code>CommonSecurityLog</code></td>
-                <td>Cisco ASA (CEF)</td>
-                <td>Via Log Forwarder</td>
-              </tr>
-              <tr>
-                <td>Linux Syslog</td>
-                <td>syslog</td>
-                <td><code>Syslog</code></td>
-                <td>Syslog via AMA</td>
-                <td>Facility-based filtering</td>
-              </tr>
-              <tr>
-                <td>ESET Endpoint</td>
-                <td>eset</td>
-                <td><code>DeviceProcessEvents</code></td>
-                <td>M365 Defender (MDE)</td>
-                <td>Replaced by MDE</td>
-              </tr>
-              <tr>
-                <td>Office 365</td>
-                <td>office365</td>
-                <td><code>OfficeActivity</code></td>
-                <td>Office 365</td>
-                <td>Native connector</td>
-              </tr>
-              <tr>
-                <td>Azure AD</td>
-                <td>azuread</td>
-                <td><code>SigninLogs</code>, <code>AuditLogs</code></td>
-                <td>Microsoft Entra ID</td>
-                <td>Native connector</td>
-              </tr>
-              <tr>
-                <td>DNS Server</td>
-                <td>microsoftdns</td>
-                <td><code>DnsEvents</code></td>
-                <td>Windows DNS via AMA</td>
-                <td>Analytical logging enabled</td>
-              </tr>
-              <tr>
-                <td>DHCP Server</td>
-                <td>microsoftdhcp</td>
-                <td><code>Event</code> (custom)</td>
-                <td>Windows Forwarded Events</td>
-                <td>DHCP server logs</td>
-              </tr>
-              <tr>
-                <td>IIS Web Server</td>
-                <td>microsoftiis</td>
-                <td><code>W3CIISLog</code></td>
-                <td>IIS via AMA</td>
-                <td>Web access logs</td>
-              </tr>
-              <tr>
-                <td>Symantec DLP</td>
-                <td>symantecdlp</td>
-                <td><code>PurviewDLPLogs</code></td>
-                <td>Microsoft Purview DLP</td>
-                <td>Replaced by Purview</td>
-              </tr>
-              <tr>
-                <td>SQL Server</td>
-                <td>mssql</td>
-                <td><code>AzureDiagnostics</code></td>
-                <td>Azure SQL</td>
-                <td>For Azure SQL only</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 4: QUERY TRANSLATION ==================== -->
-        <h2>4. Query Translation Examples</h2>
-
-        <h3>4.1 Basic Query Patterns</h3>
-
+        <h4>Key Fields: AuditLogs</h4>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">NWQL → KQL: Failed Logins from External IP</span></div>
-          <pre><code>// RSA NetWitness Query Language (NWQL)
-device.type = 'winevent_nic' && 
-event.cat = 'authentication' && 
-result = 'failure' && 
-ip.src exists && 
-ip.src != 10.0.0.0/8 && 
-ip.src != 172.16.0.0/12 && 
-ip.src != 192.168.0.0/16
-
-// Microsoft Sentinel KQL
-SigninLogs
-| where TimeGenerated > ago(24h)
-| where ResultType != "0"  // Non-zero = failure
-| where IPAddress !startswith "10." 
-    and IPAddress !startswith "172.16." 
-    and IPAddress !startswith "192.168."
-| project TimeGenerated, UserPrincipalName, IPAddress, ResultType, ResultDescription, AppDisplayName</code></pre>
+          <div class="code-header"><span class="code-lang">KQL — AuditLogs Field Reference</span></div>
+          <pre><code>AuditLogs
+| project
+    TimeGenerated,                                    // When event occurred
+    OperationName,                                    // "Add member to role", "Update user", etc.
+    Category,                                         // "UserManagement", "GroupManagement", etc.
+    Result,                                           // "success" or "failure"
+    ResultReason,                                     // Why it failed (if applicable)
+    InitiatedBy.user.userPrincipalName,              // Who made the change
+    InitiatedBy.app.displayName,                     // Or which app made the change
+    TargetResources[0].userPrincipalName,            // Target user
+    TargetResources[0].displayName,                  // Target resource name
+    TargetResources[0].modifiedProperties            // What changed (JSON array)</code></pre>
         </div>
 
+        <h4>Key Fields: SigninLogs</h4>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">NWQL → KQL: PowerShell Execution with Encoded Command</span></div>
-          <pre><code>// RSA NetWitness Query Language (NWQL)
-device.type = 'winevent_nic' && 
-filename.dst = 'powershell.exe' && 
-param.dst contains '-enc'
+          <div class="code-header"><span class="code-lang">KQL — SigninLogs Field Reference</span></div>
+          <pre><code>SigninLogs
+| project
+    TimeGenerated,
+    UserPrincipalName,                               // Who signed in
+    UserDisplayName,
+    IPAddress,                                       // Source IP
+    Location,                                        // Country/region
+    LocationDetails,                                 // City, coordinates (JSON)
+    ResultType,                                      // 0 = success, others = error codes
+    ResultDescription,                               // Human-readable result
+    AppDisplayName,                                  // Target application
+    ResourceDisplayName,                             // Target resource
+    ClientAppUsed,                                   // Browser, Mobile App, Desktop
+    DeviceDetail,                                    // Device info (JSON)
+    ConditionalAccessStatus,                         // "success", "failure", "notApplied"
+    ConditionalAccessPolicies,                       // Which CA policies evaluated (JSON array)
+    MfaDetail,                                       // MFA method used
+    RiskLevelDuringSignIn,                          // none, low, medium, high
+    AuthenticationRequirement                        // singleFactorAuthentication, multiFactorAuthentication</code></pre>
+        </div>
 
-// Microsoft Sentinel KQL
+        <h3>2.2 XDR Tables (Alerts & Incidents Only)</h3>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Cost Optimization</div>
+          <div class="callout-content">
+            <p>We ingest <strong>only alerts and incidents</strong> from XDR (~$50/month), NOT raw telemetry (~$15,000/month). Raw data is queryable in XDR Advanced Hunting.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Source</th><th>Key Fields</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SecurityAlert</strong></td>
+                <td>M365 Defender, MDC</td>
+                <td><code>AlertName</code>, <code>Severity</code>, <code>ProductName</code>, <code>Entities</code>, <code>ExtendedProperties</code></td>
+                <td>All XDR alerts for correlation</td>
+              </tr>
+              <tr>
+                <td><strong>SecurityIncident</strong></td>
+                <td>M365 Defender, Sentinel</td>
+                <td><code>Title</code>, <code>Severity</code>, <code>Status</code>, <code>AlertIds</code>, <code>Owner</code></td>
+                <td>Correlated incidents from XDR and Sentinel rules</td>
+              </tr>
+              <tr>
+                <td><strong>AlertEvidence</strong></td>
+                <td>M365 Defender</td>
+                <td><code>AlertId</code>, <code>EntityType</code>, <code>EvidenceRole</code>, <code>DeviceName</code>, <code>AccountName</code></td>
+                <td>Entity context for XDR alerts (devices, users, IPs involved)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Key Fields: SecurityAlert</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — SecurityAlert Field Reference</span></div>
+          <pre><code>SecurityAlert
+| where ProductName == "Microsoft 365 Defender"
+| project
+    TimeGenerated,
+    AlertName,                                       // Detection name
+    AlertSeverity,                                   // High, Medium, Low, Informational
+    ProductName,                                     // "Microsoft 365 Defender", "Azure Defender", etc.
+    ProviderName,                                    // "MDATP", "OATP", "IPC" (MDI)
+    Status,                                          // New, InProgress, Resolved
+    Tactics,                                         // MITRE ATT&CK tactics
+    Techniques,                                      // MITRE ATT&CK techniques
+    Entities,                                        // Affected entities (JSON array)
+    ExtendedProperties,                              // Additional context (JSON)
+    // Extract user from ExtendedProperties:
+    tostring(parse_json(ExtendedProperties).["User Account"]) as AffectedUser</code></pre>
+        </div>
+
+        <h3>2.3 Microsoft 365 & Azure Tables</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Tier</th><th>Key Fields</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>OfficeActivity</strong></td>
+                <td>Analytics</td>
+                <td><code>Operation</code>, <code>UserId</code>, <code>ClientIP</code>, <code>OfficeWorkload</code>, <code>Site_Url</code></td>
+                <td>SharePoint access, Exchange admin, Teams events</td>
+              </tr>
+              <tr>
+                <td><strong>AzureActivity</strong></td>
+                <td>Free</td>
+                <td><code>OperationNameValue</code>, <code>Caller</code>, <code>CallerIpAddress</code>, <code>ResourceGroup</code></td>
+                <td>Azure RBAC changes, resource CRUD, policy changes</td>
+              </tr>
+              <tr>
+                <td><strong>AzureDiagnostics</strong></td>
+                <td>Varies</td>
+                <td><code>ResourceType</code>, <code>OperationName</code>, <code>ResultType</code>, <code>CallerIPAddress</code></td>
+                <td>Key Vault access, Storage operations, SQL queries</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Key Fields: OfficeActivity</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — OfficeActivity Field Reference</span></div>
+          <pre><code>OfficeActivity
+| project
+    TimeGenerated,
+    Operation,                                       // "FileDownloaded", "Set-Mailbox", etc.
+    OfficeWorkload,                                  // "SharePoint", "Exchange", "Teams"
+    UserId,                                          // User who performed action
+    ClientIP,                                        // Source IP
+    UserAgent,                                       // Browser/client info
+    // SharePoint-specific:
+    Site_Url,                                        // SharePoint site
+    SourceFileName,                                  // File accessed
+    SourceRelativeUrl,                               // File path
+    // Exchange-specific:
+    MailboxOwnerUPN,                                 // Mailbox owner
+    DestMailboxOwnerUPN,                             // Delegation target
+    // Teams-specific:
+    TeamName,
+    ChannelName</code></pre>
+        </div>
+
+        <h3>2.4 Network Tables</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Source</th><th>Tier</th><th>Key Fields</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>CommonSecurityLog</strong></td>
+                <td>Palo Alto (CEF)</td>
+                <td>Analytics</td>
+                <td><code>DeviceAction</code>, <code>SourceIP</code>, <code>DestinationIP</code>, <code>DestinationPort</code>, <code>ApplicationProtocol</code></td>
+                <td>Firewall threat logs, deny events</td>
+              </tr>
+              <tr>
+                <td><strong>Syslog</strong></td>
+                <td>Palo Alto, VPN</td>
+                <td>Analytics</td>
+                <td><code>SyslogMessage</code>, <code>HostName</code>, <code>Facility</code>, <code>SeverityLevel</code></td>
+                <td>VPN/GlobalProtect, traffic logs (filtered)</td>
+              </tr>
+              <tr>
+                <td><strong>DnsEvents</strong></td>
+                <td>Windows DNS</td>
+                <td>Analytics</td>
+                <td><code>Name</code>, <code>QueryType</code>, <code>ClientIP</code>, <code>IPAddresses</code></td>
+                <td>DNS tunneling detection, suspicious domain lookups</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Key Fields: CommonSecurityLog (Palo Alto)</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — CommonSecurityLog Field Reference</span></div>
+          <pre><code>CommonSecurityLog
+| where DeviceVendor == "Palo Alto Networks"
+| project
+    TimeGenerated,
+    DeviceAction,                                    // "allow", "deny", "drop"
+    Activity,                                        // "THREAT" for threat logs
+    SourceIP,
+    SourcePort,
+    DestinationIP,
+    DestinationPort,
+    ApplicationProtocol,                             // "ssl", "web-browsing", etc.
+    RequestURL,                                      // For URL filtering
+    ThreatCategory,                                  // Threat type
+    ThreatID,                                        // Threat signature ID
+    DeviceEventClassID,                              // Log type
+    SentBytes,
+    ReceivedBytes</code></pre>
+        </div>
+
+        <h3>2.5 SaaS Application Tables (Custom)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Connector</th><th>Key Fields</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Salesforce_CL</strong></td>
+                <td>Azure Function</td>
+                <td><code>EventType_s</code>, <code>Username_s</code>, <code>SourceIp_s</code>, <code>RecordId_s</code></td>
+                <td>Data export monitoring, bulk downloads, admin actions</td>
+              </tr>
+              <tr>
+                <td><strong>Workday_CL</strong></td>
+                <td>Azure Function</td>
+                <td><code>EventType_s</code>, <code>Worker_s</code>, <code>EffectiveDate_t</code>, <code>TerminationReason_s</code></td>
+                <td>Termination events for access revocation correlation</td>
+              </tr>
+              <tr>
+                <td><strong>NetSuite_CL</strong></td>
+                <td>Azure Function</td>
+                <td><code>Operation_s</code>, <code>User_s</code>, <code>EntityType_s</code>, <code>Amount_d</code></td>
+                <td>Financial system monitoring, BEC prevention</td>
+              </tr>
+              <tr>
+                <td><strong>GitHub_CL</strong></td>
+                <td>Azure Function</td>
+                <td><code>Action_s</code>, <code>Actor_s</code>, <code>Repository_s</code>, <code>Visibility_s</code></td>
+                <td>Code access, PAT creation, repo visibility changes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2.6 Intune Tables</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Tier</th><th>Key Fields</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>IntuneAuditLogs</strong></td>
+                <td>Analytics</td>
+                <td><code>OperationName</code>, <code>Identity</code>, <code>TargetDisplayNames</code>, <code>ResultType</code></td>
+                <td>Policy changes, admin actions</td>
+              </tr>
+              <tr>
+                <td><strong>IntuneDeviceComplianceOrg</strong></td>
+                <td>Analytics</td>
+                <td><code>DeviceName</code>, <code>ComplianceState</code>, <code>OS</code>, <code>OwnerType</code></td>
+                <td>Compliance state for CA evaluation</td>
+              </tr>
+              <tr>
+                <td><strong>IntuneDevices</strong></td>
+                <td>Basic</td>
+                <td><code>DeviceName</code>, <code>UserName</code>, <code>DeviceType</code>, <code>LastContact</code></td>
+                <td>Device inventory (high volume)</td>
+              </tr>
+              <tr>
+                <td><strong>IntuneOperationalLogs</strong></td>
+                <td>Basic</td>
+                <td><code>OperationName</code>, <code>Result</code>, <code>DeviceId</code></td>
+                <td>Enrollment, sync issues</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 3: XDR TABLES ==================== -->
+        <h2>3. XDR Tables — Query in Advanced Hunting</h2>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Not Ingested to Sentinel</div>
+          <div class="callout-content">
+            <p>These tables are <strong>NOT ingested</strong> to Sentinel to save ~$15,000/month. Query them at <strong>security.microsoft.com → Hunting → Advanced Hunting</strong>.</p>
+          </div>
+        </div>
+
+        <h3>3.1 MDE Tables (Endpoint Telemetry)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Volume</th><th>Key Fields</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>DeviceProcessEvents</strong></td>
+                <td>~50M/day</td>
+                <td><code>FileName</code>, <code>ProcessCommandLine</code>, <code>InitiatingProcessFileName</code>, <code>AccountName</code>, <code>SHA256</code></td>
+                <td>Process execution, LOLBins, script activity</td>
+              </tr>
+              <tr>
+                <td><strong>DeviceNetworkEvents</strong></td>
+                <td>~30M/day</td>
+                <td><code>RemoteIP</code>, <code>RemotePort</code>, <code>RemoteUrl</code>, <code>InitiatingProcessFileName</code></td>
+                <td>Outbound connections, C2 detection</td>
+              </tr>
+              <tr>
+                <td><strong>DeviceFileEvents</strong></td>
+                <td>~40M/day</td>
+                <td><code>FileName</code>, <code>FolderPath</code>, <code>ActionType</code>, <code>SHA256</code></td>
+                <td>File creation, ransomware activity</td>
+              </tr>
+              <tr>
+                <td><strong>DeviceRegistryEvents</strong></td>
+                <td>~20M/day</td>
+                <td><code>RegistryKey</code>, <code>RegistryValueName</code>, <code>ActionType</code></td>
+                <td>Persistence mechanisms, defense evasion</td>
+              </tr>
+              <tr>
+                <td><strong>DeviceLogonEvents</strong></td>
+                <td>~5M/day</td>
+                <td><code>LogonType</code>, <code>AccountName</code>, <code>RemoteIP</code>, <code>IsLocalAdmin</code></td>
+                <td>Local/network logons, lateral movement</td>
+              </tr>
+              <tr>
+                <td><strong>DeviceImageLoadEvents</strong></td>
+                <td>~10M/day</td>
+                <td><code>FileName</code>, <code>FolderPath</code>, <code>SHA256</code>, <code>InitiatingProcessFileName</code></td>
+                <td>DLL loading, injection detection</td>
+              </tr>
+              <tr>
+                <td><strong>DeviceInfo</strong></td>
+                <td>Low</td>
+                <td><code>DeviceName</code>, <code>OSPlatform</code>, <code>OSVersion</code>, <code>PublicIP</code></td>
+                <td>Device inventory, health status</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Key Fields: DeviceProcessEvents</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — DeviceProcessEvents (XDR Advanced Hunting)</span></div>
+          <pre><code>DeviceProcessEvents
+| project
+    Timestamp,                                       // Note: "Timestamp" not "TimeGenerated" in XDR
+    DeviceId,
+    DeviceName,
+    // Process info:
+    FileName,                                        // Process name (e.g., "powershell.exe")
+    FolderPath,                                      // Full path
+    ProcessId,
+    ProcessCommandLine,                              // Full command line
+    SHA256,                                          // Process hash
+    // Parent process info:
+    InitiatingProcessFileName,                       // Parent process name
+    InitiatingProcessFolderPath,
+    InitiatingProcessId,
+    InitiatingProcessCommandLine,                    // Parent command line
+    InitiatingProcessSHA256,
+    // User context:
+    AccountDomain,
+    AccountName,
+    AccountSid,
+    // Action:
+    ActionType                                       // "ProcessCreated", etc.</code></pre>
+        </div>
+
+        <h3>3.2 MDO Tables (Email Telemetry)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Volume</th><th>Key Fields</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>EmailEvents</strong></td>
+                <td>~1M/day</td>
+                <td><code>SenderFromAddress</code>, <code>RecipientEmailAddress</code>, <code>Subject</code>, <code>DeliveryAction</code></td>
+                <td>Email delivery, phishing investigation</td>
+              </tr>
+              <tr>
+                <td><strong>EmailAttachmentInfo</strong></td>
+                <td>~100K/day</td>
+                <td><code>FileName</code>, <code>FileType</code>, <code>SHA256</code>, <code>ThreatTypes</code></td>
+                <td>Malicious attachment analysis</td>
+              </tr>
+              <tr>
+                <td><strong>EmailUrlInfo</strong></td>
+                <td>~500K/day</td>
+                <td><code>Url</code>, <code>UrlDomain</code>, <code>ThreatTypes</code></td>
+                <td>Phishing URL investigation</td>
+              </tr>
+              <tr>
+                <td><strong>UrlClickEvents</strong></td>
+                <td>~50K/day</td>
+                <td><code>Url</code>, <code>AccountUpn</code>, <code>ActionType</code>, <code>IsClickedThrough</code></td>
+                <td>Safe Links click tracking</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>3.3 MDI Tables (Identity Telemetry)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Key Fields</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>IdentityLogonEvents</strong></td>
+                <td><code>LogonType</code>, <code>AccountUpn</code>, <code>DestinationDeviceName</code>, <code>Protocol</code></td>
+                <td>AD authentication (Kerberos, NTLM)</td>
+              </tr>
+              <tr>
+                <td><strong>IdentityQueryEvents</strong></td>
+                <td><code>QueryType</code>, <code>QueryTarget</code>, <code>AccountUpn</code></td>
+                <td>LDAP reconnaissance detection</td>
+              </tr>
+              <tr>
+                <td><strong>IdentityDirectoryEvents</strong></td>
+                <td><code>ActionType</code>, <code>TargetAccountUpn</code>, <code>DestinationDeviceName</code></td>
+                <td>AD object changes (from DC perspective)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>3.4 MDA Tables (Cloud App Telemetry)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Key Fields</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>CloudAppEvents</strong></td>
+                <td><code>ActionType</code>, <code>Application</code>, <code>AccountObjectId</code>, <code>IPAddress</code>, <code>RawEventData</code></td>
+                <td>SaaS activity, shadow IT, OAuth consent</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 4: COMMON QUERY PATTERNS ==================== -->
+        <h2>4. Common Query Patterns</h2>
+
+        <h3>4.1 Identity Investigation Pattern</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Sentinel: User Activity Timeline</span></div>
+          <pre><code>// Comprehensive user activity for investigation
+let targetUser = "user@revflow.com";
+let timeRange = 24h;
+
+// Combine identity tables
+union 
+    (SigninLogs | where UserPrincipalName =~ targetUser | project TimeGenerated, Source="SignIn", Activity=ResultDescription, IP=IPAddress),
+    (AuditLogs | where TargetResources[0].userPrincipalName =~ targetUser | project TimeGenerated, Source="Audit", Activity=OperationName, IP="N/A"),
+    (OfficeActivity | where UserId =~ targetUser | project TimeGenerated, Source=OfficeWorkload, Activity=Operation, IP=ClientIP)
+| where TimeGenerated > ago(timeRange)
+| order by TimeGenerated desc</code></pre>
+        </div>
+
+        <h3>4.2 XDR Alert + Identity Change Correlation</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Sentinel: Correlate XDR Alert with MFA Change</span></div>
+          <pre><code>// Detect: XDR alert fired for user who recently changed MFA
+let mfaChanges = AuditLogs
+| where TimeGenerated > ago(7d)
+| where OperationName has_any ("User registered security info", "User deleted security info")
+| extend TargetUser = tostring(TargetResources[0].userPrincipalName)
+| project MFAChangeTime=TimeGenerated, TargetUser, MFAOperation=OperationName;
+
+SecurityAlert
+| where TimeGenerated > ago(7d)
+| where ProductName == "Microsoft 365 Defender"
+| extend AlertUser = tostring(parse_json(ExtendedProperties).["User Account"])
+| join kind=inner (mfaChanges) on $left.AlertUser == $right.TargetUser
+| where MFAChangeTime between (TimeGenerated - 24h .. TimeGenerated + 24h)
+| project TimeGenerated, AlertName, Severity, AlertUser, MFAChangeTime, MFAOperation</code></pre>
+        </div>
+
+        <h3>4.3 Endpoint Investigation Pattern</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — XDR: Process Tree Investigation</span></div>
+          <pre><code>// Query in XDR Advanced Hunting (NOT Sentinel)
+// Build process tree for suspicious activity on specific device
 DeviceProcessEvents
-| where TimeGenerated > ago(24h)
-| where FileName =~ "powershell.exe"
-| where ProcessCommandLine has_any ("-enc", "-e ", "-encodedcommand")
-| project TimeGenerated, DeviceName, AccountName, ProcessCommandLine, InitiatingProcessFileName</code></pre>
+| where Timestamp > ago(24h)
+| where DeviceName == "WORKSTATION01"
+| where InitiatingProcessFileName in~ ("powershell.exe", "cmd.exe", "wscript.exe", "mshta.exe")
+| project 
+    Timestamp,
+    DeviceName,
+    ParentProcess = InitiatingProcessFileName,
+    ParentCmdLine = InitiatingProcessCommandLine,
+    ChildProcess = FileName,
+    ChildCmdLine = ProcessCommandLine,
+    User = AccountName,
+    Hash = SHA256
+| order by Timestamp desc</code></pre>
         </div>
 
+        <h3>4.4 Network Correlation Pattern</h3>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">NWQL → KQL: Firewall Denied Traffic to Sensitive Ports</span></div>
-          <pre><code>// RSA NetWitness Query Language (NWQL)
-device.type = 'paloalto' && 
-action = 'deny' && 
-ip.dstport = 22,23,3389,445,135,139
+          <div class="code-header"><span class="code-lang">KQL — Sentinel: XDR Alert + External Connection</span></div>
+          <pre><code>// Correlate XDR alert with firewall deny to suspicious IP
+let alertIPs = SecurityAlert
+| where TimeGenerated > ago(24h)
+| where ProductName == "Microsoft 365 Defender"
+| mv-expand entity = parse_json(Entities)
+| where entity.Type == "ip"
+| extend SuspiciousIP = tostring(entity.Address)
+| project AlertTime=TimeGenerated, AlertName, SuspiciousIP;
 
-// Microsoft Sentinel KQL
 CommonSecurityLog
 | where TimeGenerated > ago(24h)
 | where DeviceVendor == "Palo Alto Networks"
 | where DeviceAction == "deny"
-| where DestinationPort in (22, 23, 3389, 445, 135, 139)
-| project TimeGenerated, SourceIP, DestinationIP, DestinationPort, DeviceAction</code></pre>
+| join kind=inner (alertIPs) on $left.DestinationIP == $right.SuspiciousIP
+| project TimeGenerated, AlertName, SourceIP, DestinationIP, DestinationPort</code></pre>
         </div>
 
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">NWQL → KQL: User Added to Privileged Group</span></div>
-          <pre><code>// RSA NetWitness Query Language (NWQL)
-device.type = 'winevent_nic' && 
-msg.id = 4728,4732,4756 && 
-group contains 'admin'
+        <!-- ==================== SECTION 5: RSA TO SENTINEL MAPPING ==================== -->
+        <h2>5. RSA NetWitness to Sentinel Field Mapping</h2>
 
-// Microsoft Sentinel KQL
-SecurityEvent
-| where TimeGenerated > ago(24h)
-| where EventID in (4728, 4732, 4756)
-| where TargetUserName has "admin" or TargetUserName has "Domain Admins"
-| project TimeGenerated, Computer, SubjectUserName, TargetUserName, Activity
+        <p>For migration from RSA NetWitness, use these field mappings to translate queries.</p>
 
-// Alternative using Entra ID AuditLogs
-AuditLogs
-| where TimeGenerated > ago(24h)
-| where OperationName has "Add member to role"
-| extend TargetUser = tostring(TargetResources[0].userPrincipalName)
-| extend Role = tostring(parse_json(tostring(TargetResources[0].modifiedProperties))[1].newValue)
-| where Role has "admin"
-| project TimeGenerated, OperationName, TargetUser, Role, InitiatedBy</code></pre>
-        </div>
-
-        <h3>4.2 Aggregation Query Patterns</h3>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">NWQL → KQL: Top Talkers by Bytes</span></div>
-          <pre><code>// RSA NetWitness Query Language (NWQL)
-device.type = 'paloalto' && action = 'allow' 
-SELECT ip.src, SUM(bytes.dst) AS total_bytes 
-GROUP BY ip.src 
-ORDER BY total_bytes DESC 
-LIMIT 10
-
-// Microsoft Sentinel KQL
-CommonSecurityLog
-| where TimeGenerated > ago(24h)
-| where DeviceVendor == "Palo Alto Networks"
-| where DeviceAction == "allow"
-| summarize TotalBytes = sum(ReceivedBytes) by SourceIP
-| top 10 by TotalBytes desc</code></pre>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">NWQL → KQL: Failed Logins per User</span></div>
-          <pre><code>// RSA NetWitness Query Language (NWQL)
-device.type = 'azuread' && result = 'failure'
-SELECT user.dst, COUNT(*) AS failed_count
-GROUP BY user.dst
-HAVING failed_count > 10
-
-// Microsoft Sentinel KQL
-SigninLogs
-| where TimeGenerated > ago(24h)
-| where ResultType != "0"
-| summarize FailedCount = count() by UserPrincipalName
-| where FailedCount > 10
-| order by FailedCount desc</code></pre>
-        </div>
-
-        <!-- ==================== SECTION 5: ASIM NORMALIZATION ==================== -->
-        <h2>5. ASIM Normalization</h2>
-
-        <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            ASIM = RSA's Unified Schema for Sentinel
-          </div>
-          <div class="callout-content">
-            <p>Microsoft's <strong>Advanced Security Information Model (ASIM)</strong> provides schema normalization similar to RSA's meta-key approach. Use ASIM parsers for cross-source queries.</p>
-          </div>
-        </div>
-
-        <h3>5.1 ASIM Schemas Available</h3>
-
+        <h3>5.1 Network Fields</h3>
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>ASIM Schema</th><th>Parser Function</th><th>Source Tables</th><th>Key Normalized Fields</th></tr>
+              <tr><th>RSA Meta Key</th><th>Sentinel Table</th><th>Sentinel Field</th><th>Notes</th></tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Authentication</td>
-                <td><code>imAuthentication</code></td>
-                <td>SigninLogs, SecurityEvent, Syslog</td>
-                <td>TargetUsername, SrcIpAddr, EventResult, LogonType</td>
-              </tr>
-              <tr>
-                <td>DNS</td>
-                <td><code>imDns</code></td>
-                <td>DnsEvents, CommonSecurityLog</td>
-                <td>DnsQuery, DnsResponseName, SrcIpAddr, ResponseCodeName</td>
-              </tr>
-              <tr>
-                <td>Network Session</td>
-                <td><code>imNetworkSession</code></td>
-                <td>CommonSecurityLog, AzureNetworkAnalytics</td>
-                <td>SrcIpAddr, DstIpAddr, DstPortNumber, NetworkProtocol</td>
-              </tr>
-              <tr>
-                <td>Process Event</td>
-                <td><code>imProcessCreate</code></td>
-                <td>DeviceProcessEvents, SecurityEvent</td>
-                <td>TargetProcessName, TargetProcessCommandLine, ActorUsername</td>
-              </tr>
-              <tr>
-                <td>File Event</td>
-                <td><code>imFileEvent</code></td>
-                <td>DeviceFileEvents, SecurityEvent</td>
-                <td>TargetFileName, TargetFilePath, ActorUsername</td>
-              </tr>
-              <tr>
-                <td>Registry Event</td>
-                <td><code>imRegistry</code></td>
-                <td>DeviceRegistryEvents, SecurityEvent</td>
-                <td>RegistryKey, RegistryValue, ActorUsername</td>
-              </tr>
-              <tr>
-                <td>Web Session</td>
-                <td><code>imWebSession</code></td>
-                <td>CommonSecurityLog, W3CIISLog</td>
-                <td>Url, HttpRequestMethod, SrcIpAddr, HttpStatusCode</td>
-              </tr>
+              <tr><td><code>ip.src</code></td><td>CommonSecurityLog</td><td><code>SourceIP</code></td><td></td></tr>
+              <tr><td><code>ip.dst</code></td><td>CommonSecurityLog</td><td><code>DestinationIP</code></td><td></td></tr>
+              <tr><td><code>ip.srcport</code></td><td>CommonSecurityLog</td><td><code>SourcePort</code></td><td></td></tr>
+              <tr><td><code>ip.dstport</code></td><td>CommonSecurityLog</td><td><code>DestinationPort</code></td><td></td></tr>
+              <tr><td><code>alias.host</code></td><td>CommonSecurityLog</td><td><code>DestinationHostName</code></td><td></td></tr>
+              <tr><td><code>bytes.src</code></td><td>CommonSecurityLog</td><td><code>SentBytes</code></td><td></td></tr>
+              <tr><td><code>bytes.dst</code></td><td>CommonSecurityLog</td><td><code>ReceivedBytes</code></td><td></td></tr>
             </tbody>
           </table>
         </div>
 
-        <h3>5.2 ASIM Query Example</h3>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - ASIM Normalized Authentication Query</span></div>
-          <pre><code>// Query all authentication failures across ALL sources using ASIM
-imAuthentication
-| where TimeGenerated > ago(24h)
-| where EventResult == "Failure"
-| summarize FailureCount = count() by TargetUsername, SrcIpAddr, EventProduct
-| where FailureCount > 5
-| order by FailureCount desc
-
-// This single query covers:
-// - SigninLogs (Entra ID)
-// - SecurityEvent (Windows)
-// - Syslog (Linux PAM)
-// - Any other source with ASIM parser</code></pre>
+        <h3>5.2 Identity Fields</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>RSA Meta Key</th><th>Sentinel Table</th><th>Sentinel Field</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>user.src</code></td><td>SigninLogs</td><td><code>UserPrincipalName</code></td><td>UPN format</td></tr>
+              <tr><td><code>domain</code></td><td>SigninLogs</td><td><code>split(UserPrincipalName, "@")[1]</code></td><td>Extract with KQL</td></tr>
+              <tr><td><code>email</code></td><td>SigninLogs</td><td><code>UserPrincipalName</code></td><td>UPN is typically email</td></tr>
+              <tr><td><code>action</code></td><td>SigninLogs</td><td><code>ResultType</code></td><td>0=success</td></tr>
+              <tr><td><code>result</code></td><td>SigninLogs</td><td><code>ResultDescription</code></td><td></td></tr>
+            </tbody>
+          </table>
         </div>
 
-        <!-- ==================== SECTION 6: MIGRATION CHECKLIST ==================== -->
-        <h2>6. Field Mapping Validation Checklist</h2>
-
-        <div class="callout warning">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            Validation Required
-          </div>
-          <div class="callout-content">
-            <p>When migrating queries or rules, validate field mappings against actual data. Field names and values may vary based on source configuration.</p>
-          </div>
+        <h3>5.3 Endpoint Fields (Query in XDR)</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>RSA Meta Key</th><th>XDR Table</th><th>XDR Field</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>device.host</code></td><td>DeviceProcessEvents</td><td><code>DeviceName</code></td><td></td></tr>
+              <tr><td><code>process.src</code></td><td>DeviceProcessEvents</td><td><code>InitiatingProcessFileName</code></td><td>Parent process</td></tr>
+              <tr><td><code>process.dst</code></td><td>DeviceProcessEvents</td><td><code>FileName</code></td><td>Child process</td></tr>
+              <tr><td><code>param.src</code></td><td>DeviceProcessEvents</td><td><code>InitiatingProcessCommandLine</code></td><td></td></tr>
+              <tr><td><code>param.dst</code></td><td>DeviceProcessEvents</td><td><code>ProcessCommandLine</code></td><td></td></tr>
+              <tr><td><code>checksum</code></td><td>DeviceProcessEvents</td><td><code>SHA256</code></td><td></td></tr>
+            </tbody>
+          </table>
         </div>
 
-        <h3>6.1 Pre-Migration Validation</h3>
+        <!-- ==================== SECTION 6: QUICK REFERENCE ==================== -->
+        <h2>6. Quick Reference</h2>
 
-        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
-          <li>☐ Identify all RSA meta keys used in existing rules</li>
-          <li>☐ Map each meta key to Sentinel table/column</li>
-          <li>☐ Verify data types match (string, int, datetime)</li>
-          <li>☐ Check for value format differences (IP format, timestamp format)</li>
-          <li>☐ Identify fields requiring JSON parsing in Sentinel</li>
-          <li>☐ Note fields that don't have direct equivalents</li>
-        </ul>
+        <h3>6.1 Where to Query What</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Question</th><th>Query Location</th><th>Table</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Who was added to Global Admins?</td><td>Sentinel</td><td><code>AuditLogs</code></td></tr>
+              <tr><td>Who signed in from unusual location?</td><td>Sentinel</td><td><code>SigninLogs</code></td></tr>
+              <tr><td>What XDR alerts fired for this user?</td><td>Sentinel</td><td><code>SecurityAlert</code></td></tr>
+              <tr><td>What processes did this malware spawn?</td><td>XDR</td><td><code>DeviceProcessEvents</code></td></tr>
+              <tr><td>What network connections did it make?</td><td>XDR</td><td><code>DeviceNetworkEvents</code></td></tr>
+              <tr><td>Who clicked the phishing link?</td><td>XDR</td><td><code>UrlClickEvents</code></td></tr>
+              <tr><td>What files were downloaded from SharePoint?</td><td>Sentinel</td><td><code>OfficeActivity</code></td></tr>
+              <tr><td>What firewall blocked this IP?</td><td>Sentinel</td><td><code>CommonSecurityLog</code></td></tr>
+              <tr><td>What Salesforce records were exported?</td><td>Sentinel</td><td><code>Salesforce_CL</code></td></tr>
+            </tbody>
+          </table>
+        </div>
 
-        <h3>6.2 Post-Migration Validation</h3>
-
-        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
-          <li>☐ Run parallel queries in both systems for 30 days</li>
-          <li>☐ Compare result counts and sample records</li>
-          <li>☐ Validate detection rule alert counts match</li>
-          <li>☐ Confirm all required fields are populated</li>
-          <li>☐ Test aggregation queries return similar results</li>
-          <li>☐ Document any discrepancies and workarounds</li>
-        </ul>
+        <h3>6.2 Time Field Reference</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Location</th><th>Time Field</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Sentinel tables</td><td><code>TimeGenerated</code></td><td>Standard across all Sentinel tables</td></tr>
+              <tr><td>XDR tables</td><td><code>Timestamp</code></td><td>Different from Sentinel!</td></tr>
+              <tr><td>Ingestion time</td><td><code>ingestion_time()</code></td><td>When Sentinel received the event</td></tr>
+            </tbody>
+          </table>
+        </div>
 
         <nav class="page-nav">
-          <a href="resources/splunk-reference.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Splunk Reference</span></a>
-          <a href="mde-onboarding.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">MDE Onboarding →</span></a>
+          <a href="scripts.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Scripts & Automation</span></a>
+          <a href="templates.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Templates →</span></a>
         </nav>
-
       </div>
     </main>
   </div>

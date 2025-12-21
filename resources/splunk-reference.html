@@ -161,7 +161,106 @@
           </div>
         </div>
 
-        <h2>Splunk's SIEM-First Model</h2>
+        <h2>RevFlow's Platform Split: Sentinel (Security) vs Splunk (Operations)</h2>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Platform Ownership Model
+          </div>
+          <div class="callout-content">
+            <p><strong>Security owns Sentinel + XDR.</strong> Engineering/SRE owns Splunk Cloud.</p>
+            <p>This is intentional separation of concerns — security logs for security use cases, operational logs for operational use cases.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Platform</th><th>Owner</th><th>Data Types</th><th>Use Cases</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Microsoft Sentinel + XDR</strong></td>
+                <td>Security Team</td>
+                <td>Identity (Entra ID), XDR alerts, network security, SaaS security, cloud security</td>
+                <td>Threat detection, incident response, compliance, security correlation</td>
+              </tr>
+              <tr>
+                <td><strong>Splunk Cloud</strong></td>
+                <td>Engineering / SRE</td>
+                <td>Application performance, API logs, Kubernetes, business transactions</td>
+                <td>APM, troubleshooting, capacity planning, feature usage</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>What Stays in Splunk (NOT Migrated to Sentinel)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Index</th><th>Owner</th><th>Volume</th><th>Why NOT in Sentinel</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>app_perf</code></td>
+                <td>SRE</td>
+                <td>~100 GB/day</td>
+                <td>APM data — operational, not security</td>
+              </tr>
+              <tr>
+                <td><code>api_logs</code></td>
+                <td>Engineering</td>
+                <td>~50 GB/day</td>
+                <td>API debugging — development use case</td>
+              </tr>
+              <tr>
+                <td><code>k8s_logs</code></td>
+                <td>SRE</td>
+                <td>~80 GB/day</td>
+                <td>Container operations — platform engineering</td>
+              </tr>
+              <tr>
+                <td><code>business_txn</code></td>
+                <td>Product</td>
+                <td>~30 GB/day</td>
+                <td>Feature analytics — product management</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Interview Talking Point</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Why Not Consolidate Everything in One Platform?</span></div>
+          <pre><code>"We intentionally maintain Splunk for operational logs alongside Sentinel 
+for security. Here's why:
+
+1. OWNERSHIP CLARITY
+   Security team owns security data in Sentinel. Engineering owns operational 
+   data in Splunk. No confusion about who maintains what.
+
+2. COST OPTIMIZATION
+   Sentinel pricing is per-GB. Ingesting 300+ GB/day of app performance logs 
+   would cost ~$25K/month with no security value. Splunk Cloud handles 
+   operational scale better for this use case.
+
+3. USE CASE ALIGNMENT
+   XDR integration, identity correlation, and security detections work 
+   natively in Sentinel. APM dashboards, Kubernetes monitoring, and 
+   business analytics work better in Splunk.
+
+4. QUERY SPECIALIZATION
+   SOC analysts stay in Sentinel. SRE stays in Splunk. Each team uses 
+   the tool optimized for their workflows.
+
+The key insight: 'One platform for everything' sounds efficient but often 
+creates a bloated, expensive system where no use case is well-served. 
+Purpose-fit platforms with clear ownership work better."</code></pre>
+        </div>
 
         <p>In Splunk Enterprise Security, detection works this way:</p>
 

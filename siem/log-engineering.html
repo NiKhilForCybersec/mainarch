@@ -32,13 +32,13 @@
         <div class="nav-divider"></div>
         <div class="nav-section">
           <div class="nav-section-title">SIEM Migration</div>
-          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
-          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
-          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
-          <a href="../siem/log-engineering.html" class="nav-item active">Log Engineering</a>
-          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
-          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
-          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+          <a href="index.html" class="nav-item">SIEM Overview</a>
+          <a href="discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="log-engineering.html" class="nav-item active">Log Engineering</a>
+          <a href="detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="soc-transition.html" class="nav-item">SOC Transition</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -119,13 +119,6 @@
       </nav>
     </aside>
 
-    <button class="mobile-menu-toggle" aria-label="Toggle menu">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 12h18M3 6h18M3 18h18"></path>
-      </svg>
-    </button>
-    <div class="sidebar-overlay"></div>
-
     <main class="main-content">
       <div class="content-wrapper">
         
@@ -144,333 +137,670 @@
             <span class="page-reading-time">Technical Implementation</span>
           </div>
           <p class="intro-text">
-            Log engineering is where logs are actually configured to flow into Sentinel. This involves Data Collection Rules (DCRs), ingestion-time transformations, cost tier decisions, and workspace architecture.
+            Log engineering for RevFlow's XDR-first architecture. This page explains what to ingest into Sentinel, what stays in XDR, and how the connectors are configured. The strategy is driven by a key principle: <strong>Defender detects attacks; Entra ID logs record changes.</strong>
           </p>
         </div>
 
-        <h2>Workspace Architecture & Data Residency</h2>
+        <!-- ==================== SECTION 1: CRITICAL DISTINCTION ==================== -->
+        <h2>1. The Critical Distinction: Attacks vs. Control-Plane</h2>
 
-        <p>
-          Before configuring log ingestion, determine the workspace architecture based on compliance requirements.
-        </p>
-
-        <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Data Residency & GDPR Compliance
-          </div>
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Understand This Before Configuring Connectors</div>
           <div class="callout-content">
-            <p>Our approach depends on client requirements:</p>
-            <p><strong>If client contract mandates logs stay in EU:</strong></p>
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li>Deploy a separate Sentinel workspace in an EU region (e.g., West Europe, North Europe)</li>
-              <li>Replicate detection logic through a Git-based deployment model</li>
-              <li>Analytics rules, workbooks, and playbooks stored in Git and deployed via CI/CD</li>
-              <li>Data never leaves EU boundaries</li>
-            </ul>
-            <p style="margin-top: 0.5rem;"><strong>If no strict residency requirement:</strong></p>
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li>Centralize logging in primary workspace</li>
-              <li>Rely on Standard Contractual Clauses (SCCs) for cross-border transfers</li>
-              <li>RBAC, auditing, and retention controls to meet GDPR obligations</li>
-            </ul>
+            <p><strong>Defender products detect ATTACKS.</strong> They do NOT provide audit logs for control-plane changes.</p>
+            <p>Account creation, group membership changes, role assignments, Conditional Access policy changes — these come from <strong>Entra ID diagnostic logs</strong>, not Defender.</p>
           </div>
         </div>
-
-        <h3>Multi-Workspace Deployment Model</h3>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Scenario</th><th>Workspace Architecture</th><th>Detection Deployment</th></tr>
+              <tr><th>Defender Product</th><th>Detects (Attacks) ✓</th><th>Does NOT Provide ✗</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>Single region, no residency requirements</td>
-                <td>Single centralized workspace</td>
-                <td>Direct deployment</td>
+                <td><strong>MDI</strong> (Identity)</td>
+                <td>Pass-the-Hash, Kerberoasting, DCSync, lateral movement</td>
+                <td>User creation, group changes, role assignments</td>
               </tr>
               <tr>
-                <td>EU data residency required</td>
-                <td>Separate EU workspace</td>
-                <td>Git-based CI/CD to both workspaces</td>
+                <td><strong>MDO</strong> (Office)</td>
+                <td>Phishing, BEC, malicious attachments/URLs</td>
+                <td>Mailbox permissions, transport rules</td>
               </tr>
               <tr>
-                <td>Multi-region global deployment</td>
-                <td>Regional workspaces + Azure Lighthouse</td>
-                <td>Git-based deployment + cross-workspace queries</td>
+                <td><strong>MDE</strong> (Endpoint)</td>
+                <td>Malware, LOLBins, credential theft, ransomware</td>
+                <td>Device join audits, Entra role assignments</td>
+              </tr>
+              <tr>
+                <td><strong>MDA</strong> (Cloud Apps)</td>
+                <td>Impossible travel, risky OAuth, shadow IT</td>
+                <td>App registration audits, consent history</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h2>Data Collection Rules (DCRs)</h2>
+        <p><strong>Implication:</strong> Even with full XDR deployment, you MUST separately ingest Entra ID logs into Sentinel for compliance, investigation, and correlation.</p>
 
-        <p>
-          DCRs are the modern way to collect data into Log Analytics / Sentinel. They replace the legacy Log Analytics Agent (MMA) and provide filtering and transformation at ingestion time.
-        </p>
+        <!-- ==================== SECTION 2: LAYERED ARCHITECTURE ==================== -->
+        <h2>2. Layered Log Architecture</h2>
 
-        <h3>DCR Architecture</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">RevFlow Log Architecture</span></div>
+          <pre><code>REVFLOW LOG ARCHITECTURE - XDR-FIRST MODEL
+═══════════════════════════════════════════════════════════════════════════════
 
-        <div class="architecture-diagram">
-          <div class="arch-container">
-            <div class="arch-layer">
-              <div class="arch-layer-title">Data Sources</div>
-              <div class="arch-layer-content">
-                <div class="arch-box gray">Windows Events</div>
-                <div class="arch-box gray">Linux Syslog</div>
-                <div class="arch-box gray">CEF/Syslog</div>
-                <div class="arch-box gray">Custom Logs</div>
-              </div>
-            </div>
-            <div class="arch-arrow">↓</div>
-            <div class="arch-layer">
-              <div class="arch-layer-title">Azure Monitor Agent (AMA)</div>
-              <div class="arch-layer-content">
-                <div class="arch-box blue">Installed on VMs / Arc-enabled servers</div>
-              </div>
-            </div>
-            <div class="arch-arrow">↓</div>
-            <div class="arch-layer">
-              <div class="arch-layer-title">Data Collection Rule (DCR)</div>
-              <div class="arch-layer-content">
-                <div class="arch-box green">Filter</div>
-                <div class="arch-box green">Transform (KQL)</div>
-                <div class="arch-box green">Route</div>
-              </div>
-            </div>
-            <div class="arch-arrow">↓</div>
-            <div class="arch-layer">
-              <div class="arch-layer-title">Destination</div>
-              <div class="arch-layer-content">
-                <div class="arch-box purple">Log Analytics Workspace (Sentinel)</div>
-              </div>
-            </div>
-          </div>
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ LAYER 1: MICROSOFT DEFENDER (Attack Detection)                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐                   │
+│   │   MDI    │  │   MDO    │  │   MDE    │  │   MDA    │                   │
+│   │ Identity │  │  Email   │  │ Endpoint │  │Cloud Apps│                   │
+│   │ Attacks  │  │ Threats  │  │ Threats  │  │  Abuse   │                   │
+│   └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘                   │
+│        │             │             │             │                          │
+│        └─────────────┴──────┬──────┴─────────────┘                          │
+│                             ▼                                               │
+│                    ┌────────────────┐                                       │
+│                    │  MICROSOFT XDR │                                       │
+│                    │   Correlation  │                                       │
+│                    └───────┬────────┘                                       │
+│                            │                                                │
+│      ┌─────────────────────┼─────────────────────┐                          │
+│      │                     │                     │                          │
+│      ▼                     ▼                     ▼                          │
+│ ┌─────────┐         ┌───────────┐         ┌──────────┐                      │
+│ │ Alerts  │         │ Incidents │         │ Raw Data │                      │
+│ │→Sentinel│         │ →Sentinel │         │ STAYS IN │                      │
+│ └─────────┘         └───────────┘         │   XDR    │                      │
+│                                           └──────────┘                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ LAYER 2: MICROSOFT SENTINEL (Correlation + Enrichment)                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   FROM XDR:                    FROM ENTRA ID:              FROM OTHER:      │
+│   ┌──────────────────┐        ┌───────────────────┐      ┌──────────────┐  │
+│   │ SecurityAlert    │        │ AuditLogs         │      │ Palo Alto    │  │
+│   │ SecurityIncident │        │ SigninLogs        │      │ Salesforce   │  │
+│   │ (Low volume,     │        │ AADNonInteractive │      │ Workday      │  │
+│   │  high value)     │        │ AADServicePrinc.  │      │ Azure Activity│  │
+│   └──────────────────┘        └───────────────────┘      └──────────────┘  │
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐  │
+│   │                    SENTINEL ANALYTICS RULES                         │  │
+│   │  • Correlate XDR alerts with identity changes                       │  │
+│   │  • Correlate XDR alerts with SaaS activity                          │  │
+│   │  • Network telemetry detections                                     │  │
+│   │  • Compliance-driven rules                                          │  │
+│   └─────────────────────────────────────────────────────────────────────┘  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
         </div>
 
-        <h3>Windows Security Events DCR</h3>
+        <!-- ==================== SECTION 3: WHAT TO INGEST ==================== -->
+        <h2>3. Log Ingestion Decision Matrix</h2>
 
-        <p>
-          Don't collect all Windows Security events—that's expensive and noisy. Use a DCR to filter to security-relevant events only.
-        </p>
-
-        <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Volume Reduction
-          </div>
-          <div class="callout-content">
-            <p>Filtering Windows Security Events at ingestion can reduce volume by 60-80%. A server generating 10 GB/day of Security events might only need 2 GB of security-relevant events.</p>
-          </div>
-        </div>
-
-        <h4>Security-Relevant Event IDs to Collect</h4>
+        <h3>3.1 Data Sources by Priority</h3>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr>
-                <th>Event ID</th>
-                <th>Description</th>
-                <th>Detection Use Case</th>
-              </tr>
+              <tr><th>Priority</th><th>Source</th><th>Ingest?</th><th>Tier</th><th>Rationale</th></tr>
             </thead>
             <tbody>
-              <tr>
-                <td><code>4624</code></td>
-                <td>Successful logon</td>
-                <td>Baseline, lateral movement</td>
+              <!-- CRITICAL - MUST INGEST -->
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td rowspan="6"><strong>P0<br>Critical</strong></td>
+                <td>Entra ID AuditLogs</td>
+                <td><span class="status-badge critical">Required</span></td>
+                <td>Analytics</td>
+                <td>Identity control-plane; XDR does NOT provide</td>
               </tr>
-              <tr>
-                <td><code>4625</code></td>
-                <td>Failed logon</td>
-                <td>Brute force, password spray</td>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>Entra ID SigninLogs</td>
+                <td><span class="status-badge critical">Required</span></td>
+                <td>Analytics</td>
+                <td>Auth events, CA evaluation; correlation</td>
               </tr>
-              <tr>
-                <td><code>4648</code></td>
-                <td>Explicit credential logon</td>
-                <td>Credential theft, pass-the-hash</td>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>SecurityAlert (XDR)</td>
+                <td><span class="status-badge critical">Required</span></td>
+                <td>Analytics</td>
+                <td>XDR alerts for Sentinel correlation</td>
               </tr>
-              <tr>
-                <td><code>4672</code></td>
-                <td>Special privileges assigned</td>
-                <td>Privilege escalation</td>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>SecurityIncident (XDR)</td>
+                <td><span class="status-badge critical">Required</span></td>
+                <td>Analytics</td>
+                <td>XDR incidents for case management</td>
               </tr>
-              <tr>
-                <td><code>4688</code></td>
-                <td>Process creation</td>
-                <td>Malware execution, LOLBins</td>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>Azure Activity</td>
+                <td><span class="status-badge critical">Required</span></td>
+                <td>Free</td>
+                <td>Cloud control-plane; free tier</td>
               </tr>
-              <tr>
-                <td><code>4698</code></td>
-                <td>Scheduled task created</td>
-                <td>Persistence</td>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>OfficeActivity</td>
+                <td><span class="status-badge critical">Required</span></td>
+                <td>Analytics</td>
+                <td>M365 audit (SharePoint, Exchange admin)</td>
               </tr>
-              <tr>
-                <td><code>4720</code></td>
-                <td>User account created</td>
-                <td>Persistence, backdoor accounts</td>
+              <!-- IMPORTANT -->
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td rowspan="4"><strong>P1<br>Important</strong></td>
+                <td>Palo Alto (Threat)</td>
+                <td><span class="status-badge complete">Yes</span></td>
+                <td>Analytics</td>
+                <td>Network threats; XDR doesn't cover</td>
               </tr>
-              <tr>
-                <td><code>4722-4726</code></td>
-                <td>Account enabled/disabled/deleted/changed</td>
-                <td>Account manipulation</td>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td>Salesforce</td>
+                <td><span class="status-badge complete">Yes</span></td>
+                <td>Analytics</td>
+                <td>SaaS outside XDR scope; data exfil</td>
               </tr>
-              <tr>
-                <td><code>4728</code></td>
-                <td>Member added to security group</td>
-                <td>Privilege escalation</td>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td>Workday</td>
+                <td><span class="status-badge complete">Yes</span></td>
+                <td>Analytics</td>
+                <td>HR system; termination correlation</td>
               </tr>
-              <tr>
-                <td><code>4732</code></td>
-                <td>Member added to local group</td>
-                <td>Local admin persistence</td>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td>SecurityEvent (DCs only)</td>
+                <td><span class="status-badge complete">Yes</span></td>
+                <td>Analytics</td>
+                <td>Tier 0 monitoring; detailed AD audit</td>
               </tr>
-              <tr>
-                <td><code>4756</code></td>
-                <td>Member added to universal group</td>
-                <td>Domain privilege escalation</td>
+              <!-- SELECTIVE -->
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td rowspan="3"><strong>P2<br>Selective</strong></td>
+                <td>AADNonInteractiveUserSignInLogs</td>
+                <td><span class="status-badge in-progress">Selective</span></td>
+                <td>Basic</td>
+                <td>High volume; compliance retention</td>
               </tr>
-              <tr>
-                <td><code>4768</code></td>
-                <td>Kerberos TGT requested</td>
-                <td>Kerberoasting, AS-REP roasting</td>
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td>Palo Alto (Traffic)</td>
+                <td><span class="status-badge in-progress">Selective</span></td>
+                <td>Basic</td>
+                <td>High volume; forensics only</td>
               </tr>
-              <tr>
-                <td><code>4769</code></td>
-                <td>Kerberos service ticket requested</td>
-                <td>Kerberoasting</td>
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td>NetSuite</td>
+                <td><span class="status-badge in-progress">Selective</span></td>
+                <td>Analytics</td>
+                <td>Financial app; BEC correlation</td>
               </tr>
-              <tr>
-                <td><code>4771</code></td>
-                <td>Kerberos pre-auth failed</td>
-                <td>Password spray</td>
+              <!-- DO NOT INGEST -->
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td rowspan="4"><strong>P3<br>Skip</strong></td>
+                <td>DeviceProcessEvents (MDE)</td>
+                <td><span class="status-badge">No</span></td>
+                <td>N/A</td>
+                <td>Query in XDR Advanced Hunting</td>
               </tr>
-              <tr>
-                <td><code>4776</code></td>
-                <td>NTLM authentication</td>
-                <td>Pass-the-hash, NTLM relay</td>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td>DeviceRegistryEvents (MDE)</td>
+                <td><span class="status-badge">No</span></td>
+                <td>N/A</td>
+                <td>Very high volume; stays in XDR</td>
               </tr>
-              <tr>
-                <td><code>5140</code></td>
-                <td>Network share accessed</td>
-                <td>Lateral movement</td>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td>EmailEvents (MDO)</td>
+                <td><span class="status-badge">No</span></td>
+                <td>N/A</td>
+                <td>Query in XDR; alerts sufficient</td>
               </tr>
-              <tr>
-                <td><code>5145</code></td>
-                <td>Network share check</td>
-                <td>Reconnaissance</td>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td>SecurityEvent (Workstations)</td>
+                <td><span class="status-badge">No</span></td>
+                <td>N/A</td>
+                <td>MDE covers; avoid duplication</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h4>DCR Configuration (ARM Template)</h4>
+        <h3>3.2 XDR Selective Ingestion</h3>
 
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">JSON (ARM Template)</span>
-            <button class="code-copy-btn">Copy</button>
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>XDR Raw Telemetry Strategy</div>
+          <div class="callout-content">
+            <p><strong>Do NOT ingest all XDR raw telemetry into Sentinel.</strong> It's expensive and unnecessary.</p>
+            <p>XDR Advanced Hunting allows ad-hoc queries without Sentinel ingestion costs. Ingest only what's needed for Sentinel correlation rules.</p>
           </div>
-          <pre><code>{
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "resources": [
-    {
-      "type": "Microsoft.Insights/dataCollectionRules",
-      "apiVersion": "2022-06-01",
-      "name": "DCR-WindowsSecurity-Filtered",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "dataSources": {
-          "windowsEventLogs": [
-            {
-              "name": "SecurityEvents",
-              "streams": ["Microsoft-SecurityEvent"],
-              "xPathQueries": [
-                "Security!*[System[(EventID=4624 or EventID=4625 or EventID=4648 or EventID=4672)]]",
-                "Security!*[System[(EventID=4688 or EventID=4698 or EventID=4699 or EventID=4700 or EventID=4701)]]",
-                "Security!*[System[(EventID=4720 or EventID=4722 or EventID=4723 or EventID=4724 or EventID=4725 or EventID=4726)]]",
-                "Security!*[System[(EventID=4728 or EventID=4732 or EventID=4756)]]",
-                "Security!*[System[(EventID=4768 or EventID=4769 or EventID=4771 or EventID=4776)]]",
-                "Security!*[System[(EventID=5140 or EventID=5145)]]"
-              ]
-            }
-          ]
-        },
-        "destinations": {
-          "logAnalytics": [
-            {
-              "workspaceResourceId": "[parameters('workspaceResourceId')]",
-              "name": "SentinelWorkspace"
-            }
-          ]
-        },
-        "dataFlows": [
-          {
-            "streams": ["Microsoft-SecurityEvent"],
-            "destinations": ["SentinelWorkspace"]
-          }
-        ]
-      }
-    }
-  ]
-}</code></pre>
         </div>
 
-        <h3>Ingestion-Time Transformations</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">XDR Ingestion Strategy</span></div>
+          <pre><code>XDR TO SENTINEL: WHAT TO INGEST
+═══════════════════════════════════════════════════════════════════════════════
 
-        <p>
-          DCRs can transform data using KQL before it reaches the workspace. This is useful for:
-        </p>
-        <ul>
-          <li>Dropping unnecessary columns to reduce storage</li>
-          <li>Parsing unstructured data into fields</li>
-          <li>Enriching data with static values</li>
-          <li>Filtering rows based on content</li>
-        </ul>
+ALWAYS INGEST (Via M365 Defender Connector):
+├── SecurityAlert         → All XDR alerts for correlation (~200/day)
+├── SecurityIncident      → XDR incidents for case management (~50/day)
+└── AlertEvidence         → Entity context for investigation
 
-        <h4>Example: Custom Application Log Transformation</h4>
+OPTIONAL (If specific correlation rules need it):
+├── DeviceLogonEvents     → If Sentinel rule needs endpoint logon data
+├── EmailPostDeliveryEvents → If tracking remediation of malicious emails
+└── IdentityLogonEvents   → MDI logon events (supplement SigninLogs)
 
-        <p>
-          RevFlow's application sends JSON security events. We transform them at ingestion to extract useful fields.
-        </p>
+DO NOT INGEST (Query in XDR Advanced Hunting instead):
+├── DeviceProcessEvents   → ~50M events/day, query ad-hoc
+├── DeviceNetworkEvents   → ~30M events/day, query ad-hoc
+├── DeviceFileEvents      → ~40M events/day, query ad-hoc
+├── DeviceRegistryEvents  → ~20M events/day, query ad-hoc
+├── DeviceInfo            → Query via API if needed
+├── EmailEvents           → Query in MDO if needed
+└── CloudAppEvents        → High volume; MDA alerts sufficient
+
+COST IMPACT:
+• XDR raw telemetry: ~150M events/day = ~$15K/month if ingested
+• XDR alerts + incidents only: ~250 events/day = ~$50/month
+• Savings: ~$15K/month by keeping raw telemetry in XDR</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 4: ENTRA ID CONNECTOR ==================== -->
+        <h2>4. Entra ID Connector Configuration</h2>
+
+        <p>This is the most critical connector. Without it, you have no visibility into identity changes.</p>
+
+        <h3>4.1 Entra ID Log Tables</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>What It Contains</th><th>Tier</th><th>Volume</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>AuditLogs</strong></td>
+                <td>User/group/role changes, CA policies, app registrations, MFA changes</td>
+                <td>Analytics</td>
+                <td>~50K/day</td>
+              </tr>
+              <tr>
+                <td><strong>SigninLogs</strong></td>
+                <td>Interactive user logins, MFA challenges, CA evaluation</td>
+                <td>Analytics</td>
+                <td>~200K/day</td>
+              </tr>
+              <tr>
+                <td><strong>AADNonInteractiveUserSignInLogs</strong></td>
+                <td>Token refreshes, background authentication</td>
+                <td>Basic</td>
+                <td>~500K/day</td>
+              </tr>
+              <tr>
+                <td><strong>AADServicePrincipalSignInLogs</strong></td>
+                <td>Service principal/app authentication</td>
+                <td>Analytics</td>
+                <td>~100K/day</td>
+              </tr>
+              <tr>
+                <td><strong>AADManagedIdentitySignInLogs</strong></td>
+                <td>Managed identity authentication</td>
+                <td>Analytics</td>
+                <td>~50K/day</td>
+              </tr>
+              <tr>
+                <td><strong>AADProvisioningLogs</strong></td>
+                <td>User provisioning (HR sync, SCIM)</td>
+                <td>Analytics</td>
+                <td>~20K/day</td>
+              </tr>
+              <tr>
+                <td><strong>AADRiskyUsers</strong></td>
+                <td>Identity Protection risk data</td>
+                <td>Analytics</td>
+                <td>~1K/day</td>
+              </tr>
+              <tr>
+                <td><strong>AADUserRiskEvents</strong></td>
+                <td>Risk detection events</td>
+                <td>Analytics</td>
+                <td>~5K/day</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>4.2 Configure Entra ID Diagnostic Settings</h3>
 
         <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">KQL (Transformation)</span>
-            <button class="code-copy-btn">Copy</button>
+          <div class="code-header"><span class="code-lang">Azure CLI - Entra ID Diagnostic Settings</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Get Entra ID tenant resource ID
+TENANT_ID=$(az account show --query tenantId -o tsv)
+
+# Create diagnostic setting for Entra ID logs
+az monitor diagnostic-settings create \
+  --name "EntraID-to-Sentinel" \
+  --resource "/providers/Microsoft.aadiam/diagnosticSettings" \
+  --workspace "/subscriptions/{sub-id}/resourceGroups/rg-sentinel/providers/Microsoft.OperationalInsights/workspaces/law-sentinel-prod" \
+  --logs '[
+    {"category": "AuditLogs", "enabled": true},
+    {"category": "SignInLogs", "enabled": true},
+    {"category": "NonInteractiveUserSignInLogs", "enabled": true},
+    {"category": "ServicePrincipalSignInLogs", "enabled": true},
+    {"category": "ManagedIdentitySignInLogs", "enabled": true},
+    {"category": "ProvisioningLogs", "enabled": true},
+    {"category": "RiskyUsers", "enabled": true},
+    {"category": "UserRiskEvents", "enabled": true}
+  ]'
+
+# Verify diagnostic setting
+az monitor diagnostic-settings show \
+  --name "EntraID-to-Sentinel" \
+  --resource "/providers/Microsoft.aadiam/diagnosticSettings"</code></pre>
+        </div>
+
+        <h3>4.3 Set Non-Interactive Logs to Basic Tier</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Azure CLI - Configure Basic Tier</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># AADNonInteractiveUserSignInLogs is high volume - set to Basic tier
+az monitor log-analytics workspace table update \
+  --resource-group "rg-sentinel" \
+  --workspace-name "law-sentinel-prod" \
+  --name "AADNonInteractiveUserSignInLogs" \
+  --plan "Basic"
+
+# Verify table plan
+az monitor log-analytics workspace table show \
+  --resource-group "rg-sentinel" \
+  --workspace-name "law-sentinel-prod" \
+  --name "AADNonInteractiveUserSignInLogs" \
+  --query "plan"</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 5: XDR CONNECTOR ==================== -->
+        <h2>5. Microsoft 365 Defender (XDR) Connector</h2>
+
+        <h3>5.1 Connector Configuration</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">XDR Connector Setup</span></div>
+          <pre><code>M365 DEFENDER CONNECTOR CONFIGURATION
+═══════════════════════════════════════════════════════════════════════════════
+
+LOCATION: Sentinel → Data Connectors → Microsoft 365 Defender
+
+PREREQUISITES:
+├── Global Admin or Security Admin role
+├── Microsoft 365 E5 or Microsoft Defender for Endpoint P2 license
+└── Sentinel workspace in same tenant
+
+STEP 1: ENABLE CONNECTOR
+────────────────────────────────────────────────────────────────────────────────
+• Open Sentinel → Data Connectors
+• Search "Microsoft 365 Defender"
+• Click "Open connector page"
+• Click "Connect"
+
+STEP 2: SELECT DATA TO INGEST
+────────────────────────────────────────────────────────────────────────────────
+Under "Connect events":
+
+✅ ENABLE (Required):
+├── Incidents - Sync Microsoft 365 Defender incidents
+└── Alerts - Sync alerts from all Defender products
+
+❓ OPTIONAL (Only if needed for specific Sentinel rules):
+├── Microsoft Defender for Endpoint
+│   └── DeviceLogonEvents (if correlation rules need it)
+│   └── DO NOT enable: DeviceProcessEvents, DeviceFileEvents, etc.
+├── Microsoft Defender for Office 365
+│   └── Usually NOT needed (alerts sufficient)
+├── Microsoft Defender for Identity
+│   └── IdentityLogonEvents (if supplementing SigninLogs)
+└── Microsoft Defender for Cloud Apps
+    └── Usually NOT needed (alerts sufficient)
+
+STEP 3: VERIFY INCIDENT SYNC
+────────────────────────────────────────────────────────────────────────────────
+• Sentinel → Incidents
+• Filter: Product name = "Microsoft 365 Defender"
+• Verify incidents appear within 15-30 minutes</code></pre>
+        </div>
+
+        <h3>5.2 Why NOT to Enable All XDR Tables</h3>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Cost Warning</div>
+          <div class="callout-content">
+            <p>Enabling all MDE tables (DeviceProcessEvents, DeviceFileEvents, DeviceNetworkEvents, etc.) can cost <strong>$10-20K/month</strong> for a 9,000-endpoint environment.</p>
+            <p>This data is already queryable in XDR Advanced Hunting at no additional cost. Only ingest to Sentinel if you have correlation rules that specifically require it.</p>
           </div>
-          <pre><code>// Transform RevFlow security logs at ingestion
+        </div>
+
+        <!-- ==================== SECTION 6: NETWORK & SAAS CONNECTORS ==================== -->
+        <h2>6. Network & SaaS Connectors</h2>
+
+        <h3>6.1 Palo Alto Networks</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Palo Alto Configuration</span></div>
+          <pre><code>PALO ALTO FIREWALL LOG INGESTION
+═══════════════════════════════════════════════════════════════════════════════
+
+ARCHITECTURE:
+Palo Alto → Syslog → AMA on Linux → DCR → Sentinel
+
+STEP 1: DEPLOY LOG FORWARDER
+────────────────────────────────────────────────────────────────────────────────
+• Deploy Azure VM (Ubuntu 22.04) or Arc-enabled on-prem Linux
+• VM Name: rf-log-fwd-01
+• Install Azure Monitor Agent (AMA)
+
+STEP 2: CONFIGURE PALO ALTO
+────────────────────────────────────────────────────────────────────────────────
+• Device → Server Profiles → Syslog
+• Create profile: Sentinel-Syslog
+• Server: rf-log-fwd-01.revflow.local
+• Port: 514 (UDP) or 6514 (TCP/TLS)
+• Format: BSD
+• Facility: LOG_LOCAL0
+
+STEP 3: CREATE DCR FOR CEF
+────────────────────────────────────────────────────────────────────────────────
+• Sentinel → Data Connectors → Common Event Format (CEF) via AMA
+• Create Data Collection Rule
+• Select log types: CommonSecurityLog
+
+STEP 4: SPLIT THREAT VS TRAFFIC (Cost Optimization)
+────────────────────────────────────────────────────────────────────────────────
+• Configure Palo Alto to send:
+  - THREAT logs → Analytics tier table (alerts, blocks, signatures)
+  - TRAFFIC logs → Basic tier table (allow/deny, high volume)
+
+Use DCR transformation to route:
 source
-| extend parsedJson = parse_json(RawData)
-| extend 
-    EventType = tostring(parsedJson.event_type),
-    UserEmail = tostring(parsedJson.user.email),
-    SourceIP = tostring(parsedJson.source_ip),
-    Action = tostring(parsedJson.action),
-    Resource = tostring(parsedJson.resource),
-    Result = tostring(parsedJson.result),
-    Timestamp = todatetime(parsedJson.timestamp)
-| where EventType in ("login", "api_auth", "data_export", "permission_change")
-| project-away RawData, parsedJson</code></pre>
+| where DeviceEventClassID has_any ("THREAT", "URL", "WILDFIRE")
+→ CommonSecurityLog (Analytics)
+
+source
+| where DeviceEventClassID == "TRAFFIC"
+→ CommonSecurityLog_Basic (Basic tier)</code></pre>
         </div>
 
-        <h2>Cost Tiers: Analytics vs Basic Logs</h2>
+        <h3>6.2 Salesforce Connector</h3>
 
-        <p>
-          Sentinel offers two log tiers with different costs and capabilities:
-        </p>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Salesforce Configuration</span></div>
+          <pre><code>SALESFORCE EVENT MONITORING LOG INGESTION
+═══════════════════════════════════════════════════════════════════════════════
+
+PREREQUISITES:
+├── Salesforce Shield or Event Monitoring add-on license
+├── Connected App with API access
+└── Azure Function or Logic App for polling
+
+STEP 1: CREATE SALESFORCE CONNECTED APP
+────────────────────────────────────────────────────────────────────────────────
+• Setup → App Manager → New Connected App
+• Enable OAuth Settings
+• Scopes: api, refresh_token, offline_access
+• Callback URL: https://login.salesforce.com/services/oauth2/callback
+• Save and note Consumer Key + Secret
+
+STEP 2: ENABLE EVENT MONITORING
+────────────────────────────────────────────────────────────────────────────────
+• Setup → Event Monitoring Settings
+• Enable: Login Events, API Events, Report Export Events
+• Set retention: 30 days (minimum for compliance)
+
+STEP 3: DEPLOY SENTINEL CONNECTOR
+────────────────────────────────────────────────────────────────────────────────
+Option A: Use Sentinel Content Hub "Salesforce Service Cloud" solution
+Option B: Custom Azure Function polling EventLogFile API
+
+• Data flows to: Salesforce_CL table
+• Configure polling interval: 5 minutes
+• Store credentials in Key Vault
+
+DETECTION USE CASES:
+├── RF-SF-001: Bulk data export (>1000 records)
+├── RF-SF-002: Login from new country
+├── RF-SF-003: Report export after hours
+└── RF-SF-004: Permission set changes</code></pre>
+        </div>
+
+        <h3>6.3 Workday Connector</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Workday Configuration</span></div>
+          <pre><code>WORKDAY AUDIT LOG INGESTION
+═══════════════════════════════════════════════════════════════════════════════
+
+PREREQUISITES:
+├── Workday Integration System User (ISU)
+├── API access with audit log permissions
+└── Azure Function for REST API polling
+
+STEP 1: CREATE WORKDAY ISU
+────────────────────────────────────────────────────────────────────────────────
+• Workday → Create Integration System User
+• Name: ISU-Sentinel-Audit
+• Grant domain permissions: Audit Trail, Security Configuration
+
+STEP 2: DEPLOY CUSTOM CONNECTOR
+────────────────────────────────────────────────────────────────────────────────
+• Use Azure Function with Workday REST API
+• Endpoint: /ccx/api/v1/audit/logs
+• Polling interval: 15 minutes
+• Data flows to: Workday_CL table
+
+CRITICAL USE CASE:
+├── RF-COR-002: Terminated employee + active session
+│   └── Correlate Workday termination event with Salesforce/SigninLogs
+└── RF-WD-001: Compensation report access by non-HR</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 7: CONNECTOR CHECKLIST ==================== -->
+        <h2>7. Complete Connector Checklist</h2>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr>
-                <th>Feature</th>
-                <th>Analytics Logs</th>
-                <th>Basic Logs</th>
+              <tr><th>Connector</th><th>Tables</th><th>Tier</th><th>Prerequisites</th><th>Week</th></tr>
+            </thead>
+            <tbody>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td><strong>Entra ID (Diagnostic Settings)</strong></td>
+                <td>AuditLogs, SigninLogs, AADServicePrincipal, AADProvisioning, RiskyUsers</td>
+                <td>Analytics</td>
+                <td>Global Admin or Security Admin</td>
+                <td><span class="status-badge complete">Week 2</span></td>
               </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td><strong>Entra ID (Non-Interactive)</strong></td>
+                <td>AADNonInteractiveUserSignInLogs</td>
+                <td>Basic</td>
+                <td>Same diagnostic setting</td>
+                <td><span class="status-badge complete">Week 2</span></td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td><strong>Microsoft 365 Defender</strong></td>
+                <td>SecurityAlert, SecurityIncident</td>
+                <td>Analytics</td>
+                <td>Security Admin, E5 license</td>
+                <td><span class="status-badge complete">Week 3</span></td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td><strong>Azure Activity</strong></td>
+                <td>AzureActivity</td>
+                <td>Free</td>
+                <td>Subscription Owner</td>
+                <td><span class="status-badge complete">Week 3</span></td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td><strong>Microsoft 365 (Office)</strong></td>
+                <td>OfficeActivity</td>
+                <td>Analytics</td>
+                <td>Global Admin, audit logging enabled</td>
+                <td><span class="status-badge complete">Week 3</span></td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td><strong>Palo Alto (Threat)</strong></td>
+                <td>CommonSecurityLog</td>
+                <td>Analytics</td>
+                <td>AMA + Linux forwarder</td>
+                <td><span class="status-badge in-progress">Week 5</span></td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td><strong>Palo Alto (Traffic)</strong></td>
+                <td>CommonSecurityLog_Basic</td>
+                <td>Basic</td>
+                <td>AMA + DCR transformation</td>
+                <td><span class="status-badge in-progress">Week 5</span></td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td><strong>Salesforce</strong></td>
+                <td>Salesforce_CL</td>
+                <td>Analytics</td>
+                <td>Shield license, Connected App</td>
+                <td><span class="status-badge in-progress">Week 6</span></td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td><strong>Workday</strong></td>
+                <td>Workday_CL</td>
+                <td>Analytics</td>
+                <td>ISU account, API access</td>
+                <td><span class="status-badge in-progress">Week 7</span></td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td><strong>Windows Security (DCs only)</strong></td>
+                <td>SecurityEvent</td>
+                <td>Analytics</td>
+                <td>AMA + DCR (filtered)</td>
+                <td><span class="status-badge in-progress">Week 8</span></td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td><strong>NetSuite</strong></td>
+                <td>NetSuite_CL</td>
+                <td>Analytics</td>
+                <td>SuiteAnalytics Connect</td>
+                <td><span class="status-badge">Week 9</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 8: COST TIERS ==================== -->
+        <h2>8. Cost Optimization: Analytics vs. Basic Logs</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Feature</th><th>Analytics Tier</th><th>Basic Tier</th></tr>
             </thead>
             <tbody>
               <tr>
@@ -486,7 +816,7 @@ source
               <tr>
                 <td><strong>Query capability</strong></td>
                 <td>Full KQL</td>
-                <td>Limited (basic operators only)</td>
+                <td>Limited (basic operators)</td>
               </tr>
               <tr>
                 <td><strong>Analytics rules</strong></td>
@@ -494,247 +824,549 @@ source
                 <td>No</td>
               </tr>
               <tr>
-                <td><strong>Workbooks/Dashboards</strong></td>
-                <td>Yes</td>
-                <td>Limited</td>
-              </tr>
-              <tr>
-                <td><strong>Search jobs</strong></td>
-                <td>Yes</td>
-                <td>Yes</td>
-              </tr>
-              <tr>
                 <td><strong>Best for</strong></td>
                 <td>Detection, investigation, dashboards</td>
-                <td>Compliance, forensics, high-volume/low-query</td>
+                <td>Compliance retention, forensics</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h3>Basic Logs Candidates</h3>
-
-        <p>
-          Move high-volume, low-query data to Basic Logs:
-        </p>
+        <h3>8.1 RevFlow Tier Assignments</h3>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr>
-                <th>Log Type</th>
-                <th>Daily Volume</th>
-                <th>Recommended Tier</th>
-                <th>Reason</th>
-              </tr>
+              <tr><th>Table</th><th>Daily Volume</th><th>Tier</th><th>Monthly Cost Est.</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>NSG Flow Logs</td>
+                <td>AuditLogs</td>
+                <td>~2 GB</td>
+                <td>Analytics</td>
+                <td>~$170</td>
+              </tr>
+              <tr>
+                <td>SigninLogs</td>
+                <td>~8 GB</td>
+                <td>Analytics</td>
+                <td>~$660</td>
+              </tr>
+              <tr>
+                <td>AADNonInteractiveUserSignInLogs</td>
+                <td>~20 GB</td>
+                <td>Basic</td>
+                <td>~$300</td>
+              </tr>
+              <tr>
+                <td>SecurityAlert + SecurityIncident</td>
+                <td>~0.1 GB</td>
+                <td>Analytics</td>
+                <td>~$10</td>
+              </tr>
+              <tr>
+                <td>CommonSecurityLog (Threat)</td>
+                <td>~5 GB</td>
+                <td>Analytics</td>
+                <td>~$415</td>
+              </tr>
+              <tr>
+                <td>CommonSecurityLog (Traffic)</td>
                 <td>~50 GB</td>
-                <td><span class="status-badge in-progress">Basic</span></td>
-                <td>High volume, mostly for forensics</td>
+                <td>Basic</td>
+                <td>~$750</td>
               </tr>
               <tr>
+                <td>Salesforce_CL</td>
+                <td>~3 GB</td>
+                <td>Analytics</td>
+                <td>~$250</td>
+              </tr>
+              <tr>
+                <td>AzureActivity</td>
+                <td>~2 GB</td>
+                <td>Free</td>
+                <td>$0</td>
+              </tr>
+              <tr style="font-weight: bold;">
+                <td>TOTAL</td>
+                <td>~90 GB</td>
+                <td>—</td>
+                <td>~$2,555/month</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 9: COMPLETE TABLE REFERENCE ==================== -->
+        <h2>9. Complete Sentinel Table Reference</h2>
+
+        <p>This is the comprehensive list of all tables ingested into Sentinel for RevFlow's security operations.</p>
+
+        <h3>9.1 Entra ID Tables (Identity Control-Plane)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Description</th><th>Key Events</th><th>Tier</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>AuditLogs</strong></td>
+                <td>All identity changes</td>
+                <td>User CRUD, group changes, role assignments, CA policy changes, app registrations, consent grants, MFA registration</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>SigninLogs</strong></td>
+                <td>Interactive user authentication</td>
+                <td>User logins, MFA challenges/results, CA policy evaluation, location, device, risk level</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>AADNonInteractiveUserSignInLogs</strong></td>
+                <td>Background/token auth</td>
+                <td>Token refreshes, SSO, cached credentials, app background auth</td>
+                <td>Basic</td>
+              </tr>
+              <tr>
+                <td><strong>AADServicePrincipalSignInLogs</strong></td>
+                <td>Service principal auth</td>
+                <td>App-to-app auth, automation accounts, service account logins</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>AADManagedIdentitySignInLogs</strong></td>
+                <td>Managed identity auth</td>
+                <td>Azure resource managed identities accessing other resources</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>AADProvisioningLogs</strong></td>
+                <td>User provisioning</td>
+                <td>HR sync (Workday → Entra), SCIM to SaaS apps, lifecycle automation</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>AADRiskyUsers</strong></td>
+                <td>Identity Protection - users</td>
+                <td>Users flagged as risky, risk level changes, remediation</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>AADUserRiskEvents</strong></td>
+                <td>Identity Protection - events</td>
+                <td>Risk detections: leaked credentials, anonymous IP, impossible travel, malware-linked IP</td>
+                <td>Analytics</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>9.2 Microsoft 365 & Azure Tables</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Description</th><th>Key Events</th><th>Tier</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>OfficeActivity</strong></td>
+                <td>M365 unified audit log</td>
+                <td>SharePoint access/sharing, Exchange mailbox activity, Teams admin, OneDrive, Power Platform</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>AzureActivity</strong></td>
+                <td>Azure control-plane</td>
+                <td>Resource CRUD, RBAC changes, policy changes, subscription operations</td>
+                <td>Free</td>
+              </tr>
+              <tr>
+                <td><strong>AzureDiagnostics</strong></td>
+                <td>Azure resource logs</td>
+                <td>Key Vault access, Storage operations, App Service requests, SQL audits</td>
+                <td>Analytics</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>9.3 Intune & Device Management Tables</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Description</th><th>Key Events</th><th>Tier</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>IntuneAuditLogs</strong></td>
+                <td>Intune admin actions</td>
+                <td>Policy changes, app deployments, configuration profile updates, admin actions</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>IntuneDeviceComplianceOrg</strong></td>
+                <td>Device compliance status</td>
+                <td>Compliance state changes, policy violations, remediation</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>IntuneDevices</strong></td>
+                <td>Device inventory</td>
+                <td>Device enrollment, properties, OS versions (use for asset context)</td>
+                <td>Basic</td>
+              </tr>
+              <tr>
+                <td><strong>IntuneOperationalLogs</strong></td>
+                <td>Operational events</td>
+                <td>Enrollment failures, sync issues, app install status</td>
+                <td>Basic</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>9.4 XDR Tables (From M365 Defender Connector)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Description</th><th>Ingest?</th><th>Tier</th></tr>
+            </thead>
+            <tbody>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td><strong>SecurityAlert</strong></td>
+                <td>All XDR alerts (MDE, MDI, MDO, MDA)</td>
+                <td><span class="status-badge complete">Yes</span></td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td><strong>SecurityIncident</strong></td>
+                <td>Correlated XDR incidents</td>
+                <td><span class="status-badge complete">Yes</span></td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td><strong>AlertEvidence</strong></td>
+                <td>Entity context for alerts</td>
+                <td><span class="status-badge complete">Yes</span></td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.1);">
+                <td><strong>IdentityLogonEvents</strong></td>
+                <td>MDI logon events</td>
+                <td><span class="status-badge in-progress">Optional</span></td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.1);">
+                <td><strong>DeviceProcessEvents</strong></td>
+                <td>MDE process telemetry</td>
+                <td><span class="status-badge">No - Query in XDR</span></td>
+                <td>N/A</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.1);">
+                <td><strong>DeviceNetworkEvents</strong></td>
+                <td>MDE network telemetry</td>
+                <td><span class="status-badge">No - Query in XDR</span></td>
+                <td>N/A</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.1);">
+                <td><strong>DeviceFileEvents</strong></td>
+                <td>MDE file telemetry</td>
+                <td><span class="status-badge">No - Query in XDR</span></td>
+                <td>N/A</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.1);">
+                <td><strong>DeviceRegistryEvents</strong></td>
+                <td>MDE registry telemetry</td>
+                <td><span class="status-badge">No - Query in XDR</span></td>
+                <td>N/A</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.1);">
+                <td><strong>EmailEvents</strong></td>
+                <td>MDO email telemetry</td>
+                <td><span class="status-badge">No - Query in XDR</span></td>
+                <td>N/A</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.1);">
+                <td><strong>CloudAppEvents</strong></td>
+                <td>MDA cloud app telemetry</td>
+                <td><span class="status-badge">No - Query in XDR</span></td>
+                <td>N/A</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>9.5 Network Security Tables</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>CommonSecurityLog</strong></td>
+                <td>Palo Alto (Threat/URL/WildFire)</td>
+                <td>Threat alerts, malicious URLs, malware detections, IPS events</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>CommonSecurityLog</strong></td>
+                <td>Palo Alto (Traffic) - filtered</td>
+                <td>Allow/deny decisions, traffic flows (high volume - forensics only)</td>
+                <td>Basic</td>
+              </tr>
+              <tr>
+                <td><strong>CommonSecurityLog</strong></td>
+                <td>F5 WAF</td>
+                <td>Web application attacks, bot detection, OWASP violations</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>Syslog</strong></td>
+                <td>Palo Alto GlobalProtect VPN</td>
+                <td>VPN connections, user logins, gateway events, HIP checks</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>DnsEvents</strong></td>
+                <td>Windows DNS Servers</td>
+                <td>DNS queries, suspicious domains, tunneling indicators</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>AzureNetworkAnalytics_CL</strong></td>
+                <td>NSG Flow Logs</td>
+                <td>Network flow data, traffic patterns (high volume)</td>
+                <td>Basic</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>9.6 Windows Security Tables</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SecurityEvent</strong></td>
+                <td>Domain Controllers (Tier 0)</td>
+                <td>4624/4625 logons, 4720 user creation, 4728/4732 group changes, 4768/4769 Kerberos</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>SecurityEvent</strong></td>
+                <td>Certificate Authority</td>
+                <td>Certificate issuance, template changes, private key access</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>SecurityEvent</strong></td>
+                <td>Entra Connect Server</td>
+                <td>Sync events, admin access, service account activity</td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.1);">
+                <td><strong>SecurityEvent</strong></td>
+                <td>Workstations</td>
+                <td>NOT ingested - MDE covers endpoint detection</td>
+                <td>N/A</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>9.7 Linux & Server Tables</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Syslog</strong></td>
+                <td>Linux servers (via AMA)</td>
+                <td>Auth logs (SSH, sudo), system events, application logs</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>Syslog</strong></td>
+                <td>Network devices (CEF fallback)</td>
+                <td>Devices that don't support CEF format</td>
+                <td>Analytics</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>9.8 SaaS Application Tables</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Salesforce_CL</strong></td>
+                <td>Salesforce Event Monitoring</td>
+                <td>Logins, report exports, data exports, API calls, permission changes</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>Workday_CL</strong></td>
+                <td>Workday Audit Logs</td>
+                <td>HR changes, terminations, compensation access, report runs</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>NetSuite_CL</strong></td>
+                <td>NetSuite SuiteAnalytics</td>
+                <td>Financial report access, vendor changes, bank detail modifications</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>GitHub_CL</strong></td>
+                <td>GitHub Audit Log</td>
+                <td>Repo access, code pushes, PAT creation, org changes</td>
+                <td>Analytics</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>9.9 Cloud Infrastructure Tables</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>AWSCloudTrail</strong></td>
+                <td>AWS CloudTrail (via S3/SQS)</td>
+                <td>API calls, IAM changes, resource CRUD, console logins</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>AWSGuardDuty</strong></td>
+                <td>AWS GuardDuty findings</td>
+                <td>Threat findings, reconnaissance, credential compromise</td>
+                <td>Analytics</td>
+              </tr>
+              <tr>
+                <td><strong>AWSVPCFlow</strong></td>
                 <td>AWS VPC Flow Logs</td>
-                <td>~15 GB</td>
-                <td><span class="status-badge in-progress">Basic</span></td>
-                <td>High volume, mostly for forensics</td>
-              </tr>
-              <tr>
-                <td>Verbose firewall logs</td>
-                <td>~10 GB</td>
-                <td><span class="status-badge in-progress">Basic</span></td>
-                <td>Keep threat logs in Analytics, traffic logs in Basic</td>
-              </tr>
-              <tr>
-                <td>Sign-in logs (archive)</td>
-                <td>Varies</td>
-                <td><span class="status-badge in-progress">Basic</span></td>
-                <td>Compliance retention beyond 90 days</td>
+                <td>Network traffic flows (high volume - forensics)</td>
+                <td>Basic</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h4>Configure Basic Logs</h4>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">Azure CLI</span>
-            <button class="code-copy-btn">Copy</button>
-          </div>
-          <pre><code># Set table to Basic Logs tier
-az monitor log-analytics workspace table update \
-  --resource-group "rg-sentinel" \
-  --workspace-name "law-sentinel-prod" \
-  --name "AzureNetworkAnalytics_CL" \
-  --plan "Basic"
-
-# Verify table plan
-az monitor log-analytics workspace table show \
-  --resource-group "rg-sentinel" \
-  --workspace-name "law-sentinel-prod" \
-  --name "AzureNetworkAnalytics_CL" \
-  --query "plan"</code></pre>
-        </div>
-
-        <h2>Workspace Architecture</h2>
-
-        <p>
-          For RevFlow, a single workspace with regional data residency is sufficient:
-        </p>
+        <h3>9.10 Defender for Cloud Tables</h3>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr>
-                <th>Design Decision</th>
-                <th>Choice</th>
-                <th>Rationale</th>
-              </tr>
+              <tr><th>Table</th><th>Description</th><th>Key Events</th><th>Tier</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>Number of workspaces</td>
-                <td>Single workspace</td>
-                <td>Simplicity, unified detection, single pane of glass</td>
+                <td><strong>SecurityAlert</strong> (from MDC)</td>
+                <td>Defender for Cloud alerts</td>
+                <td>Cloud security alerts (separate from XDR alerts), resource threats</td>
+                <td>Analytics</td>
               </tr>
               <tr>
-                <td>Region</td>
-                <td>East US 2</td>
-                <td>Primary Azure region, data residency compliance</td>
+                <td><strong>SecurityRecommendation</strong></td>
+                <td>Security posture recommendations</td>
+                <td>Misconfigurations, compliance gaps, hardening recommendations</td>
+                <td>Analytics</td>
               </tr>
               <tr>
-                <td>Commitment tier</td>
-                <td>100 GB/day</td>
-                <td>~30% discount at this volume</td>
-              </tr>
-              <tr>
-                <td>Retention</td>
-                <td>90 days interactive, 2 years archive</td>
-                <td>SOC 2 compliance requirement</td>
+                <td><strong>SecurityRegulatoryCompliance</strong></td>
+                <td>Compliance assessments</td>
+                <td>Regulatory benchmark results (CIS, NIST, SOC 2)</td>
+                <td>Analytics</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h3>Workspace Configuration</h3>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">Azure CLI</span>
-            <button class="code-copy-btn">Copy</button>
-          </div>
-          <pre><code># Create Log Analytics Workspace
-az monitor log-analytics workspace create \
-  --resource-group "rg-sentinel" \
-  --workspace-name "law-sentinel-prod" \
-  --location "eastus2" \
-  --sku "PerGB2018" \
-  --retention-time 90
-
-# Enable Sentinel on the workspace
-az sentinel onboard create \
-  --resource-group "rg-sentinel" \
-  --workspace-name "law-sentinel-prod"
-
-# Set commitment tier (100 GB/day)
-az monitor log-analytics workspace update \
-  --resource-group "rg-sentinel" \
-  --workspace-name "law-sentinel-prod" \
-  --capacity-reservation-level 100</code></pre>
-        </div>
-
-        <h2>Connector Configuration Checklist</h2>
+        <h3>9.11 Threat Intelligence Tables</h3>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr>
-                <th>Connector</th>
-                <th>Configuration Method</th>
-                <th>Prerequisites</th>
-                <th>Status</th>
-              </tr>
+              <tr><th>Table</th><th>Source</th><th>Description</th><th>Tier</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>Entra ID</td>
-                <td>Diagnostic Settings</td>
-                <td>Global Admin or Security Admin</td>
-                <td><span class="status-badge complete">Week 2</span></td>
+                <td><strong>ThreatIntelligenceIndicator</strong></td>
+                <td>Sentinel TI connector</td>
+                <td>IOCs from Microsoft, TAXII feeds, custom indicators</td>
+                <td>Analytics</td>
               </tr>
               <tr>
-                <td>Microsoft 365</td>
-                <td>Data Connector</td>
-                <td>Global Admin, audit logging enabled</td>
-                <td><span class="status-badge complete">Week 2</span></td>
-              </tr>
-              <tr>
-                <td>M365 Defender (XDR)</td>
-                <td>Data Connector</td>
-                <td>Security Admin, E5 license</td>
-                <td><span class="status-badge complete">Week 3</span></td>
-              </tr>
-              <tr>
-                <td>Azure Activity</td>
-                <td>Policy + Diagnostic Settings</td>
-                <td>Subscription Owner</td>
-                <td><span class="status-badge complete">Week 3</span></td>
-              </tr>
-              <tr>
-                <td>Azure Resources</td>
-                <td>Diagnostic Settings (per resource)</td>
-                <td>Resource Owner</td>
-                <td><span class="status-badge in-progress">Week 4-6</span></td>
-              </tr>
-              <tr>
-                <td>AWS CloudTrail</td>
-                <td>S3 + SQS Connector</td>
-                <td>AWS IAM role, S3 bucket</td>
-                <td><span class="status-badge in-progress">Week 5</span></td>
-              </tr>
-              <tr>
-                <td>Windows Security</td>
-                <td>AMA + DCR</td>
-                <td>AMA deployed, DCR created</td>
-                <td><span class="status-badge in-progress">Week 6-8</span></td>
-              </tr>
-              <tr>
-                <td>Salesforce</td>
-                <td>Data Connector + API</td>
-                <td>Shield license, Connected App</td>
-                <td><span class="status-badge in-progress">Week 7</span></td>
-              </tr>
-              <tr>
-                <td>Network Devices</td>
-                <td>AMA (CEF/Syslog)</td>
-                <td>Linux forwarder, DCR</td>
-                <td><span class="status-badge in-progress">Week 8-10</span></td>
+                <td><strong>Watchlist</strong></td>
+                <td>Sentinel Watchlists</td>
+                <td>VIP users, Tier 0 assets, terminated employees, known bad IPs</td>
+                <td>Analytics</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h2>Validation Queries</h2>
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Table Naming Convention</div>
+          <div class="callout-content">
+            <p><strong>Built-in tables:</strong> PascalCase (e.g., <code>AuditLogs</code>, <code>SecurityEvent</code>)</p>
+            <p><strong>Custom tables:</strong> End with <code>_CL</code> (e.g., <code>Salesforce_CL</code>, <code>Workday_CL</code>)</p>
+            <p><strong>Azure Diagnostics:</strong> All go to <code>AzureDiagnostics</code> table, differentiate by <code>ResourceType</code></p>
+          </div>
+        </div>
 
-        <p>
-          Use these queries to validate data is flowing correctly:
-        </p>
+        <!-- ==================== SECTION 10: VALIDATION ==================== -->
+        <h2>10. Validation Queries</h2>
 
         <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">KQL</span>
-            <button class="code-copy-btn">Copy</button>
-          </div>
-          <pre><code>// Check ingestion volume by table (last 24h)
+          <div class="code-header"><span class="code-lang">KQL - Validate Connector Health</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// ═══════════════════════════════════════════════════════════════════════════
+// CONNECTOR HEALTH VALIDATION QUERIES
+// ═══════════════════════════════════════════════════════════════════════════
+
+// 1. Check ingestion volume by table (last 24h)
 Usage
 | where TimeGenerated > ago(24h)
 | summarize TotalGB = sum(Quantity) / 1024 by DataType
 | order by TotalGB desc
 
-// Check for ingestion delays
+// 2. Verify Entra ID AuditLogs flowing
+AuditLogs
+| where TimeGenerated > ago(1h)
+| summarize Count = count() by bin(TimeGenerated, 5m)
+| render timechart
+
+// 3. Verify XDR alerts flowing
+SecurityAlert
+| where TimeGenerated > ago(24h)
+| where ProductName == "Microsoft 365 Defender"
+| summarize Count = count() by AlertSeverity
+| order by AlertSeverity
+
+// 4. Check for ingestion delays
 SigninLogs
 | where TimeGenerated > ago(1h)
 | extend IngestionDelay = ingestion_time() - TimeGenerated
@@ -743,17 +1375,26 @@ SigninLogs
     MaxDelayMinutes = max(IngestionDelay) / 1m,
     Count = count()
 
-// Verify specific connector is working
-AzureActivity
+// 5. Verify Salesforce connector
+Salesforce_CL
 | where TimeGenerated > ago(1h)
-| summarize count() by bin(TimeGenerated, 5m)
-| render timechart
+| summarize count() by EventType_s
 
-// Check DCR-collected Windows events
-SecurityEvent
+// 6. Check all tables receiving data
+union withsource=TableName *
 | where TimeGenerated > ago(1h)
-| summarize count() by EventID
-| order by count_ desc</code></pre>
+| summarize Count = count() by TableName
+| order by Count desc</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 11: INTERVIEW SUMMARY ==================== -->
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Interview-Ready Summary</div>
+          <div class="callout-content">
+            <p><em>"The log ingestion strategy is driven by understanding what XDR provides vs. what it doesn't. Defender products detect attacks — Pass-the-Hash, phishing, ransomware — but they don't log control-plane changes like user creation or group membership changes. Those come from Entra ID AuditLogs, which we must ingest separately.</em></p>
+            <p><em>For XDR, we ingest alerts and incidents into Sentinel for correlation, but we don't ingest raw telemetry like DeviceProcessEvents or DeviceFileEvents — that would cost $15K/month and it's already queryable in XDR Advanced Hunting at no extra cost.</em></p>
+            <p><em>Sentinel becomes the correlation layer where we combine XDR attack signals with identity changes from Entra ID, network logs from Palo Alto, and SaaS activity from Salesforce and Workday. That's where we write our custom detections — for things XDR can't see."</em></p>
+          </div>
         </div>
 
         <nav class="page-nav">

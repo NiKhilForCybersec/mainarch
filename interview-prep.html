@@ -325,49 +325,47 @@ in final handover phase with knowledge transfer to internal team."</code></pre>
 
         <div class="interview-question">
           <h3>4. How do you decide which log sources to onboard first?</h3>
-          <p class="interview-context"><strong>What they want:</strong> Risk-based prioritization, identity/endpoint/network first, cost awareness.</p>
+          <p class="interview-context"><strong>What they want:</strong> Risk-based prioritization, XDR-first model, attacks vs control-plane distinction.</p>
           
           <div class="code-block">
             <div class="code-header"><span class="code-lang">Response</span></div>
-            <pre><code>"I prioritize based on detection value, not volume. We use a tiered approach:
+            <pre><code>"My approach starts with a critical distinction that drives all ingestion 
+decisions: Defender products detect ATTACKS; Entra ID logs record CHANGES.
 
-PRIORITY 1 — DETECTION ANCHORS (~70% of detection coverage)
-These are our primary focus because they cover the majority of detection 
-use cases and are often free or low-cost:
+MDI detects Pass-the-Hash, but it doesn't log who was added to Global 
+Admins — that comes from Entra ID AuditLogs. Understanding this separation 
+determines your entire log strategy.
 
-  1. IDENTITY (Entra ID)
-     Sign-in and audit logs. Identity is the foundation for correlation — 
-     every detection eventually ties back to a user or service principal. 
-     Free tier in Sentinel.
+PRIORITY 0 — WHAT XDR DOESN'T PROVIDE (Must Ingest Separately)
+  1. ENTRA ID LOGS (AuditLogs, SigninLogs)
+     User creation, group changes, role assignments, CA policy changes.
+     XDR detects identity ATTACKS but NOT control-plane CHANGES.
+     
+  2. OFFICE ACTIVITY
+     SharePoint permissions, Exchange admin, mailbox forwarding.
+     MDO detects phishing but NOT mailbox permission changes.
 
-  2. ENDPOINT (MDE via M365 Defender)
-     Process execution, network connections, credential access — high-
-     confidence behavioral signals. Free ingestion through XDR connector.
+PRIORITY 1 — XDR ALERTS & INCIDENTS (Low Volume, High Value)
+  • SecurityAlert, SecurityIncident from M365 Defender connector
+  • This is how XDR attack detections flow into Sentinel
+  • ~$50/month, NOT $15K/month for raw telemetry
 
-  3. CLOUD CONTROL PLANE
-     Azure Activity Logs, Defender for Cloud alerts. High security value, 
-     low personal data, mostly free.
+PRIORITY 2 — WHAT XDR DOESN'T COVER
+  • Network: Palo Alto firewall, VPN logs, DNS — XDR is endpoint-focused
+  • SaaS apps: Salesforce, Workday, NetSuite — outside Defender scope
+  • Tier 0 servers: Domain Controllers, Certificate Authority
 
-We prioritized P1 initially because these three anchors alone covered 
-roughly 70% of our detection use cases — and they're largely free.
+PRIORITY 3 — SELECTIVE FORENSICS (Basic Tier)
+  • High-volume, low-query: Firewall traffic, NSG flows, VPC flows
+  • Use Basic tier (~$0.50/GB vs $2.76/GB)
 
-PRIORITY 2 — NETWORK AND PERIMETER
-  • Firewall logs, DNS, NSG flows
-  • Important for lateral movement and exfiltration detection
-  • Higher volume, so we're selective — filter at ingestion
+WHAT WE DON'T INGEST:
+  • MDE raw telemetry (DeviceProcessEvents, DeviceFileEvents, etc.)
+  • Query these in XDR Advanced Hunting at no extra cost
+  • Ingesting would cost ~$15K/month and duplicate XDR detection
 
-PRIORITY 3 — SAAS AND CUSTOM APPLICATIONS
-  • Salesforce audit logs, custom app logs
-  • Important for business-specific detections
-  • Lower priority than anchors, often require custom onboarding
-
-COST AWARENESS:
-With Sentinel's per-GB pricing, we get P1 sources largely free (~150 GB/day 
-of MDE telemetry alone). We focus billable ingestion on P2/P3 sources that 
-add detection value the free data doesn't already cover.
-
-The key insight: Don't try to ingest everything. Start with sources that 
-enable the most detections per dollar spent."</code></pre>
+The key insight: Understand what XDR provides (attack detection) vs 
+what it doesn't (control-plane changes), then fill the gaps selectively."</code></pre>
           </div>
         </div>
 
@@ -420,6 +418,63 @@ VALIDATION APPROACH (Same for All Sources):
 • Check volume against expectations
 • Ensure data is usable for detection and correlation — not just present 
   in the workspace"</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>5b. What does each Defender product provide vs. what it doesn't?</h3>
+          <p class="interview-context"><strong>Key XDR understanding.</strong> Attacks vs control-plane, what requires separate ingestion.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"This is critical for log ingestion strategy. Each Defender product 
+detects ATTACKS but does NOT provide control-plane audit logs:
+
+MDI (DEFENDER FOR IDENTITY):
+  Detects: Pass-the-Hash, Kerberoasting, DCSync, Golden Ticket, 
+           lateral movement, LDAP reconnaissance
+  Does NOT provide: User creation logs, group membership changes, 
+           role assignments, password resets
+
+  Example: MDI alerts on Pass-the-Hash attack. But if you ask 'who added 
+  this user to Domain Admins?' — that's in Entra ID AuditLogs, not MDI.
+
+MDO (DEFENDER FOR OFFICE 365):
+  Detects: Phishing campaigns, malicious attachments/URLs, BEC, 
+           impersonation attacks
+  Does NOT provide: Mailbox permission changes, transport rule changes,
+           mailbox forwarding rule audits
+
+  Example: MDO catches phishing email. But 'who set up this inbox 
+  forwarding rule?' — that's in OfficeActivity, not MDO.
+
+MDE (DEFENDER FOR ENDPOINT):
+  Detects: Malware, ransomware, LOLBins, credential theft (LSASS), 
+           persistence mechanisms, exploit activity
+  Does NOT provide: Device join audits, Entra ID role assignments,
+           Intune compliance changes
+
+  Example: MDE detects LSASS access. But 'who enrolled this device?' — 
+  that's in IntuneAuditLogs or AuditLogs.
+
+MDA (DEFENDER FOR CLOUD APPS):
+  Detects: Impossible travel, risky OAuth consent, shadow IT, 
+           mass file downloads, suspicious inbox rules
+  Does NOT provide: App registration audit logs, consent change history,
+           tenant configuration changes
+
+  Example: MDA flags impossible travel. But 'who registered this app 
+  in our tenant?' — that's in AuditLogs.
+
+THE IMPLICATION:
+Even with full XDR deployment, you MUST separately ingest Entra ID 
+diagnostic logs (AuditLogs, SigninLogs) for:
+  • Compliance audits ('Show all Global Admin changes last 90 days')
+  • Investigation context ('Was MFA just changed for this user?')
+  • Identity governance ('Who has admin and when was it assigned?')
+
+XDR + Sentinel = XDR for attack detection, Sentinel for correlation 
+with control-plane changes that XDR doesn't provide."</code></pre>
           </div>
         </div>
 
@@ -725,6 +780,57 @@ and tuned), 30% were custom for environment-specific needs."</code></pre>
         </div>
 
         <div class="interview-question">
+          <h3>10b. How does detection engineering change with XDR?</h3>
+          <p class="interview-context"><strong>Modern XDR understanding.</strong> What you write vs what XDR handles, rule disposition.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"XDR fundamentally changes what detection engineering means. Here's how:
+
+THE OLD MODEL (SIEM-First):
+• You write low-level rules for everything
+• Process + network + file activity = correlate yourself
+• High rule count, high maintenance, lots of false positives
+
+THE NEW MODEL (XDR-First):
+• XDR handles attack detection across endpoint, identity, email, cloud
+• XDR correlates automatically with ML and threat intel
+• You focus on correlation XDR CAN'T do and business-specific gaps
+
+WHAT XDR HANDLES (Don't Write These):
+• Malware detection, ransomware behavior, LOLBins abuse (MDE)
+• Phishing, BEC, malicious attachments (MDO)
+• Credential attacks, lateral movement (MDI)
+• Risky app consent, impossible travel (MDA)
+• Cross-product correlation (XDR unified incidents)
+
+WHAT YOU STILL WRITE (Sentinel Custom Rules):
+1. XDR alert + identity change correlation
+   'XDR alert fired AND MFA method changed in last 24 hours'
+   
+2. SaaS app monitoring outside Defender scope
+   'Salesforce bulk export by user not in data-team group'
+   
+3. Network correlation
+   'XDR alert + connection to IP on threat intel watchlist'
+   
+4. Business-specific logic
+   'Wire transfer approval after hours from non-finance user'
+
+RULE DISPOSITION IN MIGRATION:
+When we migrated 187 legacy RSA rules:
+• 60% RETIRED — XDR handles natively (don't recreate)
+• 20% REPLACED — XDR equivalent exists (use XDR)
+• 17% REBUILT — Still needed, rewrite in KQL for gaps
+• 3% DEPRECATED — Obsolete, no longer relevant
+
+The key insight: Detection engineering shifts from 'write everything' 
+to 'design the strategy'. You decide what XDR handles vs what needs 
+custom rules. That's higher-value work."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
           <h3>11. How do you validate detections once implemented?</h3>
           <p class="interview-context"><strong>What they expect:</strong> Telemetry availability, test cases, SOC feedback, false positive tuning.</p>
           
@@ -779,53 +885,57 @@ tune or disable until fixed."</code></pre>
 
         <div class="interview-question">
           <h3>12. What endpoint telemetry do you rely on most for detections?</h3>
-          <p class="interview-context"><strong>Checking:</strong> EDR understanding, process/network/identity linkage.</p>
+          <p class="interview-context"><strong>Checking:</strong> EDR understanding, XDR vs Sentinel, when to query where.</p>
           
           <div class="code-block">
             <div class="code-header"><span class="code-lang">Response</span></div>
-            <pre><code>"From MDE, I rely heavily on these tables in order of detection value:
+            <pre><code>"With XDR, there's an important distinction: where the telemetry LIVES 
+vs where DETECTIONS run.
+
+THE TELEMETRY (Lives in XDR, Query via Advanced Hunting):
 
 1. DeviceProcessEvents (HIGHEST VALUE)
    • Process creation with full command line
    • Parent-child process relationships
    • User context
    Critical for: Malware execution, LOLBins, script-based attacks
-   
-   Example: Detecting encoded PowerShell:
-   | where ProcessCommandLine contains "-enc" or ProcessCommandLine contains "-e "
 
 2. DeviceNetworkEvents
    • Outbound connections with process context
-   • DNS queries
-   • Remote IP/port
-   Critical for: C2 detection, data exfiltration, lateral movement
-   
-   Example: Detecting suspicious outbound on non-standard ports
+   • DNS queries, remote IP/port
+   Critical for: C2 detection, data exfiltration
 
 3. DeviceLogonEvents
-   • Local and network logons
-   • Logon type (interactive, network, service)
-   • Source context
-   Critical for: Credential abuse, lateral movement, privilege escalation
+   • Local and network logons, logon type
+   Critical for: Credential abuse, lateral movement
 
-4. DeviceFileEvents
-   • File creation, modification, deletion
-   • File path and hash
-   Critical for: Ransomware (mass file changes), data staging
+4. DeviceFileEvents / DeviceRegistryEvents
+   • File changes, registry modifications
+   Critical for: Persistence detection, ransomware
 
-5. DeviceRegistryEvents
-   • Registry modifications
-   • Persistence mechanisms
-   Critical for: Persistence detection, defense evasion
+THE DETECTION MODEL:
 
-THE POWER IS IN CORRELATION:
-A process event alone might be benign. But:
-   Process spawns encoded PowerShell 
-   + Makes outbound connection to rare domain
-   + Downloads file to temp directory
-   + File executes and modifies registry
+XDR HANDLES (Don't Ingest to Sentinel):
+• MDE correlates these tables automatically
+• ML models detect malware, ransomware, credential theft
+• Produces SecurityAlert, SecurityIncident in Sentinel
+• Query raw data in XDR Advanced Hunting when investigating
 
-That chain across tables tells the full story."</code></pre>
+SENTINEL HANDLES (After XDR Alert):
+• Correlate XDR alert with Entra ID changes
+• Correlate XDR alert with network/SaaS logs
+• Business-specific rules XDR can't do
+
+PRACTICAL WORKFLOW:
+1. XDR alert fires for 'Suspicious LSASS access'
+2. Alert syncs to Sentinel as SecurityAlert
+3. Sentinel rule correlates: 'XDR alert + MFA change in last 24h'
+4. Analyst investigates in XDR (raw telemetry) + Sentinel (identity context)
+
+COST IMPLICATION:
+• We DON'T ingest DeviceProcessEvents to Sentinel (~50M events/day)
+• We DO get XDR alerts (~200/day)
+• Raw data is queryable in XDR at no extra cost"</code></pre>
           </div>
         </div>
 

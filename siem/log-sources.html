@@ -32,13 +32,13 @@
         <div class="nav-divider"></div>
         <div class="nav-section">
           <div class="nav-section-title">SIEM Migration</div>
-          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
-          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
-          <a href="../siem/log-sources.html" class="nav-item active">Log Source Strategy</a>
-          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
-          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
-          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
-          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+          <a href="index.html" class="nav-item">SIEM Overview</a>
+          <a href="discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="log-sources.html" class="nav-item active">Log Source Strategy</a>
+          <a href="log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="soc-transition.html" class="nav-item">SOC Transition</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -118,12 +118,10 @@
         </div>
       </nav>
     </aside>
-    <button class="mobile-menu-toggle" aria-label="Toggle menu">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
-    </button>
-    <div class="sidebar-overlay"></div>
+
     <main class="main-content">
       <div class="content-wrapper">
+
         <nav class="breadcrumb">
           <a href="../index.html">Home</a>
           <span class="breadcrumb-separator">/</span>
@@ -138,489 +136,740 @@
             <span class="page-badge siem">SIEM Track</span>
             <span class="page-reading-time">Core Planning Document</span>
           </div>
-          <p class="intro-text">Not all logs belong in Sentinel. This document defines what goes where, why, and how. The key principle: <strong>Sentinel for security, Splunk for operations</strong>.</p>
+          <p class="intro-text">Strategic overview of what logs go where and why. The key principle: <strong>Defender detects attacks; Entra ID logs record changes.</strong> This drives every ingestion decision.</p>
         </div>
 
-        <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Compliance-Aware Log Architecture
-          </div>
+        <!-- ==================== SECTION 1: CRITICAL DISTINCTION ==================== -->
+        <h2>1. The Critical Distinction: Attacks vs. Control-Plane</h2>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>This Changes Everything</div>
           <div class="callout-content">
-            <p><strong>Single Workspace:</strong> All logs flow to a centralized Sentinel workspace in Canada, supporting our centralized SOC.</p>
-            <p><strong>EU Data Handling:</strong> Identity logs contain personal data (EU users) → protected via Standard Contractual Clauses (SCCs), RBAC access controls, and defined retention limits.</p>
-            <p><strong>Data Minimization:</strong> No unnecessary PII ingestion. Endpoint and network logs are primarily metadata, not content.</p>
+            <p><strong>Defender products detect ATTACKS.</strong> They do NOT provide audit logs for control-plane changes.</p>
+            <p>Account creation, group changes, role assignments, CA policy changes — these come from <strong>Entra ID diagnostic logs</strong>, NOT from Defender.</p>
+            <p style="margin-top: 0.5rem;"><strong>Understanding this determines your entire log ingestion strategy.</strong></p>
           </div>
         </div>
 
-        <h2>The Two-Platform Architecture</h2>
-        <p>RevFlow already operates Splunk Cloud for application monitoring and business analytics. Rather than migrate everything to Sentinel, we maintain clear separation of concerns:</p>
-
-        <div class="comparison-grid">
-          <div class="comparison-column">
-            <div class="comparison-header" style="background-color: rgba(56, 139, 253, 0.15); color: var(--accent-blue);">Microsoft Sentinel (Security)</div>
-            <div class="comparison-content">
-              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Threat detection & hunting</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Incident response workflows</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Compliance monitoring</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Identity threat analytics</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Cloud security posture</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>SOC operations</span></div>
-            </div>
-          </div>
-          <div class="comparison-column">
-            <div class="comparison-header" style="background-color: rgba(57, 211, 83, 0.15); color: var(--accent-cyan);">Splunk Cloud (Operations)</div>
-            <div class="comparison-content">
-              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Application performance</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Business transaction logs</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>SRE dashboards</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>API metrics & debugging</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Infrastructure metrics</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">✓</span><span>Engineering troubleshooting</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="callout info">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Why Not Consolidate?</div>
-          <div class="callout-content">
-            <p><strong>Cost:</strong> Sentinel charges ~$2.76/GB. Sending all app logs would be prohibitively expensive.</p>
-            <p><strong>Ownership:</strong> Engineering owns their Splunk dashboards. Migrating them adds months of work.</p>
-            <p><strong>Focus:</strong> Clear boundaries mean clear accountability. Security owns Sentinel, Engineering owns Splunk.</p>
-          </div>
-        </div>
-
-        <h2>Complete Log Source Mapping</h2>
-
-        <h3>Identity & Access Logs → Sentinel (Highest Priority)</h3>
-        <p><strong>Detection anchor #1.</strong> Identity is the foundation of security correlation. Contains personal data (usernames, IPs, locations) — protected via SCCs, RBAC, and retention limits.</p>
-
-        <div class="callout warning">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Critical: MDI + XDR ≠ Entra ID Logs</div>
-          <div class="callout-content">
-            <p><strong>Defender for Identity (MDI) + XDR</strong> covers identity <em>attacks</em> — credential theft, lateral movement, privilege escalation. This is behavioral, attack-focused telemetry that produces XDR incidents.</p>
-            <p><strong>Entra ID diagnostic logs</strong> cover identity <em>operations</em> — who signed in, role changes, app consents, MFA policy changes. These are control-plane logs for governance, compliance, and audit.</p>
-            <p style="margin-top: 0.5rem;"><strong>They are complementary, not duplicates.</strong> You need both. XDR does NOT replace Entra ID diagnostic logs.</p>
-          </div>
-        </div>
+        <h3>1.1 What Each Defender Product Provides</h3>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Log Source</th><th>Sentinel Table</th><th>Connector</th><th>Volume/Day</th><th>Cost</th></tr>
+              <tr><th>Defender Product</th><th>Detects (Attacks) ✓</th><th>Does NOT Provide ✗</th></tr>
             </thead>
             <tbody>
-              <tr><td><strong>Entra ID Sign-in Logs</strong></td><td><code>SigninLogs</code></td><td>Microsoft Entra ID</td><td>10-30 GB</td><td>Free*</td></tr>
-              <tr><td><strong>Entra ID Audit Logs</strong></td><td><code>AuditLogs</code></td><td>Microsoft Entra ID</td><td>1-5 GB</td><td>Free*</td></tr>
-              <tr><td><strong>Non-Interactive Sign-ins</strong></td><td><code>AADNonInteractiveUserSignInLogs</code></td><td>Microsoft Entra ID</td><td>5-20 GB</td><td>Analytics</td></tr>
-              <tr><td><strong>Service Principal Sign-ins</strong></td><td><code>AADServicePrincipalSignInLogs</code></td><td>Microsoft Entra ID</td><td>1-5 GB</td><td>Analytics</td></tr>
-              <tr><td><strong>Identity Protection Events</strong></td><td><code>AADUserRiskEvents</code></td><td>Microsoft Entra ID</td><td>&lt;500 MB</td><td>Free</td></tr>
-              <tr><td><strong>Conditional Access Events</strong></td><td><code>SigninLogs</code></td><td>Microsoft Entra ID</td><td>Included above</td><td>Free*</td></tr>
-              <tr><td><strong>Risky Sign-ins / Users</strong></td><td><code>AADRiskyUsers</code></td><td>Microsoft Entra ID</td><td>&lt;100 MB</td><td>Free</td></tr>
+              <tr>
+                <td><strong>MDI</strong><br>Defender for Identity</td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1rem;">
+                    <li>Pass-the-Hash / Pass-the-Ticket</li>
+                    <li>Kerberoasting, Golden Ticket</li>
+                    <li>DCSync / replication abuse</li>
+                    <li>Lateral movement via SMB/NTLM</li>
+                    <li>LDAP reconnaissance</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1rem;">
+                    <li>❌ User account creation logs</li>
+                    <li>❌ Group membership change logs</li>
+                    <li>❌ Role assignment audits</li>
+                    <li>❌ MFA / CA policy changes</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>MDO</strong><br>Defender for Office 365</td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1rem;">
+                    <li>Phishing campaigns</li>
+                    <li>Malicious attachments/URLs</li>
+                    <li>Business Email Compromise (BEC)</li>
+                    <li>Email-based lateral movement</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1rem;">
+                    <li>❌ Mailbox permission changes</li>
+                    <li>❌ Transport rule changes</li>
+                    <li>❌ Mailbox forwarding audits</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>MDE</strong><br>Defender for Endpoint</td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1rem;">
+                    <li>Malware and ransomware</li>
+                    <li>LOLBins abuse</li>
+                    <li>Credential theft (LSASS, SAM)</li>
+                    <li>Persistence mechanisms</li>
+                    <li>Exploit activity</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1rem;">
+                    <li>❌ Device join/removal audits</li>
+                    <li>❌ Entra ID role assignments</li>
+                    <li>❌ Identity lifecycle events</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>MDA</strong><br>Defender for Cloud Apps</td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1rem;">
+                    <li>Impossible travel</li>
+                    <li>Risky OAuth app consent</li>
+                    <li>Data exfiltration behavior</li>
+                    <li>Shadow IT detection</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1rem;">
+                    <li>❌ App registration audit logs</li>
+                    <li>❌ Consent changes (full fidelity)</li>
+                    <li>❌ Tenant-wide config history</li>
+                  </ul>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
 
-        <div class="callout info">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Why You Still Need Entra ID Logs (Even with XDR)</div>
-          <div class="callout-content">
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li><strong>Governance & compliance:</strong> Who granted admin rights? Who modified Conditional Access? Who consented to an app?</li>
-              <li><strong>Identity change tracking:</strong> Role assignments, MFA policy changes, app registrations — not attacks, but security-relevant</li>
-              <li><strong>Cross-domain correlation:</strong> XDR identity incident + recent admin role assignment requires Entra ID logs</li>
-              <li><strong>Investigation context:</strong> Validate XDR incident with sign-in location, device, CA policy applied</li>
-            </ul>
-          </div>
-        </div>
+        <h3>1.2 How This Drives Log Ingestion</h3>
 
-        <h4>How to Enable: Entra ID Diagnostic Settings</h4>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">Azure Portal Steps</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code>1. Azure Portal → Microsoft Entra ID → Diagnostic settings
-2. Click "+ Add diagnostic setting"
-3. Name: "SendToSentinel"
-4. Select log categories:
-   ☑ SignInLogs
-   ☑ AuditLogs
-   ☑ NonInteractiveUserSignInLogs
-   ☑ ServicePrincipalSignInLogs
-   ☑ ManagedIdentitySignInLogs
-   ☑ RiskyUsers
-   ☑ UserRiskEvents
-5. Destination: "Send to Log Analytics workspace"
-6. Select your Sentinel workspace
-7. Save
+          <div class="code-header"><span class="code-lang">Log Architecture Model</span></div>
+          <pre><code>LOG INGESTION STRATEGY - DRIVEN BY ATTACKS VS. CHANGES
+═══════════════════════════════════════════════════════════════════════════════
 
-Verify: SigninLogs | take 10</code></pre>
+QUESTION: "Where do I see that a user was added to Global Admins?"
+ANSWER:   AuditLogs (Entra ID) — NOT MDI
+
+QUESTION: "Where do I see Pass-the-Hash attack detection?"
+ANSWER:   SecurityAlert (from XDR/MDI) — NOT AuditLogs
+
+QUESTION: "Where do I see CA policy was modified?"
+ANSWER:   AuditLogs (Entra ID) — NOT any Defender product
+
+QUESTION: "Where do I see ransomware detection?"
+ANSWER:   SecurityAlert (from XDR/MDE) — NOT SecurityEvent
+
+
+THEREFORE:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ MUST INGEST SEPARATELY (Not from XDR)                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ • Entra ID AuditLogs       → User/group/role changes                       │
+│ • Entra ID SigninLogs      → Authentication, MFA, CA evaluation            │
+│ • OfficeActivity           → SharePoint, Exchange, Teams admin             │
+│ • AzureActivity            → Azure control-plane                           │
+│ • IntuneAuditLogs          → Device management changes                     │
+│ • Network logs (Palo Alto) → Firewall, VPN                                 │
+│ • SaaS logs (SF, WD, NS)   → App-specific activity                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ FROM XDR (Alerts & Incidents only)                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ • SecurityAlert            → All Defender alerts                           │
+│ • SecurityIncident         → Correlated incidents                          │
+│ • AlertEvidence            → Entity context                                │
+│ • Raw telemetry           → STAYS IN XDR (query via Advanced Hunting)      │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
         </div>
 
-        <h3>Endpoint & XDR Data → Sentinel (Detection Anchor #2)</h3>
-        <p><strong>XDR-First Ingestion Strategy:</strong> With M365 Defender XDR enabled, we consume <strong>XDR incidents and alerts</strong>, not raw Device* tables. XDR already correlates endpoint telemetry and produces high-fidelity incidents. Raw table ingestion is optional and selective.</p>
+        <!-- ==================== SECTION 2: COMPLETE LOG SOURCE MAP ==================== -->
+        <h2>2. Complete Log Source Map</h2>
 
-        <div class="callout warning">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Critical: Don't Ingest All Raw Tables</div>
-          <div class="callout-content">
-            <p><strong>Anti-Pattern:</strong> Ingesting all Device* tables (DeviceProcessEvents, DeviceNetworkEvents, etc.) into Sentinel when XDR is enabled.</p>
-            <p><strong>Why it's wrong:</strong></p>
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li>Duplicates detection — XDR already correlates these events</li>
-              <li>Increases storage cost — even "free" ingestion has retention costs</li>
-              <li>Creates noise — SOC sees same events in multiple places</li>
-              <li>Confuses workflows — which source of truth?</li>
-            </ul>
-            <p style="margin-top: 0.5rem;"><strong>Best Practice:</strong> Consume XDR incidents. Selectively ingest raw tables only for specific cross-domain correlation needs.</p>
-          </div>
-        </div>
+        <p>All log sources for RevFlow's security operations, categorized by priority and ingestion decision.</p>
 
-        <h4>What We Ingest (XDR-First)</h4>
+        <h3>2.1 P0 — Critical (Must Have)</h3>
+
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Data Type</th><th>Sentinel Table</th><th>Ingestion</th><th>Volume</th><th>Why</th></tr>
+              <tr><th>Category</th><th>Log Source</th><th>Sentinel Table</th><th>Tier</th><th>Why Critical</th></tr>
             </thead>
             <tbody>
-              <tr style="background: rgba(34, 197, 94, 0.1);">
-                <td><strong>XDR Incidents</strong></td>
-                <td><code>SecurityIncident</code></td>
-                <td><span class="status-badge complete">Always</span></td>
-                <td>&lt;100 MB/day</td>
-                <td>Correlated incidents from XDR — primary detection source</td>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td rowspan="8"><strong>Entra ID<br>(Identity)</strong></td>
+                <td>Audit Logs</td>
+                <td><code>AuditLogs</code></td>
+                <td>Analytics</td>
+                <td>User/group/role changes — NOT in XDR</td>
               </tr>
-              <tr style="background: rgba(34, 197, 94, 0.1);">
-                <td><strong>XDR Alerts</strong></td>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>Sign-in Logs</td>
+                <td><code>SigninLogs</code></td>
+                <td>Analytics</td>
+                <td>Auth events, MFA, CA evaluation</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>Non-Interactive Sign-ins</td>
+                <td><code>AADNonInteractiveUserSignInLogs</code></td>
+                <td>Basic</td>
+                <td>Token refreshes, background auth</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>Service Principal Sign-ins</td>
+                <td><code>AADServicePrincipalSignInLogs</code></td>
+                <td>Analytics</td>
+                <td>App-to-app auth, automation</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>Managed Identity Sign-ins</td>
+                <td><code>AADManagedIdentitySignInLogs</code></td>
+                <td>Analytics</td>
+                <td>Azure resource identities</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>Provisioning Logs</td>
+                <td><code>AADProvisioningLogs</code></td>
+                <td>Analytics</td>
+                <td>HR sync (Workday → Entra)</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>Risky Users</td>
+                <td><code>AADRiskyUsers</code></td>
+                <td>Analytics</td>
+                <td>Identity Protection risk</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>User Risk Events</td>
+                <td><code>AADUserRiskEvents</code></td>
+                <td>Analytics</td>
+                <td>Risk detections (leaked creds, etc.)</td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td rowspan="3"><strong>XDR<br>(Attacks)</strong></td>
+                <td>XDR Alerts</td>
                 <td><code>SecurityAlert</code></td>
-                <td><span class="status-badge complete">Always</span></td>
-                <td>&lt;500 MB/day</td>
-                <td>Individual alerts before XDR correlation</td>
+                <td>Analytics</td>
+                <td>All Defender alerts for correlation</td>
               </tr>
-              <tr style="background: rgba(59, 130, 246, 0.1);">
-                <td><strong>Device Network Events</strong></td>
-                <td><code>DeviceNetworkEvents</code></td>
-                <td><span class="status-badge in-progress">Selective</span></td>
-                <td>~20 GB/day (filtered)</td>
-                <td>For XDR + firewall correlation (higher-order rules)</td>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td>XDR Incidents</td>
+                <td><code>SecurityIncident</code></td>
+                <td>Analytics</td>
+                <td>Correlated incidents</td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td>Alert Evidence</td>
+                <td><code>AlertEvidence</code></td>
+                <td>Analytics</td>
+                <td>Entity context</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td rowspan="2"><strong>Microsoft 365</strong></td>
+                <td>Office Activity</td>
+                <td><code>OfficeActivity</code></td>
+                <td>Analytics</td>
+                <td>SharePoint, Exchange, Teams admin</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td>Azure Activity</td>
+                <td><code>AzureActivity</code></td>
+                <td>Free</td>
+                <td>Azure control-plane changes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2.2 P1 — Important (Required for Coverage)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Category</th><th>Log Source</th><th>Sentinel Table</th><th>Tier</th><th>Why Important</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="4"><strong>Intune<br>(Device Mgmt)</strong></td>
+                <td>Intune Audit Logs</td>
+                <td><code>IntuneAuditLogs</code></td>
+                <td>Analytics</td>
+                <td>Policy changes, admin actions</td>
               </tr>
               <tr>
-                <td><strong>Device Process Events</strong></td>
+                <td>Device Compliance</td>
+                <td><code>IntuneDeviceComplianceOrg</code></td>
+                <td>Analytics</td>
+                <td>Compliance state changes</td>
+              </tr>
+              <tr>
+                <td>Intune Devices</td>
+                <td><code>IntuneDevices</code></td>
+                <td>Basic</td>
+                <td>Device inventory for context</td>
+              </tr>
+              <tr>
+                <td>Operational Logs</td>
+                <td><code>IntuneOperationalLogs</code></td>
+                <td>Basic</td>
+                <td>Enrollment, sync issues</td>
+              </tr>
+              <tr>
+                <td rowspan="3"><strong>Network</strong></td>
+                <td>Palo Alto (Threat)</td>
+                <td><code>CommonSecurityLog</code></td>
+                <td>Analytics</td>
+                <td>Network threat detection</td>
+              </tr>
+              <tr>
+                <td>Palo Alto (VPN/GlobalProtect)</td>
+                <td><code>Syslog</code></td>
+                <td>Analytics</td>
+                <td>VPN connections, geo correlation</td>
+              </tr>
+              <tr>
+                <td>DNS Events</td>
+                <td><code>DnsEvents</code></td>
+                <td>Analytics</td>
+                <td>DNS tunneling, suspicious domains</td>
+              </tr>
+              <tr>
+                <td rowspan="4"><strong>SaaS Apps</strong></td>
+                <td>Salesforce</td>
+                <td><code>Salesforce_CL</code></td>
+                <td>Analytics</td>
+                <td>Data export monitoring</td>
+              </tr>
+              <tr>
+                <td>Workday</td>
+                <td><code>Workday_CL</code></td>
+                <td>Analytics</td>
+                <td>HR changes, termination correlation</td>
+              </tr>
+              <tr>
+                <td>NetSuite</td>
+                <td><code>NetSuite_CL</code></td>
+                <td>Analytics</td>
+                <td>Financial system, BEC risk</td>
+              </tr>
+              <tr>
+                <td>GitHub</td>
+                <td><code>GitHub_CL</code></td>
+                <td>Analytics</td>
+                <td>Code access, PAT creation</td>
+              </tr>
+              <tr>
+                <td rowspan="2"><strong>Windows<br>(Tier 0 only)</strong></td>
+                <td>Domain Controllers</td>
+                <td><code>SecurityEvent</code></td>
+                <td>Analytics</td>
+                <td>AD audit beyond MDI coverage</td>
+              </tr>
+              <tr>
+                <td>Certificate Authority</td>
+                <td><code>SecurityEvent</code></td>
+                <td>Analytics</td>
+                <td>Certificate issuance, key access</td>
+              </tr>
+              <tr>
+                <td><strong>Linux</strong></td>
+                <td>Linux Servers (via AMA)</td>
+                <td><code>Syslog</code></td>
+                <td>Analytics</td>
+                <td>SSH, sudo, system events</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2.3 P2 — Selective (High Volume / Forensics)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Sentinel Table</th><th>Tier</th><th>Why Basic Tier</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Palo Alto (Traffic)</td>
+                <td><code>CommonSecurityLog</code></td>
+                <td>Basic</td>
+                <td>High volume (~50GB/day), forensics only</td>
+              </tr>
+              <tr>
+                <td>NSG Flow Logs</td>
+                <td><code>AzureNetworkAnalytics_CL</code></td>
+                <td>Basic</td>
+                <td>Very high volume, forensics only</td>
+              </tr>
+              <tr>
+                <td>AWS VPC Flow Logs</td>
+                <td><code>AWSVPCFlow</code></td>
+                <td>Basic</td>
+                <td>High volume, forensics only</td>
+              </tr>
+              <tr>
+                <td>Azure Diagnostics (Storage)</td>
+                <td><code>AzureDiagnostics</code></td>
+                <td>Basic</td>
+                <td>High volume storage operations</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2.4 P3 — Do NOT Ingest (XDR Handles or Skip)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Sentinel Table</th><th>Decision</th><th>Reason</th></tr>
+            </thead>
+            <tbody>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td>MDE Process Events</td>
                 <td><code>DeviceProcessEvents</code></td>
-                <td><span class="status-badge">Not Ingested</span></td>
-                <td>—</td>
-                <td>XDR handles process-based detection</td>
+                <td><span class="status-badge">Query in XDR</span></td>
+                <td>~50M events/day, XDR handles detection</td>
               </tr>
-              <tr>
-                <td><strong>Device File Events</strong></td>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td>MDE Network Events</td>
+                <td><code>DeviceNetworkEvents</code></td>
+                <td><span class="status-badge">Query in XDR</span></td>
+                <td>~30M events/day, XDR handles detection</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td>MDE File Events</td>
                 <td><code>DeviceFileEvents</code></td>
-                <td><span class="status-badge">Not Ingested</span></td>
-                <td>—</td>
-                <td>XDR handles file-based detection</td>
+                <td><span class="status-badge">Query in XDR</span></td>
+                <td>~40M events/day, XDR handles detection</td>
               </tr>
-              <tr>
-                <td><strong>Device Registry Events</strong></td>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td>MDE Registry Events</td>
                 <td><code>DeviceRegistryEvents</code></td>
-                <td><span class="status-badge">Not Ingested</span></td>
-                <td>—</td>
-                <td>XDR handles registry-based detection</td>
+                <td><span class="status-badge">Query in XDR</span></td>
+                <td>~20M events/day, XDR handles detection</td>
               </tr>
-              <tr>
-                <td><strong>Device Logon Events</strong></td>
-                <td><code>DeviceLogonEvents</code></td>
-                <td><span class="status-badge">Not Ingested</span></td>
-                <td>—</td>
-                <td>XDR + MDI handles logon correlation</td>
-              </tr>
-              <tr>
-                <td><strong>Email Events</strong></td>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td>MDO Email Events</td>
                 <td><code>EmailEvents</code></td>
-                <td><span class="status-badge">Not Ingested</span></td>
+                <td><span class="status-badge">Query in XDR</span></td>
+                <td>XDR handles email detection</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td>MDA Cloud App Events</td>
+                <td><code>CloudAppEvents</code></td>
+                <td><span class="status-badge">Query in XDR</span></td>
+                <td>High volume, MDA alerts sufficient</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td>Workstation Security Events</td>
+                <td><code>SecurityEvent</code></td>
+                <td><span class="status-badge">Skip</span></td>
+                <td>MDE covers endpoints; avoid duplication</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Cost Impact of XDR Selective Ingestion</div>
+          <div class="callout-content">
+            <p><strong>If you ingested all MDE raw telemetry:</strong> ~150M events/day = ~$15,000/month</p>
+            <p><strong>By ingesting only alerts/incidents:</strong> ~250 events/day = ~$50/month</p>
+            <p><strong>Savings:</strong> ~$15,000/month — query raw data in XDR Advanced Hunting at no extra cost.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 3: CLOUD & AWS ==================== -->
+        <h2>3. Cloud Infrastructure Logs</h2>
+
+        <h3>3.1 Azure Resources</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Sentinel Table</th><th>Tier</th><th>Detection Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Azure Activity (all subs)</td>
+                <td><code>AzureActivity</code></td>
+                <td>Free</td>
+                <td>RBAC changes, resource CRUD, policy changes</td>
+              </tr>
+              <tr>
+                <td>Key Vault</td>
+                <td><code>AzureDiagnostics</code></td>
+                <td>Analytics</td>
+                <td>Secret access, key operations</td>
+              </tr>
+              <tr>
+                <td>Storage Accounts</td>
+                <td><code>AzureDiagnostics</code></td>
+                <td>Basic</td>
+                <td>Blob access (high volume)</td>
+              </tr>
+              <tr>
+                <td>App Service</td>
+                <td><code>AzureDiagnostics</code></td>
+                <td>Analytics</td>
+                <td>Web app requests, auth failures</td>
+              </tr>
+              <tr>
+                <td>SQL Auditing</td>
+                <td><code>AzureDiagnostics</code></td>
+                <td>Analytics</td>
+                <td>Database queries, admin actions</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>3.2 AWS (Legacy Workloads)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Sentinel Table</th><th>Tier</th><th>Detection Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>CloudTrail</td>
+                <td><code>AWSCloudTrail</code></td>
+                <td>Analytics</td>
+                <td>API calls, IAM changes, console logins</td>
+              </tr>
+              <tr>
+                <td>GuardDuty</td>
+                <td><code>AWSGuardDuty</code></td>
+                <td>Analytics</td>
+                <td>Threat findings from AWS</td>
+              </tr>
+              <tr>
+                <td>VPC Flow Logs</td>
+                <td><code>AWSVPCFlow</code></td>
+                <td>Basic</td>
+                <td>Network flows (forensics only)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 4: DEFENDER FOR CLOUD & TI ==================== -->
+        <h2>4. Defender for Cloud & Threat Intelligence</h2>
+
+        <h3>4.1 Defender for Cloud Tables</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Sentinel Table</th><th>Tier</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Security Alerts (MDC)</td>
+                <td><code>SecurityAlert</code></td>
+                <td>Analytics</td>
+                <td>Cloud security alerts (separate from XDR)</td>
+              </tr>
+              <tr>
+                <td>Security Recommendations</td>
+                <td><code>SecurityRecommendation</code></td>
+                <td>Analytics</td>
+                <td>Misconfigurations, hardening</td>
+              </tr>
+              <tr>
+                <td>Regulatory Compliance</td>
+                <td><code>SecurityRegulatoryCompliance</code></td>
+                <td>Analytics</td>
+                <td>CIS, NIST, SOC 2 benchmark results</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>4.2 Threat Intelligence</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Source</th><th>Sentinel Table</th><th>Tier</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Microsoft TI / TAXII Feeds</td>
+                <td><code>ThreatIntelligenceIndicator</code></td>
+                <td>Analytics</td>
+                <td>IOC matching, enrichment</td>
+              </tr>
+              <tr>
+                <td>Custom Watchlists</td>
+                <td><code>Watchlist</code></td>
+                <td>Analytics</td>
+                <td>VIP users, Tier 0 assets, terminated employees</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 5: WHAT STAYS IN SPLUNK ==================== -->
+        <h2>5. What Stays in Splunk (Operations)</h2>
+
+        <p>RevFlow maintains Splunk Cloud for application monitoring. Security owns Sentinel; Engineering owns Splunk.</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Splunk Index</th><th>Owner</th><th>Why Not Sentinel</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Application Performance</td>
+                <td><code>app_perf</code></td>
+                <td>SRE</td>
+                <td>Operational, not security</td>
+              </tr>
+              <tr>
+                <td>RevFlow API Logs</td>
+                <td><code>api_logs</code></td>
+                <td>Engineering</td>
+                <td>Debugging, not security</td>
+              </tr>
+              <tr>
+                <td>Kubernetes Logs</td>
+                <td><code>k8s_logs</code></td>
+                <td>SRE</td>
+                <td>Container ops, not security</td>
+              </tr>
+              <tr>
+                <td>Business Transactions</td>
+                <td><code>business_txn</code></td>
+                <td>Product</td>
+                <td>Feature usage, not security</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 6: COST SUMMARY ==================== -->
+        <h2>6. Monthly Cost Projection</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Category</th><th>Daily Volume</th><th>Tier</th><th>Monthly Cost</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Entra ID (all tables)</td>
+                <td>~30 GB</td>
+                <td>Analytics + Basic</td>
+                <td>~$1,500</td>
+              </tr>
+              <tr>
+                <td>XDR Alerts + Incidents</td>
+                <td>~0.1 GB</td>
+                <td>Analytics</td>
+                <td>~$10</td>
+              </tr>
+              <tr>
+                <td>OfficeActivity</td>
+                <td>~5 GB</td>
+                <td>Analytics</td>
+                <td>~$400</td>
+              </tr>
+              <tr>
+                <td>AzureActivity</td>
+                <td>~2 GB</td>
+                <td>Free</td>
+                <td>$0</td>
+              </tr>
+              <tr>
+                <td>Intune (all tables)</td>
+                <td>~2 GB</td>
+                <td>Analytics + Basic</td>
+                <td>~$100</td>
+              </tr>
+              <tr>
+                <td>Network (Palo Alto Threat)</td>
+                <td>~5 GB</td>
+                <td>Analytics</td>
+                <td>~$400</td>
+              </tr>
+              <tr>
+                <td>Network (Palo Alto Traffic)</td>
+                <td>~50 GB</td>
+                <td>Basic</td>
+                <td>~$750</td>
+              </tr>
+              <tr>
+                <td>SaaS Apps (SF, WD, NS, GH)</td>
+                <td>~8 GB</td>
+                <td>Analytics</td>
+                <td>~$660</td>
+              </tr>
+              <tr>
+                <td>Windows (Tier 0 only)</td>
+                <td>~3 GB</td>
+                <td>Analytics</td>
+                <td>~$250</td>
+              </tr>
+              <tr>
+                <td>Linux Servers</td>
+                <td>~2 GB</td>
+                <td>Analytics</td>
+                <td>~$165</td>
+              </tr>
+              <tr>
+                <td>AWS (CloudTrail, GuardDuty)</td>
+                <td>~10 GB</td>
+                <td>Analytics</td>
+                <td>~$830</td>
+              </tr>
+              <tr>
+                <td>AWS VPC Flow</td>
+                <td>~20 GB</td>
+                <td>Basic</td>
+                <td>~$300</td>
+              </tr>
+              <tr>
+                <td>Azure Diagnostics</td>
+                <td>~5 GB</td>
+                <td>Analytics</td>
+                <td>~$400</td>
+              </tr>
+              <tr>
+                <td>Defender for Cloud</td>
+                <td>~0.5 GB</td>
+                <td>Analytics</td>
+                <td>~$40</td>
+              </tr>
+              <tr style="font-weight: bold; background: var(--bg-tertiary);">
+                <td><strong>TOTAL</strong></td>
+                <td><strong>~143 GB/day</strong></td>
                 <td>—</td>
-                <td>XDR (MDO) handles email detection</td>
+                <td><strong>~$5,800/month</strong></td>
               </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="callout info">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>When to Selectively Ingest Raw Tables</div>
-          <div class="callout-content">
-            <p><strong>You ingest selectively only when at least one of these is true:</strong></p>
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li><strong>Cross-domain correlation XDR can't do:</strong> XDR incident + firewall/DNS logs, endpoint behavior + cloud/IAM actions outside Defender</li>
-              <li><strong>Bespoke detections not covered by XDR:</strong> Very specific internal tooling misuse, regulated workflows requiring explicit logic</li>
-              <li><strong>Migration/validation phase:</strong> Short-term overlap to compare XDR vs legacy rules — retire after confidence is established</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="callout warning">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Decision Checklist: Should I Ingest This MDE Table?</div>
-          <div class="callout-content">
-            <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li>Does XDR already detect and explain this behavior? <strong>(If yes → don't ingest)</strong></li>
-              <li>Do I need raw fields for correlation with non-Defender data? <strong>(If yes → ingest selectively)</strong></li>
-              <li>Is the cost and complexity justified?</li>
-              <li>Is this temporary (migration) or permanent? <strong>(Review quarterly)</strong></li>
-            </ol>
-            <p style="margin-top: 0.5rem;"><strong>If #1 is "yes" and #2 is "no" → don't ingest raw MDE tables.</strong></p>
-          </div>
-        </div>
-
-        <div class="callout success">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>What Mature Environments Actually Do</div>
-          <div class="callout-content">
-            <p><strong>Default posture:</strong> Ingest SecurityIncident + SecurityAlert from XDR. Do NOT ingest full Device* telemetry.</p>
-            <p><strong>Selective posture:</strong> Ingest 1-2 Device* tables with filters (event types, devices, time). Review quarterly and remove if unused.</p>
-          </div>
-        </div>
-
-        <h4>How to Enable: XDR Incident Sync (Required)</h4>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">Steps</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code>1. Sentinel → Content Hub → "Microsoft 365 Defender" → Install
-2. Data Connectors → Microsoft 365 Defender → Open connector page
-3. Configuration:
-   ☑ Connect incidents & alerts (REQUIRED)
-   ☑ Connect entities
-4. Under "Connect events" (Advanced Hunting):
-   ⚠️ DO NOT enable all tables by default
-   
-   Only enable if you have a specific use case:
-   ☐ DeviceProcessEvents — Only if needed for custom hunting
-   ☑ DeviceNetworkEvents — If doing XDR + firewall correlation
-   ☐ DeviceFileEvents — Only if needed for custom hunting
-   ☐ DeviceLogonEvents — XDR + MDI handles this
-   ☐ EmailEvents — XDR (MDO) handles this
-
-5. Click "Apply Changes"
-
-Verify: SecurityIncident | where ProviderName == "Microsoft 365 Defender" | take 10</code></pre>
-        </div>
-
-        <div class="callout success">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Cost Optimization</div>
-          <div class="callout-content">
-            <p><strong>Before (naive approach):</strong> Ingest all Device* tables — ~150 GB/day. Even with "free" ingestion, storage and compute costs add up.</p>
-            <p><strong>After (XDR-first):</strong> Ingest XDR incidents + 1 selective table — ~25 GB/day. 80%+ reduction in endpoint data volume.</p>
-          </div>
-        </div>
-
-        <h3>Cloud Control Plane → Sentinel (Detection Anchor #3)</h3>
-        <p><strong>High security value, low personal data.</strong> Azure RBAC changes, resource creation, privilege escalation. Infrastructure actions, not user PII.</p>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Log Source</th><th>Sentinel Table</th><th>Connector</th><th>Volume/Day</th><th>Cost</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><strong>Azure Activity Log</strong></td><td><code>AzureActivity</code></td><td>Azure Activity</td><td>1-5 GB</td><td>Free</td></tr>
-              <tr><td><strong>Defender for Cloud Alerts</strong></td><td><code>SecurityAlert</code></td><td>Defender for Cloud</td><td>&lt;1 GB</td><td>Free</td></tr>
-              <tr><td><strong>Azure Key Vault</strong></td><td><code>AzureDiagnostics</code></td><td>Diagnostic Settings</td><td>0.5-2 GB</td><td>Analytics</td></tr>
-              <tr><td><strong>Azure Firewall</strong></td><td><code>AzureDiagnostics</code></td><td>Diagnostic Settings</td><td>10-50 GB</td><td>Basic</td></tr>
-              <tr><td><strong>NSG Flow Logs</strong></td><td><code>AzureNetworkAnalytics_CL</code></td><td>NSG Flow Logs</td><td>50-200 GB</td><td>Basic</td></tr>
-              <tr><td><strong>Azure RBAC Changes</strong></td><td><code>AzureActivity</code></td><td>Azure Activity</td><td>Included above</td><td>Free</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>AWS Logs → Sentinel (Legacy Workloads)</h3>
-        <p>AWS workloads are legacy — migrating to Azure over time. Still need visibility for security coverage.</p>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Log Source</th><th>Sentinel Table</th><th>Connector</th><th>Volume/Day</th><th>Cost</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><strong>AWS CloudTrail</strong></td><td><code>AWSCloudTrail</code></td><td>AWS S3 Connector</td><td>5-20 GB</td><td>Analytics</td></tr>
-              <tr><td><strong>AWS VPC Flow Logs</strong></td><td><code>AWSVPCFlow</code></td><td>AWS S3 Connector</td><td>20-100 GB</td><td>Basic</td></tr>
-              <tr><td><strong>AWS GuardDuty</strong></td><td><code>AWSGuardDuty</code></td><td>AWS S3 Connector</td><td>&lt;1 GB</td><td>Analytics</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h4>How to Enable: AWS CloudTrail</h4>
-        <div class="flow-diagram">
-          <div class="flow-step"><div class="flow-step-number">1</div><div class="flow-step-content"><strong>AWS: Enable CloudTrail → S3</strong><br>Configure CloudTrail to log to S3 bucket with SQS notifications</div></div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step"><div class="flow-step-number">2</div><div class="flow-step-content"><strong>AWS: Create IAM Role</strong><br>Create role with S3 read and SQS permissions for Sentinel</div></div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step"><div class="flow-step-number">3</div><div class="flow-step-content"><strong>Sentinel: Install AWS Connector</strong><br>Content Hub → Amazon Web Services → Configure with Role ARN</div></div>
-        </div>
-
-        <h3>Network & On-Premises → Sentinel</h3>
-        <p><strong>Metadata-only, no packet capture.</strong> DNS logs, firewall logs, auth events. On-prem systems migrating to Azure over time.</p>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Log Source</th><th>Sentinel Table</th><th>Collection Method</th><th>Volume/Day</th><th>Cost</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><strong>Windows Security Events</strong></td><td><code>SecurityEvent</code></td><td>Azure Monitor Agent + DCR</td><td>10-50 GB</td><td>Analytics</td></tr>
-              <tr><td><strong>Windows Sysmon</strong></td><td><code>Event</code></td><td>Azure Monitor Agent + DCR</td><td>5-20 GB</td><td>Analytics</td></tr>
-              <tr><td><strong>Linux Auth Logs</strong></td><td><code>Syslog</code></td><td>Azure Monitor Agent + DCR</td><td>1-5 GB</td><td>Analytics</td></tr>
-              <tr><td><strong>DNS Server Logs</strong></td><td><code>DnsEvents</code></td><td>DNS Analytics</td><td>10-50 GB</td><td>Basic</td></tr>
-              <tr><td><strong>Firewall (CEF)</strong></td><td><code>CommonSecurityLog</code></td><td>CEF via AMA</td><td>20-100 GB</td><td>Basic</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>Email & SaaS Applications → Sentinel</h3>
-        <p><strong>Business data — protected via data minimization and access control.</strong> Salesforce audit logs, M365 audit, other SaaS business apps.</p>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Log Source</th><th>Sentinel Table</th><th>Connector</th><th>Volume/Day</th><th>Cost</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><strong>Salesforce Event Monitoring</strong></td><td><code>SalesforceServiceCloud_CL</code></td><td>Salesforce Connector</td><td>1-10 GB</td><td>Analytics</td></tr>
-              <tr><td><strong>GitHub Audit Logs</strong></td><td><code>GitHubAuditLogPolling_CL</code></td><td>GitHub Connector</td><td>0.5-2 GB</td><td>Analytics</td></tr>
-              <tr><td><strong>Zoom Audit Logs</strong></td><td><code>Zoom_CL</code></td><td>Custom Function App</td><td>&lt;500 MB</td><td>Analytics</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="callout warning">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Salesforce Shield Required</div>
-          <div class="callout-content"><p>Full Salesforce Event Monitoring requires Shield license (~$10/user/month). Without it, only basic login history is available. Verify licensing before planning detections.</p></div>
-        </div>
-
-        <hr>
-
-        <h2>What Stays in Splunk (Operations)</h2>
-        <p>These logs remain in Splunk Cloud. Engineering owns these workflows.</p>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Log Source</th><th>Splunk Index</th><th>Owner</th><th>Purpose</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><strong>Application Performance</strong></td><td><code>app_perf</code></td><td>SRE</td><td>Response times, errors, throughput</td></tr>
-              <tr><td><strong>RevFlow API Logs</strong></td><td><code>api_logs</code></td><td>Engineering</td><td>API debugging, call patterns</td></tr>
-              <tr><td><strong>Salesforce Integration</strong></td><td><code>sf_integration</code></td><td>Engineering</td><td>Data sync, quota usage</td></tr>
-              <tr><td><strong>Data Pipeline</strong></td><td><code>data_pipeline</code></td><td>Data Eng</td><td>ETL jobs, data quality</td></tr>
-              <tr><td><strong>Kubernetes Logs</strong></td><td><code>k8s_logs</code></td><td>SRE</td><td>Container logs, scaling</td></tr>
-              <tr><td><strong>Business Transactions</strong></td><td><code>business_txn</code></td><td>Product</td><td>Feature usage, funnels</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <hr>
-
-        <h2>Cost Optimization: Analytics vs Basic Logs</h2>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Feature</th><th>Analytics Logs</th><th>Basic Logs</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><strong>Price</strong></td><td>~$2.76/GB</td><td>~$0.50/GB</td></tr>
-              <tr><td><strong>Interactive Retention</strong></td><td>90 days</td><td>8 days</td></tr>
-              <tr><td><strong>Analytics Rules</strong></td><td>✓ Supported</td><td>✗ Not supported</td></tr>
-              <tr><td><strong>Use Case</strong></td><td>Active detection & hunting</td><td>Compliance, forensics</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>Recommended Tier Assignments</h3>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Log Type</th><th>Tier</th><th>Rationale</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Entra ID Sign-ins</td><td><span class="status-badge complete">Analytics</span></td><td>Critical for identity detection</td></tr>
-              <tr><td>MDE Telemetry</td><td><span class="status-badge complete">Free (XDR)</span></td><td>Free via M365 Defender</td></tr>
-              <tr><td>AWS CloudTrail</td><td><span class="status-badge complete">Analytics</span></td><td>Cloud security detection</td></tr>
-              <tr><td>NSG Flow Logs</td><td><span class="status-badge in-progress">Basic</span></td><td>High volume, forensics only</td></tr>
-              <tr><td>Firewall Logs</td><td><span class="status-badge in-progress">Basic</span></td><td>High volume, selective queries</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h2>Monthly Cost Projection (9,000 Endpoints)</h2>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Category</th><th>Monthly Volume</th><th>Tier</th><th>Monthly Cost</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Identity (Entra ID)</td><td>900 GB</td><td>Analytics</td><td>$2,484</td></tr>
-              <tr><td>MDE Telemetry (9,000 endpoints)</td><td>5,400 GB</td><td>Free (XDR)</td><td>$0</td></tr>
-              <tr><td>Azure Activity</td><td>150 GB</td><td>Free</td><td>$0</td></tr>
-              <tr><td>AWS CloudTrail</td><td>450 GB</td><td>Analytics</td><td>$1,242</td></tr>
-              <tr><td>Windows Security</td><td>900 GB</td><td>Analytics</td><td>$2,484</td></tr>
-              <tr><td>Network Logs (Firewall, NSG)</td><td>3,600 GB</td><td>Basic</td><td>$1,800</td></tr>
-              <tr><td>SaaS Apps (Salesforce, etc.)</td><td>450 GB</td><td>Analytics</td><td>$1,242</td></tr>
-              <tr><td>Linux/Server Logs</td><td>600 GB</td><td>Analytics</td><td>$1,656</td></tr>
-              <tr style="background-color: var(--bg-tertiary); font-weight: 600;"><td><strong>Total</strong></td><td><strong>~12,500 GB</strong></td><td></td><td><strong>~$11,000/mo</strong></td></tr>
-              <tr style="background-color: rgba(63, 185, 80, 0.1);"><td><em>Free XDR Data</em></td><td><em>5,400 GB</em></td><td>—</td><td><em>Would be ~$14,900</em></td></tr>
             </tbody>
           </table>
         </div>
 
         <div class="callout success">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Cost Savings</div>
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Cost Comparison</div>
           <div class="callout-content">
-            <p><strong>RSA NetWitness:</strong> ~$35,000/month for comparable coverage.</p>
-            <p><strong>Sentinel:</strong> ~$11,000/month with commitment tier pricing.</p>
-            <p><strong>Free XDR Telemetry:</strong> 5,400 GB/month of endpoint data ingested at no cost via M365 Defender connector.</p>
-            <p><strong>Result:</strong> 69% cost reduction with improved cloud-native capabilities and unified XDR experience.</p>
+            <p><strong>RSA NetWitness (current):</strong> ~$35,000/month</p>
+            <p><strong>Microsoft Sentinel (projected):</strong> ~$5,800/month (with 100 GB commitment tier)</p>
+            <p><strong>Savings:</strong> ~83% reduction with improved XDR integration</p>
           </div>
         </div>
 
-        <h2>Industry Best Practices</h2>
-        
-        <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Log Ingestion Best Practices
-          </div>
+        <!-- ==================== SECTION 7: INTERVIEW SUMMARY ==================== -->
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Interview-Ready Summary</div>
           <div class="callout-content">
-            <p><strong>Microsoft & Industry Recommendations:</strong></p>
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li><strong>Retention:</strong> 90 days hot for investigation, 1+ year archive for compliance (NIST, SOC 2)</li>
-              <li><strong>Prioritization:</strong> Identity → Endpoint → Cloud → Network (CIS Controls, MITRE D3FEND)</li>
-              <li><strong>Cost Optimization:</strong> Use commitment tiers at 100+ GB/day for 50% savings</li>
-              <li><strong>Basic vs Analytics:</strong> Use Basic tier for high-volume, low-query logs (firewall, flow)</li>
-              <li><strong>XDR Integration:</strong> Always enable M365 Defender connector first — free high-value telemetry</li>
-              <li><strong>Data Minimization:</strong> Filter at source, not after ingestion (GDPR, privacy compliance)</li>
-            </ul>
+            <p><em>"The log source strategy is driven by one key insight: Defender products detect attacks, not control-plane changes. MDI detects Pass-the-Hash, but if you want to know who was added to Global Admins, that's in Entra ID AuditLogs — which we ingest separately.</em></p>
+            <p><em>For XDR, we ingest alerts and incidents into Sentinel, but raw telemetry like DeviceProcessEvents stays in XDR — that saves $15K/month and the data is still queryable via Advanced Hunting.</em></p>
+            <p><em>The rest of the strategy fills gaps XDR doesn't cover: network logs from Palo Alto, SaaS activity from Salesforce and Workday, and SecurityEvents from Tier 0 infrastructure like Domain Controllers. That's what Sentinel correlation rules need for cross-domain detection."</em></p>
           </div>
-        </div>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Log all authentication events</td>
-                <td>NIST 800-53 AU-2, CIS Control 8</td>
-                <td>Entra ID sign-in + audit logs, full coverage</td>
-              </tr>
-              <tr>
-                <td>Retain security logs 1 year minimum</td>
-                <td>SOC 2, PCI-DSS, ISO 27001</td>
-                <td>90 days hot, 1 year archive tier</td>
-              </tr>
-              <tr>
-                <td>Centralize security telemetry</td>
-                <td>MITRE D3FEND, Gartner SOC recommendations</td>
-                <td>Single Sentinel workspace, unified XDR</td>
-              </tr>
-              <tr>
-                <td>Monitor privileged access</td>
-                <td>CIS Control 5, NIST 800-53 AC-6</td>
-                <td>PIM logs, admin audit, role changes</td>
-              </tr>
-              <tr>
-                <td>Log endpoint process execution</td>
-                <td>MITRE ATT&CK, CIS Control 8</td>
-                <td>MDE DeviceProcessEvents with command line</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
 
         <nav class="page-nav">
