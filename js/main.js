@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initTimeline();
   initMobileMenu();
   setActiveNavItem();
+  initSidebarScroll(); // New: Handle sidebar scroll position
 });
 
 /* Sidebar Navigation */
@@ -18,11 +19,90 @@ function initSidebar() {
   
   navItems.forEach(item => {
     item.addEventListener('click', function(e) {
+      // Save sidebar scroll position before navigating
+      saveSidebarScrollPosition();
+      
       // Remove active class from all items
       navItems.forEach(nav => nav.classList.remove('active'));
       // Add active class to clicked item
       this.classList.add('active');
     });
+  });
+}
+
+/* Sidebar Scroll Position Management */
+function initSidebarScroll() {
+  const sidebar = document.querySelector('.sidebar-nav');
+  if (!sidebar) return;
+  
+  // Try to restore saved scroll position first
+  const savedPosition = sessionStorage.getItem('sidebarScrollPosition');
+  
+  if (savedPosition !== null) {
+    // Restore saved position
+    sidebar.scrollTop = parseInt(savedPosition, 10);
+    // Clear after restoring so it doesn't interfere with manual scrolling
+    // We'll save again when user clicks a link
+  } else {
+    // No saved position, scroll to active item
+    scrollToActiveNavItem();
+  }
+  
+  // Also scroll to active item after a short delay to ensure DOM is ready
+  setTimeout(() => {
+    const activeItem = document.querySelector('.nav-item.active');
+    if (activeItem) {
+      // Check if active item is visible in the sidebar
+      const sidebarRect = sidebar.getBoundingClientRect();
+      const activeRect = activeItem.getBoundingClientRect();
+      
+      // If active item is not visible, scroll to it
+      if (activeRect.top < sidebarRect.top || activeRect.bottom > sidebarRect.bottom) {
+        scrollToActiveNavItem();
+      }
+    }
+  }, 100);
+}
+
+/* Save sidebar scroll position */
+function saveSidebarScrollPosition() {
+  const sidebar = document.querySelector('.sidebar-nav');
+  if (sidebar) {
+    sessionStorage.setItem('sidebarScrollPosition', sidebar.scrollTop.toString());
+  }
+}
+
+/* Scroll sidebar to show the active navigation item */
+function scrollToActiveNavItem() {
+  const sidebar = document.querySelector('.sidebar-nav');
+  const activeItem = document.querySelector('.nav-item.active');
+  
+  if (!sidebar || !activeItem) return;
+  
+  // Get the section title for the active item (for context)
+  const activeSection = activeItem.closest('.nav-section');
+  const sectionTitle = activeSection?.querySelector('.nav-section-title');
+  
+  // Calculate position to scroll to
+  // We want to show the section title if possible, or at least the active item
+  const targetElement = sectionTitle || activeItem;
+  
+  // Get the offset of the target relative to the sidebar
+  const sidebarRect = sidebar.getBoundingClientRect();
+  const targetRect = targetElement.getBoundingClientRect();
+  const activeRect = activeItem.getBoundingClientRect();
+  
+  // Calculate scroll position to center the active item (or at least show it)
+  const targetOffset = targetElement.offsetTop;
+  const sidebarHeight = sidebar.clientHeight;
+  
+  // Scroll to show the section title at the top, with active item visible
+  const scrollTo = Math.max(0, targetOffset - 20); // 20px padding from top
+  
+  // Smooth scroll to position
+  sidebar.scrollTo({
+    top: scrollTo,
+    behavior: 'smooth'
   });
 }
 
