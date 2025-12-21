@@ -385,6 +385,194 @@
 
         <h2>What Changes When XDR Is Enabled</h2>
 
+        <h3>Detection Transition Strategy</h3>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Key Principle: Retire, Don't Migrate
+          </div>
+          <div class="callout-content">
+            <p><strong>When XDR is enabled, correlation is handled natively by XDR.</strong></p>
+            <p>We don't migrate Sentinel rules into XDR. Instead:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Identify overlapping detections</strong> — Find Sentinel rules that cover endpoint and identity behaviors now handled by XDR</li>
+              <li><strong>Retire or downscope</strong> — Disable redundant rules once XDR detection is validated</li>
+              <li><strong>Shift Sentinel focus</strong> — Move to higher-order correlation combining XDR incidents with network, cloud, and business context</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>The transition is phased</strong> to avoid alert duplication and SOC disruption.</p>
+          </div>
+        </div>
+
+        <h4>Detection Transition Process</h4>
+
+        <div class="flow-diagram">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <strong>Inventory Sentinel Rules</strong><br>
+              Catalog all analytics rules. Tag by telemetry source: endpoint, identity, email, network, cloud, custom app.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <strong>Identify XDR Overlap</strong><br>
+              Flag rules that detect behaviors XDR now handles natively (e.g., credential theft, lateral movement, phishing → endpoint compromise chains).
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <strong>Validate XDR Coverage</strong><br>
+              Run both Sentinel rule and XDR in parallel. Confirm XDR detects the same (or better) with proper correlation.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-content">
+              <strong>Retire/Downscope Sentinel Rules</strong><br>
+              Disable redundant rules. For partial overlap, downscope to edge cases XDR doesn't cover.
+            </div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-number">5</div>
+            <div class="flow-step-content">
+              <strong>Shift Sentinel Focus</strong><br>
+              Build higher-order correlation rules that combine XDR incidents with network, cloud, and business context.
+            </div>
+          </div>
+        </div>
+
+        <h4>Detection Categories: Keep vs Retire</h4>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Detection Category</th><th>Action</th><th>Rationale</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Endpoint process-based (e.g., LSASS access, encoded PowerShell)</td>
+                <td><span class="status-badge complete">Retire</span></td>
+                <td>MDE detects natively with richer context</td>
+              </tr>
+              <tr>
+                <td>Identity anomalies (e.g., impossible travel, risky sign-in)</td>
+                <td><span class="status-badge complete">Retire</span></td>
+                <td>Entra ID Protection + MDI handle natively</td>
+              </tr>
+              <tr>
+                <td>Phishing/BEC detection</td>
+                <td><span class="status-badge complete">Retire</span></td>
+                <td>MDO handles with email context</td>
+              </tr>
+              <tr>
+                <td>Cross-domain attack chains (phishing → endpoint → lateral movement)</td>
+                <td><span class="status-badge complete">Retire</span></td>
+                <td>XDR correlates automatically</td>
+              </tr>
+              <tr>
+                <td>Firewall/network anomalies</td>
+                <td><span class="status-badge in-progress">Keep</span></td>
+                <td>Not in XDR scope — Sentinel handles</td>
+              </tr>
+              <tr>
+                <td>Custom application logs</td>
+                <td><span class="status-badge in-progress">Keep</span></td>
+                <td>Not in XDR scope — Sentinel handles</td>
+              </tr>
+              <tr>
+                <td>Third-party SaaS (non-Microsoft)</td>
+                <td><span class="status-badge in-progress">Keep</span></td>
+                <td>Not in XDR scope — Sentinel handles</td>
+              </tr>
+              <tr>
+                <td>XDR incident + network context (higher-order)</td>
+                <td><span class="status-badge in-progress">Build New</span></td>
+                <td>Sentinel's new role: enrich XDR incidents with non-Microsoft data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Higher-Order Correlation Examples</h4>
+
+        <p>Once XDR handles Microsoft telemetry correlation, Sentinel focuses on enriching XDR incidents with additional context:</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Example: XDR Incident + Network Context</span></div>
+          <pre><code>// Sentinel rule: Enrich XDR incident with firewall data
+// Trigger: XDR incident synced to Sentinel
+
+SecurityIncident
+| where ProviderName == "Microsoft 365 Defender"
+| where Classification == "TruePositive" or Classification == ""
+| mv-expand AlertIds
+| join kind=inner (
+    SecurityAlert
+    | where ProviderName == "Microsoft 365 Defender"
+    | extend Entities = parse_json(Entities)
+    | mv-expand Entities
+    | where Entities.Type == "ip"
+    | extend SuspiciousIP = tostring(Entities.Address)
+) on $left.AlertIds == $right.SystemAlertId
+| join kind=leftouter (
+    CommonSecurityLog
+    | where DeviceVendor == "Palo Alto Networks"
+    | where DestinationIP == SuspiciousIP or SourceIP == SuspiciousIP
+    | summarize 
+        FirewallHits = count(),
+        BytesOut = sum(SentBytes),
+        DestPorts = make_set(DestinationPort)
+    by SourceIP, DestinationIP
+) on $left.SuspiciousIP == $right.SourceIP
+| project 
+    IncidentNumber,
+    Title,
+    Severity,
+    SuspiciousIP,
+    FirewallHits,
+    BytesOut,
+    DestPorts</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Example: XDR Incident + Business Context</span></div>
+          <pre><code>// Sentinel rule: Flag XDR incidents involving high-value assets
+// Uses a watchlist of critical systems
+
+SecurityIncident
+| where ProviderName == "Microsoft 365 Defender"
+| mv-expand AlertIds
+| join kind=inner (
+    SecurityAlert
+    | extend Entities = parse_json(Entities)
+    | mv-expand Entities
+    | where Entities.Type == "host"
+    | extend AffectedHost = tostring(Entities.HostName)
+) on $left.AlertIds == $right.SystemAlertId
+| join kind=inner (
+    _GetWatchlist('CriticalAssets')
+    | project CriticalHost = HostName, BusinessFunction, DataClassification
+) on $left.AffectedHost == $right.CriticalHost
+| extend 
+    EscalationRequired = true,
+    EscalationReason = strcat("Critical asset affected: ", BusinessFunction)
+| project 
+    IncidentNumber,
+    Title,
+    Severity,
+    AffectedHost,
+    BusinessFunction,
+    DataClassification,
+    EscalationRequired</code></pre>
+        </div>
+
         <h3>1. Detection Strategy Changes</h3>
 
         <div class="table-wrapper">

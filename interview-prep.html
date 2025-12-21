@@ -1499,6 +1499,24 @@ model:
    To: Data lake + compliance + non-Microsoft detections + cross-platform 
    correlation
 
+KEY PRINCIPLE — RETIRE, DON'T MIGRATE:
+When XDR is enabled, correlation is handled natively by XDR. We don't migrate 
+Sentinel rules into XDR. Instead:
+
+• Identify overlapping detections — find Sentinel rules covering endpoint and 
+  identity behaviors now handled by XDR
+• Retire or downscope — disable redundant rules once XDR detection is validated
+• Shift Sentinel focus — move to higher-order correlation combining XDR 
+  incidents with network, cloud, and business context
+
+The transition is phased to avoid alert duplication and SOC disruption.
+
+DETECTION CATEGORIES:
+• RETIRE: Endpoint process-based (LSASS, encoded PowerShell), identity 
+  anomalies (impossible travel), phishing/BEC, cross-domain attack chains
+• KEEP: Firewall/network, custom apps, third-party SaaS
+• BUILD NEW: Higher-order correlation (XDR incident + network/business context)
+
 WHEN TO ENABLE XDR:
 I'd enable XDR once:
 • SIEM and EDR are stable (check)
