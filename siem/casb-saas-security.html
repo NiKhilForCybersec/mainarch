@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CASB & SaaS Security — XDR vs SIEM | Cloud Security</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+    .comparison-card { background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 8px; padding: 1.25rem; }
+    .comparison-card h4 { margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem; }
+    .comparison-card.xdr { border-left: 3px solid #3b82f6; }
+    .comparison-card.siem { border-left: 3px solid #8b5cf6; }
+    .saas-flow { background: var(--bg-tertiary); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+    .capability-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 4px; }
+    .capability-badge.xdr { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+    .capability-badge.siem { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; }
+    .capability-badge.both { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+    @media (max-width: 768px) { .comparison-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="../siem/workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
+          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="../siem/casb-saas-security.html" class="nav-item active">CASB &amp; SaaS Security</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="../infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="../operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="../operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="../resources/templates.html" class="nav-item">Templates</a>
+          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="../resources/alternative-architectures.html" class="nav-item">Alternative Architectures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="../resources/incident-response.html" class="nav-item">Incident Response</a>
+          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">SIEM Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">CASB & SaaS Security</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>CASB & SaaS Security</h1>
+          <div class="page-header-meta">
+            <span class="page-badge siem">SIEM Track</span>
+            <span class="page-badge edr">XDR Track</span>
+            <span class="page-reading-time">Interview Critical</span>
+          </div>
+          <p class="intro-text">This page covers the critical distinction between XDR's CASB capabilities and SIEM's SaaS log collection — a topic that separates senior security engineers from junior ones in interviews. Understand how Microsoft Defender for Cloud Apps (MDA), Sentinel, and third-party SaaS integrations work together.</p>
+        </div>
+
+        <!-- ==================== SECTION 1: THE KEY DISTINCTION ==================== -->
+        <h2>1. The Critical Distinction (Interview Winner)</h2>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Key Interview Point</div>
+          <div class="callout-content">
+            <p><strong>XDR SaaS visibility ≠ All SaaS logs</strong></p>
+            <p>This distinction wins interviews. Many candidates conflate CASB behavioral monitoring with full SaaS audit log collection. They are complementary but different.</p>
+          </div>
+        </div>
+
+        <div class="comparison-grid">
+          <div class="comparison-card xdr">
+            <h4><span class="capability-badge xdr">XDR / CASB</span> Behavioral Monitoring</h4>
+            <p><strong>Microsoft Defender for Cloud Apps (MDA)</strong></p>
+            <p><strong>What it does:</strong></p>
+            <ul>
+              <li>Monitors SaaS <em>behavior patterns</em></li>
+              <li>Detects risky user actions</li>
+              <li>Identifies data exfiltration attempts</li>
+              <li>Catches OAuth abuse and shadow IT</li>
+              <li>Enforces session controls and policies</li>
+            </ul>
+            <p><strong>Works best with:</strong></p>
+            <ul>
+              <li>Microsoft 365 (native integration)</li>
+              <li>Select third-party SaaS (API connectors)</li>
+              <li>~30 supported apps with full API</li>
+            </ul>
+            <p><strong>Does NOT provide:</strong></p>
+            <ul>
+              <li>Complete audit trail of all actions</li>
+              <li>Full log retention for compliance</li>
+              <li>Coverage for all SaaS apps</li>
+            </ul>
+          </div>
+          
+          <div class="comparison-card siem">
+            <h4><span class="capability-badge siem">SIEM</span> Full Audit Logs</h4>
+            <p><strong>Microsoft Sentinel + Data Connectors</strong></p>
+            <p><strong>What it does:</strong></p>
+            <ul>
+              <li>Collects <em>complete audit logs</em> via APIs</li>
+              <li>Provides full event history for forensics</li>
+              <li>Enables cross-platform correlation</li>
+              <li>Supports compliance retention requirements</li>
+              <li>Custom detection rules on raw events</li>
+            </ul>
+            <p><strong>Covers:</strong></p>
+            <ul>
+              <li>Any SaaS with API access</li>
+              <li>Salesforce, Workday, ServiceNow, etc.</li>
+              <li>Custom/niche SaaS applications</li>
+            </ul>
+            <p><strong>Does NOT provide:</strong></p>
+            <ul>
+              <li>Real-time session blocking</li>
+              <li>Inline policy enforcement</li>
+              <li>Shadow IT discovery</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Interview Answer — Memorize This</span></div>
+          <pre><code>"SaaS refers to any cloud-hosted application, including third-party platforms 
+like Salesforce, not just Azure services. 
+
+In security architecture, there are two complementary approaches:
+
+1. CASB (XDR) — Microsoft Defender for Cloud Apps monitors SaaS BEHAVIOR:
+   • Risky user actions, data exfiltration, OAuth abuse
+   • Real-time session controls and policy enforcement
+   • Works great for M365 and supported third-party apps
+   • But it's behavioral alerting, not full audit logs
+
+2. SIEM — SaaS audit logs collected via APIs for FULL VISIBILITY:
+   • Complete audit trail for forensics and compliance
+   • Correlation with identity, endpoint, network events
+   • Covers any SaaS with an API, not just supported CASB apps
+   • Custom detections on raw events
+
+They work together: CASB catches risky behavior in real-time, 
+SIEM provides the full picture for investigation and compliance."</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 2: WHAT IS CASB ==================== -->
+        <h2>2. Understanding CASB (Cloud Access Security Broker)</h2>
+
+        <h3>2.1 CASB Definition</h3>
+
+        <p>A <strong>Cloud Access Security Broker (CASB)</strong> is a security policy enforcement point between cloud service consumers and cloud service providers. It provides visibility, compliance, data security, and threat protection for cloud applications.</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">CASB Architecture</span></div>
+          <pre><code>CASB DEPLOYMENT MODES
+════════════════════════════════════════════════════════════════════════════════
+
+                    ┌─────────────────────────────────────────────────────────┐
+                    │                      CASB                                │
+                    │         (Microsoft Defender for Cloud Apps)              │
+                    └─────────────────────────────────────────────────────────┘
+                                          │
+           ┌──────────────────────────────┼──────────────────────────────┐
+           │                              │                              │
+           ▼                              ▼                              ▼
+┌─────────────────────┐      ┌─────────────────────┐      ┌─────────────────────┐
+│   API MODE          │      │   PROXY MODE        │      │   LOG COLLECTOR     │
+│   (Out-of-band)     │      │   (Inline)          │      │   (Discovery)       │
+├─────────────────────┤      ├─────────────────────┤      ├─────────────────────┤
+│ • Connects to SaaS  │      │ • Reverse proxy for │      │ • Collects firewall │
+│   APIs directly     │      │   managed apps      │      │   /proxy logs       │
+│ • Scans content     │      │ • Forward proxy via │      │ • Discovers shadow  │
+│ • Applies policies  │      │   Conditional Access│      │   IT usage          │
+│ • No inline control │      │ • Real-time session │      │ • Risk scoring      │
+│                     │      │   controls          │      │                     │
+│ Examples:           │      │ Examples:           │      │ Examples:           │
+│ • Scan SharePoint   │      │ • Block download on │      │ • "400 users are    │
+│ • Detect malware    │      │   unmanaged device  │      │    using Dropbox"   │
+│ • Find sensitive    │      │ • Watermark docs    │      │ • "50 apps with     │
+│   data in OneDrive  │      │ • Copy/paste block  │      │    OAuth access"    │
+└─────────────────────┘      └─────────────────────┘      └─────────────────────┘</code></pre>
+        </div>
+
+        <h3>2.2 Microsoft Defender for Cloud Apps (MDA) Capabilities</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Capability</th><th>What It Does</th><th>Example Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Shadow IT Discovery</strong></td>
+                <td>Analyzes firewall/proxy logs to find unsanctioned apps</td>
+                <td>"Discovered 47 employees using personal Dropbox"</td>
+              </tr>
+              <tr>
+                <td><strong>App Governance</strong></td>
+                <td>Monitors OAuth apps with access to M365 data</td>
+                <td>"Third-party app has Mail.Read permissions for 200 users"</td>
+              </tr>
+              <tr>
+                <td><strong>Session Controls</strong></td>
+                <td>Conditional Access App Control for real-time enforcement</td>
+                <td>"Block download of sensitive files on unmanaged devices"</td>
+              </tr>
+              <tr>
+                <td><strong>Data Classification</strong></td>
+                <td>Scans files in connected apps for sensitive content</td>
+                <td>"Found 500 files with credit card numbers in SharePoint"</td>
+              </tr>
+              <tr>
+                <td><strong>Anomaly Detection</strong></td>
+                <td>ML-based detection of unusual user behavior</td>
+                <td>"Impossible travel: User in NY then London in 30 mins"</td>
+              </tr>
+              <tr>
+                <td><strong>Activity Policies</strong></td>
+                <td>Custom rules on user activities</td>
+                <td>"Alert when admin shares file externally"</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2.3 MDA Connected Apps</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">SaaS Apps with Full API Integration</span></div>
+          <pre><code>MICROSOFT DEFENDER FOR CLOUD APPS — SUPPORTED CONNECTORS
+════════════════════════════════════════════════════════════════════════════════
+
+NATIVE/DEEP INTEGRATION (Full visibility + controls):
+├── Microsoft 365 (Exchange, SharePoint, OneDrive, Teams)
+├── Azure (Activity logs, resources)
+├── Power Platform (Power BI, Power Apps)
+└── Dynamics 365
+
+API CONNECTORS (Good visibility, some controls):
+├── AWS
+├── Google Workspace
+├── Salesforce
+├── Box
+├── Dropbox
+├── ServiceNow
+├── Okta
+├── GitHub
+├── Workday (limited)
+├── Slack Enterprise
+├── Zoom
+├── DocuSign
+├── Atlassian (Jira, Confluence)
+├── Zendesk
+└── ~15 more apps
+
+CONDITIONAL ACCESS APP CONTROL (Proxy-based session controls):
+├── Any SAML/OIDC app through Entra ID
+├── Works with Conditional Access policies
+├── Enables: download blocking, copy/paste restrictions, watermarking
+└── Limited to apps federated with Azure AD
+
+NOT COVERED:
+├── Custom internal SaaS apps (unless proxied)
+├── SaaS apps not using SSO
+├── Apps without API connectors
+└── Consumer versions of apps (personal Gmail, etc.)</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 3: XDR + CASB ==================== -->
+        <h2>3. How XDR Uses CASB Data</h2>
+
+        <p>Microsoft Defender XDR integrates MDA alerts into its unified incident experience:</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">XDR + CASB Integration Flow</span></div>
+          <pre><code>XDR CORRELATION WITH CASB ALERTS
+════════════════════════════════════════════════════════════════════════════════
+
+USER: john.smith@company.com
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        MICROSOFT DEFENDER XDR                                │
+│                      (Unified Incident View)                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+         ┌──────────────────────────┼──────────────────────────────┐
+         │                          │                              │
+         ▼                          ▼                              ▼
+┌─────────────────────┐  ┌─────────────────────┐  ┌─────────────────────┐
+│  MDE (Endpoint)     │  │  MDI (Identity)     │  │  MDA (Cloud Apps)   │
+├─────────────────────┤  ├─────────────────────┤  ├─────────────────────┤
+│ 9:00 AM             │  │ 9:05 AM             │  │ 9:15 AM             │
+│ Suspicious          │  │ Password spray      │  │ Mass download       │
+│ PowerShell          │  │ attempt detected    │  │ from SharePoint     │
+│ execution           │  │                     │  │                     │
+└─────────────────────┘  └─────────────────────┘  └─────────────────────┘
+         │                          │                              │
+         └──────────────────────────┼──────────────────────────────┘
+                                    │
+                                    ▼
+                    ┌───────────────────────────────────┐
+                    │  CORRELATED INCIDENT              │
+                    │  "Compromised User Account"       │
+                    │  High Severity                    │
+                    │                                   │
+                    │  Attack Story:                    │
+                    │  1. Credential theft via phishing │
+                    │  2. Lateral movement attempts     │
+                    │  3. Data exfiltration in progress │
+                    │                                   │
+                    │  Auto-Response:                   │
+                    │  → User session revoked           │
+                    │  → Account disabled               │
+                    │  → Endpoint isolated              │
+                    └───────────────────────────────────┘</code></pre>
+        </div>
+
+        <h3>3.1 MDA Alert Types in XDR</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Alert Category</th><th>Detection Method</th><th>Example Alert</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Impossible Travel</strong></td>
+                <td>ML anomaly detection</td>
+                <td>"User accessed from US and Germany within 30 minutes"</td>
+              </tr>
+              <tr>
+                <td><strong>Mass Download</strong></td>
+                <td>Threshold-based</td>
+                <td>"User downloaded 500+ files in 1 hour"</td>
+              </tr>
+              <tr>
+                <td><strong>Risky OAuth App</strong></td>
+                <td>App governance</td>
+                <td>"High-risk app granted Mail.ReadWrite permissions"</td>
+              </tr>
+              <tr>
+                <td><strong>Ransomware Activity</strong></td>
+                <td>Pattern matching</td>
+                <td>"Multiple file extensions changed to .encrypted"</td>
+              </tr>
+              <tr>
+                <td><strong>Suspicious Inbox Rules</strong></td>
+                <td>Activity policy</td>
+                <td>"Inbox rule created to forward emails externally"</td>
+              </tr>
+              <tr>
+                <td><strong>Admin Activity Anomaly</strong></td>
+                <td>UEBA baseline</td>
+                <td>"First-time admin action: Global Admin added"</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 4: SIEM SaaS LOG COLLECTION ==================== -->
+        <h2>4. SIEM: Full SaaS Audit Log Collection</h2>
+
+        <p>While CASB monitors behavior, SIEM collects the <strong>complete audit trail</strong> for forensics, compliance, and custom detections.</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">SaaS Log Collection Architecture</span></div>
+          <pre><code>SIEM SaaS LOG COLLECTION — FULL AUDIT VISIBILITY
+════════════════════════════════════════════════════════════════════════════════
+
+                              ┌─────────────────────────────────────┐
+                              │         MICROSOFT SENTINEL          │
+                              │        (Log Analytics Workspace)    │
+                              └─────────────────────────────────────┘
+                                              ▲
+                                              │
+              ┌───────────────────────────────┼───────────────────────────────┐
+              │                               │                               │
+              ▼                               ▼                               ▼
+┌─────────────────────────┐     ┌─────────────────────────┐     ┌─────────────────────────┐
+│  NATIVE CONNECTORS      │     │  API-BASED CONNECTORS   │     │  CUSTOM API INGESTION   │
+│  (Microsoft Sources)    │     │  (Third-Party SaaS)     │     │  (Logic Apps/Functions) │
+├─────────────────────────┤     ├─────────────────────────┤     ├─────────────────────────┤
+│                         │     │                         │     │                         │
+│ • Azure Activity Logs   │     │ • Salesforce            │     │ • Any SaaS with API     │
+│ • Azure AD Sign-in Logs │     │ • AWS CloudTrail        │     │ • Custom connectors     │
+│ • Azure AD Audit Logs   │     │ • Google Workspace      │     │ • Logic App pulls API   │
+│ • Microsoft 365 Logs    │     │ • Okta                  │     │ • Azure Function        │
+│ • Defender for Cloud    │     │ • GitHub                │     │ • Data Collector API    │
+│ • MDA Alerts            │     │ • Zoom                  │     │                         │
+│                         │     │ • ServiceNow            │     │ Examples:               │
+│ Tables:                 │     │ • Workday               │     │ • Workday (full logs)   │
+│ • SigninLogs            │     │                         │     │ • SAP SuccessFactors    │
+│ • AuditLogs             │     │ Tables:                 │     │ • Coupa, Concur         │
+│ • OfficeActivity        │     │ • Salesforce_CL         │     │ • Custom SaaS apps      │
+│ • CloudAppEvents        │     │ • AWS_CloudTrail_CL     │     │                         │
+│                         │     │ • GoogleWorkspace_CL    │     │ Table:                  │
+└─────────────────────────┘     └─────────────────────────┘     │ • CustomSaaS_CL         │
+                                                                └─────────────────────────┘</code></pre>
+        </div>
+
+        <h3>4.1 Key SaaS Audit Log Tables in Sentinel</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Source</th><th>Key Fields</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>OfficeActivity</code></td>
+                <td>M365 Unified Audit Log</td>
+                <td>Operation, UserId, ClientIP, Workload</td>
+                <td>SharePoint access, Exchange activity, Teams events</td>
+              </tr>
+              <tr>
+                <td><code>CloudAppEvents</code></td>
+                <td>Defender for Cloud Apps</td>
+                <td>ActionType, Application, AccountName</td>
+                <td>Cross-SaaS activity (MDA connected apps)</td>
+              </tr>
+              <tr>
+                <td><code>SigninLogs</code></td>
+                <td>Azure AD / Entra ID</td>
+                <td>UserPrincipalName, AppDisplayName, ResultType</td>
+                <td>Authentication to all federated SaaS apps</td>
+              </tr>
+              <tr>
+                <td><code>AuditLogs</code></td>
+                <td>Azure AD / Entra ID</td>
+                <td>OperationName, TargetResources, InitiatedBy</td>
+                <td>Directory changes, app consent, role assignments</td>
+              </tr>
+              <tr>
+                <td><code>AWSCloudTrail</code></td>
+                <td>AWS (via connector)</td>
+                <td>eventName, userIdentity, sourceIPAddress</td>
+                <td>AWS API calls, IAM changes, resource access</td>
+              </tr>
+              <tr>
+                <td><code>GWorkspace_*</code></td>
+                <td>Google Workspace</td>
+                <td>actor.email, event_name, parameters</td>
+                <td>Google Drive, Gmail, Admin Console activity</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>4.2 Example: Salesforce Audit Logs in Sentinel</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Logic App — Salesforce Event Log Collection</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Salesforce Event Monitoring (hourly pull)
+# Uses Salesforce Event Monitoring API
+
+1. AUTHENTICATE TO SALESFORCE
+   POST https://login.salesforce.com/services/oauth2/token
+   Body: grant_type=password&client_id=...&client_secret=...&username=...&password=...
+
+2. QUERY EVENT LOG FILES
+   GET https://[instance].salesforce.com/services/data/v58.0/query
+   Query: SELECT Id, EventType, LogDate, LogFileLength 
+          FROM EventLogFile 
+          WHERE LogDate = TODAY
+
+3. DOWNLOAD LOG FILE
+   GET https://[instance].salesforce.com/services/data/v58.0/sobjects/EventLogFile/{Id}/LogFile
+
+4. PARSE AND SEND TO SENTINEL
+   POST https://[workspace-id].ods.opinsights.azure.com/api/logs?api-version=2016-04-01
+   Header: Log-Type: Salesforce_EventLog
+   Body: [array of log events]
+
+# Captured Salesforce Event Types:
+- Login / LoginAs / Logout
+- Report / Dashboard / Document
+- API / RestApi / BulkApi
+- ContentTransfer (file download)
+- ApexExecution / ApexTrigger
+- ChangeSetOperation</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Salesforce Anomaly Detection</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Detect mass export from Salesforce (report exports > 1000 records)
+Salesforce_EventLog_CL
+| where EventType_s == "ReportExport"
+| where RowsProcessed_d > 1000
+| project TimeGenerated, User_s, ReportName_s, RowsProcessed_d, ClientIP_s
+| order by RowsProcessed_d desc
+
+// Detect after-hours Salesforce access
+Salesforce_EventLog_CL
+| where EventType_s == "Login"
+| extend Hour = datetime_part("hour", TimeGenerated)
+| where Hour < 6 or Hour > 22  // Outside 6 AM - 10 PM
+| summarize LoginCount = count() by User_s, bin(TimeGenerated, 1d)
+| where LoginCount > 3
+
+// Detect first-time API access (potential token theft)
+let known_api_users = Salesforce_EventLog_CL
+    | where TimeGenerated between (ago(30d) .. ago(1d))
+    | where EventType_s == "API"
+    | distinct User_s;
+Salesforce_EventLog_CL
+| where TimeGenerated > ago(1d)
+| where EventType_s == "API"
+| where User_s !in (known_api_users)
+| project TimeGenerated, User_s, ApiType_s, ClientIP_s</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 5: XDR vs SIEM COMPARISON ==================== -->
+        <h2>5. XDR vs SIEM for SaaS — When to Use Each</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Decision Matrix</span></div>
+          <pre><code>SAAS SECURITY: XDR (CASB) vs SIEM — WHEN TO USE WHICH
+════════════════════════════════════════════════════════════════════════════════
+
+┌────────────────────────────────┬─────────────────────┬─────────────────────┐
+│  USE CASE                      │  XDR / CASB (MDA)   │  SIEM (Sentinel)    │
+├────────────────────────────────┼─────────────────────┼─────────────────────┤
+│  Real-time session blocking    │       ✅            │       ❌            │
+│  "Block download on BYOD"      │                     │                     │
+├────────────────────────────────┼─────────────────────┼─────────────────────┤
+│  Shadow IT discovery           │       ✅            │       ❌            │
+│  "Find unsanctioned apps"      │                     │                     │
+├────────────────────────────────┼─────────────────────┼─────────────────────┤
+│  OAuth app governance          │       ✅            │       ⚠️ Limited    │
+│  "Risky third-party apps"      │                     │                     │
+├────────────────────────────────┼─────────────────────┼─────────────────────┤
+│  Behavioral anomaly detection  │       ✅            │       ✅            │
+│  "Impossible travel"           │   (Built-in ML)     │   (Custom rules)    │
+├────────────────────────────────┼─────────────────────┼─────────────────────┤
+│  Full audit log for forensics  │       ❌            │       ✅            │
+│  "Show all actions last week"  │                     │                     │
+├────────────────────────────────┼─────────────────────┼─────────────────────┤
+│  Compliance log retention      │       ❌            │       ✅            │
+│  "7-year retention for SOX"    │                     │                     │
+├────────────────────────────────┼─────────────────────┼─────────────────────┤
+│  Cross-platform correlation    │       ⚠️ XDR only  │       ✅            │
+│  "SaaS + on-prem + network"    │                     │                     │
+├────────────────────────────────┼─────────────────────┼─────────────────────┤
+│  Third-party SaaS visibility   │       ⚠️ Limited   │       ✅            │
+│  "Workday + SAP + Coupa"       │   (~30 apps)        │   (Any with API)    │
+├────────────────────────────────┼─────────────────────┼─────────────────────┤
+│  Custom detection logic        │       ⚠️ Basic     │       ✅            │
+│  "Complex multi-step rules"    │                     │   (Full KQL)        │
+└────────────────────────────────┴─────────────────────┴─────────────────────┘
+
+RECOMMENDATION: Use BOTH
+• CASB (MDA) for real-time controls and behavioral alerts on supported apps
+• SIEM (Sentinel) for full audit logs, forensics, and broader SaaS coverage</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 6: DATA FLOW ARCHITECTURE ==================== -->
+        <h2>6. Complete SaaS Security Data Flow</h2>
+
+        <div class="saas-flow">
+          <pre><code>COMPLETE SAAS SECURITY ARCHITECTURE
+════════════════════════════════════════════════════════════════════════════════
+
+                                    USERS
+                                      │
+                          ┌───────────┴───────────┐
+                          │                       │
+                          ▼                       ▼
+                   ┌─────────────┐         ┌─────────────┐
+                   │  MANAGED    │         │  UNMANAGED  │
+                   │  DEVICE     │         │  DEVICE     │
+                   └──────┬──────┘         └──────┬──────┘
+                          │                       │
+                          └───────────┬───────────┘
+                                      │
+                                      ▼
+                    ┌─────────────────────────────────────┐
+                    │           AZURE AD / ENTRA ID       │
+                    │           (Conditional Access)       │
+                    └─────────────────────────────────────┘
+                                      │
+                   ┌──────────────────┼──────────────────┐
+                   │                  │                  │
+                   ▼                  ▼                  ▼
+         ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
+         │   MICROSOFT     │ │   THIRD-PARTY   │ │   OTHER SAAS    │
+         │   365           │ │   SAAS (CASB)   │ │   (API Only)    │
+         ├─────────────────┤ ├─────────────────┤ ├─────────────────┤
+         │ Exchange        │ │ Salesforce      │ │ Workday         │
+         │ SharePoint      │ │ Box             │ │ SAP             │
+         │ Teams           │ │ ServiceNow      │ │ Custom Apps     │
+         │ OneDrive        │ │ Slack           │ │                 │
+         └────────┬────────┘ └────────┬────────┘ └────────┬────────┘
+                  │                   │                   │
+                  │                   │                   │
+    ┌─────────────┴───────────────────┴───────────────────┴─────────────┐
+    │                                                                    │
+    │                  DATA COLLECTION LAYER                             │
+    │                                                                    │
+    │  ┌────────────────────┐  ┌────────────────────┐  ┌──────────────┐ │
+    │  │ CASB (MDA)         │  │ NATIVE CONNECTORS  │  │ LOGIC APPS   │ │
+    │  │ • Behavioral alerts│  │ • OfficeActivity   │  │ • Custom API │ │
+    │  │ • Session controls │  │ • SigninLogs       │  │   ingestion  │ │
+    │  │ • OAuth governance │  │ • CloudAppEvents   │  │ • Workday    │ │
+    │  │                    │  │ • AuditLogs        │  │ • SAP logs   │ │
+    │  └─────────┬──────────┘  └─────────┬──────────┘  └──────┬───────┘ │
+    │            │                       │                    │         │
+    └────────────┼───────────────────────┼────────────────────┼─────────┘
+                 │                       │                    │
+                 ▼                       ▼                    ▼
+    ┌────────────────────────────────────────────────────────────────────┐
+    │                       MICROSOFT SENTINEL                            │
+    │                    (Log Analytics Workspace)                        │
+    │                                                                     │
+    │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌───────────┐│
+    │   │CloudAppEvents│  │OfficeActivity│  │ SigninLogs │  │CustomSaaS_CL│
+    │   └─────────────┘  └─────────────┘  └─────────────┘  └───────────┘│
+    │                                                                     │
+    │   ANALYTICS RULES                 WORKBOOKS                         │
+    │   • Impossible travel             • SaaS Activity Dashboard         │
+    │   • Mass download                 • OAuth App Inventory             │
+    │   • Suspicious OAuth grant        • User Risk Timeline              │
+    │   • Cross-SaaS exfiltration       • Compliance Reports              │
+    │                                                                     │
+    └─────────────────────────────────────┬───────────────────────────────┘
+                                          │
+                                          ▼
+                         ┌─────────────────────────────────────┐
+                         │           SECURITY OPERATIONS        │
+                         │                                      │
+                         │   • Unified incident investigation   │
+                         │   • Automated response (SOAR)        │
+                         │   • Threat hunting across SaaS       │
+                         │   • Compliance evidence              │
+                         └─────────────────────────────────────┘</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 7: INTERVIEW ANSWERS ==================== -->
+        <h2>7. Interview-Ready Answers</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "How do you monitor SaaS applications in your security architecture?"</span></div>
+          <pre><code>"I use a layered approach combining CASB and SIEM:
+
+LAYER 1: CASB (Microsoft Defender for Cloud Apps)
+Real-time behavioral monitoring and controls:
+• Session controls via Conditional Access App Control — block downloads 
+  on unmanaged devices, apply watermarks
+• Shadow IT discovery — analyze proxy logs to find unsanctioned apps
+• OAuth governance — monitor and control third-party app permissions
+• Built-in anomaly detection — impossible travel, mass downloads
+
+This works great for Microsoft 365 and the ~30 supported third-party 
+apps like Salesforce, Box, and ServiceNow.
+
+LAYER 2: SIEM (Sentinel) Full Audit Logs
+Complete visibility via API-based log collection:
+• OfficeActivity table for M365 audit logs
+• CloudAppEvents for MDA-connected apps
+• Custom connectors (Logic Apps) for SaaS without native support — 
+  Workday, SAP, custom apps
+• Full audit trail for forensics and compliance
+
+KEY DISTINCTION:
+CASB catches risky BEHAVIOR in real-time. SIEM provides the COMPLETE 
+PICTURE for investigation. They're complementary — CASB alerts tell 
+you something's wrong, SIEM logs tell you exactly what happened.
+
+For example: CASB alerts on 'mass download.' I pivot to Sentinel to 
+see exactly which files, correlate with sign-in location, check if 
+the same user accessed other SaaS apps, and build the full timeline."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "What's the difference between CASB and SIEM for SaaS?"</span></div>
+          <pre><code>"The key difference is BEHAVIORAL MONITORING vs AUDIT LOG COLLECTION.
+
+CASB (Defender for Cloud Apps):
+• Monitors PATTERNS — 'user is downloading a lot of files'
+• Provides CONTROLS — 'block download on BYOD'
+• Discovers SHADOW IT — 'employees are using Dropbox'
+• Governs OAUTH APPS — 'this app has risky permissions'
+• Limited to SUPPORTED APPS (~30 with full API integration)
+
+SIEM (Sentinel):
+• Collects EVERY EVENT — 'user downloaded file X at time Y'
+• Provides FULL AUDIT TRAIL — 'show me all actions for last 90 days'
+• Enables CUSTOM DETECTIONS — complex multi-condition rules in KQL
+• Supports COMPLIANCE — 7-year retention for SOX, HIPAA, etc.
+• Covers ANY SAAS with an API — not limited to CASB connectors
+
+Real-world example:
+CASB alert: 'Suspicious OAuth app granted Mail.Read permission'
+SIEM investigation: 
+  1. When was consent granted? (AuditLogs)
+  2. Which user granted it? (AuditLogs)
+  3. What did the app access? (OfficeActivity)
+  4. Did the app exfiltrate data? (CloudAppEvents)
+  5. Did the user's account show other signs of compromise? (SigninLogs)
+
+That full investigation requires SIEM data, not just the CASB alert."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "How do you collect logs from SaaS apps that don't have native Sentinel connectors?"</span></div>
+          <pre><code>"For SaaS apps without native connectors, I build custom integrations:
+
+1. IDENTIFY THE API
+   Most enterprise SaaS has an audit log API. For example:
+   • Workday: REST API for activity logs
+   • SAP SuccessFactors: OData API
+   • Coupa: Reporting API
+
+2. BUILD THE CONNECTOR
+   Option A: Logic App (low-code)
+   - Timer trigger (hourly)
+   - HTTP action to call SaaS API
+   - Parse JSON
+   - Send to Log Analytics via Data Collector API
+
+   Option B: Azure Function (more control)
+   - Python/PowerShell function
+   - Handle pagination, rate limits
+   - Transform to common schema
+   - Write to custom table (e.g., Workday_Audit_CL)
+
+3. DEFINE THE SCHEMA
+   I normalize fields to a common format:
+   - TimeGenerated, User, Action, Target, SourceIP, Result
+   - Makes cross-SaaS correlation easier
+
+4. BUILD DETECTIONS
+   Once logs are in Sentinel, I write analytics rules:
+   - 'Employee termination in Workday → check for data exfil in M365'
+   - 'New vendor in Coupa from unusual country'
+   - 'SAP role change outside change window'
+
+The key is treating SaaS logs like any other data source — 
+normalize, ingest, correlate, detect."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "What is OAuth abuse and how do you detect it?"</span></div>
+          <pre><code>"OAuth abuse is when attackers trick users into granting permissions 
+to malicious applications, giving them persistent access to corporate 
+data without needing credentials.
+
+HOW IT WORKS:
+1. Attacker creates a malicious app (or compromises a legitimate one)
+2. Sends phishing email: 'Click here to update your calendar'
+3. User clicks, sees OAuth consent prompt
+4. User clicks 'Allow' without reading permissions
+5. App now has Mail.Read, Files.ReadWrite, etc.
+6. Attacker exfiltrates data through the app's token
+
+WHY IT'S DANGEROUS:
+• Bypasses MFA — app token doesn't require re-authentication
+• Persists through password reset — token still valid
+• Legitimate traffic — app calls look like normal API usage
+• Hard to detect — no failed logins, no malware
+
+DETECTION (CASB + SIEM):
+
+CASB (Defender for Cloud Apps) — App Governance:
+• Alerts on high-risk OAuth apps
+• Shows apps with overprivileged permissions
+• Tracks dormant apps with broad access
+• One-click revoke
+
+SIEM (Sentinel) — Analytics Rules:
+// New OAuth app with sensitive permissions
+AuditLogs
+| where OperationName == 'Consent to application'
+| extend AppName = TargetResources[0].displayName
+| extend Permissions = TargetResources[0].modifiedProperties
+| where Permissions contains 'Mail.' or Permissions contains 'Files.'
+| project TimeGenerated, InitiatedBy.user.userPrincipalName, AppName
+
+// App accessing data outside business hours
+CloudAppEvents
+| where Application != 'Microsoft 365'
+| where ActionType contains 'FileDownload' or ActionType contains 'MailRead'
+| extend Hour = datetime_part('hour', TimeGenerated)
+| where Hour < 6 or Hour > 22
+
+RESPONSE:
+1. Revoke app permissions in Entra ID
+2. Revoke user sessions (force re-auth)
+3. Audit what data the app accessed
+4. Block app ID tenant-wide"</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 8: REVFLOW IMPLEMENTATION ==================== -->
+        <h2>8. RevFlow SaaS Security Implementation</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>SaaS Category</th><th>Applications</th><th>Collection Method</th><th>Detections</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Productivity</strong></td>
+                <td>Microsoft 365 (Exchange, SharePoint, Teams, OneDrive)</td>
+                <td>Native connector (OfficeActivity)</td>
+                <td>Mass download, external sharing, inbox rules</td>
+              </tr>
+              <tr>
+                <td><strong>Identity</strong></td>
+                <td>Azure AD / Entra ID</td>
+                <td>Native connector (SigninLogs, AuditLogs)</td>
+                <td>Impossible travel, risky sign-in, OAuth consent</td>
+              </tr>
+              <tr>
+                <td><strong>CRM</strong></td>
+                <td>Salesforce</td>
+                <td>MDA connector + Logic App for Event Logs</td>
+                <td>Mass export, login anomaly, API abuse</td>
+              </tr>
+              <tr>
+                <td><strong>ITSM</strong></td>
+                <td>ServiceNow</td>
+                <td>MDA connector + native Sentinel connector</td>
+                <td>Privilege escalation, sensitive record access</td>
+              </tr>
+              <tr>
+                <td><strong>HCM</strong></td>
+                <td>Workday</td>
+                <td>Custom Logic App (REST API)</td>
+                <td>Termination + access correlation, PII access</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud Infra</strong></td>
+                <td>AWS</td>
+                <td>Native connector (CloudTrail)</td>
+                <td>IAM changes, S3 exposure, unusual region</td>
+              </tr>
+              <tr>
+                <td><strong>DevOps</strong></td>
+                <td>GitHub Enterprise</td>
+                <td>Native connector</td>
+                <td>Public repo, secrets in code, unusual clone</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="cost-optimization.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Cost Optimization</span></a>
+          <a href="soc-transition.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">SOC Transition →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>
