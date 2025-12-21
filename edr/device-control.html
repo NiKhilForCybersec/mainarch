@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Device Control — USB & Removable Media | MDE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .policy-card { background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 8px; padding: 1.25rem; margin: 0.75rem 0; }
+    .policy-card h4 { margin: 0 0 0.75rem 0; }
+    .action-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .action-badge.allow { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+    .action-badge.audit { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+    .action-badge.block { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/device-control.html" class="nav-item active">Device Control</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">EDR Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Device Control</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Device Control — USB & Removable Media</h1>
+          <div class="page-header-meta">
+            <span class="page-badge edr">EDR Track</span>
+            <span class="page-reading-time">Data Protection</span>
+          </div>
+          <p class="intro-text">This page covers MDE Device Control — policies to manage USB drives, removable storage, printers, and Bluetooth devices. Prevent data exfiltration and malware introduction via physical media.</p>
+        </div>
+
+        <!-- ==================== SECTION 1: OVERVIEW ==================== -->
+        <h2>1. Device Control Overview</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>What is Device Control?</div>
+          <div class="callout-content">
+            <p><strong>Device Control</strong> = Granular policies to allow, audit, or block removable devices (USB, external drives, printers, Bluetooth). Part of MDE's data loss prevention capabilities.</p>
+          </div>
+        </div>
+
+        <p><strong>Key risks addressed:</strong></p>
+        <ul>
+          <li><strong>Data exfiltration:</strong> Users copying sensitive files to USB drives</li>
+          <li><strong>Malware introduction:</strong> Infected USB drives auto-running malware</li>
+          <li><strong>Unauthorized peripherals:</strong> Rogue devices connecting to corporate endpoints</li>
+          <li><strong>Compliance:</strong> Many standards require removable media controls</li>
+        </ul>
+
+        <h3>1.1 Device Types</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Device Type</th><th>Examples</th><th>Primary Risk</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Removable Storage</strong></td>
+                <td>USB flash drives, external HDDs/SSDs, SD cards</td>
+                <td>Data exfiltration, malware</td>
+              </tr>
+              <tr>
+                <td><strong>Portable Devices</strong></td>
+                <td>Smartphones, cameras, MP3 players</td>
+                <td>Data exfiltration via MTP/PTP</td>
+              </tr>
+              <tr>
+                <td><strong>Printers</strong></td>
+                <td>USB printers, network printers</td>
+                <td>Sensitive document printing</td>
+              </tr>
+              <tr>
+                <td><strong>Bluetooth</strong></td>
+                <td>Keyboards, mice, headsets, file transfer</td>
+                <td>Unauthorized data transfer, eavesdropping</td>
+              </tr>
+              <tr>
+                <td><strong>CD/DVD</strong></td>
+                <td>Optical drives</td>
+                <td>Data exfiltration, malware</td>
+              </tr>
+              <tr>
+                <td><strong>WPD (Windows Portable Devices)</strong></td>
+                <td>Media players, cameras</td>
+                <td>Data transfer via MTP protocol</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 2: POLICY STRUCTURE ==================== -->
+        <h2>2. Device Control Policy Structure</h2>
+
+        <p>MDE Device Control uses a hierarchical policy model:</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Policy Structure</span></div>
+          <pre><code>DEVICE CONTROL POLICY HIERARCHY
+════════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  GROUPS                                                                      │
+│  Define WHAT devices the policy applies to                                   │
+│  • By Vendor ID, Product ID                                                  │
+│  • By Device Class (Removable Storage, Printer, etc.)                        │
+│  • By Instance ID (specific device serial number)                            │
+│  • By Device properties (encrypted, unencrypted)                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  RULES                                                                       │
+│  Define WHAT ACTIONS to take                                                 │
+│  • Allow: Full access                                                        │
+│  • Audit Only: Log but don't block                                           │
+│  • Block Read: Prevent reading from device                                   │
+│  • Block Write: Prevent writing to device                                    │
+│  • Block Execute: Prevent running programs from device                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  POLICY                                                                      │
+│  Combines Groups + Rules + Deployment targets                                │
+│  • Deploy via Intune, GPO, or Defender portal                                │
+│  • Assign to device groups or users                                          │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+        </div>
+
+        <h3>2.1 Device Properties for Matching</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Device Identifiers</span></div>
+          <pre><code># How to identify devices for policies:
+
+VENDOR ID (VID):
+  Identifies manufacturer
+  Example: VID_0781 = SanDisk
+
+PRODUCT ID (PID):
+  Identifies specific product model
+  Example: PID_5567 = SanDisk Cruzer Blade
+
+INSTANCE ID:
+  Unique to specific device (includes serial number)
+  Example: USB\VID_0781&PID_5567\4C530001234567890
+
+DEVICE CLASS:
+  Category of device
+  • {53f56307-b6bf-11d0-94f2-00a0c91efb8b} = Disk drives
+  • {4d36e979-e325-11ce-bfc1-08002be10318} = Printers
+  • {e0cbf06c-cd8b-4647-bb8a-263b43f0f974} = Bluetooth
+
+# Find device info:
+# Device Manager → Device → Properties → Details → Hardware Ids</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 3: COMMON POLICIES ==================== -->
+        <h2>3. Common Device Control Policies</h2>
+
+        <div class="policy-card">
+          <h4>Policy 1: Block All Removable Storage (with Exceptions)</h4>
+          <p><span class="action-badge block">Block</span> Default deny, allow approved devices only</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">XML Policy</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>&lt;PolicyGroups&gt;
+  &lt;!-- Group 1: All removable storage devices --&gt;
+  &lt;Group Id="{all-removable}" Type="Device"&gt;
+    &lt;MatchType&gt;MatchAll&lt;/MatchType&gt;
+    &lt;DescriptorIdList&gt;
+      &lt;PrimaryId&gt;RemovableMediaDevices&lt;/PrimaryId&gt;
+    &lt;/DescriptorIdList&gt;
+  &lt;/Group&gt;
+  
+  &lt;!-- Group 2: Approved encrypted USB drives --&gt;
+  &lt;Group Id="{approved-usb}" Type="Device"&gt;
+    &lt;MatchType&gt;MatchAny&lt;/MatchType&gt;
+    &lt;DescriptorIdList&gt;
+      &lt;!-- Kingston IronKey --&gt;
+      &lt;VID_PID&gt;0951_16A2&lt;/VID_PID&gt;
+      &lt;!-- Apricorn Aegis --&gt;
+      &lt;VID_PID&gt;1B4F_9100&lt;/VID_PID&gt;
+    &lt;/DescriptorIdList&gt;
+  &lt;/Group&gt;
+&lt;/PolicyGroups&gt;
+
+&lt;PolicyRules&gt;
+  &lt;!-- Rule 1: Allow approved devices --&gt;
+  &lt;Rule Id="{allow-approved}"&gt;
+    &lt;IncludedIdList&gt;
+      &lt;GroupId&gt;{approved-usb}&lt;/GroupId&gt;
+    &lt;/IncludedIdList&gt;
+    &lt;Entry&gt;
+      &lt;Type&gt;Allow&lt;/Type&gt;
+      &lt;Options&gt;0&lt;/Options&gt;
+      &lt;AccessMask&gt;63&lt;/AccessMask&gt;
+    &lt;/Entry&gt;
+  &lt;/Rule&gt;
+  
+  &lt;!-- Rule 2: Block all other removable storage --&gt;
+  &lt;Rule Id="{block-all-removable}"&gt;
+    &lt;IncludedIdList&gt;
+      &lt;GroupId&gt;{all-removable}&lt;/GroupId&gt;
+    &lt;/IncludedIdList&gt;
+    &lt;ExcludedIdList&gt;
+      &lt;GroupId&gt;{approved-usb}&lt;/GroupId&gt;
+    &lt;/ExcludedIdList&gt;
+    &lt;Entry&gt;
+      &lt;Type&gt;Deny&lt;/Type&gt;
+      &lt;Options&gt;0&lt;/Options&gt;
+      &lt;AccessMask&gt;63&lt;/AccessMask&gt;
+    &lt;/Entry&gt;
+  &lt;/Rule&gt;
+&lt;/PolicyRules&gt;</code></pre>
+          </div>
+        </div>
+
+        <div class="policy-card">
+          <h4>Policy 2: Read-Only USB (Block Write)</h4>
+          <p><span class="action-badge audit">Block Write</span> Allow reading from USB, prevent data exfiltration</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">XML Policy</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>&lt;PolicyRules&gt;
+  &lt;Rule Id="{readonly-usb}"&gt;
+    &lt;IncludedIdList&gt;
+      &lt;GroupId&gt;{all-removable}&lt;/GroupId&gt;
+    &lt;/IncludedIdList&gt;
+    &lt;Entry&gt;
+      &lt;!-- Allow Read --&gt;
+      &lt;Type&gt;Allow&lt;/Type&gt;
+      &lt;AccessMask&gt;1&lt;/AccessMask&gt;  &lt;!-- Read only --&gt;
+    &lt;/Entry&gt;
+    &lt;Entry&gt;
+      &lt;!-- Block Write --&gt;
+      &lt;Type&gt;Deny&lt;/Type&gt;
+      &lt;AccessMask&gt;2&lt;/AccessMask&gt;  &lt;!-- Write --&gt;
+    &lt;/Entry&gt;
+    &lt;Entry&gt;
+      &lt;!-- Block Execute --&gt;
+      &lt;Type&gt;Deny&lt;/Type&gt;
+      &lt;AccessMask&gt;4&lt;/AccessMask&gt;  &lt;!-- Execute --&gt;
+    &lt;/Entry&gt;
+  &lt;/Rule&gt;
+&lt;/PolicyRules&gt;
+
+&lt;!-- Access Mask Values:
+  1 = Read
+  2 = Write  
+  4 = Execute
+  8 = File System Read
+  16 = File System Write
+  32 = File System Execute
+  63 = All (1+2+4+8+16+32)
+--&gt;</code></pre>
+          </div>
+        </div>
+
+        <div class="policy-card">
+          <h4>Policy 3: Audit Only (Monitor Before Blocking)</h4>
+          <p><span class="action-badge audit">Audit</span> Log all USB activity without blocking</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">XML Policy</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>&lt;PolicyRules&gt;
+  &lt;Rule Id="{audit-all-usb}"&gt;
+    &lt;IncludedIdList&gt;
+      &lt;GroupId&gt;{all-removable}&lt;/GroupId&gt;
+    &lt;/IncludedIdList&gt;
+    &lt;Entry&gt;
+      &lt;Type&gt;AuditAllowed&lt;/Type&gt;
+      &lt;Options&gt;2&lt;/Options&gt;  &lt;!-- Send event --&gt;
+      &lt;AccessMask&gt;63&lt;/AccessMask&gt;
+    &lt;/Entry&gt;
+  &lt;/Rule&gt;
+&lt;/PolicyRules&gt;
+
+&lt;!-- Options Values:
+  0 = None
+  1 = Show notification
+  2 = Send event to Defender
+  3 = Both notification and event
+--&gt;</code></pre>
+          </div>
+        </div>
+
+        <div class="policy-card">
+          <h4>Policy 4: Block Printers (Except Approved)</h4>
+          <p><span class="action-badge block">Block</span> Prevent printing to unauthorized printers</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">XML Policy</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>&lt;PolicyGroups&gt;
+  &lt;!-- All printers --&gt;
+  &lt;Group Id="{all-printers}" Type="Device"&gt;
+    &lt;DescriptorIdList&gt;
+      &lt;PrimaryId&gt;PrinterDevices&lt;/PrimaryId&gt;
+    &lt;/DescriptorIdList&gt;
+  &lt;/Group&gt;
+  
+  &lt;!-- Approved corporate printers --&gt;
+  &lt;Group Id="{approved-printers}" Type="Device"&gt;
+    &lt;DescriptorIdList&gt;
+      &lt;!-- HP LaserJet Enterprise --&gt;
+      &lt;VID_PID&gt;03F0_0853&lt;/VID_PID&gt;
+      &lt;!-- Canon ImageRunner --&gt;
+      &lt;VID_PID&gt;04A9_26B4&lt;/VID_PID&gt;
+    &lt;/DescriptorIdList&gt;
+  &lt;/Group&gt;
+&lt;/PolicyGroups&gt;
+
+&lt;PolicyRules&gt;
+  &lt;Rule Id="{allow-approved-printers}"&gt;
+    &lt;IncludedIdList&gt;
+      &lt;GroupId&gt;{approved-printers}&lt;/GroupId&gt;
+    &lt;/IncludedIdList&gt;
+    &lt;Entry&gt;
+      &lt;Type&gt;Allow&lt;/Type&gt;
+      &lt;AccessMask&gt;63&lt;/AccessMask&gt;
+    &lt;/Entry&gt;
+  &lt;/Rule&gt;
+  
+  &lt;Rule Id="{block-other-printers}"&gt;
+    &lt;IncludedIdList&gt;
+      &lt;GroupId&gt;{all-printers}&lt;/GroupId&gt;
+    &lt;/IncludedIdList&gt;
+    &lt;ExcludedIdList&gt;
+      &lt;GroupId&gt;{approved-printers}&lt;/GroupId&gt;
+    &lt;/ExcludedIdList&gt;
+    &lt;Entry&gt;
+      &lt;Type&gt;Deny&lt;/Type&gt;
+      &lt;Options&gt;3&lt;/Options&gt;  &lt;!-- Notify and log --&gt;
+      &lt;AccessMask&gt;63&lt;/AccessMask&gt;
+    &lt;/Entry&gt;
+  &lt;/Rule&gt;
+&lt;/PolicyRules&gt;</code></pre>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 4: DEPLOYMENT ==================== -->
+        <h2>4. Deployment via Intune</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Intune Configuration Profile</span></div>
+          <pre><code>1. Navigate to: Intune → Devices → Configuration profiles → Create
+
+2. Platform: Windows 10 and later
+
+3. Profile type: Settings catalog
+
+4. Search for: "Device Control"
+
+5. Configure settings:
+   
+   Device Installation:
+   • Prevent installation of removable devices: Enabled
+   • Allow installation of devices that match (Approved VID/PID list)
+   
+   Removable Storage Access:
+   • All Removable Storage: Deny
+   • All Removable Storage classes: Deny write access
+   
+   Or use Custom OMA-URI:
+   
+   OMA-URI: ./Vendor/MSFT/Defender/Configuration/DeviceControl/PolicyGroups
+   Data type: String (XML)
+   Value: [Paste PolicyGroups XML]
+   
+   OMA-URI: ./Vendor/MSFT/Defender/Configuration/DeviceControl/PolicyRules  
+   Data type: String (XML)
+   Value: [Paste PolicyRules XML]
+
+6. Assign to device groups</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 5: MONITORING ==================== -->
+        <h2>5. Monitoring Device Control Events</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Device Control Events in Advanced Hunting</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// All device control events
+DeviceEvents
+| where ActionType startswith "RemovableStorage" 
+    or ActionType startswith "Printer"
+| project Timestamp, DeviceName, ActionType, 
+          FileName, FolderPath, InitiatingProcessFileName,
+          AdditionalFields
+| order by Timestamp desc
+
+// Blocked USB attempts
+DeviceEvents
+| where ActionType == "RemovableStoragePolicyTriggered"
+| extend PolicyDetails = parse_json(AdditionalFields)
+| where PolicyDetails.PolicyVerdict == "Denied"
+| project Timestamp, DeviceName, 
+          USBProduct = PolicyDetails.ProductName,
+          USBVendor = PolicyDetails.VendorName,
+          SerialNumber = PolicyDetails.SerialNumber,
+          User = InitiatingProcessAccountName
+
+// USB file copy activity (for audit mode)
+DeviceEvents  
+| where ActionType == "RemovableStorageFileEvent"
+| extend Details = parse_json(AdditionalFields)
+| project Timestamp, DeviceName, 
+          Operation = Details.Operation,
+          FileName = Details.TargetFileName,
+          USBDevice = Details.ProductName,
+          User = InitiatingProcessAccountName</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 6: INTERVIEW ==================== -->
+        <h2>6. Interview-Ready Answer</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "How do you handle USB device control?"</span></div>
+          <pre><code>"I use MDE Device Control to manage removable media with a 
+risk-based approach:
+
+POLICY STRATEGY:
+Default deny with exceptions. All removable storage is blocked 
+except for approved encrypted drives (Kingston IronKey, Apricorn). 
+This prevents data exfiltration while allowing legitimate use.
+
+IMPLEMENTATION:
+1. Started with Audit mode to understand usage patterns
+2. Identified legitimate business needs (encrypted drives for field staff)
+3. Created approved device list by Vendor ID + Product ID
+4. Deployed block policy with exceptions
+5. Custom notification: "USB blocked - request exception via IT"
+
+MONITORING:
+Advanced Hunting queries track:
+• Blocked attempts (potential policy violations)
+• Approved device usage (audit trail)
+• New device types appearing
+
+RESULTS:
+• Zero data exfiltration incidents via USB
+• 95% reduction in USB malware alerts
+• Clear exception process for legitimate needs
+• Compliance with SOC 2 removable media controls
+
+Key lesson: Always audit first. We found several legitimate use cases 
+we would have broken if we'd blocked immediately."</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="asr-rules.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← ASR Rules</span></a>
+          <a href="coexistence.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Coexistence Strategy →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

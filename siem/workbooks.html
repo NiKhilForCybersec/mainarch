@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workbooks & Dashboards — Security Operations Visualization | SIEM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .workbook-card { background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 8px; padding: 1.25rem; margin: 0.75rem 0; }
+    .workbook-card h4 { margin: 0 0 0.75rem 0; }
+    .audience-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; margin-left: 0.5rem; }
+    .audience-badge.soc { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+    .audience-badge.exec { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; }
+    .audience-badge.eng { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+    .viz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0; }
+    .viz-card { background: var(--bg-tertiary); border-radius: 8px; padding: 1rem; text-align: center; }
+    .viz-card .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="../siem/workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
+          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR & Automation</a>
+          <a href="../siem/workbooks.html" class="nav-item active">Workbooks & Dashboards</a>
+          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">SIEM Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Workbooks & Dashboards</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Workbooks & Dashboards</h1>
+          <div class="page-header-meta">
+            <span class="page-badge siem">SIEM Track</span>
+            <span class="page-reading-time">Visualization</span>
+          </div>
+          <p class="intro-text">Sentinel Workbooks provide interactive dashboards for security operations, executive reporting, and compliance. This page covers workbook architecture, common templates, and custom visualizations.</p>
+        </div>
+
+        <!-- ==================== SECTION 1: OVERVIEW ==================== -->
+        <h2>1. Sentinel Workbooks Overview</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>What are Workbooks?</div>
+          <div class="callout-content">
+            <p><strong>Workbooks</strong> = Interactive, customizable dashboards built on Azure Monitor Workbooks. Combine KQL queries, visualizations, and parameters into shareable reports.</p>
+          </div>
+        </div>
+
+        <div class="viz-grid">
+          <div class="viz-card">
+            <div class="icon">📊</div>
+            <strong>Charts</strong>
+            <p style="font-size: 0.85rem;">Line, bar, pie, area, scatter</p>
+          </div>
+          <div class="viz-card">
+            <div class="icon">📋</div>
+            <strong>Tables</strong>
+            <p style="font-size: 0.85rem;">Sortable, filterable grids</p>
+          </div>
+          <div class="viz-card">
+            <div class="icon">🗺️</div>
+            <strong>Maps</strong>
+            <p style="font-size: 0.85rem;">Geographic visualizations</p>
+          </div>
+          <div class="viz-card">
+            <div class="icon">🔢</div>
+            <strong>Tiles</strong>
+            <p style="font-size: 0.85rem;">KPI metrics and counts</p>
+          </div>
+          <div class="viz-card">
+            <div class="icon">📝</div>
+            <strong>Text</strong>
+            <p style="font-size: 0.85rem;">Markdown documentation</p>
+          </div>
+          <div class="viz-card">
+            <div class="icon">🎛️</div>
+            <strong>Parameters</strong>
+            <p style="font-size: 0.85rem;">Dynamic filters and inputs</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 2: WORKBOOK CATALOG ==================== -->
+        <h2>2. RevFlow Workbook Catalog</h2>
+
+        <div class="workbook-card">
+          <h4>SOC Operations Dashboard <span class="audience-badge soc">SOC Team</span></h4>
+          <p><strong>Purpose:</strong> Real-time operational visibility for SOC analysts</p>
+          <p><strong>Key metrics:</strong></p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>Open incidents by severity (tile cards)</li>
+            <li>Incidents created today/week (trend chart)</li>
+            <li>Mean Time to Acknowledge (MTTA)</li>
+            <li>Mean Time to Resolve (MTTR)</li>
+            <li>Incidents by analyst (workload distribution)</li>
+            <li>Top triggered analytics rules</li>
+            <li>Automation success rate</li>
+          </ul>
+          <p><strong>Refresh:</strong> Auto-refresh every 5 minutes</p>
+        </div>
+
+        <div class="workbook-card">
+          <h4>Executive Security Summary <span class="audience-badge exec">Leadership</span></h4>
+          <p><strong>Purpose:</strong> Monthly security posture report for CISO and executives</p>
+          <p><strong>Key metrics:</strong></p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>Total incidents (month-over-month trend)</li>
+            <li>Incidents by severity breakdown</li>
+            <li>Top attack techniques (MITRE ATT&CK)</li>
+            <li>Mean Time to Detect (MTTD)</li>
+            <li>Mean Time to Respond (MTTR)</li>
+            <li>Coverage metrics (% endpoints protected)</li>
+            <li>Compliance score trend</li>
+          </ul>
+          <p><strong>Format:</strong> Exportable to PDF for board presentations</p>
+        </div>
+
+        <div class="workbook-card">
+          <h4>Threat Intelligence Report <span class="audience-badge eng">Security Engineering</span></h4>
+          <p><strong>Purpose:</strong> Visibility into TI indicator matches and effectiveness</p>
+          <p><strong>Key metrics:</strong></p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>TI indicators by type (IP, domain, hash, URL)</li>
+            <li>TI matches over time (trend)</li>
+            <li>Top matched indicators</li>
+            <li>TI source effectiveness (which feeds produce matches)</li>
+            <li>Devices with most TI matches</li>
+            <li>Geographic distribution of malicious IPs</li>
+          </ul>
+        </div>
+
+        <div class="workbook-card">
+          <h4>Identity & Access Monitoring <span class="audience-badge soc">SOC Team</span></h4>
+          <p><strong>Purpose:</strong> Monitor authentication events and identity threats</p>
+          <p><strong>Key metrics:</strong></p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>Sign-in activity by location (map)</li>
+            <li>Failed sign-ins (trend and top users)</li>
+            <li>Risky sign-ins from Entra ID Protection</li>
+            <li>MFA registration and usage</li>
+            <li>Privileged account activity</li>
+            <li>Conditional Access policy hits</li>
+          </ul>
+        </div>
+
+        <div class="workbook-card">
+          <h4>Data Ingestion & Health <span class="audience-badge eng">Security Engineering</span></h4>
+          <p><strong>Purpose:</strong> Monitor data sources, ingestion volume, and connector health</p>
+          <p><strong>Key metrics:</strong></p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>Ingestion volume by table (GB/day)</li>
+            <li>Ingestion trend (cost forecasting)</li>
+            <li>Data freshness (latency per source)</li>
+            <li>Connector health status</li>
+            <li>Top data sources by volume</li>
+            <li>Anomalies in ingestion (sudden drops/spikes)</li>
+          </ul>
+        </div>
+
+        <!-- ==================== SECTION 3: BUILDING WORKBOOKS ==================== -->
+        <h2>3. Building Custom Workbooks</h2>
+
+        <h3>3.1 Workbook Structure</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Workbook Architecture</span></div>
+          <pre><code>WORKBOOK STRUCTURE
+════════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  PARAMETERS (Top of workbook)                                               │
+│  • Time range picker (TimeRange)                                            │
+│  • Subscription/Workspace selector                                          │
+│  • Custom filters (severity, status, etc.)                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  GROUPS (Collapsible sections)                                              │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  Overview Section                                                    │   │
+│  │  • Tile metrics (KPIs)                                               │   │
+│  │  • Summary charts                                                    │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  Detail Section                                                      │   │
+│  │  • Tables with drill-down                                            │   │
+│  │  • Trend charts                                                      │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  Analysis Section                                                    │   │
+│  │  • Deep-dive visualizations                                          │   │
+│  │  • Maps, heatmaps                                                    │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+        </div>
+
+        <h3>3.2 Common KQL Patterns for Workbooks</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Incident Metrics (Tile Cards)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Open incidents by severity — use for tile visualization
+SecurityIncident
+| where TimeGenerated > ago(30d)
+| where Status != "Closed"
+| summarize 
+    Critical = countif(Severity == "High"),
+    High = countif(Severity == "Medium"),
+    Medium = countif(Severity == "Low"),
+    Low = countif(Severity == "Informational"),
+    Total = count()</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Incident Trend (Time Chart)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Incidents over time by severity
+SecurityIncident
+| where TimeGenerated > ago(30d)
+| summarize Count = count() by bin(TimeGenerated, 1d), Severity
+| render timechart</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — MTTD and MTTR Calculation</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Mean Time to Detect (MTTD) and Mean Time to Respond (MTTR)
+SecurityIncident
+| where TimeGenerated > ago(30d)
+| where Status == "Closed"
+| extend 
+    FirstActivityTime = todatetime(AdditionalData.firstActivityTimeUtc),
+    ClosedTime = ClosedTime
+| extend 
+    TimeToDetect = datetime_diff('minute', TimeGenerated, FirstActivityTime),
+    TimeToRespond = datetime_diff('minute', ClosedTime, TimeGenerated)
+| summarize 
+    MTTD_Minutes = avg(TimeToDetect),
+    MTTR_Minutes = avg(TimeToRespond),
+    MTTD_Hours = round(avg(TimeToDetect) / 60, 1),
+    MTTR_Hours = round(avg(TimeToRespond) / 60, 1)</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Top Analytics Rules</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Most triggered analytics rules
+SecurityIncident
+| where TimeGenerated > ago(30d)
+| mv-expand AlertIds
+| join kind=leftouter (
+    SecurityAlert
+    | project AlertId = SystemAlertId, AlertName
+) on $left.AlertIds == $right.AlertId
+| summarize IncidentCount = dcount(IncidentNumber) by AlertName
+| top 10 by IncidentCount desc
+| render barchart</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Sign-in Locations (Map)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Sign-in activity by location — use for Map visualization
+SigninLogs
+| where TimeGenerated > ago(7d)
+| where ResultType == 0  // Successful
+| summarize SignIns = count() by 
+    Location = strcat(LocationDetails.city, ", ", LocationDetails.countryOrRegion),
+    Latitude = toreal(LocationDetails.geoCoordinates.latitude),
+    Longitude = toreal(LocationDetails.geoCoordinates.longitude)
+| where isnotempty(Latitude)</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Data Ingestion Volume</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Ingestion volume by table (for cost monitoring)
+Usage
+| where TimeGenerated > ago(30d)
+| where IsBillable == true
+| summarize TotalGB = sum(Quantity) / 1000 by DataType
+| top 20 by TotalGB desc
+| render piechart</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 4: PARAMETERS ==================== -->
+        <h2>4. Using Parameters</h2>
+
+        <p>Parameters make workbooks interactive and reusable:</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Parameter Examples</span></div>
+          <pre><code># TIME RANGE PARAMETER
+Type: Time range picker
+Name: TimeRange
+Default: Last 7 days
+Usage in query: | where TimeGenerated {TimeRange}
+
+# DROPDOWN PARAMETER — Severity Filter
+Type: Dropdown
+Name: SeverityFilter
+Query: 
+  SecurityIncident
+  | distinct Severity
+  | order by Severity
+Allow multiple: Yes
+Usage in query: | where Severity in ({SeverityFilter})
+
+# TEXT PARAMETER — User Search
+Type: Text
+Name: UserSearch
+Default: *
+Usage in query: | where UserPrincipalName contains "{UserSearch}"
+
+# SUBSCRIPTION PARAMETER
+Type: Subscription picker
+Name: Subscription
+Usage: Scope queries to selected subscription</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Query Using Parameters</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Query with TimeRange and Severity parameters
+SecurityIncident
+| where TimeGenerated {TimeRange}
+| where Severity in ({SeverityFilter}) or '{SeverityFilter}' == '*'
+| summarize Count = count() by bin(TimeGenerated, 1d), Severity
+| render timechart</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 5: EXECUTIVE REPORTING ==================== -->
+        <h2>5. Executive Reporting Workbook</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Monthly Executive Summary Queries</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// ═══════════════════════════════════════════════════════════════════════════
+// EXECUTIVE DASHBOARD QUERIES
+// ═══════════════════════════════════════════════════════════════════════════
+
+// 1. HEADLINE METRICS (Tiles)
+let CurrentMonth = startofmonth(now());
+let PreviousMonth = startofmonth(datetime_add('month', -1, now()));
+SecurityIncident
+| where TimeGenerated >= PreviousMonth
+| summarize 
+    CurrentMonthIncidents = countif(TimeGenerated >= CurrentMonth),
+    PreviousMonthIncidents = countif(TimeGenerated < CurrentMonth),
+    CriticalIncidents = countif(Severity == "High" and TimeGenerated >= CurrentMonth)
+| extend MonthOverMonthChange = round(100.0 * (CurrentMonthIncidents - PreviousMonthIncidents) / PreviousMonthIncidents, 1)
+
+// 2. MITRE ATT&CK COVERAGE
+SecurityIncident
+| where TimeGenerated > ago(30d)
+| mv-expand tactic = AdditionalData.tactics
+| summarize IncidentCount = count() by tostring(tactic)
+| top 10 by IncidentCount desc
+| render barchart with (title="Top Attack Techniques")
+
+// 3. SECURITY POSTURE SCORE
+// Combine multiple metrics into composite score
+let EndpointCoverage = toscalar(
+    DeviceInfo
+    | where TimeGenerated > ago(1d)
+    | summarize Onboarded = dcountif(DeviceId, OnboardingStatus == "Onboarded"),
+                Total = dcount(DeviceId)
+    | extend Coverage = 100.0 * Onboarded / Total
+    | project Coverage
+);
+let IncidentResolutionRate = toscalar(
+    SecurityIncident
+    | where TimeGenerated > ago(30d)
+    | summarize Closed = countif(Status == "Closed"), Total = count()
+    | extend Rate = 100.0 * Closed / Total
+    | project Rate
+);
+print EndpointCoverage = EndpointCoverage,
+      IncidentResolution = IncidentResolutionRate,
+      CompositeScore = (EndpointCoverage + IncidentResolutionRate) / 2
+
+// 4. TREND ANALYSIS
+SecurityIncident
+| where TimeGenerated > ago(90d)
+| summarize Count = count() by bin(TimeGenerated, 7d)
+| render timechart with (title="Weekly Incident Trend (90 days)")</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 6: INTERVIEW ==================== -->
+        <h2>6. Interview-Ready Answer</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "How do you build security dashboards for different audiences?"</span></div>
+          <pre><code>"I design dashboards with the audience in mind — different stakeholders 
+need different views of the same data.
+
+SOC OPERATIONS DASHBOARD:
+Real-time focus. Shows open incidents by severity (tile cards with 
+red/yellow/green), incident queue sorted by priority, MTTA metrics, 
+analyst workload distribution. Auto-refreshes every 5 minutes. 
+Actionable — analysts can click through to incidents.
+
+Key KQL pattern:
+  SecurityIncident | where Status != 'Closed' | summarize by Severity
+
+EXECUTIVE DASHBOARD:
+Monthly cadence. Trends over time, month-over-month comparisons, 
+high-level KPIs: total incidents, MTTD/MTTR, compliance score. 
+No technical jargon. Exportable to PDF for board meetings.
+
+Key KQL pattern:
+  SecurityIncident | summarize by bin(TimeGenerated, 1d) | render timechart
+
+ENGINEERING DASHBOARD:
+Focuses on system health: data ingestion volumes, connector status, 
+detection rule effectiveness, false positive rates. Helps me tune 
+the platform.
+
+Key features I always include:
+1. PARAMETERS — Time range picker and filters make workbooks reusable
+2. DRILL-DOWN — Click a chart bar to see underlying incidents
+3. CONTEXT — Markdown sections explaining what metrics mean
+4. EXPORT — PDF export for offline sharing
+
+At RevFlow, I built 5 workbooks covering SOC ops, executive summary, 
+identity monitoring, data health, and threat intelligence. The executive 
+workbook reduced monthly reporting time from 4 hours to 15 minutes."</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="soar-automation.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← SOAR & Automation</span></a>
+          <a href="cost-optimization.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Cost Optimization →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

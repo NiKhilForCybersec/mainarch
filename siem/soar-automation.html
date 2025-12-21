@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOAR & Automation — Sentinel Playbooks | SIEM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .playbook-card { background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 8px; padding: 1.25rem; margin: 0.75rem 0; }
+    .playbook-card h4 { margin: 0 0 0.75rem 0; display: flex; align-items: center; gap: 0.5rem; }
+    .trigger-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+    .trigger-badge.incident { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+    .trigger-badge.alert { background: rgba(249, 115, 22, 0.2); color: #fdba74; }
+    .trigger-badge.scheduled { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+    .trigger-badge.entity { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+    .flow-diagram { background: var(--bg-tertiary); padding: 1.5rem; border-radius: 8px; margin: 1rem 0; overflow-x: auto; }
+    .action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0; }
+    .action-card { background: var(--bg-tertiary); border-radius: 8px; padding: 1rem; }
+    .action-card h5 { margin: 0 0 0.5rem 0; color: #3b82f6; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="../siem/workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
+          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="../siem/soar-automation.html" class="nav-item active">SOAR & Automation</a>
+          <a href="../siem/workbooks.html" class="nav-item">Workbooks & Dashboards</a>
+          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">SIEM Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">SOAR & Automation</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>SOAR & Automation — Sentinel Playbooks</h1>
+          <div class="page-header-meta">
+            <span class="page-badge siem">SIEM Track</span>
+            <span class="page-reading-time">Automation</span>
+          </div>
+          <p class="intro-text">This page covers Security Orchestration, Automation, and Response (SOAR) in Microsoft Sentinel — Logic Apps playbooks, automation rules, and common response patterns that reduce MTTR and analyst workload.</p>
+        </div>
+
+        <!-- ==================== SECTION 1: SOAR OVERVIEW ==================== -->
+        <h2>1. SOAR in Microsoft Sentinel</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>What is SOAR?</div>
+          <div class="callout-content">
+            <p><strong>SOAR</strong> = Security Orchestration, Automation, and Response</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Orchestration:</strong> Connect multiple security tools and data sources</li>
+              <li><strong>Automation:</strong> Execute repetitive tasks without human intervention</li>
+              <li><strong>Response:</strong> Take containment/remediation actions automatically</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>1.1 Sentinel SOAR Components</h3>
+
+        <div class="flow-diagram">
+          <pre><code>SENTINEL SOAR ARCHITECTURE
+════════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           AUTOMATION RULES                                   │
+│  • Trigger on incident creation/update                                       │
+│  • Run playbooks automatically                                               │
+│  • Modify incidents (assign, change severity, add tags)                      │
+│  • No-code, runs before playbooks                                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              PLAYBOOKS                                       │
+│  • Built on Azure Logic Apps                                                 │
+│  • Full automation workflows                                                 │
+│  • 400+ connectors (Microsoft, third-party)                                  │
+│  • Custom code via Azure Functions                                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+              ┌───────────────────────┼───────────────────────┐
+              ▼                       ▼                       ▼
+┌─────────────────────┐ ┌─────────────────────┐ ┌─────────────────────┐
+│   ENRICHMENT        │ │   CONTAINMENT       │ │   NOTIFICATION      │
+│   • Get user info   │ │   • Isolate host    │ │   • Send email      │
+│   • Check TI feeds  │ │   • Disable account │ │   • Teams message   │
+│   • Query CMDB      │ │   • Block IP        │ │   • ServiceNow      │
+│   • Lookup VirusTotal│ │   • Revoke sessions │ │   • PagerDuty       │
+└─────────────────────┘ └─────────────────────┘ └─────────────────────┘</code></pre>
+        </div>
+
+        <h3>1.2 Automation Rules vs Playbooks</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Aspect</th><th>Automation Rules</th><th>Playbooks (Logic Apps)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Complexity</strong></td>
+                <td>Simple, no-code</td>
+                <td>Complex workflows</td>
+              </tr>
+              <tr>
+                <td><strong>Triggers</strong></td>
+                <td>Incident created/updated only</td>
+                <td>Incident, alert, entity, scheduled, manual</td>
+              </tr>
+              <tr>
+                <td><strong>Actions</strong></td>
+                <td>Modify incident, run playbook</td>
+                <td>Any — API calls, integrations, custom code</td>
+              </tr>
+              <tr>
+                <td><strong>Use case</strong></td>
+                <td>Auto-assign, change severity, tag, suppress</td>
+                <td>Enrichment, containment, notifications</td>
+              </tr>
+              <tr>
+                <td><strong>Execution</strong></td>
+                <td>Runs first, before playbooks</td>
+                <td>Runs after automation rules (if triggered by rule)</td>
+              </tr>
+              <tr>
+                <td><strong>Cost</strong></td>
+                <td>Free (included with Sentinel)</td>
+                <td>Logic Apps consumption pricing</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 2: PLAYBOOK TRIGGERS ==================== -->
+        <h2>2. Playbook Trigger Types</h2>
+
+        <div class="action-grid">
+          <div class="action-card">
+            <h5><span class="trigger-badge incident">Incident Trigger</span></h5>
+            <p><strong>When:</strong> Incident is created or updated</p>
+            <p><strong>Data available:</strong> Incident details, entities, alerts, analytics rule</p>
+            <p><strong>Use for:</strong> Enrichment, triage, notifications, containment</p>
+            <p><strong>Example:</strong> When high-severity incident created, isolate affected host</p>
+          </div>
+          <div class="action-card">
+            <h5><span class="trigger-badge alert">Alert Trigger</span></h5>
+            <p><strong>When:</strong> Alert is generated (before incident grouping)</p>
+            <p><strong>Data available:</strong> Alert details, entities</p>
+            <p><strong>Use for:</strong> Per-alert processing, immediate response</p>
+            <p><strong>Example:</strong> On malware alert, immediately check hash in VirusTotal</p>
+          </div>
+          <div class="action-card">
+            <h5><span class="trigger-badge entity">Entity Trigger</span></h5>
+            <p><strong>When:</strong> Run manually on specific entity</p>
+            <p><strong>Data available:</strong> Entity (IP, user, host, file hash, etc.)</p>
+            <p><strong>Use for:</strong> On-demand investigation actions</p>
+            <p><strong>Example:</strong> Right-click IP → "Block in Firewall"</p>
+          </div>
+          <div class="action-card">
+            <h5><span class="trigger-badge scheduled">Scheduled/Manual</span></h5>
+            <p><strong>When:</strong> On schedule or manual trigger</p>
+            <p><strong>Data available:</strong> Query results, parameters</p>
+            <p><strong>Use for:</strong> Reports, maintenance, batch processing</p>
+            <p><strong>Example:</strong> Daily report of unassigned incidents</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 3: COMMON PLAYBOOK PATTERNS ==================== -->
+        <h2>3. Common Playbook Patterns</h2>
+
+        <div class="playbook-card">
+          <h4>🔴 Isolate Host (MDE)</h4>
+          <p><strong>Trigger:</strong> Incident with high severity + endpoint entity</p>
+          <p><strong>Actions:</strong></p>
+          <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>Extract device entity from incident</li>
+            <li>Call MDE API: Isolate machine</li>
+            <li>Add comment to incident: "Host isolated automatically"</li>
+            <li>Send Teams notification to SOC channel</li>
+          </ol>
+          <div class="code-block" style="margin-top: 0.75rem;">
+            <div class="code-header"><span class="code-lang">Logic App — MDE Isolate Host</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Trigger: When Microsoft Sentinel incident creation rule was triggered
+
+// Action 1: Parse entities from incident
+Entities → Filter array → Where type equals "Host"
+
+// Action 2: For each host entity
+For_Each_Host:
+  // Get MDE device ID
+  HTTP POST: https://api.securitycenter.microsoft.com/api/machines/find
+  Body: { "Hostname": "@{items('For_Each_Host')?['HostName']}" }
+  
+  // Isolate the device
+  HTTP POST: https://api.securitycenter.microsoft.com/api/machines/@{DeviceId}/isolate
+  Body: {
+    "Comment": "Isolated via Sentinel playbook - Incident @{triggerBody()?['object']?['properties']?['incidentNumber']}",
+    "IsolationType": "Full"  // or "Selective"
+  }
+
+// Action 3: Update incident
+Add comment to incident: "Device @{HostName} isolated automatically at @{utcNow()}"
+
+// Action 4: Notify
+Post message to Teams:
+  Channel: SOC-Alerts
+  Message: "🔴 Host Isolated: @{HostName} due to incident #@{IncidentNumber}"</code></pre>
+          </div>
+        </div>
+
+        <div class="playbook-card">
+          <h4>🟡 Disable User Account (Entra ID)</h4>
+          <p><strong>Trigger:</strong> Incident indicating compromised account</p>
+          <p><strong>Actions:</strong></p>
+          <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>Extract account entity from incident</li>
+            <li>Revoke all refresh tokens</li>
+            <li>Disable user account</li>
+            <li>Reset password (optional)</li>
+            <li>Notify user's manager</li>
+          </ol>
+          <div class="code-block" style="margin-top: 0.75rem;">
+            <div class="code-header"><span class="code-lang">Logic App — Disable Compromised User</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Trigger: When Microsoft Sentinel incident creation rule was triggered
+
+// Action 1: Get account entities
+Parse JSON → Filter where type equals "Account"
+
+// Action 2: For each account
+For_Each_Account:
+  // Get user from Graph API
+  HTTP GET: https://graph.microsoft.com/v1.0/users/@{UPN}
+  
+  // Revoke sessions (forces re-authentication)
+  HTTP POST: https://graph.microsoft.com/v1.0/users/@{UserId}/revokeSignInSessions
+  
+  // Disable account
+  HTTP PATCH: https://graph.microsoft.com/v1.0/users/@{UserId}
+  Body: { "accountEnabled": false }
+  
+  // Get manager for notification
+  HTTP GET: https://graph.microsoft.com/v1.0/users/@{UserId}/manager
+
+// Action 3: Update incident with actions taken
+Add comment: "User @{UPN} disabled, sessions revoked at @{utcNow()}"
+
+// Action 4: Notify manager
+Send email:
+  To: @{ManagerEmail}
+  Subject: "Security Alert: @{UPN} account disabled"
+  Body: "Your direct report's account has been disabled due to suspected compromise..."</code></pre>
+          </div>
+        </div>
+
+        <div class="playbook-card">
+          <h4>🟠 Block IP in Firewall</h4>
+          <p><strong>Trigger:</strong> Entity trigger (right-click IP in investigation)</p>
+          <p><strong>Actions:</strong></p>
+          <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>Validate IP is external (not internal range)</li>
+            <li>Check if already blocked</li>
+            <li>Add to firewall block list (Palo Alto, Azure Firewall, etc.)</li>
+            <li>Add to Sentinel watchlist for tracking</li>
+          </ol>
+          <div class="code-block" style="margin-top: 0.75rem;">
+            <div class="code-header"><span class="code-lang">Logic App — Block IP (Azure Firewall)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Trigger: When a response to a Microsoft Sentinel alert is triggered (Entity: IP)
+
+// Action 1: Validate IP is not internal
+Condition: 
+  NOT startsWith(IP, '10.')
+  AND NOT startsWith(IP, '192.168.')
+  AND NOT startsWith(IP, '172.16.')
+
+// If internal → terminate with "Cannot block internal IP"
+
+// Action 2: Add to Azure Firewall IP Group
+HTTP PUT: https://management.azure.com/subscriptions/@{SubscriptionId}/resourceGroups/@{RG}/providers/Microsoft.Network/ipGroups/BlockedIPs?api-version=2023-05-01
+Body: {
+  "properties": {
+    "ipAddresses": ["@{IP}"]  // Append to existing
+  }
+}
+
+// Action 3: Add to Sentinel Watchlist
+HTTP POST: Sentinel API - Add watchlist item
+{
+  "properties": {
+    "itemsKeyValue": {
+      "IPAddress": "@{IP}",
+      "BlockedDate": "@{utcNow()}",
+      "BlockedBy": "Playbook",
+      "IncidentId": "@{IncidentId}"
+    }
+  }
+}
+
+// Action 4: Confirm action
+Response: "IP @{IP} blocked in Azure Firewall and added to watchlist"</code></pre>
+          </div>
+        </div>
+
+        <div class="playbook-card">
+          <h4>🟢 Enrichment — Get User Context</h4>
+          <p><strong>Trigger:</strong> Any incident with account entity</p>
+          <p><strong>Actions:</strong></p>
+          <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>Get user details from Entra ID</li>
+            <li>Get user's recent sign-in activity</li>
+            <li>Get user's group memberships (is admin?)</li>
+            <li>Check if user is VIP/executive</li>
+            <li>Add enrichment as incident comment</li>
+          </ol>
+          <div class="code-block" style="margin-top: 0.75rem;">
+            <div class="code-header"><span class="code-lang">Logic App — Enrich User Entity</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Trigger: When Microsoft Sentinel incident creation rule was triggered
+
+// Action 1: Get user details
+HTTP GET: https://graph.microsoft.com/v1.0/users/@{UPN}?$select=displayName,department,jobTitle,manager,accountEnabled
+
+// Action 2: Get group memberships
+HTTP GET: https://graph.microsoft.com/v1.0/users/@{UserId}/memberOf
+
+// Action 3: Check if privileged
+Condition: Groups contains "Global Administrators" OR "Domain Admins"
+  → Set variable: IsPrivileged = true
+
+// Action 4: Get recent sign-ins
+HTTP GET: https://graph.microsoft.com/v1.0/auditLogs/signIns?$filter=userId eq '@{UserId}'&$top=10
+
+// Action 5: Check VIP watchlist
+Run query: 
+  _GetWatchlist('VIP_Users') | where UPN == "@{UPN}"
+
+// Action 6: Build enrichment comment
+Set variable: EnrichmentComment = 
+"=== USER ENRICHMENT ===
+Name: @{DisplayName}
+Title: @{JobTitle}
+Department: @{Department}
+Manager: @{ManagerName}
+Account Enabled: @{AccountEnabled}
+Is Privileged: @{IsPrivileged}
+Is VIP: @{IsVIP}
+
+Recent Sign-ins:
+@{RecentSignIns}
+========================"
+
+// Action 7: Add to incident
+Add comment to incident: @{EnrichmentComment}
+
+// Action 8: Increase severity if privileged or VIP
+Condition: IsPrivileged OR IsVIP
+  → Update incident severity to "High"</code></pre>
+          </div>
+        </div>
+
+        <div class="playbook-card">
+          <h4>🔵 Create ServiceNow Ticket</h4>
+          <p><strong>Trigger:</strong> High/Critical severity incidents</p>
+          <p><strong>Actions:</strong></p>
+          <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>Extract incident details</li>
+            <li>Map severity to ServiceNow priority</li>
+            <li>Create incident in ServiceNow</li>
+            <li>Link ServiceNow ticket ID back to Sentinel incident</li>
+          </ol>
+          <div class="code-block" style="margin-top: 0.75rem;">
+            <div class="code-header"><span class="code-lang">Logic App — ServiceNow Integration</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Trigger: Automation rule triggers on High/Critical incidents
+
+// Action 1: Map severity
+Switch (Sentinel Severity):
+  "High" → ServiceNow Priority = 2
+  "Critical" → ServiceNow Priority = 1
+  Default → ServiceNow Priority = 3
+
+// Action 2: Create ServiceNow incident
+HTTP POST: https://instance.servicenow.com/api/now/table/incident
+Headers: Authorization: Basic @{base64(username:password)}
+Body: {
+  "short_description": "@{IncidentTitle}",
+  "description": "@{IncidentDescription}\n\nEntities:\n@{Entities}\n\nSentinel Link: @{IncidentUrl}",
+  "priority": "@{SNOWPriority}",
+  "category": "Security",
+  "subcategory": "Security Incident",
+  "assignment_group": "Security Operations",
+  "caller_id": "sentinel_automation"
+}
+
+// Action 3: Get ServiceNow ticket number from response
+Parse JSON → Extract sys_id and number
+
+// Action 4: Update Sentinel incident with SNOW ticket
+Add comment: "ServiceNow Ticket Created: @{SNOW_Number}"
+Add tag: "SNOW:@{SNOW_Number}"
+
+// Action 5: Update incident custom field (if using)
+HTTP PATCH: Update incident with external ticket ID</code></pre>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 4: AUTOMATION RULES ==================== -->
+        <h2>4. Automation Rules</h2>
+
+        <p>Automation rules are simpler, no-code automations that run before playbooks:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Rule Name</th><th>Trigger Condition</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Auto-assign Critical</strong></td>
+                <td>Severity = Critical</td>
+                <td>Assign to Senior Analyst group, Run enrichment playbook</td>
+              </tr>
+              <tr>
+                <td><strong>Auto-close Known FP</strong></td>
+                <td>Title contains "test" AND source IP in internal range</td>
+                <td>Close incident, Add tag "Auto-closed-FP"</td>
+              </tr>
+              <tr>
+                <td><strong>Escalate VIP</strong></td>
+                <td>Entity in VIP watchlist</td>
+                <td>Change severity to High, Add tag "VIP", Run notification playbook</td>
+              </tr>
+              <tr>
+                <td><strong>Suppress Noisy Rule</strong></td>
+                <td>Analytics rule = "Noisy Rule X" AND count > 100/hour</td>
+                <td>Change status to Closed, Add tag "Suppressed"</td>
+              </tr>
+              <tr>
+                <td><strong>Add Context Tag</strong></td>
+                <td>Alert product = "Microsoft Defender for Endpoint"</td>
+                <td>Add tag "MDE", Add tag by MITRE tactic</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Example: Automation Rule — Auto-Close Test Alerts</span></div>
+          <pre><code># Automation Rule Configuration
+Name: Auto-Close Test Environment Alerts
+Order: 1 (runs first)
+Status: Enabled
+
+# Trigger
+When: Incident is created
+Analytics rule: All
+
+# Conditions (AND)
+Condition 1: Incident title contains "test-"
+Condition 2: Source IP starts with "10.99." (test environment)
+
+# Actions
+Action 1: Change status → Closed
+Action 2: Close reason → False Positive
+Action 3: Add tag → "Auto-Closed-Test"
+Action 4: Add comment → "Automatically closed - test environment alert"
+
+# Result: Test alerts never reach analyst queue</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 5: REVFLOW PLAYBOOK CATALOG ==================== -->
+        <h2>5. RevFlow Playbook Catalog</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Playbook</th><th>Trigger</th><th>Purpose</th><th>Automation Level</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Enrich-User-Entity</strong></td>
+                <td>Incident</td>
+                <td>Add user context from Entra ID</td>
+                <td>Full auto</td>
+              </tr>
+              <tr>
+                <td><strong>Enrich-IP-ThreatIntel</strong></td>
+                <td>Incident</td>
+                <td>Check IP in VirusTotal, AbuseIPDB</td>
+                <td>Full auto</td>
+              </tr>
+              <tr>
+                <td><strong>Enrich-FileHash-VT</strong></td>
+                <td>Alert</td>
+                <td>Check file hash in VirusTotal</td>
+                <td>Full auto</td>
+              </tr>
+              <tr>
+                <td><strong>Isolate-Endpoint-MDE</strong></td>
+                <td>Incident (manual trigger)</td>
+                <td>Isolate host via MDE API</td>
+                <td>One-click</td>
+              </tr>
+              <tr>
+                <td><strong>Disable-User-EntraID</strong></td>
+                <td>Incident (manual trigger)</td>
+                <td>Disable user, revoke sessions</td>
+                <td>One-click</td>
+              </tr>
+              <tr>
+                <td><strong>Block-IP-Firewall</strong></td>
+                <td>Entity (IP)</td>
+                <td>Add IP to Azure Firewall block list</td>
+                <td>One-click</td>
+              </tr>
+              <tr>
+                <td><strong>Block-URL-Proxy</strong></td>
+                <td>Entity (URL)</td>
+                <td>Add URL to Zscaler block list</td>
+                <td>One-click</td>
+              </tr>
+              <tr>
+                <td><strong>Create-SNOW-Ticket</strong></td>
+                <td>Automation Rule</td>
+                <td>Create ServiceNow incident</td>
+                <td>Full auto (High/Critical)</td>
+              </tr>
+              <tr>
+                <td><strong>Notify-Teams-Channel</strong></td>
+                <td>Automation Rule</td>
+                <td>Post to SOC Teams channel</td>
+                <td>Full auto</td>
+              </tr>
+              <tr>
+                <td><strong>Notify-OnCall-PagerDuty</strong></td>
+                <td>Automation Rule</td>
+                <td>Page on-call for Critical</td>
+                <td>Full auto (Critical only)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 6: INTERVIEW ANSWERS ==================== -->
+        <h2>6. Interview-Ready Answers</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "How did you implement SOAR in your environment?"</span></div>
+          <pre><code>"We built a tiered automation strategy in Sentinel:
+
+TIER 1 — FULL AUTOMATION (no human needed):
+• Enrichment playbooks run on every incident — add user context, 
+  check IPs against TI feeds, lookup file hashes in VirusTotal
+• Automation rules auto-close known false positives — test environment 
+  alerts, expected scheduled tasks, approved admin activity
+• Notifications — Teams channel posts, ServiceNow tickets for High/Critical
+
+TIER 2 — ONE-CLICK RESPONSE (analyst decision, automated execution):
+• Isolate host — analyst clicks button, playbook calls MDE API
+• Disable user — analyst confirms, playbook disables in Entra ID
+• Block IP/URL — entity-triggered playbooks for immediate containment
+
+TIER 3 — GUIDED RESPONSE (playbook assists analyst):
+• Investigation playbooks gather data, analyst makes decision
+• Approval workflows for high-impact actions
+
+Results:
+• MTTR reduced 65% — enrichment happens in seconds, not minutes
+• Analyst capacity increased 40% — automation handles repetitive tasks
+• Consistent response — same actions every time, no missed steps"</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "What's the difference between automation rules and playbooks?"</span></div>
+          <pre><code>"Automation rules are simple, no-code rules that run first when 
+incidents are created. They can modify incident properties (assign, 
+tag, change severity) or trigger playbooks. They're free and fast.
+
+Playbooks are full Logic Apps workflows with complex logic, API 
+integrations, conditional branching, and loops. They can do anything — 
+call external APIs, run queries, send notifications, take containment 
+actions.
+
+My approach:
+• Use automation rules for: auto-assignment, auto-close FPs, tagging, 
+  severity adjustment, triggering playbooks based on conditions
+• Use playbooks for: enrichment, containment actions, integrations 
+  with third-party tools, complex multi-step responses
+
+Example workflow:
+1. Incident created (Critical severity)
+2. Automation rule runs: assigns to senior analyst, adds tag, 
+   triggers three playbooks
+3. Playbook 1: Enriches with user context
+4. Playbook 2: Creates ServiceNow ticket
+5. Playbook 3: Posts to Teams
+
+The automation rule orchestrates; playbooks do the heavy lifting."</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="detection-catalog.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Detection Catalog</span></a>
+          <a href="workbooks.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Workbooks & Dashboards →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

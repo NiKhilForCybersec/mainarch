@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Response — Remote Forensics | MDE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .command-card { background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 8px; padding: 1rem; margin: 0.75rem 0; }
+    .command-card h5 { margin: 0 0 0.5rem 0; color: #3b82f6; font-family: 'IBM Plex Mono', monospace; }
+    .risk-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; margin-left: 0.5rem; }
+    .risk-badge.low { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+    .risk-badge.medium { background: rgba(249, 115, 22, 0.2); color: #fdba74; }
+    .risk-badge.high { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item active">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">EDR Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Live Response</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Live Response — Remote Forensics</h1>
+          <div class="page-header-meta">
+            <span class="page-badge edr">EDR Track</span>
+            <span class="page-reading-time">Incident Response</span>
+          </div>
+          <p class="intro-text">Live Response provides remote shell access to endpoints for forensic investigation and incident response. Collect files, run scripts, analyze memory, and remediate threats without physical access.</p>
+        </div>
+
+        <!-- ==================== SECTION 1: OVERVIEW ==================== -->
+        <h2>1. Live Response Overview</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>What is Live Response?</div>
+          <div class="callout-content">
+            <p><strong>Live Response</strong> = Remote command-line access to endpoints via the MDE agent. Enables forensic investigation without physical access or remote desktop.</p>
+            <p>Available in: Microsoft 365 Defender → Device page → "..." → Initiate Live Response Session</p>
+          </div>
+        </div>
+
+        <p><strong>Key capabilities:</strong></p>
+        <ul>
+          <li>Run built-in commands (dir, cd, processes, connections)</li>
+          <li>Download files from endpoint for analysis</li>
+          <li>Upload and run PowerShell scripts</li>
+          <li>Collect investigation packages (logs, memory dumps)</li>
+          <li>Remediate threats (delete files, stop processes, remove persistence)</li>
+        </ul>
+
+        <h3>1.1 Prerequisites and Permissions</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Requirement</th><th>Details</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>License</strong></td>
+                <td>MDE P2 or Microsoft 365 E5</td>
+              </tr>
+              <tr>
+                <td><strong>RBAC Role</strong></td>
+                <td>Security Administrator or custom role with Live Response permissions</td>
+              </tr>
+              <tr>
+                <td><strong>Advanced settings</strong></td>
+                <td>Enable "Live Response" and optionally "Live Response unsigned script execution"</td>
+              </tr>
+              <tr>
+                <td><strong>Device state</strong></td>
+                <td>Device must be online and communicating with MDE cloud</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 2: COMMANDS ==================== -->
+        <h2>2. Live Response Commands</h2>
+
+        <h3>2.1 Basic Commands (Read-Only)</h3>
+
+        <div class="command-card">
+          <h5>dir <span class="risk-badge low">Low Risk</span></h5>
+          <p>List files and directories</p>
+          <div class="code-block"><pre><code>dir C:\Users\
+dir C:\Windows\Temp\
+dir C:\Users\*\AppData\Roaming\ -recurse</code></pre></div>
+        </div>
+
+        <div class="command-card">
+          <h5>cd <span class="risk-badge low">Low Risk</span></h5>
+          <p>Change directory</p>
+          <div class="code-block"><pre><code>cd C:\Users\victim\AppData\Local\Temp\</code></pre></div>
+        </div>
+
+        <div class="command-card">
+          <h5>processes <span class="risk-badge low">Low Risk</span></h5>
+          <p>List running processes</p>
+          <div class="code-block"><pre><code>processes
+# Output: PID, Name, Filename, Command line, User, Memory</code></pre></div>
+        </div>
+
+        <div class="command-card">
+          <h5>connections <span class="risk-badge low">Low Risk</span></h5>
+          <p>List active network connections</p>
+          <div class="code-block"><pre><code>connections
+# Output: Local address, Remote address, State, PID, Process name</code></pre></div>
+        </div>
+
+        <div class="command-card">
+          <h5>scheduledtasks <span class="risk-badge low">Low Risk</span></h5>
+          <p>List scheduled tasks (persistence check)</p>
+          <div class="code-block"><pre><code>scheduledtasks</code></pre></div>
+        </div>
+
+        <div class="command-card">
+          <h5>services <span class="risk-badge low">Low Risk</span></h5>
+          <p>List Windows services</p>
+          <div class="code-block"><pre><code>services</code></pre></div>
+        </div>
+
+        <div class="command-card">
+          <h5>registry <span class="risk-badge low">Low Risk</span></h5>
+          <p>Query registry keys</p>
+          <div class="code-block"><pre><code>registry query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+registry query "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"</code></pre></div>
+        </div>
+
+        <h3>2.2 File Operations</h3>
+
+        <div class="command-card">
+          <h5>getfile <span class="risk-badge low">Low Risk</span></h5>
+          <p>Download file from endpoint for analysis</p>
+          <div class="code-block"><pre><code>getfile "C:\Users\victim\AppData\Local\Temp\malware.exe"
+getfile "C:\Windows\System32\config\SAM"</code></pre></div>
+          <p style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">Files are copied to the MDE cloud and downloadable from the portal.</p>
+        </div>
+
+        <div class="command-card">
+          <h5>fileinfo <span class="risk-badge low">Low Risk</span></h5>
+          <p>Get file metadata without downloading</p>
+          <div class="code-block"><pre><code>fileinfo "C:\Windows\Temp\suspicious.exe"
+# Output: SHA256, size, created, modified, digital signature</code></pre></div>
+        </div>
+
+        <div class="command-card">
+          <h5>findfile <span class="risk-badge low">Low Risk</span></h5>
+          <p>Search for files by name</p>
+          <div class="code-block"><pre><code>findfile malware.exe
+findfile *.ps1</code></pre></div>
+        </div>
+
+        <div class="command-card">
+          <h5>putfile <span class="risk-badge medium">Medium Risk</span></h5>
+          <p>Upload file to endpoint (requires scripts in library)</p>
+          <div class="code-block"><pre><code>putfile remediation.ps1
+putfile autoruns.exe</code></pre></div>
+        </div>
+
+        <h3>2.3 Remediation Commands</h3>
+
+        <div class="command-card">
+          <h5>remediate <span class="risk-badge high">High Risk</span></h5>
+          <p>Delete malicious file</p>
+          <div class="code-block"><pre><code>remediate file "C:\Users\victim\AppData\Local\Temp\malware.exe"</code></pre></div>
+          <p style="margin-top: 0.5rem; color: #fca5a5; font-size: 0.85rem;">⚠️ Cannot be undone. Ensure file is backed up via getfile first.</p>
+        </div>
+
+        <div class="command-card">
+          <h5>undo <span class="risk-badge medium">Medium Risk</span></h5>
+          <p>Restore quarantined file</p>
+          <div class="code-block"><pre><code>undo file "C:\Users\victim\AppData\Local\Temp\legit_file.exe"</code></pre></div>
+        </div>
+
+        <h3>2.4 Running Scripts</h3>
+
+        <div class="command-card">
+          <h5>run <span class="risk-badge high">High Risk</span></h5>
+          <p>Execute PowerShell script from library</p>
+          <div class="code-block"><pre><code>run Get-MemoryDump.ps1
+run Collect-Autoruns.ps1
+run Remediate-Persistence.ps1</code></pre></div>
+          <p style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">Scripts must be uploaded to Live Response library first.</p>
+        </div>
+
+        <!-- ==================== SECTION 3: INVESTIGATION PLAYBOOKS ==================== -->
+        <h2>3. Investigation Playbooks</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Playbook: Initial Triage</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Initial Triage Checklist - Live Response
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# 1. Check running processes
+processes
+
+# 2. Check network connections (look for C2)
+connections
+
+# 3. Check persistence mechanisms
+scheduledtasks
+services
+registry query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+registry query "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+
+# 4. Check common malware locations
+dir C:\Users\*\AppData\Local\Temp\
+dir C:\Users\*\AppData\Roaming\
+dir C:\Windows\Temp\
+dir C:\ProgramData\
+
+# 5. Collect investigation package (if needed)
+collect</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Playbook: Malware Investigation</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Malware Investigation - When alert identifies suspicious file
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# 1. Navigate to file location
+cd C:\Users\victim\AppData\Local\Temp\
+
+# 2. List directory contents
+dir
+
+# 3. Get file metadata
+fileinfo malware.exe
+
+# 4. Check if file is running
+processes | findstr malware
+
+# 5. Check network connections from process
+connections
+
+# 6. Download file for sandbox analysis
+getfile "C:\Users\victim\AppData\Local\Temp\malware.exe"
+
+# 7. Check persistence (did it install itself?)
+registry query "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+scheduledtasks | findstr malware
+
+# 8. If confirmed malicious, remediate
+# remediate file "C:\Users\victim\AppData\Local\Temp\malware.exe"</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Playbook: Credential Theft Investigation</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Credential Theft Investigation - LSASS access detected
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# 1. Check for Mimikatz or similar tools
+processes | findstr -i "mimikatz procdump sekurlsa"
+
+# 2. Check temp directories for dump files
+findfile *.dmp
+findfile lsass*
+dir C:\Windows\Temp\
+
+# 3. Check for credential dumping tools
+findfile mimikatz.exe
+findfile procdump.exe
+findfile gsecdump.exe
+
+# 4. Check suspicious PowerShell commands
+# (Review in MDE timeline, not available in Live Response)
+
+# 5. Collect LSASS-related artifacts
+getfile "C:\Windows\System32\config\SAM"
+getfile "C:\Windows\System32\config\SYSTEM"
+getfile "C:\Windows\System32\config\SECURITY"
+
+# 6. Run memory forensics script
+run Collect-MemoryArtifacts.ps1</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 4: LIVE RESPONSE LIBRARY ==================== -->
+        <h2>4. Live Response Library Scripts</h2>
+
+        <p>Custom scripts uploaded to the library for common IR tasks:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Script</th><th>Purpose</th><th>Usage</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Collect-Autoruns.ps1</strong></td>
+                <td>Collect all autostart entries (Sysinternals Autoruns output)</td>
+                <td><code>run Collect-Autoruns.ps1</code></td>
+              </tr>
+              <tr>
+                <td><strong>Collect-BrowserHistory.ps1</strong></td>
+                <td>Extract browser history (Chrome, Edge, Firefox)</td>
+                <td><code>run Collect-BrowserHistory.ps1</code></td>
+              </tr>
+              <tr>
+                <td><strong>Collect-EventLogs.ps1</strong></td>
+                <td>Export Security, System, Application logs</td>
+                <td><code>run Collect-EventLogs.ps1</code></td>
+              </tr>
+              <tr>
+                <td><strong>Collect-PrefetchFiles.ps1</strong></td>
+                <td>Collect Prefetch files for execution history</td>
+                <td><code>run Collect-PrefetchFiles.ps1</code></td>
+              </tr>
+              <tr>
+                <td><strong>Get-NetworkConnections.ps1</strong></td>
+                <td>Detailed netstat with process info</td>
+                <td><code>run Get-NetworkConnections.ps1</code></td>
+              </tr>
+              <tr>
+                <td><strong>Remove-Persistence.ps1</strong></td>
+                <td>Remove specified Run key or scheduled task</td>
+                <td><code>run Remove-Persistence.ps1 -Key "HKCU\...\Run\malware"</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Example: Collect-Autoruns.ps1</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Collect-Autoruns.ps1
+# Collects autostart entries for persistence analysis
+
+$OutputPath = "C:\Windows\Temp\autoruns_$(Get-Date -Format 'yyyyMMdd_HHmmss').csv"
+
+# Get Run keys
+$RunKeys = @(
+    "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run",
+    "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce",
+    "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run",
+    "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+)
+
+$Results = @()
+
+foreach ($Key in $RunKeys) {
+    if (Test-Path $Key) {
+        $Items = Get-ItemProperty -Path $Key
+        foreach ($Item in $Items.PSObject.Properties) {
+            if ($Item.Name -notmatch "PS") {
+                $Results += [PSCustomObject]@{
+                    Type = "Registry Run Key"
+                    Location = $Key
+                    Name = $Item.Name
+                    Value = $Item.Value
+                }
+            }
+        }
+    }
+}
+
+# Get Scheduled Tasks
+Get-ScheduledTask | Where-Object {$_.State -ne "Disabled"} | ForEach-Object {
+    $Results += [PSCustomObject]@{
+        Type = "Scheduled Task"
+        Location = $_.TaskPath
+        Name = $_.TaskName
+        Value = ($_.Actions | Select-Object -First 1).Execute
+    }
+}
+
+# Get Services
+Get-WmiObject Win32_Service | Where-Object {$_.StartMode -ne "Disabled"} | ForEach-Object {
+    $Results += [PSCustomObject]@{
+        Type = "Service"
+        Location = "Services"
+        Name = $_.Name
+        Value = $_.PathName
+    }
+}
+
+$Results | Export-Csv -Path $OutputPath -NoTypeInformation
+Write-Output "Autoruns collected: $OutputPath"</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 5: INTERVIEW ==================== -->
+        <h2>5. Interview-Ready Answer</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "How do you use Live Response for incident investigation?"</span></div>
+          <pre><code>"Live Response is my primary tool for remote forensics during incidents.
+
+TYPICAL WORKFLOW:
+
+1. INITIAL TRIAGE
+   When an alert fires, I open a Live Response session on the affected 
+   endpoint. First, I run 'processes' to see what's running and 
+   'connections' to identify any C2 communication.
+
+2. PERSISTENCE CHECK
+   I check common persistence mechanisms: registry Run keys, scheduled 
+   tasks, services. Command: registry query 'HKLM\...\Run' — this tells 
+   me if malware has installed itself to survive reboots.
+
+3. FILE COLLECTION
+   If I identify a suspicious file, I use 'fileinfo' to get the hash, 
+   then 'getfile' to download it for sandbox analysis. This gives me 
+   the actual malware without needing physical access.
+
+4. ARTIFACT COLLECTION
+   For deeper analysis, I run pre-built scripts from our library:
+   - Collect-Autoruns.ps1 for all persistence
+   - Collect-EventLogs.ps1 for Security logs
+   - Collect-Prefetch.ps1 for execution history
+
+5. REMEDIATION
+   Once I confirm the threat, I can remediate directly:
+   - 'remediate file' to delete malware
+   - Run removal scripts to clean persistence
+   
+The key advantage: I can investigate and remediate endpoints anywhere 
+in the world without VPN, remote desktop, or physical access. During 
+our ransomware scare last year, I investigated 15 endpoints in 2 hours 
+from my home — would have been impossible otherwise."</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="advanced-hunting.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Advanced Hunting</span></a>
+          <a href="tvm.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Vulnerability Management →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

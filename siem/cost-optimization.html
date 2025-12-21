@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cost Optimization — Log Tiers & Strategies | SIEM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .tier-card { background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin: 0.75rem 0; }
+    .tier-card h4 { margin: 0 0 0.75rem 0; display: flex; align-items: center; gap: 0.5rem; }
+    .tier-badge { padding: 4px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+    .tier-badge.analytics { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .tier-badge.basic { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .tier-badge.archive { background: rgba(107, 114, 128, 0.2); color: #9ca3af; border: 1px solid rgba(107, 114, 128, 0.3); }
+    .cost-comparison { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
+    .cost-box { background: var(--bg-tertiary); border-radius: 8px; padding: 1rem; text-align: center; }
+    .cost-box .price { font-size: 1.5rem; font-weight: 700; }
+    .cost-box .label { font-size: 0.85rem; color: var(--text-secondary); }
+    .savings-callout { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+    .savings-callout .value { font-size: 2rem; font-weight: 700; color: #86efac; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR & Automation</a>
+          <a href="../siem/workbooks.html" class="nav-item">Workbooks & Dashboards</a>
+          <a href="../siem/cost-optimization.html" class="nav-item active">Cost Optimization</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">SIEM Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Cost Optimization</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Cost Optimization — Log Tiers & Strategies</h1>
+          <div class="page-header-meta">
+            <span class="page-badge siem">SIEM Track</span>
+            <span class="page-reading-time">FinOps</span>
+          </div>
+          <p class="intro-text">This page covers Sentinel cost optimization — understanding log tiers (Analytics, Basic, Archive), commitment tiers, and strategies to reduce costs while maintaining security visibility.</p>
+        </div>
+
+        <!-- ==================== SECTION 1: SENTINEL PRICING ==================== -->
+        <h2>1. Microsoft Sentinel Pricing Model</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Cost Components</div>
+          <div class="callout-content">
+            <p>Sentinel costs have two components:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Log Analytics ingestion:</strong> Cost per GB ingested (varies by tier)</li>
+              <li><strong>Sentinel analysis:</strong> Additional cost for analytics features</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>1.1 Log Tiers Explained</h3>
+
+        <div class="tier-card">
+          <h4><span class="tier-badge analytics">Analytics Logs</span> Full-Featured</h4>
+          <p><strong>Cost:</strong> ~$2.76/GB ingestion + $2.00/GB Sentinel (Pay-as-you-go)</p>
+          <p><strong>Capabilities:</strong></p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>Full KQL query support</li>
+            <li>Analytics rules and alerts</li>
+            <li>Workbooks and visualizations</li>
+            <li>UEBA and entity behavior</li>
+            <li>90 days interactive retention (default)</li>
+            <li>Up to 12 years archive</li>
+          </ul>
+          <p><strong>Use for:</strong> Security events, authentication logs, alerts — anything you need for detection and investigation.</p>
+        </div>
+
+        <div class="tier-card">
+          <h4><span class="tier-badge basic">Basic Logs</span> Cost-Effective</h4>
+          <p><strong>Cost:</strong> ~$0.59/GB ingestion (no Sentinel charge)</p>
+          <p><strong>Capabilities:</strong></p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>Limited KQL (no joins, limited operators)</li>
+            <li>8 days interactive retention</li>
+            <li>Query-time filtering only</li>
+            <li>No analytics rules or alerts</li>
+            <li>Can restore to Analytics tier for investigation</li>
+          </ul>
+          <p><strong>Use for:</strong> High-volume, low-security-value logs — verbose debug logs, NetFlow, web access logs for troubleshooting.</p>
+        </div>
+
+        <div class="tier-card">
+          <h4><span class="tier-badge archive">Archive Tier</span> Long-Term Storage</h4>
+          <p><strong>Cost:</strong> ~$0.023/GB/month storage + query costs when restored</p>
+          <p><strong>Capabilities:</strong></p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>Not directly queryable</li>
+            <li>Must restore to Analytics tier (takes time)</li>
+            <li>Up to 12 years retention</li>
+            <li>Search jobs for async queries</li>
+          </ul>
+          <p><strong>Use for:</strong> Compliance retention, cold storage for forensics.</p>
+        </div>
+
+        <div class="cost-comparison">
+          <div class="cost-box">
+            <div class="price" style="color: #93c5fd;">$4.76</div>
+            <div class="label">Analytics Logs (per GB)</div>
+          </div>
+          <div class="cost-box">
+            <div class="price" style="color: #86efac;">$0.59</div>
+            <div class="label">Basic Logs (per GB)</div>
+          </div>
+          <div class="cost-box">
+            <div class="price" style="color: #9ca3af;">$0.02</div>
+            <div class="label">Archive (per GB/month)</div>
+          </div>
+        </div>
+
+        <div class="savings-callout">
+          <p><strong>Basic Logs save 87%</strong> compared to Analytics tier. Moving 100 GB/day of low-value logs to Basic saves ~$12,500/month.</p>
+        </div>
+
+        <!-- ==================== SECTION 2: COMMITMENT TIERS ==================== -->
+        <h2>2. Commitment Tiers</h2>
+
+        <p>Commitment tiers offer discounts for guaranteed daily ingestion:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Tier</th><th>Daily Commitment</th><th>Effective Price/GB</th><th>Discount vs PAYG</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Pay-as-you-go</td>
+                <td>None</td>
+                <td>$4.76</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>100 GB/day</td>
+                <td>100 GB</td>
+                <td>$3.42</td>
+                <td>28%</td>
+              </tr>
+              <tr>
+                <td>200 GB/day</td>
+                <td>200 GB</td>
+                <td>$3.17</td>
+                <td>33%</td>
+              </tr>
+              <tr>
+                <td>300 GB/day</td>
+                <td>300 GB</td>
+                <td>$2.96</td>
+                <td>38%</td>
+              </tr>
+              <tr>
+                <td>400 GB/day</td>
+                <td>400 GB</td>
+                <td>$2.82</td>
+                <td>41%</td>
+              </tr>
+              <tr>
+                <td>500 GB/day</td>
+                <td>500 GB</td>
+                <td>$2.68</td>
+                <td>44%</td>
+              </tr>
+              <tr>
+                <td>1000 GB/day</td>
+                <td>1 TB</td>
+                <td>$2.40</td>
+                <td>50%</td>
+              </tr>
+              <tr>
+                <td>2000+ GB/day</td>
+                <td>2+ TB</td>
+                <td>~$2.10</td>
+                <td>56%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Commitment Tier Considerations</div>
+          <div class="callout-content">
+            <ul style="margin: 0; padding-left: 1.5rem;">
+              <li>You pay for the commitment even if you ingest less</li>
+              <li>Overage charged at commitment tier rate</li>
+              <li>31-day commitment, can upgrade but not downgrade easily</li>
+              <li>Calculate based on average daily ingestion, not peak</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 3: OPTIMIZATION STRATEGIES ==================== -->
+        <h2>3. Cost Optimization Strategies</h2>
+
+        <h3>3.1 Strategy 1: Move Low-Value Logs to Basic Tier</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Candidates for Basic Logs</span></div>
+          <pre><code># Good candidates for Basic Logs tier:
+
+HIGH VOLUME, LOW SECURITY VALUE:
+• ContainerLog (Kubernetes verbose logs)
+• AzureDiagnostics (non-security resources)
+• AppTraces / AppDependencies
+• Heartbeat (can sample instead)
+• Perf (performance counters)
+• InsightsMetrics
+• NetFlow / traffic flow data
+
+NOT SUITABLE FOR BASIC (keep in Analytics):
+• SecurityEvent, SecurityAlert, SecurityIncident
+• SigninLogs, AADNonInteractiveUserSignInLogs
+• AuditLogs
+• OfficeActivity
+• CommonSecurityLog (firewall, IDS)
+• DeviceProcessEvents, DeviceNetworkEvents (MDE)
+• ThreatIntelligenceIndicator
+• Any table used in analytics rules</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Configure Table to Basic Tier (Azure CLI)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Set table to Basic logs tier
+az monitor log-analytics workspace table update \
+  --resource-group "rg-sentinel" \
+  --workspace-name "law-sentinel-prod" \
+  --table-name "ContainerLog" \
+  --plan "Basic"
+
+# Verify table configuration
+az monitor log-analytics workspace table show \
+  --resource-group "rg-sentinel" \
+  --workspace-name "law-sentinel-prod" \
+  --table-name "ContainerLog"</code></pre>
+        </div>
+
+        <h3>3.2 Strategy 2: Filter Before Ingestion (DCR Transformations)</h3>
+
+        <p>Use Data Collection Rules to filter out unnecessary data before it's ingested:</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">DCR Transformation — Filter Noise</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// DCR transformation to reduce SecurityEvent volume
+// Filter out noisy, low-value events
+
+source 
+| where EventID !in (
+    4688,  // Process creation (very high volume, use MDE instead)
+    5156,  // Windows Filtering Platform connection
+    5158,  // Windows Filtering Platform bind
+    4658,  // Handle closed (noise)
+    4690,  // Attempt to duplicate handle
+    4703   // Token right adjusted (noise)
+)
+| where not(EventID == 4624 and LogonType == 3 and TargetUserName endswith "$")  // Filter machine account logons</code></pre>
+        </div>
+
+        <h3>3.3 Strategy 3: Reduce Retention</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Retention Strategy by Table</span></div>
+          <pre><code># Retention recommendations by log type:
+
+90 DAYS (Interactive) → 2 YEARS (Archive):
+• SecurityEvent, SecurityAlert
+• SigninLogs, AuditLogs
+• OfficeActivity
+• CommonSecurityLog
+
+30 DAYS (Interactive) → 1 YEAR (Archive):
+• DeviceProcessEvents, DeviceNetworkEvents
+• Syslog (non-critical)
+• W3CIISLog
+
+30 DAYS (Interactive) → NO ARCHIVE:
+• Heartbeat (can regenerate)
+• Perf (point-in-time data)
+• InsightsMetrics
+
+8 DAYS (Basic) → 30 DAYS (Archive):
+• ContainerLog
+• AppTraces</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Set Retention (Azure CLI)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Set interactive retention to 30 days, archive for 365 days
+az monitor log-analytics workspace table update \
+  --resource-group "rg-sentinel" \
+  --workspace-name "law-sentinel-prod" \
+  --table-name "DeviceProcessEvents" \
+  --retention-time 30 \
+  --total-retention-time 365</code></pre>
+        </div>
+
+        <h3>3.4 Strategy 4: Identify Ingestion Anomalies</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Monitor Ingestion Volume by Table</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Daily ingestion by table (last 30 days)
+Usage
+| where TimeGenerated > ago(30d)
+| where IsBillable == true
+| summarize GB = sum(Quantity) / 1000 by DataType, bin(TimeGenerated, 1d)
+| render timechart
+
+// Top 10 tables by volume
+Usage
+| where TimeGenerated > ago(7d)
+| where IsBillable == true
+| summarize GB = round(sum(Quantity) / 1000, 2) by DataType
+| top 10 by GB
+| render barchart
+
+// Ingestion anomalies (spikes)
+Usage
+| where TimeGenerated > ago(14d)
+| where IsBillable == true
+| summarize GB = sum(Quantity) / 1000 by bin(TimeGenerated, 1h)
+| extend AvgGB = avg(GB)
+| extend Threshold = AvgGB * 2
+| where GB > Threshold
+| project TimeGenerated, GB, Threshold, Anomaly = "Spike detected"</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 4: REVFLOW OPTIMIZATION ==================== -->
+        <h2>4. RevFlow Cost Optimization Results</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Optimization</th><th>Volume Impact</th><th>Monthly Savings</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Move ContainerLog to Basic tier</td>
+                <td>45 GB/day</td>
+                <td>$5,600</td>
+              </tr>
+              <tr>
+                <td>Filter noisy SecurityEvent IDs via DCR</td>
+                <td>-30 GB/day</td>
+                <td>$4,284</td>
+              </tr>
+              <tr>
+                <td>Move to 200 GB/day commitment tier</td>
+                <td>200 GB/day baseline</td>
+                <td>$2,850</td>
+              </tr>
+              <tr>
+                <td>Reduce Perf table retention to 14 days</td>
+                <td>Storage reduction</td>
+                <td>$320</td>
+              </tr>
+              <tr>
+                <td><strong>Total Monthly Savings</strong></td>
+                <td></td>
+                <td><strong>$13,054</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 5: INTERVIEW ==================== -->
+        <h2>5. Interview-Ready Answer</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "How did you optimize Sentinel costs?"</span></div>
+          <pre><code>"I reduced our Sentinel costs by 40% using a tiered approach:
+
+1. LOG TIER OPTIMIZATION
+   Identified high-volume, low-security-value tables like ContainerLog 
+   and moved them to Basic Logs tier — 87% cheaper than Analytics. 
+   These logs were useful for troubleshooting but not security detection.
+
+2. DCR TRANSFORMATIONS
+   Used Data Collection Rules to filter noise before ingestion. For 
+   SecurityEvent, I filtered out high-volume events like 4688 (process 
+   creation) since MDE already captures this with better context. 
+   Saved 30 GB/day.
+
+3. COMMITMENT TIER
+   Analyzed our average daily ingestion (stable at ~180 GB/day) and 
+   moved to the 200 GB/day commitment tier for 33% discount.
+
+4. RETENTION OPTIMIZATION
+   Set appropriate retention by table:
+   • Security tables: 90 days interactive + 2 years archive
+   • Operational tables: 30 days, no archive
+   • Performance data: 14 days only
+
+5. MONITORING
+   Built a workbook to track ingestion by table daily. Alerts on 
+   anomalies — if a table suddenly spikes 2x normal, we investigate 
+   before it impacts the bill.
+
+Total savings: $13,000/month or ~$156K annually. Key lesson: not all 
+logs need the same treatment — match cost to security value."</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="workbooks.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Workbooks & Dashboards</span></a>
+          <a href="soc-transition.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">SOC Transition →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

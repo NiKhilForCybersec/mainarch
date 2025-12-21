@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Hunting & Custom Detections — MDE | EDR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .table-card { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 1rem; margin: 0.5rem 0; }
+    .table-card h5 { margin: 0 0 0.5rem 0; color: #3b82f6; }
+    .hunt-category { background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 8px; padding: 1rem; margin: 0.75rem 0; }
+    .hunt-category h4 { margin: 0 0 0.75rem 0; }
+    .mitre-tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; background: rgba(168, 85, 247, 0.2); color: #d8b4fe; margin-right: 4px; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR & Automation</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item active">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">EDR Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Advanced Hunting</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Advanced Hunting & Custom Detection Rules</h1>
+          <div class="page-header-meta">
+            <span class="page-badge edr">EDR Track</span>
+            <span class="page-reading-time">Threat Hunting</span>
+          </div>
+          <p class="intro-text">This page covers MDE Advanced Hunting — the key tables, hunting query patterns, and how to convert successful hunts into custom detection rules that generate alerts.</p>
+        </div>
+
+        <!-- ==================== SECTION 1: ADVANCED HUNTING OVERVIEW ==================== -->
+        <h2>1. Advanced Hunting Overview</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>What is Advanced Hunting?</div>
+          <div class="callout-content">
+            <p><strong>Advanced Hunting</strong> = Query-based threat hunting using KQL across Microsoft 365 Defender data. Proactively search for threats that automated detections might miss.</p>
+            <p>Available in: Microsoft 365 Defender portal (security.microsoft.com) and Microsoft Sentinel (if MDE connector enabled)</p>
+          </div>
+        </div>
+
+        <h3>1.1 Key MDE Tables</h3>
+
+        <div class="table-card">
+          <h5>DeviceProcessEvents</h5>
+          <p>Process creation and related events. The most important table for hunting.</p>
+          <p><strong>Key columns:</strong> Timestamp, DeviceName, ActionType, FileName, FolderPath, SHA256, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine, AccountName</p>
+          <p><strong>Use for:</strong> Suspicious process execution, command-line analysis, parent-child relationships</p>
+        </div>
+
+        <div class="table-card">
+          <h5>DeviceNetworkEvents</h5>
+          <p>Network connections and related network events.</p>
+          <p><strong>Key columns:</strong> Timestamp, DeviceName, ActionType, RemoteIP, RemotePort, RemoteUrl, LocalIP, LocalPort, InitiatingProcessFileName</p>
+          <p><strong>Use for:</strong> C2 detection, lateral movement, data exfiltration</p>
+        </div>
+
+        <div class="table-card">
+          <h5>DeviceFileEvents</h5>
+          <p>File creation, modification, and other file events.</p>
+          <p><strong>Key columns:</strong> Timestamp, DeviceName, ActionType, FileName, FolderPath, SHA256, FileSize, InitiatingProcessFileName</p>
+          <p><strong>Use for:</strong> Malware drops, ransomware behavior, suspicious file writes</p>
+        </div>
+
+        <div class="table-card">
+          <h5>DeviceRegistryEvents</h5>
+          <p>Registry key creation, modification, and deletion.</p>
+          <p><strong>Key columns:</strong> Timestamp, DeviceName, ActionType, RegistryKey, RegistryValueName, RegistryValueData, InitiatingProcessFileName</p>
+          <p><strong>Use for:</strong> Persistence mechanisms, defense evasion, configuration changes</p>
+        </div>
+
+        <div class="table-card">
+          <h5>DeviceLogonEvents</h5>
+          <p>Logon events on devices.</p>
+          <p><strong>Key columns:</strong> Timestamp, DeviceName, ActionType, LogonType, AccountName, AccountDomain, RemoteIP, RemoteDeviceName</p>
+          <p><strong>Use for:</strong> Lateral movement, brute force, suspicious authentication</p>
+        </div>
+
+        <div class="table-card">
+          <h5>DeviceImageLoadEvents</h5>
+          <p>DLL and driver loading events.</p>
+          <p><strong>Key columns:</strong> Timestamp, DeviceName, FileName, FolderPath, SHA256, InitiatingProcessFileName</p>
+          <p><strong>Use for:</strong> DLL hijacking, injection, malicious drivers</p>
+        </div>
+
+        <div class="table-card">
+          <h5>DeviceEvents</h5>
+          <p>Miscellaneous events including ASR, exploit protection, controlled folder access.</p>
+          <p><strong>Key columns:</strong> Timestamp, DeviceName, ActionType, FileName, AdditionalFields</p>
+          <p><strong>Use for:</strong> Security control events, AMSI, Credential Guard, etc.</p>
+        </div>
+
+        <div class="table-card">
+          <h5>AlertEvidence / AlertInfo</h5>
+          <p>Alerts generated by MDE and related evidence.</p>
+          <p><strong>Use for:</strong> Alert analysis, incident investigation, detection gaps</p>
+        </div>
+
+        <!-- ==================== SECTION 2: HUNTING QUERIES ==================== -->
+        <h2>2. Hunting Query Library</h2>
+
+        <div class="hunt-category">
+          <h4>Credential Access <span class="mitre-tag">TA0006</span></h4>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: LSASS Memory Access (T1003.001)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect processes accessing LSASS memory (credential dumping)
+DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where FileName =~ "lsass.exe"
+| join kind=inner (
+    DeviceEvents
+    | where ActionType == "OpenProcessApiCall"
+    | where FileName =~ "lsass.exe"
+) on DeviceId, Timestamp
+| where InitiatingProcessFileName !in~ (
+    "MsMpEng.exe", "csrss.exe", "wininit.exe", "services.exe",
+    "svchost.exe", "lsm.exe", "wmiprvse.exe", "taskmgr.exe"
+)
+| project Timestamp, DeviceName, InitiatingProcessFileName, 
+          InitiatingProcessCommandLine, InitiatingProcessAccountName
+| summarize Count = count(), Devices = make_set(DeviceName) 
+          by InitiatingProcessFileName, InitiatingProcessCommandLine</code></pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: Mimikatz Patterns (T1003)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect Mimikatz-like command patterns
+DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where ProcessCommandLine has_any (
+    "sekurlsa::logonpasswords",
+    "sekurlsa::wdigest",
+    "lsadump::sam",
+    "lsadump::dcsync",
+    "kerberos::golden",
+    "kerberos::ptt",
+    "privilege::debug",
+    "token::elevate"
+)
+| project Timestamp, DeviceName, FileName, ProcessCommandLine, 
+          AccountName, InitiatingProcessFileName</code></pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: DCSync Attack (T1003.006)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect DCSync replication requests from non-DC sources
+// Note: Requires identity data or AD logs
+DeviceNetworkEvents
+| where Timestamp > ago(7d)
+| where RemotePort == 389 or RemotePort == 636  // LDAP/LDAPS
+| where LocalPort != 389 and LocalPort != 636   // Outbound, not DC
+| join kind=inner (
+    DeviceProcessEvents
+    | where ProcessCommandLine has_any ("dcsync", "drsuapi", "GetNCChanges")
+) on DeviceId
+| project Timestamp, DeviceName, RemoteIP, InitiatingProcessFileName, 
+          ProcessCommandLine</code></pre>
+          </div>
+        </div>
+
+        <div class="hunt-category">
+          <h4>Execution <span class="mitre-tag">TA0002</span></h4>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: Encoded PowerShell (T1059.001)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect Base64-encoded PowerShell commands
+DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where FileName in~ ("powershell.exe", "pwsh.exe")
+| where ProcessCommandLine has_any ("-enc", "-encoded", "-e ", "-ec ")
+        or ProcessCommandLine matches regex @"-e[ncodedcommand]*\s+[A-Za-z0-9+/=]{50,}"
+| extend DecodedCommand = base64_decode_tostring(
+    extract(@"-e[ncodedcommand]*\s+([A-Za-z0-9+/=]+)", 1, ProcessCommandLine)
+)
+| project Timestamp, DeviceName, ProcessCommandLine, DecodedCommand, 
+          InitiatingProcessFileName, AccountName
+| where isnotempty(DecodedCommand)</code></pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: Suspicious WMI Execution (T1047)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect WMI-based remote execution
+DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where InitiatingProcessFileName =~ "WmiPrvSE.exe"
+| where FileName in~ ("powershell.exe", "cmd.exe", "mshta.exe", 
+                      "cscript.exe", "wscript.exe", "regsvr32.exe")
+| project Timestamp, DeviceName, FileName, ProcessCommandLine, 
+          AccountName, InitiatingProcessCommandLine
+| summarize Count = count(), Commands = make_set(ProcessCommandLine, 5) 
+          by DeviceName, FileName</code></pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: LOLBins Abuse (T1218)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect Living-off-the-Land binaries used for execution
+let LOLBins = dynamic([
+    "mshta.exe", "regsvr32.exe", "rundll32.exe", "certutil.exe",
+    "msiexec.exe", "cmstp.exe", "msbuild.exe", "installutil.exe",
+    "regasm.exe", "regsvcs.exe", "msxsl.exe", "wmic.exe",
+    "csc.exe", "vbc.exe", "jsc.exe"
+]);
+DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where FileName in~ (LOLBins)
+| where ProcessCommandLine has_any ("http://", "https://", "ftp://", 
+                                     "\\\\", "/c ", "/k ", "-e ", "-enc")
+| project Timestamp, DeviceName, FileName, ProcessCommandLine, 
+          InitiatingProcessFileName, AccountName
+| summarize Count = count() by FileName, 
+          CommandPattern = substring(ProcessCommandLine, 0, 100)</code></pre>
+          </div>
+        </div>
+
+        <div class="hunt-category">
+          <h4>Persistence <span class="mitre-tag">TA0003</span></h4>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: Registry Run Keys (T1547.001)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect modifications to common autostart registry keys
+DeviceRegistryEvents
+| where Timestamp > ago(7d)
+| where ActionType in ("RegistryValueSet", "RegistryKeyCreated")
+| where RegistryKey has_any (
+    @"\CurrentVersion\Run",
+    @"\CurrentVersion\RunOnce",
+    @"\CurrentVersion\RunServices",
+    @"\CurrentVersion\Policies\Explorer\Run",
+    @"\CurrentVersion\Explorer\Shell Folders",
+    @"\CurrentVersion\Explorer\User Shell Folders"
+)
+| where RegistryValueData has_any (".exe", ".dll", ".bat", ".ps1", ".vbs", ".js")
+| project Timestamp, DeviceName, RegistryKey, RegistryValueName, 
+          RegistryValueData, InitiatingProcessFileName, AccountName</code></pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: Scheduled Task Creation (T1053.005)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect scheduled task creation via command line
+DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where FileName =~ "schtasks.exe"
+| where ProcessCommandLine has "/create"
+| where ProcessCommandLine has_any ("/sc ", "/tr ", "/tn ")
+| extend TaskName = extract(@"/tn\s+[""']?([^""'\s]+)", 1, ProcessCommandLine)
+| extend TaskAction = extract(@"/tr\s+[""']?([^""']+)[""']?", 1, ProcessCommandLine)
+| project Timestamp, DeviceName, TaskName, TaskAction, ProcessCommandLine,
+          AccountName, InitiatingProcessFileName
+| where TaskName !in ("Microsoft", "Windows", "Adobe", "Google")</code></pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: New Services Created (T1543.003)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect new Windows services created
+DeviceRegistryEvents
+| where Timestamp > ago(7d)
+| where ActionType == "RegistryKeyCreated"
+| where RegistryKey startswith @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\"
+| extend ServiceName = extract(@"Services\\([^\\]+)", 1, RegistryKey)
+| join kind=leftouter (
+    DeviceRegistryEvents
+    | where RegistryValueName == "ImagePath"
+    | extend ServicePath = RegistryValueData
+) on DeviceId, ServiceName
+| project Timestamp, DeviceName, ServiceName, ServicePath, 
+          InitiatingProcessFileName, AccountName
+| where ServiceName !startswith "Windows"</code></pre>
+          </div>
+        </div>
+
+        <div class="hunt-category">
+          <h4>Defense Evasion <span class="mitre-tag">TA0005</span></h4>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: Defender Tampering (T1562.001)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect attempts to disable Windows Defender
+DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where ProcessCommandLine has_any (
+    "Set-MpPreference",
+    "DisableRealtimeMonitoring",
+    "DisableBehaviorMonitoring",
+    "DisableIOAVProtection",
+    "DisableScriptScanning",
+    "sc stop WinDefend",
+    "sc delete WinDefend",
+    "net stop WinDefend"
+)
+| project Timestamp, DeviceName, FileName, ProcessCommandLine,
+          AccountName, InitiatingProcessFileName
+| union (
+    DeviceRegistryEvents
+    | where Timestamp > ago(7d)
+    | where RegistryKey has @"Windows Defender"
+    | where RegistryValueName in ("DisableAntiSpyware", "DisableRealtimeMonitoring")
+)</code></pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: Event Log Clearing (T1070.001)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect clearing of Windows event logs
+DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where (FileName =~ "wevtutil.exe" and ProcessCommandLine has "cl ")
+    or (FileName =~ "powershell.exe" and ProcessCommandLine has "Clear-EventLog")
+    or (ProcessCommandLine has "wevtutil" and ProcessCommandLine has "clear-log")
+| project Timestamp, DeviceName, FileName, ProcessCommandLine,
+          AccountName, InitiatingProcessFileName</code></pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: Process Injection (T1055)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect potential process injection indicators
+DeviceEvents
+| where Timestamp > ago(7d)
+| where ActionType in ("CreateRemoteThreadApiCall", "QueueUserApcRemoteApiCall",
+                        "SetThreadContextRemoteApiCall", "WriteProcessMemoryApiCall")
+| where InitiatingProcessFileName != FileName  // Cross-process
+| where FileName in~ ("lsass.exe", "services.exe", "svchost.exe", 
+                      "explorer.exe", "winlogon.exe")
+| project Timestamp, DeviceName, ActionType, FileName, 
+          InitiatingProcessFileName, InitiatingProcessCommandLine</code></pre>
+          </div>
+        </div>
+
+        <div class="hunt-category">
+          <h4>Lateral Movement <span class="mitre-tag">TA0008</span></h4>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: PsExec-style Remote Execution (T1021.002)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect PsExec and similar remote execution tools
+DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where FileName in~ ("psexec.exe", "psexec64.exe", "paexec.exe", "remcom.exe")
+    or ProcessCommandLine has_any ("\\\\", "-s cmd", "-i cmd", "-d cmd")
+| project Timestamp, DeviceName, FileName, ProcessCommandLine,
+          AccountName, InitiatingProcessFileName
+| union (
+    // Detect PSEXESVC service creation (indicates PsExec target)
+    DeviceProcessEvents
+    | where FileName =~ "PSEXESVC.exe"
+    | project Timestamp, DeviceName, FileName, AccountName, 
+              InitiatingProcessFileName
+)</code></pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: RDP Lateral Movement (T1021.001)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect RDP connections followed by suspicious activity
+DeviceLogonEvents
+| where Timestamp > ago(7d)
+| where LogonType == "RemoteInteractive"  // RDP
+| where ActionType == "LogonSuccess"
+| project RDPTime = Timestamp, DeviceName, AccountName, RemoteIP
+| join kind=inner (
+    DeviceProcessEvents
+    | where InitiatingProcessFileName =~ "explorer.exe"
+    | where FileName in~ ("powershell.exe", "cmd.exe", "wmic.exe", 
+                          "net.exe", "whoami.exe", "nltest.exe")
+    | project ProcessTime = Timestamp, DeviceName, FileName, 
+              ProcessCommandLine, AccountName
+) on DeviceName, AccountName
+| where ProcessTime between (RDPTime .. (RDPTime + 30m))
+| project RDPTime, ProcessTime, DeviceName, RemoteIP, AccountName,
+          FileName, ProcessCommandLine</code></pre>
+          </div>
+        </div>
+
+        <div class="hunt-category">
+          <h4>Impact / Ransomware <span class="mitre-tag">TA0040</span></h4>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: Shadow Copy Deletion (T1490)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect deletion of Volume Shadow Copies
+DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where (FileName =~ "vssadmin.exe" and ProcessCommandLine has "delete shadows")
+    or (FileName =~ "wmic.exe" and ProcessCommandLine has "shadowcopy delete")
+    or (FileName =~ "wbadmin.exe" and ProcessCommandLine has "delete catalog")
+    or (FileName =~ "bcdedit.exe" and ProcessCommandLine has_any 
+        ("recoveryenabled no", "bootstatuspolicy ignoreallfailures"))
+| project Timestamp, DeviceName, FileName, ProcessCommandLine,
+          AccountName, InitiatingProcessFileName</code></pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Hunt: Mass File Encryption Behavior (T1486)</span><button class="code-copy-btn">Copy</button></div>
+            <pre><code>// Detect high-volume file modifications (ransomware indicator)
+DeviceFileEvents
+| where Timestamp > ago(1h)
+| where ActionType in ("FileModified", "FileCreated")
+| summarize 
+    FileCount = count(),
+    UniqueExtensions = dcount(extract(@"\.([^.]+)$", 1, FileName)),
+    Extensions = make_set(extract(@"\.([^.]+)$", 1, FileName), 10)
+    by DeviceName, bin(Timestamp, 5m), InitiatingProcessFileName
+| where FileCount > 1000  // Threshold: >1000 files in 5 minutes
+| project Timestamp, DeviceName, InitiatingProcessFileName, 
+          FileCount, UniqueExtensions, Extensions</code></pre>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 3: CUSTOM DETECTION RULES ==================== -->
+        <h2>3. Custom Detection Rules</h2>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>From Hunt to Detection</div>
+          <div class="callout-content">
+            <p>When a hunting query consistently finds threats, convert it to a <strong>Custom Detection Rule</strong>. This creates automated alerts whenever the query matches — turning reactive hunting into proactive detection.</p>
+          </div>
+        </div>
+
+        <h3>3.1 Creating Custom Detection Rules</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Step-by-Step: Create Custom Detection Rule</span></div>
+          <pre><code># Location: Microsoft 365 Defender → Hunting → Custom detection rules
+
+# Step 1: Start with a working hunting query
+DeviceProcessEvents
+| where FileName =~ "certutil.exe"
+| where ProcessCommandLine has_any ("-urlcache", "-decode", "-encode", "-verifyctl")
+| where ProcessCommandLine has_any ("http://", "https://", "ftp://")
+
+# Step 2: Click "Create detection rule"
+
+# Step 3: Configure rule settings
+Name: Certutil Download or Decode Activity
+Description: Detects certutil.exe used for downloading or decoding files (LOLBin abuse)
+Severity: Medium
+Category: Execution
+MITRE techniques: T1105 (Ingress Tool Transfer), T1140 (Deobfuscate/Decode)
+
+# Step 4: Set frequency
+Run every: 1 hour
+Lookback: 1 hour
+
+# Step 5: Configure alert settings
+Alert title: Certutil suspicious activity on {{DeviceName}}
+Impacted entities: 
+  - Device: DeviceName
+  - User: AccountName
+  - Process: FileName, ProcessCommandLine
+
+# Step 6: Configure response actions (optional)
+Automated response: 
+  - Collect investigation package
+  - Run antivirus scan
+  - Isolate device (for high confidence detections)
+
+# Step 7: Save and enable</code></pre>
+        </div>
+
+        <h3>3.2 RevFlow Custom Detection Rules</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Rule Name</th><th>MITRE</th><th>Severity</th><th>Query Logic</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>LSASS Access by Unknown Process</strong></td>
+                <td>T1003.001</td>
+                <td>High</td>
+                <td>Process accessing LSASS not in approved list</td>
+              </tr>
+              <tr>
+                <td><strong>Encoded PowerShell Execution</strong></td>
+                <td>T1059.001</td>
+                <td>Medium</td>
+                <td>PowerShell with -enc flag and long Base64 string</td>
+              </tr>
+              <tr>
+                <td><strong>Shadow Copy Deletion</strong></td>
+                <td>T1490</td>
+                <td>High</td>
+                <td>vssadmin/wmic deleting shadow copies</td>
+              </tr>
+              <tr>
+                <td><strong>Defender Tampering Attempt</strong></td>
+                <td>T1562.001</td>
+                <td>High</td>
+                <td>Commands attempting to disable Defender</td>
+              </tr>
+              <tr>
+                <td><strong>Certutil Download/Decode</strong></td>
+                <td>T1105, T1140</td>
+                <td>Medium</td>
+                <td>certutil.exe with URL or decode flags</td>
+              </tr>
+              <tr>
+                <td><strong>New Persistence - Run Key</strong></td>
+                <td>T1547.001</td>
+                <td>Medium</td>
+                <td>Registry Run key modification with executable</td>
+              </tr>
+              <tr>
+                <td><strong>PsExec Remote Execution</strong></td>
+                <td>T1021.002</td>
+                <td>Medium</td>
+                <td>PsExec or PSEXESVC.exe execution</td>
+              </tr>
+              <tr>
+                <td><strong>Mass File Modification</strong></td>
+                <td>T1486</td>
+                <td>Critical</td>
+                <td>&gt;1000 file changes in 5 minutes by single process</td>
+              </tr>
+              <tr>
+                <td><strong>DCSync Attack Indicators</strong></td>
+                <td>T1003.006</td>
+                <td>Critical</td>
+                <td>DRSUAPI/GetNCChanges from non-DC</td>
+              </tr>
+              <tr>
+                <td><strong>WMI Remote Process Creation</strong></td>
+                <td>T1047</td>
+                <td>Medium</td>
+                <td>WmiPrvSE spawning cmd/powershell</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 4: INTERVIEW ANSWERS ==================== -->
+        <h2>4. Interview-Ready Answers</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "How do you use Advanced Hunting in MDE?"</span></div>
+          <pre><code>"I use Advanced Hunting for two purposes: proactive threat hunting and 
+detection development.
+
+PROACTIVE HUNTING:
+When we get threat intel about a new attack technique — like a new 
+Mimikatz variant — I write a hunting query to search our environment:
+
+DeviceProcessEvents
+| where ProcessCommandLine has_any ('sekurlsa', 'lsadump', 'kerberos::')
+| project Timestamp, DeviceName, ProcessCommandLine, AccountName
+
+This tells me if we've been hit before our detections caught it.
+
+DETECTION DEVELOPMENT:
+When a hunt finds something consistently malicious, I convert it to a 
+Custom Detection Rule. The query runs automatically every hour and 
+generates alerts. For example, I created a rule for encoded PowerShell 
+that's caught multiple phishing incidents.
+
+Key tables I use most:
+• DeviceProcessEvents — command-line analysis, parent-child relationships
+• DeviceNetworkEvents — C2 detection, lateral movement
+• DeviceFileEvents — malware drops, ransomware behavior
+• DeviceRegistryEvents — persistence mechanisms
+
+I also use joins to correlate across tables — like finding RDP logins 
+followed by suspicious commands within 30 minutes."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "Walk me through creating a custom detection rule"</span></div>
+          <pre><code>"Let me use a real example — detecting LOLBin abuse with certutil.exe.
+
+STEP 1: HYPOTHESIS
+Attackers use certutil.exe to download malware or decode payloads 
+because it's a signed Microsoft binary that bypasses application 
+whitelisting.
+
+STEP 2: WRITE HUNTING QUERY
+DeviceProcessEvents
+| where FileName =~ 'certutil.exe'
+| where ProcessCommandLine has_any ('-urlcache', '-decode', '-encode')
+| where ProcessCommandLine has_any ('http://', 'https://')
+
+STEP 3: VALIDATE
+Run against historical data. Check results for false positives. 
+Tune query — maybe exclude IT admin accounts or known update processes.
+
+STEP 4: CREATE DETECTION RULE
+In M365 Defender: Hunting → Custom detection rules → Create
+• Set severity (Medium for this)
+• Map to MITRE (T1105, T1140)
+• Configure to run every hour
+• Set up entity mapping (device, user, process)
+
+STEP 5: CONFIGURE RESPONSE
+For high-confidence detections, I add automated response:
+• Collect investigation package
+• Run AV scan
+• For critical alerts: auto-isolate device
+
+STEP 6: MONITOR AND TUNE
+Review alerts weekly. If false positive rate is high, refine the query. 
+If it's catching real threats, consider increasing severity.
+
+This certutil rule has caught two actual malware downloads in 
+six months at RevFlow."</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="xdr-detection-model.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← XDR Detection Model</span></a>
+          <a href="live-response.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Live Response →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>
