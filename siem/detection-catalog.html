@@ -134,25 +134,166 @@
           <div class="page-header-meta">
             <span class="page-badge siem">SIEM Track</span>
           </div>
-          <p class="intro-text">Complete catalog of detection rules for RevFlow Analytics. Includes XDR-native detections (Microsoft-managed), Sentinel custom rules, and cross-domain correlations specific to our Salesforce, Workday, and cloud infrastructure.</p>
+          <p class="intro-text">Detection coverage matrix, migration disposition tracker, and custom rules for RevFlow's XDR-first security architecture. This catalog documents <em>what</em> is detected and <em>where</em> — not the underlying detection logic, which for XDR is Microsoft-managed.</p>
         </div>
 
+        <!-- ==================== SECTION 1: XDR DETECTION MODEL ==================== -->
+        <h2>1. Detection Engineering in an XDR World</h2>
+
         <div class="callout info">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Detection Architecture</div>
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>The Big Shift</div>
           <div class="callout-content">
-            <p><strong>XDR-First:</strong> M365 Defender handles endpoint (~150), identity (~85), email (~65), cloud apps (~50) = ~350 detection types</p>
-            <p><strong>Sentinel Custom:</strong> Network (85), Azure (65), higher-order (35), DLP (25), custom (22), Linux (18), third-party (15), TI (8) = ~270 rules</p>
-            <p><strong>Total Coverage:</strong> ~620 detection types across all domains</p>
+            <p><strong>With XDR, detection engineering shifts from "writing low-level rules" to "designing detection strategy and coverage."</strong></p>
+            <p>Detection engineers don't disappear — their role evolves to higher-impact work.</p>
           </div>
         </div>
 
-        <!-- ==================== SECTION 1: DETECTION SUMMARY ==================== -->
-        <h2>1. Detection Coverage Summary</h2>
+        <h3>1.1 Traditional SIEM vs. XDR Model</h3>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Domain</th><th>Source</th><th>Detection Count</th><th>Owner</th><th>Example Scenarios</th></tr>
+              <tr><th>Aspect</th><th>Traditional SIEM (Splunk/RSA)</th><th>XDR-First (Microsoft)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Detection Logic</strong></td>
+                <td>Written and maintained by detection engineers</td>
+                <td>ML + behavior-based, Microsoft-managed</td>
+              </tr>
+              <tr>
+                <td><strong>Rule Count</strong></td>
+                <td>Hundreds of custom correlation rules</td>
+                <td>~350 built-in + selective custom rules</td>
+              </tr>
+              <tr>
+                <td><strong>Primary Work</strong></td>
+                <td>Rule writing, threshold tuning, multi-source joins</td>
+                <td>Coverage mapping, gap analysis, validation</td>
+              </tr>
+              <tr>
+                <td><strong>Exportable Logic</strong></td>
+                <td>Yes — SPL/KQL queries exportable</td>
+                <td>No — XDR detections are proprietary</td>
+              </tr>
+              <tr>
+                <td><strong>Updates</strong></td>
+                <td>Manual — detection engineers update rules</td>
+                <td>Automatic — Microsoft updates globally</td>
+              </tr>
+              <tr>
+                <td><strong>Documentation</strong></td>
+                <td>Document rules and logic</td>
+                <td>Document coverage, not logic</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>1.2 What Detection Engineers Do With XDR</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Detection Engineering Role Evolution</span></div>
+          <pre><code>DETECTION ENGINEERING RESPONSIBILITIES - XDR ERA
+═══════════════════════════════════════════════════════════════════════════════
+
+1️⃣ DETECTION COVERAGE OWNERSHIP (Primary)
+├── Map threats to MITRE ATT&CK framework
+├── Validate XDR has coverage for required techniques
+├── Identify gaps in built-in detections
+├── Decide: What XDR handles vs. what Sentinel handles
+└── Maintain coverage matrix (this catalog)
+
+2️⃣ DETECTION TRANSLATION & RATIONALIZATION
+├── Review legacy SIEM rules (RSA NetWitness in our case)
+├── Categorize each rule:
+│   ├── RETIRE → XDR handles this natively
+│   ├── REPLACE → Use XDR alert as trigger
+│   └── REBUILD → Create Sentinel correlation rule
+└── Maintain detection migration catalog
+
+3️⃣ CUSTOM XDR DETECTIONS (Selective)
+├── Write Advanced Hunting queries for gaps
+├── Focus on:
+│   ├── Environment-specific behaviors
+│   ├── RevFlow business logic (Salesforce, Workday)
+│   └── Gaps not covered by Microsoft
+├── Fewer rules, higher quality
+└── These ARE exportable (we own them)
+
+4️⃣ SENTINEL CORRELATION FOR NON-XDR TELEMETRY
+├── Network telemetry (Palo Alto, F5)
+├── SaaS apps (Salesforce, Workday, NetSuite)
+├── Cloud infrastructure (Azure, AWS)
+├── Threat intelligence enrichment
+└── Asset criticality context
+
+5️⃣ TUNING, VALIDATION & QUALITY CONTROL
+├── Validate XDR alerts match expected behavior
+├── Reduce false positives via suppression rules
+├── Test detections via attack simulations
+├── Ensure SOC usability
+└── Document known gaps and workarounds</code></pre>
+        </div>
+
+        <h3>1.3 Why XDR Detections Cannot Be Exported</h3>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>XDR Detection Logic is Proprietary</div>
+          <div class="callout-content">
+            <p>Microsoft Defender XDR detection logic is:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>ML + behavior-based</strong> — not static rules</li>
+              <li><strong>Continuously updated</strong> — Microsoft improves globally</li>
+              <li><strong>Proprietary</strong> — no rule text, no KQL to export</li>
+            </ul>
+            <p>This is intentional: logic doesn't drift, customers don't clone stale detections, and Microsoft can improve without coordination.</p>
+            <p><strong>You document coverage, not logic.</strong></p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>What You CAN Extract</th><th>How</th><th>Use Case</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Alert metadata</strong></td>
+                <td>M365 Defender APIs, Sentinel connector</td>
+                <td>Ticketing, SOAR, reporting</td>
+              </tr>
+              <tr>
+                <td><strong>Incident data</strong></td>
+                <td>M365 Defender APIs, Sentinel incidents</td>
+                <td>Case management, metrics</td>
+              </tr>
+              <tr>
+                <td><strong>MITRE mappings</strong></td>
+                <td>Alert properties, Microsoft documentation</td>
+                <td>Coverage matrix</td>
+              </tr>
+              <tr>
+                <td><strong>Custom hunting queries</strong></td>
+                <td>Export from Advanced Hunting</td>
+                <td>Custom detections you own</td>
+              </tr>
+              <tr>
+                <td><strong>Detection coverage</strong></td>
+                <td>Manual mapping via alert review</td>
+                <td>Gap analysis</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 2: COVERAGE SUMMARY ==================== -->
+        <h2>2. Detection Coverage Summary</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Domain</th><th>Source</th><th>Detection Count</th><th>Type</th><th>Exportable?</th></tr>
             </thead>
             <tbody>
               <tr style="background: rgba(59, 130, 246, 0.1);">
@@ -160,89 +301,464 @@
                 <td>XDR (MDE)</td>
                 <td>~150</td>
                 <td>Microsoft-managed</td>
-                <td>Malware, ransomware, LOLBins, credential theft</td>
+                <td>No (coverage only)</td>
               </tr>
               <tr style="background: rgba(59, 130, 246, 0.1);">
                 <td><strong>Identity</strong></td>
                 <td>XDR (MDI)</td>
                 <td>~85</td>
                 <td>Microsoft-managed</td>
-                <td>Pass-the-hash, DCSync, Golden Ticket, lateral movement</td>
+                <td>No (coverage only)</td>
               </tr>
               <tr style="background: rgba(59, 130, 246, 0.1);">
                 <td><strong>Email</strong></td>
                 <td>XDR (MDO)</td>
                 <td>~65</td>
                 <td>Microsoft-managed</td>
-                <td>Phishing, BEC, malicious attachments, impersonation</td>
+                <td>No (coverage only)</td>
               </tr>
               <tr style="background: rgba(59, 130, 246, 0.1);">
                 <td><strong>Cloud Apps</strong></td>
                 <td>XDR (MDA)</td>
                 <td>~50</td>
                 <td>Microsoft-managed</td>
-                <td>Impossible travel, mass download, OAuth abuse</td>
+                <td>No (coverage only)</td>
               </tr>
               <tr style="background: rgba(34, 197, 94, 0.1);">
                 <td><strong>Network</strong></td>
                 <td>Sentinel</td>
-                <td>85</td>
-                <td>RF-SEC-DET</td>
-                <td>C2 beaconing, DNS tunneling, lateral movement</td>
+                <td>45</td>
+                <td>RevFlow-owned</td>
+                <td>Yes (KQL)</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td><strong>SaaS (SF/WD/NS)</strong></td>
+                <td>Sentinel</td>
+                <td>22</td>
+                <td>RevFlow-owned</td>
+                <td>Yes (KQL)</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td><strong>Cross-Domain</strong></td>
+                <td>Sentinel</td>
+                <td>18</td>
+                <td>RevFlow-owned</td>
+                <td>Yes (KQL)</td>
               </tr>
               <tr style="background: rgba(34, 197, 94, 0.1);">
                 <td><strong>Azure/Cloud</strong></td>
                 <td>Sentinel</td>
-                <td>65</td>
-                <td>RF-SEC-DET</td>
-                <td>Privilege escalation, resource abuse, key vault access</td>
-              </tr>
-              <tr style="background: rgba(34, 197, 94, 0.1);">
-                <td><strong>SaaS Apps</strong></td>
-                <td>Sentinel</td>
                 <td>35</td>
-                <td>RF-SEC-DET</td>
-                <td>Salesforce bulk export, Workday suspicious access</td>
+                <td>RevFlow-owned</td>
+                <td>Yes (KQL)</td>
               </tr>
-              <tr style="background: rgba(34, 197, 94, 0.1);">
-                <td><strong>DLP Events</strong></td>
-                <td>Sentinel</td>
-                <td>25</td>
-                <td>RF-SEC-DET</td>
-                <td>Data exfil correlation, policy bypass attempts</td>
-              </tr>
-              <tr style="background: rgba(34, 197, 94, 0.1);">
-                <td><strong>Custom/RevFlow</strong></td>
-                <td>Sentinel</td>
-                <td>22</td>
-                <td>RF-SEC-DET</td>
-                <td>Tier 0 access, project code leakage, VIP monitoring</td>
-              </tr>
-              <tr style="background: rgba(34, 197, 94, 0.1);">
-                <td><strong>Linux Servers</strong></td>
-                <td>Sentinel</td>
-                <td>18</td>
-                <td>RF-SEC-DET</td>
-                <td>SSH brute force, privilege escalation, web shells</td>
+              <tr style="background: rgba(251, 191, 36, 0.1);">
+                <td><strong>Custom XDR</strong></td>
+                <td>Advanced Hunting</td>
+                <td>12</td>
+                <td>RevFlow-owned</td>
+                <td>Yes (KQL)</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <!-- ==================== SECTION 2: REVFLOW CUSTOM DETECTIONS ==================== -->
-        <h2>2. RevFlow Custom Detections</h2>
+        <p><strong>Total:</strong> ~350 XDR (Microsoft-managed) + ~132 Sentinel/Custom (RevFlow-owned) = ~482 detection types</p>
 
-        <h3>2.1 Tier 0 Asset Protection</h3>
+        <!-- ==================== SECTION 3: MITRE COVERAGE MATRIX ==================== -->
+        <h2>3. MITRE ATT&CK Coverage Matrix</h2>
+
+        <p>This matrix documents <em>what</em> is covered and <em>where</em> — the foundation of XDR detection engineering.</p>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Rule ID</th><th>Name</th><th>Severity</th><th>MITRE</th><th>Data Source</th></tr>
+              <tr><th>Tactic</th><th>Technique</th><th>Coverage Source</th><th>Disposition</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <!-- Initial Access -->
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td rowspan="4"><strong>Initial Access</strong><br>(TA0001)</td>
+                <td>T1566 Phishing</td>
+                <td>XDR (MDO)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>MDO handles phishing, BEC, impersonation</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>T1078 Valid Accounts</td>
+                <td>XDR (MDI) + Sentinel</td>
+                <td><span class="status-badge in-progress">Hybrid</span></td>
+                <td>MDI for AD, Sentinel for SaaS apps</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>T1190 Exploit Public App</td>
+                <td>Sentinel</td>
+                <td><span class="status-badge in-progress">Build</span></td>
+                <td>WAF logs correlation</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td>T1199 Trusted Relationship</td>
+                <td>Sentinel</td>
+                <td><span class="status-badge in-progress">Build</span></td>
+                <td>Partner/vendor access monitoring</td>
+              </tr>
+              <!-- Execution -->
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td rowspan="3"><strong>Execution</strong><br>(TA0002)</td>
+                <td>T1059 Command & Script</td>
+                <td>XDR (MDE)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>PowerShell, cmd, WMI, VBS covered</td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td>T1204 User Execution</td>
+                <td>XDR (MDE + MDO)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>Malicious link/attachment clicks</td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td>T1053 Scheduled Task</td>
+                <td>XDR (MDE)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>Persistence via scheduled tasks</td>
+              </tr>
+              <!-- Persistence -->
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td rowspan="3"><strong>Persistence</strong><br>(TA0003)</td>
+                <td>T1098 Account Manipulation</td>
+                <td>XDR (MDI) + Sentinel</td>
+                <td><span class="status-badge in-progress">Hybrid</span></td>
+                <td>MDI for AD, custom for RF-SEC-GlobalAdmins</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td>T1136 Create Account</td>
+                <td>XDR (MDI) + Sentinel</td>
+                <td><span class="status-badge in-progress">Hybrid</span></td>
+                <td>Custom rule for service account creation</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td>T1543 Create/Modify System Process</td>
+                <td>XDR (MDE)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>Service creation/modification</td>
+              </tr>
+              <!-- Privilege Escalation -->
+              <tr style="background: rgba(59, 130, 246, 0.05);">
+                <td rowspan="3"><strong>Privilege Escalation</strong><br>(TA0004)</td>
+                <td>T1068 Exploitation for Priv Esc</td>
+                <td>XDR (MDE)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>Exploit detection via behavior analysis</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.05);">
+                <td>T1078 Valid Accounts</td>
+                <td>XDR (MDI)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>Abnormal account usage</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.05);">
+                <td>T1134 Access Token Manipulation</td>
+                <td>XDR (MDE)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>Token theft, impersonation</td>
+              </tr>
+              <!-- Credential Access -->
+              <tr style="background: rgba(168, 85, 247, 0.05);">
+                <td rowspan="4"><strong>Credential Access</strong><br>(TA0006)</td>
+                <td>T1003 OS Credential Dumping</td>
+                <td>XDR (MDE)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>LSASS, SAM, NTDS extraction</td>
+              </tr>
+              <tr style="background: rgba(168, 85, 247, 0.05);">
+                <td>T1110 Brute Force</td>
+                <td>XDR (MDI) + Sentinel</td>
+                <td><span class="status-badge in-progress">Hybrid</span></td>
+                <td>MDI for AD, Sentinel for VPN/SaaS</td>
+              </tr>
+              <tr style="background: rgba(168, 85, 247, 0.05);">
+                <td>T1558 Steal Kerberos Tickets</td>
+                <td>XDR (MDI)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>Kerberoasting, Golden Ticket, etc.</td>
+              </tr>
+              <tr style="background: rgba(168, 85, 247, 0.05);">
+                <td>T1621 MFA Request Generation</td>
+                <td>Sentinel</td>
+                <td><span class="status-badge in-progress">Build</span></td>
+                <td>MFA fatigue detection (custom)</td>
+              </tr>
+              <!-- Lateral Movement -->
+              <tr style="background: rgba(236, 72, 153, 0.05);">
+                <td rowspan="3"><strong>Lateral Movement</strong><br>(TA0008)</td>
+                <td>T1021 Remote Services</td>
+                <td>XDR (MDI + MDE)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>RDP, SMB, WinRM, SSH</td>
+              </tr>
+              <tr style="background: rgba(236, 72, 153, 0.05);">
+                <td>T1550 Use Alternate Auth</td>
+                <td>XDR (MDI)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>Pass-the-hash, pass-the-ticket</td>
+              </tr>
+              <tr style="background: rgba(236, 72, 153, 0.05);">
+                <td>T1570 Lateral Tool Transfer</td>
+                <td>XDR (MDE)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>Tools copied across network</td>
+              </tr>
+              <!-- Exfiltration -->
+              <tr style="background: rgba(20, 184, 166, 0.05);">
+                <td rowspan="4"><strong>Exfiltration</strong><br>(TA0010)</td>
+                <td>T1567 Exfil Over Web Service</td>
+                <td>Sentinel + DLP</td>
+                <td><span class="status-badge in-progress">Build</span></td>
+                <td>Salesforce bulk export monitoring</td>
+              </tr>
+              <tr style="background: rgba(20, 184, 166, 0.05);">
+                <td>T1048 Exfil Over Alt Protocol</td>
+                <td>Sentinel</td>
+                <td><span class="status-badge in-progress">Build</span></td>
+                <td>DNS tunneling, ICMP exfil</td>
+              </tr>
+              <tr style="background: rgba(20, 184, 166, 0.05);">
+                <td>T1052 Exfil Over Physical</td>
+                <td>DLP (Purview)</td>
+                <td><span class="status-badge in-progress">Replace</span></td>
+                <td>USB copy detection via Endpoint DLP</td>
+              </tr>
+              <tr style="background: rgba(20, 184, 166, 0.05);">
+                <td>T1041 Exfil Over C2</td>
+                <td>XDR (MDE)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>C2 communication detection</td>
+              </tr>
+              <!-- Impact -->
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td rowspan="3"><strong>Impact</strong><br>(TA0040)</td>
+                <td>T1486 Data Encrypted (Ransomware)</td>
+                <td>XDR (MDE)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>Ransomware behavior detection</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td>T1490 Inhibit System Recovery</td>
+                <td>XDR (MDE)</td>
+                <td><span class="status-badge complete">Retire SIEM</span></td>
+                <td>VSS deletion, backup destruction</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td>T1489 Service Stop</td>
+                <td>XDR (MDE) + Sentinel</td>
+                <td><span class="status-badge in-progress">Hybrid</span></td>
+                <td>Critical service stopping (custom for DC)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 4: DETECTION MIGRATION CATALOG ==================== -->
+        <h2>4. Detection Migration Catalog</h2>
+
+        <p>Legacy RSA NetWitness rules disposition: <strong>Retire</strong> (XDR handles), <strong>Replace</strong> (use XDR alert), or <strong>Rebuild</strong> (create Sentinel rule).</p>
+
+        <h3>4.1 Migration Statistics</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">RSA NetWitness Rule Disposition</span></div>
+          <pre><code>LEGACY DETECTION MIGRATION SUMMARY
+═══════════════════════════════════════════════════════════════════════════════
+
+TOTAL LEGACY RULES: 187 (from RSA NetWitness)
+
+DISPOSITION:
+├── RETIRE:   112 (60%) → XDR handles natively
+│   └── Endpoint: 45, Identity: 28, Email: 22, Cloud Apps: 17
+│
+├── REPLACE:   38 (20%) → Use XDR alert as Sentinel trigger
+│   └── Correlation rules that reference XDR alerts
+│
+├── REBUILD:   31 (17%) → Create new Sentinel rule
+│   └── Network: 15, SaaS: 8, Custom: 5, Compliance: 3
+│
+└── ARCHIVE:    6 (3%)  → Obsolete, no longer relevant
+    └── Legacy app monitoring, deprecated protocols
+
+OUTCOME:
+• 60% of detection work now handled by Microsoft
+• Detection engineers focus on gaps, not coverage basics
+• Higher-quality custom rules for RevFlow-specific needs</code></pre>
+        </div>
+
+        <h3>4.2 Retire (XDR-Native Coverage)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Legacy Rule</th><th>XDR Coverage</th><th>XDR Alert Name</th><th>MITRE</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>RSA-001: Mimikatz Execution</td>
+                <td>MDE</td>
+                <td>Credential dumping activity</td>
+                <td>T1003</td>
+              </tr>
+              <tr>
+                <td>RSA-002: PowerShell Download Cradle</td>
+                <td>MDE</td>
+                <td>Suspicious PowerShell download</td>
+                <td>T1059.001</td>
+              </tr>
+              <tr>
+                <td>RSA-003: Pass-the-Hash Detected</td>
+                <td>MDI</td>
+                <td>Suspected Pass-the-Hash attack</td>
+                <td>T1550.002</td>
+              </tr>
+              <tr>
+                <td>RSA-004: Kerberoasting Activity</td>
+                <td>MDI</td>
+                <td>Suspected Kerberoasting attack</td>
+                <td>T1558.003</td>
+              </tr>
+              <tr>
+                <td>RSA-005: DCSync Attack</td>
+                <td>MDI</td>
+                <td>Suspected DCSync attack</td>
+                <td>T1003.006</td>
+              </tr>
+              <tr>
+                <td>RSA-006: Ransomware Behavior</td>
+                <td>MDE</td>
+                <td>Ransomware behavior detected</td>
+                <td>T1486</td>
+              </tr>
+              <tr>
+                <td>RSA-007: Phishing Email Delivered</td>
+                <td>MDO</td>
+                <td>Email containing malicious URL</td>
+                <td>T1566.002</td>
+              </tr>
+              <tr>
+                <td>RSA-008: Suspicious Mailbox Rule</td>
+                <td>MDO</td>
+                <td>Suspicious inbox forwarding rule</td>
+                <td>T1114.003</td>
+              </tr>
+              <tr>
+                <td>RSA-009: Impossible Travel</td>
+                <td>MDA</td>
+                <td>Impossible travel activity</td>
+                <td>T1078</td>
+              </tr>
+              <tr>
+                <td>RSA-010: Mass File Download</td>
+                <td>MDA</td>
+                <td>Mass download by a single user</td>
+                <td>T1567</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>4.3 Replace (XDR Alert as Trigger)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Legacy Rule</th><th>New Approach</th><th>XDR Alert + Sentinel Enrichment</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>RSA-050: Credential Theft + Data Access</td>
+                <td>Sentinel correlation</td>
+                <td>MDE credential alert → join with Salesforce access logs</td>
+              </tr>
+              <tr>
+                <td>RSA-051: Phishing + Account Compromise</td>
+                <td>Sentinel correlation</td>
+                <td>MDO phishing alert → join with SigninLogs anomalies</td>
+              </tr>
+              <tr>
+                <td>RSA-052: Lateral Movement + Tier 0 Access</td>
+                <td>Sentinel correlation</td>
+                <td>MDI lateral movement → join with DC logon events</td>
+              </tr>
+              <tr>
+                <td>RSA-053: VIP User Compromise</td>
+                <td>Sentinel enrichment</td>
+                <td>Any XDR alert → enrich with VIP watchlist</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>4.4 Rebuild (Sentinel Custom Rules)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Legacy Rule</th><th>New Sentinel Rule</th><th>Reason</th><th>Owner</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>RSA-100: VPN from New Country</td>
+                <td>RF-LOC-VPN-001</td>
+                <td>Palo Alto VPN logs not in XDR</td>
+                <td>RF-SEC-DET</td>
+              </tr>
+              <tr>
+                <td>RSA-101: Salesforce Bulk Export</td>
+                <td>RF-SF-001</td>
+                <td>Salesforce not in XDR scope</td>
+                <td>RF-SEC-DET</td>
+              </tr>
+              <tr>
+                <td>RSA-102: Terminated Employee Access</td>
+                <td>RF-COR-002</td>
+                <td>Requires Workday integration</td>
+                <td>RF-SEC-DET</td>
+              </tr>
+              <tr>
+                <td>RSA-103: After-Hours Admin Activity</td>
+                <td>RF-LOC-BLR-001</td>
+                <td>Business context required</td>
+                <td>RF-SEC-DET</td>
+              </tr>
+              <tr>
+                <td>RSA-104: DNS Tunneling</td>
+                <td>RF-NET-DNS-001</td>
+                <td>DNS logs via Palo Alto, not XDR</td>
+                <td>RF-SEC-DET</td>
+              </tr>
+              <tr>
+                <td>RSA-105: Protected Group Change</td>
+                <td>RF-T0-004</td>
+                <td>Custom group list (RF-SEC-GlobalAdmins)</td>
+                <td>RF-SEC-DET</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 5: REVFLOW CUSTOM DETECTIONS ==================== -->
+        <h2>5. RevFlow Custom Detections</h2>
+
+        <p>These are rules RevFlow owns — written in KQL, stored in Sentinel, and exportable.</p>
+
+        <h3>5.1 Tier 0 Asset Protection</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Rule ID</th><th>Name</th><th>Severity</th><th>MITRE</th><th>Data Sources</th></tr>
             </thead>
             <tbody>
               <tr>
                 <td><strong>RF-T0-001</strong></td>
-                <td>Domain Controller Logon from Non-Admin Workstation</td>
+                <td>DC Logon from Non-Admin Workstation</td>
                 <td><span class="status-badge critical">High</span></td>
                 <td>T1078</td>
                 <td>SecurityEvent, IdentityLogonEvents</td>
@@ -270,7 +786,7 @@
               </tr>
               <tr>
                 <td><strong>RF-T0-005</strong></td>
-                <td>Privileged Role Activation Outside Business Hours</td>
+                <td>PIM Role Activation Outside Business Hours</td>
                 <td><span class="status-badge complete">Medium</span></td>
                 <td>T1078.004</td>
                 <td>AuditLogs (PIM)</td>
@@ -282,7 +798,7 @@
         <div class="code-block">
           <div class="code-header"><span class="code-lang">KQL - RF-T0-001: DC Logon from Non-Admin Workstation</span><button class="code-copy-btn">Copy</button></div>
           <pre><code>// RF-T0-001: Domain Controller Logon from Non-Admin Workstation
-// Detects interactive logons to DCs from workstations not in admin tier
+// This is a REBUILD rule - XDR detects lateral movement but doesn't know our PAW list
 // Owner: RF-SEC-DET | Severity: High | MITRE: T1078
 
 let DomainControllers = dynamic(["RF-TOR-SRV-DC-01", "RF-TOR-SRV-DC-02", "RF-VAN-SRV-DC-01", 
@@ -293,21 +809,19 @@ let AllowedAdminAccounts = dynamic(["svc-ad-admin", "svc-entra-connect"]);
 SecurityEvent
 | where TimeGenerated > ago(1h)
 | where Computer in (DomainControllers)
-| where EventID in (4624, 4625)  // Successful and failed logons
+| where EventID in (4624, 4625)
 | where LogonType in (2, 10, 11)  // Interactive, RemoteInteractive, CachedInteractive
 | where WorkstationName !in (AdminWorkstations)
 | where TargetUserName !in (AllowedAdminAccounts)
-| where TargetUserName !endswith "$"  // Exclude computer accounts
+| where TargetUserName !endswith "$"
 | project TimeGenerated, Computer, TargetUserName, WorkstationName, LogonType, IpAddress
-| extend Severity = "High"
-| extend AlertTitle = strcat("DC logon from non-admin workstation: ", WorkstationName, " → ", Computer)
-| extend MITRE = "T1078 - Valid Accounts"</code></pre>
+| extend AlertTitle = strcat("DC logon from non-PAW: ", WorkstationName, " → ", Computer)</code></pre>
         </div>
 
         <div class="code-block">
           <div class="code-header"><span class="code-lang">KQL - RF-T0-004: GlobalAdmins Group Modification</span><button class="code-copy-btn">Copy</button></div>
           <pre><code>// RF-T0-004: RF-SEC-GlobalAdmins Group Modification
-// Detects any changes to the Global Administrators security group
+// XDR/MDI detects generic group changes but doesn't know our protected groups
 // Owner: RF-SEC-DET | Severity: Critical | MITRE: T1098
 
 let ProtectedGroups = dynamic(["RF-SEC-GlobalAdmins", "RF-SEC-SecurityAdmins", 
@@ -320,168 +834,97 @@ AuditLogs
 | extend InitiatedBy = tostring(InitiatedBy.user.userPrincipalName)
 | extend TargetGroup = tostring(TargetResources[0].displayName)
 | extend ModifiedMember = tostring(TargetResources[0].modifiedProperties[0].newValue)
-| project TimeGenerated, InitiatedBy, OperationName, TargetGroup, ModifiedMember, CorrelationId
-| extend Severity = "Critical"
-| extend AlertTitle = strcat("Protected group modified: ", TargetGroup)
-| extend MITRE = "T1098 - Account Manipulation"</code></pre>
+| project TimeGenerated, InitiatedBy, OperationName, TargetGroup, ModifiedMember
+| extend AlertTitle = strcat("Protected group modified: ", TargetGroup)</code></pre>
         </div>
 
-        <h3>2.2 Salesforce Security Monitoring</h3>
+        <h3>5.2 SaaS Application Monitoring</h3>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Rule ID</th><th>Name</th><th>Severity</th><th>Trigger</th><th>Data Source</th></tr>
+              <tr><th>Rule ID</th><th>Name</th><th>App</th><th>Trigger</th><th>Why Custom?</th></tr>
             </thead>
             <tbody>
               <tr>
                 <td><strong>RF-SF-001</strong></td>
                 <td>Salesforce Bulk Data Export</td>
-                <td><span class="status-badge critical">High</span></td>
-                <td>>1000 records exported in 1 hour</td>
-                <td>Salesforce_CL via Sentinel connector</td>
+                <td>Salesforce</td>
+                <td>>1000 records/hour</td>
+                <td>Salesforce not in XDR scope</td>
               </tr>
               <tr>
                 <td><strong>RF-SF-002</strong></td>
                 <td>Salesforce Login from New Country</td>
-                <td><span class="status-badge complete">Medium</span></td>
-                <td>Login from country not in user's history</td>
-                <td>Salesforce_CL, SigninLogs</td>
+                <td>Salesforce</td>
+                <td>Country not in user history</td>
+                <td>Salesforce not in XDR scope</td>
               </tr>
               <tr>
                 <td><strong>RF-SF-003</strong></td>
                 <td>Salesforce Report Export After Hours</td>
-                <td><span class="status-badge complete">Medium</span></td>
-                <td>Report export outside 6AM-9PM local</td>
-                <td>Salesforce_CL</td>
+                <td>Salesforce</td>
+                <td>Export outside 6AM-9PM local</td>
+                <td>Business context required</td>
               </tr>
               <tr>
-                <td><strong>RF-SF-004</strong></td>
-                <td>Salesforce Admin Permission Change</td>
-                <td><span class="status-badge critical">High</span></td>
-                <td>Profile or permission set modified</td>
-                <td>Salesforce_CL</td>
+                <td><strong>RF-WD-001</strong></td>
+                <td>Workday Compensation Report Access</td>
+                <td>Workday</td>
+                <td>Non-HR accessing comp data</td>
+                <td>Workday not in XDR scope</td>
               </tr>
               <tr>
-                <td><strong>RF-SF-005</strong></td>
-                <td>Salesforce API Key Created</td>
-                <td><span class="status-badge complete">Medium</span></td>
-                <td>New connected app or API key</td>
-                <td>Salesforce_CL</td>
+                <td><strong>RF-WD-002</strong></td>
+                <td>Workday Bulk Employee Export</td>
+                <td>Workday</td>
+                <td>>100 records exported</td>
+                <td>Workday not in XDR scope</td>
+              </tr>
+              <tr>
+                <td><strong>RF-NS-001</strong></td>
+                <td>NetSuite Financial Report Export</td>
+                <td>NetSuite</td>
+                <td>P&L, Balance Sheet export</td>
+                <td>NetSuite not in XDR scope</td>
+              </tr>
+              <tr>
+                <td><strong>RF-NS-002</strong></td>
+                <td>NetSuite Vendor Bank Details Change</td>
+                <td>NetSuite</td>
+                <td>Bank account modification</td>
+                <td>BEC risk - NetSuite not in XDR</td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - RF-SF-001: Salesforce Bulk Data Export</span><button class="code-copy-btn">Copy</button></div>
+          <div class="code-header"><span class="code-lang">KQL - RF-SF-001: Salesforce Bulk Export</span><button class="code-copy-btn">Copy</button></div>
           <pre><code>// RF-SF-001: Salesforce Bulk Data Export Detection
-// Detects when a user exports large amounts of customer data
-// Owner: RF-SEC-DET | Severity: High | MITRE: T1567 (Exfiltration Over Web Service)
+// Salesforce is outside XDR scope - we monitor via Sentinel connector
+// Owner: RF-SEC-DET | Severity: High | MITRE: T1567
 
 Salesforce_CL
 | where TimeGenerated > ago(1h)
 | where EventType_s in ("ReportExport", "DataExport", "ListView")
-| where RecordsProcessed_d > 100  // Threshold for significant export
+| where RecordsProcessed_d > 100
 | summarize 
     TotalRecords = sum(RecordsProcessed_d),
     ExportCount = count(),
     Reports = make_set(ReportName_s)
     by UserId_s, UserName_s, bin(TimeGenerated, 1h)
-| where TotalRecords > 1000  // Alert threshold
+| where TotalRecords > 1000
 | extend Severity = case(
     TotalRecords > 10000, "Critical",
     TotalRecords > 5000, "High",
     "Medium")
-| extend AlertTitle = strcat("Bulk Salesforce export by ", UserName_s, ": ", TotalRecords, " records")
-| extend MITRE = "T1567 - Exfiltration Over Web Service"
-
-// Enrich with user context
-| join kind=leftouter (
-    IdentityInfo
-    | project AccountUPN, Department, JobTitle, ManagerUPN
-) on $left.UserName_s == $right.AccountUPN</code></pre>
+| extend AlertTitle = strcat("Bulk Salesforce export: ", UserName_s, " - ", TotalRecords, " records")</code></pre>
         </div>
 
-        <h3>2.3 Workday HR System Monitoring</h3>
+        <h3>5.3 Cross-Domain Correlation Rules</h3>
 
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Rule ID</th><th>Name</th><th>Severity</th><th>Trigger</th><th>Data Source</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>RF-WD-001</strong></td>
-                <td>Workday Compensation Report Access</td>
-                <td><span class="status-badge complete">Medium</span></td>
-                <td>Access to comp reports by non-HR</td>
-                <td>Workday_CL</td>
-              </tr>
-              <tr>
-                <td><strong>RF-WD-002</strong></td>
-                <td>Workday Bulk Employee Export</td>
-                <td><span class="status-badge critical">High</span></td>
-                <td>>100 employee records exported</td>
-                <td>Workday_CL</td>
-              </tr>
-              <tr>
-                <td><strong>RF-WD-003</strong></td>
-                <td>Workday Terminated Employee Access</td>
-                <td><span class="status-badge critical">High</span></td>
-                <td>Access after termination date</td>
-                <td>Workday_CL, SigninLogs</td>
-              </tr>
-              <tr>
-                <td><strong>RF-WD-004</strong></td>
-                <td>Workday Security Role Change</td>
-                <td><span class="status-badge complete">Medium</span></td>
-                <td>Security role assigned/removed</td>
-                <td>Workday_CL</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>2.4 Financial Systems (NetSuite)</h3>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Rule ID</th><th>Name</th><th>Severity</th><th>Trigger</th><th>Data Source</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>RF-NS-001</strong></td>
-                <td>NetSuite Financial Report Export</td>
-                <td><span class="status-badge complete">Medium</span></td>
-                <td>P&L, Balance Sheet export</td>
-                <td>NetSuite_CL</td>
-              </tr>
-              <tr>
-                <td><strong>RF-NS-002</strong></td>
-                <td>NetSuite Vendor/Payment Modification</td>
-                <td><span class="status-badge critical">High</span></td>
-                <td>Vendor bank details changed</td>
-                <td>NetSuite_CL</td>
-              </tr>
-              <tr>
-                <td><strong>RF-NS-003</strong></td>
-                <td>NetSuite Admin Role Assignment</td>
-                <td><span class="status-badge critical">High</span></td>
-                <td>Administrator role granted</td>
-                <td>NetSuite_CL</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 3: CROSS-DOMAIN CORRELATIONS ==================== -->
-        <h2>3. Cross-Domain Correlation Rules</h2>
-
-        <p>These rules correlate events across multiple data sources to detect sophisticated attacks that span domains.</p>
-
-        <h3>3.1 Data Exfiltration Correlations</h3>
+        <p>These rules correlate XDR alerts with data outside XDR scope — the highest-value detection work.</p>
 
         <div class="table-wrapper">
           <table>
@@ -491,357 +934,767 @@ Salesforce_CL
             <tbody>
               <tr>
                 <td><strong>RF-COR-001</strong></td>
-                <td>Salesforce Export + DLP Alert + USB Copy</td>
+                <td>Salesforce Export + DLP + USB Chain</td>
                 <td>Salesforce_CL + DLP Events + DeviceFileEvents</td>
                 <td><span class="status-badge critical">Critical</span></td>
               </tr>
               <tr>
                 <td><strong>RF-COR-002</strong></td>
-                <td>Terminated Employee + Active Salesforce Session</td>
-                <td>Workday_CL (term) + Salesforce_CL (active)</td>
+                <td>Terminated Employee + Active Session</td>
+                <td>Workday_CL (term) + Salesforce_CL / SigninLogs</td>
                 <td><span class="status-badge critical">Critical</span></td>
               </tr>
               <tr>
                 <td><strong>RF-COR-003</strong></td>
-                <td>VPN from New Location + Bulk Download</td>
-                <td>SigninLogs (VPN) + CloudAppEvents (download)</td>
+                <td>VPN New Location + Bulk Download</td>
+                <td>Palo Alto VPN + CloudAppEvents</td>
                 <td><span class="status-badge critical">High</span></td>
               </tr>
               <tr>
                 <td><strong>RF-COR-004</strong></td>
-                <td>Failed MFA + Successful Login (MFA Fatigue)</td>
-                <td>SigninLogs (MFA failures) + SigninLogs (success)</td>
+                <td>MFA Fatigue Attack</td>
+                <td>SigninLogs (MFA failures) → SigninLogs (success)</td>
                 <td><span class="status-badge critical">High</span></td>
               </tr>
               <tr>
                 <td><strong>RF-COR-005</strong></td>
-                <td>GitHub Secret Commit + External Email</td>
-                <td>GitHub audit + EmailEvents (external)</td>
-                <td><span class="status-badge critical">High</span></td>
+                <td>XDR Alert + VIP User</td>
+                <td>Any SecurityAlert + VIP Watchlist</td>
+                <td><span class="status-badge complete">Elevated</span></td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - RF-COR-001: Salesforce Export + DLP + USB Chain</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code>// RF-COR-001: Salesforce Export → DLP Alert → USB Copy Chain
-// Detects potential data theft: SF export, DLP trigger, USB exfil
-// Owner: RF-SEC-DET | Severity: Critical | MITRE: T1567, T1052
-
-// Step 1: Find Salesforce exports in last 24h
-let SalesforceExports = Salesforce_CL
-| where TimeGenerated > ago(24h)
-| where EventType_s in ("ReportExport", "DataExport")
-| where RecordsProcessed_d > 500
-| project SF_Time = TimeGenerated, UserId_s, UserName_s, RecordsProcessed_d;
-
-// Step 2: Find DLP alerts for customer data
-let DLPAlerts = SecurityAlert
-| where TimeGenerated > ago(24h)
-| where AlertName has "Customer Data" or AlertName has "RF-SIT-Salesforce"
-| extend UserPrincipalName = tostring(parse_json(ExtendedProperties)["User Principal Name"])
-| project DLP_Time = TimeGenerated, UserPrincipalName, AlertName;
-
-// Step 3: Find USB file copies
-let USBCopies = DeviceFileEvents
-| where TimeGenerated > ago(24h)
-| where ActionType == "FileCreated"
-| where FolderPath startswith "E:\\" or FolderPath startswith "F:\\" // Removable drives
-| where FileName endswith ".csv" or FileName endswith ".xlsx"
-| extend AccountUpn = InitiatingProcessAccountUpn
-| project USB_Time = TimeGenerated, DeviceName, FileName, AccountUpn;
-
-// Correlate: Same user, within 4 hour window
-SalesforceExports
-| join kind=inner (DLPAlerts) on $left.UserName_s == $right.UserPrincipalName
-| where DLP_Time between (SF_Time .. SF_Time + 4h)
-| join kind=inner (USBCopies) on $left.UserName_s == $right.AccountUpn
-| where USB_Time between (SF_Time .. SF_Time + 6h)
-| project SF_Time, DLP_Time, USB_Time, UserName_s, RecordsProcessed_d, AlertName, DeviceName, FileName
-| extend Severity = "Critical"
-| extend AlertTitle = strcat("DATA EXFIL CHAIN: ", UserName_s, " - SF Export → DLP Alert → USB Copy")
-| extend MITRE = "T1567, T1052 - Exfiltration Over Web Service, Exfiltration Over Physical Medium"</code></pre>
-        </div>
-
-        <div class="code-block">
           <div class="code-header"><span class="code-lang">KQL - RF-COR-002: Terminated Employee Active Access</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code>// RF-COR-002: Terminated Employee with Active Salesforce/Workday Session
-// Correlates Workday termination with continued application access
+          <pre><code>// RF-COR-002: Terminated Employee with Active Session
+// Correlates Workday termination with continued app access
+// Why custom: Requires Workday integration + business context
 // Owner: RF-SEC-DET | Severity: Critical | MITRE: T1078
 
-// Get recent terminations from Workday
 let Terminations = Workday_CL
 | where TimeGenerated > ago(7d)
 | where EventType_s == "Termination"
 | project EmployeeID_s, TerminatedUser = Email_s, TerminationDate = TimeGenerated;
 
-// Check for active sessions after termination
 let PostTermActivity = union
-    (SigninLogs | project TimeGenerated, UserPrincipalName, AppDisplayName, ResultType),
-    (Salesforce_CL | project TimeGenerated, UserPrincipalName = UserName_s, AppDisplayName = "Salesforce", ResultType = "Success"),
-    (AADNonInteractiveUserSignInLogs | project TimeGenerated, UserPrincipalName, AppDisplayName, ResultType)
-| where ResultType == 0 or ResultType == "Success"
+    (SigninLogs | where ResultType == 0 | project TimeGenerated, UserPrincipalName, AppDisplayName),
+    (Salesforce_CL | project TimeGenerated, UserPrincipalName = UserName_s, AppDisplayName = "Salesforce")
 | project ActivityTime = TimeGenerated, UserPrincipalName, AppDisplayName;
 
-// Correlate
 Terminations
 | join kind=inner (PostTermActivity) on $left.TerminatedUser == $right.UserPrincipalName
 | where ActivityTime > TerminationDate
 | project TerminationDate, ActivityTime, TerminatedUser, AppDisplayName,
           HoursAfterTerm = datetime_diff('hour', ActivityTime, TerminationDate)
-| where HoursAfterTerm > 0  // Activity after termination
-| extend Severity = "Critical"
-| extend AlertTitle = strcat("TERMINATED USER ACTIVE: ", TerminatedUser, " accessed ", AppDisplayName, 
-                             " ", HoursAfterTerm, " hours after termination")</code></pre>
+| where HoursAfterTerm > 0
+| extend AlertTitle = strcat("TERMINATED USER ACTIVE: ", TerminatedUser, " accessed ", AppDisplayName)</code></pre>
         </div>
 
-        <h3>3.2 Identity Attack Correlations</h3>
+        <h3>5.4 Custom Advanced Hunting Queries (XDR)</h3>
+
+        <p>These are custom detections written in Advanced Hunting for gaps in Microsoft's built-in coverage. We own these.</p>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Rule ID</th><th>Name</th><th>Correlation</th><th>Severity</th></tr>
+              <tr><th>Query ID</th><th>Name</th><th>Gap Addressed</th><th>Platform</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong>RF-COR-010</strong></td>
-                <td>Password Spray + Successful Login</td>
-                <td>SigninLogs (failures across users) + SigninLogs (success)</td>
-                <td><span class="status-badge critical">High</span></td>
+                <td><strong>RF-AH-001</strong></td>
+                <td>Suspicious Process on Tier 0 Server</td>
+                <td>Custom Tier 0 server list</td>
+                <td>M365 Defender</td>
               </tr>
               <tr>
-                <td><strong>RF-COR-011</strong></td>
-                <td>Impossible Travel + Privileged Action</td>
-                <td>SigninLogs (geo-anomaly) + AuditLogs (admin action)</td>
-                <td><span class="status-badge critical">Critical</span></td>
+                <td><strong>RF-AH-002</strong></td>
+                <td>Encoded PowerShell to External IP</td>
+                <td>More aggressive than default</td>
+                <td>M365 Defender</td>
               </tr>
               <tr>
-                <td><strong>RF-COR-012</strong></td>
-                <td>Entra Connect Compromise Chain</td>
-                <td>DeviceLogonEvents (AAD server) + AuditLogs (sync changes)</td>
-                <td><span class="status-badge critical">Critical</span></td>
+                <td><strong>RF-AH-003</strong></td>
+                <td>LOLBIN Execution from Temp</td>
+                <td>Environment-specific tuning</td>
+                <td>M365 Defender</td>
               </tr>
               <tr>
-                <td><strong>RF-COR-013</strong></td>
-                <td>Service Account Anomaly + Data Access</td>
-                <td>SigninLogs (svc-* unusual) + CloudAppEvents</td>
-                <td><span class="status-badge critical">High</span></td>
+                <td><strong>RF-AH-004</strong></td>
+                <td>OAuth App with Mail.Read Scope</td>
+                <td>RevFlow-specific consent policy</td>
+                <td>M365 Defender</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <!-- ==================== SECTION 4: LOCATION-SPECIFIC RULES ==================== -->
-        <h2>4. Location-Specific Detections</h2>
+        <!-- ==================== SECTION 6: SENTINEL AS DOCUMENTATION LAYER ==================== -->
+        <h2>6. Sentinel as the Documentation Layer</h2>
 
-        <p>Rules scoped to specific RevFlow office locations and their unique risk profiles.</p>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Rule ID</th><th>Name</th><th>Location</th><th>Trigger</th><th>Rationale</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>RF-LOC-TOR-001</strong></td>
-                <td>Toronto DC Tier 0 Access</td>
-                <td>RF-CA-TOR</td>
-                <td>Logon to RF-TOR-SRV-DC-* from non-PAW</td>
-                <td>HQ DCs are primary targets</td>
-              </tr>
-              <tr>
-                <td><strong>RF-LOC-BLR-001</strong></td>
-                <td>Bangalore After-Hours Admin Activity</td>
-                <td>RF-IN-BLR</td>
-                <td>Admin actions outside 6AM-11PM IST</td>
-                <td>Large dev team, off-hours risk</td>
-              </tr>
-              <tr>
-                <td><strong>RF-LOC-SFO-001</strong></td>
-                <td>SF Office Salesforce Mass Export</td>
-                <td>RF-US-SFO</td>
-                <td>Sales team bulk customer export</td>
-                <td>Sales HQ, customer data risk</td>
-              </tr>
-              <tr>
-                <td><strong>RF-LOC-VPN-001</strong></td>
-                <td>VPN from Unexpected Country</td>
-                <td>All</td>
-                <td>VPN login from non-CA/US/IN</td>
-                <td>Travel baseline: CA, US, IN, DE, UK</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <p>Sentinel serves as the single place where all detection coverage is tracked — even when logic lives in XDR.</p>
 
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - RF-LOC-VPN-001: VPN from Unexpected Country</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code>// RF-LOC-VPN-001: VPN Login from Unexpected Country
-// RevFlow baseline: CA, US, IN (offices), DE, UK (Siemens, common travel)
-// Owner: RF-SEC-DET | Severity: Medium | MITRE: T1078
-
-let ExpectedCountries = dynamic(["CA", "US", "IN", "DE", "UK", "GB"]);
-let VPNAppIds = dynamic(["app-id-for-globalprotect", "app-id-for-azurevpn"]);  // Replace with actual
-
-SigninLogs
-| where TimeGenerated > ago(1h)
-| where AppId in (VPNAppIds) or AppDisplayName has "VPN"
-| where ResultType == 0  // Successful
-| extend Country = tostring(LocationDetails.countryOrRegion)
-| where Country !in (ExpectedCountries)
-| project TimeGenerated, UserPrincipalName, Country, City = tostring(LocationDetails.city),
-          IPAddress, DeviceDetail, AppDisplayName
-| extend Severity = "Medium"
-| extend AlertTitle = strcat("VPN login from unexpected country: ", UserPrincipalName, " from ", Country)
-
-// Exclude known travelers (optional watchlist)
-| join kind=leftanti (
-    _GetWatchlist('ApprovedTravelers')
-    | project UserPrincipalName = SearchKey
-) on UserPrincipalName</code></pre>
-        </div>
-
-        <!-- ==================== SECTION 5: COMPLIANCE DETECTIONS ==================== -->
-        <h2>5. Compliance-Aligned Detections</h2>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Compliance</th><th>Control</th><th>Rule ID</th><th>Detection</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td rowspan="3"><strong>SOC 2</strong></td>
-                <td>CC6.1 - Logical Access</td>
-                <td>RF-SOC2-001</td>
-                <td>Unauthorized privileged access attempt</td>
-              </tr>
-              <tr>
-                <td>CC6.7 - Data Transmission</td>
-                <td>RF-SOC2-002</td>
-                <td>Unencrypted sensitive data transfer</td>
-              </tr>
-              <tr>
-                <td>CC7.2 - Incident Response</td>
-                <td>RF-SOC2-003</td>
-                <td>Critical alert not acknowledged in SLA</td>
-              </tr>
-              <tr>
-                <td rowspan="2"><strong>ISO 27001</strong></td>
-                <td>A.9.2.3 - Privilege Management</td>
-                <td>RF-ISO-001</td>
-                <td>Privilege escalation without approval</td>
-              </tr>
-              <tr>
-                <td>A.12.4.1 - Event Logging</td>
-                <td>RF-ISO-002</td>
-                <td>Log source stopped sending events</td>
-              </tr>
-              <tr>
-                <td rowspan="2"><strong>PIPEDA</strong></td>
-                <td>4.7 - Safeguards</td>
-                <td>RF-PIP-001</td>
-                <td>Canadian employee PII accessed without authorization</td>
-              </tr>
-              <tr>
-                <td>4.9 - Individual Access</td>
-                <td>RF-PIP-002</td>
-                <td>Bulk employee data export (potential breach)</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 6: MITRE COVERAGE ==================== -->
-        <h2>6. MITRE ATT&CK Coverage</h2>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">MITRE Coverage Summary</span></div>
-          <pre><code>REVFLOW MITRE ATT&CK COVERAGE (Enterprise)
+          <div class="code-header"><span class="code-lang">Sentinel Rule Types</span></div>
+          <pre><code>SENTINEL RULE TAXONOMY
 ═══════════════════════════════════════════════════════════════════════════════
 
-INITIAL ACCESS (TA0001)                    PERSISTENCE (TA0003)
-├── T1078 Valid Accounts: ✓ High           ├── T1098 Account Manipulation: ✓ High  
-├── T1566 Phishing: ✓ XDR (MDO)            ├── T1136 Create Account: ✓ High
-└── T1199 Trusted Relationship: ✓ Med      └── T1053 Scheduled Task: ✓ XDR (MDE)
+1. ACTIVE RULES (Logic in Sentinel)
+├── Network monitoring (Palo Alto, F5 logs)
+├── SaaS apps (Salesforce, Workday, NetSuite)
+├── Cross-domain correlations
+├── Azure/cloud infrastructure
+└── Custom business logic
 
-PRIVILEGE ESCALATION (TA0004)              DEFENSE EVASION (TA0005)
-├── T1068 Exploitation: ✓ XDR (MDE)        ├── T1070 Indicator Removal: ✓ Med
-├── T1078 Valid Accounts: ✓ High           ├── T1562 Impair Defenses: ✓ High
-└── T1134 Access Token: ✓ XDR (MDE)        └── T1036 Masquerading: ✓ XDR (MDE)
+2. STUB RULES (Documentation Only)
+├── Reference XDR coverage
+├── No query logic (or "//Covered by XDR")
+├── Used for:
+│   ├── MITRE ATT&CK mapping completeness
+│   ├── Compliance reporting
+│   └── Coverage documentation
+└── Example:
+    Name: "Ransomware Detection"
+    Query: // Covered by XDR - MDE ransomware behavior detection
+    Enabled: No (documentation only)
 
-CREDENTIAL ACCESS (TA0006)                 DISCOVERY (TA0007)
-├── T1003 OS Credential Dump: ✓ XDR        ├── T1087 Account Discovery: ✓ Med
-├── T1110 Brute Force: ✓ High              ├── T1082 System Info: ✓ XDR (MDE)
-└── T1558 Steal Kerberos: ✓ XDR (MDI)      └── T1069 Permission Groups: ✓ Med
+3. XDR ALERT RULES (Sentinel Analytics for XDR Incidents)
+├── Create Sentinel incidents from XDR alerts
+├── Used for ticketing/SOAR integration
+├── Example: "Create incident for MDE High/Critical alerts"
+└── Query references SecurityAlert or SecurityIncident tables
 
-LATERAL MOVEMENT (TA0008)                  COLLECTION (TA0009)
-├── T1021 Remote Services: ✓ High          ├── T1005 Data from Local: ✓ XDR
-├── T1550 Use Alt Auth: ✓ XDR (MDI)        ├── T1213 Data from Info Repos: ✓ High
-└── T1570 Lateral Tool Transfer: ✓ Med     └── T1560 Archive Collected: ✓ Med
-
-EXFILTRATION (TA0010)                      IMPACT (TA0040)
-├── T1041 Exfil Over C2: ✓ Med             ├── T1486 Data Encrypted: ✓ XDR (MDE)
-├── T1567 Exfil Over Web: ✓ High           ├── T1490 Inhibit Recovery: ✓ High
-└── T1052 Exfil Over Physical: ✓ High      └── T1489 Service Stop: ✓ Med
-
-LEGEND: ✓ XDR = Microsoft-managed | ✓ High/Med = Sentinel custom rule</code></pre>
+4. ENRICHMENT RULES (XDR + Context)
+├── XDR alert + asset criticality
+├── XDR alert + VIP watchlist
+├── XDR alert + threat intel
+└── Adds business context to Microsoft detections</code></pre>
         </div>
 
-        <!-- ==================== SECTION 7: RULE LIFECYCLE ==================== -->
-        <h2>7. Detection Rule Lifecycle</h2>
+        <!-- ==================== SECTION 7: DETECTION METRICS ==================== -->
+        <h2>7. Detection Metrics & Quality</h2>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Stage</th><th>Duration</th><th>Actions</th><th>Approval</th></tr>
+              <tr><th>Metric</th><th>Target</th><th>Current</th><th>Owner</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong>Development</strong></td>
-                <td>1-2 weeks</td>
-                <td>Write KQL, test in dev workspace, document</td>
-                <td>RF-SEC-DET peer review</td>
-              </tr>
-              <tr>
-                <td><strong>Testing</strong></td>
-                <td>1 week</td>
-                <td>Run in audit mode, validate against test cases</td>
-                <td>RF-SEC-DET lead</td>
-              </tr>
-              <tr>
-                <td><strong>Pilot</strong></td>
-                <td>2 weeks</td>
-                <td>Enable for SOC review, collect false positives</td>
-                <td>RF-SEC-SOC-L3</td>
-              </tr>
-              <tr>
-                <td><strong>Production</strong></td>
-                <td>Ongoing</td>
-                <td>Full alerting, playbook integration</td>
-                <td>Security CAB</td>
-              </tr>
-              <tr>
-                <td><strong>Tuning</strong></td>
-                <td>Quarterly</td>
-                <td>Review FP rate, adjust thresholds</td>
+                <td>MITRE ATT&CK coverage (Enterprise)</td>
+                <td>>80% of techniques</td>
+                <td>78%</td>
                 <td>RF-SEC-DET</td>
               </tr>
               <tr>
-                <td><strong>Retirement</strong></td>
-                <td>As needed</td>
-                <td>Disable when superseded or no longer relevant</td>
-                <td>Security CAB</td>
+                <td>Mean Time to Detect (MTTD)</td>
+                <td><15 minutes</td>
+                <td>8 minutes (XDR), 22 minutes (Sentinel)</td>
+                <td>RF-SEC-SOC</td>
+              </tr>
+              <tr>
+                <td>False Positive Rate</td>
+                <td><20%</td>
+                <td>15%</td>
+                <td>RF-SEC-DET</td>
+              </tr>
+              <tr>
+                <td>Detection validation coverage</td>
+                <td>100% of custom rules tested</td>
+                <td>85%</td>
+                <td>RF-SEC-DET</td>
+              </tr>
+              <tr>
+                <td>Legacy rule migration</td>
+                <td>100% dispositioned</td>
+                <td>100%</td>
+                <td>RF-SEC-DET</td>
               </tr>
             </tbody>
           </table>
         </div>
 
+        <!-- ==================== SECTION 8: DEFENDER PRODUCT BREAKDOWN ==================== -->
+        <h2>8. What Each Defender Product Provides</h2>
+
+        <p>Understanding exactly what each Defender product detects — and what it does NOT provide — is critical for log ingestion strategy.</p>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Key Distinction</div>
+          <div class="callout-content">
+            <p><strong>Defender products detect ATTACKS.</strong> They do not provide audit logs for control-plane changes.</p>
+            <p>Account creation, group changes, role assignments, CA policy changes — those come from <strong>Entra ID diagnostic logs</strong>, not Defender.</p>
+          </div>
+        </div>
+
+        <h3>8.1 Microsoft Defender for Identity (MDI)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>What MDI Detects ✓</th><th>What MDI Does NOT Provide ✗</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>Pass-the-Hash / Pass-the-Ticket</li>
+                    <li>Kerberoasting</li>
+                    <li>LDAP reconnaissance</li>
+                    <li>DCSync / replication abuse</li>
+                    <li>Lateral movement via SMB / NTLM</li>
+                    <li>Abnormal privilege escalation behavior</li>
+                    <li>Golden Ticket attacks</li>
+                    <li>Suspicious service creation</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>❌ User account creation logs</li>
+                    <li>❌ Group membership change logs</li>
+                    <li>❌ Role assignment audits</li>
+                    <li>❌ MFA / Conditional Access changes</li>
+                    <li>❌ Password reset history</li>
+                    <li>❌ Service account creation</li>
+                  </ul>
+                  <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">These are control-plane changes, not attacks. → <strong>AuditLogs</strong></p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>MDI Focus:</strong> Identity attacks (on-prem AD / hybrid identity)</p>
+        <p><strong>Output:</strong> Security alerts, entity context, signals for XDR correlation</p>
+
+        <h3>8.2 Microsoft Defender for Office 365 (MDO)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>What MDO Detects ✓</th><th>What MDO Does NOT Provide ✗</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>Phishing campaigns</li>
+                    <li>Malicious attachments</li>
+                    <li>Malicious URLs in email</li>
+                    <li>Business Email Compromise (BEC)</li>
+                    <li>Email-based lateral movement</li>
+                    <li>Impersonation attacks</li>
+                    <li>Spam / bulk mail abuse</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>❌ Mailbox permission changes</li>
+                    <li>❌ Mailbox creation / deletion</li>
+                    <li>❌ Transport rule changes</li>
+                    <li>❌ Mail forwarding rule audits</li>
+                    <li>❌ Delegate access changes</li>
+                  </ul>
+                  <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">These are audit events, not attacks. → <strong>OfficeActivity / AuditLogs</strong></p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>MDO Focus:</strong> Email and collaboration attacks</p>
+        <p><strong>Output:</strong> Email threat alerts, message trace context, user impact (who clicked/received)</p>
+
+        <h3>8.3 Microsoft Defender for Endpoint (MDE)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>What MDE Detects ✓</th><th>What MDE Does NOT Replace ✗</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>Malware and ransomware</li>
+                    <li>LOLBins abuse (living off the land)</li>
+                    <li>ASR rule triggers</li>
+                    <li>Credential theft (LSASS, SAM)</li>
+                    <li>Persistence mechanisms</li>
+                    <li>Exploit activity</li>
+                    <li>Suspicious process behavior</li>
+                    <li>Network indicators (C2)</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>❌ Device join / removal audit logs</li>
+                    <li>❌ Entra ID role assignments</li>
+                    <li>❌ Identity lifecycle events</li>
+                    <li>❌ Intune compliance changes</li>
+                    <li>❌ BitLocker key audits</li>
+                  </ul>
+                  <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">These are control-plane events. → <strong>AuditLogs / IntuneAuditLogs</strong></p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>MDE Focus:</strong> Endpoint attack behavior</p>
+        <p><strong>Output:</strong> Endpoint alerts, attack timelines, device risk scores</p>
+
+        <h3>8.4 Microsoft Defender for Cloud Apps (MDA/MDCA)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>What MDA Detects ✓</th><th>What MDA Does NOT Replace ✗</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>Impossible travel</li>
+                    <li>Risky OAuth app consent</li>
+                    <li>Data exfiltration behavior</li>
+                    <li>Suspicious downloads (mass file)</li>
+                    <li>Shadow IT detection</li>
+                    <li>Anomalous app usage</li>
+                    <li>Suspicious inbox rules</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>❌ App registration audit logs</li>
+                    <li>❌ Consent changes (full fidelity)</li>
+                    <li>❌ Tenant-wide configuration history</li>
+                    <li>❌ Service principal changes</li>
+                  </ul>
+                  <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">For full audit trail. → <strong>AuditLogs</strong></p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>MDA Focus:</strong> SaaS abuse and risky cloud app behavior</p>
+        <p><strong>Output:</strong> SaaS security alerts, app/user risk signals</p>
+
+        <!-- ==================== SECTION 9: ENTRA ID LOGS ==================== -->
+        <h2>9. Entra ID Logs: The Control Plane</h2>
+
+        <p>Account creation, admin changes, and identity governance events do NOT come from Defender products. They come from <strong>Microsoft Entra ID diagnostic logs</strong>, ingested into Sentinel.</p>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>These Logs Are Mandatory</div>
+          <div class="callout-content">
+            <p>Even with full XDR deployment, you MUST ingest Entra ID logs into Sentinel for:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Compliance:</strong> Audit trail for access changes (SOC 2, ISO 27001)</li>
+              <li><strong>Investigations:</strong> "Who added this user to Global Admins?"</li>
+              <li><strong>Identity governance:</strong> Lifecycle tracking</li>
+              <li><strong>Correlation:</strong> Enrich XDR alerts with identity context</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>9.1 Critical Entra ID Tables</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>What It Contains</th><th>Example Events</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>AuditLogs</strong></td>
+                <td>All identity control-plane changes</td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>User creation / deletion</li>
+                    <li>Group membership changes</li>
+                    <li>Role assignments (Global Admin, etc.)</li>
+                    <li>Conditional Access policy changes</li>
+                    <li>App registrations & consent grants</li>
+                    <li>Password resets</li>
+                    <li>MFA method changes</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>SigninLogs</strong></td>
+                <td>Interactive authentication events</td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>User login attempts (success/fail)</li>
+                    <li>MFA challenge outcomes</li>
+                    <li>Conditional Access evaluation results</li>
+                    <li>Location, device, app details</li>
+                    <li>Risk level at sign-in</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>AADNonInteractiveUserSignInLogs</strong></td>
+                <td>Background / token-based auth</td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>App token refreshes</li>
+                    <li>Service authentication</li>
+                    <li>Cached credential usage</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>AADServicePrincipalSignInLogs</strong></td>
+                <td>Service principal authentication</td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>App-to-app authentication</li>
+                    <li>Automation account logins</li>
+                    <li>Service account usage</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>AADProvisioningLogs</strong></td>
+                <td>User provisioning events</td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>HR sync events (Workday → Entra)</li>
+                    <li>SCIM provisioning to SaaS apps</li>
+                    <li>User lifecycle automation</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>AADRiskyUsers</strong></td>
+                <td>Identity Protection risk data</td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>Users flagged as risky</li>
+                    <li>Risk level changes</li>
+                    <li>Risk remediation events</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>9.2 The Complete Detection Model</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Layered Detection Architecture</span></div>
+          <pre><code>REVFLOW DETECTION ARCHITECTURE
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ LAYER 1: DEFENDER PRODUCTS (Attack Detection)                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐                   │
+│   │   MDI    │  │   MDO    │  │   MDE    │  │   MDA    │                   │
+│   │ Identity │  │  Email   │  │ Endpoint │  │Cloud Apps│                   │
+│   │ Attacks  │  │ Attacks  │  │ Attacks  │  │  Abuse   │                   │
+│   └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘                   │
+│        │             │             │             │                          │
+│        └─────────────┴──────┬──────┴─────────────┘                          │
+│                             ▼                                               │
+│                    ┌────────────────┐                                       │
+│                    │  MICROSOFT XDR │  ← Correlates attack signals          │
+│                    │   (Unified)    │                                       │
+│                    └───────┬────────┘                                       │
+│                            │                                                │
+└────────────────────────────┼────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ LAYER 2: MICROSOFT SENTINEL (Correlation + Enrichment)                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   XDR Alerts ──────┬─────────────────────────────────────────────────────► │
+│                    │                                                        │
+│   Entra ID ────────┤  ┌─────────────────────────────────────────────────┐  │
+│   AuditLogs        │  │                                                 │  │
+│   SigninLogs       ├──►  SENTINEL ANALYTICS + CORRELATION RULES         │  │
+│                    │  │                                                 │  │
+│   Network ─────────┤  │  • XDR alert + identity change correlation      │  │
+│   Palo Alto        │  │  • SaaS app monitoring (Salesforce, Workday)    │  │
+│   F5               │  │  • Network + endpoint correlation               │  │
+│                    │  │  • Compliance-driven detections                 │  │
+│   SaaS Apps ───────┤  │  • Custom business logic (Tier 0, VIPs)         │  │
+│   Salesforce       │  │                                                 │  │
+│   Workday          │  └─────────────────────────────────────────────────┘  │
+│   NetSuite         │                                                        │
+│                    │                                                        │
+└────────────────────┼────────────────────────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ LAYER 3: SOC OPERATIONS (Response)                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   Incidents ───────► SOAR Playbooks ───────► ServiceNow ───────► Response  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 10: LOG INGESTION STRATEGY ==================== -->
+        <h2>10. Sentinel Log Ingestion Strategy</h2>
+
+        <p>This strategy is driven by what XDR provides vs. what requires Sentinel ingestion.</p>
+
+        <h3>10.1 Ingestion Decision Matrix</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Ingest to Sentinel?</th><th>Rationale</th><th>Tier</th></tr>
+            </thead>
+            <tbody>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td><strong>Entra ID AuditLogs</strong></td>
+                <td><span class="status-badge critical">Yes - Required</span></td>
+                <td>Identity control-plane; XDR does NOT provide</td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td><strong>Entra ID SigninLogs</strong></td>
+                <td><span class="status-badge critical">Yes - Required</span></td>
+                <td>Auth events for correlation; CA evaluation</td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td><strong>SecurityAlert (XDR)</strong></td>
+                <td><span class="status-badge critical">Yes - Required</span></td>
+                <td>XDR alerts for Sentinel correlation</td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.05);">
+                <td><strong>SecurityIncident (XDR)</strong></td>
+                <td><span class="status-badge critical">Yes - Required</span></td>
+                <td>XDR incidents for case management</td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td><strong>DeviceEvents (MDE)</strong></td>
+                <td><span class="status-badge in-progress">Selective</span></td>
+                <td>Raw telemetry for hunting; high volume</td>
+                <td>Basic (filtered)</td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.05);">
+                <td><strong>EmailEvents (MDO)</strong></td>
+                <td><span class="status-badge in-progress">Selective</span></td>
+                <td>Email telemetry for BEC investigation</td>
+                <td>Basic (filtered)</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td><strong>Palo Alto Firewall</strong></td>
+                <td><span class="status-badge complete">Yes</span></td>
+                <td>Network telemetry; XDR doesn't cover</td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td><strong>Salesforce Logs</strong></td>
+                <td><span class="status-badge complete">Yes</span></td>
+                <td>SaaS app outside XDR scope</td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td><strong>Workday Logs</strong></td>
+                <td><span class="status-badge complete">Yes</span></td>
+                <td>HR system; termination correlation</td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.05);">
+                <td><strong>Azure Activity</strong></td>
+                <td><span class="status-badge complete">Yes</span></td>
+                <td>Cloud control-plane; XDR partial coverage</td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td><strong>Windows Security Events (DCs)</strong></td>
+                <td><span class="status-badge complete">Yes</span></td>
+                <td>Tier 0 monitoring; detailed AD audit</td>
+                <td>Analytics</td>
+              </tr>
+              <tr style="background: rgba(107, 114, 128, 0.05);">
+                <td><strong>Windows Security Events (Workstations)</strong></td>
+                <td><span class="status-badge in-progress">No</span></td>
+                <td>MDE covers endpoint; avoid duplication</td>
+                <td>N/A</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>10.2 Why Entra ID Logs Are Non-Negotiable</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Entra ID Log Use Cases</span></div>
+          <pre><code>ENTRA ID LOGS: CRITICAL USE CASES
+═══════════════════════════════════════════════════════════════════════════════
+
+1. COMPLIANCE REQUIREMENTS (SOC 2, ISO 27001, PIPEDA)
+   ├── "Show me all Global Admin role changes in the last 90 days"
+   ├── "Who created this service account?"
+   ├── "Audit trail for Conditional Access policy modifications"
+   └── XDR CANNOT provide this — only AuditLogs can
+
+2. INCIDENT INVESTIGATION
+   ├── XDR Alert: "Suspicious sign-in from unusual location"
+   ├── Investigation: "Was this user's MFA method changed recently?"
+   └── Requires: AuditLogs (MFA registration changes)
+   
+   ├── XDR Alert: "Pass-the-Hash attack detected"
+   ├── Investigation: "Was this account's group membership modified?"
+   └── Requires: AuditLogs (group membership changes)
+
+3. IDENTITY GOVERNANCE
+   ├── "Which accounts were created in the last 30 days?"
+   ├── "Which accounts haven't signed in for 90 days?"
+   ├── "Who has Global Admin and when was it assigned?"
+   └── Requires: AuditLogs + SigninLogs
+
+4. CROSS-DOMAIN CORRELATION (Sentinel Rules)
+   ├── RF-COR-006: XDR alert + recent password change
+   ├── RF-COR-007: XDR alert + recent MFA method change
+   ├── RF-COR-008: Impossible travel + new device registration
+   └── These correlations REQUIRE Entra ID logs
+
+5. PRIVILEGED ACCESS MONITORING
+   ├── RF-T0-004: Protected group modification (RF-SEC-GlobalAdmins)
+   ├── RF-T0-006: PIM role activation tracking
+   ├── RF-T0-007: Emergency access account usage
+   └── Requires: AuditLogs + SigninLogs</code></pre>
+        </div>
+
+        <h3>10.3 XDR Selective Ingestion Model</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">What to Ingest from XDR</span></div>
+          <pre><code>XDR TO SENTINEL: SELECTIVE INGESTION
+═══════════════════════════════════════════════════════════════════════════════
+
+ALWAYS INGEST (Via M365 Defender Connector):
+├── SecurityAlert         → All XDR alerts for correlation
+├── SecurityIncident      → XDR incidents for case management
+└── AlertEvidence         → Entity context for investigation
+
+SELECTIVE INGESTION (High-value, filtered):
+├── DeviceProcessEvents   → Filter to: suspicious, Tier 0 servers only
+├── DeviceNetworkEvents   → Filter to: external connections only
+├── DeviceFileEvents      → Filter to: sensitive paths only
+├── EmailEvents           → Filter to: High severity, external senders
+└── IdentityLogonEvents   → MDI logon events (supplement SigninLogs)
+
+DO NOT INGEST (XDR handles, avoid cost):
+├── DeviceInfo            → MDE inventory; query via API if needed
+├── DeviceRegistryEvents  → Very high volume; hunt ad-hoc in XDR
+├── EmailUrlInfo          → Query in MDO Advanced Hunting
+└── CloudAppEvents        → High volume; MDA alerts sufficient
+
+RATIONALE:
+• XDR raw telemetry is high-volume and expensive
+• XDR Advanced Hunting allows ad-hoc queries without ingestion
+• Ingest only what's needed for Sentinel correlation rules
+• Alerts and incidents are low-volume, high-value</code></pre>
+        </div>
+
+        <h3>10.4 RevFlow Log Ingestion Summary</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Category</th><th>Source</th><th>Daily Volume</th><th>Tier</th><th>Cost Driver</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="4"><strong>Identity (Required)</strong></td>
+                <td>AuditLogs</td>
+                <td>~50K events</td>
+                <td>Analytics</td>
+                <td>Low</td>
+              </tr>
+              <tr>
+                <td>SigninLogs</td>
+                <td>~200K events</td>
+                <td>Analytics</td>
+                <td>Medium</td>
+              </tr>
+              <tr>
+                <td>AADNonInteractiveUserSignInLogs</td>
+                <td>~500K events</td>
+                <td>Basic</td>
+                <td>Low (Basic tier)</td>
+              </tr>
+              <tr>
+                <td>AADServicePrincipalSignInLogs</td>
+                <td>~100K events</td>
+                <td>Analytics</td>
+                <td>Low</td>
+              </tr>
+              <tr>
+                <td rowspan="2"><strong>XDR (Required)</strong></td>
+                <td>SecurityAlert</td>
+                <td>~200 alerts</td>
+                <td>Analytics</td>
+                <td>Minimal</td>
+              </tr>
+              <tr>
+                <td>SecurityIncident</td>
+                <td>~50 incidents</td>
+                <td>Analytics</td>
+                <td>Minimal</td>
+              </tr>
+              <tr>
+                <td rowspan="2"><strong>Network</strong></td>
+                <td>Palo Alto (Threat)</td>
+                <td>~1M events</td>
+                <td>Analytics</td>
+                <td>Medium</td>
+              </tr>
+              <tr>
+                <td>Palo Alto (Traffic)</td>
+                <td>~50M events</td>
+                <td>Basic</td>
+                <td>Low (Basic tier)</td>
+              </tr>
+              <tr>
+                <td rowspan="2"><strong>SaaS Apps</strong></td>
+                <td>Salesforce</td>
+                <td>~100K events</td>
+                <td>Analytics</td>
+                <td>Low</td>
+              </tr>
+              <tr>
+                <td>Workday</td>
+                <td>~20K events</td>
+                <td>Analytics</td>
+                <td>Minimal</td>
+              </tr>
+              <tr>
+                <td><strong>Infrastructure</strong></td>
+                <td>Azure Activity</td>
+                <td>~50K events</td>
+                <td>Free</td>
+                <td>Free</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 11: INTERVIEW SUMMARY ==================== -->
         <div class="callout success">
           <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Interview-Ready Summary</div>
           <div class="callout-content">
-            <p><em>"Our detection strategy at RevFlow is XDR-first — Microsoft manages ~350 detections for endpoint, identity, email, and cloud apps. Sentinel adds ~270 custom rules for gaps: network telemetry, SaaS apps like Salesforce and Workday, and cross-domain correlations. Key custom detections include Salesforce bulk export monitoring, terminated employee access correlation with Workday, and Tier 0 asset protection for our domain controllers. We scope rules by location — Toronto HQ has stricter DC monitoring, Bangalore has after-hours alerting for the dev team, San Francisco monitors Sales team customer data access. Everything maps to MITRE ATT&CK for coverage analysis and SOC 2/ISO 27001 for compliance."</em></p>
+            <p><em>"With XDR, detection engineering shifts from writing low-level rules to designing detection strategy. We migrated 187 legacy RSA NetWitness rules — 60% were retired because XDR handles them natively.</em></p>
+            <p><em>The key insight is that Defender products detect ATTACKS, not control-plane changes. MDI detects Pass-the-Hash, but it doesn't log who was added to Global Admins. That comes from Entra ID AuditLogs, which we ingest into Sentinel separately.</em></p>
+            <p><em>Our log ingestion strategy is driven by this: we MUST ingest Entra ID logs for compliance and investigation. XDR alerts and incidents come in for correlation. Network and SaaS logs fill the gaps XDR doesn't cover. But we DON'T duplicate what XDR already handles — that would be expensive and redundant.</em></p>
+            <p><em>Sentinel becomes the correlation layer where we combine XDR attack signals with identity changes, network telemetry, and SaaS activity. That's where the real detection engineering value is now."</em></p>
           </div>
         </div>
 
