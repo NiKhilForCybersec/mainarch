@@ -3,136 +3,112 @@
    Main JavaScript
    ============================================ */
 
+// Prevent browser's automatic scroll restoration for the sidebar
+if ('scrollRestoration' in history) {
+  // We handle scroll restoration ourselves via sessionStorage
+  // This prevents conflicts with our sidebar scroll management
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize all components
-  initSidebar();
   initCodeCopy();
   initTimeline();
   initMobileMenu();
   setActiveNavItem();
-  initSidebarScroll(); // New: Handle sidebar scroll position
+  
+  // Initialize sidebar scroll LAST (after active item is set)
+  initSidebarScroll();
 });
 
-/* Sidebar Navigation */
-function initSidebar() {
-  const navItems = document.querySelectorAll('.nav-item');
+/* ============================================
+   SIDEBAR SCROLL MANAGEMENT
+   Maintains scroll position when navigating
+   ============================================ */
+
+function initSidebarScroll() {
+  const sidebarNav = document.querySelector('.sidebar-nav');
+  if (!sidebarNav) return;
   
-  navItems.forEach(item => {
-    item.addEventListener('click', function(e) {
-      // Save sidebar scroll position before navigating
-      saveSidebarScrollPosition();
-      
-      // Remove active class from all items
-      navItems.forEach(nav => nav.classList.remove('active'));
-      // Add active class to clicked item
-      this.classList.add('active');
+  // Step 1: Try to restore saved scroll position
+  const savedPosition = sessionStorage.getItem('sidebarScrollPos');
+  
+  if (savedPosition && parseInt(savedPosition) > 0) {
+    // Restore saved position immediately
+    sidebarNav.scrollTop = parseInt(savedPosition);
+    
+    // Also set it after a small delay in case browser resets it
+    setTimeout(() => {
+      sidebarNav.scrollTop = parseInt(savedPosition);
+    }, 50);
+  } else {
+    // No saved position, scroll active item into view after DOM is ready
+    setTimeout(() => {
+      scrollToActiveItem();
+    }, 50);
+  }
+  
+  // Step 2: Add click handlers to save position before navigation
+  const navLinks = document.querySelectorAll('.nav-item');
+  navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      // Save scroll position right before navigating
+      sessionStorage.setItem('sidebarScrollPos', sidebarNav.scrollTop.toString());
     });
   });
 }
 
-/* Sidebar Scroll Position Management */
-function initSidebarScroll() {
-  const sidebar = document.querySelector('.sidebar-nav');
-  if (!sidebar) return;
-  
-  // Try to restore saved scroll position first
-  const savedPosition = sessionStorage.getItem('sidebarScrollPosition');
-  
-  if (savedPosition !== null) {
-    // Restore saved position
-    sidebar.scrollTop = parseInt(savedPosition, 10);
-    // Clear after restoring so it doesn't interfere with manual scrolling
-    // We'll save again when user clicks a link
-  } else {
-    // No saved position, scroll to active item
-    scrollToActiveNavItem();
-  }
-  
-  // Also scroll to active item after a short delay to ensure DOM is ready
-  setTimeout(() => {
-    const activeItem = document.querySelector('.nav-item.active');
-    if (activeItem) {
-      // Check if active item is visible in the sidebar
-      const sidebarRect = sidebar.getBoundingClientRect();
-      const activeRect = activeItem.getBoundingClientRect();
-      
-      // If active item is not visible, scroll to it
-      if (activeRect.top < sidebarRect.top || activeRect.bottom > sidebarRect.bottom) {
-        scrollToActiveNavItem();
-      }
-    }
-  }, 100);
-}
-
-/* Save sidebar scroll position */
-function saveSidebarScrollPosition() {
-  const sidebar = document.querySelector('.sidebar-nav');
-  if (sidebar) {
-    sessionStorage.setItem('sidebarScrollPosition', sidebar.scrollTop.toString());
-  }
-}
-
-/* Scroll sidebar to show the active navigation item */
-function scrollToActiveNavItem() {
-  const sidebar = document.querySelector('.sidebar-nav');
+/* Scroll the active item into view */
+function scrollToActiveItem() {
+  const sidebarNav = document.querySelector('.sidebar-nav');
   const activeItem = document.querySelector('.nav-item.active');
   
-  if (!sidebar || !activeItem) return;
+  if (!sidebarNav || !activeItem) return;
   
-  // Get the section title for the active item (for context)
-  const activeSection = activeItem.closest('.nav-section');
-  const sectionTitle = activeSection?.querySelector('.nav-section-title');
+  // Calculate the position of active item relative to the sidebar-nav container
+  const sidebarNavRect = sidebarNav.getBoundingClientRect();
+  const activeItemRect = activeItem.getBoundingClientRect();
   
-  // Calculate position to scroll to
-  // We want to show the section title if possible, or at least the active item
-  const targetElement = sectionTitle || activeItem;
+  // Calculate current scroll position and where active item is
+  const currentScroll = sidebarNav.scrollTop;
+  const activeItemTop = activeItemRect.top - sidebarNavRect.top + currentScroll;
+  const activeItemHeight = activeItem.offsetHeight;
+  const sidebarHeight = sidebarNav.clientHeight;
   
-  // Get the offset of the target relative to the sidebar
-  const sidebarRect = sidebar.getBoundingClientRect();
-  const targetRect = targetElement.getBoundingClientRect();
-  const activeRect = activeItem.getBoundingClientRect();
+  // Calculate scroll position to center the active item
+  const targetScroll = activeItemTop - (sidebarHeight / 2) + (activeItemHeight / 2);
   
-  // Calculate scroll position to center the active item (or at least show it)
-  const targetOffset = targetElement.offsetTop;
-  const sidebarHeight = sidebar.clientHeight;
-  
-  // Scroll to show the section title at the top, with active item visible
-  const scrollTo = Math.max(0, targetOffset - 20); // 20px padding from top
-  
-  // Smooth scroll to position
-  sidebar.scrollTo({
-    top: scrollTo,
-    behavior: 'smooth'
-  });
+  // Apply scroll (clamped to valid range)
+  sidebarNav.scrollTop = Math.max(0, targetScroll);
 }
 
-/* Set Active Nav Item Based on Current Page */
+/* ============================================
+   SET ACTIVE NAV ITEM
+   Highlights current page in navigation
+   ============================================ */
+
 function setActiveNavItem() {
   const currentPath = window.location.pathname;
+  const currentPage = currentPath.split('/').pop() || 'index.html';
   const navItems = document.querySelectorAll('.nav-item');
   
   navItems.forEach(item => {
     const href = item.getAttribute('href');
-    if (href && currentPath.endsWith(href.replace('./', ''))) {
+    if (!href) return;
+    
+    // Get the filename from the href
+    const hrefPage = href.split('/').pop();
+    
+    // Check if this nav item matches current page
+    if (currentPage === hrefPage) {
       item.classList.add('active');
-    } else if (href && currentPath.includes(href.replace('./', '').replace('index.html', ''))) {
-      // For section index pages
-      if (href.includes('index.html')) {
-        item.classList.add('active');
-      }
     }
   });
-  
-  // Special case for root index
-  if (currentPath === '/' || currentPath.endsWith('/index.html') || currentPath.endsWith('security-transformation/')) {
-    const homeLink = document.querySelector('.nav-item[href="index.html"], .nav-item[href="./index.html"]');
-    if (homeLink) {
-      homeLink.classList.add('active');
-    }
-  }
 }
 
-/* Code Copy Functionality */
+/* ============================================
+   CODE COPY FUNCTIONALITY
+   ============================================ */
+
 function initCodeCopy() {
   const copyButtons = document.querySelectorAll('.code-copy-btn');
   
@@ -162,13 +138,15 @@ function initCodeCopy() {
   });
 }
 
-/* Interactive Timeline */
+/* ============================================
+   INTERACTIVE TIMELINE
+   ============================================ */
+
 function initTimeline() {
   const timelineSegments = document.querySelectorAll('.timeline-segment');
   
   timelineSegments.forEach(segment => {
     segment.addEventListener('mouseenter', function() {
-      // Highlight related segments
       const track = this.dataset.track;
       document.querySelectorAll(`.timeline-segment[data-track="${track}"]`).forEach(s => {
         s.style.opacity = '1';
@@ -176,7 +154,6 @@ function initTimeline() {
     });
     
     segment.addEventListener('mouseleave', function() {
-      // Reset opacity
       document.querySelectorAll('.timeline-segment').forEach(s => {
         s.style.opacity = '';
       });
@@ -184,7 +161,10 @@ function initTimeline() {
   });
 }
 
-/* Mobile Menu */
+/* ============================================
+   MOBILE MENU
+   ============================================ */
+
 function initMobileMenu() {
   const menuToggle = document.querySelector('.mobile-menu-toggle');
   const sidebar = document.querySelector('.sidebar');
@@ -207,7 +187,10 @@ function initMobileMenu() {
   }
 }
 
-/* Smooth Scroll for Anchor Links */
+/* ============================================
+   SMOOTH SCROLL FOR ANCHOR LINKS
+   ============================================ */
+
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function(e) {
     e.preventDefault();
@@ -221,7 +204,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-/* Table of Contents Highlight on Scroll */
+/* ============================================
+   TABLE OF CONTENTS HIGHLIGHT
+   ============================================ */
+
 function initTocHighlight() {
   const headings = document.querySelectorAll('h2[id], h3[id]');
   const tocLinks = document.querySelectorAll('.toc-link');
@@ -247,7 +233,10 @@ function initTocHighlight() {
   headings.forEach(heading => observer.observe(heading));
 }
 
-/* Collapsible Sections */
+/* ============================================
+   COLLAPSIBLE SECTIONS
+   ============================================ */
+
 function initCollapsible() {
   const collapsibles = document.querySelectorAll('.collapsible-trigger');
   
@@ -268,27 +257,10 @@ function initCollapsible() {
   });
 }
 
-/* Search Functionality (if implemented) */
-function initSearch() {
-  const searchInput = document.querySelector('.search-input');
-  const searchResults = document.querySelector('.search-results');
-  
-  if (!searchInput) return;
-  
-  searchInput.addEventListener('input', debounce(function(e) {
-    const query = e.target.value.toLowerCase().trim();
-    
-    if (query.length < 2) {
-      searchResults.innerHTML = '';
-      return;
-    }
-    
-    // Search implementation would go here
-    // This is a placeholder for client-side search
-  }, 300));
-}
+/* ============================================
+   UTILITY FUNCTIONS
+   ============================================ */
 
-/* Utility: Debounce */
 function debounce(func, wait) {
   let timeout;
   return function executedFunction(...args) {
@@ -301,7 +273,6 @@ function debounce(func, wait) {
   };
 }
 
-/* Utility: Format Date */
 function formatDate(date) {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
@@ -310,9 +281,12 @@ function formatDate(date) {
   }).format(new Date(date));
 }
 
-/* Export for use in other scripts */
+/* ============================================
+   EXPORT FOR USE IN OTHER SCRIPTS
+   ============================================ */
+
 window.SecurityDocs = {
-  initSidebar,
+  scrollToActiveItem,
   initCodeCopy,
   initTimeline,
   setActiveNavItem

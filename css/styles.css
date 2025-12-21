@@ -208,7 +208,6 @@ strong {
   padding: 1rem 0;
   overflow-y: auto;
   overflow-x: hidden;
-  scroll-behavior: smooth;
 }
 
 /* Custom scrollbar for sidebar */
