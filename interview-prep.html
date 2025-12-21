@@ -53,6 +53,7 @@
         <div class="nav-section">
           <div class="nav-section-title">DLP Migration</div>
           <a href="dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
           <a href="dlp/policy-translation.html" class="nav-item">Policy Translation</a>
           <a href="dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
           <a href="dlp/user-communication.html" class="nav-item">User Communication</a>
@@ -86,6 +87,7 @@
           <div class="nav-section-title">Resources</div>
           <a href="resources/timeline.html" class="nav-item">Project Timeline</a>
           <a href="resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
           <a href="resources/scripts.html" class="nav-item">Scripts & Queries</a>
           <a href="resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
           <a href="resources/templates.html" class="nav-item">Templates</a>
@@ -1870,6 +1872,327 @@ DECISION CHECKLIST:
 MATURE ENVIRONMENTS:
 • Default: XDR incidents only
 • Selective: 1-2 Device* tables with filters, reviewed quarterly"</code></pre>
+          </div>
+        </div>
+
+        <h2>DLP Migration Questions</h2>
+
+        <div class="interview-question">
+          <h3>26e. How do Sensitive Information Types (SITs) work in Purview DLP?</h3>
+          <p class="interview-context"><strong>Tests DLP fundamentals.</strong> Understanding of detection mechanisms.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"SITs are the foundation of DLP detection — they define WHAT data to protect.
+
+COMPONENTS OF A SIT:
+1. Primary Pattern — regex or function that identifies the data
+   Example: \d{3}-\d{2}-\d{4} for SSN format
+
+2. Keywords — contextual words that increase confidence
+   Example: 'social security', 'SSN', 'tax ID'
+
+3. Checksum/Function — validation algorithm (Luhn for credit cards)
+   Example: Luhn check ensures credit card numbers are valid
+
+4. Proximity — how close keywords must be to pattern (usually 300 chars)
+
+5. Confidence Level — likelihood match is true positive (65/75/85%)
+   Low = pattern only
+   Medium = pattern + keywords
+   High = pattern + keywords + checksum
+
+SIT CATEGORIES:
+• Financial (50+): Credit Card, Bank Account, SWIFT, IBAN
+• Health (30+): SSN, Health Insurance Claim
+• National ID (100+): SSN, Canadian SIN, UK NIN, German ID
+• Credentials (20+): Azure AD Client Secret, AWS Access Key
+• Custom: Organization-specific patterns
+
+BUILT-IN VS CUSTOM:
+Purview has 300+ built-in SITs vs Symantec's smaller library.
+Custom SITs use the same components but are defined by you.
+
+SYMANTEC TRANSLATION:
+Symantec 'Data Identifiers' = Purview 'Sensitive Information Types'
+Same concept, different name, Purview has more built-in options."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>26f. What is Exact Data Match (EDM) and when would you use it?</h3>
+          <p class="interview-context"><strong>Tests advanced DLP knowledge.</strong> Understanding of precise vs pattern matching.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"EDM provides precise matching against your ACTUAL sensitive data rather 
+than patterns. It's for when pattern-based SITs would cause too many 
+false positives.
+
+HOW EDM WORKS:
+1. You export sensitive data (employee IDs, customer numbers) to CSV
+2. EDM Upload Agent hashes the data on-premises
+3. Only HASHES are uploaded to cloud (actual data stays on-prem)
+4. DLP compares content hashes against your data hashes
+5. Match = alert/block
+
+WHEN TO USE EDM VS PATTERN-BASED SITs:
+
+USE PATTERN-BASED:
+• Credit cards — Luhn checksum validates any valid CC
+• Generic PII (SSN) — well-defined patterns
+• Standard formats — predictable structure
+
+USE EDM:
+• Employee IDs — pattern might match random numbers
+• Customer account numbers — high false positive risk
+• Patient record numbers — format varies
+• Any organization-specific identifiers
+
+EDM SCALABILITY:
+• Up to 100 million rows per data store
+• Up to 32 columns per schema
+• Up to 5 searchable columns
+• Daily refresh capability
+
+SYMANTEC EQUIVALENT:
+Symantec 'Indexed Document Matching (IDM)' ≈ Purview 'EDM'
+Same concept — match against actual data values, not patterns.
+Purview EDM is more scalable and integrates with the broader 
+Microsoft ecosystem."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>26g. How do Sensitivity Labels differ from DLP policies?</h3>
+          <p class="interview-context"><strong>Tests understanding of classification vs protection.</strong></p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"Labels and DLP serve different purposes but work together:
+
+SENSITIVITY LABELS:
+• Purpose: CLASSIFY data based on sensitivity
+• Applied to: Files, emails, sites, containers
+• Persistence: Travel with the document
+• Protection: Can encrypt, watermark, restrict access
+• Application: Manual, auto-label, or default
+
+DLP POLICIES:
+• Purpose: CONTROL data movement based on content
+• Applied to: Actions (send, share, copy, print)
+• Scope: Location-specific (Exchange, SharePoint, Endpoint)
+• Protection: Block, warn, audit specific actions
+• Trigger: Content matches SITs
+
+HOW THEY WORK TOGETHER:
+1. Label classifies: 'Confidential - Internal Only'
+2. Label applies encryption: Only employees can open
+3. DLP policy: If labeled 'Confidential', block external sharing
+4. DLP policy: If contains Credit Card SIT, warn before sending
+
+EXAMPLE HIERARCHY:
+┌─────────────────────────────────────────────────────┐
+│ Highly Confidential                                  │
+│   ├── Board Only (encrypt: board members only)      │
+│   ├── Executive (encrypt: executives + watermark)   │
+│   └── Legal Hold (encrypt: legal team, no print)    │
+├─────────────────────────────────────────────────────┤
+│ Confidential                                         │
+│   ├── Internal Only (encrypt: all employees)        │
+│   ├── Partners (encrypt: employees + partner domains)│
+│   └── Project-Specific (encrypt: project team only) │
+├─────────────────────────────────────────────────────┤
+│ Internal                                             │
+│   ├── General (header: 'Internal Use Only')         │
+│   └── HR / Finance (header + footer)                │
+├─────────────────────────────────────────────────────┤
+│ Public                                               │
+│   └── Marketing / Press Release (no protection)     │
+└─────────────────────────────────────────────────────┘
+
+SYMANTEC TRANSLATION:
+Symantec 'Classification Tags' ≈ Purview 'Sensitivity Labels'
+But Purview labels are more powerful — they can encrypt content, 
+apply Rights Management, and persist across platforms."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>26h. What's the difference between Symantec EDLP and Purview Endpoint DLP?</h3>
+          <p class="interview-context"><strong>Direct migration comparison.</strong> Shows hands-on experience.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"The fundamental difference is architecture:
+
+SYMANTEC ENDPOINT DLP:
+• Standalone agent (separate from AV/EDR)
+• Requires Enforce Server (on-prem or cloud)
+• Separate management infrastructure
+• Own database for incidents
+• Separate licensing
+
+PURVIEW ENDPOINT DLP:
+• Built INTO Microsoft Defender for Endpoint (MDE)
+• No separate agent — uses MDE sensor already deployed
+• Managed in Purview Compliance Portal (cloud-native)
+• Incidents flow to Activity Explorer + Sentinel
+• Included with M365 E5 license
+
+FEATURE PARITY:
+Both support:
+✓ Clipboard monitoring
+✓ USB/removable media (block/allow/audit)
+✓ Print monitoring
+✓ Network share upload
+✓ Browser upload monitoring
+✓ OCR (image text detection)
+✓ User override with justification
+✓ macOS support
+
+PURVIEW ADVANTAGES:
+✓ No additional agent (MDE already deployed for EDR)
+✓ Unified management (same portal as email/SharePoint DLP)
+✓ Native Sentinel integration (DLP alerts flow directly)
+✓ XDR correlation (DLP events correlate with endpoint/identity)
+✓ Cost consolidation (included in E5)
+
+SYMANTEC ADVANTAGES:
+✓ More mature Linux support
+✓ Network DLP appliance option
+✓ Longer track record in enterprise
+
+FOR MIGRATION:
+The key insight: if you're already deploying MDE for EDR, 
+Endpoint DLP comes 'free' — no additional agent, just enable 
+policies. This is why Purview EDLP made sense for our migration."</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>26i. Explain the DLP policy modes and how you'd roll out a new policy.</h3>
+          <p class="interview-context"><strong>Tests operational DLP knowledge.</strong> Audit vs enforcement progression.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"DLP policies progress through modes to ensure safe rollout:
+
+POLICY MODES (Symantec → Purview):
+
+1. SIMULATION (Symantec: Test Mode)
+   Purview: 'Test it first'
+   User Impact: None — users see nothing
+   Admin: Full visibility in Activity Explorer
+   Use: Initial validation, tune before production
+
+2. AUDIT (Symantec: Monitor/Log Only)
+   Purview: 'Turn it on' with Audit action
+   User Impact: None — users see nothing
+   Admin: Alerts generated, no enforcement
+   Use: Production monitoring, false positive assessment
+
+3. WARN (Symantec: Warn/Notify)
+   Purview: Show policy tip + Allow override
+   User Impact: See warning, can proceed
+   Admin: Logged with user action
+   Use: User education, soft enforcement
+
+4. BLOCK WITH OVERRIDE (Symantec: Block with Justification)
+   Purview: Block + Allow override with justification
+   User Impact: Blocked unless they provide reason
+   Admin: Logged with justification text
+   Use: Balanced enforcement with business flexibility
+
+5. BLOCK (Symantec: Block/Prevent)
+   Purview: Block + No override
+   User Impact: Hard block, no bypass
+   Admin: Alert generated
+   Use: High-risk data, full enforcement
+
+ROLLOUT PROGRESSION (6-8 weeks per policy):
+
+Week 1-2: SIMULATION
+• Validate matches, identify false positives
+• Success: <5% false positive rate
+
+Week 3-4: AUDIT
+• Production validation, volume assessment
+• Success: FP rate <3%, volume manageable
+
+Week 5-6: WARN (pilot group)
+• IT + Security teams first
+• Success: Complaints <1%, override rate <10%
+
+Week 7-8: WARN (all users)
+• Organization-wide education
+• Success: Override rate declining
+
+Week 9-10: BLOCK WITH OVERRIDE
+• Must justify to proceed
+• Success: Justified overrides <5%
+
+Week 11+: BLOCK (high-risk only)
+• Hard block for bulk PII export, etc.
+
+PARALLEL OPERATION DURING MIGRATION:
+During Symantec → Purview migration:
+• Symantec: Switch to Audit-only (no blocking)
+• Purview: Progressively Simulation → Audit → Warn → Block
+• Validate: Purview catches everything Symantec did
+• Cutover: Disable Symantec after parity confirmed"</code></pre>
+          </div>
+        </div>
+
+        <div class="interview-question">
+          <h3>26j. What endpoint activities can Purview DLP monitor and control?</h3>
+          <p class="interview-context"><strong>Tests detailed EDLP knowledge.</strong></p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Response</span></div>
+            <pre><code>"Purview Endpoint DLP monitors these activities:
+
+ENDPOINT ACTIVITIES & ACTIONS:
+┌────────────────────────────┬───────┬──────┬───────┬─────────────────┐
+│ Activity                   │ Audit │ Warn │ Block │ Block+Override  │
+├────────────────────────────┼───────┼──────┼───────┼─────────────────┤
+│ Copy to USB/Removable      │  ✓    │  ✓   │   ✓   │       ✓         │
+│ Copy to Network Share      │  ✓    │  ✓   │   ✓   │       ✓         │
+│ Copy to Clipboard          │  ✓    │  ✓   │   ✓   │       ✓         │
+│ Print                      │  ✓    │  ✓   │   ✓   │       ✓         │
+│ Upload via Browser         │  ✓    │  ✓   │   ✓   │       ✓         │
+│ Access by Unallowed App    │  ✓    │  ✓   │   ✓   │       ✓         │
+│ Access by Bluetooth        │  ✓    │  —   │   ✓   │       —         │
+│ Access by RDP              │  ✓    │  —   │   ✓   │       —         │
+└────────────────────────────┴───────┴──────┴───────┴─────────────────┘
+
+BROWSER COVERAGE:
+• Microsoft Edge: Native integration
+• Chrome: Requires Microsoft Purview extension
+• Firefox: Requires extension
+
+CLOUD APP INTEGRATION:
+When combined with Defender for Cloud Apps:
+• Monitor uploads to unsanctioned cloud apps
+• Block sensitive data to personal OneDrive/Dropbox
+• Control SaaS app data movement
+
+WHAT TRIGGERS DETECTION:
+• File opened containing sensitive data
+• Sensitive content copied to clipboard
+• Sensitive file attached to non-corporate app
+• Sensitive document sent to printer
+• File with sensitive content copied to USB
+
+DEVICE GROUPS:
+Can scope policies to specific device groups:
+• All devices
+• Privileged workstations
+• Developer machines
+• Specific departments
+
+This granularity lets you apply stricter policies to 
+high-risk devices while keeping productivity for others."</code></pre>
           </div>
         </div>
 

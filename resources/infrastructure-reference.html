@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infrastructure Reference | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+        <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="../infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="../operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="../operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="timeline.html" class="nav-item">Project Timeline</a>
+          <a href="raci.html" class="nav-item">RACI Matrix</a>
+          <a href="infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="templates.html" class="nav-item">Templates</a>
+          <a href="splunk-reference.html" class="nav-item">Splunk Reference</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="incident-response.html" class="nav-item">Incident Response</a>
+          <a href="operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html" class="breadcrumb-link">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="timeline.html" class="breadcrumb-link">Resources</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Infrastructure Reference</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>RevFlow Infrastructure Reference</h1>
+          <div class="page-header-meta">
+            <span class="page-badge">Reference Document</span>
+          </div>
+          <p class="intro-text">
+            Comprehensive reference for RevFlow Analytics infrastructure, naming conventions, organizational structure, and security group mappings. This document serves as the authoritative source for all runbooks and operational procedures.
+          </p>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Document Information
+          </div>
+          <div class="callout-content">
+            <p><strong>Version:</strong> 3.0 | <strong>Last Updated:</strong> 2024-12-01 | <strong>Owner:</strong> Security Engineering</p>
+            <p><strong>Classification:</strong> Internal Use Only</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 1: ORGANIZATIONAL STRUCTURE ==================== -->
+        <h2>1. Organizational Structure</h2>
+
+        <h3>1.1 Global Locations</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Location Code</th><th>City</th><th>Country</th><th>Timezone</th><th>Employees</th><th>Endpoints</th><th>Primary Function</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>RF-CA-TOR</strong></td>
+                <td>Toronto</td>
+                <td>Canada</td>
+                <td>EST (UTC-5)</td>
+                <td>1,800</td>
+                <td>4,200</td>
+                <td>HQ, Engineering, SOC, Corporate</td>
+              </tr>
+              <tr>
+                <td><strong>RF-CA-VAN</strong></td>
+                <td>Vancouver</td>
+                <td>Canada</td>
+                <td>PST (UTC-8)</td>
+                <td>450</td>
+                <td>1,000</td>
+                <td>Engineering, Product</td>
+              </tr>
+              <tr>
+                <td><strong>RF-US-SFO</strong></td>
+                <td>San Francisco</td>
+                <td>USA</td>
+                <td>PST (UTC-8)</td>
+                <td>600</td>
+                <td>1,400</td>
+                <td>Sales, Customer Success</td>
+              </tr>
+              <tr>
+                <td><strong>RF-US-NYC</strong></td>
+                <td>New York</td>
+                <td>USA</td>
+                <td>EST (UTC-5)</td>
+                <td>350</td>
+                <td>800</td>
+                <td>Sales, Finance</td>
+              </tr>
+              <tr>
+                <td><strong>RF-IN-BLR</strong></td>
+                <td>Bangalore</td>
+                <td>India</td>
+                <td>IST (UTC+5:30)</td>
+                <td>700</td>
+                <td>1,400</td>
+                <td>Engineering, Support, SOC</td>
+              </tr>
+              <tr>
+                <td><strong>RF-IN-HYD</strong></td>
+                <td>Hyderabad</td>
+                <td>India</td>
+                <td>IST (UTC+5:30)</td>
+                <td>100</td>
+                <td>200</td>
+                <td>QA, Support</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>1.2 Department Structure</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Organizational Hierarchy</span></div>
+          <pre><code>REVFLOW ANALYTICS - DEPARTMENT STRUCTURE
+═══════════════════════════════════════════════════════════════════════════════
+
+CEO
+├── CTO (Technology)
+│   ├── VP Engineering
+│   │   ├── Platform Engineering (RF-ENG-PLAT)
+│   │   ├── Product Engineering (RF-ENG-PROD)
+│   │   ├── Data Engineering (RF-ENG-DATA)
+│   │   ├── DevOps/SRE (RF-ENG-SRE)
+│   │   └── QA Engineering (RF-ENG-QA)
+│   ├── VP Infrastructure
+│   │   ├── Cloud Operations (RF-IT-CLOUD)
+│   │   ├── Network Operations (RF-IT-NET)
+│   │   └── IT Service Desk (RF-IT-DESK)
+│   └── VP Product
+│       ├── Product Management (RF-PROD-MGT)
+│       └── UX/Design (RF-PROD-UX)
+│
+├── CISO (Security)
+│   ├── Director, Security Operations
+│   │   ├── SOC Analysts L1 (RF-SEC-SOC-L1)
+│   │   ├── SOC Analysts L2 (RF-SEC-SOC-L2)
+│   │   └── SOC Lead/L3 (RF-SEC-SOC-L3)
+│   ├── Director, Security Engineering
+│   │   ├── Detection Engineering (RF-SEC-DET)
+│   │   ├── Platform Security (RF-SEC-PLAT)
+│   │   └── Identity & Access (RF-SEC-IAM)
+│   ├── Director, GRC
+│   │   ├── Compliance (RF-SEC-GRC-COMP)
+│   │   └── Risk Management (RF-SEC-GRC-RISK)
+│   └── Director, Application Security
+│       └── AppSec Engineers (RF-SEC-APP)
+│
+├── CFO (Finance)
+│   ├── Accounting (RF-FIN-ACCT)
+│   ├── FP&A (RF-FIN-FPA)
+│   └── Treasury (RF-FIN-TREAS)
+│
+├── CRO (Revenue)
+│   ├── Sales - Enterprise (RF-SALES-ENT)
+│   ├── Sales - Commercial (RF-SALES-COM)
+│   ├── Sales - APAC (RF-SALES-APAC)
+│   ├── Sales Operations (RF-SALES-OPS)
+│   └── Customer Success (RF-CS)
+│
+├── CHRO (People)
+│   ├── HR Operations (RF-HR-OPS)
+│   ├── Talent Acquisition (RF-HR-TA)
+│   └── L&D (RF-HR-LD)
+│
+└── CLO (Legal)
+    ├── Corporate Legal (RF-LEGAL-CORP)
+    ├── Commercial Legal (RF-LEGAL-COM)
+    └── Privacy (RF-LEGAL-PRIV)</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 2: ENDPOINT INVENTORY ==================== -->
+        <h2>2. Endpoint Inventory</h2>
+
+        <h3>2.1 Endpoint Types & Naming Convention</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Type</th><th>Naming Pattern</th><th>Example</th><th>Count</th><th>OS</th><th>Management</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Corporate Laptop</strong></td>
+                <td><code>RF-{LOC}-L-{ASSET#}</code></td>
+                <td><code>RF-TOR-L-00142</code></td>
+                <td>3,500</td>
+                <td>Windows 11 Pro</td>
+                <td>Intune + Entra Hybrid Join</td>
+              </tr>
+              <tr>
+                <td><strong>Corporate Desktop</strong></td>
+                <td><code>RF-{LOC}-D-{ASSET#}</code></td>
+                <td><code>RF-BLR-D-00891</code></td>
+                <td>800</td>
+                <td>Windows 11 Pro</td>
+                <td>Intune + Entra Hybrid Join</td>
+              </tr>
+              <tr>
+                <td><strong>Developer Workstation</strong></td>
+                <td><code>RF-{LOC}-DEV-{ASSET#}</code></td>
+                <td><code>RF-VAN-DEV-00234</code></td>
+                <td>600</td>
+                <td>Windows 11 Pro / macOS</td>
+                <td>Intune</td>
+              </tr>
+              <tr>
+                <td><strong>MacBook</strong></td>
+                <td><code>RF-{LOC}-MAC-{ASSET#}</code></td>
+                <td><code>RF-SFO-MAC-00567</code></td>
+                <td>1,200</td>
+                <td>macOS 14 Sonoma</td>
+                <td>Intune + Jamf</td>
+              </tr>
+              <tr>
+                <td><strong>VDI (Persistent)</strong></td>
+                <td><code>RF-VDI-P-{USER}</code></td>
+                <td><code>RF-VDI-P-JSMITH</code></td>
+                <td>400</td>
+                <td>Windows 11 Enterprise</td>
+                <td>AVD + Intune</td>
+              </tr>
+              <tr>
+                <td><strong>VDI (Non-Persistent)</strong></td>
+                <td><code>RF-VDI-NP-{POOL}-{#}</code></td>
+                <td><code>RF-VDI-NP-CS-015</code></td>
+                <td>300</td>
+                <td>Windows 11 Enterprise</td>
+                <td>AVD (Golden Image)</td>
+              </tr>
+              <tr>
+                <td><strong>Windows Server</strong></td>
+                <td><code>RF-{LOC}-SRV-{ROLE}-{#}</code></td>
+                <td><code>RF-TOR-SRV-DC-01</code></td>
+                <td>180</td>
+                <td>Windows Server 2022</td>
+                <td>SCCM + GPO</td>
+              </tr>
+              <tr>
+                <td><strong>Linux Server</strong></td>
+                <td><code>rf-{loc}-{role}-{#}</code></td>
+                <td><code>rf-blr-app-web-03</code></td>
+                <td>420</td>
+                <td>Ubuntu 22.04 / RHEL 9</td>
+                <td>Ansible + Satellite</td>
+              </tr>
+              <tr>
+                <td><strong>Azure VM</strong></td>
+                <td><code>rf-{env}-{role}-{region}-{#}</code></td>
+                <td><code>rf-prod-api-eastus-02</code></td>
+                <td>350</td>
+                <td>Ubuntu 22.04 / Windows</td>
+                <td>Azure Arc + Defender for Cloud</td>
+              </tr>
+              <tr>
+                <td><strong>AWS EC2</strong></td>
+                <td><code>rf-{env}-{role}-{region}-{#}</code></td>
+                <td><code>rf-prod-db-useast1-01</code></td>
+                <td>150</td>
+                <td>Amazon Linux 2 / Ubuntu</td>
+                <td>AWS SSM + Arc (hybrid)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2.2 Server Roles</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Role Code</th><th>Description</th><th>Count</th><th>Criticality</th><th>Owner</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>DC</strong></td>
+                <td>Domain Controller</td>
+                <td>6</td>
+                <td><span class="status-badge critical">Critical</span></td>
+                <td>RF-IT-CLOUD</td>
+              </tr>
+              <tr>
+                <td><strong>CA</strong></td>
+                <td>Certificate Authority</td>
+                <td>3</td>
+                <td><span class="status-badge critical">Critical</span></td>
+                <td>RF-SEC-IAM</td>
+              </tr>
+              <tr>
+                <td><strong>AAD</strong></td>
+                <td>Entra Connect Server</td>
+                <td>2</td>
+                <td><span class="status-badge critical">Critical</span></td>
+                <td>RF-SEC-IAM</td>
+              </tr>
+              <tr>
+                <td><strong>SCCM</strong></td>
+                <td>ConfigMgr Site Server</td>
+                <td>3</td>
+                <td><span class="status-badge complete">High</span></td>
+                <td>RF-IT-DESK</td>
+              </tr>
+              <tr>
+                <td><strong>FS</strong></td>
+                <td>File Server</td>
+                <td>8</td>
+                <td><span class="status-badge complete">High</span></td>
+                <td>RF-IT-CLOUD</td>
+              </tr>
+              <tr>
+                <td><strong>SQL</strong></td>
+                <td>SQL Server</td>
+                <td>12</td>
+                <td><span class="status-badge critical">Critical</span></td>
+                <td>RF-ENG-DATA</td>
+              </tr>
+              <tr>
+                <td><strong>WEB</strong></td>
+                <td>Web/App Server</td>
+                <td>45</td>
+                <td><span class="status-badge complete">High</span></td>
+                <td>RF-ENG-SRE</td>
+              </tr>
+              <tr>
+                <td><strong>API</strong></td>
+                <td>API Gateway/Service</td>
+                <td>28</td>
+                <td><span class="status-badge complete">High</span></td>
+                <td>RF-ENG-PLAT</td>
+              </tr>
+              <tr>
+                <td><strong>MQ</strong></td>
+                <td>Message Queue (Kafka/RabbitMQ)</td>
+                <td>15</td>
+                <td><span class="status-badge complete">High</span></td>
+                <td>RF-ENG-PLAT</td>
+              </tr>
+              <tr>
+                <td><strong>CACHE</strong></td>
+                <td>Redis/Memcached</td>
+                <td>12</td>
+                <td><span class="status-badge in-progress">Medium</span></td>
+                <td>RF-ENG-PLAT</td>
+              </tr>
+              <tr>
+                <td><strong>JUMP</strong></td>
+                <td>Jump/Bastion Host</td>
+                <td>6</td>
+                <td><span class="status-badge complete">High</span></td>
+                <td>RF-SEC-PLAT</td>
+              </tr>
+              <tr>
+                <td><strong>LOG</strong></td>
+                <td>Log Collector/Forwarder</td>
+                <td>8</td>
+                <td><span class="status-badge in-progress">Medium</span></td>
+                <td>RF-SEC-DET</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 3: SECURITY GROUPS ==================== -->
+        <h2>3. Security Groups & Distribution Lists</h2>
+
+        <h3>3.1 Entra ID Security Groups (Cloud)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Group Name</th><th>Type</th><th>Purpose</th><th>Members</th><th>Owner</th></tr>
+            </thead>
+            <tbody>
+              <tr style="background: rgba(239, 68, 68, 0.1);">
+                <td><strong>RF-SEC-GlobalAdmins</strong></td>
+                <td>Assigned</td>
+                <td>Entra ID Global Administrators</td>
+                <td>8</td>
+                <td>CISO</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.1);">
+                <td><strong>RF-SEC-SecurityAdmins</strong></td>
+                <td>Assigned</td>
+                <td>Security Administrator role</td>
+                <td>15</td>
+                <td>Dir, Sec Eng</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.1);">
+                <td><strong>RF-SEC-PrivilegedUsers</strong></td>
+                <td>Dynamic</td>
+                <td>All users with admin roles (PIM eligible)</td>
+                <td>~120</td>
+                <td>RF-SEC-IAM</td>
+              </tr>
+              <tr>
+                <td><strong>RF-MDE-Pilot</strong></td>
+                <td>Assigned</td>
+                <td>MDE pilot deployment group</td>
+                <td>500</td>
+                <td>RF-SEC-PLAT</td>
+              </tr>
+              <tr>
+                <td><strong>RF-MDE-Production</strong></td>
+                <td>Dynamic</td>
+                <td>All MDE-enabled devices</td>
+                <td>~8,500</td>
+                <td>RF-SEC-PLAT</td>
+              </tr>
+              <tr>
+                <td><strong>RF-MDE-Exclusions</strong></td>
+                <td>Assigned</td>
+                <td>Devices excluded from MDE policies</td>
+                <td>45</td>
+                <td>RF-SEC-PLAT</td>
+              </tr>
+              <tr>
+                <td><strong>RF-DLP-HighRisk</strong></td>
+                <td>Assigned</td>
+                <td>Users with access to sensitive data</td>
+                <td>850</td>
+                <td>RF-SEC-GRC-COMP</td>
+              </tr>
+              <tr>
+                <td><strong>RF-DLP-Executives</strong></td>
+                <td>Assigned</td>
+                <td>C-suite and VPs for DLP exceptions</td>
+                <td>45</td>
+                <td>CISO</td>
+              </tr>
+              <tr>
+                <td><strong>RF-CA-MFA-Enforced</strong></td>
+                <td>Dynamic</td>
+                <td>All users requiring MFA</td>
+                <td>~4,000</td>
+                <td>RF-SEC-IAM</td>
+              </tr>
+              <tr>
+                <td><strong>RF-CA-MFA-Excluded</strong></td>
+                <td>Assigned</td>
+                <td>Service accounts excluded from MFA</td>
+                <td>28</td>
+                <td>RF-SEC-IAM</td>
+              </tr>
+              <tr>
+                <td><strong>RF-Intune-Managed</strong></td>
+                <td>Dynamic</td>
+                <td>All Intune-managed devices</td>
+                <td>~6,200</td>
+                <td>RF-IT-DESK</td>
+              </tr>
+              <tr>
+                <td><strong>RF-AVD-Users</strong></td>
+                <td>Assigned</td>
+                <td>Users with AVD access</td>
+                <td>700</td>
+                <td>RF-IT-CLOUD</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>3.2 On-Premises AD Security Groups</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Group Name</th><th>OU</th><th>Purpose</th><th>Synced to Entra</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>RF-AD-DomainAdmins</strong></td>
+                <td>OU=Privileged,OU=Groups</td>
+                <td>Domain Administrators</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td><strong>RF-AD-ServerAdmins</strong></td>
+                <td>OU=Privileged,OU=Groups</td>
+                <td>Server local admin rights</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td><strong>RF-AD-WorkstationAdmins</strong></td>
+                <td>OU=Privileged,OU=Groups</td>
+                <td>Workstation local admin rights</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td><strong>RF-GPO-MDE-Onboarding</strong></td>
+                <td>OU=Security,OU=Groups</td>
+                <td>Computers receiving MDE GPO</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td><strong>RF-GPO-ASR-Audit</strong></td>
+                <td>OU=Security,OU=Groups</td>
+                <td>ASR rules in audit mode</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td><strong>RF-GPO-ASR-Block</strong></td>
+                <td>OU=Security,OU=Groups</td>
+                <td>ASR rules in block mode</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SCCM-MDE-Collection</strong></td>
+                <td>OU=Security,OU=Groups</td>
+                <td>SCCM collection for MDE deployment</td>
+                <td>No</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>3.3 Service Accounts</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Account</th><th>Type</th><th>Purpose</th><th>Password Rotation</th><th>Owner</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>svc-mde-onboarding</strong></td>
+                <td>Managed Service Account</td>
+                <td>MDE deployment automation</td>
+                <td>Automatic (gMSA)</td>
+                <td>RF-SEC-PLAT</td>
+              </tr>
+              <tr>
+                <td><strong>svc-sentinel-collector</strong></td>
+                <td>Managed Service Account</td>
+                <td>Log collector to Sentinel</td>
+                <td>Automatic (gMSA)</td>
+                <td>RF-SEC-DET</td>
+              </tr>
+              <tr>
+                <td><strong>svc-sccm-client</strong></td>
+                <td>Managed Service Account</td>
+                <td>SCCM client push installation</td>
+                <td>Automatic (gMSA)</td>
+                <td>RF-IT-DESK</td>
+              </tr>
+              <tr>
+                <td><strong>svc-entra-connect</strong></td>
+                <td>Service Account</td>
+                <td>Entra Connect synchronization</td>
+                <td>90 days (Key Vault)</td>
+                <td>RF-SEC-IAM</td>
+              </tr>
+              <tr>
+                <td><strong>svc-backup-agent</strong></td>
+                <td>Service Account</td>
+                <td>Azure Backup agent</td>
+                <td>90 days (Key Vault)</td>
+                <td>RF-IT-CLOUD</td>
+              </tr>
+              <tr>
+                <td><strong>app-sentinel-playbook</strong></td>
+                <td>App Registration</td>
+                <td>Sentinel playbook automation</td>
+                <td>365 days (certificate)</td>
+                <td>RF-SEC-SOC-L3</td>
+              </tr>
+              <tr>
+                <td><strong>app-mde-automation</strong></td>
+                <td>App Registration</td>
+                <td>MDE API automation</td>
+                <td>365 days (certificate)</td>
+                <td>RF-SEC-PLAT</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 4: NETWORK ==================== -->
+        <h2>4. Network Architecture</h2>
+
+        <h3>4.1 IP Address Ranges</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Location</th><th>Network</th><th>CIDR</th><th>VLAN</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>RF-CA-TOR</strong></td>
+                <td>Corporate LAN</td>
+                <td>10.10.0.0/16</td>
+                <td>10-99</td>
+                <td>Toronto office network</td>
+              </tr>
+              <tr>
+                <td><strong>RF-CA-TOR</strong></td>
+                <td>Server VLAN</td>
+                <td>10.10.100.0/24</td>
+                <td>100</td>
+                <td>On-prem servers</td>
+              </tr>
+              <tr>
+                <td><strong>RF-CA-TOR</strong></td>
+                <td>DMZ</td>
+                <td>10.10.200.0/24</td>
+                <td>200</td>
+                <td>DMZ / perimeter</td>
+              </tr>
+              <tr>
+                <td><strong>RF-CA-VAN</strong></td>
+                <td>Corporate LAN</td>
+                <td>10.20.0.0/16</td>
+                <td>20-99</td>
+                <td>Vancouver office network</td>
+              </tr>
+              <tr>
+                <td><strong>RF-US-SFO</strong></td>
+                <td>Corporate LAN</td>
+                <td>10.30.0.0/16</td>
+                <td>30-99</td>
+                <td>San Francisco office network</td>
+              </tr>
+              <tr>
+                <td><strong>RF-US-NYC</strong></td>
+                <td>Corporate LAN</td>
+                <td>10.40.0.0/16</td>
+                <td>40-99</td>
+                <td>New York office network</td>
+              </tr>
+              <tr>
+                <td><strong>RF-IN-BLR</strong></td>
+                <td>Corporate LAN</td>
+                <td>10.50.0.0/16</td>
+                <td>50-99</td>
+                <td>Bangalore office network</td>
+              </tr>
+              <tr>
+                <td><strong>RF-IN-HYD</strong></td>
+                <td>Corporate LAN</td>
+                <td>10.60.0.0/16</td>
+                <td>60-99</td>
+                <td>Hyderabad office network</td>
+              </tr>
+              <tr>
+                <td><strong>Azure - Hub</strong></td>
+                <td>Hub VNet</td>
+                <td>10.100.0.0/16</td>
+                <td>—</td>
+                <td>Azure Hub (firewall, gateway)</td>
+              </tr>
+              <tr>
+                <td><strong>Azure - Prod</strong></td>
+                <td>Production VNet</td>
+                <td>10.101.0.0/16</td>
+                <td>—</td>
+                <td>Production workloads</td>
+              </tr>
+              <tr>
+                <td><strong>Azure - Dev</strong></td>
+                <td>Development VNet</td>
+                <td>10.102.0.0/16</td>
+                <td>—</td>
+                <td>Development/test workloads</td>
+              </tr>
+              <tr>
+                <td><strong>AWS - Prod</strong></td>
+                <td>Production VPC</td>
+                <td>10.200.0.0/16</td>
+                <td>—</td>
+                <td>Legacy AWS production</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 5: SOC STRUCTURE ==================== -->
+        <h2>5. SOC Structure & Escalation</h2>
+
+        <h3>5.1 SOC Team Structure</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Role</th><th>Group</th><th>Shift Coverage</th><th>Headcount</th><th>Primary Responsibilities</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SOC Analyst L1</strong></td>
+                <td>RF-SEC-SOC-L1</td>
+                <td>24x7 (TOR + BLR rotation)</td>
+                <td>12</td>
+                <td>Alert triage, initial response, ticket creation</td>
+              </tr>
+              <tr>
+                <td><strong>SOC Analyst L2</strong></td>
+                <td>RF-SEC-SOC-L2</td>
+                <td>16x5 + on-call</td>
+                <td>6</td>
+                <td>Investigation, containment, playbook execution</td>
+              </tr>
+              <tr>
+                <td><strong>SOC Lead / L3</strong></td>
+                <td>RF-SEC-SOC-L3</td>
+                <td>Business hours + on-call</td>
+                <td>3</td>
+                <td>Escalations, threat hunting, major incidents</td>
+              </tr>
+              <tr>
+                <td><strong>Detection Engineer</strong></td>
+                <td>RF-SEC-DET</td>
+                <td>Business hours</td>
+                <td>4</td>
+                <td>Rule development, tuning, MITRE coverage</td>
+              </tr>
+              <tr>
+                <td><strong>Platform Security</strong></td>
+                <td>RF-SEC-PLAT</td>
+                <td>Business hours + on-call</td>
+                <td>5</td>
+                <td>MDE, Sentinel, Purview administration</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>5.2 Escalation Matrix</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Incident Escalation Path</span></div>
+          <pre><code>REVFLOW SOC ESCALATION MATRIX
+═══════════════════════════════════════════════════════════════════════════════
+
+SEVERITY 4 (Low) - Informational
+├── Owner: L1 SOC Analyst
+├── Response: 4 hours
+├── Escalation: None required
+└── Example: Policy violation, informational alert
+
+SEVERITY 3 (Medium) - Suspicious Activity
+├── Owner: L1 → L2 if unresolved in 2 hours
+├── Response: 2 hours
+├── Escalation: L2 after 2 hours, L3 after 4 hours
+└── Example: Failed login attempts, suspicious process
+
+SEVERITY 2 (High) - Confirmed Threat
+├── Owner: L2 SOC Analyst
+├── Response: 30 minutes
+├── Escalation: L3 immediately, CISO within 2 hours
+├── Notification: IT Leadership, affected department head
+└── Example: Malware detection, data exfiltration attempt
+
+SEVERITY 1 (Critical) - Active Breach / Major Incident
+├── Owner: L3 SOC Lead + Incident Commander
+├── Response: 15 minutes
+├── Escalation: CISO immediately, CEO within 1 hour
+├── Notification: Executive team, Legal, PR (if needed)
+├── War Room: Teams channel #incident-war-room
+└── Example: Ransomware, APT activity, data breach confirmed
+
+CONTACT INFORMATION:
+├── SOC Hotline: +1-416-555-SOC1 (7621)
+├── SOC Email: soc@revflow.com
+├── SOC Slack: #soc-alerts
+├── On-Call L3: PagerDuty - "RevFlow SOC L3"
+├── CISO (Emergency): +1-416-555-0100
+└── Security Bridge: Teams - "Security Incident Bridge"</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 6: TICKETING ==================== -->
+        <h2>6. Ticketing & Change Management</h2>
+
+        <h3>6.1 ServiceNow Configuration</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Ticket Type</th><th>Queue</th><th>Assignment Group</th><th>SLA</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Security Incident</strong></td>
+                <td>SEC-INC</td>
+                <td>RF-SEC-SOC</td>
+                <td>Based on severity</td>
+              </tr>
+              <tr>
+                <td><strong>MDE Onboarding Request</strong></td>
+                <td>SEC-REQ</td>
+                <td>RF-SEC-PLAT</td>
+                <td>3 business days</td>
+              </tr>
+              <tr>
+                <td><strong>MDE Offboarding Request</strong></td>
+                <td>SEC-REQ</td>
+                <td>RF-SEC-PLAT</td>
+                <td>1 business day</td>
+              </tr>
+              <tr>
+                <td><strong>DLP Exception Request</strong></td>
+                <td>SEC-REQ</td>
+                <td>RF-SEC-GRC-COMP</td>
+                <td>5 business days</td>
+              </tr>
+              <tr>
+                <td><strong>Firewall Change Request</strong></td>
+                <td>NET-CHG</td>
+                <td>RF-IT-NET</td>
+                <td>5 business days (standard)</td>
+              </tr>
+              <tr>
+                <td><strong>Access Request</strong></td>
+                <td>IAM-REQ</td>
+                <td>RF-SEC-IAM</td>
+                <td>2 business days</td>
+              </tr>
+              <tr>
+                <td><strong>Sentinel Rule Change</strong></td>
+                <td>SEC-CHG</td>
+                <td>RF-SEC-DET</td>
+                <td>CAB approval required</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>6.2 Change Advisory Board (CAB)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>CAB Type</th><th>Schedule</th><th>Attendees</th><th>Scope</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Security CAB</strong></td>
+                <td>Tuesday 10:00 AM EST</td>
+                <td>CISO, Dir Sec Eng, Dir SecOps, IT Rep</td>
+                <td>Security tool changes, detection rules, policy changes</td>
+              </tr>
+              <tr>
+                <td><strong>Infrastructure CAB</strong></td>
+                <td>Thursday 2:00 PM EST</td>
+                <td>VP Infra, Dir IT, Security Rep, SRE Lead</td>
+                <td>Server changes, network changes, cloud infrastructure</td>
+              </tr>
+              <tr>
+                <td><strong>Emergency CAB</strong></td>
+                <td>As needed (Teams bridge)</td>
+                <td>CISO or delegate, IT Lead, Change Owner</td>
+                <td>Emergency changes outside normal CAB</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 7: TOOL URLS ==================== -->
+        <h2>7. Security Tool URLs & Access</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Tool</th><th>URL</th><th>SSO</th><th>Access Group</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Microsoft 365 Defender</strong></td>
+                <td>security.microsoft.com</td>
+                <td>Entra ID</td>
+                <td>RF-SEC-SecurityAdmins</td>
+              </tr>
+              <tr>
+                <td><strong>Microsoft Sentinel</strong></td>
+                <td>portal.azure.com → Sentinel</td>
+                <td>Entra ID</td>
+                <td>RF-SEC-SOC-* (RBAC)</td>
+              </tr>
+              <tr>
+                <td><strong>Microsoft Purview</strong></td>
+                <td>compliance.microsoft.com</td>
+                <td>Entra ID</td>
+                <td>RF-SEC-GRC-COMP</td>
+              </tr>
+              <tr>
+                <td><strong>Intune Admin Center</strong></td>
+                <td>intune.microsoft.com</td>
+                <td>Entra ID</td>
+                <td>RF-IT-DESK, RF-SEC-PLAT</td>
+              </tr>
+              <tr>
+                <td><strong>Entra ID Portal</strong></td>
+                <td>entra.microsoft.com</td>
+                <td>Entra ID</td>
+                <td>RF-SEC-IAM</td>
+              </tr>
+              <tr>
+                <td><strong>ServiceNow</strong></td>
+                <td>revflow.service-now.com</td>
+                <td>Entra ID (SAML)</td>
+                <td>All employees</td>
+              </tr>
+              <tr>
+                <td><strong>PagerDuty</strong></td>
+                <td>revflow.pagerduty.com</td>
+                <td>Entra ID (SAML)</td>
+                <td>RF-SEC-SOC-*, RF-ENG-SRE</td>
+              </tr>
+              <tr>
+                <td><strong>Confluence (Security)</strong></td>
+                <td>revflow.atlassian.net/wiki/spaces/SEC</td>
+                <td>Entra ID (SAML)</td>
+                <td>Security team</td>
+              </tr>
+              <tr>
+                <td><strong>Jira (Security)</strong></td>
+                <td>revflow.atlassian.net/jira/software/c/projects/SEC</td>
+                <td>Entra ID (SAML)</td>
+                <td>Security team</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Quick Reference
+          </div>
+          <div class="callout-content">
+            <p>This infrastructure reference is used by all runbooks and operational procedures. When in doubt about naming conventions, group memberships, or escalation paths, refer to this document as the authoritative source.</p>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

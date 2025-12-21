@@ -53,6 +53,7 @@
         <div class="nav-section">
           <div class="nav-section-title">DLP Migration</div>
           <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
           <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
           <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
           <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
@@ -84,20 +85,21 @@
         <div class="nav-divider"></div>
         <div class="nav-section">
           <div class="nav-section-title">Resources</div>
-          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
-          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
-          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
-          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
-          <a href="../resources/templates.html" class="nav-item">Templates</a>
-          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="timeline.html" class="nav-item">Project Timeline</a>
+          <a href="raci.html" class="nav-item">RACI Matrix</a>
+          <a href="infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="templates.html" class="nav-item">Templates</a>
+          <a href="splunk-reference.html" class="nav-item">Splunk Reference</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
           <div class="nav-section-title">Runbooks</div>
-          <a href="../resources/mde-onboarding.html" class="nav-item active">MDE Onboarding</a>
-          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
-          <a href="../resources/incident-response.html" class="nav-item">Incident Response</a>
-          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+          <a href="mde-onboarding.html" class="nav-item active">MDE Onboarding</a>
+          <a href="mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="incident-response.html" class="nav-item">Incident Response</a>
+          <a href="operational-procedures.html" class="nav-item">Operational Procedures</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -120,9 +122,7 @@
     <main class="main-content">
       <div class="content-wrapper">
         <nav class="breadcrumb">
-          <a href="../index.html">Home</a>
-          <span class="breadcrumb-separator">/</span>
-          <a href="templates.html">Resources</a>
+          <a href="../index.html" class="breadcrumb-link">Home</a>
           <span class="breadcrumb-separator">/</span>
           <span class="breadcrumb-current">MDE Onboarding Runbook</span>
         </nav>
@@ -133,682 +133,273 @@
             <span class="page-badge edr">EDR Track</span>
             <span class="page-reading-time">Operational Runbook</span>
           </div>
-          <p class="intro-text">
-            Step-by-step procedures for onboarding devices to Microsoft Defender for Endpoint. This runbook covers Windows, macOS, Linux, and server onboarding with validation steps and troubleshooting guidance.
-          </p>
+          <p class="intro-text">Step-by-step procedures for onboarding RevFlow devices to Microsoft Defender for Endpoint across all locations and device types.</p>
         </div>
 
-        <!-- ==================== DOCUMENT METADATA ==================== -->
         <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Document Information
-          </div>
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Document Information</div>
           <div class="callout-content">
-            <p><strong>Version:</strong> 2.1 | <strong>Last Updated:</strong> 2024-11-15 | <strong>Owner:</strong> Security Engineering</p>
-            <p><strong>Applies To:</strong> Windows 10/11, Windows Server 2016+, macOS 11+, Ubuntu 18.04+, RHEL 7+</p>
-            <p><strong>Prerequisites:</strong> M365 E5 or MDE P2 license, Intune enrollment (for managed devices), Local admin rights (for manual onboarding)</p>
+            <p><strong>Version:</strong> 3.2 | <strong>Last Updated:</strong> 2024-12-01 | <strong>Owner:</strong> RF-SEC-PLAT</p>
+            <p><strong>ServiceNow Queue:</strong> SEC-REQ | <strong>SLA:</strong> 3 business days</p>
+            <p><strong>Approved By:</strong> Director, Security Engineering</p>
           </div>
         </div>
 
-        <!-- ==================== SECTION 1: OVERVIEW ==================== -->
-        <h2>1. Onboarding Methods Overview</h2>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Method</th><th>Best For</th><th>Prerequisites</th><th>Automation Level</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Microsoft Intune</strong></td>
-                <td>Managed Windows/macOS endpoints</td>
-                <td>Intune enrollment, Entra ID join</td>
-                <td>Fully automated</td>
-              </tr>
-              <tr>
-                <td><strong>Group Policy (GPO)</strong></td>
-                <td>Domain-joined Windows endpoints</td>
-                <td>Active Directory, SYSVOL access</td>
-                <td>Automated via GPO</td>
-              </tr>
-              <tr>
-                <td><strong>SCCM/ConfigMgr</strong></td>
-                <td>ConfigMgr-managed endpoints</td>
-                <td>SCCM client, package deployment</td>
-                <td>Automated via SCCM</td>
-              </tr>
-              <tr>
-                <td><strong>Local Script</strong></td>
-                <td>Non-managed endpoints, servers</td>
-                <td>Local admin, script execution</td>
-                <td>Manual per device</td>
-              </tr>
-              <tr>
-                <td><strong>VDI Onboarding</strong></td>
-                <td>Non-persistent VDI</td>
-                <td>Golden image access</td>
-                <td>Image-based</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>ESET Coexistence</div>
+          <div class="callout-content"><p>During migration, ESET remains installed. MDE runs in <strong>passive mode</strong> until ESET removal. See <a href="../edr/coexistence.html">Coexistence Strategy</a>.</p></div>
         </div>
 
-        <!-- ==================== SECTION 2: INTUNE ==================== -->
-        <h2>2. Intune Onboarding (Recommended)</h2>
+        <h2>1. Onboarding Decision Tree</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Decision Tree</span></div>
+          <pre><code>REVFLOW MDE ONBOARDING DECISION TREE
+═══════════════════════════════════════════════════════════════════════════════
+
+CORPORATE LAPTOP/DESKTOP (RF-{LOC}-L-* / RF-{LOC}-D-*)
+├── Intune-enrolled? → YES → Method A: Intune Deployment
+└── Domain-joined?   → YES → Method B: GPO Deployment
+                     → NO  → Method E: Local Script
+
+MACOS (RF-{LOC}-MAC-*)
+└── In Jamf? → YES → Method C: Jamf + Intune Hybrid
+              → NO → Method E: Local Script (macOS)
+
+DEVELOPER WORKSTATION (RF-{LOC}-DEV-*)
+└── Use Method A (Intune) + Developer exclusion profile
+
+WINDOWS SERVER (RF-{LOC}-SRV-*)
+├── DC/CA/AAD (Tier 0) → Method D: Manual + CAB Approval
+└── SQL/WEB/API        → Method B: GPO via RF-GPO-MDE-Onboarding
+
+LINUX SERVER (rf-{loc}-*)
+├── Ubuntu 20.04+  → Method F: Linux Script (apt)
+├── RHEL 8+        → Method F: Linux Script (yum)
+└── Other          → Escalate to RF-SEC-PLAT
+
+VDI (RF-VDI-*)
+├── Persistent (RF-VDI-P-*)     → Method A: Intune
+└── Non-Persistent (RF-VDI-NP-*) → Method G: Golden Image
+
+AZURE VM / AWS EC2 → Method H: Azure Arc + Defender for Cloud</code></pre>
+        </div>
+
+        <h2>2. Method A: Intune Deployment</h2>
+        <p><strong>Use for:</strong> Corporate laptops, desktops, persistent VDI | <strong>Group:</strong> <code>RF-MDE-Production</code></p>
 
         <h3>2.1 Prerequisites</h3>
-
-        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
-          <li>Device is Entra ID joined or Hybrid Entra ID joined</li>
-          <li>Device is enrolled in Microsoft Intune</li>
-          <li>User has MDE license assigned</li>
-          <li>Microsoft Defender Antivirus is not disabled</li>
-        </ul>
-
-        <h3>2.2 Configuration Steps</h3>
-
-        <div class="flow-diagram">
-          <div class="flow-step">
-            <div class="flow-step-number">1</div>
-            <div class="flow-step-content">
-              <strong>Enable MDE Integration</strong><br>
-              Intune Admin Center → Endpoint Security → Microsoft Defender for Endpoint → Enable connector
-            </div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-number">2</div>
-            <div class="flow-step-content">
-              <strong>Create Configuration Profile</strong><br>
-              Devices → Configuration Profiles → Create → Windows 10+ → Templates → Microsoft Defender for Endpoint
-            </div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-number">3</div>
-            <div class="flow-step-content">
-              <strong>Configure Settings</strong><br>
-              Enable: Sample sharing, Telemetry, Cloud protection, Tamper protection
-            </div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-number">4</div>
-            <div class="flow-step-content">
-              <strong>Assign to Groups</strong><br>
-              Assign profile to device groups (start with pilot, then production)
-            </div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-number">5</div>
-            <div class="flow-step-content">
-              <strong>Verify Deployment</strong><br>
-              Monitor profile deployment status and device onboarding in M365 Defender portal
-            </div>
-          </div>
-        </div>
-
-        <h3>2.3 Intune Configuration Profile Settings</h3>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">JSON - Intune MDE Configuration Profile</span></div>
-          <pre><code>{
-  "@odata.type": "#microsoft.graph.windows10EndpointProtectionConfiguration",
-  "displayName": "MDE Onboarding - Production",
-  "description": "Microsoft Defender for Endpoint onboarding configuration",
-  "defenderSecurityCenterDisableAppBrowserUI": false,
-  "defenderSecurityCenterDisableFamilyUI": true,
-  "defenderSecurityCenterDisableHealthUI": false,
-  "defenderSecurityCenterDisableNetworkUI": false,
-  "defenderSecurityCenterDisableVirusUI": false,
-  "defenderSecurityCenterOrganizationDisplayName": "RevFlow Analytics Security",
-  "defenderSecurityCenterHelpEmail": "security@revflow.com",
-  "defenderSecurityCenterHelpPhone": "+1-555-SEC-HELP",
-  "defenderSecurityCenterHelpURL": "https://security.revflow.com/help",
-  "defenderSecurityCenterNotificationsFromApp": "blockNoncriticalNotifications",
-  "defenderCloudBlockLevel": "high",
-  "defenderCloudExtendedTimeout": 50,
-  "defenderSubmitSamplesConsent": "sendSafeSamplesAutomatically",
-  "defenderScanDownloads": true,
-  "defenderScanScriptsLoadedInInternetExplorer": true,
-  "defenderBlockEndUserAccess": false,
-  "defenderSignatureUpdateIntervalInHours": 4,
-  "defenderMonitorFileActivity": "monitorAllFiles",
-  "defenderPotentiallyUnwantedAppAction": "block",
-  "defenderDetectedMalwareActions": {
-    "lowSeverity": "quarantine",
-    "moderateSeverity": "quarantine",
-    "highSeverity": "quarantine",
-    "severeSeverity": "quarantine"
-  }
-}</code></pre>
-        </div>
-
-        <!-- ==================== SECTION 3: GPO ==================== -->
-        <h2>3. Group Policy Onboarding</h2>
-
-        <h3>3.1 Download Onboarding Package</h3>
-
-        <ol style="margin: 1rem 0; padding-left: 1.5rem;">
-          <li>Go to <strong>Microsoft 365 Defender Portal</strong> → Settings → Endpoints → Onboarding</li>
-          <li>Select <strong>Windows 10 and 11</strong> as the operating system</li>
-          <li>Select <strong>Group Policy</strong> as the deployment method</li>
-          <li>Click <strong>Download package</strong> to download WindowsDefenderATPOnboardingPackage.zip</li>
-          <li>Extract the package to get <code>WindowsDefenderATPOnboardingScript.cmd</code></li>
-        </ol>
-
-        <h3>3.2 Create GPO</h3>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">PowerShell - Create MDE Onboarding GPO</span></div>
-          <pre><code># Create new GPO
-$GPOName = "MDE-Onboarding-Production"
-New-GPO -Name $GPOName -Comment "Microsoft Defender for Endpoint Onboarding"
-
-# Link GPO to target OU
-$TargetOU = "OU=Workstations,OU=Computers,DC=revflow,DC=com"
-New-GPLink -Name $GPOName -Target $TargetOU
-
-# Copy onboarding script to SYSVOL
-$SYSVOLPath = "\\revflow.com\SYSVOL\revflow.com\scripts\MDE"
-New-Item -Path $SYSVOLPath -ItemType Directory -Force
-Copy-Item "C:\Temp\WindowsDefenderATPOnboardingScript.cmd" -Destination $SYSVOLPath
-
-Write-Host "GPO created. Configure startup script manually in GPMC."</code></pre>
-        </div>
-
-        <h3>3.3 Configure GPO Settings</h3>
-
         <div class="table-wrapper">
           <table>
-            <thead>
-              <tr><th>Setting Path</th><th>Setting Name</th><th>Value</th></tr>
-            </thead>
+            <thead><tr><th>Requirement</th><th>Verification</th><th>Owner</th></tr></thead>
             <tbody>
-              <tr>
-                <td>Computer Configuration → Policies → Windows Settings → Scripts → Startup</td>
-                <td>Startup Script</td>
-                <td><code>\\revflow.com\SYSVOL\revflow.com\scripts\MDE\WindowsDefenderATPOnboardingScript.cmd</code></td>
-              </tr>
-              <tr>
-                <td>Computer Configuration → Administrative Templates → Windows Components → Microsoft Defender Antivirus</td>
-                <td>Turn off Microsoft Defender Antivirus</td>
-                <td>Disabled (ensure AV is ON)</td>
-              </tr>
-              <tr>
-                <td>Computer Configuration → Administrative Templates → Windows Components → Microsoft Defender Antivirus → MAPS</td>
-                <td>Join Microsoft MAPS</td>
-                <td>Enabled: Advanced MAPS</td>
-              </tr>
-              <tr>
-                <td>Computer Configuration → Administrative Templates → Windows Components → Microsoft Defender Antivirus → MAPS</td>
-                <td>Send file samples when further analysis is required</td>
-                <td>Enabled: Send safe samples</td>
-              </tr>
-              <tr>
-                <td>Computer Configuration → Administrative Templates → Windows Components → Microsoft Defender Antivirus → Real-time Protection</td>
-                <td>Turn on behavior monitoring</td>
-                <td>Enabled</td>
-              </tr>
-              <tr>
-                <td>Computer Configuration → Administrative Templates → Windows Components → Microsoft Defender Antivirus → Real-time Protection</td>
-                <td>Scan all downloaded files and attachments</td>
-                <td>Enabled</td>
-              </tr>
+              <tr><td>Device Entra ID Joined/Hybrid</td><td><code>dsregcmd /status</code></td><td>RF-IT-DESK</td></tr>
+              <tr><td>Device Intune-enrolled</td><td>Intune Admin Center → Devices</td><td>RF-IT-DESK</td></tr>
+              <tr><td>User has M365 E5 license</td><td>Entra Admin → Users → Licenses</td><td>RF-IT-DESK</td></tr>
+              <tr><td>ESET installed and healthy</td><td>ESET Management Console</td><td>RF-SEC-PLAT</td></tr>
+              <tr><td>Hostname follows convention</td><td><code>RF-{LOC}-{TYPE}-{ASSET#}</code></td><td>RF-IT-DESK</td></tr>
             </tbody>
           </table>
         </div>
 
-        <!-- ==================== SECTION 4: LOCAL SCRIPT ==================== -->
-        <h2>4. Local Script Onboarding</h2>
-
-        <h3>4.1 Windows Endpoints</h3>
-
+        <h3>2.2 Intune Profile Configuration</h3>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">CMD - Windows Local Onboarding</span></div>
-          <pre><code>@echo off
-:: MDE Local Onboarding Script
-:: Run as Administrator
+          <div class="code-header"><span class="code-lang">Intune Profile: RF-MDE-Onboarding-Windows</span></div>
+          <pre><code>Profile Type: Microsoft Defender for Endpoint (Windows 10+)
+Assignment:   Include: RF-MDE-Production | Exclude: RF-MDE-Exclusions
 
-echo =========================================
-echo Microsoft Defender for Endpoint Onboarding
-echo =========================================
-
-:: Check for admin rights
-net session >nul 2>&1
-if %errorLevel% neq 0 (
-    echo ERROR: Please run as Administrator
-    exit /b 1
-)
-
-:: Check Windows version
-for /f "tokens=4-5 delims=. " %%i in ('ver') do set VERSION=%%i.%%j
-echo Windows Version: %VERSION%
-
-:: Verify Defender service is running
-sc query WinDefend | find "RUNNING" >nul
-if %errorLevel% neq 0 (
-    echo WARNING: Windows Defender service not running
-    echo Starting Windows Defender...
-    sc start WinDefend
-)
-
-:: Run onboarding script
-echo Running onboarding script...
-call "%~dp0WindowsDefenderATPOnboardingScript.cmd"
-
-:: Verify onboarding
-echo Verifying onboarding status...
-reg query "HKLM\SOFTWARE\Microsoft\Windows Advanced Threat Protection\Status" /v OnboardingState 2>nul
-if %errorLevel% equ 0 (
-    for /f "tokens=3" %%a in ('reg query "HKLM\SOFTWARE\Microsoft\Windows Advanced Threat Protection\Status" /v OnboardingState 2^>nul ^| find "OnboardingState"') do (
-        if "%%a"=="0x1" (
-            echo SUCCESS: Device onboarded successfully
-        ) else (
-            echo WARNING: Onboarding state is %%a
-        )
-    )
-) else (
-    echo ERROR: Could not verify onboarding status
-)
-
-:: Force sensor restart
-echo Restarting SENSE service...
-sc stop SENSE
-timeout /t 5 /nobreak >nul
-sc start SENSE
-
-echo =========================================
-echo Onboarding complete. Check M365 Defender portal.
-echo =========================================
-pause</code></pre>
+SETTINGS:
+├── Onboarding package: [From security.microsoft.com]
+├── Sample sharing: Enabled
+├── Telemetry reporting: Expedited
+└── Tamper protection: Enabled</code></pre>
         </div>
 
-        <h3>4.2 Linux Endpoints (Ubuntu/Debian)</h3>
+        <h3>2.3 Step-by-Step Procedure</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Step</th><th>Action</th><th>Details</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Receive SEC-REQ ticket</td><td>Verify: hostname, asset tag, user, department</td></tr>
+              <tr><td>2</td><td>Verify prerequisites</td><td>Run checklist; route to RF-IT-DESK if not enrolled</td></tr>
+              <tr><td>3</td><td>Add to RF-MDE-Production</td><td>Entra Admin → Groups → Add device</td></tr>
+              <tr><td>4</td><td>Trigger Intune sync</td><td>Intune → Device → Sync (or wait 8 hours)</td></tr>
+              <tr><td>5</td><td>Verify onboarding (30-60 min)</td><td>security.microsoft.com → Device inventory</td></tr>
+              <tr><td>6</td><td>Validate sensor health</td><td>Run RF-MDE-Validate.ps1 on device</td></tr>
+              <tr><td>7</td><td>Apply device tags</td><td>Location, Department, Criticality, Migration status</td></tr>
+              <tr><td>8</td><td>Close ticket</td><td>Document Device ID, timestamp, validation results</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>3. Method B: GPO Deployment</h2>
+        <p><strong>Use for:</strong> Domain-joined endpoints not in Intune, Windows Servers | <strong>Group:</strong> <code>RF-GPO-MDE-Onboarding</code></p>
 
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">Bash - Linux Onboarding (Ubuntu/Debian)</span></div>
+          <div class="code-header"><span class="code-lang">GPO: RF-SEC-MDE-Onboarding</span></div>
+          <pre><code>LINKED TO:
+├── OU=Workstations,OU=RevFlow,DC=revflow,DC=local
+└── OU=Servers,OU=RevFlow,DC=revflow,DC=local
+
+SECURITY FILTERING: RF-GPO-MDE-Onboarding
+
+STARTUP SCRIPT:
+\\revflow.local\SYSVOL\revflow.local\scripts\MDE\MDE-Onboard-GPO.ps1
+
+REQUIRED FILES IN SYSVOL:
+├── MDE-Onboard-GPO.ps1 (wrapper)
+├── WindowsDefenderATPOnboardingScript.cmd (from Microsoft)
+└── MDE-Onboard-Config.json (RevFlow settings)</code></pre>
+        </div>
+
+        <h2>4. Method D: Critical Server Onboarding (DC, CA, AAD)</h2>
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Tier 0 Assets</div>
+          <div class="callout-content">
+            <p>Requires Security CAB + Infrastructure CAB approval, maintenance window, rollback plan, L3 SOC standby.</p>
+          </div>
+        </div>
+
+        <h3>Critical Server Checklist</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Step</th><th>Action</th><th>Owner</th><th>✓</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Submit SEC-CHG with impact analysis</td><td>RF-SEC-PLAT</td><td>☐</td></tr>
+              <tr><td>2</td><td>Security CAB approval</td><td>CISO</td><td>☐</td></tr>
+              <tr><td>3</td><td>Infrastructure CAB approval</td><td>VP Infra</td><td>☐</td></tr>
+              <tr><td>4</td><td>Maintenance window confirmed</td><td>RF-IT-CLOUD</td><td>☐</td></tr>
+              <tr><td>5</td><td>Full system backup</td><td>RF-IT-CLOUD</td><td>☐</td></tr>
+              <tr><td>6</td><td>Rollback script tested</td><td>RF-SEC-PLAT</td><td>☐</td></tr>
+              <tr><td>7</td><td>L3 SOC notified</td><td>RF-SEC-SOC-L3</td><td>☐</td></tr>
+              <tr><td>8</td><td>MDE exclusions pre-configured</td><td>RF-SEC-PLAT</td><td>☐</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Domain Controller Exclusions</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">MDE Exclusions for DC</span></div>
+          <pre><code>FOLDER EXCLUSIONS:
+├── %systemroot%\NTDS
+├── %systemroot%\SYSVOL
+├── %systemroot%\System32\DNS
+└── %systemroot%\System32\DHCP
+
+PROCESS EXCLUSIONS:
+├── lsass.exe, ntfrs.exe, dns.exe
+├── dfsr.exe, dfsrs.exe, ntdsutil.exe
+└── dsac.exe
+
+FILE EXTENSIONS (NTDS folder):
+├── *.dit, *.pat, *.edb
+└── *.log, *.jrs</code></pre>
+        </div>
+
+        <h2>5. Method F: Linux Server Onboarding</h2>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Ubuntu/Debian</span><button class="code-copy-btn">Copy</button></div>
           <pre><code>#!/bin/bash
-# MDE Linux Onboarding Script - Ubuntu/Debian
-# Run as root
+# rf-mde-linux-onboard.sh - RevFlow Linux Onboarding
 
-set -e
-
-echo "========================================="
-echo "MDE Linux Onboarding - Ubuntu/Debian"
-echo "========================================="
-
-# Check root
-if [ "$EUID" -ne 0 ]; then
-    echo "ERROR: Please run as root"
-    exit 1
-fi
-
-# Variables
-CHANNEL="prod"  # Options: prod, insiders-fast, insiders-slow
-
-echo "[1/6] Adding Microsoft GPG key..."
+# Add Microsoft repository
 curl -sSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /usr/share/keyrings/microsoft-prod.gpg
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/ubuntu/$(lsb_release -rs)/prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/microsoft-prod.list
 
-echo "[2/6] Adding Microsoft repository..."
-DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
-RELEASE=$(lsb_release -rs)
-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/${DISTRO}/${RELEASE}/prod ${CHANNEL} main" > /etc/apt/sources.list.d/microsoft-${CHANNEL}.list
+# Install MDE
+apt-get update && apt-get install -y mdatp
 
-echo "[3/6] Updating package cache..."
-apt-get update
+# Onboard (download script from secure blob)
+python3 /tmp/MicrosoftDefenderATPOnboardingLinuxServer.py
 
-echo "[4/6] Installing MDE..."
-apt-get install -y mdatp
+# Enable real-time protection
+mdatp config real-time-protection --value enabled
 
-echo "[5/6] Applying onboarding package..."
-# Copy onboarding JSON to /etc/opt/microsoft/mdatp/
-if [ -f "./MicrosoftDefenderATPOnboardingLinuxServer.py" ]; then
-    python3 MicrosoftDefenderATPOnboardingLinuxServer.py
-else
-    echo "ERROR: Onboarding script not found"
-    exit 1
-fi
-
-echo "[6/6] Verifying installation..."
-mdatp health
-
-echo "========================================="
-echo "Onboarding complete!"
-echo "Run 'mdatp health' to verify status"
-echo "========================================="</code></pre>
+# Verify
+mdatp health</code></pre>
         </div>
 
-        <h3>4.3 macOS Endpoints</h3>
-
+        <h2>6. Validation Script</h2>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">Bash - macOS Onboarding</span></div>
-          <pre><code>#!/bin/bash
-# MDE macOS Onboarding Script
-# Run with sudo
+          <div class="code-header"><span class="code-lang">PowerShell - RF-MDE-Validate.ps1</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># RF-MDE-Validate.ps1 - Run as Administrator
+Write-Host "REVFLOW MDE HEALTH VALIDATION" -ForegroundColor Cyan
 
-set -e
+# Check Sense Service
+$Sense = Get-Service -Name "Sense" -ErrorAction SilentlyContinue
+Write-Host "Sense Service: $($Sense.Status)"
 
-echo "========================================="
-echo "MDE macOS Onboarding"
-echo "========================================="
+# Check Onboarding State
+$RegPath = "HKLM:\SOFTWARE\Microsoft\Windows Advanced Threat Protection\Status"
+$State = (Get-ItemProperty -Path $RegPath -EA SilentlyContinue).OnboardingState
+Write-Host "Onboarding State: $State (1=Onboarded)"
 
-# Check sudo
-if [ "$EUID" -ne 0 ]; then
-    echo "ERROR: Please run with sudo"
-    exit 1
-fi
+# Check AV Mode
+$AVMode = (Get-MpComputerStatus).AMRunningMode
+Write-Host "AV Mode: $AVMode (Passive if ESET active)"
 
-# Variables
-ONBOARDING_PKG="./wdav.pkg"
-ONBOARDING_BLOB="./WindowsDefenderATPOnboarding.plist"
+# Check Definitions
+$DefAge = (Get-MpComputerStatus).AntivirusSignatureAge
+Write-Host "Definition Age: $DefAge days"
 
-echo "[1/4] Installing MDE package..."
-if [ -f "$ONBOARDING_PKG" ]; then
-    installer -pkg "$ONBOARDING_PKG" -target /
-else
-    echo "ERROR: wdav.pkg not found. Download from M365 Defender portal."
-    exit 1
-fi
-
-echo "[2/4] Applying onboarding configuration..."
-if [ -f "$ONBOARDING_BLOB" ]; then
-    cp "$ONBOARDING_BLOB" /Library/Application\ Support/Microsoft/Defender/
-else
-    echo "ERROR: Onboarding plist not found"
-    exit 1
-fi
-
-echo "[3/4] Granting Full Disk Access..."
-echo "IMPORTANT: You must manually grant Full Disk Access to Microsoft Defender"
-echo "System Preferences → Security & Privacy → Privacy → Full Disk Access"
-echo "Add: /Applications/Microsoft Defender.app"
-
-echo "[4/4] Verifying installation..."
-/usr/local/bin/mdatp health
-
-echo "========================================="
-echo "Onboarding complete!"
-echo "Remember to grant Full Disk Access manually"
-echo "========================================="</code></pre>
+# Check Tamper Protection
+$Tamper = (Get-MpComputerStatus).IsTamperProtected
+Write-Host "Tamper Protection: $Tamper"</code></pre>
         </div>
 
-        <!-- ==================== SECTION 5: SERVER ==================== -->
-        <h2>5. Server Onboarding</h2>
-
-        <h3>5.1 Windows Server Prerequisites</h3>
-
-        <div class="callout warning">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            Server-Specific Requirements
-          </div>
-          <div class="callout-content">
-            <p><strong>Windows Server 2016/2019/2022:</strong> Use the unified MDE agent (MDE for Server)</p>
-            <p><strong>Windows Server 2012 R2:</strong> Requires Microsoft Monitoring Agent (MMA) - legacy approach</p>
-            <p><strong>Licensing:</strong> MDE for Servers P1/P2 or Microsoft Defender for Cloud</p>
-          </div>
-        </div>
-
-        <h3>5.2 Windows Server Onboarding Script</h3>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">PowerShell - Windows Server Onboarding</span></div>
-          <pre><code># MDE Server Onboarding Script
-# Run as Administrator
-
-param(
-    [string]$OnboardingPackagePath = ".\WindowsDefenderATPOnboardingPackage.zip"
-)
-
-$ErrorActionPreference = "Stop"
-
-Write-Host "=========================================" -ForegroundColor Cyan
-Write-Host "MDE Server Onboarding" -ForegroundColor Cyan
-Write-Host "=========================================" -ForegroundColor Cyan
-
-# Check admin rights
-$isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
-if (-not $isAdmin) {
-    throw "Please run as Administrator"
-}
-
-# Detect OS version
-$os = Get-WmiObject -Class Win32_OperatingSystem
-Write-Host "Operating System: $($os.Caption)" -ForegroundColor Yellow
-Write-Host "Version: $($os.Version)" -ForegroundColor Yellow
-
-# Check if Server 2012 R2 (requires MMA)
-if ($os.Version -like "6.3*") {
-    Write-Host "Windows Server 2012 R2 detected - MMA required" -ForegroundColor Yellow
-    Write-Host "Please use Microsoft Monitoring Agent for onboarding" -ForegroundColor Yellow
-    exit 1
-}
-
-# Step 1: Enable Windows Defender if needed
-Write-Host "`n[1/5] Checking Windows Defender status..." -ForegroundColor Green
-$defenderFeature = Get-WindowsFeature -Name Windows-Defender
-if ($defenderFeature.Installed -eq $false) {
-    Write-Host "Installing Windows Defender feature..." -ForegroundColor Yellow
-    Install-WindowsFeature -Name Windows-Defender -IncludeManagementTools
-    Write-Host "Restart required after Defender installation" -ForegroundColor Red
-}
-
-# Step 2: Check for existing EDR
-Write-Host "`n[2/5] Checking for existing EDR products..." -ForegroundColor Green
-$esetService = Get-Service -Name "ekrn" -ErrorAction SilentlyContinue
-if ($esetService) {
-    Write-Host "WARNING: ESET detected. Ensure coexistence mode or removal before proceeding." -ForegroundColor Yellow
-}
-
-# Step 3: Extract onboarding package
-Write-Host "`n[3/5] Extracting onboarding package..." -ForegroundColor Green
-$extractPath = "$env:TEMP\MDEOnboarding"
-if (Test-Path $extractPath) { Remove-Item $extractPath -Recurse -Force }
-Expand-Archive -Path $OnboardingPackagePath -DestinationPath $extractPath
-
-# Step 4: Run onboarding script
-Write-Host "`n[4/5] Running onboarding script..." -ForegroundColor Green
-$onboardingScript = Get-ChildItem -Path $extractPath -Filter "*.cmd" -Recurse | Select-Object -First 1
-if ($onboardingScript) {
-    Start-Process -FilePath $onboardingScript.FullName -Wait -NoNewWindow
-} else {
-    throw "Onboarding script not found in package"
-}
-
-# Step 5: Verify onboarding
-Write-Host "`n[5/5] Verifying onboarding status..." -ForegroundColor Green
-Start-Sleep -Seconds 30  # Wait for registration
-
-$onboardingState = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Advanced Threat Protection\Status" -Name OnboardingState -ErrorAction SilentlyContinue
-if ($onboardingState.OnboardingState -eq 1) {
-    Write-Host "`nSUCCESS: Server onboarded successfully!" -ForegroundColor Green
-    
-    # Get Org ID
-    $orgId = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Advanced Threat Protection\Status" -Name OrgId -ErrorAction SilentlyContinue
-    Write-Host "Organization ID: $($orgId.OrgId)" -ForegroundColor Cyan
-} else {
-    Write-Host "`nWARNING: Onboarding may not be complete. Check M365 Defender portal." -ForegroundColor Yellow
-}
-
-# Restart SENSE service
-Write-Host "`nRestarting SENSE service..." -ForegroundColor Yellow
-Restart-Service -Name SENSE -Force
-
-Write-Host "`n=========================================" -ForegroundColor Cyan
-Write-Host "Onboarding complete. Verify in M365 Defender portal." -ForegroundColor Cyan
-Write-Host "=========================================" -ForegroundColor Cyan</code></pre>
-        </div>
-
-        <!-- ==================== SECTION 6: VALIDATION ==================== -->
-        <h2>6. Onboarding Validation</h2>
-
-        <h3>6.1 Validation Commands</h3>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">PowerShell - Validate MDE Onboarding (Windows)</span></div>
-          <pre><code># Check onboarding status
-$status = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Advanced Threat Protection\Status" -ErrorAction SilentlyContinue
-Write-Host "Onboarding State: $($status.OnboardingState)" # 1 = onboarded
-Write-Host "Org ID: $($status.OrgId)"
-Write-Host "Last Connected: $($status.LastConnected)"
-
-# Check SENSE service
-Get-Service -Name SENSE | Format-List Name, Status, StartType
-
-# Check cloud connectivity
-$connectivityTest = Invoke-WebRequest -Uri "https://winatp-gw-cus.microsoft.com/test" -UseBasicParsing -ErrorAction SilentlyContinue
-if ($connectivityTest.StatusCode -eq 200) {
-    Write-Host "Cloud connectivity: OK" -ForegroundColor Green
-} else {
-    Write-Host "Cloud connectivity: FAILED" -ForegroundColor Red
-}
-
-# Run detection test (EICAR-like)
-Write-Host "Running detection test..."
-$testCommand = "powershell.exe -NoExit -ExecutionPolicy Bypass -WindowStyle Hidden (New-Object System.Net.WebClient).DownloadFile('https://winatpmanagement.windows.com/client/management/static/DC3.Test.exe', 'C:\test-mde-detection.exe'); Start-Process 'C:\test-mde-detection.exe'"
-# Note: This triggers a benign detection to verify MDE is working</code></pre>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">Bash - Validate MDE Onboarding (Linux)</span></div>
-          <pre><code>#!/bin/bash
-# MDE Linux Validation Script
-
-echo "=== MDE Health Check ==="
-mdatp health
-
-echo ""
-echo "=== Service Status ==="
-systemctl status mdatp
-
-echo ""
-echo "=== Connectivity Test ==="
-mdatp connectivity test
-
-echo ""
-echo "=== License Status ==="
-mdatp health --field licensed
-
-echo ""
-echo "=== Real-time Protection ==="
-mdatp health --field real_time_protection_enabled
-
-echo ""
-echo "=== Definitions Version ==="
-mdatp health --field definitions_version
-
-echo ""
-echo "=== Run Detection Test ==="
-curl -o /tmp/eicar.com.txt https://www.eicar.org/download/eicar.com.txt
-mdatp scan custom --path /tmp/eicar.com.txt</code></pre>
-        </div>
-
-        <h3>6.2 Expected Validation Results</h3>
-
+        <h2>7. Troubleshooting</h2>
         <div class="table-wrapper">
           <table>
-            <thead>
-              <tr><th>Check</th><th>Expected Value</th><th>Troubleshooting</th></tr>
-            </thead>
+            <thead><tr><th>Issue</th><th>Resolution</th></tr></thead>
             <tbody>
-              <tr>
-                <td>OnboardingState</td>
-                <td><code>1</code></td>
-                <td>Re-run onboarding script, check network connectivity</td>
-              </tr>
-              <tr>
-                <td>SENSE Service</td>
-                <td><code>Running</code></td>
-                <td>Start service, check Event Viewer for errors</td>
-              </tr>
-              <tr>
-                <td>Cloud Connectivity</td>
-                <td><code>200 OK</code></td>
-                <td>Check proxy/firewall, allow MDE URLs</td>
-              </tr>
-              <tr>
-                <td>Licensed</td>
-                <td><code>true</code></td>
-                <td>Verify license assignment in M365 admin center</td>
-              </tr>
-              <tr>
-                <td>Real-time Protection</td>
-                <td><code>true</code></td>
-                <td>Enable via policy, check for conflicting AV</td>
-              </tr>
-              <tr>
-                <td>Appears in Portal</td>
-                <td>Within 24 hours</td>
-                <td>Force sync, restart SENSE service</td>
-              </tr>
+              <tr><td>Device not in portal after 60 min</td><td>Check Sense service, verify connectivity to *.securitycenter.windows.com, re-run onboarding</td></tr>
+              <tr><td>Sense service not starting</td><td>Check Event Log (SENSE/Operational), verify no conflicting AV, check disk space</td></tr>
+              <tr><td>Passive mode not working</td><td>Set ForcePassiveMode=1 via GPO/Intune, restart Sense service</td></tr>
+              <tr><td>Wrong organization</td><td>Offboard, wait 24h, re-onboard with correct RevFlow package</td></tr>
+              <tr><td>macOS FDA denied</td><td>Verify MDM profile, check System Preferences → Security</td></tr>
             </tbody>
           </table>
         </div>
 
-        <!-- ==================== SECTION 7: TROUBLESHOOTING ==================== -->
-        <h2>7. Common Onboarding Issues</h2>
-
-        <h3>7.1 Device Not Appearing in Portal</h3>
-
+        <h2>8. Escalation Path</h2>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">PowerShell - Force MDE Sync</span></div>
-          <pre><code># Force SENSE service restart
-Stop-Service -Name SENSE -Force
-Start-Sleep -Seconds 10
-Start-Service -Name SENSE
+          <div class="code-header"><span class="code-lang">Escalation Matrix</span></div>
+          <pre><code>LEVEL 1: RF-SEC-PLAT
+├── First responder | SLA: 4 hours
+└── Slack: #sec-platform-support
 
-# Clear MDE cache and re-onboard
-Stop-Service -Name SENSE -Force
-Remove-Item -Path "C:\ProgramData\Microsoft\Windows Defender Advanced Threat Protection\Cyber" -Recurse -Force -ErrorAction SilentlyContinue
-Start-Service -Name SENSE
+LEVEL 2: RF-SEC-SOC-L3
+├── Security incident suspected | SLA: 1 hour
+└── PagerDuty: "RevFlow SOC L3"
 
-# Re-run onboarding script if needed
-& "C:\Path\To\WindowsDefenderATPOnboardingScript.cmd"</code></pre>
+LEVEL 3: Microsoft Support
+├── Platform bugs, unexplained failures
+└── Portal: admin.microsoft.com (Premier: RevFlow-MS-Premier-2024)
+
+EMERGENCY (Tier 0):
+├── RF-SEC-PLAT on-call
+├── Teams: "Security Incident Bridge"
+└── CISO notification required</code></pre>
         </div>
 
-        <h3>7.2 Connectivity Issues</h3>
-
+        <h2>9. RevFlow Device Tags</h2>
         <div class="table-wrapper">
           <table>
-            <thead>
-              <tr><th>URL</th><th>Purpose</th><th>Required</th></tr>
-            </thead>
+            <thead><tr><th>Category</th><th>Values</th><th>Purpose</th></tr></thead>
             <tbody>
-              <tr><td><code>*.blob.core.windows.net</code></td><td>Azure Blob storage</td><td>Yes</td></tr>
-              <tr><td><code>*.ods.opinsights.azure.com</code></td><td>Log Analytics</td><td>Yes</td></tr>
-              <tr><td><code>*.oms.opinsights.azure.com</code></td><td>OMS Gateway</td><td>Yes</td></tr>
-              <tr><td><code>winatp-gw-*.microsoft.com</code></td><td>MDE Gateway</td><td>Yes</td></tr>
-              <tr><td><code>*.events.data.microsoft.com</code></td><td>Telemetry</td><td>Yes</td></tr>
-              <tr><td><code>*.securitycenter.windows.com</code></td><td>Security Center</td><td>Yes</td></tr>
+              <tr><td>Location</td><td>TOR, VAN, SFO, NYC, BLR, HYD</td><td>Geographic compliance</td></tr>
+              <tr><td>Department</td><td>Engineering, Sales, Finance, HR, IT, Security</td><td>Business ownership</td></tr>
+              <tr><td>Criticality</td><td>Tier0, Tier1, Tier2, Standard</td><td>Incident priority</td></tr>
+              <tr><td>Environment</td><td>Production, Development, Test</td><td>Environment class</td></tr>
+              <tr><td>Migration</td><td>ESET-Coexist, ESET-Removed, MDE-Primary</td><td>Migration tracking</td></tr>
             </tbody>
           </table>
         </div>
 
-        <h3>7.3 Coexistence with Existing AV</h3>
-
-        <div class="callout warning">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            EDR Coexistence Mode
-          </div>
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Related Runbooks</div>
           <div class="callout-content">
-            <p>If ESET or another AV is still active, MDE enters "Passive Mode" where:</p>
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li>Real-time protection is disabled</li>
-              <li>EDR telemetry is still collected</li>
-              <li>Scheduled scans are disabled</li>
-            </ul>
-            <p>Remove legacy AV or configure coexistence per EDR migration plan.</p>
           </div>
         </div>
-
-        <nav class="page-nav">
-          <a href="resources/data-dictionary.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Data Dictionary</span></a>
-          <a href="mde-offboarding.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">MDE Offboarding →</span></a>
-        </nav>
 
       </div>
     </main>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Incident Response Playbooks | Security Transformation</title>
+  <title>Incident Response Runbook | Security Transformation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -53,6 +53,7 @@
         <div class="nav-section">
           <div class="nav-section-title">DLP Migration</div>
           <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
           <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
           <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
           <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
@@ -84,20 +85,21 @@
         <div class="nav-divider"></div>
         <div class="nav-section">
           <div class="nav-section-title">Resources</div>
-          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
-          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
-          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
-          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
-          <a href="../resources/templates.html" class="nav-item">Templates</a>
-          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="timeline.html" class="nav-item">Project Timeline</a>
+          <a href="raci.html" class="nav-item">RACI Matrix</a>
+          <a href="infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="templates.html" class="nav-item">Templates</a>
+          <a href="splunk-reference.html" class="nav-item">Splunk Reference</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
           <div class="nav-section-title">Runbooks</div>
-          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
-          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
-          <a href="../resources/incident-response.html" class="nav-item active">Incident Response</a>
-          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+          <a href="mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="incident-response.html" class="nav-item active">Incident Response</a>
+          <a href="operational-procedures.html" class="nav-item">Operational Procedures</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -120,758 +122,549 @@
     <main class="main-content">
       <div class="content-wrapper">
         <nav class="breadcrumb">
-          <a href="../index.html">Home</a>
+          <a href="../index.html" class="breadcrumb-link">Home</a>
           <span class="breadcrumb-separator">/</span>
-          <a href="templates.html">Resources</a>
-          <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-current">Incident Response Playbooks</span>
+          <span class="breadcrumb-current">Incident Response Runbook</span>
         </nav>
 
         <div class="page-header">
-          <h1>Incident Response Playbooks</h1>
+          <h1>Incident Response Runbook</h1>
           <div class="page-header-meta">
-            <span class="page-badge siem">SOC Operations</span>
+            <span class="page-badge critical">Critical</span>
             <span class="page-reading-time">Operational Runbook</span>
           </div>
-          <p class="intro-text">
-            Step-by-step playbooks for common incident types. These playbooks integrate Microsoft Sentinel, MDE, and Purview workflows for unified incident response.
-          </p>
+          <p class="intro-text">RevFlow Analytics Security Incident Response procedures. Covers detection, triage, containment, eradication, recovery, and lessons learned phases.</p>
         </div>
 
-        <!-- ==================== SECTION 1: OVERVIEW ==================== -->
-        <h2>1. Incident Response Framework</h2>
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Emergency Contacts</div>
+          <div class="callout-content">
+            <p><strong>SOC Hotline:</strong> +1-416-555-7621 | <strong>Email:</strong> soc@revflow.com | <strong>Slack:</strong> #soc-alerts</p>
+            <p><strong>L3 On-Call:</strong> PagerDuty "RevFlow SOC L3" | <strong>CISO Emergency:</strong> +1-416-555-0100</p>
+            <p><strong>War Room:</strong> Teams channel #incident-war-room | <strong>Bridge:</strong> Teams "Security Incident Bridge"</p>
+          </div>
+        </div>
 
         <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            NIST IR Lifecycle
-          </div>
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Document Information</div>
           <div class="callout-content">
-            <p>All playbooks follow the NIST Incident Response lifecycle:</p>
-            <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li><strong>Preparation</strong> - Tools, access, documentation ready</li>
-              <li><strong>Detection & Analysis</strong> - Identify and validate the incident</li>
-              <li><strong>Containment</strong> - Stop the spread, preserve evidence</li>
-              <li><strong>Eradication</strong> - Remove threat from environment</li>
-              <li><strong>Recovery</strong> - Restore normal operations</li>
-              <li><strong>Lessons Learned</strong> - Document and improve</li>
-            </ol>
+            <p><strong>Version:</strong> 4.0 | <strong>Last Updated:</strong> 2024-12-01 | <strong>Owner:</strong> Director, Security Operations</p>
+            <p><strong>Review Cycle:</strong> Quarterly | <strong>Last Tabletop:</strong> 2024-10-15</p>
           </div>
         </div>
 
-        <h3>1.1 Severity Levels</h3>
-
+        <h2>1. Severity Classification</h2>
         <div class="table-wrapper">
           <table>
-            <thead>
-              <tr><th>Severity</th><th>Description</th><th>Response Time</th><th>Escalation</th></tr>
-            </thead>
+            <thead><tr><th>Severity</th><th>Description</th><th>Response Time</th><th>Owner</th><th>Notification</th></tr></thead>
             <tbody>
-              <tr>
-                <td><span class="status-badge" style="background: #7f1d1d; color: #fecaca;">Critical</span></td>
-                <td>Active breach, ransomware, data exfiltration in progress</td>
-                <td>Immediate (15 min)</td>
-                <td>CISO, Legal, Executive team</td>
+              <tr style="background: rgba(239, 68, 68, 0.1);">
+                <td><strong>SEV-1 Critical</strong></td>
+                <td>Active breach, ransomware, APT, data exfiltration confirmed</td>
+                <td>15 minutes</td>
+                <td>L3 + Incident Commander</td>
+                <td>CISO immediately, CEO within 1 hour, Legal, PR</td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.1);">
+                <td><strong>SEV-2 High</strong></td>
+                <td>Confirmed malware, credential compromise, data exfil attempt</td>
+                <td>30 minutes</td>
+                <td>L2 SOC Analyst</td>
+                <td>CISO within 2 hours, IT Leadership, Department head</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td><strong>SEV-3 Medium</strong></td>
+                <td>Suspicious activity, policy violation, reconnaissance</td>
+                <td>2 hours</td>
+                <td>L1 → L2 escalation</td>
+                <td>Security management (daily summary)</td>
               </tr>
               <tr>
-                <td><span class="status-badge" style="background: #991b1b; color: #fecaca;">High</span></td>
-                <td>Confirmed malware, compromised credentials, lateral movement</td>
-                <td>1 hour</td>
-                <td>Security Manager, IT Director</td>
-              </tr>
-              <tr>
-                <td><span class="status-badge" style="background: #c2410c; color: #fed7aa;">Medium</span></td>
-                <td>Suspicious activity, policy violations, potential compromise</td>
+                <td><strong>SEV-4 Low</strong></td>
+                <td>Informational, minor policy violation</td>
                 <td>4 hours</td>
-                <td>SOC Lead</td>
-              </tr>
-              <tr>
-                <td><span class="status-badge" style="background: #1e40af; color: #bfdbfe;">Low</span></td>
-                <td>Informational, reconnaissance, failed attacks</td>
-                <td>24 hours</td>
-                <td>Analyst handling</td>
+                <td>L1 SOC Analyst</td>
+                <td>None required</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <!-- ==================== PLAYBOOK 1: PHISHING ==================== -->
-        <h2>2. Playbook: Phishing Incident</h2>
-
-        <div class="callout warning">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            Trigger
-          </div>
-          <div class="callout-content">
-            <p><strong>Alert Sources:</strong> User report, Microsoft Defender for Office 365, Sentinel analytics rule</p>
-            <p><strong>Typical Alerts:</strong> "Phishing email delivered", "User clicked malicious link", "Credential harvesting detected"</p>
-          </div>
-        </div>
-
-        <h3>2.1 Detection & Analysis</h3>
-
+        <h2>2. Incident Response Phases</h2>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - Identify Phishing Recipients</span></div>
-          <pre><code>// Find all recipients of the phishing email
-let SuspiciousSender = "attacker@malicious-domain.com";
-let SuspiciousSubject = "Urgent: Password Reset Required";
+          <div class="code-header"><span class="code-lang">IR Lifecycle</span></div>
+          <pre><code>REVFLOW INCIDENT RESPONSE LIFECYCLE
+═══════════════════════════════════════════════════════════════════════════════
 
-EmailEvents
-| where TimeGenerated > ago(7d)
-| where SenderFromAddress == SuspiciousSender 
-    or Subject has SuspiciousSubject
-| summarize 
-    Recipients = make_set(RecipientEmailAddress),
-    DeliveryActions = make_set(DeliveryAction),
-    FirstSeen = min(TimeGenerated),
-    LastSeen = max(TimeGenerated)
-| extend RecipientCount = array_length(Recipients)</code></pre>
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│  DETECTION  │───▶│   TRIAGE    │───▶│ CONTAINMENT │───▶│ ERADICATION │
+└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
+      │                  │                  │                  │
+      ▼                  ▼                  ▼                  ▼
+  • XDR Alert       • Severity        • Isolate device    • Remove malware
+  • Sentinel        • Scope           • Disable account   • Reset credentials
+  • User report     • Impact          • Block IP/domain   • Patch vuln
+  • Threat intel    • Initial IOCs    • Preserve evidence • Clean systems
+
+                                           │
+                    ┌──────────────────────┘
+                    ▼
+              ┌─────────────┐    ┌─────────────┐
+              │  RECOVERY   │───▶│   LESSONS   │
+              └─────────────┘    └─────────────┘
+                    │                  │
+                    ▼                  ▼
+               • Restore systems   • PIR (48-72 hrs)
+               • Monitor closely   • Update runbooks
+               • Validate clean    • Improve detections
+               • Return to prod    • Share IOCs</code></pre>
         </div>
 
+        <h2>3. Phase 1: Detection & Initial Response</h2>
+        <h3>3.1 Alert Sources</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Source</th><th>Portal</th><th>Alert Volume</th><th>Auto-Ticket</th></tr></thead>
+            <tbody>
+              <tr><td><strong>M365 Defender XDR</strong></td><td>security.microsoft.com</td><td>~150/day</td><td>Yes (High/Critical)</td></tr>
+              <tr><td><strong>Microsoft Sentinel</strong></td><td>portal.azure.com</td><td>~80/day</td><td>Yes (via playbook)</td></tr>
+              <tr><td><strong>Defender for Cloud</strong></td><td>portal.azure.com</td><td>~30/day</td><td>Yes (High/Critical)</td></tr>
+              <tr><td><strong>User Reports</strong></td><td>phishing@revflow.com</td><td>~20/day</td><td>Manual triage</td></tr>
+              <tr><td><strong>External TI</strong></td><td>MS-ISAC, FS-ISAC</td><td>Variable</td><td>Manual assessment</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>3.2 L1 Initial Triage Checklist</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Step</th><th>Action</th><th>Tool</th><th>Time</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Review alert in XDR unified queue</td><td>security.microsoft.com</td><td>2 min</td></tr>
+              <tr><td>2</td><td>Check incident correlation (related alerts)</td><td>XDR Incident view</td><td>2 min</td></tr>
+              <tr><td>3</td><td>Identify affected assets & users</td><td>Device/User timeline</td><td>3 min</td></tr>
+              <tr><td>5</td><td>Review process tree / attack story</td><td>XDR Investigation graph</td><td>5 min</td></tr>
+              <tr><td>6</td><td>Check for known IOCs</td><td>VirusTotal, AbuseIPDB</td><td>2 min</td></tr>
+              <tr><td>7</td><td>Assign severity & create SEC-INC ticket</td><td>ServiceNow</td><td>2 min</td></tr>
+              <tr><td>8</td><td>Escalate if SEV-1/SEV-2 or uncertain</td><td>PagerDuty / Slack</td><td>1 min</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>4. Phase 2: Containment</h2>
+        <h3>4.1 Containment Actions by Asset Type</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Asset Type</th><th>Containment Action</th><th>Command/Procedure</th><th>Approval</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Endpoint (Workstation)</strong></td>
+                <td>Network isolation via MDE</td>
+                <td>XDR → Device → Isolate device</td>
+                <td>L2 (L1 for SEV-1)</td>
+              </tr>
+              <tr>
+                <td><strong>Endpoint (Laptop - Remote)</strong></td>
+                <td>Network isolation + VPN revoke</td>
+                <td>XDR isolate + Disable VPN cert</td>
+                <td>L2</td>
+              </tr>
+              <tr>
+                <td><strong>User Account</strong></td>
+                <td>Disable account + revoke sessions</td>
+                <td>Entra → Users → Revoke sessions, Disable sign-in</td>
+                <td>L2</td>
+              </tr>
+              <tr>
+                <td><strong>Service Account</strong></td>
+                <td>Disable account (coordinate with owner)</td>
+                <td>Entra/AD → Disable + rotate secrets</td>
+                <td>L3 + App Owner</td>
+              </tr>
+              <tr>
+                <td><strong>Server (Non-Critical)</strong></td>
+                <td>Network isolation or shutdown</td>
+                <td>XDR isolate or VM shutdown</td>
+                <td>L2 + RF-IT-CLOUD</td>
+              </tr>
+              <tr>
+                <td><strong>Server (Tier 0: DC/CA)</strong></td>
+                <td>Network segment isolation</td>
+                <td>Firewall rules (DO NOT shutdown DC)</td>
+                <td>L3 + CISO + VP Infra</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud Resource</strong></td>
+                <td>Isolate via NSG / revoke access</td>
+                <td>Azure Portal → NSG deny all</td>
+                <td>L2 + RF-IT-CLOUD</td>
+              </tr>
+              <tr>
+                <td><strong>External IP/Domain</strong></td>
+                <td>Block at firewall + DNS sinkhole</td>
+                <td>Palo Alto + DNS RPZ</td>
+                <td>L1 (via playbook)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>4.2 MDE Device Isolation</h3>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - Check for Link Clicks</span></div>
-          <pre><code>// Find users who clicked the malicious link
-let MaliciousURL = "https://malicious-site.com/phish";
+          <div class="code-header"><span class="code-lang">MDE Isolation Procedure</span></div>
+          <pre><code>MDE DEVICE ISOLATION - REVFLOW PROCEDURE
+═══════════════════════════════════════════════════════════════════════════════
 
-UrlClickEvents
-| where TimeGenerated > ago(7d)
-| where Url has MaliciousURL
-| project TimeGenerated, AccountUpn, Url, ActionType, NetworkMessageId
-| join kind=inner (
-    EmailEvents
-    | where TimeGenerated > ago(7d)
-) on NetworkMessageId
-| project TimeGenerated, AccountUpn, Url, SenderFromAddress, Subject</code></pre>
-        </div>
+STEP 1: ISOLATE VIA PORTAL
+├── Navigate: security.microsoft.com → Endpoints → Device inventory
+├── Search: [hostname or device ID]
+├── Click: "Isolate device"
+├── Select: "Full isolation" (blocks all except MDE cloud)
+├── Add comment: "SEC-INC-XXXXX: [brief reason]"
+└── Click: "Confirm"
 
-        <h3>2.2 Containment Actions</h3>
-
-        <ol style="margin: 1rem 0; padding-left: 1.5rem;">
-          <li><strong>Block sender domain</strong> in Exchange Online Protection
-            <ul>
-              <li>Security.microsoft.com → Policies → Anti-spam → Block sender/domain</li>
-            </ul>
-          </li>
-          <li><strong>Purge emails</strong> from all mailboxes
-            <ul>
-              <li>Use Content Search in Compliance Center</li>
-              <li>Search query: <code>from:attacker@domain.com AND subject:"Urgent"</code></li>
-              <li>Delete results using: <code>New-ComplianceSearchAction -SearchName "PhishSearch" -Purge -PurgeType SoftDelete</code></li>
-            </ul>
-          </li>
-          <li><strong>Block malicious URL</strong> in Defender for Office 365
-            <ul>
-              <li>Add to Tenant Allow/Block List</li>
-            </ul>
-          </li>
-          <li><strong>Reset passwords</strong> for users who clicked
-            <ul>
-              <li>Force password reset in Entra ID</li>
-              <li>Revoke all sessions: <code>Revoke-AzureADUserAllRefreshToken</code></li>
-            </ul>
-          </li>
-        </ol>
-
-        <h3>2.3 Investigation Queries</h3>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - Check for Credential Compromise</span></div>
-          <pre><code>// Check for suspicious sign-ins from affected users
-let AffectedUsers = dynamic(["user1@company.com", "user2@company.com"]);
-let IncidentTime = datetime(2024-01-15T10:00:00Z);
-
-SigninLogs
-| where TimeGenerated between (IncidentTime .. (IncidentTime + 24h))
-| where UserPrincipalName in (AffectedUsers)
-| where ResultType == "0"  // Successful sign-ins
-| project 
-    TimeGenerated,
-    UserPrincipalName,
-    IPAddress,
-    Location = strcat(LocationDetails.city, ", ", LocationDetails.countryOrRegion),
-    AppDisplayName,
-    DeviceDetail,
-    RiskLevelDuringSignIn
-| order by TimeGenerated desc</code></pre>
-        </div>
-
-        <!-- ==================== PLAYBOOK 2: MALWARE ==================== -->
-        <h2>3. Playbook: Malware Detection</h2>
-
-        <div class="callout warning">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            Trigger
-          </div>
-          <div class="callout-content">
-            <p><strong>Alert Sources:</strong> Microsoft Defender for Endpoint (via XDR), Sentinel analytics</p>
-            <p><strong>Typical Alerts:</strong> "Malware detected", "Suspicious process execution", "Known malware hash detected"</p>
-          </div>
-        </div>
-
-        <h3>3.1 Detection & Analysis</h3>
-
-        <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Where to Run These Queries
-          </div>
-          <div class="callout-content">
-            <p><strong>M365 Defender Portal:</strong> These Device* table queries run in Advanced Hunting at security.microsoft.com. With XDR-first, raw endpoint telemetry is available in Defender for hunting — we don't need to ingest it into Sentinel.</p>
-            <p><strong>XDR Incident provides context:</strong> The XDR incident already includes attack timeline, process tree, and related alerts. Use Advanced Hunting for deeper investigation when needed.</p>
-          </div>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - Malware Investigation (Run in M365 Defender Advanced Hunting)</span></div>
-          <pre><code>// Get full context of malware detection
-let MalwareHash = "abc123...";  // SHA256 from alert
-let DeviceName = "WORKSTATION01";
-
-// Find the malware execution
-DeviceProcessEvents
-| where TimeGenerated > ago(7d)
-| where DeviceName == DeviceName
-| where SHA256 == MalwareHash or InitiatingProcessSHA256 == MalwareHash
-| project 
-    TimeGenerated,
-    DeviceName,
-    FileName,
-    FolderPath,
-    ProcessCommandLine,
-    AccountName,
-    InitiatingProcessFileName,
-    InitiatingProcessCommandLine,
-    SHA256
-
-// Check for persistence
-union
-(DeviceRegistryEvents
-| where TimeGenerated > ago(7d)
-| where DeviceName == DeviceName
-| where RegistryKey has_any ("Run", "RunOnce", "Services")),
-(DeviceFileEvents
-| where TimeGenerated > ago(7d)
-| where DeviceName == DeviceName
-| where FolderPath has_any ("Startup", "Tasks"))
-| project TimeGenerated, ActionType, FileName, FolderPath, RegistryKey</code></pre>
-        </div>
-
-        <h3>3.2 Containment Actions</h3>
-
-        <div class="flow-diagram">
-          <div class="flow-step">
-            <div class="flow-step-number">1</div>
-            <div class="flow-step-content">
-              <strong>Isolate Device</strong><br>
-              M365 Defender → Device page → "Isolate device" (allows Defender communication only)
-            </div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-number">2</div>
-            <div class="flow-step-content">
-              <strong>Stop & Quarantine</strong><br>
-              M365 Defender → Device page → "Stop and quarantine file"
-            </div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-number">3</div>
-            <div class="flow-step-content">
-              <strong>Block Hash</strong><br>
-              Settings → Endpoints → Indicators → Add file hash indicator (Block)
-            </div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-number">4</div>
-            <div class="flow-step-content">
-              <strong>Run AV Scan</strong><br>
-              M365 Defender → Device page → "Run antivirus scan" (Full scan)
-            </div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-number">5</div>
-            <div class="flow-step-content">
-              <strong>Collect Investigation Package</strong><br>
-              M365 Defender → Device page → "Collect investigation package"
-            </div>
-          </div>
-        </div>
-
-        <h3>3.3 PowerShell Response Actions</h3>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">PowerShell - MDE Response Actions via API</span></div>
-          <pre><code># Isolate device via MDE API
-$DeviceId = "device-id-from-portal"
-$TenantId = "your-tenant-id"
-$AppId = "app-id-with-machine.isolate-permission"
-$AppSecret = "app-secret"
-
-# Get access token
-$body = @{
-    Grant_Type    = "client_credentials"
-    Scope         = "https://api.securitycenter.microsoft.com/.default"
-    Client_Id     = $AppId
-    Client_Secret = $AppSecret
-}
-$token = (Invoke-RestMethod -Uri "https://login.microsoftonline.com/$TenantId/oauth2/v2.0/token" -Method POST -Body $body).access_token
-
-# Isolate device
-$isolateBody = @{
-    Comment = "Isolated due to malware detection - Incident INC-2024-001"
-    IsolationType = "Full"  # or "Selective"
-} | ConvertTo-Json
-
-$headers = @{
-    Authorization = "Bearer $token"
-    "Content-Type" = "application/json"
+STEP 2: ISOLATE VIA API (Automation)
+POST https://api.securitycenter.microsoft.com/api/machines/{id}/isolate
+{
+    "Comment": "SEC-INC-XXXXX: Malware detected - containment",
+    "IsolationType": "Full"
 }
 
-Invoke-RestMethod -Uri "https://api.securitycenter.microsoft.com/api/machines/$DeviceId/isolate" -Method POST -Headers $headers -Body $isolateBody</code></pre>
+STEP 3: VERIFY ISOLATION
+├── Device page shows "Isolated" status
+├── User sees isolation notification
+└── Network test confirms no connectivity
+
+STEP 4: DOCUMENT
+├── Update SEC-INC ticket with timestamp
+├── Note: Device ID, isolation type, reason
+└── Notify device owner (if not the threat actor)
+
+TO RELEASE ISOLATION:
+├── Requires L2+ approval
+├── Device → "Release from isolation"
+├── Monitor for 24 hours post-release
+└── Document in ticket</code></pre>
         </div>
 
-        <!-- ==================== PLAYBOOK 3: COMPROMISED ACCOUNT ==================== -->
-        <h2>4. Playbook: Compromised Account</h2>
-
-        <div class="callout warning">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            Trigger
-          </div>
-          <div class="callout-content">
-            <p><strong>Alert Sources:</strong> Entra ID Protection, Sentinel UEBA, Microsoft Defender for Cloud Apps</p>
-            <p><strong>Typical Alerts:</strong> "Impossible travel", "Unfamiliar sign-in properties", "Mass file download", "Inbox rule creation"</p>
-          </div>
-        </div>
-
-        <h3>4.1 Detection & Analysis</h3>
-
+        <h3>4.3 Account Containment</h3>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - Compromised Account Investigation</span></div>
-          <pre><code>// Comprehensive account activity review
-let SuspiciousUser = "compromised.user@company.com";
-let InvestigationWindow = 7d;
-
-// Sign-in activity
-let SignIns = SigninLogs
-| where TimeGenerated > ago(InvestigationWindow)
-| where UserPrincipalName == SuspiciousUser
-| project TimeGenerated, IPAddress, Location = LocationDetails.city, 
-    AppDisplayName, ResultType, RiskLevel = RiskLevelDuringSignIn,
-    DeviceDetail, ConditionalAccessStatus;
-
-// Audit actions
-let AuditActions = AuditLogs
-| where TimeGenerated > ago(InvestigationWindow)
-| where InitiatedBy.user.userPrincipalName == SuspiciousUser
-| project TimeGenerated, OperationName, TargetResources, Result;
-
-// Email activity
-let EmailActivity = OfficeActivity
-| where TimeGenerated > ago(InvestigationWindow)
-| where UserId == SuspiciousUser
-| where Operation in ("New-InboxRule", "Set-InboxRule", "SendAs", "SendOnBehalf")
-| project TimeGenerated, Operation, Parameters;
-
-// Combine results
-SignIns
-| summarize 
-    SignInCount = count(),
-    UniqueIPs = dcount(IPAddress),
-    UniqueLocations = dcount(Location),
-    RiskySignIns = countif(RiskLevel in ("medium", "high")),
-    FailedSignIns = countif(ResultType != "0")</code></pre>
-        </div>
-
-        <h3>4.2 Containment Actions</h3>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">PowerShell - Account Containment Script</span></div>
-          <pre><code># Compromised Account Containment Script
-# Run with appropriate admin permissions
+          <div class="code-header"><span class="code-lang">PowerShell - Account Containment</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># RF-Contain-Account.ps1 - Emergency Account Containment
+# Run from PAW with appropriate Entra permissions
 
 param(
     [Parameter(Mandatory=$true)]
     [string]$UserPrincipalName,
-    [string]$IncidentId = "INC-$(Get-Date -Format 'yyyyMMdd-HHmm')"
+    [string]$IncidentNumber
 )
 
-$ErrorActionPreference = "Stop"
-$LogFile = "C:\Incidents\$IncidentId\containment_$(Get-Date -Format 'yyyyMMddHHmmss').log"
-New-Item -Path (Split-Path $LogFile) -ItemType Directory -Force | Out-Null
-
-function Write-Log {
-    param([string]$Message)
-    $entry = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] $Message"
-    Write-Host $entry
-    Add-Content -Path $LogFile -Value $entry
-}
-
-Write-Log "========================================="
-Write-Log "Compromised Account Containment"
-Write-Log "User: $UserPrincipalName"
-Write-Log "Incident: $IncidentId"
-Write-Log "========================================="
-
-# Connect to required services
 Connect-MgGraph -Scopes "User.ReadWrite.All", "Directory.ReadWrite.All"
-Connect-ExchangeOnline
+
+Write-Host "Containing account: $UserPrincipalName" -ForegroundColor Red
+Write-Host "Incident: $IncidentNumber"
 
 # Step 1: Disable sign-in
-Write-Log "[1/7] Disabling user sign-in..."
 Update-MgUser -UserId $UserPrincipalName -AccountEnabled:$false
-Write-Log "Sign-in disabled"
+Write-Host "✓ Sign-in disabled"
 
 # Step 2: Revoke all sessions
-Write-Log "[2/7] Revoking all refresh tokens..."
 Revoke-MgUserSignInSession -UserId $UserPrincipalName
-Write-Log "All sessions revoked"
+Write-Host "✓ All sessions revoked"
 
-# Step 3: Reset password
-Write-Log "[3/7] Resetting password..."
-$newPassword = [System.Web.Security.Membership]::GeneratePassword(16, 4)
-$passwordProfile = @{
-    Password = $newPassword
-    ForceChangePasswordNextSignIn = $true
-}
-Update-MgUser -UserId $UserPrincipalName -PasswordProfile $passwordProfile
-Write-Log "Password reset (new password logged separately)"
+# Step 3: Revoke refresh tokens (forces re-auth)
+$User = Get-MgUser -UserId $UserPrincipalName
+Invoke-MgInvalidateUserRefreshToken -UserId $User.Id
+Write-Host "✓ Refresh tokens invalidated"
 
-# Step 4: Disable MFA methods (force re-registration)
-Write-Log "[4/7] Reviewing MFA methods..."
-$authMethods = Get-MgUserAuthenticationMethod -UserId $UserPrincipalName
-Write-Log "Found $($authMethods.Count) authentication methods"
+# Step 4: Reset password (optional - use if credential compromise confirmed)
+# $NewPassword = [System.Web.Security.Membership]::GeneratePassword(16,4)
+# Update-MgUser -UserId $UserPrincipalName -PasswordProfile @{Password=$NewPassword; ForceChangePasswordNextSignIn=$true}
 
-# Step 5: Check and remove suspicious inbox rules
-Write-Log "[5/7] Checking inbox rules..."
-$inboxRules = Get-InboxRule -Mailbox $UserPrincipalName
-foreach ($rule in $inboxRules) {
-    if ($rule.ForwardTo -or $rule.ForwardAsAttachmentTo -or $rule.RedirectTo) {
-        Write-Log "SUSPICIOUS: Forwarding rule found - $($rule.Name)"
-        Remove-InboxRule -Mailbox $UserPrincipalName -Identity $rule.Identity -Confirm:$false
-        Write-Log "Removed rule: $($rule.Name)"
-    }
+# Step 5: Remove from privileged groups (if applicable)
+$PrivGroups = @("RF-SEC-GlobalAdmins", "RF-SEC-SecurityAdmins", "RF-AD-DomainAdmins")
+foreach ($Group in $PrivGroups) {
+    try {
+        $GroupObj = Get-MgGroup -Filter "displayName eq '$Group'"
+        Remove-MgGroupMemberByRef -GroupId $GroupObj.Id -DirectoryObjectId $User.Id -ErrorAction SilentlyContinue
+        Write-Host "✓ Removed from $Group"
+    } catch {}
 }
 
-# Step 6: Check OAuth app consents
-Write-Log "[6/7] Checking OAuth app consents..."
-$appConsents = Get-MgUserOAuth2PermissionGrant -UserId $UserPrincipalName
-Write-Log "Found $($appConsents.Count) app consents"
-# Review and remove suspicious consents as needed
-
-# Step 7: Document current group memberships
-Write-Log "[7/7] Documenting group memberships..."
-$groups = Get-MgUserMemberOf -UserId $UserPrincipalName
-Write-Log "User is member of $($groups.Count) groups"
-
-Write-Log "========================================="
-Write-Log "Containment complete"
-Write-Log "NEXT STEPS:"
-Write-Log "1. Investigate sign-in logs for attacker activity"
-Write-Log "2. Check for data exfiltration"
-Write-Log "3. Review email sent during compromise"
-Write-Log "4. Re-enable account after investigation"
-Write-Log "========================================="</code></pre>
+Write-Host ""
+Write-Host "Account contained. Document in SEC-INC-$IncidentNumber" -ForegroundColor Yellow</code></pre>
         </div>
 
-        <!-- ==================== PLAYBOOK 4: DLP VIOLATION ==================== -->
-        <h2>5. Playbook: DLP Policy Violation</h2>
-
-        <div class="callout warning">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            Trigger
-          </div>
-          <div class="callout-content">
-            <p><strong>Alert Sources:</strong> Microsoft Purview DLP, Sentinel analytics</p>
-            <p><strong>Typical Alerts:</strong> "Sensitive data shared externally", "PII detected in email", "Large file upload to cloud storage"</p>
-          </div>
-        </div>
-
-        <h3>5.1 Detection & Analysis</h3>
-
+        <h2>5. Phase 3: Investigation</h2>
+        <h3>5.1 Investigation Queries (KQL)</h3>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - DLP Violation Investigation</span></div>
-          <pre><code>// Investigate DLP policy matches
-let InvestigationUser = "user@company.com";
+          <div class="code-header"><span class="code-lang">KQL - User Activity Investigation</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// RF-INV-UserActivity.kql - Investigate compromised user
+// Replace: <UPN> with user principal name, <TIMEFRAME> with lookback
 
-PurviewDLPLogs
-| where TimeGenerated > ago(7d)
-| where User == InvestigationUser
-| project 
-    TimeGenerated,
-    User,
-    PolicyName,
-    RuleName,
-    SensitiveInfoType,
-    SensitiveInfoTypeCount,
-    ActionsTaken,
-    Workload,
-    ItemPath,
-    Recipients
+let TargetUser = "<UPN>";
+let TimeFrame = <TIMEFRAME>; // e.g., 7d
+
+// Sign-in activity
+SigninLogs
+| where TimeGenerated > ago(TimeFrame)
+| where UserPrincipalName =~ TargetUser
+| project TimeGenerated, UserPrincipalName, AppDisplayName, IPAddress, 
+          Location, DeviceDetail, Status, ConditionalAccessStatus
 | order by TimeGenerated desc
 
-// Check for pattern of violations
-PurviewDLPLogs
-| where TimeGenerated > ago(30d)
-| summarize 
-    ViolationCount = count(),
-    UniquePolicies = dcount(PolicyName),
-    UniqueRecipients = dcount(Recipients),
-    SensitiveTypes = make_set(SensitiveInfoType)
-    by User
-| where ViolationCount > 5
-| order by ViolationCount desc</code></pre>
+// Entra audit activity
+AuditLogs
+| where TimeGenerated > ago(TimeFrame)
+| where InitiatedBy.user.userPrincipalName =~ TargetUser
+| project TimeGenerated, OperationName, TargetResources, Result
+
+// Email activity (if mailbox compromise suspected)
+EmailEvents
+| where TimeGenerated > ago(TimeFrame)
+| where SenderFromAddress =~ TargetUser or RecipientEmailAddress =~ TargetUser
+| project TimeGenerated, Subject, SenderFromAddress, RecipientEmailAddress, 
+          DeliveryAction, ThreatTypes
+
+// Endpoint activity (correlate via IdentityInfo)
+let UserSID = toscalar(IdentityInfo | where AccountUPN =~ TargetUser | take 1 | project AccountSID);
+DeviceLogonEvents
+| where TimeGenerated > ago(TimeFrame)
+| where AccountSid == UserSID
+| project TimeGenerated, DeviceName, ActionType, LogonType, RemoteIP</code></pre>
         </div>
 
-        <h3>5.2 Response Actions</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Device Investigation</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// RF-INV-DeviceActivity.kql - Investigate compromised device
+// Replace: <DEVICENAME> with hostname
 
+let TargetDevice = "<DEVICENAME>";
+let TimeFrame = 7d;
+
+// Process execution timeline
+DeviceProcessEvents
+| where TimeGenerated > ago(TimeFrame)
+| where DeviceName =~ TargetDevice
+| project TimeGenerated, FileName, FolderPath, ProcessCommandLine, 
+          AccountName, InitiatingProcessFileName
+| order by TimeGenerated desc
+
+// Network connections
+DeviceNetworkEvents
+| where TimeGenerated > ago(TimeFrame)
+| where DeviceName =~ TargetDevice
+| where RemoteIP !startswith "10." and RemoteIP !startswith "192.168."
+| project TimeGenerated, ActionType, RemoteIP, RemotePort, RemoteUrl, 
+          InitiatingProcessFileName
+| summarize ConnectionCount=count(), FirstSeen=min(TimeGenerated), 
+            LastSeen=max(TimeGenerated) by RemoteIP, RemotePort
+| order by ConnectionCount desc
+
+// File modifications
+DeviceFileEvents
+| where TimeGenerated > ago(TimeFrame)
+| where DeviceName =~ TargetDevice
+| where ActionType in ("FileCreated", "FileModified")
+| project TimeGenerated, ActionType, FileName, FolderPath, 
+          InitiatingProcessFileName, SHA256
+| order by TimeGenerated desc
+
+// Alerts on this device
+AlertEvidence
+| where TimeGenerated > ago(TimeFrame)
+| where DeviceName =~ TargetDevice
+| join kind=inner AlertInfo on AlertId
+| project TimeGenerated, AlertId, Title, Severity, Category</code></pre>
+        </div>
+
+        <h2>6. Phase 4: Eradication & Recovery</h2>
+        <h3>6.1 Eradication Checklist</h3>
         <div class="table-wrapper">
           <table>
-            <thead>
-              <tr><th>Severity</th><th>Sensitive Data Type</th><th>Action</th></tr>
-            </thead>
+            <thead><tr><th>Action</th><th>Procedure</th><th>Owner</th><th>Verified</th></tr></thead>
             <tbody>
-              <tr>
-                <td><span class="status-badge" style="background: #7f1d1d; color: #fecaca;">Critical</span></td>
-                <td>PCI, PHI, classified data</td>
-                <td>Block immediately, notify Legal, preserve evidence, incident report</td>
-              </tr>
-              <tr>
-                <td><span class="status-badge" style="background: #991b1b; color: #fecaca;">High</span></td>
-                <td>PII, financial data, credentials</td>
-                <td>Block, notify manager, require justification</td>
-              </tr>
-              <tr>
-                <td><span class="status-badge" style="background: #c2410c; color: #fed7aa;">Medium</span></td>
-                <td>Internal confidential</td>
-                <td>Warn user, log for review, training reminder</td>
-              </tr>
-              <tr>
-                <td><span class="status-badge" style="background: #1e40af; color: #bfdbfe;">Low</span></td>
-                <td>General business</td>
-                <td>Log only, periodic review</td>
-              </tr>
+              <tr><td>Remove malware/tools</td><td>MDE remediation or manual removal</td><td>L2/L3</td><td>☐</td></tr>
+              <tr><td>Reset compromised credentials</td><td>All accounts touched by attacker</td><td>RF-SEC-IAM</td><td>☐</td></tr>
+              <tr><td>Rotate service account secrets</td><td>Key Vault, app registrations</td><td>RF-SEC-IAM + App Owner</td><td>☐</td></tr>
+              <tr><td>Patch exploited vulnerability</td><td>Emergency patch if 0-day</td><td>RF-IT-CLOUD</td><td>☐</td></tr>
+              <tr><td>Block attacker IOCs</td><td>Firewall, DNS, MDE custom IOC</td><td>L2</td><td>☐</td></tr>
+              <tr><td>Review persistence mechanisms</td><td>Scheduled tasks, services, registry</td><td>L3</td><td>☐</td></tr>
+              <tr><td>Scan all potentially affected systems</td><td>MDE full scan, custom IOC hunt</td><td>L2</td><td>☐</td></tr>
             </tbody>
           </table>
         </div>
 
-        <!-- ==================== PLAYBOOK 5: RANSOMWARE ==================== -->
-        <h2>6. Playbook: Ransomware Attack</h2>
-
-        <div class="callout" style="background: #450a0a; border-color: #dc2626;">
-          <div class="callout-title" style="color: #fecaca;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            CRITICAL INCIDENT
-          </div>
-          <div class="callout-content" style="color: #fecaca;">
-            <p><strong>Immediate escalation required.</strong> Contact CISO, Legal, and Executive team immediately.</p>
-            <p><strong>Trigger:</strong> Mass file encryption, ransom note detected, known ransomware process</p>
-          </div>
+        <h3>6.2 Recovery Checklist</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Action</th><th>Procedure</th><th>Owner</th><th>Verified</th></tr></thead>
+            <tbody>
+              <tr><td>Restore from clean backup</td><td>If reimage required</td><td>RF-IT-CLOUD</td><td>☐</td></tr>
+              <tr><td>Re-enable user accounts</td><td>After credential reset verified</td><td>RF-SEC-IAM</td><td>☐</td></tr>
+              <tr><td>Release device isolation</td><td>MDE portal</td><td>L2</td><td>☐</td></tr>
+              <tr><td>Restore network access</td><td>Remove firewall blocks</td><td>RF-IT-NET</td><td>☐</td></tr>
+              <tr><td>Monitor for 24-48 hours</td><td>Enhanced logging, alert tuning</td><td>SOC</td><td>☐</td></tr>
+              <tr><td>Confirm business operations restored</td><td>User/department confirmation</td><td>Incident Commander</td><td>☐</td></tr>
+            </tbody>
+          </table>
         </div>
 
-        <h3>6.1 Immediate Actions (First 15 Minutes)</h3>
+        <h2>7. Phase 5: Post-Incident Review</h2>
+        <h3>7.1 PIR Timeline</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Milestone</th><th>Deadline</th><th>Owner</th><th>Deliverable</th></tr></thead>
+            <tbody>
+              <tr><td>Incident closed</td><td>T+0</td><td>L2/L3</td><td>SEC-INC ticket resolved</td></tr>
+              <tr><td>Initial timeline drafted</td><td>T+24h</td><td>L3</td><td>Incident timeline document</td></tr>
+              <tr><td>PIR meeting scheduled</td><td>T+48h</td><td>Dir, SecOps</td><td>Meeting invite to stakeholders</td></tr>
+              <tr><td>PIR meeting conducted</td><td>T+72h</td><td>All</td><td>Discussion, action items</td></tr>
+              <tr><td>PIR report finalized</td><td>T+5 days</td><td>L3</td><td>Final report in Confluence</td></tr>
+              <tr><td>Action items tracked</td><td>T+30 days</td><td>Dir, SecOps</td><td>JIRA tickets for improvements</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-        <ol style="margin: 1rem 0; padding-left: 1.5rem;">
-          <li><strong>ISOLATE AFFECTED SYSTEMS</strong>
-            <ul>
-              <li>Use MDE device isolation for confirmed systems</li>
-              <li>Disconnect from network if MDE unavailable</li>
-              <li>Do NOT power off (preserve memory)</li>
-            </ul>
-          </li>
-          <li><strong>IDENTIFY SCOPE</strong>
-            <ul>
-              <li>Query for ransomware indicators across all endpoints</li>
-              <li>Check file share access logs</li>
-              <li>Identify patient zero</li>
-            </ul>
-          </li>
-          <li><strong>PRESERVE EVIDENCE</strong>
-            <ul>
-              <li>Collect MDE investigation packages</li>
-              <li>Preserve ransom notes</li>
-              <li>Screenshot all artifacts</li>
-            </ul>
-          </li>
-          <li><strong>ESCALATE</strong>
-            <ul>
-              <li>Notify CISO and Security Manager</li>
-              <li>Engage incident response retainer (if applicable)</li>
-              <li>Brief Legal on potential breach notification</li>
-            </ul>
-          </li>
-        </ol>
+        <h3>7.2 PIR Report Template</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PIR Report Structure</span></div>
+          <pre><code>REVFLOW POST-INCIDENT REVIEW REPORT
+═══════════════════════════════════════════════════════════════════════════════
 
-        <h3>6.2 Detection Queries</h3>
+INCIDENT SUMMARY
+├── Incident ID: SEC-INC-XXXXX
+├── Severity: SEV-X
+├── Date/Time: YYYY-MM-DD HH:MM UTC
+├── Duration: X hours
+├── Affected Assets: [list]
+├── Affected Users: [count]
+└── Business Impact: [description]
 
-        <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Advanced Hunting in M365 Defender
-          </div>
+TIMELINE
+├── T+0:00 - Initial detection
+├── T+0:XX - Triage completed, severity assigned
+├── T+X:XX - Containment actions taken
+├── T+X:XX - Investigation completed
+├── T+X:XX - Eradication completed
+└── T+X:XX - Recovery and closure
+
+ROOT CAUSE ANALYSIS
+├── Attack Vector: [how attacker got in]
+├── Vulnerability Exploited: [CVE or misconfiguration]
+├── Detection Gap: [why wasn't it caught sooner]
+└── Contributing Factors: [other issues]
+
+WHAT WENT WELL
+├── [positive item 1]
+├── [positive item 2]
+└── [positive item 3]
+
+AREAS FOR IMPROVEMENT
+├── [improvement 1]
+├── [improvement 2]
+└── [improvement 3]
+
+ACTION ITEMS
+├── [Action] - Owner: [name] - Due: [date] - JIRA: SEC-XXX
+├── [Action] - Owner: [name] - Due: [date] - JIRA: SEC-XXX
+└── [Action] - Owner: [name] - Due: [date] - JIRA: SEC-XXX
+
+INDICATORS OF COMPROMISE (IOCs)
+├── IP Addresses: [list]
+├── Domains: [list]
+├── File Hashes: [list]
+└── Other: [list]</code></pre>
+        </div>
+
+        <h2>8. Scenario-Specific Playbooks</h2>
+        <h3>8.1 Ransomware Response</h3>
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Ransomware - IMMEDIATE ACTIONS</div>
           <div class="callout-content">
-            <p>These queries run in M365 Defender Advanced Hunting (security.microsoft.com). With XDR-first, we access raw Device* tables in Defender for investigation — they're not ingested into Sentinel.</p>
+            <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>DO NOT</strong> pay ransom without CISO + Legal + CEO approval</li>
+              <li><strong>DO NOT</strong> shut down infected systems (preserves evidence)</li>
+              <li><strong>DO</strong> isolate affected systems immediately via MDE</li>
+              <li><strong>DO</strong> disable network shares to prevent spread</li>
+              <li><strong>DO</strong> preserve ransom note and encrypted file samples</li>
+              <li><strong>DO</strong> engage CISO and consider external IR firm</li>
+            </ol>
           </div>
         </div>
 
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - Ransomware Detection (M365 Defender Advanced Hunting)</span></div>
-          <pre><code>// Detect mass file encryption
-DeviceFileEvents
-| where TimeGenerated > ago(1h)
-| where ActionType in ("FileModified", "FileRenamed")
-| extend FileExtension = extract(@"\.([^.]+)$", 1, FileName)
-| summarize 
-    ModifiedFiles = count(),
-    UniqueExtensions = dcount(FileExtension),
-    Devices = dcount(DeviceName),
-    Users = dcount(InitiatingProcessAccountName),
-    Processes = make_set(InitiatingProcessFileName)
-    by bin(TimeGenerated, 5m)
-| where ModifiedFiles > 500 and UniqueExtensions > 50
-| order by TimeGenerated desc
-
-// Find ransomware indicators
-DeviceProcessEvents
-| where TimeGenerated > ago(24h)
-| where ProcessCommandLine has_any (
-    "vssadmin delete shadows",
-    "wmic shadowcopy delete",
-    "bcdedit /set",
-    "wbadmin delete catalog",
-    ".onion",
-    "YOUR FILES HAVE BEEN ENCRYPTED",
-    "bitcoin",
-    "ransom"
-)
-| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine</code></pre>
+        <h3>8.2 Business Email Compromise (BEC)</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Step</th><th>Action</th><th>Owner</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Contain account (disable, revoke sessions)</td><td>L2</td></tr>
+              <tr><td>2</td><td>Check inbox rules for forwarding/deletion</td><td>L2</td></tr>
+              <tr><td>3</td><td>Review sent emails for fraud attempts</td><td>L2 + Legal</td></tr>
+              <tr><td>4</td><td>Notify recipients of fraudulent emails</td><td>Communications</td></tr>
+              <tr><td>5</td><td>Review OAuth app consents</td><td>RF-SEC-IAM</td></tr>
+              <tr><td>6</td><td>Reset password + MFA re-enrollment</td><td>RF-SEC-IAM</td></tr>
+              <tr><td>7</td><td>If wire fraud attempted, contact bank + FBI IC3</td><td>Legal + Finance</td></tr>
+            </tbody>
+          </table>
         </div>
 
-        <h3>6.3 Containment Script</h3>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">PowerShell - Mass Device Isolation</span></div>
-          <pre><code># Emergency mass device isolation for ransomware
-# CAUTION: This will isolate all specified devices
-
-param(
-    [Parameter(Mandatory=$true)]
-    [string[]]$DeviceNames,
-    [string]$Justification = "Ransomware containment"
-)
-
-# API credentials (use managed identity in production)
-$TenantId = $env:TENANT_ID
-$AppId = $env:MDE_APP_ID
-$AppSecret = $env:MDE_APP_SECRET
-
-# Get token
-$tokenBody = @{
-    Grant_Type    = "client_credentials"
-    Scope         = "https://api.securitycenter.microsoft.com/.default"
-    Client_Id     = $AppId
-    Client_Secret = $AppSecret
-}
-$token = (Invoke-RestMethod -Uri "https://login.microsoftonline.com/$TenantId/oauth2/v2.0/token" -Method POST -Body $tokenBody).access_token
-
-$headers = @{
-    Authorization = "Bearer $token"
-    "Content-Type" = "application/json"
-}
-
-foreach ($deviceName in $DeviceNames) {
-    Write-Host "Processing: $deviceName" -ForegroundColor Yellow
-    
-    # Get device ID
-    $device = Invoke-RestMethod -Uri "https://api.securitycenter.microsoft.com/api/machines?`$filter=computerDnsName eq '$deviceName'" -Headers $headers
-    
-    if ($device.value.Count -gt 0) {
-        $deviceId = $device.value[0].id
-        
-        # Isolate device
-        $isolateBody = @{
-            Comment = $Justification
-            IsolationType = "Full"
-        } | ConvertTo-Json
-        
-        try {
-            Invoke-RestMethod -Uri "https://api.securitycenter.microsoft.com/api/machines/$deviceId/isolate" -Method POST -Headers $headers -Body $isolateBody
-            Write-Host "ISOLATED: $deviceName" -ForegroundColor Green
-        } catch {
-            Write-Host "FAILED: $deviceName - $_" -ForegroundColor Red
-        }
-    } else {
-        Write-Host "NOT FOUND: $deviceName" -ForegroundColor Red
-    }
-}</code></pre>
+        <h3>8.3 Data Exfiltration</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Step</th><th>Action</th><th>Owner</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Identify scope of data accessed/exfiltrated</td><td>L3</td></tr>
+              <tr><td>2</td><td>Determine data classification (PII, financial, IP)</td><td>L3 + GRC</td></tr>
+              <tr><td>3</td><td>Engage Legal for breach notification assessment</td><td>Legal</td></tr>
+              <tr><td>4</td><td>Preserve evidence for potential litigation</td><td>L3 + Legal</td></tr>
+              <tr><td>5</td><td>If PII breach confirmed, follow PIPEDA/GDPR timelines</td><td>Legal + Privacy</td></tr>
+              <tr><td>6</td><td>Notify affected customers if required</td><td>Legal + Communications</td></tr>
+            </tbody>
+          </table>
         </div>
 
-        <!-- ==================== SECTION: DOCUMENTATION ==================== -->
-        <h2>7. Incident Documentation Template</h2>
-
+        <h2>9. Communication Templates</h2>
+        <h3>9.1 Internal Stakeholder Update</h3>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">Markdown - Incident Report Template</span></div>
-          <pre><code># Incident Report: [INC-YYYY-XXX]
+          <div class="code-header"><span class="code-lang">Email Template - Stakeholder Update</span></div>
+          <pre><code>Subject: [CONFIDENTIAL] Security Incident Update - SEC-INC-XXXXX
 
-## Executive Summary
-- **Incident Type:** [Phishing/Malware/Compromised Account/DLP/Ransomware]
-- **Severity:** [Critical/High/Medium/Low]
-- **Status:** [Active/Contained/Resolved/Closed]
-- **Detection Time:** YYYY-MM-DD HH:MM UTC
-- **Resolution Time:** YYYY-MM-DD HH:MM UTC
-- **MTTR:** X hours Y minutes
+Team,
 
-## Timeline
-| Time (UTC) | Event | Action Taken |
-|------------|-------|--------------|
-| HH:MM | Initial alert triggered | Analyst assigned |
-| HH:MM | Investigation started | Queries executed |
-| HH:MM | Scope identified | X devices, Y users affected |
-| HH:MM | Containment initiated | Devices isolated |
-| HH:MM | Eradication complete | Malware removed |
-| HH:MM | Recovery complete | Systems restored |
+INCIDENT STATUS: [Active Investigation / Contained / Resolved]
 
-## Affected Assets
-- Devices: [List]
-- Users: [List]
-- Data: [Description]
+SUMMARY:
+At [TIME] on [DATE], the Security Operations Center detected [brief description].
+Current severity: SEV-[X]
 
-## Root Cause Analysis
-[Description of how the incident occurred]
+IMPACT:
+- Affected systems: [count/description]
+- Affected users: [count]
+- Business impact: [description]
 
-## Actions Taken
-1. [Action 1]
-2. [Action 2]
-3. [Action 3]
+CURRENT STATUS:
+- Containment: [Complete/In Progress]
+- Investigation: [Complete/In Progress]
+- Eradication: [Complete/In Progress]
 
-## Indicators of Compromise (IOCs)
-- File Hashes: [SHA256]
-- IP Addresses: [IPs]
-- Domains: [Domains]
-- Email Addresses: [Emails]
+NEXT UPDATE: [TIME]
 
-## Lessons Learned
-- What worked well:
-- What could be improved:
-- Recommended changes:
+ACTION REQUIRED:
+[Any actions needed from recipients]
 
-## Attachments
-- [ ] Timeline diagram
-- [ ] Investigation queries
-- [ ] Evidence screenshots
-- [ ] Communication logs</code></pre>
+Questions: Contact SOC at soc@revflow.com or join #incident-war-room
+
+--
+[Incident Commander Name]
+RevFlow Security Operations</code></pre>
         </div>
 
-        <nav class="page-nav">
-          <a href="mde-offboarding.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← MDE Offboarding</span></a>
-          <a href="operational-procedures.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Operational Procedures →</span></a>
-        </nav>
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Related Resources</div>
+          <div class="callout-content">
+          </div>
+        </div>
 
       </div>
     </main>

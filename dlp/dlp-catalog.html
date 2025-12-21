@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DLP Catalog | DLP Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+        <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="index.html" class="nav-item">DLP Overview</a>
+          <a href="dlp-catalog.html" class="nav-item active">DLP Catalog</a>
+          <a href="policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="../infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="../operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="../operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="../resources/templates.html" class="nav-item">Templates</a>
+          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="../resources/incident-response.html" class="nav-item">Incident Response</a>
+          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html" class="breadcrumb-link">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html" class="breadcrumb-link">DLP Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">DLP Catalog</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>RevFlow DLP Catalog</h1>
+          <div class="page-header-meta">
+            <span class="page-badge dlp">DLP Track</span>
+          </div>
+          <p class="intro-text">Complete catalog of RevFlow's DLP components: Sensitive Information Types customized for our Salesforce data, EDM schemas for customer and employee databases, sensitivity labels aligned with our classification policy, and policies mapped to SOC 2/ISO 27001/PIPEDA requirements.</p>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>RevFlow Data Landscape</div>
+          <div class="callout-content">
+            <p><strong>Primary Data Sources:</strong> Salesforce CRM (customer data), Workday (HR), NetSuite (Finance), GitHub (Source Code), Confluence/Jira (Internal Docs)</p>
+            <p><strong>Compliance Scope:</strong> SOC 2 Type II, ISO 27001, PIPEDA (Canada), GDPR (EU customers), CCPA (California)</p>
+            <p><strong>High-Risk Groups:</strong> RF-SALES-ENT (customer data), RF-FIN-* (financial), RF-HR-* (employee PII), RF-ENG-* (source code)</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 1: REVFLOW DATA CLASSIFICATION ==================== -->
+        <h2>1. RevFlow Data Classification Framework</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">RevFlow Data Classification</span></div>
+          <pre><code>REVFLOW DATA CLASSIFICATION HIERARCHY
+═══════════════════════════════════════════════════════════════════════════════
+
+LEVEL 4: RESTRICTED (Red)
+├── Board materials, M&A documents, executive compensation
+├── Encryption required, need-to-know access only
+├── Approver: CISO or CLO
+└── Examples: Board deck, acquisition targets, legal holds
+
+LEVEL 3: CONFIDENTIAL (Orange)  
+├── Customer data, employee PII, financial reports, source code
+├── Internal only, no external sharing without approval
+├── Approver: Department head
+└── Examples: Salesforce exports, revenue forecasts, HR records
+
+LEVEL 2: INTERNAL (Yellow)
+├── Business operations, project plans, internal communications
+├── Internal employees only, no public disclosure
+├── Approver: Manager
+└── Examples: Roadmaps, org charts, internal wikis
+
+LEVEL 1: PUBLIC (Green)
+├── Marketing materials, public docs, press releases
+├── No restrictions
+├── Approver: None required
+└── Examples: Website content, product docs, job postings</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 2: REVFLOW CUSTOM SITs ==================== -->
+        <h2>2. RevFlow Custom Sensitive Information Types</h2>
+
+        <h3>2.1 Salesforce & Customer Data SITs</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>SIT Name</th><th>Detection Pattern</th><th>Keywords</th><th>Confidence</th><th>Policy</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>RF-SIT-SalesforceID</strong></td>
+                <td>Regex: <code>[0-9a-zA-Z]{15}|[0-9a-zA-Z]{18}</code></td>
+                <td>salesforce, sfdc, account id, opportunity id, contact id</td>
+                <td>High (85%)</td>
+                <td>P1: Customer Data</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-CustomerExport</strong></td>
+                <td>Keywords + file pattern (.csv, .xlsx with headers)</td>
+                <td>account name, opportunity amount, close date, stage, pipeline</td>
+                <td>High (85%)</td>
+                <td>P1: Customer Data</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-DealPipeline</strong></td>
+                <td>Keywords + currency patterns</td>
+                <td>deal value, ARR, MRR, contract value, renewal, forecast</td>
+                <td>Medium (75%)</td>
+                <td>P2: Revenue Data</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-CustomerPII</strong></td>
+                <td>Email + phone + name patterns</td>
+                <td>customer contact, client email, billing contact</td>
+                <td>High (85%)</td>
+                <td>P1: Customer Data</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-CustomerList</strong></td>
+                <td>Bulk detection (10+ customer names)</td>
+                <td>customer list, account list, client roster</td>
+                <td>High (85%)</td>
+                <td>P1: Customer Data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">PowerShell - Create RF-SIT-SalesforceID</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># RF-SIT-SalesforceID - Detects Salesforce Record IDs
+# Owner: RF-SEC-GRC-COMP | Last Updated: 2024-12-01
+
+Connect-IPPSSession -UserPrincipalName admin@revflow.com
+
+$RuleXml = @"
+<RulePackage xmlns="http://schemas.microsoft.com/office/2020/contentclassification">
+  <RulePack id="RF-SalesforceID-Pack-v1">
+    <Version major="1" minor="0" build="0" revision="0"/>
+    <Publisher id="RevFlow-Security"/>
+  </RulePack>
+  <Rules>
+    <Entity id="rf-salesforce-id-001" patternsProximity="300" recommendedConfidence="85">
+      <Pattern confidenceLevel="85">
+        <IdMatch idRef="Regex_Salesforce_ID"/>
+        <Match idRef="Keywords_Salesforce"/>
+      </Pattern>
+      <Pattern confidenceLevel="75">
+        <IdMatch idRef="Regex_Salesforce_ID"/>
+      </Pattern>
+    </Entity>
+    <Regex id="Regex_Salesforce_ID">\b[0-9a-zA-Z]{15}\b|\b[0-9a-zA-Z]{18}\b</Regex>
+    <Keyword id="Keywords_Salesforce">
+      <Group matchStyle="word">
+        <Term>salesforce</Term>
+        <Term>sfdc</Term>
+        <Term>account id</Term>
+        <Term>opportunity id</Term>
+        <Term>contact id</Term>
+        <Term>lead id</Term>
+        <Term>case id</Term>
+      </Group>
+    </Keyword>
+  </Rules>
+</RulePackage>
+"@
+
+New-DlpSensitiveInformationType -Name "RF-SIT-SalesforceID" `
+    -Description "RevFlow - Salesforce Record IDs (Accounts, Opportunities, Contacts)" `
+    -ClassificationRuleXml $RuleXml</code></pre>
+        </div>
+
+        <h3>2.2 Financial & Revenue SITs</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>SIT Name</th><th>Detection Pattern</th><th>Keywords</th><th>Confidence</th><th>Policy</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>RF-SIT-RevenueForecast</strong></td>
+                <td>Keywords + quarterly patterns</td>
+                <td>Q1, Q2, Q3, Q4, forecast, projection, guidance, ARR target</td>
+                <td>High (85%)</td>
+                <td>P2: Revenue Data</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-FinancialReport</strong></td>
+                <td>Keywords + file patterns</td>
+                <td>P&L, balance sheet, income statement, cash flow, EBITDA</td>
+                <td>High (85%)</td>
+                <td>P3: Financial Data</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-NetSuiteExport</strong></td>
+                <td>NetSuite field patterns</td>
+                <td>internal id, subsidiary, posting period, GL account</td>
+                <td>Medium (75%)</td>
+                <td>P3: Financial Data</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-CompensationData</strong></td>
+                <td>Salary patterns + keywords</td>
+                <td>base salary, bonus, equity, stock options, OTE, commission</td>
+                <td>High (85%)</td>
+                <td>P4: HR Data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2.3 Employee & HR SITs</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>SIT Name</th><th>Detection Pattern</th><th>Keywords</th><th>Confidence</th><th>Policy</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>RF-SIT-EmployeeID</strong></td>
+                <td>Regex: <code>RF-EMP-[0-9]{5}</code></td>
+                <td>employee id, emp id, staff id</td>
+                <td>High (85%)</td>
+                <td>P4: HR Data</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-WorkdayExport</strong></td>
+                <td>Workday field patterns</td>
+                <td>worker id, supervisory org, hire date, termination date</td>
+                <td>High (85%)</td>
+                <td>P4: HR Data</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-PerformanceReview</strong></td>
+                <td>Keywords + rating patterns</td>
+                <td>performance rating, exceeds, meets, needs improvement, PIP</td>
+                <td>Medium (75%)</td>
+                <td>P4: HR Data</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-CanadianSIN</strong></td>
+                <td>Built-in + keywords</td>
+                <td>SIN, social insurance, T4, payroll</td>
+                <td>High (85%)</td>
+                <td>P4: HR Data</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-USEmployeeSSN</strong></td>
+                <td>Built-in + keywords</td>
+                <td>SSN, social security, W2, I-9</td>
+                <td>High (85%)</td>
+                <td>P4: HR Data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2.4 Engineering & Source Code SITs</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>SIT Name</th><th>Detection Pattern</th><th>Keywords</th><th>Confidence</th><th>Policy</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>RF-SIT-AzureSecret</strong></td>
+                <td>Built-in Azure AD Client Secret</td>
+                <td>client secret, app secret, azure ad</td>
+                <td>High (85%)</td>
+                <td>P5: Source Code</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-AWSKey</strong></td>
+                <td>Built-in AWS Access Key</td>
+                <td>aws_access_key, aws_secret, AKIA</td>
+                <td>High (85%)</td>
+                <td>P5: Source Code</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-GitHubPAT</strong></td>
+                <td>Regex: <code>ghp_[a-zA-Z0-9]{36}</code></td>
+                <td>github token, personal access token, ghp_</td>
+                <td>High (85%)</td>
+                <td>P5: Source Code</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-DatabaseCreds</strong></td>
+                <td>Connection string patterns</td>
+                <td>connection string, jdbc, mongodb://, postgresql://</td>
+                <td>High (85%)</td>
+                <td>P5: Source Code</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-APIKey</strong></td>
+                <td>Generic API key patterns</td>
+                <td>api_key, apikey, x-api-key, bearer token</td>
+                <td>Medium (75%)</td>
+                <td>P5: Source Code</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-ProjectCode</strong></td>
+                <td>Regex: <code>RF-[A-Z]{3,4}-[0-9]{4}</code></td>
+                <td>project code, initiative, roadmap item</td>
+                <td>Medium (75%)</td>
+                <td>P6: Internal Projects</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2.5 Legal & Partner SITs</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>SIT Name</th><th>Detection Pattern</th><th>Keywords</th><th>Confidence</th><th>Policy</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>RF-SIT-NDADocument</strong></td>
+                <td>Document fingerprint + keywords</td>
+                <td>non-disclosure, confidentiality agreement, NDA, proprietary information</td>
+                <td>High (85%)</td>
+                <td>P7: Legal Documents</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-MSA</strong></td>
+                <td>Keywords + legal terms</td>
+                <td>master services agreement, statement of work, SOW, terms and conditions</td>
+                <td>Medium (75%)</td>
+                <td>P7: Legal Documents</td>
+              </tr>
+              <tr>
+                <td><strong>RF-SIT-PartnerData</strong></td>
+                <td>Keywords + partner names</td>
+                <td>partner agreement, reseller, channel partner, co-sell</td>
+                <td>Medium (75%)</td>
+                <td>P8: Partner Data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 3: EDM SCHEMAS ==================== -->
+        <h2>3. Exact Data Match (EDM) Schemas</h2>
+
+        <p>EDM provides precise matching against RevFlow's actual data records rather than patterns.</p>
+
+        <h3>3.1 EDM Schema: Customer Database</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">JSON - RF-EDM-CustomerDB Schema</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>{
+  "schemaName": "RF-EDM-CustomerDB",
+  "description": "RevFlow Customer Database from Salesforce - refreshed daily",
+  "dataSourceName": "Salesforce-CustomerExport",
+  "lastRefresh": "2024-12-01T06:00:00Z",
+  "recordCount": 45000,
+  "columns": [
+    { "name": "AccountID", "type": "String", "searchable": true, "isPrimaryKey": true },
+    { "name": "AccountName", "type": "String", "searchable": true },
+    { "name": "BillingContact", "type": "String", "searchable": true },
+    { "name": "BillingEmail", "type": "String", "searchable": true },
+    { "name": "Phone", "type": "String", "searchable": false },
+    { "name": "ARR", "type": "String", "searchable": false },
+    { "name": "CustomerSince", "type": "Date", "searchable": false },
+    { "name": "AccountOwner", "type": "String", "searchable": false },
+    { "name": "Region", "type": "String", "searchable": false }
+  ]
+}
+
+-- REFRESH PROCESS --
+Source: Salesforce API → Azure Data Factory → Blob Storage
+Schedule: Daily 6:00 AM UTC
+Owner: RF-ENG-DATA
+Hash Upload: EDM Upload Agent on rf-tor-srv-edm-01</code></pre>
+        </div>
+
+        <h3>3.2 EDM Schema: Employee Database</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">JSON - RF-EDM-EmployeeDB Schema</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>{
+  "schemaName": "RF-EDM-EmployeeDB",
+  "description": "RevFlow Employee Database from Workday - refreshed daily",
+  "dataSourceName": "Workday-EmployeeExport",
+  "lastRefresh": "2024-12-01T05:00:00Z",
+  "recordCount": 4200,
+  "columns": [
+    { "name": "EmployeeID", "type": "String", "searchable": true, "isPrimaryKey": true },
+    { "name": "FullName", "type": "String", "searchable": true },
+    { "name": "WorkEmail", "type": "String", "searchable": true },
+    { "name": "PersonalEmail", "type": "String", "searchable": true },
+    { "name": "SIN_SSN", "type": "String", "searchable": true },
+    { "name": "DateOfBirth", "type": "Date", "searchable": false },
+    { "name": "HireDate", "type": "Date", "searchable": false },
+    { "name": "Department", "type": "String", "searchable": false },
+    { "name": "Location", "type": "String", "searchable": false },
+    { "name": "ManagerID", "type": "String", "searchable": false }
+  ]
+}
+
+-- COMPLIANCE NOTE --
+PIPEDA/GDPR: Employee consent obtained via Workday onboarding
+Retention: Active employees only; terminated employees removed after 7 years
+Access: RF-HR-OPS, RF-SEC-GRC-COMP</code></pre>
+        </div>
+
+        <h3>3.3 EDM Schema: Partner Contracts</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">JSON - RF-EDM-PartnerDB Schema</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>{
+  "schemaName": "RF-EDM-PartnerDB",
+  "description": "RevFlow Partner and Vendor contracts - refreshed weekly",
+  "dataSourceName": "Legal-ContractDB",
+  "lastRefresh": "2024-11-29T08:00:00Z",
+  "recordCount": 850,
+  "columns": [
+    { "name": "ContractID", "type": "String", "searchable": true, "isPrimaryKey": true },
+    { "name": "PartnerName", "type": "String", "searchable": true },
+    { "name": "ContractType", "type": "String", "searchable": true },
+    { "name": "SignatoryName", "type": "String", "searchable": true },
+    { "name": "EffectiveDate", "type": "Date", "searchable": false },
+    { "name": "ExpirationDate", "type": "Date", "searchable": false },
+    { "name": "ContractValue", "type": "String", "searchable": false }
+  ]
+}</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 4: SENSITIVITY LABELS ==================== -->
+        <h2>4. RevFlow Sensitivity Labels</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Label</th><th>Sub-Label</th><th>Protection</th><th>Auto-Apply Trigger</th><th>Scope</th></tr>
+            </thead>
+            <tbody>
+              <tr style="background: rgba(239, 68, 68, 0.1);">
+                <td rowspan="3"><strong>Restricted</strong></td>
+                <td>Board Only</td>
+                <td>Encrypt (RF-SEC-GlobalAdmins + Board), No forward, Watermark</td>
+                <td>Manual only</td>
+                <td>Files, Email</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.1);">
+                <td>Executive</td>
+                <td>Encrypt (C-suite + VPs), Watermark "Executive Confidential"</td>
+                <td>Manual only</td>
+                <td>Files, Email</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.1);">
+                <td>Legal Hold</td>
+                <td>Encrypt (RF-LEGAL-*), No copy/print, Audit all access</td>
+                <td>Manual (Legal team)</td>
+                <td>Files, Email, Sites</td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.1);">
+                <td rowspan="4"><strong>Confidential</strong></td>
+                <td>Customer Data</td>
+                <td>Encrypt (All employees), Block external sharing</td>
+                <td>RF-SIT-SalesforceID (10+), RF-EDM-CustomerDB</td>
+                <td>Files, Email, Sites, Endpoint</td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.1);">
+                <td>Employee PII</td>
+                <td>Encrypt (RF-HR-* only), Block external</td>
+                <td>RF-SIT-CanadianSIN, RF-EDM-EmployeeDB</td>
+                <td>Files, Email, Sites</td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.1);">
+                <td>Financial</td>
+                <td>Encrypt (RF-FIN-* + Executives), Block external</td>
+                <td>RF-SIT-FinancialReport, RF-SIT-RevenueForecast</td>
+                <td>Files, Email, Sites</td>
+              </tr>
+              <tr style="background: rgba(251, 191, 36, 0.1);">
+                <td>Source Code</td>
+                <td>Encrypt (RF-ENG-* only), Block external</td>
+                <td>RF-SIT-AzureSecret, RF-SIT-GitHubPAT</td>
+                <td>Files, Endpoint</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td rowspan="2"><strong>Internal</strong></td>
+                <td>General</td>
+                <td>Header: "RevFlow Internal", Block anonymous links</td>
+                <td>Default for internal docs</td>
+                <td>Files, Email, Sites</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td>Partners</td>
+                <td>Allow sharing to: @siemens.com, approved partner domains</td>
+                <td>Manual</td>
+                <td>Files, Email</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td><strong>Public</strong></td>
+                <td>—</td>
+                <td>No protection</td>
+                <td>Manual only</td>
+                <td>Files</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 5: POLICY CATALOG ==================== -->
+        <h2>5. DLP Policy Catalog</h2>
+
+        <h3>5.1 Policy Overview</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Policy ID</th><th>Name</th><th>SITs / EDM</th><th>Locations</th><th>Mode</th><th>Compliance</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>P1</strong></td>
+                <td>Customer Data Protection</td>
+                <td>RF-SIT-SalesforceID, RF-SIT-CustomerExport, RF-EDM-CustomerDB</td>
+                <td>Exchange, SPO, OD, Teams, Endpoint</td>
+                <td><span class="status-badge complete">Block + Override</span></td>
+                <td>SOC 2, ISO 27001</td>
+              </tr>
+              <tr>
+                <td><strong>P2</strong></td>
+                <td>Revenue & Forecast Data</td>
+                <td>RF-SIT-DealPipeline, RF-SIT-RevenueForecast</td>
+                <td>Exchange, SPO, OD, Teams</td>
+                <td><span class="status-badge complete">Block + Override</span></td>
+                <td>SOC 2, SEC (public co prep)</td>
+              </tr>
+              <tr>
+                <td><strong>P3</strong></td>
+                <td>Financial Data</td>
+                <td>RF-SIT-FinancialReport, RF-SIT-NetSuiteExport, Credit Card (built-in)</td>
+                <td>Exchange, SPO, OD, Teams, Endpoint</td>
+                <td><span class="status-badge complete">Block</span></td>
+                <td>SOC 2, PCI-DSS</td>
+              </tr>
+              <tr>
+                <td><strong>P4</strong></td>
+                <td>Employee PII</td>
+                <td>RF-SIT-CanadianSIN, RF-SIT-USEmployeeSSN, RF-EDM-EmployeeDB, RF-SIT-WorkdayExport</td>
+                <td>Exchange, SPO, OD, Teams, Endpoint</td>
+                <td><span class="status-badge complete">Block</span></td>
+                <td>PIPEDA, GDPR, CCPA</td>
+              </tr>
+              <tr>
+                <td><strong>P5</strong></td>
+                <td>Source Code & Secrets</td>
+                <td>RF-SIT-AzureSecret, RF-SIT-AWSKey, RF-SIT-GitHubPAT, RF-SIT-DatabaseCreds</td>
+                <td>Exchange, SPO, OD, Endpoint</td>
+                <td><span class="status-badge in-progress">Warn</span></td>
+                <td>SOC 2</td>
+              </tr>
+              <tr>
+                <td><strong>P6</strong></td>
+                <td>Internal Projects</td>
+                <td>RF-SIT-ProjectCode</td>
+                <td>Exchange, SPO, OD, Teams</td>
+                <td><span class="status-badge in-progress">Audit</span></td>
+                <td>Internal policy</td>
+              </tr>
+              <tr>
+                <td><strong>P7</strong></td>
+                <td>Legal Documents</td>
+                <td>RF-SIT-NDADocument, RF-SIT-MSA, RF-EDM-PartnerDB</td>
+                <td>Exchange, SPO, OD</td>
+                <td><span class="status-badge complete">Block + Override</span></td>
+                <td>Legal/Contractual</td>
+              </tr>
+              <tr>
+                <td><strong>P8</strong></td>
+                <td>Partner Data</td>
+                <td>RF-SIT-PartnerData</td>
+                <td>Exchange, SPO, OD, Teams</td>
+                <td><span class="status-badge in-progress">Warn</span></td>
+                <td>Contractual</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>5.2 Policy P1: Customer Data Protection (Detailed)</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Policy Configuration</span></div>
+          <pre><code>POLICY: P1 - Customer Data Protection
+═══════════════════════════════════════════════════════════════════════════════
+
+POLICY SETTINGS:
+├── Name: RF-DLP-P1-CustomerData
+├── Status: Enabled (Enforcement)
+├── Priority: 1 (Highest)
+├── Mode: Block with business justification override
+└── Owner: RF-SEC-GRC-COMP
+
+CONDITIONS:
+├── Content contains:
+│   ├── RF-SIT-SalesforceID (instance count: 5+, confidence: 75%+)
+│   ├── OR RF-SIT-CustomerExport (instance count: 1+, confidence: 85%)
+│   ├── OR RF-SIT-CustomerPII (instance count: 10+)
+│   └── OR RF-EDM-CustomerDB match (any searchable column)
+│
+├── Content is shared:
+│   └── With people outside my organization
+│
+└── Except if:
+    ├── Sender is member of: RF-DLP-Executives
+    ├── OR Recipient domain is: @siemens.com, @*.siemens.com
+    └── OR Content is labeled: "Internal - Partners"
+
+ACTIONS:
+├── Exchange:
+│   ├── Block email with policy tip
+│   ├── Allow override with business justification
+│   └── Notify: sender, sender's manager
+│
+├── SharePoint/OneDrive:
+│   ├── Block external sharing
+│   ├── Show policy tip: "This file contains customer data and cannot be shared externally"
+│   └── Restrict access to: "Only people in your organization"
+│
+├── Teams:
+│   ├── Block sharing in chats with external participants
+│   └── Show policy tip
+│
+├── Endpoint:
+│   ├── Audit: Copy to USB, Print, Upload via browser
+│   ├── Warn: Copy to network share, Access by unallowed app
+│   └── Unallowed apps: Dropbox, WeTransfer, personal OneDrive
+
+NOTIFICATIONS:
+├── User notification: Policy tip in app
+├── Admin alert: soc@revflow.com (High severity)
+├── Incident report: Weekly to RF-SEC-GRC-COMP
+└── Sentinel: DLP events forwarded via connector
+
+COMPLIANCE MAPPING:
+├── SOC 2 CC6.1: Logical access controls
+├── ISO 27001 A.13.2: Information transfer
+└── PIPEDA Principle 4.7: Safeguards</code></pre>
+        </div>
+
+        <h3>5.3 Department-Specific Scoping</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Department</th><th>Group</th><th>High-Risk Data</th><th>Special Policies</th><th>Exceptions</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Sales</strong></td>
+                <td>RF-SALES-ENT, RF-SALES-COM</td>
+                <td>Customer data, deal pipeline, pricing</td>
+                <td>P1, P2 (strict)</td>
+                <td>Share to @siemens.com for co-sell</td>
+              </tr>
+              <tr>
+                <td><strong>Customer Success</strong></td>
+                <td>RF-CS</td>
+                <td>Customer data, usage metrics</td>
+                <td>P1 (strict)</td>
+                <td>None</td>
+              </tr>
+              <tr>
+                <td><strong>Finance</strong></td>
+                <td>RF-FIN-*</td>
+                <td>Financial reports, payroll, tax</td>
+                <td>P3, P4 (strict)</td>
+                <td>Share to auditors (PwC, Deloitte domains)</td>
+              </tr>
+              <tr>
+                <td><strong>HR</strong></td>
+                <td>RF-HR-*</td>
+                <td>Employee PII, compensation, performance</td>
+                <td>P4 (strict)</td>
+                <td>Share to benefits providers</td>
+              </tr>
+              <tr>
+                <td><strong>Engineering</strong></td>
+                <td>RF-ENG-*</td>
+                <td>Source code, API keys, architecture</td>
+                <td>P5 (warn → block)</td>
+                <td>GitHub.com allowed for public repos only</td>
+              </tr>
+              <tr>
+                <td><strong>Legal</strong></td>
+                <td>RF-LEGAL-*</td>
+                <td>Contracts, litigation, M&A</td>
+                <td>P7 (strict)</td>
+                <td>Share to outside counsel (approved domains)</td>
+              </tr>
+              <tr>
+                <td><strong>Executives</strong></td>
+                <td>RF-DLP-Executives</td>
+                <td>All sensitive data</td>
+                <td>Override available</td>
+                <td>Can override with justification logged</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 6: APP INTEGRATION ==================== -->
+        <h2>6. Application Integration</h2>
+
+        <h3>6.1 Cloud App DLP Coverage</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Application</th><th>Data Type</th><th>DLP Integration</th><th>Policies Applied</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Salesforce</strong></td>
+                <td>Customer CRM data</td>
+                <td>Defender for Cloud Apps (session control)</td>
+                <td>P1 (block bulk export to unmanaged devices)</td>
+              </tr>
+              <tr>
+                <td><strong>Workday</strong></td>
+                <td>Employee HR data</td>
+                <td>Defender for Cloud Apps (session control)</td>
+                <td>P4 (block download to unmanaged devices)</td>
+              </tr>
+              <tr>
+                <td><strong>NetSuite</strong></td>
+                <td>Financial data</td>
+                <td>Defender for Cloud Apps (monitoring)</td>
+                <td>P3 (alert on bulk download)</td>
+              </tr>
+              <tr>
+                <td><strong>GitHub Enterprise</strong></td>
+                <td>Source code</td>
+                <td>Native GitHub secret scanning + Purview</td>
+                <td>P5 (block secrets in commits)</td>
+              </tr>
+              <tr>
+                <td><strong>Confluence</strong></td>
+                <td>Internal documentation</td>
+                <td>Defender for Cloud Apps</td>
+                <td>P6 (audit external sharing)</td>
+              </tr>
+              <tr>
+                <td><strong>Slack</strong></td>
+                <td>Communications</td>
+                <td>Defender for Cloud Apps (DLP scanning)</td>
+                <td>P1, P4 (warn on PII in channels)</td>
+              </tr>
+              <tr>
+                <td><strong>Zoom</strong></td>
+                <td>Meeting recordings</td>
+                <td>Defender for Cloud Apps (monitoring)</td>
+                <td>P1 (audit recording downloads)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>6.2 Defender for Cloud Apps Session Policies</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Session Policy: Salesforce Bulk Export Control</span></div>
+          <pre><code>DEFENDER FOR CLOUD APPS - SESSION POLICY
+═══════════════════════════════════════════════════════════════════════════════
+
+POLICY: RF-MCAS-Salesforce-BulkExport
+├── App: Salesforce
+├── Session control: Monitor and control file download
+└── Status: Enabled
+
+CONDITIONS:
+├── Activity type: Download file
+├── File type: CSV, XLSX, Report export
+├── File size: > 1 MB (indicates bulk export)
+└── Device: Unmanaged device (not Intune compliant)
+
+ACTIONS:
+├── Block download
+├── Show message: "Bulk customer data exports are blocked on unmanaged devices. 
+│   Please use your managed RevFlow device."
+├── Notify user's manager
+└── Generate alert: High severity
+
+GOVERNANCE:
+├── Alert: soc@revflow.com
+├── Sentinel: Forward via MCAS connector
+└── Review: Weekly by RF-SEC-GRC-COMP</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 7: SYMANTEC TRANSLATION ==================== -->
+        <h2>7. Symantec to Purview Translation</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Symantec Policy</th><th>Symantec Data Identifier</th><th>Purview Policy</th><th>Purview SIT</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>CRM Data Protection</td>
+                <td>Salesforce ID (custom regex)</td>
+                <td>P1: Customer Data</td>
+                <td>RF-SIT-SalesforceID</td>
+                <td>Added EDM for exact match</td>
+              </tr>
+              <tr>
+                <td>PCI-DSS Compliance</td>
+                <td>Credit Card Number</td>
+                <td>P3: Financial Data</td>
+                <td>Credit Card Number (built-in)</td>
+                <td>Same detection, better integration</td>
+              </tr>
+              <tr>
+                <td>HR Data Protection</td>
+                <td>Canadian SIN, US SSN</td>
+                <td>P4: Employee PII</td>
+                <td>Built-in + RF-EDM-EmployeeDB</td>
+                <td>Added EDM for employee lookup</td>
+              </tr>
+              <tr>
+                <td>Dev Environment</td>
+                <td>API Key (custom)</td>
+                <td>P5: Source Code</td>
+                <td>RF-SIT-AzureSecret, RF-SIT-AWSKey</td>
+                <td>More granular secret types</td>
+              </tr>
+              <tr>
+                <td>Legal Hold</td>
+                <td>NDA Template (IDM)</td>
+                <td>P7: Legal Documents</td>
+                <td>RF-SIT-NDADocument</td>
+                <td>Document fingerprinting similar</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Interview-Ready Summary</div>
+          <div class="callout-content">
+            <p><em>"At RevFlow, our DLP strategy centers on protecting customer data from Salesforce, employee PII from Workday, and financial data from NetSuite. We built 15+ custom SITs for RevFlow-specific patterns like Salesforce IDs and project codes, plus 3 EDM schemas that refresh daily against our actual customer and employee databases. Policies are scoped by department — Sales gets stricter customer data controls, Engineering has source code protections, Finance has financial data rules. Integration with Defender for Cloud Apps adds session-level controls for our SaaS apps, blocking bulk exports from Salesforce on unmanaged devices."</em></p>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>
