@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Controls Mapping — Framework Alignment | Compliance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .framework-card { background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 8px; padding: 1.25rem; margin: 0.75rem 0; }
+    .framework-card h4 { margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem; }
+    .framework-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .framework-badge.nist { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+    .framework-badge.iso { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+    .framework-badge.soc2 { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; }
+    .framework-badge.cis { background: rgba(249, 115, 22, 0.2); color: #fdba74; }
+    .framework-badge.pci { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+    .process-step { display: flex; gap: 1rem; margin: 1rem 0; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; }
+    .step-number { background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+    .step-content h4 { margin: 0 0 0.5rem 0; }
+    .mapping-table { font-size: 0.85rem; }
+    .mapping-table td, .mapping-table th { padding: 0.5rem 0.75rem; }
+    .control-status { padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+    .control-status.implemented { background: #166534; color: #dcfce7; }
+    .control-status.partial { background: #92400e; color: #fef3c7; }
+    .control-status.planned { background: #1e40af; color: #dbeafe; }
+    .control-status.gap { background: #991b1b; color: #fecaca; }
+    .evidence-card { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 1rem; margin: 0.5rem 0; }
+    .crosswalk-flow { background: var(--bg-tertiary); padding: 1.5rem; border-radius: 8px; margin: 1rem 0; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="index.html" class="nav-item">Executive Summary</a>
+          <a href="company-profile.html" class="nav-item">Company Profile</a>
+          <a href="security-framework.html" class="nav-item">Security Framework</a>
+          <a href="program-structure.html" class="nav-item">Program Structure</a>
+          <a href="controls-mapping.html" class="nav-item">Controls Mapping</a>
+          <a href="controls-mapping.html" class="nav-item active">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="resources/alternative-architectures.html" class="nav-item">Alternative Architectures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="interview-prep.html" class="nav-item">Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Controls Mapping</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Security Controls Mapping — Framework Alignment</h1>
+          <div class="page-header-meta">
+            <span class="page-badge">GRC</span>
+            <span class="page-reading-time">Compliance & Audit</span>
+          </div>
+          <p class="intro-text">This page explains how to map security controls to compliance frameworks — the complete process from identifying requirements to collecting evidence. Covers NIST CSF, ISO 27001, SOC 2, CIS Controls, and how they relate to each other.</p>
+        </div>
+
+        <!-- ==================== SECTION 1: WHY MAPPING MATTERS ==================== -->
+        <h2>1. Why Security Controls Mapping Matters</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>The Core Problem</div>
+          <div class="callout-content">
+            <p>Organizations face multiple compliance requirements: SOC 2 from customers, ISO 27001 from enterprise clients, PCI DSS for payment processing, GDPR for EU data. Each framework has different language, structure, and requirements.</p>
+            <p><strong>Controls mapping</strong> = Understanding how one security control satisfies requirements across multiple frameworks.</p>
+          </div>
+        </div>
+
+        <p>Without mapping, you end up with:</p>
+        <ul>
+          <li><strong>Duplicate work:</strong> Implementing the same control separately for each framework</li>
+          <li><strong>Audit fatigue:</strong> Providing the same evidence multiple times in different formats</li>
+          <li><strong>Gaps:</strong> Missing requirements because frameworks use different terminology</li>
+          <li><strong>Inefficiency:</strong> No unified view of security posture</li>
+        </ul>
+
+        <p>With proper mapping:</p>
+        <ul>
+          <li><strong>One control, many frameworks:</strong> MFA satisfies NIST, ISO, SOC 2, and CIS simultaneously</li>
+          <li><strong>Unified evidence:</strong> Same screenshot proves compliance across frameworks</li>
+          <li><strong>Gap analysis:</strong> Quickly identify what's missing for a new certification</li>
+          <li><strong>Efficient audits:</strong> Auditors see clear traceability from requirement to implementation</li>
+        </ul>
+
+        <!-- ==================== SECTION 2: MAJOR FRAMEWORKS ==================== -->
+        <h2>2. Understanding the Major Frameworks</h2>
+
+        <div class="framework-card">
+          <h4><span class="framework-badge nist">NIST CSF</span> NIST Cybersecurity Framework</h4>
+          <p><strong>What it is:</strong> Voluntary framework from US government for managing cybersecurity risk</p>
+          <p><strong>Structure:</strong> 5 Functions → 23 Categories → 108 Subcategories</p>
+          <p><strong>Functions:</strong> Identify, Protect, Detect, Respond, Recover</p>
+          <p><strong>Who uses it:</strong> US federal contractors, critical infrastructure, organizations wanting risk-based approach</p>
+          <p><strong>Certification:</strong> No formal certification — self-attestation or third-party assessment</p>
+          <div class="code-block" style="margin-top: 0.75rem;">
+            <div class="code-header"><span class="code-lang">NIST CSF Structure Example</span></div>
+            <pre><code>Function: PROTECT (PR)
+  └── Category: PR.AC - Identity Management and Access Control
+        └── Subcategory: PR.AC-1
+            "Identities and credentials are issued, managed, 
+             verified, revoked, and audited for authorized 
+             devices, users and processes"</code></pre>
+          </div>
+        </div>
+
+        <div class="framework-card">
+          <h4><span class="framework-badge iso">ISO 27001</span> Information Security Management System</h4>
+          <p><strong>What it is:</strong> International standard for information security management systems (ISMS)</p>
+          <p><strong>Structure:</strong> Clauses 4-10 (ISMS requirements) + Annex A (114 controls in 14 domains)</p>
+          <p><strong>Domains:</strong> Access Control, Cryptography, Physical Security, Operations, etc.</p>
+          <p><strong>Who uses it:</strong> Global enterprises, especially European clients, government contracts</p>
+          <p><strong>Certification:</strong> Formal third-party audit and certification (valid 3 years)</p>
+          <div class="code-block" style="margin-top: 0.75rem;">
+            <div class="code-header"><span class="code-lang">ISO 27001 Structure Example</span></div>
+            <pre><code>Domain: A.9 - Access Control
+  └── Objective: A.9.2 - User Access Management
+        └── Control: A.9.2.1 - User Registration and De-registration
+            "A formal user registration and de-registration 
+             process shall be implemented to enable assignment 
+             of access rights"</code></pre>
+          </div>
+        </div>
+
+        <div class="framework-card">
+          <h4><span class="framework-badge soc2">SOC 2</span> Service Organization Controls</h4>
+          <p><strong>What it is:</strong> AICPA framework for service organizations handling customer data</p>
+          <p><strong>Structure:</strong> 5 Trust Service Criteria (TSC) with ~60+ points of focus</p>
+          <p><strong>Criteria:</strong> Security (required), Availability, Processing Integrity, Confidentiality, Privacy</p>
+          <p><strong>Who uses it:</strong> SaaS companies, cloud providers, any service handling customer data</p>
+          <p><strong>Certification:</strong> Type I (point-in-time) or Type II (period of time, typically 6-12 months)</p>
+          <div class="code-block" style="margin-top: 0.75rem;">
+            <div class="code-header"><span class="code-lang">SOC 2 Structure Example</span></div>
+            <pre><code>Trust Service Criteria: Security (Common Criteria)
+  └── Category: CC6 - Logical and Physical Access Controls
+        └── Criteria: CC6.1
+            "The entity implements logical access security 
+             software, infrastructure, and architectures over 
+             protected information assets..."</code></pre>
+          </div>
+        </div>
+
+        <div class="framework-card">
+          <h4><span class="framework-badge cis">CIS Controls</span> Center for Internet Security Controls</h4>
+          <p><strong>What it is:</strong> Prioritized set of security actions developed by security practitioners</p>
+          <p><strong>Structure:</strong> 18 Controls with Implementation Groups (IG1, IG2, IG3)</p>
+          <p><strong>Approach:</strong> Prescriptive, technical, actionable — tells you exactly what to do</p>
+          <p><strong>Who uses it:</strong> Organizations wanting practical security guidance, SMBs (IG1), enterprises (IG2/IG3)</p>
+          <p><strong>Certification:</strong> No formal certification — self-assessment or CIS benchmarks</p>
+          <div class="code-block" style="margin-top: 0.75rem;">
+            <div class="code-header"><span class="code-lang">CIS Controls Structure Example</span></div>
+            <pre><code>Control 6: Access Control Management
+  └── Safeguard 6.3 - Require MFA for Externally-Exposed Applications
+      IG1: ✓  IG2: ✓  IG3: ✓
+      "Require all externally-exposed enterprise or third-party 
+       applications to enforce MFA..."
+  └── Safeguard 6.4 - Require MFA for Remote Network Access
+      IG1: ✓  IG2: ✓  IG3: ✓
+      "Require MFA for remote network access"</code></pre>
+          </div>
+        </div>
+
+        <div class="framework-card">
+          <h4><span class="framework-badge pci">PCI DSS</span> Payment Card Industry Data Security Standard</h4>
+          <p><strong>What it is:</strong> Security standard for organizations handling credit card data</p>
+          <p><strong>Structure:</strong> 12 Requirements with ~300+ sub-requirements</p>
+          <p><strong>Approach:</strong> Very prescriptive — specific technical requirements</p>
+          <p><strong>Who uses it:</strong> Any organization processing, storing, or transmitting cardholder data</p>
+          <p><strong>Certification:</strong> Annual assessment (SAQ for small, ROC for large merchants)</p>
+        </div>
+
+        <!-- ==================== SECTION 3: THE MAPPING PROCESS ==================== -->
+        <h2>3. The Controls Mapping Process — Step by Step</h2>
+
+        <div class="process-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Identify Your Compliance Requirements</h4>
+            <p>Start by listing all frameworks you need to comply with. This comes from:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Customer contracts:</strong> "Vendor must maintain SOC 2 Type II"</li>
+              <li><strong>Regulations:</strong> GDPR, HIPAA, state privacy laws</li>
+              <li><strong>Industry:</strong> PCI DSS for payment, HITRUST for healthcare</li>
+              <li><strong>Corporate:</strong> Parent company standards (Siemens CISO requirements)</li>
+              <li><strong>Insurance:</strong> Cyber insurance questionnaires</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>RevFlow Example:</strong> SOC 2 Type II (customer requirement), ISO 27001 (enterprise clients), GDPR (EU customers), Siemens Corporate Security Standards</p>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Choose Your Primary Framework</h4>
+            <p>Select one framework as your "source of truth" — all other frameworks map to it.</p>
+            <div class="table-wrapper" style="margin-top: 0.75rem;">
+              <table>
+                <thead><tr><th>Situation</th><th>Recommended Primary Framework</th><th>Why</th></tr></thead>
+                <tbody>
+                  <tr><td>B2B SaaS company</td><td>SOC 2</td><td>Most requested by customers</td></tr>
+                  <tr><td>Global enterprise</td><td>ISO 27001</td><td>International recognition</td></tr>
+                  <tr><td>US federal contractor</td><td>NIST CSF / NIST 800-53</td><td>Required for contracts</td></tr>
+                  <tr><td>Technical-first org</td><td>CIS Controls</td><td>Most actionable</td></tr>
+                  <tr><td>Healthcare</td><td>HITRUST CSF</td><td>Comprehensive, includes HIPAA</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin-top: 0.5rem;"><strong>RevFlow Choice:</strong> NIST CSF as primary (risk-based, maps well to others), with SOC 2 TSC as secondary for customer-facing compliance.</p>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Build Your Control Inventory</h4>
+            <p>List every security control you have implemented. Sources include:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Technical controls:</strong> MFA, encryption, firewalls, SIEM, EDR, DLP</li>
+              <li><strong>Administrative controls:</strong> Policies, procedures, training</li>
+              <li><strong>Physical controls:</strong> Badge access, cameras, visitor logs</li>
+              <li><strong>Vendor controls:</strong> Cloud provider certifications (Azure SOC 2)</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Each control needs: <strong>Control ID</strong>, <strong>Description</strong>, <strong>Owner</strong>, <strong>Implementation Status</strong>, <strong>Evidence Location</strong></p>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Create the Crosswalk Matrix</h4>
+            <p>Map each control to requirements in each framework. Use existing crosswalks as starting points:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>NIST CSF Reference Tool:</strong> Official mappings to ISO, COBIT, CIS</li>
+              <li><strong>CIS Controls Mapping:</strong> Maps to NIST CSF, ISO 27001, PCI DSS</li>
+              <li><strong>SOC 2 to NIST mapping:</strong> AICPA provides guidance</li>
+              <li><strong>UCF (Unified Compliance Framework):</strong> Commercial tool for crosswalks</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h4>Perform Gap Analysis</h4>
+            <p>For each framework requirement, determine status:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><span class="control-status implemented">IMPLEMENTED</span> — Control exists and is effective</li>
+              <li><span class="control-status partial">PARTIAL</span> — Control exists but needs enhancement</li>
+              <li><span class="control-status planned">PLANNED</span> — Control is in roadmap</li>
+              <li><span class="control-status gap">GAP</span> — No control, needs remediation</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-number">6</div>
+          <div class="step-content">
+            <h4>Collect and Organize Evidence</h4>
+            <p>For each implemented control, document evidence that proves effectiveness:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Screenshots:</strong> Configuration settings, enabled policies</li>
+              <li><strong>Reports:</strong> System-generated compliance reports</li>
+              <li><strong>Logs:</strong> Audit trails showing control operation</li>
+              <li><strong>Policies:</strong> Documented procedures</li>
+              <li><strong>Attestations:</strong> Vendor certifications, SOC reports</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 4: CROSSWALK EXAMPLE ==================== -->
+        <h2>4. Crosswalk Example — MFA Control</h2>
+
+        <p>Let's trace one control across multiple frameworks to see how mapping works:</p>
+
+        <div class="crosswalk-flow">
+          <pre><code>CONTROL: Multi-Factor Authentication (MFA)
+═══════════════════════════════════════════════════════════════════════════════
+
+YOUR IMPLEMENTATION (RevFlow):
+────────────────────────────────────────────────────────────────────────────────
+• Entra ID with Microsoft Authenticator
+• Conditional Access policies requiring MFA for:
+  - All cloud apps (external access)
+  - Admin portals (Azure, M365, Intune)
+  - VPN/remote access
+• FIDO2 security keys for privileged admins
+• Risk-based MFA (sign-in risk = high → always require)
+
+HOW THIS MAPS TO EACH FRAMEWORK:
+────────────────────────────────────────────────────────────────────────────────
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ NIST CSF                                                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ PR.AC-1: Identities and credentials are issued, managed, verified, revoked │
+│ PR.AC-7: Users, devices, and other assets are authenticated commensurate   │
+│          with the risk of the transaction                                   │
+│                                                                             │
+│ ✓ MFA directly satisfies authentication requirements                       │
+│ ✓ Risk-based MFA satisfies "commensurate with risk"                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ISO 27001 (Annex A)                                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ A.9.2.1: User registration and de-registration                              │
+│ A.9.4.2: Secure log-on procedures                                           │
+│ A.9.4.3: Password management system                                         │
+│                                                                             │
+│ ✓ MFA enhances secure log-on beyond passwords                              │
+│ ✓ Entra ID provides registration/de-registration                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ SOC 2 (Trust Service Criteria)                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ CC6.1: Logical access security software, infrastructure, architectures      │
+│ CC6.2: Prior to issuing system credentials, the entity registers users      │
+│ CC6.3: The entity authorizes, modifies, or removes access...                │
+│                                                                             │
+│ ✓ MFA is core to logical access security                                   │
+│ ✓ Conditional Access provides granular authorization                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ CIS Controls v8                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 6.3: Require MFA for Externally-Exposed Applications (IG1)                  │
+│ 6.4: Require MFA for Remote Network Access (IG1)                            │
+│ 6.5: Require MFA for Administrative Access (IG1)                            │
+│                                                                             │
+│ ✓ Conditional Access enforces MFA for all external apps                    │
+│ ✓ VPN requires MFA                                                         │
+│ ✓ Admin portals require MFA + FIDO2 for privileged                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PCI DSS 4.0                                                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 8.4.2: MFA for all access into the CDE                                      │
+│ 8.4.3: MFA for all non-console administrative access                        │
+│                                                                             │
+│ ✓ If processing cards, MFA covers CDE access                               │
+│ ✓ Admin MFA satisfies non-console requirement                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+ONE CONTROL → SATISFIES 15+ REQUIREMENTS ACROSS 5 FRAMEWORKS</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 5: REVFLOW MAPPING MATRIX ==================== -->
+        <h2>5. RevFlow Controls Mapping Matrix (Example)</h2>
+
+        <p>Here's how RevFlow's security stack maps to frameworks:</p>
+
+        <div class="table-wrapper">
+          <table class="mapping-table">
+            <thead>
+              <tr>
+                <th>Control</th>
+                <th>Implementation</th>
+                <th>NIST CSF</th>
+                <th>ISO 27001</th>
+                <th>SOC 2</th>
+                <th>CIS v8</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Multi-Factor Auth</strong></td>
+                <td>Entra ID + Conditional Access</td>
+                <td>PR.AC-1, PR.AC-7</td>
+                <td>A.9.4.2</td>
+                <td>CC6.1</td>
+                <td>6.3, 6.4, 6.5</td>
+                <td><span class="control-status implemented">IMPLEMENTED</span></td>
+              </tr>
+              <tr>
+                <td><strong>Endpoint Detection</strong></td>
+                <td>Microsoft Defender for Endpoint</td>
+                <td>DE.CM-4, DE.CM-5</td>
+                <td>A.12.2.1</td>
+                <td>CC6.8</td>
+                <td>10.1, 10.2</td>
+                <td><span class="control-status implemented">IMPLEMENTED</span></td>
+              </tr>
+              <tr>
+                <td><strong>SIEM/Log Monitoring</strong></td>
+                <td>Microsoft Sentinel</td>
+                <td>DE.AE-2, DE.AE-3</td>
+                <td>A.12.4.1</td>
+                <td>CC7.2, CC7.3</td>
+                <td>8.2, 8.5</td>
+                <td><span class="control-status implemented">IMPLEMENTED</span></td>
+              </tr>
+              <tr>
+                <td><strong>Data Loss Prevention</strong></td>
+                <td>Microsoft Purview DLP</td>
+                <td>PR.DS-5</td>
+                <td>A.13.2.1</td>
+                <td>CC6.7</td>
+                <td>3.3</td>
+                <td><span class="control-status implemented">IMPLEMENTED</span></td>
+              </tr>
+              <tr>
+                <td><strong>Encryption at Rest</strong></td>
+                <td>Azure Storage Encryption, BitLocker</td>
+                <td>PR.DS-1</td>
+                <td>A.10.1.1</td>
+                <td>CC6.1</td>
+                <td>3.11</td>
+                <td><span class="control-status implemented">IMPLEMENTED</span></td>
+              </tr>
+              <tr>
+                <td><strong>Encryption in Transit</strong></td>
+                <td>TLS 1.2+, Azure Private Link</td>
+                <td>PR.DS-2</td>
+                <td>A.10.1.1</td>
+                <td>CC6.1</td>
+                <td>3.10</td>
+                <td><span class="control-status implemented">IMPLEMENTED</span></td>
+              </tr>
+              <tr>
+                <td><strong>Vulnerability Management</strong></td>
+                <td>Defender for Cloud, Qualys</td>
+                <td>ID.RA-1, PR.IP-12</td>
+                <td>A.12.6.1</td>
+                <td>CC7.1</td>
+                <td>7.1, 7.2, 7.4</td>
+                <td><span class="control-status implemented">IMPLEMENTED</span></td>
+              </tr>
+              <tr>
+                <td><strong>Incident Response</strong></td>
+                <td>Sentinel Playbooks, IR Runbooks</td>
+                <td>RS.RP-1, RS.CO-2</td>
+                <td>A.16.1.1</td>
+                <td>CC7.4, CC7.5</td>
+                <td>17.1, 17.4</td>
+                <td><span class="control-status implemented">IMPLEMENTED</span></td>
+              </tr>
+              <tr>
+                <td><strong>Privileged Access</strong></td>
+                <td>Entra PIM, JIT Access</td>
+                <td>PR.AC-4</td>
+                <td>A.9.2.3</td>
+                <td>CC6.2, CC6.3</td>
+                <td>5.4, 6.8</td>
+                <td><span class="control-status implemented">IMPLEMENTED</span></td>
+              </tr>
+              <tr>
+                <td><strong>Backup & Recovery</strong></td>
+                <td>Azure Backup, geo-redundant</td>
+                <td>PR.IP-4, RC.RP-1</td>
+                <td>A.12.3.1</td>
+                <td>A1.2</td>
+                <td>11.2, 11.4</td>
+                <td><span class="control-status implemented">IMPLEMENTED</span></td>
+              </tr>
+              <tr>
+                <td><strong>Security Awareness</strong></td>
+                <td>KnowBe4, Phishing Simulations</td>
+                <td>PR.AT-1</td>
+                <td>A.7.2.2</td>
+                <td>CC1.4</td>
+                <td>14.1, 14.2</td>
+                <td><span class="control-status implemented">IMPLEMENTED</span></td>
+              </tr>
+              <tr>
+                <td><strong>Network Segmentation</strong></td>
+                <td>Azure NSGs, Private Endpoints</td>
+                <td>PR.AC-5</td>
+                <td>A.13.1.3</td>
+                <td>CC6.6</td>
+                <td>12.2</td>
+                <td><span class="control-status partial">PARTIAL</span></td>
+              </tr>
+              <tr>
+                <td><strong>WAF</strong></td>
+                <td>Azure WAF (planned)</td>
+                <td>PR.DS-5</td>
+                <td>A.13.1.1</td>
+                <td>CC6.6</td>
+                <td>13.10</td>
+                <td><span class="control-status planned">PLANNED</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 6: EVIDENCE COLLECTION ==================== -->
+        <h2>6. Evidence Collection for Audits</h2>
+
+        <p>Each control needs evidence proving it works. Here's how to organize:</p>
+
+        <div class="evidence-card">
+          <h5>Evidence Types</h5>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Type</th><th>Examples</th><th>When to Use</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Configuration Screenshots</strong></td>
+                  <td>Conditional Access policy settings, Sentinel rule config</td>
+                  <td>Prove control is configured correctly</td>
+                </tr>
+                <tr>
+                  <td><strong>System Reports</strong></td>
+                  <td>Microsoft Secure Score, Compliance Manager, MDE health</td>
+                  <td>Automated evidence of control effectiveness</td>
+                </tr>
+                <tr>
+                  <td><strong>Audit Logs</strong></td>
+                  <td>Sign-in logs showing MFA, alert history, change logs</td>
+                  <td>Prove control is operating over time</td>
+                </tr>
+                <tr>
+                  <td><strong>Policy Documents</strong></td>
+                  <td>Security policy, incident response plan, BCP</td>
+                  <td>Prove governance exists</td>
+                </tr>
+                <tr>
+                  <td><strong>Training Records</strong></td>
+                  <td>Completion certificates, phishing test results</td>
+                  <td>Prove awareness program effectiveness</td>
+                </tr>
+                <tr>
+                  <td><strong>Vendor Attestations</strong></td>
+                  <td>Azure SOC 2, AWS SOC 2, SaaS vendor security docs</td>
+                  <td>Inherited controls from providers</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <h3>6.1 Evidence Naming Convention</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Recommended Naming Convention</span></div>
+          <pre><code># Format: [Framework]-[Control]-[EvidenceType]-[Date].[ext]
+
+Examples:
+SOC2-CC6.1-ConditionalAccess-MFA-Policy-2024-01-15.png
+ISO-A9.4.2-SigninLogs-MFA-Enforcement-2024-Q1.xlsx
+NIST-PR.AC-7-RiskBasedMFA-Configuration-2024-01-15.png
+CIS-6.3-MFA-Coverage-Report-2024-01.pdf
+
+Folder Structure:
+/Evidence
+  /2024-Q1
+    /Access-Control
+      SOC2-CC6.1-ConditionalAccess-Policy.png
+      SOC2-CC6.1-MFA-SigninLogs.xlsx
+    /Endpoint-Security
+      SOC2-CC6.8-MDE-Configuration.png
+      SOC2-CC6.8-MDE-Alert-Summary.pdf
+    /Logging-Monitoring
+      SOC2-CC7.2-Sentinel-Rules.png
+      SOC2-CC7.2-Alert-Volume-Report.xlsx</code></pre>
+        </div>
+
+        <h3>6.2 Microsoft Compliance Manager</h3>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Built-in Mapping Tool</div>
+          <div class="callout-content">
+            <p>Microsoft Compliance Manager (in Purview portal) automatically:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Assesses your M365/Azure configuration against frameworks</li>
+              <li>Provides pre-built assessments for NIST CSF, ISO 27001, SOC 2, GDPR, etc.</li>
+              <li>Shows which controls are "Microsoft-managed" vs "customer-managed"</li>
+              <li>Generates compliance score and improvement actions</li>
+              <li>Stores evidence and tracks remediation</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">For RevFlow, Compliance Manager handles ~40% of SOC 2 evidence automatically because it's Microsoft cloud-native.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 7: GAP ANALYSIS PROCESS ==================== -->
+        <h2>7. Gap Analysis Process</h2>
+
+        <p>When preparing for a new certification or audit, follow this gap analysis process:</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Gap Analysis Workflow</span></div>
+          <pre><code>STEP 1: SCOPE DEFINITION
+─────────────────────────────────────────────────────────────────────────────────
+• What systems are in scope? (production only? dev too?)
+• What data types? (customer data, PII, financial?)
+• What business processes?
+• What third parties?
+
+STEP 2: REQUIREMENT EXTRACTION
+─────────────────────────────────────────────────────────────────────────────────
+• List all controls from target framework
+• Identify which are applicable (some may be N/A)
+• Group by domain/category
+
+STEP 3: CURRENT STATE ASSESSMENT
+─────────────────────────────────────────────────────────────────────────────────
+For each requirement, answer:
+• Do we have a control? (Yes/No/Partial)
+• Is it documented? (Policy exists?)
+• Is it implemented? (Technical control in place?)
+• Is it effective? (Evidence shows it works?)
+• Is it monitored? (Ongoing assurance?)
+
+STEP 4: GAP IDENTIFICATION
+─────────────────────────────────────────────────────────────────────────────────
+Status definitions:
+• COMPLIANT: Control exists, documented, implemented, effective, monitored
+• PARTIAL: Control exists but missing documentation or monitoring
+• NON-COMPLIANT: No control or ineffective control
+• NOT APPLICABLE: Requirement doesn't apply to our scope
+
+STEP 5: REMEDIATION PLANNING
+─────────────────────────────────────────────────────────────────────────────────
+For each gap:
+• What needs to be done?
+• Who is responsible?
+• What's the timeline?
+• What's the cost/effort?
+• What's the priority? (Risk-based)
+
+STEP 6: TRACKING
+─────────────────────────────────────────────────────────────────────────────────
+• Create remediation tracker (spreadsheet or GRC tool)
+• Assign owners
+• Set milestones
+• Review weekly until audit-ready</code></pre>
+        </div>
+
+        <h3>7.1 Gap Analysis Example — SOC 2 Readiness</h3>
+
+        <div class="table-wrapper">
+          <table class="mapping-table">
+            <thead>
+              <tr><th>SOC 2 Criteria</th><th>Requirement</th><th>Current State</th><th>Gap</th><th>Remediation</th><th>Owner</th><th>Timeline</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>CC6.1</td>
+                <td>Logical access controls</td>
+                <td><span class="control-status implemented">COMPLIANT</span></td>
+                <td>None</td>
+                <td>N/A</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>CC6.6</td>
+                <td>Prevent unauthorized access from outside system boundaries</td>
+                <td><span class="control-status partial">PARTIAL</span></td>
+                <td>WAF not deployed</td>
+                <td>Deploy Azure WAF on App Gateway</td>
+                <td>Cloud Team</td>
+                <td>Q1 2024</td>
+              </tr>
+              <tr>
+                <td>CC7.2</td>
+                <td>Monitor system components for anomalies</td>
+                <td><span class="control-status implemented">COMPLIANT</span></td>
+                <td>None (Sentinel)</td>
+                <td>N/A</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>CC8.1</td>
+                <td>Change management process</td>
+                <td><span class="control-status partial">PARTIAL</span></td>
+                <td>Process exists but not documented</td>
+                <td>Document change management policy</td>
+                <td>IT Manager</td>
+                <td>2 weeks</td>
+              </tr>
+              <tr>
+                <td>CC9.2</td>
+                <td>Vendor risk management</td>
+                <td><span class="control-status gap">GAP</span></td>
+                <td>No formal vendor assessment</td>
+                <td>Implement vendor security questionnaire process</td>
+                <td>Security</td>
+                <td>Q1 2024</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 8: TOOLS ==================== -->
+        <h2>8. Tools for Controls Mapping</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Tool</th><th>Type</th><th>Best For</th><th>Cost</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Microsoft Compliance Manager</strong></td>
+                <td>Built-in (M365)</td>
+                <td>Microsoft-native environments</td>
+                <td>Included with E5/A5</td>
+              </tr>
+              <tr>
+                <td><strong>Vanta</strong></td>
+                <td>GRC SaaS</td>
+                <td>Startups, SOC 2 automation</td>
+                <td>$$</td>
+              </tr>
+              <tr>
+                <td><strong>Drata</strong></td>
+                <td>GRC SaaS</td>
+                <td>Continuous compliance monitoring</td>
+                <td>$$</td>
+              </tr>
+              <tr>
+                <td><strong>OneTrust</strong></td>
+                <td>Enterprise GRC</td>
+                <td>Large enterprises, privacy</td>
+                <td>$$$</td>
+              </tr>
+              <tr>
+                <td><strong>ServiceNow GRC</strong></td>
+                <td>Enterprise GRC</td>
+                <td>Integrated with ITSM</td>
+                <td>$$$</td>
+              </tr>
+              <tr>
+                <td><strong>Spreadsheet</strong></td>
+                <td>Manual</td>
+                <td>Small orgs, simple needs</td>
+                <td>Free</td>
+              </tr>
+              <tr>
+                <td><strong>NIST CSF Reference Tool</strong></td>
+                <td>Free reference</td>
+                <td>Framework crosswalks</td>
+                <td>Free</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 9: INTERVIEW ANSWERS ==================== -->
+        <h2>9. Interview-Ready Answers</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "How do you approach mapping security controls to frameworks?"</span></div>
+          <pre><code>"I start by identifying which frameworks we need to comply with — typically 
+driven by customer contracts, regulations, and business requirements. Then 
+I choose a primary framework as the source of truth. For B2B SaaS, I usually 
+use SOC 2 or NIST CSF.
+
+Next, I build a control inventory — every security control we have 
+implemented. Then I create a crosswalk matrix showing how each control 
+maps to requirements in each framework. 
+
+The key insight is that controls are reusable. MFA, for example, satisfies 
+NIST PR.AC-1, ISO A.9.4.2, SOC 2 CC6.1, and CIS 6.3 simultaneously. One 
+implementation, one piece of evidence, multiple frameworks satisfied.
+
+Finally, I do gap analysis — identify where we're compliant, partial, or 
+have gaps. This drives the remediation roadmap."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "What's the difference between NIST CSF and ISO 27001?"</span></div>
+          <pre><code>"NIST CSF is a risk-based framework focused on outcomes. It's organized 
+around five functions: Identify, Protect, Detect, Respond, Recover. It 
+doesn't require formal certification — it's a self-assessment tool.
+
+ISO 27001 is a management system standard. It requires an Information 
+Security Management System (ISMS) with formal policies, risk assessment 
+methodology, and continuous improvement. It requires third-party 
+certification audit, renewed every three years.
+
+In practice:
+• NIST CSF tells you WHAT to protect and WHY
+• ISO 27001 tells you HOW to manage security as a program
+
+Many organizations use both: NIST CSF for technical controls mapping, 
+ISO 27001 for management system and certification. They map well to 
+each other — NIST provides crosswalk documentation."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "How do you collect evidence for SOC 2 audits?"</span></div>
+          <pre><code>"I categorize evidence into three types:
+
+1. CONFIGURATION EVIDENCE
+   Screenshots of control settings — Conditional Access policies, 
+   Sentinel analytics rules, MDE configuration. Proves control is 
+   configured correctly.
+
+2. OPERATING EVIDENCE
+   Reports and logs showing control operated over the audit period.
+   For SOC 2 Type II, you need 6-12 months of evidence. Examples:
+   • Sign-in logs showing MFA was enforced
+   • Alert history showing SIEM detected threats
+   • Change tickets showing change management worked
+
+3. GOVERNANCE EVIDENCE
+   Policies, procedures, org charts. Proves management oversight exists.
+
+I use a naming convention like [Framework]-[Control]-[Type]-[Date] and 
+organize in folders by quarter. For Microsoft environments, Compliance 
+Manager automates ~40% of evidence collection because it reads your 
+actual configuration.
+
+Key tip: Collect evidence continuously, not just before audits. Much 
+easier than scrambling to reconstruct 12 months of history."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "Walk me through a gap analysis you've done"</span></div>
+          <pre><code>"When RevFlow was preparing for SOC 2 Type II, I led the gap analysis:
+
+SCOPE: Production environment, customer data, SaaS platform
+
+PROCESS:
+1. Listed all 60+ SOC 2 Trust Service Criteria points of focus
+2. For each, assessed: Do we have a control? Is it documented? 
+   Implemented? Effective? Monitored?
+3. Categorized as Compliant, Partial, Gap, or N/A
+
+FINDINGS:
+• 70% compliant — Microsoft stack provided strong baseline
+• 20% partial — controls existed but lacked documentation
+• 10% gaps — needed new controls or processes
+
+KEY GAPS:
+• CC9.2 Vendor risk management — no formal assessment process
+• CC8.1 Change management — process existed but undocumented
+• CC6.6 Boundary protection — WAF not deployed
+
+REMEDIATION:
+• Created 90-day roadmap prioritized by risk
+• Assigned owners to each gap
+• Weekly tracking until audit-ready
+• Documentation took longer than technical fixes
+
+RESULT: Achieved SOC 2 Type II with zero exceptions"</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="program-structure.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Program Structure</span></a>
+          <a href="siem/index.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">SIEM Overview →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="js/main.js"></script>
+</body>
+</html>
