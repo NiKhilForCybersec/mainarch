@@ -8,6 +8,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .ingest-yes { background: rgba(34, 197, 94, 0.1) !important; }
+    .ingest-no { background: rgba(239, 68, 68, 0.1) !important; }
+    .ingest-selective { background: rgba(251, 191, 36, 0.1) !important; }
+    .badge-ingest { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
+    .badge-yes { background: #166534; color: #dcfce7; }
+    .badge-no { background: #991b1b; color: #fecaca; }
+    .badge-selective { background: #92400e; color: #fef3c7; }
+    .badge-xdr { background: #1e40af; color: #dbeafe; }
+  </style>
 </head>
 <body>
   <div class="layout">
@@ -44,6 +54,7 @@
         <div class="nav-section">
           <div class="nav-section-title">EDR Migration</div>
           <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
           <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
           <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
           <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
@@ -248,6 +259,15 @@
 
         <h3>3.1 Data Sources by Priority</h3>
 
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Legend</div>
+          <div class="callout-content">
+            <p><span class="badge-ingest badge-yes">INGEST</span> Ingested into Sentinel — query in Sentinel Logs</p>
+            <p><span class="badge-ingest badge-no">DO NOT INGEST</span> Stays in XDR — query in XDR Advanced Hunting</p>
+            <p><span class="badge-ingest badge-selective">SELECTIVE</span> High volume — use Basic tier or filter</p>
+          </div>
+        </div>
+
         <div class="table-wrapper">
           <table>
             <thead>
@@ -255,114 +275,114 @@
             </thead>
             <tbody>
               <!-- CRITICAL - MUST INGEST -->
-              <tr style="background: rgba(239, 68, 68, 0.05);">
+              <tr class="ingest-yes">
                 <td rowspan="6"><strong>P0<br>Critical</strong></td>
                 <td>Entra ID AuditLogs</td>
-                <td><span class="status-badge critical">Required</span></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
-                <td>Identity control-plane; XDR does NOT provide</td>
+                <td>Identity control-plane — XDR does NOT provide</td>
               </tr>
-              <tr style="background: rgba(239, 68, 68, 0.05);">
+              <tr class="ingest-yes">
                 <td>Entra ID SigninLogs</td>
-                <td><span class="status-badge critical">Required</span></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
-                <td>Auth events, CA evaluation; correlation</td>
+                <td>Auth events, CA evaluation — XDR does NOT provide</td>
               </tr>
-              <tr style="background: rgba(239, 68, 68, 0.05);">
+              <tr class="ingest-yes">
                 <td>SecurityAlert (XDR)</td>
-                <td><span class="status-badge critical">Required</span></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
                 <td>XDR alerts for Sentinel correlation</td>
               </tr>
-              <tr style="background: rgba(239, 68, 68, 0.05);">
+              <tr class="ingest-yes">
                 <td>SecurityIncident (XDR)</td>
-                <td><span class="status-badge critical">Required</span></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
                 <td>XDR incidents for case management</td>
               </tr>
-              <tr style="background: rgba(239, 68, 68, 0.05);">
+              <tr class="ingest-yes">
                 <td>Azure Activity</td>
-                <td><span class="status-badge critical">Required</span></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Free</td>
-                <td>Cloud control-plane; free tier</td>
+                <td>Cloud control-plane — FREE TIER</td>
               </tr>
-              <tr style="background: rgba(239, 68, 68, 0.05);">
+              <tr class="ingest-yes">
                 <td>OfficeActivity</td>
-                <td><span class="status-badge critical">Required</span></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
-                <td>M365 audit (SharePoint, Exchange admin)</td>
+                <td>M365 audit — XDR does NOT provide</td>
               </tr>
               <!-- IMPORTANT -->
-              <tr style="background: rgba(251, 191, 36, 0.05);">
+              <tr class="ingest-yes">
                 <td rowspan="4"><strong>P1<br>Important</strong></td>
                 <td>Palo Alto (Threat)</td>
-                <td><span class="status-badge complete">Yes</span></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
-                <td>Network threats; XDR doesn't cover</td>
+                <td>Network threats — XDR has no network visibility</td>
               </tr>
-              <tr style="background: rgba(251, 191, 36, 0.05);">
+              <tr class="ingest-yes">
                 <td>Salesforce</td>
-                <td><span class="status-badge complete">Yes</span></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
-                <td>SaaS outside XDR scope; data exfil</td>
+                <td>SaaS outside XDR scope — data exfil detection</td>
               </tr>
-              <tr style="background: rgba(251, 191, 36, 0.05);">
+              <tr class="ingest-yes">
                 <td>Workday</td>
-                <td><span class="status-badge complete">Yes</span></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
-                <td>HR system; termination correlation</td>
+                <td>HR system — termination correlation</td>
               </tr>
-              <tr style="background: rgba(251, 191, 36, 0.05);">
+              <tr class="ingest-yes">
                 <td>SecurityEvent (DCs only)</td>
-                <td><span class="status-badge complete">Yes</span></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
-                <td>Tier 0 monitoring; detailed AD audit</td>
+                <td>Tier 0 monitoring — detailed AD audit</td>
               </tr>
               <!-- SELECTIVE -->
-              <tr style="background: rgba(34, 197, 94, 0.05);">
+              <tr class="ingest-selective">
                 <td rowspan="3"><strong>P2<br>Selective</strong></td>
                 <td>AADNonInteractiveUserSignInLogs</td>
-                <td><span class="status-badge in-progress">Selective</span></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
                 <td>Basic</td>
-                <td>High volume; compliance retention</td>
+                <td>High volume — compliance retention only</td>
               </tr>
-              <tr style="background: rgba(34, 197, 94, 0.05);">
+              <tr class="ingest-selective">
                 <td>Palo Alto (Traffic)</td>
-                <td><span class="status-badge in-progress">Selective</span></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
                 <td>Basic</td>
-                <td>High volume; forensics only</td>
+                <td>High volume — forensics only</td>
               </tr>
-              <tr style="background: rgba(34, 197, 94, 0.05);">
+              <tr class="ingest-selective">
                 <td>NetSuite</td>
-                <td><span class="status-badge in-progress">Selective</span></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
                 <td>Analytics</td>
-                <td>Financial app; BEC correlation</td>
+                <td>Financial app — BEC correlation</td>
               </tr>
               <!-- DO NOT INGEST -->
-              <tr style="background: rgba(107, 114, 128, 0.05);">
+              <tr class="ingest-no">
                 <td rowspan="4"><strong>P3<br>Skip</strong></td>
                 <td>DeviceProcessEvents (MDE)</td>
-                <td><span class="status-badge">No</span></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
                 <td>N/A</td>
-                <td>Query in XDR Advanced Hunting</td>
+                <td>Query in XDR Advanced Hunting — XDR detects</td>
               </tr>
-              <tr style="background: rgba(107, 114, 128, 0.05);">
+              <tr class="ingest-no">
                 <td>DeviceRegistryEvents (MDE)</td>
-                <td><span class="status-badge">No</span></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
                 <td>N/A</td>
-                <td>Very high volume; stays in XDR</td>
+                <td>Very high volume — stays in XDR</td>
               </tr>
-              <tr style="background: rgba(107, 114, 128, 0.05);">
+              <tr class="ingest-no">
                 <td>EmailEvents (MDO)</td>
-                <td><span class="status-badge">No</span></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
                 <td>N/A</td>
-                <td>Query in XDR; alerts sufficient</td>
+                <td>Query in XDR — alerts sufficient</td>
               </tr>
-              <tr style="background: rgba(107, 114, 128, 0.05);">
+              <tr class="ingest-no">
                 <td>SecurityEvent (Workstations)</td>
-                <td><span class="status-badge">No</span></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
                 <td>N/A</td>
-                <td>MDE covers; avoid duplication</td>
+                <td>MDE covers workstations — avoid duplication</td>
               </tr>
             </tbody>
           </table>
@@ -418,56 +438,64 @@ COST IMPACT:
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Table</th><th>What It Contains</th><th>Tier</th><th>Volume</th></tr>
+              <tr><th>Table</th><th>Ingest?</th><th>What It Contains</th><th>Tier</th><th>Volume</th></tr>
             </thead>
             <tbody>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AuditLogs</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>User/group/role changes, CA policies, app registrations, MFA changes</td>
                 <td>Analytics</td>
                 <td>~50K/day</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>SigninLogs</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Interactive user logins, MFA challenges, CA evaluation</td>
                 <td>Analytics</td>
                 <td>~200K/day</td>
               </tr>
-              <tr>
+              <tr class="ingest-selective">
                 <td><strong>AADNonInteractiveUserSignInLogs</strong></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
                 <td>Token refreshes, background authentication</td>
                 <td>Basic</td>
                 <td>~500K/day</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AADServicePrincipalSignInLogs</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Service principal/app authentication</td>
                 <td>Analytics</td>
                 <td>~100K/day</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AADManagedIdentitySignInLogs</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Managed identity authentication</td>
                 <td>Analytics</td>
                 <td>~50K/day</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AADProvisioningLogs</strong></td>
-                <td>User provisioning (HR sync, SCIM)</td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>HR sync from Workday, user provisioning events</td>
                 <td>Analytics</td>
-                <td>~20K/day</td>
+                <td>~10K/day</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AADRiskyUsers</strong></td>
-                <td>Identity Protection risk data</td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Identity Protection risk state</td>
                 <td>Analytics</td>
-                <td>~1K/day</td>
+                <td>Low</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AADUserRiskEvents</strong></td>
-                <td>Risk detection events</td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Leaked credentials, impossible travel detections</td>
                 <td>Analytics</td>
-                <td>~5K/day</td>
+                <td>Low</td>
               </tr>
             </tbody>
           </table>
@@ -901,62 +929,75 @@ CRITICAL USE CASE:
         <!-- ==================== SECTION 9: COMPLETE TABLE REFERENCE ==================== -->
         <h2>9. Complete Sentinel Table Reference</h2>
 
-        <p>This is the comprehensive list of all tables ingested into Sentinel for RevFlow's security operations.</p>
+        <p>Comprehensive list of all tables with ingestion decision. <span class="badge-ingest badge-yes">INGEST</span> means ingested to Sentinel. <span class="badge-ingest badge-no">DO NOT INGEST</span> means query in XDR Advanced Hunting.</p>
 
         <h3>9.1 Entra ID Tables (Identity Control-Plane)</h3>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>XDR Does NOT Provide These</div>
+          <div class="callout-content"><p>MDI detects identity attacks. It does NOT log who was added to Global Admins. That requires AuditLogs.</p></div>
+        </div>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Table</th><th>Description</th><th>Key Events</th><th>Tier</th></tr>
+              <tr><th>Table</th><th>Ingest?</th><th>Description</th><th>Key Events</th><th>Tier</th></tr>
             </thead>
             <tbody>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AuditLogs</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>All identity changes</td>
-                <td>User CRUD, group changes, role assignments, CA policy changes, app registrations, consent grants, MFA registration</td>
+                <td>User CRUD, group changes, role assignments, CA policy changes, MFA registration</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>SigninLogs</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Interactive user authentication</td>
-                <td>User logins, MFA challenges/results, CA policy evaluation, location, device, risk level</td>
+                <td>User logins, MFA challenges/results, CA policy evaluation, location</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-selective">
                 <td><strong>AADNonInteractiveUserSignInLogs</strong></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
                 <td>Background/token auth</td>
-                <td>Token refreshes, SSO, cached credentials, app background auth</td>
+                <td>Token refreshes, SSO, cached credentials</td>
                 <td>Basic</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AADServicePrincipalSignInLogs</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Service principal auth</td>
-                <td>App-to-app auth, automation accounts, service account logins</td>
+                <td>App-to-app auth, automation accounts</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AADManagedIdentitySignInLogs</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Managed identity auth</td>
-                <td>Azure resource managed identities accessing other resources</td>
+                <td>Azure resource managed identities</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AADProvisioningLogs</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>User provisioning</td>
-                <td>HR sync (Workday → Entra), SCIM to SaaS apps, lifecycle automation</td>
+                <td>HR sync (Workday → Entra), SCIM to SaaS</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AADRiskyUsers</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Identity Protection - users</td>
-                <td>Users flagged as risky, risk level changes, remediation</td>
+                <td>Users flagged as risky, risk level changes</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AADUserRiskEvents</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Identity Protection - events</td>
-                <td>Risk detections: leaked credentials, anonymous IP, impossible travel, malware-linked IP</td>
+                <td>Leaked credentials, impossible travel</td>
                 <td>Analytics</td>
               </tr>
             </tbody>
@@ -968,26 +1009,29 @@ CRITICAL USE CASE:
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Table</th><th>Description</th><th>Key Events</th><th>Tier</th></tr>
+              <tr><th>Table</th><th>Ingest?</th><th>Description</th><th>Key Events</th><th>Tier</th></tr>
             </thead>
             <tbody>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>OfficeActivity</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>M365 unified audit log</td>
-                <td>SharePoint access/sharing, Exchange mailbox activity, Teams admin, OneDrive, Power Platform</td>
+                <td>SharePoint access/sharing, Exchange mailbox, Teams admin</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AzureActivity</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Azure control-plane</td>
-                <td>Resource CRUD, RBAC changes, policy changes, subscription operations</td>
+                <td>Resource CRUD, RBAC changes, policy changes</td>
                 <td>Free</td>
               </tr>
-              <tr>
+              <tr class="ingest-selective">
                 <td><strong>AzureDiagnostics</strong></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
                 <td>Azure resource logs</td>
-                <td>Key Vault access, Storage operations, App Service requests, SQL audits</td>
-                <td>Analytics</td>
+                <td>Key Vault access, Storage ops, App Service, SQL audits</td>
+                <td>Analytics/Basic</td>
               </tr>
             </tbody>
           </table>
@@ -998,31 +1042,35 @@ CRITICAL USE CASE:
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Table</th><th>Description</th><th>Key Events</th><th>Tier</th></tr>
+              <tr><th>Table</th><th>Ingest?</th><th>Description</th><th>Key Events</th><th>Tier</th></tr>
             </thead>
             <tbody>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>IntuneAuditLogs</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Intune admin actions</td>
-                <td>Policy changes, app deployments, configuration profile updates, admin actions</td>
+                <td>Policy changes, app deployments, config updates</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>IntuneDeviceComplianceOrg</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Device compliance status</td>
-                <td>Compliance state changes, policy violations, remediation</td>
+                <td>Compliance state changes, policy violations</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-selective">
                 <td><strong>IntuneDevices</strong></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
                 <td>Device inventory</td>
-                <td>Device enrollment, properties, OS versions (use for asset context)</td>
+                <td>Device enrollment, properties, OS versions</td>
                 <td>Basic</td>
               </tr>
-              <tr>
+              <tr class="ingest-selective">
                 <td><strong>IntuneOperationalLogs</strong></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
                 <td>Operational events</td>
-                <td>Enrollment failures, sync issues, app install status</td>
+                <td>Enrollment failures, sync issues</td>
                 <td>Basic</td>
               </tr>
             </tbody>
@@ -1031,70 +1079,85 @@ CRITICAL USE CASE:
 
         <h3>9.4 XDR Tables (From M365 Defender Connector)</h3>
 
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Cost Decision: ~$50/month vs ~$15,000/month</div>
+          <div class="callout-content"><p>We ingest alerts + incidents only. Raw telemetry stays in XDR and is queried via Advanced Hunting.</p></div>
+        </div>
+
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Table</th><th>Description</th><th>Ingest?</th><th>Tier</th></tr>
+              <tr><th>Table</th><th>Ingest?</th><th>Description</th><th>Where to Query</th><th>Tier</th></tr>
             </thead>
             <tbody>
-              <tr style="background: rgba(34, 197, 94, 0.1);">
+              <tr class="ingest-yes">
                 <td><strong>SecurityAlert</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>All XDR alerts (MDE, MDI, MDO, MDA)</td>
-                <td><span class="status-badge complete">Yes</span></td>
+                <td>Sentinel</td>
                 <td>Analytics</td>
               </tr>
-              <tr style="background: rgba(34, 197, 94, 0.1);">
+              <tr class="ingest-yes">
                 <td><strong>SecurityIncident</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Correlated XDR incidents</td>
-                <td><span class="status-badge complete">Yes</span></td>
+                <td>Sentinel</td>
                 <td>Analytics</td>
               </tr>
-              <tr style="background: rgba(34, 197, 94, 0.1);">
+              <tr class="ingest-yes">
                 <td><strong>AlertEvidence</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Entity context for alerts</td>
-                <td><span class="status-badge complete">Yes</span></td>
+                <td>Sentinel</td>
                 <td>Analytics</td>
               </tr>
-              <tr style="background: rgba(251, 191, 36, 0.1);">
-                <td><strong>IdentityLogonEvents</strong></td>
-                <td>MDI logon events</td>
-                <td><span class="status-badge in-progress">Optional</span></td>
-                <td>Analytics</td>
-              </tr>
-              <tr style="background: rgba(107, 114, 128, 0.1);">
+              <tr class="ingest-no">
                 <td><strong>DeviceProcessEvents</strong></td>
-                <td>MDE process telemetry</td>
-                <td><span class="status-badge">No - Query in XDR</span></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>MDE process telemetry (~50M/day)</td>
+                <td>XDR Advanced Hunting</td>
                 <td>N/A</td>
               </tr>
-              <tr style="background: rgba(107, 114, 128, 0.1);">
+              <tr class="ingest-no">
                 <td><strong>DeviceNetworkEvents</strong></td>
-                <td>MDE network telemetry</td>
-                <td><span class="status-badge">No - Query in XDR</span></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>MDE network telemetry (~30M/day)</td>
+                <td>XDR Advanced Hunting</td>
                 <td>N/A</td>
               </tr>
-              <tr style="background: rgba(107, 114, 128, 0.1);">
+              <tr class="ingest-no">
                 <td><strong>DeviceFileEvents</strong></td>
-                <td>MDE file telemetry</td>
-                <td><span class="status-badge">No - Query in XDR</span></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>MDE file telemetry (~40M/day)</td>
+                <td>XDR Advanced Hunting</td>
                 <td>N/A</td>
               </tr>
-              <tr style="background: rgba(107, 114, 128, 0.1);">
+              <tr class="ingest-no">
                 <td><strong>DeviceRegistryEvents</strong></td>
-                <td>MDE registry telemetry</td>
-                <td><span class="status-badge">No - Query in XDR</span></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>MDE registry telemetry (~20M/day)</td>
+                <td>XDR Advanced Hunting</td>
                 <td>N/A</td>
               </tr>
-              <tr style="background: rgba(107, 114, 128, 0.1);">
+              <tr class="ingest-no">
                 <td><strong>EmailEvents</strong></td>
-                <td>MDO email telemetry</td>
-                <td><span class="status-badge">No - Query in XDR</span></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>MDO email telemetry (~1M/day)</td>
+                <td>XDR Advanced Hunting</td>
                 <td>N/A</td>
               </tr>
-              <tr style="background: rgba(107, 114, 128, 0.1);">
+              <tr class="ingest-no">
+                <td><strong>IdentityLogonEvents</strong></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>MDI identity telemetry (~2M/day)</td>
+                <td>XDR Advanced Hunting</td>
+                <td>N/A</td>
+              </tr>
+              <tr class="ingest-no">
                 <td><strong>CloudAppEvents</strong></td>
-                <td>MDA cloud app telemetry</td>
-                <td><span class="status-badge">No - Query in XDR</span></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>MDA cloud app telemetry (~1M/day)</td>
+                <td>XDR Advanced Hunting</td>
                 <td>N/A</td>
               </tr>
             </tbody>
@@ -1103,46 +1166,57 @@ CRITICAL USE CASE:
 
         <h3>9.5 Network Security Tables</h3>
 
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>XDR Does NOT Cover Network</div>
+          <div class="callout-content"><p>XDR has no visibility into network-layer attacks. Network logs must be ingested into Sentinel.</p></div>
+        </div>
+
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Table</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
+              <tr><th>Table</th><th>Ingest?</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
             </thead>
             <tbody>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>CommonSecurityLog</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Palo Alto (Threat/URL/WildFire)</td>
-                <td>Threat alerts, malicious URLs, malware detections, IPS events</td>
+                <td>Threat alerts, malicious URLs, malware detections</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-selective">
                 <td><strong>CommonSecurityLog</strong></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
                 <td>Palo Alto (Traffic) - filtered</td>
-                <td>Allow/deny decisions, traffic flows (high volume - forensics only)</td>
+                <td>Allow/deny decisions — high volume, forensics only</td>
                 <td>Basic</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>CommonSecurityLog</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>F5 WAF</td>
-                <td>Web application attacks, bot detection, OWASP violations</td>
+                <td>Web application attacks, bot detection</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>Syslog</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Palo Alto GlobalProtect VPN</td>
-                <td>VPN connections, user logins, gateway events, HIP checks</td>
+                <td>VPN connections, user logins, gateway events</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>DnsEvents</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Windows DNS Servers</td>
-                <td>DNS queries, suspicious domains, tunneling indicators</td>
+                <td>DNS queries, suspicious domains, tunneling</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-selective">
                 <td><strong>AzureNetworkAnalytics_CL</strong></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
                 <td>NSG Flow Logs</td>
-                <td>Network flow data, traffic patterns (high volume)</td>
+                <td>Network flow data — high volume</td>
                 <td>Basic</td>
               </tr>
             </tbody>
@@ -1151,34 +1225,43 @@ CRITICAL USE CASE:
 
         <h3>9.6 Windows Security Tables</h3>
 
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>MDE Covers Workstations</div>
+          <div class="callout-content"><p>Do NOT ingest SecurityEvent from workstations. MDE already collects this data. Only ingest from Tier 0 systems (DCs, CA, Entra Connect).</p></div>
+        </div>
+
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Table</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
+              <tr><th>Table</th><th>Ingest?</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
             </thead>
             <tbody>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>SecurityEvent</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Domain Controllers (Tier 0)</td>
-                <td>4624/4625 logons, 4720 user creation, 4728/4732 group changes, 4768/4769 Kerberos</td>
+                <td>4624/4625 logons, 4720 user creation, 4728/4732 group changes</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>SecurityEvent</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Certificate Authority</td>
                 <td>Certificate issuance, template changes, private key access</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>SecurityEvent</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Entra Connect Server</td>
                 <td>Sync events, admin access, service account activity</td>
                 <td>Analytics</td>
               </tr>
-              <tr style="background: rgba(107, 114, 128, 0.1);">
+              <tr class="ingest-no">
                 <td><strong>SecurityEvent</strong></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
                 <td>Workstations</td>
-                <td>NOT ingested - MDE covers endpoint detection</td>
+                <td>MDE covers endpoint detection — avoid duplication</td>
                 <td>N/A</td>
               </tr>
             </tbody>
@@ -1190,17 +1273,19 @@ CRITICAL USE CASE:
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Table</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
+              <tr><th>Table</th><th>Ingest?</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
             </thead>
             <tbody>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>Syslog</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Linux servers (via AMA)</td>
-                <td>Auth logs (SSH, sudo), system events, application logs</td>
+                <td>Auth logs (SSH, sudo), system events</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>Syslog</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Network devices (CEF fallback)</td>
                 <td>Devices that don't support CEF format</td>
                 <td>Analytics</td>
@@ -1211,34 +1296,43 @@ CRITICAL USE CASE:
 
         <h3>9.8 SaaS Application Tables</h3>
 
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>XDR Does NOT Cover Non-Microsoft SaaS</div>
+          <div class="callout-content"><p>MDA covers Microsoft cloud apps. Non-Microsoft SaaS (Salesforce, Workday, NetSuite, GitHub) requires custom Azure Function connectors.</p></div>
+        </div>
+
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Table</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
+              <tr><th>Table</th><th>Ingest?</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
             </thead>
             <tbody>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>Salesforce_CL</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Salesforce Event Monitoring</td>
-                <td>Logins, report exports, data exports, API calls, permission changes</td>
+                <td>Logins, report exports, data exports, API calls</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>Workday_CL</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Workday Audit Logs</td>
-                <td>HR changes, terminations, compensation access, report runs</td>
+                <td>HR changes, terminations — correlation rule</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-selective">
                 <td><strong>NetSuite_CL</strong></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
                 <td>NetSuite SuiteAnalytics</td>
-                <td>Financial report access, vendor changes, bank detail modifications</td>
+                <td>Financial report access, vendor changes — BEC prevention</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>GitHub_CL</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>GitHub Audit Log</td>
-                <td>Repo access, code pushes, PAT creation, org changes</td>
+                <td>Repo access, code pushes, PAT creation</td>
                 <td>Analytics</td>
               </tr>
             </tbody>
@@ -1250,25 +1344,28 @@ CRITICAL USE CASE:
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Table</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
+              <tr><th>Table</th><th>Ingest?</th><th>Source</th><th>Key Events</th><th>Tier</th></tr>
             </thead>
             <tbody>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AWSCloudTrail</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>AWS CloudTrail (via S3/SQS)</td>
-                <td>API calls, IAM changes, resource CRUD, console logins</td>
+                <td>API calls, IAM changes, console logins — XDR has no AWS visibility</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>AWSGuardDuty</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>AWS GuardDuty findings</td>
-                <td>Threat findings, reconnaissance, credential compromise</td>
+                <td>Threat findings — correlate with Azure/M365</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-selective">
                 <td><strong>AWSVPCFlow</strong></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
                 <td>AWS VPC Flow Logs</td>
-                <td>Network traffic flows (high volume - forensics)</td>
+                <td>Network traffic flows — high volume, forensics only</td>
                 <td>Basic</td>
               </tr>
             </tbody>
@@ -1280,23 +1377,26 @@ CRITICAL USE CASE:
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Table</th><th>Description</th><th>Key Events</th><th>Tier</th></tr>
+              <tr><th>Table</th><th>Ingest?</th><th>Description</th><th>Key Events</th><th>Tier</th></tr>
             </thead>
             <tbody>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>SecurityAlert</strong> (from MDC)</td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Defender for Cloud alerts</td>
-                <td>Cloud security alerts (separate from XDR alerts), resource threats</td>
+                <td>Cloud security alerts (separate from XDR alerts)</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>SecurityRecommendation</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Security posture recommendations</td>
-                <td>Misconfigurations, compliance gaps, hardening recommendations</td>
+                <td>Misconfigurations, compliance gaps</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>SecurityRegulatoryCompliance</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Compliance assessments</td>
                 <td>Regulatory benchmark results (CIS, NIST, SOC 2)</td>
                 <td>Analytics</td>
@@ -1310,19 +1410,21 @@ CRITICAL USE CASE:
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Table</th><th>Source</th><th>Description</th><th>Tier</th></tr>
+              <tr><th>Table</th><th>Ingest?</th><th>Source</th><th>Description</th><th>Tier</th></tr>
             </thead>
             <tbody>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>ThreatIntelligenceIndicator</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Sentinel TI connector</td>
                 <td>IOCs from Microsoft, TAXII feeds, custom indicators</td>
                 <td>Analytics</td>
               </tr>
-              <tr>
+              <tr class="ingest-yes">
                 <td><strong>Watchlist</strong></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Sentinel Watchlists</td>
-                <td>VIP users, Tier 0 assets, terminated employees, known bad IPs</td>
+                <td>VIP users, Tier 0 assets, terminated employees</td>
                 <td>Analytics</td>
               </tr>
             </tbody>

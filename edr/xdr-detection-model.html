@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XDR Detection Model — The Paradigm Shift | EDR Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .model-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+    .model-box { padding: 1.5rem; border-radius: 8px; }
+    .model-siem { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); }
+    .model-xdr { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); }
+    .model-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
+    .model-siem .model-title { color: #ef4444; }
+    .model-xdr .model-title { color: #22c55e; }
+    .owns-box { padding: 1rem; border-radius: 6px; margin: 1rem 0; }
+    .owns-microsoft { background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; }
+    .owns-customer { background: rgba(168, 85, 247, 0.1); border-left: 4px solid #a855f7; }
+    @media (max-width: 768px) { .model-compare { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item active">XDR Detection Model</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="../infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="../operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="../operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="../resources/templates.html" class="nav-item">Templates</a>
+          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="../resources/incident-response.html" class="nav-item">Incident Response</a>
+          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">EDR Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">XDR Detection Model</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>XDR Detection Model — The Paradigm Shift</h1>
+          <div class="page-header-meta">
+            <span class="page-badge edr">EDR Track</span>
+            <span class="page-reading-time">Critical Concept</span>
+          </div>
+          <p class="intro-text">Understanding the fundamental difference between SIEM-based detection and XDR-based detection is critical. In XDR, <strong>Microsoft owns detection logic</strong>. You do not write malware rules, ransomware rules, or credential theft rules. You configure <strong>security controls</strong>, not detections.</p>
+        </div>
+
+        <!-- ==================== SECTION 1: THE PARADIGM SHIFT ==================== -->
+        <h2>1. The Fundamental Shift: SIEM vs XDR</h2>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>This Changes Everything</div>
+          <div class="callout-content">
+            <p>If you come from a Splunk/SIEM background, you need to fundamentally rethink how detection works.</p>
+            <p style="margin-top: 0.5rem;"><strong>In SIEM:</strong> You ingest logs → You write rules → You own detection quality</p>
+            <p><strong>In XDR:</strong> Microsoft builds detection logic → You configure controls → Microsoft owns detection quality</p>
+          </div>
+        </div>
+
+        <div class="model-compare">
+          <div class="model-box model-siem">
+            <div class="model-title">❌ Traditional SIEM Model (Splunk)</div>
+            <ul style="margin: 0; padding-left: 1.2rem;">
+              <li><strong>You ingest logs</strong></li>
+              <li><strong>You write detection rules</strong></li>
+              <li><strong>You own detection quality</strong></li>
+              <li>You tune false positives</li>
+              <li>You maintain rule coverage</li>
+              <li>Detection = your responsibility</li>
+            </ul>
+            <p style="margin-top: 1rem; font-style: italic; color: #ef4444;">Every detection rule is custom-built by your team.</p>
+          </div>
+          <div class="model-box model-xdr">
+            <div class="model-title">✅ XDR Model (Microsoft Defender)</div>
+            <ul style="margin: 0; padding-left: 1.2rem;">
+              <li><strong>Microsoft builds detection logic</strong></li>
+              <li><strong>Detection is behavior-based + ML</strong></li>
+              <li><strong>Continuously updated by Microsoft</strong></li>
+              <li>You configure controls</li>
+              <li>You validate coverage</li>
+              <li>Detection = Microsoft's responsibility</li>
+            </ul>
+            <p style="margin-top: 1rem; font-style: italic; color: #22c55e;">Detection logic exists whether or not Sentinel is present.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 2: WHAT DETECTS THREATS ==================== -->
+        <h2>2. What Actually Detects Threats in MDE/XDR?</h2>
+
+        <div class="owns-box owns-microsoft">
+          <h4 style="margin-top: 0; color: #3b82f6;">🔵 Microsoft Owns Detection Logic</h4>
+          <p style="margin-bottom: 0.5rem;">Microsoft's detection engine is:</p>
+          <ul style="margin: 0; padding-left: 1.2rem;">
+            <li><strong>Behavior-based</strong> — Analyzes process chains, file operations, network connections</li>
+            <li><strong>ML-powered</strong> — Machine learning models trained on trillions of signals</li>
+            <li><strong>Continuously updated</strong> — Microsoft pushes updates automatically</li>
+            <li><strong>Threat intelligence-enriched</strong> — Microsoft DART, threat research feeds</li>
+          </ul>
+        </div>
+
+        <h3>2.1 You Do NOT Write These Rules</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Detection Type</th><th>Who Builds It?</th><th>Your Role</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Malware detection</strong></td>
+                <td>Microsoft (signature + behavior + ML)</td>
+                <td>Configure AV settings, exclusions</td>
+              </tr>
+              <tr>
+                <td><strong>Ransomware detection</strong></td>
+                <td>Microsoft (behavior-based detection)</td>
+                <td>Enable controlled folder access, ASR rules</td>
+              </tr>
+              <tr>
+                <td><strong>Credential theft (Mimikatz, LSASS)</strong></td>
+                <td>Microsoft (MDE + MDI)</td>
+                <td>Enable ASR rule for LSASS protection</td>
+              </tr>
+              <tr>
+                <td><strong>LOLBins abuse</strong></td>
+                <td>Microsoft (behavior analysis)</td>
+                <td>Enable ASR rules for script blocking</td>
+              </tr>
+              <tr>
+                <td><strong>Lateral movement</strong></td>
+                <td>Microsoft (MDI + MDE correlation)</td>
+                <td>Ensure MDI sensor coverage</td>
+              </tr>
+              <tr>
+                <td><strong>Phishing / BEC</strong></td>
+                <td>Microsoft (MDO detection engine)</td>
+                <td>Configure Safe Links, Safe Attachments</td>
+              </tr>
+              <tr>
+                <td><strong>Identity attacks</strong></td>
+                <td>Microsoft (MDI detection engine)</td>
+                <td>Deploy MDI sensors on DCs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Key Insight</div>
+          <div class="callout-content">
+            <p>These detections exist <strong>whether or not Sentinel is present</strong>.</p>
+            <p style="margin-top: 0.5rem;">XDR simply <strong>correlates the alerts</strong> produced by Defender products. It does not create the detection logic.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 3: WHAT YOU CONFIGURE ==================== -->
+        <h2>3. What You Configure in MDE (Security Controls)</h2>
+
+        <div class="owns-box owns-customer">
+          <h4 style="margin-top: 0; color: #a855f7;">🟣 Customer Owns Configuration</h4>
+          <p style="margin-bottom: 0.5rem;">You configure <strong>security controls</strong>, not detections. Think of MDE configuration as:</p>
+          <ul style="margin: 0; padding-left: 1.2rem;">
+            <li><strong>Prevention</strong> — Blocking threats before they execute</li>
+            <li><strong>Telemetry quality</strong> — Ensuring good signal for Microsoft's detection models</li>
+            <li><strong>Coverage</strong> — Ensuring all assets are protected</li>
+          </ul>
+        </div>
+
+        <h3>3.1 Attack Surface Reduction (ASR) Rules</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">ASR Rules — Controls, Not Detections</span></div>
+          <pre><code>ASR RULES ARE CONTROLS, NOT DETECTIONS
+═══════════════════════════════════════════════════════════════════════════════
+
+WHAT ASR RULES DO:
+• Block Office child processes         → PREVENTS execution
+• Block credential theft from LSASS    → PREVENTS Mimikatz
+• Block abuse of Win32 APIs           → PREVENTS macro abuse
+• Block obfuscated scripts            → PREVENTS encoded PowerShell
+
+WHAT HAPPENS WHEN ASR FIRES:
+1. Action is BLOCKED (prevention)
+2. Alert is GENERATED (telemetry)
+3. XDR CORRELATES the alert with other signals
+
+YOU ARE NOT WRITING DETECTION LOGIC.
+You are enabling/disabling preventive controls.
+
+Microsoft decides:
+• What behaviors are blocked
+• What patterns trigger the control
+
+You decide:
+• Which controls to enable
+• Audit vs Warn vs Block mode
+• What exclusions to add</code></pre>
+        </div>
+
+        <h3>3.2 Antivirus / EDR Settings</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Setting</th><th>What It Does</th><th>Who Decides What's Malicious?</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Real-time protection</strong></td>
+                <td>Scans files as they're accessed</td>
+                <td>Microsoft (signature + ML)</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud-delivered protection</strong></td>
+                <td>Queries cloud for unknown files</td>
+                <td>Microsoft (cloud ML models)</td>
+              </tr>
+              <tr>
+                <td><strong>Tamper protection</strong></td>
+                <td>Prevents disabling security features</td>
+                <td>Microsoft (built-in protection)</td>
+              </tr>
+              <tr>
+                <td><strong>PUA blocking</strong></td>
+                <td>Blocks potentially unwanted applications</td>
+                <td>Microsoft (PUA classification)</td>
+              </tr>
+              <tr>
+                <td><strong>EDR in block mode</strong></td>
+                <td>Blocks threats even with 3rd-party AV</td>
+                <td>Microsoft (EDR detection engine)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Your Role</div>
+          <div class="callout-content">
+            <p><strong>Microsoft decides what is malicious.</strong></p>
+            <p><strong>You decide how aggressively to enforce.</strong></p>
+          </div>
+        </div>
+
+        <h3>3.3 Sensor & Telemetry Configuration</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Sensor Configuration — Signal Quality</span></div>
+          <pre><code>SENSOR CONFIGURATION ENSURES SIGNAL QUALITY
+═══════════════════════════════════════════════════════════════════════════════
+
+WHAT YOU CONFIGURE:
+• Onboarding method (Intune, GPO, SCCM, Arc)
+• Device tags (for grouping, targeting)
+• Network connectivity (cloud URLs)
+• Exclusions (for performance, not bypassing detection)
+
+WHY IT MATTERS:
+• Good sensor health = good telemetry
+• Good telemetry = accurate detections
+• Accurate detections = reliable XDR correlation
+
+WHAT YOU DO NOT CONFIGURE:
+• What processes to monitor (Microsoft decides)
+• What behaviors to flag (Microsoft decides)
+• Detection sensitivity (Microsoft decides)
+
+Your job is to ensure the sensor is:
+✓ Deployed on all endpoints
+✓ Healthy and connected
+✓ Not blocked by network policies
+✓ Not conflicting with other agents</code></pre>
+        </div>
+
+        <h3>3.4 Threat & Vulnerability Management (TVM)</h3>
+
+        <p>TVM provides vulnerability context, not detection logic.</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>TVM Component</th><th>What It Does</th><th>Feeds Into</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Software inventory</strong></td>
+                <td>Lists installed software</td>
+                <td>Vulnerability correlation</td>
+              </tr>
+              <tr>
+                <td><strong>Vulnerability assessment</strong></td>
+                <td>Identifies CVEs</td>
+                <td>Prioritization, exposure scoring</td>
+              </tr>
+              <tr>
+                <td><strong>Security recommendations</strong></td>
+                <td>Hardening guidance</td>
+                <td>Remediation workflows</td>
+              </tr>
+              <tr>
+                <td><strong>Exposure score</strong></td>
+                <td>Aggregate risk measure</td>
+                <td>XDR context enrichment</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>TVM feeds <strong>context</strong> into XDR, not detection logic. If an exploit fires, the alert is enriched with "this device has CVE-XXXX."</p>
+
+        <!-- ==================== SECTION 4: XDR END-TO-END FLOW ==================== -->
+        <h2>4. How XDR Actually Works (End-to-End)</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">XDR Detection Flow</span></div>
+          <pre><code>XDR END-TO-END DETECTION FLOW
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 1: ENDPOINT ACTIVITY HAPPENS
+────────────────────────────────────────────────────────────────────────────────
+User opens malicious attachment
+PowerShell encoded command executes
+Process attempts to access LSASS
+
+STEP 2: MDE SENSORS COLLECT TELEMETRY
+────────────────────────────────────────────────────────────────────────────────
+Process creation events
+File writes
+Network connections
+Registry changes
+→ Telemetry sent to Microsoft cloud
+
+STEP 3: MICROSOFT-BUILT DETECTION MODELS FIRE
+────────────────────────────────────────────────────────────────────────────────
+Behavior analysis: "This looks like Mimikatz"
+ML model: "This process chain is suspicious"
+Signature: "This file hash is known malware"
+→ Alert generated in MDE
+
+STEP 4: ALERTS ARE GENERATED
+────────────────────────────────────────────────────────────────────────────────
+Alert: "Suspicious credential access detected"
+Alert: "Encoded PowerShell command"
+Alert: "Malware detected"
+→ Each Defender product generates its own alerts
+
+STEP 5: XDR CORRELATES ALERTS ACROSS DOMAINS
+────────────────────────────────────────────────────────────────────────────────
+XDR sees:
+• MDE alert: Malicious attachment opened
+• MDO alert: Phishing email delivered
+• MDI alert: Lateral movement attempt
+• MDA alert: Unusual cloud app access
+
+XDR correlates: "These are the same attack"
+
+STEP 6: UNIFIED INCIDENT IS CREATED
+────────────────────────────────────────────────────────────────────────────────
+Single incident with:
+• All related alerts
+• All affected entities
+• Full attack timeline
+• Recommended actions
+
+═══════════════════════════════════════════════════════════════════════════════
+AT NO POINT DO CUSTOMER-WRITTEN DETECTION RULES DRIVE THIS FLOW.
+═══════════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 5: WHERE CUSTOMER RULES EXIST ==================== -->
+        <h2>5. Where Do Customer Detection Rules Exist?</h2>
+
+        <p>There are <strong>only two places</strong> where customer-written detection logic exists:</p>
+
+        <h3>5.1 Sentinel Analytics Rules</h3>
+
+        <div class="owns-box owns-customer">
+          <h4 style="margin-top: 0; color: #a855f7;">Customer-Written Rules in Sentinel</h4>
+          <p style="margin-bottom: 0.5rem;"><strong>Used for:</strong></p>
+          <ul style="margin: 0; padding-left: 1.2rem;">
+            <li><strong>Non-Defender telemetry</strong> — Palo Alto, Salesforce, Workday, custom apps</li>
+            <li><strong>Cross-domain correlation</strong> — "Terminated employee + Salesforce export"</li>
+            <li><strong>Business logic</strong> — "VIP user signed in from new country"</li>
+            <li><strong>Gaps</strong> — Edge cases Microsoft doesn't cover</li>
+          </ul>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Example: Sentinel Rule for Non-Defender Data</span></div>
+          <pre><code>// This rule is for SALESFORCE — XDR has no visibility here
+// This is where customer detection rules make sense
+
+Salesforce_CL
+| where TimeGenerated > ago(1h)
+| where Operation == "DataExport"
+| where RecordCount > 10000
+| join kind=inner (
+    Workday_CL
+    | where EmploymentStatus == "Terminated"
+    | where TerminationDate > ago(7d)
+) on UserPrincipalName
+| project TimeGenerated, User, RecordCount, TerminationDate
+| extend AlertTitle = "Terminated Employee Exported Salesforce Records"
+
+// THIS is where you write detection logic.
+// NOT for malware. NOT for ransomware. NOT for credential theft.
+// For business logic and non-Microsoft data sources.</code></pre>
+        </div>
+
+        <h3>5.2 Custom XDR Detections (Optional)</h3>
+
+        <div class="owns-box owns-customer">
+          <h4 style="margin-top: 0; color: #a855f7;">Optional Custom XDR Detections</h4>
+          <p style="margin-bottom: 0.5rem;"><strong>Characteristics:</strong></p>
+          <ul style="margin: 0; padding-left: 1.2rem;">
+            <li>Written using Advanced Hunting (KQL)</li>
+            <li><strong>Very limited use cases</strong></li>
+            <li>Used only for niche gaps Microsoft doesn't cover</li>
+            <li>Examples: Company-specific LOLBins, custom tooling</li>
+          </ul>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Important</div>
+          <div class="callout-content">
+            <p>Custom XDR detections are <strong>exceptions, not the foundation</strong>.</p>
+            <p style="margin-top: 0.5rem;">If you're writing dozens of custom XDR detections, you're fighting the platform. Microsoft's built-in detections should cover 95%+ of threat scenarios.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 6: OWNERSHIP MODEL ==================== -->
+        <h2>6. Ownership Model Summary</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Responsibility</th><th>SIEM Model</th><th>XDR Model</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Detection logic</strong></td>
+                <td>Customer builds</td>
+                <td><span style="color: #3b82f6; font-weight: 600;">Microsoft builds</span></td>
+              </tr>
+              <tr>
+                <td><strong>Detection quality</strong></td>
+                <td>Customer owns</td>
+                <td><span style="color: #3b82f6; font-weight: 600;">Microsoft owns</span></td>
+              </tr>
+              <tr>
+                <td><strong>Detection updates</strong></td>
+                <td>Customer maintains</td>
+                <td><span style="color: #3b82f6; font-weight: 600;">Microsoft pushes</span></td>
+              </tr>
+              <tr>
+                <td><strong>Security controls</strong></td>
+                <td>N/A (SIEM is passive)</td>
+                <td><span style="color: #a855f7; font-weight: 600;">Customer configures</span></td>
+              </tr>
+              <tr>
+                <td><strong>Coverage validation</strong></td>
+                <td>Customer validates</td>
+                <td><span style="color: #a855f7; font-weight: 600;">Customer validates</span></td>
+              </tr>
+              <tr>
+                <td><strong>Gap identification</strong></td>
+                <td>Customer identifies</td>
+                <td><span style="color: #a855f7; font-weight: 600;">Customer identifies</span></td>
+              </tr>
+              <tr>
+                <td><strong>Integration strategy</strong></td>
+                <td>Customer builds</td>
+                <td><span style="color: #a855f7; font-weight: 600;">Customer builds</span></td>
+              </tr>
+              <tr>
+                <td><strong>Non-Microsoft sources</strong></td>
+                <td>Customer rules</td>
+                <td><span style="color: #a855f7; font-weight: 600;">Customer rules (Sentinel)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Summary</span></div>
+          <pre><code>XDR OWNERSHIP MODEL
+═══════════════════════════════════════════════════════════════════════════════
+
+MICROSOFT OWNS:
+• Detection logic (ML, behavior, signatures)
+• Detection quality
+• Detection updates
+• Threat intelligence integration
+
+CUSTOMER OWNS:
+• Security control configuration (ASR, AV settings)
+• Coverage validation (are all assets protected?)
+• Gap identification (what's Microsoft missing?)
+• Integration strategy (how does XDR + Sentinel work together?)
+• Non-Microsoft detection (Sentinel rules for SaaS, network, custom apps)
+
+═══════════════════════════════════════════════════════════════════════════════
+This is the fundamental shift from Splunk to XDR.
+═══════════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 7: PRACTICAL IMPLICATIONS ==================== -->
+        <h2>7. Practical Implications for RevFlow</h2>
+
+        <h3>7.1 What We Don't Do</h3>
+
+        <ul>
+          <li>❌ Write malware detection rules</li>
+          <li>❌ Write ransomware detection rules</li>
+          <li>❌ Write credential theft detection rules</li>
+          <li>❌ Write LOLBins abuse rules</li>
+          <li>❌ Maintain signature databases</li>
+          <li>❌ Tune false positives in MDE detection logic</li>
+        </ul>
+
+        <h3>7.2 What We Do</h3>
+
+        <ul>
+          <li>✅ Configure ASR rules (prevention controls)</li>
+          <li>✅ Configure AV/EDR settings (enforcement level)</li>
+          <li>✅ Ensure sensor coverage (all endpoints protected)</li>
+          <li>✅ Validate exclusions (don't break the business)</li>
+          <li>✅ Write Sentinel rules for non-Defender data</li>
+          <li>✅ Write Sentinel rules for business logic correlation</li>
+          <li>✅ Monitor XDR for gaps (what's Microsoft missing?)</li>
+          <li>✅ Integrate XDR alerts with SOC workflows</li>
+        </ul>
+
+        <h3>7.3 RevFlow Detection Strategy</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">RevFlow Detection Ownership</span></div>
+          <pre><code>REVFLOW DETECTION STRATEGY
+═══════════════════════════════════════════════════════════════════════════════
+
+MICROSOFT DEFENDER XDR (No customer rules)
+────────────────────────────────────────────────────────────────────────────────
+• Endpoint threats (MDE)           → Microsoft-built detection
+• Identity attacks (MDI)           → Microsoft-built detection
+• Email threats (MDO)              → Microsoft-built detection
+• Cloud app anomalies (MDA)        → Microsoft-built detection
+
+Our role: Configure controls, validate coverage
+
+MICROSOFT SENTINEL (Customer rules)
+────────────────────────────────────────────────────────────────────────────────
+• Palo Alto network threats        → Custom detection rules
+• Salesforce data exfiltration     → Custom detection rules
+• Workday HR correlation           → Custom detection rules
+• Cross-domain business logic      → Custom detection rules
+• Compliance monitoring            → Custom detection rules
+
+Our role: Build and maintain detection rules
+
+INTEGRATION
+────────────────────────────────────────────────────────────────────────────────
+• XDR alerts → Sentinel (via connector)
+• Sentinel enriches with business context
+• Unified incident management in Sentinel
+• SOC works primarily in Sentinel
+
+═══════════════════════════════════════════════════════════════════════════════
+XDR handles threat detection. Sentinel handles everything else.
+═══════════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="index.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← EDR Overview</span></a>
+          <a href="deployment.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">MDE Deployment →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>
