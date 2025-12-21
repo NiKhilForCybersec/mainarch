@@ -813,6 +813,988 @@ CommonSecurityLog
           </div>
         </div>
 
+        <!-- ==================== SPLUNK DATA PIPELINE - DEEP DIVE ==================== -->
+        <h2>Splunk Data Pipeline — Deep Dive</h2>
+
+        <p>Understanding the Splunk data pipeline is <strong>critical for interviews</strong> and actual implementation. This section covers how data flows from source to searchable events — the equivalent of understanding DCRs in Sentinel.</p>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>The Data Pipeline Mental Model</div>
+          <div class="callout-content">
+            <p>Splunk processes data in <strong>three phases</strong>: Input → Parsing → Indexing</p>
+            <p>Unlike Sentinel where "stream determines table", in Splunk <strong>you control every step</strong> — but that means you're responsible for configuring it correctly.</p>
+          </div>
+        </div>
+
+        <h3>End-to-End Data Flow</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Splunk Data Pipeline — Complete Flow</span></div>
+          <pre><code>DATA SOURCE (Application, OS, Network Device)
+              ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 1: INPUT (Forwarder or Direct)                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  • Read from: file, syslog, API, script, Windows Event Log                  │
+│  • Assign: source, sourcetype, host, index                                  │
+│  • Configure in: inputs.conf                                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+              ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 2: PARSING (Heavy Forwarder or Indexer)                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  • Line breaking: Split raw data into individual events                     │
+│  • Timestamp extraction: Identify and parse _time                           │
+│  • Character encoding: Handle UTF-8, ASCII, etc.                            │
+│  • Transformations: Field extraction, routing, filtering                    │
+│  • Configure in: props.conf + transforms.conf                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+              ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 3: INDEXING (Indexer)                                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  • Segmentation: Break events into searchable segments                      │
+│  • Index-time field extraction: Extract fields at write time                │
+│  • Compression: Compress and store in buckets                               │
+│  • Write to disk: Store in designated index                                 │
+│  • Configure in: indexes.conf                                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+              ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 4: SEARCH (Search Head)                                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  • Search-time field extraction: Extract fields when queried                │
+│  • Lookups: Enrich with external data                                       │
+│  • Correlation: Join events, transaction grouping                           │
+│  • Output: Results, dashboards, alerts                                      │
+│  • Configure in: props.conf (search-time), lookups, savedsearches.conf      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+COMPARISON TO SENTINEL:
+• Splunk's inputs.conf ≈ DCR dataSources
+• Splunk's props.conf + transforms.conf ≈ DCR transformations (KQL)
+• Splunk's indexes.conf ≈ LAW table configuration
+• Splunk's sourcetype ≈ DCR stream (but more flexible)
+═══════════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <!-- ==================== SOURCE, SOURCETYPE, HOST, INDEX ==================== -->
+        <h3>The Four Metadata Fields (Critical Concepts)</h3>
+
+        <p>Every event in Splunk has four critical metadata fields assigned at input time:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Field</th><th>Purpose</th><th>Example</th><th>Sentinel Equivalent</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>source</strong></td>
+                <td>Where data came from (file path, network port, script)</td>
+                <td><code>/var/log/auth.log</code><br><code>UDP:514</code></td>
+                <td>Similar to Source field in logs</td>
+              </tr>
+              <tr>
+                <td><strong>sourcetype</strong></td>
+                <td>Format/type of data — determines how Splunk parses it</td>
+                <td><code>syslog</code><br><code>pan:traffic</code><br><code>aws:cloudtrail</code></td>
+                <td>Closest to DCR stream (Microsoft-Syslog, Microsoft-CEF)</td>
+              </tr>
+              <tr>
+                <td><strong>host</strong></td>
+                <td>Machine that generated the event</td>
+                <td><code>web01.revflow.com</code></td>
+                <td>Computer field</td>
+              </tr>
+              <tr>
+                <td><strong>index</strong></td>
+                <td>Data repository where event is stored</td>
+                <td><code>main</code><br><code>security</code><br><code>network</code></td>
+                <td>Log Analytics Workspace table</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Sourcetype Is King</div>
+          <div class="callout-content">
+            <p><strong>Sourcetype is the most important metadata field.</strong> It determines:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>How Splunk breaks raw data into events (line breaking)</li>
+              <li>How timestamps are extracted</li>
+              <li>What fields are automatically extracted</li>
+              <li>Which props.conf stanzas apply</li>
+            </ul>
+            <p>Get sourcetype wrong → parsing fails → your data is garbage.</p>
+          </div>
+        </div>
+
+        <!-- ==================== INPUTS.CONF ==================== -->
+        <h3>inputs.conf — Data Collection Configuration</h3>
+
+        <p><code>inputs.conf</code> defines <strong>what data Splunk collects and from where</strong>. This is the equivalent of DCR dataSources.</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">inputs.conf — File Monitoring</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Monitor a specific file
+[monitor:///var/log/auth.log]
+sourcetype = linux_secure
+index = security
+disabled = false
+
+# Monitor all files in a directory
+[monitor:///var/log/myapp/*.log]
+sourcetype = myapp
+index = application
+whitelist = \.log$
+
+# Equivalent to DCR logFiles dataSource:
+# {
+#   "logFiles": [{
+#     "name": "myapp-logs",
+#     "filePatterns": ["/var/log/myapp/*.log"],
+#     "streams": ["Custom-MyApp_CL"]
+#   }]
+# }</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">inputs.conf — Syslog (UDP/TCP)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Receive syslog on UDP 514
+[udp://514]
+sourcetype = syslog
+index = network
+connection_host = ip
+
+# Receive syslog on TCP 514 (more reliable)
+[tcp://514]
+sourcetype = syslog
+index = network
+connection_host = dns
+
+# Palo Alto on dedicated port
+[udp://5514]
+sourcetype = pan:traffic
+index = network
+
+# Equivalent to DCR syslog dataSource:
+# {
+#   "syslog": [{
+#     "name": "firewall-logs",
+#     "facilityNames": ["local4"],
+#     "streams": ["Microsoft-CEF"]
+#   }]
+# }</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">inputs.conf — Windows Event Log</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Collect Windows Security Event Log
+[WinEventLog://Security]
+index = wineventlog
+sourcetype = WinEventLog:Security
+disabled = false
+# Whitelist specific Event IDs (like DCR xPathQueries)
+whitelist = 4624,4625,4648,4672,4720,4726,4728,4732
+
+# Collect Windows System Event Log
+[WinEventLog://System]
+index = wineventlog
+sourcetype = WinEventLog:System
+disabled = false
+
+# Equivalent to DCR windowsEventLogs:
+# {
+#   "windowsEventLogs": [{
+#     "name": "security-events",
+#     "xPathQueries": ["Security!*[System[(EventID=4624 or EventID=4625)]]"],
+#     "streams": ["Microsoft-SecurityEvent"]
+#   }]
+# }</code></pre>
+        </div>
+
+        <!-- ==================== PROPS.CONF ==================== -->
+        <h3>props.conf — Parsing Configuration (The Brain)</h3>
+
+        <p><code>props.conf</code> is the <strong>most important configuration file</strong>. It controls how Splunk parses raw data into events. This is where you define line breaking, timestamp extraction, and field extractions.</p>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>props.conf Stanza Structure</div>
+          <div class="callout-content">
+            <p>Stanzas in props.conf can be based on:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><code>[sourcetype]</code> — Most common, applies to all data of that sourcetype</li>
+              <li><code>[host::hostname]</code> — Applies to data from specific host</li>
+              <li><code>[source::...path...]</code> — Applies to data from specific source path</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">props.conf — Line Breaking</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Line breaking controls how raw data is split into events
+# CRITICAL: Get this wrong and your events are malformed
+
+[myapp_json]
+# JSON logs: each line is one event
+LINE_BREAKER = ([\r\n]+)
+SHOULD_LINEMERGE = false
+TRUNCATE = 50000
+
+[myapp_multiline]
+# Multiline logs: events start with timestamp pattern
+LINE_BREAKER = ([\r\n]+)(?=\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})
+SHOULD_LINEMERGE = false
+
+[myapp_stacktrace]
+# Merge continuation lines (stack traces)
+SHOULD_LINEMERGE = true
+BREAK_ONLY_BEFORE = ^\d{4}-\d{2}-\d{2}
+MAX_EVENTS = 256
+
+# ═══════════════════════════════════════════════════════════════════════════
+# KEY LINE BREAKING SETTINGS:
+# ═══════════════════════════════════════════════════════════════════════════
+# LINE_BREAKER       - Regex that matches the break between events
+# SHOULD_LINEMERGE   - true = merge lines into events, false = each line is event
+# BREAK_ONLY_BEFORE  - Only break when this pattern matches start of line
+# TRUNCATE           - Max characters per event (default 10000)
+# ═══════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">props.conf — Timestamp Extraction</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Timestamp extraction tells Splunk how to find and parse _time
+
+[myapp]
+# Automatic timestamp recognition (usually works)
+DATETIME_CONFIG = 
+TIME_FORMAT = 
+TIME_PREFIX = 
+
+[custom_timestamp]
+# Custom timestamp format
+TIME_PREFIX = ^
+TIME_FORMAT = %Y-%m-%d %H:%M:%S.%3N
+MAX_TIMESTAMP_LOOKAHEAD = 30
+
+[iso8601_logs]
+# ISO 8601 format: 2024-01-15T10:30:45.123Z
+TIME_FORMAT = %Y-%m-%dT%H:%M:%S.%3NZ
+
+[epoch_logs]
+# Unix epoch timestamp
+TIME_FORMAT = %s
+TIME_PREFIX = "timestamp":
+
+[syslog_timestamp]
+# Standard syslog format: Jan 15 10:30:45
+TIME_FORMAT = %b %d %H:%M:%S
+TZ = UTC
+
+# ═══════════════════════════════════════════════════════════════════════════
+# KEY TIMESTAMP SETTINGS:
+# ═══════════════════════════════════════════════════════════════════════════
+# TIME_PREFIX        - Characters before timestamp (regex)
+# TIME_FORMAT        - strptime format string
+# MAX_TIMESTAMP_LOOKAHEAD - How far to look for timestamp (chars)
+# TZ                 - Timezone for events without TZ info
+# ═══════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">props.conf — Field Extraction</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># Field extraction (search-time) - extracts fields when you search
+
+[pan:traffic]
+# Regex-based field extraction
+EXTRACT-src_ip = src=(?&lt;src_ip&gt;\d+\.\d+\.\d+\.\d+)
+EXTRACT-dst_ip = dst=(?&lt;dst_ip&gt;\d+\.\d+\.\d+\.\d+)
+EXTRACT-action = action=(?&lt;action&gt;\w+)
+EXTRACT-bytes = bytes=(?&lt;bytes&gt;\d+)
+
+[linux_secure]
+# Extract user from auth.log
+EXTRACT-user = user[=:\s]+(?&lt;user&gt;[^\s]+)
+EXTRACT-src_ip = from\s+(?&lt;src_ip&gt;\d+\.\d+\.\d+\.\d+)
+
+[json_logs]
+# Automatic JSON field extraction
+KV_MODE = json
+
+[custom_kv]
+# Key-value extraction
+KV_MODE = auto
+# Custom field delimiter
+FIELD_DELIMITER = ,
+# Custom key-value delimiter  
+FIELD_QUOTE = "
+
+# ═══════════════════════════════════════════════════════════════════════════
+# EXTRACTION METHODS:
+# ═══════════════════════════════════════════════════════════════════════════
+# EXTRACT-<name>     - Regex extraction, names the field
+# KV_MODE = json     - Automatic JSON parsing
+# KV_MODE = auto     - Automatic key=value parsing
+# REPORT-<name>      - References transforms.conf for complex extraction
+# ═══════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <!-- ==================== TRANSFORMS.CONF ==================== -->
+        <h3>transforms.conf — Advanced Transformations</h3>
+
+        <p><code>transforms.conf</code> works with props.conf for complex transformations: routing, filtering, field extraction with lookups, and data masking.</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">transforms.conf + props.conf — Event Routing</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# SCENARIO: Route Palo Alto logs to different indexes based on type
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ----- transforms.conf -----
+[pan_traffic_route]
+REGEX = TRAFFIC
+DEST_KEY = _MetaData:Index
+FORMAT = network_traffic
+
+[pan_threat_route]
+REGEX = THREAT
+DEST_KEY = _MetaData:Index
+FORMAT = network_threat
+
+[pan_system_route]
+REGEX = SYSTEM
+DEST_KEY = _MetaData:Index
+FORMAT = network_system
+
+# ----- props.conf -----
+[pan:log]
+TRANSFORMS-route = pan_traffic_route, pan_threat_route, pan_system_route
+
+# ═══════════════════════════════════════════════════════════════════════════
+# RESULT:
+# • TRAFFIC logs → network_traffic index
+# • THREAT logs → network_threat index  
+# • SYSTEM logs → network_system index
+# ═══════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">transforms.conf — Event Filtering (Drop)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# SCENARIO: Drop noisy health check logs to save license
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ----- transforms.conf -----
+[drop_healthchecks]
+REGEX = healthcheck|heartbeat|keepalive
+DEST_KEY = queue
+FORMAT = nullQueue
+
+[drop_debug_logs]
+REGEX = DEBUG|TRACE
+DEST_KEY = queue
+FORMAT = nullQueue
+
+# ----- props.conf -----
+[myapp]
+TRANSFORMS-filter = drop_healthchecks, drop_debug_logs
+
+# ═══════════════════════════════════════════════════════════════════════════
+# RESULT: Events matching regex are sent to nullQueue (dropped)
+# This is how you filter high-volume noise BEFORE indexing
+# ═══════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">transforms.conf — Data Masking (PII)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# SCENARIO: Mask credit card numbers and SSNs before indexing
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ----- transforms.conf -----
+[mask_credit_card]
+REGEX = (\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?)\d{4}
+FORMAT = $1XXXX
+DEST_KEY = _raw
+
+[mask_ssn]
+REGEX = (\d{3})[-\s]?(\d{2})[-\s]?\d{4}
+FORMAT = $1-$2-XXXX
+DEST_KEY = _raw
+
+# ----- props.conf -----
+[payment_logs]
+TRANSFORMS-mask = mask_credit_card, mask_ssn
+
+# ═══════════════════════════════════════════════════════════════════════════
+# RESULT:
+# • 4111-2222-3333-4444 → 4111-2222-3333-XXXX
+# • 123-45-6789 → 123-45-XXXX
+# Masking happens BEFORE indexing — original data never stored
+# ═══════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <!-- ==================== INDEX-TIME VS SEARCH-TIME ==================== -->
+        <h3>Index-Time vs Search-Time Extraction (Critical Concept)</h3>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>This Is a Common Interview Question</div>
+          <div class="callout-content">
+            <p><strong>Q: "What's the difference between index-time and search-time field extraction?"</strong></p>
+            <p>This is fundamental to Splunk architecture and licensing optimization.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Aspect</th><th>Index-Time Extraction</th><th>Search-Time Extraction</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>When it happens</strong></td>
+                <td>During indexing (data ingestion)</td>
+                <td>During search (query execution)</td>
+              </tr>
+              <tr>
+                <td><strong>Storage impact</strong></td>
+                <td>Increases index size (fields stored)</td>
+                <td>No storage impact</td>
+              </tr>
+              <tr>
+                <td><strong>Search speed</strong></td>
+                <td>Faster — fields are pre-extracted</td>
+                <td>Slower — extraction on every search</td>
+              </tr>
+              <tr>
+                <td><strong>Flexibility</strong></td>
+                <td>Fixed — can't change after indexing</td>
+                <td>Flexible — can modify extractions anytime</td>
+              </tr>
+              <tr>
+                <td><strong>Use case</strong></td>
+                <td>High-volume fields you search constantly</td>
+                <td>Most fields — default approach</td>
+              </tr>
+              <tr>
+                <td><strong>Configuration</strong></td>
+                <td><code>INDEXED_EXTRACTIONS</code> in props.conf</td>
+                <td><code>EXTRACT-</code> in props.conf</td>
+              </tr>
+              <tr>
+                <td><strong>Best practice</strong></td>
+                <td>Use sparingly — only for critical fields</td>
+                <td>Default — use for most extractions</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Index-Time vs Search-Time Example</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# SEARCH-TIME EXTRACTION (DEFAULT - USE THIS)
+# ═══════════════════════════════════════════════════════════════════════════
+
+# props.conf
+[pan:traffic]
+# Extractions happen when you search — flexible, no storage overhead
+EXTRACT-src_ip = src=(?&lt;src_ip&gt;\d+\.\d+\.\d+\.\d+)
+EXTRACT-dst_ip = dst=(?&lt;dst_ip&gt;\d+\.\d+\.\d+\.\d+)
+EXTRACT-action = action=(?&lt;action&gt;\w+)
+
+# ═══════════════════════════════════════════════════════════════════════════
+# INDEX-TIME EXTRACTION (USE SPARINGLY)
+# ═══════════════════════════════════════════════════════════════════════════
+
+# props.conf — only for fields you ALWAYS search on
+[pan:traffic]
+# This field is stored in the index — faster search but uses storage
+INDEXED_EXTRACTIONS = json
+
+# For CSV data with header
+[csv_data]
+INDEXED_EXTRACTIONS = csv
+FIELD_NAMES = timestamp, src_ip, dst_ip, action, bytes
+
+# ═══════════════════════════════════════════════════════════════════════════
+# INTERVIEW ANSWER:
+# "Search-time extraction is the default and preferred approach because 
+# it's flexible — you can modify extractions without re-indexing data. 
+# Index-time extraction is faster for searching but increases storage 
+# and can't be changed after data is indexed. I only use index-time 
+# for high-volume, critical fields that are always searched."
+# ═══════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <!-- ==================== CIM (COMMON INFORMATION MODEL) ==================== -->
+        <h3>CIM — Common Information Model (Normalization)</h3>
+
+        <p>CIM is Splunk's <strong>normalization framework</strong>. It defines standard field names and data models that allow searches to work across different data sources. This is critical for Splunk Enterprise Security.</p>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>CIM vs Sentinel Normalization</div>
+          <div class="callout-content">
+            <p><strong>Sentinel:</strong> Uses ASIM (Advanced Security Information Model) — normalized tables like ASimDnsActivityLogs, ASimNetworkSessionLogs</p>
+            <p><strong>Splunk:</strong> Uses CIM (Common Information Model) — data models like Network_Traffic, Authentication, Web</p>
+            <p>Same concept: Normalize diverse sources to common schema for cross-source detection.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>CIM Data Model</th><th>Use Case</th><th>Key Fields</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Network_Traffic</strong></td>
+                <td>Firewall, router, network flow</td>
+                <td>src, dest, src_port, dest_port, action, bytes_in, bytes_out</td>
+              </tr>
+              <tr>
+                <td><strong>Authentication</strong></td>
+                <td>Login events across all systems</td>
+                <td>user, src, dest, action (success/failure), app</td>
+              </tr>
+              <tr>
+                <td><strong>Web</strong></td>
+                <td>Web proxy, web server logs</td>
+                <td>url, http_method, status, bytes, user_agent, src</td>
+              </tr>
+              <tr>
+                <td><strong>Endpoint</strong></td>
+                <td>EDR, endpoint activity</td>
+                <td>dest, user, process_name, process_path, action</td>
+              </tr>
+              <tr>
+                <td><strong>Malware</strong></td>
+                <td>AV, EDR malware detections</td>
+                <td>signature, file_name, file_hash, action, dest</td>
+              </tr>
+              <tr>
+                <td><strong>Change</strong></td>
+                <td>Configuration changes</td>
+                <td>object, object_category, action, user, result</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">CIM Field Aliasing — props.conf</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# SCENARIO: Normalize Palo Alto logs to CIM Network_Traffic model
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ----- props.conf -----
+[pan:traffic]
+# Palo Alto uses: src, dst, sport, dport
+# CIM requires: src, dest, src_port, dest_port
+
+# Field aliases map vendor fields to CIM fields
+FIELDALIAS-dest = dst AS dest
+FIELDALIAS-src_port = sport AS src_port
+FIELDALIAS-dest_port = dport AS dest_port
+FIELDALIAS-bytes_in = bytes_received AS bytes_in
+FIELDALIAS-bytes_out = bytes_sent AS bytes_out
+
+# Calculated field for CIM compliance
+EVAL-action = case(
+    action=="allow", "allowed",
+    action=="deny", "blocked",
+    action=="drop", "blocked",
+    1==1, action
+)
+
+# ═══════════════════════════════════════════════════════════════════════════
+# RESULT: 
+# • Palo Alto logs now match CIM Network_Traffic model
+# • ES correlation searches work across all network sources
+# • Single search: index=network | datamodel Network_Traffic search
+# ═══════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">CIM Authentication Model — Example</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# Normalize Windows, Linux, and Okta auth to CIM Authentication
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ----- Windows Security Events -----
+[WinEventLog:Security]
+FIELDALIAS-user = Account_Name AS user
+FIELDALIAS-src = Workstation_Name AS src
+FIELDALIAS-dest = ComputerName AS dest
+EVAL-action = case(
+    EventCode==4624, "success",
+    EventCode==4625, "failure",
+    EventCode==4634, "success",
+    1==1, "unknown"
+)
+EVAL-app = "Windows"
+
+# ----- Linux auth.log -----
+[linux_secure]
+EXTRACT-user = user\s+(?&lt;user&gt;\S+)
+EXTRACT-src = from\s+(?&lt;src&gt;\d+\.\d+\.\d+\.\d+)
+EVAL-dest = host
+EVAL-action = if(match(_raw, "Accepted|session opened"), "success", "failure")
+EVAL-app = "Linux"
+
+# ----- Okta -----
+[okta:log]
+FIELDALIAS-user = actor.alternateId AS user
+FIELDALIAS-src = client.ipAddress AS src
+EVAL-dest = "Okta"
+EVAL-action = case(
+    outcome.result=="SUCCESS", "success",
+    outcome.result=="FAILURE", "failure",
+    1==1, "unknown"
+)
+EVAL-app = "Okta"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# NOW YOU CAN SEARCH:
+# | datamodel Authentication search | stats count by user, src, action
+# 
+# This single search covers Windows, Linux, AND Okta auth events!
+# ═══════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <!-- ==================== HTTP EVENT COLLECTOR (HEC) ==================== -->
+        <h3>HTTP Event Collector (HEC)</h3>
+
+        <p>HEC is Splunk's API for sending data directly over HTTP/HTTPS. Used for cloud sources, custom applications, and serverless functions.</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">HEC — Sending Events via API</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# HEC ENDPOINT FORMAT
+# ═══════════════════════════════════════════════════════════════════════════
+# URL: https://splunk-server:8088/services/collector/event
+# Headers: 
+#   Authorization: Splunk &lt;HEC_TOKEN&gt;
+#   Content-Type: application/json
+
+# ----- Single Event -----
+curl -k https://splunk.revflow.com:8088/services/collector/event \
+  -H "Authorization: Splunk abc123-hec-token" \
+  -d '{"event": "User login failed", "source": "myapp", "sourcetype": "myapp:auth"}'
+
+# ----- Event with Fields -----
+curl -k https://splunk.revflow.com:8088/services/collector/event \
+  -H "Authorization: Splunk abc123-hec-token" \
+  -d '{
+    "event": {
+      "message": "User login failed",
+      "user": "jsmith",
+      "src_ip": "10.1.1.100",
+      "action": "failure"
+    },
+    "source": "myapp",
+    "sourcetype": "myapp:auth",
+    "index": "application",
+    "time": 1705312245
+  }'
+
+# ----- Batch Events (Multiple) -----
+curl -k https://splunk.revflow.com:8088/services/collector/event \
+  -H "Authorization: Splunk abc123-hec-token" \
+  -d '{"event": "Event 1", "sourcetype": "myapp"}
+      {"event": "Event 2", "sourcetype": "myapp"}
+      {"event": "Event 3", "sourcetype": "myapp"}'
+
+# ═══════════════════════════════════════════════════════════════════════════
+# HEC USE CASES:
+# • AWS Lambda/CloudWatch → Splunk
+# • Azure Functions → Splunk
+# • Custom application logging
+# • CI/CD pipeline events
+# • Webhook receivers
+# ═══════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <!-- ==================== FORWARDER COMPARISON ==================== -->
+        <h3>Universal Forwarder vs Heavy Forwarder (Decision Guide)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Aspect</th><th>Universal Forwarder (UF)</th><th>Heavy Forwarder (HF)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Resource usage</strong></td>
+                <td>~512 MB RAM, minimal CPU</td>
+                <td>4-8 GB RAM, significant CPU</td>
+              </tr>
+              <tr>
+                <td><strong>Parsing</strong></td>
+                <td>No parsing — raw data forwarded</td>
+                <td>Full parsing — props.conf, transforms.conf</td>
+              </tr>
+              <tr>
+                <td><strong>Filtering</strong></td>
+                <td>Basic — whitelist/blacklist in inputs.conf</td>
+                <td>Advanced — regex, nullQueue routing</td>
+              </tr>
+              <tr>
+                <td><strong>Routing</strong></td>
+                <td>Static — all data to configured indexers</td>
+                <td>Dynamic — route by content, sourcetype, index</td>
+              </tr>
+              <tr>
+                <td><strong>Use case</strong></td>
+                <td>Most endpoints — servers, workstations</td>
+                <td>Syslog aggregation, data transformation</td>
+              </tr>
+              <tr>
+                <td><strong>Install count</strong></td>
+                <td>Thousands (one per endpoint)</td>
+                <td>Few (centralized collectors)</td>
+              </tr>
+              <tr>
+                <td><strong>Management</strong></td>
+                <td>Deployment Server pushes configs</td>
+                <td>Manual or version control</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">When to Use Heavy Forwarder</span></div>
+          <pre><code>USE HEAVY FORWARDER WHEN:
+═══════════════════════════════════════════════════════════════════════════════
+
+1. SYSLOG AGGREGATION
+   • Network devices send syslog to HF
+   • HF parses, routes to correct index
+   • Example: All Palo Alto, Cisco, F5 logs → one HF
+
+2. DATA TRANSFORMATION
+   • Need to mask PII before indexing
+   • Need to filter high-volume noise
+   • Need to route based on content
+
+3. PROTOCOL CONVERSION  
+   • Receive syslog UDP → forward to Splunk Cloud (HTTPS)
+   • On-prem sources → cloud Splunk
+
+4. COMPLEX PARSING
+   • Multiline logs that need special handling
+   • Custom sourcetypes with complex extraction
+
+USE UNIVERSAL FORWARDER FOR EVERYTHING ELSE:
+• Windows servers
+• Linux servers  
+• Workstations
+• Any endpoint where you just need to collect files/events
+
+═══════════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <!-- ==================== INDEXES.CONF ==================== -->
+        <h3>indexes.conf — Index Configuration</h3>
+
+        <p>Indexes are Splunk's data repositories — similar to Log Analytics Workspace tables in Sentinel.</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">indexes.conf — Index Definition</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code># ═══════════════════════════════════════════════════════════════════════════
+# INDEX CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════
+
+[security]
+homePath = $SPLUNK_DB/security/db
+coldPath = $SPLUNK_DB/security/colddb
+thawedPath = $SPLUNK_DB/security/thaweddb
+# Retention: 90 days hot/warm, then delete
+frozenTimePeriodInSecs = 7776000
+# Max size: 500 GB
+maxTotalDataSizeMB = 512000
+
+[network]
+homePath = $SPLUNK_DB/network/db
+coldPath = $SPLUNK_DB/network/colddb
+thawedPath = $SPLUNK_DB/network/thaweddb
+# Retention: 30 days (high volume, less retention)
+frozenTimePeriodInSecs = 2592000
+maxTotalDataSizeMB = 1024000
+
+[application]
+homePath = $SPLUNK_DB/application/db
+coldPath = $SPLUNK_DB/application/colddb
+thawedPath = $SPLUNK_DB/application/thaweddb
+frozenTimePeriodInSecs = 7776000
+maxTotalDataSizeMB = 256000
+
+# ═══════════════════════════════════════════════════════════════════════════
+# INDEX STRATEGY BEST PRACTICES:
+# ═══════════════════════════════════════════════════════════════════════════
+# • Separate by retention requirement (security=90 days, network=30 days)
+# • Separate by access control (security team vs IT ops)
+# • Separate by search pattern (frequently searched together = same index)
+# • Don't over-segment (too many indexes = management overhead)
+# ═══════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <!-- ==================== COMPLETE COMPARISON ==================== -->
+        <h3>Complete Configuration Mapping: Splunk vs Sentinel</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Concept</th><th>Splunk</th><th>Sentinel (AMA/DCR)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>What to collect</strong></td>
+                <td>inputs.conf</td>
+                <td>DCR dataSources</td>
+              </tr>
+              <tr>
+                <td><strong>How to parse</strong></td>
+                <td>props.conf + transforms.conf</td>
+                <td>DCR transformKql (limited)</td>
+              </tr>
+              <tr>
+                <td><strong>Where to store</strong></td>
+                <td>indexes.conf (index)</td>
+                <td>DCR destinations (LAW table via stream)</td>
+              </tr>
+              <tr>
+                <td><strong>Data format identifier</strong></td>
+                <td>sourcetype</td>
+                <td>stream (Microsoft-Syslog, etc.)</td>
+              </tr>
+              <tr>
+                <td><strong>Normalization</strong></td>
+                <td>CIM (field aliases, eval)</td>
+                <td>ASIM (normalized tables)</td>
+              </tr>
+              <tr>
+                <td><strong>Filtering before storage</strong></td>
+                <td>transforms.conf (nullQueue)</td>
+                <td>DCR transformKql with filtering</td>
+              </tr>
+              <tr>
+                <td><strong>API ingestion</strong></td>
+                <td>HEC (HTTP Event Collector)</td>
+                <td>Data Collection Endpoint (DCE) API</td>
+              </tr>
+              <tr>
+                <td><strong>Agent</strong></td>
+                <td>Universal Forwarder</td>
+                <td>Azure Monitor Agent</td>
+              </tr>
+              <tr>
+                <td><strong>Intermediate processing</strong></td>
+                <td>Heavy Forwarder</td>
+                <td>Log Analytics Gateway (limited)</td>
+              </tr>
+              <tr>
+                <td><strong>Central config management</strong></td>
+                <td>Deployment Server</td>
+                <td>DCR associations (Azure Policy)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== INTERVIEW ANSWERS ==================== -->
+        <h3>Interview-Ready Answers</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "Walk me through the Splunk data pipeline"</span></div>
+          <pre><code>"Data flows through four phases:
+
+1. INPUT PHASE
+   The forwarder reads data from files, syslog, WMI, or APIs based on 
+   inputs.conf. It assigns source, sourcetype, host, and index metadata.
+
+2. PARSING PHASE  
+   Either the Heavy Forwarder or Indexer applies props.conf and 
+   transforms.conf. This handles line breaking — splitting raw data into 
+   events — timestamp extraction, character encoding, and transformations 
+   like routing or filtering.
+
+3. INDEXING PHASE
+   The indexer segments events for searching, applies any index-time 
+   field extractions, compresses the data, and writes it to the 
+   designated index.
+
+4. SEARCH PHASE
+   When users search, search-time field extractions from props.conf 
+   are applied. Lookups enrich the data. Results are returned.
+
+The key insight is that sourcetype drives parsing — it determines 
+which props.conf stanzas apply. Get sourcetype wrong, and your 
+data is unparseable."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "Index-time vs search-time extraction — when do you use each?"</span></div>
+          <pre><code>"Search-time extraction is the default and should be used for most fields. 
+It's flexible — I can modify extractions without re-indexing historical data — 
+and it doesn't increase storage.
+
+Index-time extraction is faster for searching but has tradeoffs: it 
+increases index size, can't be changed after indexing, and requires 
+re-ingesting data to modify. I only use it for high-volume fields that 
+are always searched — like src_ip in firewall logs.
+
+In practice, I use search-time for 95% of extractions. The performance 
+difference is minimal for most use cases, and flexibility is more 
+valuable than marginal speed improvement."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "What is CIM and why does it matter for Enterprise Security?"</span></div>
+          <pre><code>"CIM — Common Information Model — is Splunk's normalization framework. 
+It defines standard field names and data models like Network_Traffic, 
+Authentication, and Endpoint.
+
+It matters because Enterprise Security correlation searches are written 
+against CIM data models, not raw sourcetypes. If I have firewall logs 
+from Palo Alto, Cisco, and Fortinet, they all use different field names. 
+CIM field aliases normalize them to common fields like src, dest, 
+src_port, dest_port.
+
+Without CIM normalization, I'd have to write separate detections for 
+each vendor's log format. With CIM, one detection covers all sources.
+
+Implementation is in props.conf using FIELDALIAS and EVAL commands to 
+map vendor fields to CIM fields. It's similar to ASIM in Sentinel — 
+both solve the same normalization problem."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "When would you use a Heavy Forwarder vs Universal Forwarder?"</span></div>
+          <pre><code>"Universal Forwarder is the default for endpoints — it's lightweight, 
+uses minimal resources, and just forwards raw data to indexers. I'd 
+deploy UF on every Windows server, Linux server, and workstation.
+
+Heavy Forwarder is for specialized collection scenarios:
+
+1. Syslog aggregation — network devices send syslog to HF, which parses 
+   and routes to correct indexes
+2. Data transformation — masking PII, filtering noise before it 
+   consumes license
+3. Protocol conversion — receiving syslog and forwarding to Splunk Cloud 
+   over HTTPS
+4. Complex parsing — multiline logs that need special handling
+
+The rule is: use UF everywhere possible, HF only when you need 
+intermediate processing. HF uses 4-8 GB RAM vs 512 MB for UF, so 
+deploying HF everywhere would be wasteful."</code></pre>
+        </div>
+
         <h2>Certifications & Learning Path</h2>
 
         <div class="table-wrapper">
