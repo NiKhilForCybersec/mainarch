@@ -3,15 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detection Engineering | SIEM Migration</title>
+  <title>Detection Engineering — 6-Step Migration Framework | SIEM Migration</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .disposition-retire { background: #166534; color: #dcfce7; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .disposition-replace { background: #1e40af; color: #dbeafe; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .disposition-rewrite { background: #92400e; color: #fef3c7; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .disposition-keep { background: #374151; color: #d1d5db; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .step-box { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+    .step-number { display: inline-block; background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 700; margin-right: 0.75rem; }
+    .step-title { font-size: 1.1rem; font-weight: 600; display: inline; }
+    .drop-criteria { background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 1rem 1.5rem; margin: 1rem 0; }
+    .migrate-criteria { background: rgba(34, 197, 94, 0.1); border-left: 4px solid #22c55e; padding: 1rem 1.5rem; margin: 1rem 0; }
+  </style>
 </head>
 <body>
   <div class="layout">
-        <aside class="sidebar">
+    <aside class="sidebar">
       <div class="sidebar-header">
         <div class="sidebar-logo">
           <div class="sidebar-logo-icon">RF</div>
@@ -93,6 +104,7 @@
           <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
           <a href="../resources/templates.html" class="nav-item">Templates</a>
           <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="../resources/alternative-architectures.html" class="nav-item">Alternative Architectures</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -119,10 +131,7 @@
         </div>
       </nav>
     </aside>
-    <button class="mobile-menu-toggle" aria-label="Toggle menu">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
-    </button>
-    <div class="sidebar-overlay"></div>
+
     <main class="main-content">
       <div class="content-wrapper">
         <nav class="breadcrumb">
@@ -134,404 +143,563 @@
         </nav>
 
         <div class="page-header">
-          <h1>Detection Engineering</h1>
+          <h1>Detection Engineering — 6-Step Migration Framework</h1>
           <div class="page-header-meta">
             <span class="page-badge siem">SIEM Track</span>
+            <span class="page-reading-time">Authoritative Methodology</span>
           </div>
-          <p class="intro-text">Enabling built-in detection capabilities and translating custom RSA NetWitness rules to Sentinel KQL. This section covers rule categorization, Microsoft content deployment, and translation patterns.</p>
+          <p class="intro-text">We migrate detections based on <strong>outcomes and coverage</strong>, not rule equivalence. If XDR reliably detects the same attack technique, the SIEM rule is retired. This page documents our authoritative 6-step decision framework for RSA NetWitness → Microsoft Sentinel migration.</p>
         </div>
 
-        <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Role Scope
-          </div>
+        <!-- ==================== CORE PRINCIPLE ==================== -->
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Core Principle</div>
           <div class="callout-content">
-            <p><strong>My Contribution (Security Engineer):</strong> Implemented and enabled built-in detection rules from the detection translation catalog — specifically those with direct native equivalents in Microsoft Sentinel and Microsoft Defender. Translated and aligned detection use cases around endpoint telemetry, ensuring proper correlation between MDE, identity, and network signals. Deployed Microsoft Content Hub solutions and configured XDR-aligned rules.</p>
-            <p><strong>Detection Engineering Team:</strong> Detailed custom KQL detection development, complex rule translation requiring significant logic rewrite, ongoing threshold tuning, false positive reduction, and continuous detection optimization.</p>
+            <p><strong>We do NOT translate rules 1:1.</strong></p>
+            <p>We evaluate whether the <em>attack technique</em> is detected — not whether the <em>rule logic</em> is preserved. If Microsoft Defender XDR reliably detects the technique, we retire the RSA rule. Period.</p>
           </div>
         </div>
 
-        <h2>Detection Anchors (XDR-First Strategy)</h2>
-        <p>Our detection strategy is built around <strong>layered correlation</strong> — XDR handles what it's good at, Sentinel handles the rest:</p>
+        <!-- ==================== SECTION 1: THE 6-STEP FRAMEWORK ==================== -->
+        <h2>1. The 6-Step Decision Framework</h2>
 
-        <div class="callout warning">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            XDR-First Detection Ownership
+        <p>This framework is applied to every RSA NetWitness detection rule. No exceptions.</p>
+
+        <!-- STEP 1 -->
+        <div class="step-box">
+          <div><span class="step-number">1</span><span class="step-title">Classify Every RSA Rule by Purpose</span></div>
+          <p style="margin-top: 1rem;">For each RSA detection, identify <strong>what it is trying to detect</strong> — not <em>how</em> it does it.</p>
+          
+          <div class="table-wrapper" style="margin-top: 1rem;">
+            <table>
+              <thead>
+                <tr><th>Category</th><th>Examples</th><th>Likely Disposition</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Endpoint Behavior</strong></td>
+                  <td>Process injection, ransomware, persistence, LOLBins</td>
+                  <td><span class="disposition-retire">RETIRE → XDR</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Identity Attack</strong></td>
+                  <td>Credential theft, lateral movement, Kerberoasting</td>
+                  <td><span class="disposition-retire">RETIRE → XDR</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Email Threat</strong></td>
+                  <td>Phishing, BEC, malware attachment</td>
+                  <td><span class="disposition-retire">RETIRE → XDR</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Network IOC</strong></td>
+                  <td>C2 traffic, DNS tunneling, beaconing</td>
+                  <td><span class="disposition-rewrite">REWRITE → Sentinel</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Audit / Governance</strong></td>
+                  <td>Admin changes, privilege escalation, policy violations</td>
+                  <td><span class="disposition-rewrite">REWRITE → Sentinel</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Business Logic</strong></td>
+                  <td>VIP access, terminated employee, data export</td>
+                  <td><span class="disposition-rewrite">REWRITE → Sentinel</span></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="callout-content">
-            <p><strong>XDR (M365 Defender) handles:</strong> Endpoint, identity, email, cloud apps — automatic correlation, no Sentinel rules needed.</p>
-            <p><strong>Sentinel handles:</strong> Network, Azure control plane, DLP, higher-order correlation (XDR + non-Microsoft context).</p>
-            <p><strong>Key insight:</strong> We don't ingest all raw Device* tables into Sentinel. XDR produces high-fidelity incidents that Sentinel consumes. Selective raw table ingestion only for specific cross-domain correlation needs.</p>
+          
+          <p style="margin-top: 1rem;"><strong>This classification is critical.</strong> It determines the likely disposition before you even look at rule logic.</p>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step-box">
+          <div><span class="step-number">2</span><span class="step-title">Map Each Rule to MITRE ATT&CK</span></div>
+          <p style="margin-top: 1rem;">Every rule must map to a MITRE ATT&CK technique. If it cannot be mapped, that's already a red flag.</p>
+          
+          <div class="code-block" style="margin-top: 1rem;">
+            <div class="code-header"><span class="code-lang">Example MITRE Mapping</span></div>
+            <pre><code>RSA RULE: "Rapid file rename activity"
+├── Tactic: Impact
+├── Technique: T1486 – Data Encrypted for Impact
+├── Sub-technique: N/A
+└── Detection Goal: Ransomware encryption behavior
+
+RSA RULE: "LSASS memory access"
+├── Tactic: Credential Access
+├── Technique: T1003.001 – LSASS Memory
+├── Sub-technique: OS Credential Dumping
+└── Detection Goal: Mimikatz / credential theft
+
+RSA RULE: "PowerShell encoded command"
+├── Tactic: Execution
+├── Technique: T1059.001 – PowerShell
+├── Sub-technique: Command and Scripting Interpreter
+└── Detection Goal: Obfuscated script execution</code></pre>
+          </div>
+          
+          <div class="callout warning" style="margin-top: 1rem;">
+            <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>If No MITRE Mapping</div>
+            <div class="callout-content">
+              <p>Rules that cannot map to MITRE are often low-value, overly specific, or operational noise. These are candidates for immediate retirement without replacement.</p>
+            </div>
           </div>
         </div>
 
-        <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            XDR Detection Model ≠ SIEM Detection Model
+        <!-- STEP 3 -->
+        <div class="step-box">
+          <div><span class="step-number">3</span><span class="step-title">Check XDR Native Coverage (Not Rule Logic)</span></div>
+          <p style="margin-top: 1rem;"><strong>You do NOT look for equivalent rules.</strong> You check whether XDR produces alerts for that technique.</p>
+          
+          <h4 style="margin-top: 1.5rem;">How to Validate XDR Coverage</h4>
+          <div class="table-wrapper" style="margin-top: 0.5rem;">
+            <table>
+              <thead>
+                <tr><th>Method</th><th>Description</th><th>When to Use</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Microsoft Documentation</strong></td>
+                  <td>Review Defender coverage for MITRE techniques</td>
+                  <td>Initial assessment</td>
+                </tr>
+                <tr>
+                  <td><strong>Historical Incidents</strong></td>
+                  <td>Check if XDR has fired alerts for this technique before</td>
+                  <td>Validation of coverage claims</td>
+                </tr>
+                <tr>
+                  <td><strong>Attack Simulation</strong></td>
+                  <td>Run Atomic Red Team / safe simulations</td>
+                  <td>High-risk techniques, audit requirements</td>
+                </tr>
+                <tr>
+                  <td><strong>Red Team Tests</strong></td>
+                  <td>Real adversary simulation</td>
+                  <td>Critical techniques, compliance</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="callout-content">
-            <p><strong>XDR does NOT rely on user-authored detection rules.</strong> XDR detections are:</p>
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li><strong>Microsoft-managed</strong> — you cannot see the exact logic</li>
-              <li><strong>Behavior + ML-based</strong> — continuously updated</li>
-              <li><strong>Automatic correlation</strong> — no correlation rules to configure</li>
-            </ul>
-            <p style="margin-top: 0.5rem;"><strong>Sentinel detection rules</strong> are user-authored KQL analytics rules for domains XDR doesn't cover (network, Azure, DLP, higher-order). This is why we have ~270 Sentinel rules, not 500+ — XDR handles the rest without rules.</p>
+          
+          <h4 style="margin-top: 1.5rem;">Outcome-Based Check (Not Logic-Based)</h4>
+          <div class="code-block" style="margin-top: 0.5rem;">
+            <div class="code-header"><span class="code-lang">Validation Questions</span></div>
+            <pre><code>OUTCOME-BASED VALIDATION CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+For each MITRE technique the RSA rule covers, answer:
+
+1. Does XDR alert fire when this technique executes?
+   □ Yes → Candidate for RETIRE
+   □ No  → Candidate for REWRITE
+
+2. Is the alert correlated into an incident?
+   □ Yes → High confidence in XDR coverage
+   □ No  → May need Sentinel correlation
+
+3. Is severity appropriate for SOC triage?
+   □ Yes → XDR coverage sufficient
+   □ No  → May need Sentinel enrichment
+
+4. Does XDR provide sufficient context?
+   □ Yes → Retire RSA rule
+   □ No  → Consider Sentinel enrichment rule
+
+═══════════════════════════════════════════════════════════════════════════════
+KEY: You are validating OUTCOMES, not comparing RULE LOGIC.
+═══════════════════════════════════════════════════════════════════════════════</code></pre>
           </div>
         </div>
+
+        <!-- STEP 4 -->
+        <div class="step-box">
+          <div><span class="step-number">4</span><span class="step-title">Assign a Disposition to Each RSA Rule</span></div>
+          <p style="margin-top: 1rem;">Each rule gets one of four outcomes:</p>
+          
+          <div class="table-wrapper" style="margin-top: 1rem;">
+            <table>
+              <thead>
+                <tr><th>Disposition</th><th>Meaning</th><th>Action</th></tr>
+              </thead>
+              <tbody>
+                <tr style="background: rgba(34, 197, 94, 0.1);">
+                  <td><span class="disposition-retire">RETIRE — XDR Native</span></td>
+                  <td>XDR reliably detects this technique</td>
+                  <td>Do not migrate. Document XDR coverage.</td>
+                </tr>
+                <tr style="background: rgba(59, 130, 246, 0.1);">
+                  <td><span class="disposition-replace">REPLACE — Sentinel</span></td>
+                  <td>Needs non-Defender telemetry</td>
+                  <td>Create Sentinel rule using network/SaaS/cloud logs.</td>
+                </tr>
+                <tr style="background: rgba(234, 179, 8, 0.1);">
+                  <td><span class="disposition-rewrite">REWRITE — Sentinel</span></td>
+                  <td>Business / deterministic logic required</td>
+                  <td>Create custom Sentinel analytics rule.</td>
+                </tr>
+                <tr style="background: rgba(107, 114, 128, 0.1);">
+                  <td><span class="disposition-keep">KEEP TEMPORARILY</span></td>
+                  <td>Validation phase only</td>
+                  <td>Run parallel until XDR coverage confirmed.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="step-box">
+          <div><span class="step-number">5</span><span class="step-title">Apply Clear Drop Criteria (This Is Key)</span></div>
+          <p style="margin-top: 1rem;">You <strong>DROP / DO NOT TRANSLATE</strong> an RSA rule if <strong>any</strong> of the following are true:</p>
+          
+          <div class="drop-criteria">
+            <h4 style="margin-top: 0; color: #ef4444;">🚫 DROP CRITERION 1: Endpoint-Centric Behavior</h4>
+            <p>Examples: Ransomware, LOLBins, credential dumping, persistence mechanisms, process injection, suspicious child processes</p>
+            <p><strong>Rationale:</strong> MDE/XDR has kernel-level visibility, AMSI integration, and behavioral ML. SIEM rules using DeviceProcessEvents cannot match this fidelity.</p>
+          </div>
+          
+          <div class="drop-criteria">
+            <h4 style="margin-top: 0; color: #ef4444;">🚫 DROP CRITERION 2: Signature / IOC-Based Logic</h4>
+            <p>Examples: Static file hashes, known bad domains, simple IP matches, specific malware signatures</p>
+            <p><strong>Rationale:</strong> XDR + Threat Intelligence handles this better. Microsoft TI is continuously updated; static SIEM rules go stale.</p>
+          </div>
+          
+          <div class="drop-criteria">
+            <h4 style="margin-top: 0; color: #ef4444;">🚫 DROP CRITERION 3: Low-Fidelity / Noisy Rules</h4>
+            <p>Examples: High false positive rules, threshold-based heuristics, rules SOC routinely ignored</p>
+            <p><strong>Rationale:</strong> Migration is a chance to clean house. Don't migrate noise.</p>
+          </div>
+          
+          <div class="drop-criteria">
+            <h4 style="margin-top: 0; color: #ef4444;">🚫 DROP CRITERION 4: Redundant Correlation</h4>
+            <p>Examples: Endpoint + endpoint correlation, identity + identity correlation</p>
+            <p><strong>Rationale:</strong> XDR already correlates within its domains natively. Don't rebuild what XDR does automatically.</p>
+          </div>
+        </div>
+
+        <!-- STEP 6 -->
+        <div class="step-box">
+          <div><span class="step-number">6</span><span class="step-title">Document the Decision (Non-Negotiable)</span></div>
+          <p style="margin-top: 1rem;"><strong>Every dropped rule is documented</strong> with RSA rule name, MITRE mapping, disposition, and justification.</p>
+          
+          <div class="table-wrapper" style="margin-top: 1rem;">
+            <table>
+              <thead>
+                <tr><th>RSA Rule</th><th>MITRE</th><th>Disposition</th><th>Justification</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Rapid file rename activity</td>
+                  <td>T1486</td>
+                  <td><span class="disposition-retire">RETIRE</span></td>
+                  <td>XDR ransomware detection covers this technique</td>
+                </tr>
+                <tr>
+                  <td>Mimikatz string detection</td>
+                  <td>T1003.001</td>
+                  <td><span class="disposition-retire">RETIRE</span></td>
+                  <td>MDE credential theft detection + ASR LSASS rule</td>
+                </tr>
+                <tr>
+                  <td>NTLM relay abuse</td>
+                  <td>T1550.002</td>
+                  <td><span class="disposition-retire">RETIRE</span></td>
+                  <td>MDI + XDR correlation handles this natively</td>
+                </tr>
+                <tr>
+                  <td>Palo Alto C2 beaconing</td>
+                  <td>T1071.001</td>
+                  <td><span class="disposition-rewrite">REWRITE</span></td>
+                  <td>XDR has no firewall visibility — Sentinel required</td>
+                </tr>
+                <tr>
+                  <td>Terminated employee data export</td>
+                  <td>T1567</td>
+                  <td><span class="disposition-rewrite">REWRITE</span></td>
+                  <td>Business logic requiring Workday + Salesforce correlation</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="callout success" style="margin-top: 1rem;">
+            <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Why Documentation Matters</div>
+            <div class="callout-content">
+              <p>This documentation protects you during:</p>
+              <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                <li><strong>Audits</strong> — "Why don't you have a rule for X?" → "XDR covers T1003.001 natively."</li>
+                <li><strong>Handover</strong> — New team understands decisions</li>
+                <li><strong>Incident review</strong> — "Did we have coverage for this?" → Check the catalog</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 2: WHAT ALWAYS GETS MIGRATED ==================== -->
+        <h2>2. What Always Gets Migrated to Sentinel</h2>
+        
+        <p>In contrast to the drop criteria, these rule categories <strong>always</strong> get migrated because XDR has no visibility:</p>
+
+        <div class="migrate-criteria">
+          <h4 style="margin-top: 0; color: #22c55e;">✅ MIGRATE: Network Telemetry</h4>
+          <p>Firewalls (Palo Alto), proxy, DNS, VPN, WAF</p>
+          <p><strong>Why:</strong> XDR has no network visibility. All network-based detections belong in Sentinel.</p>
+        </div>
+
+        <div class="migrate-criteria">
+          <h4 style="margin-top: 0; color: #22c55e;">✅ MIGRATE: Cloud Platforms</h4>
+          <p>AWS CloudTrail, Azure Activity, GCP audit logs</p>
+          <p><strong>Why:</strong> XDR covers M365/Azure AD but not cloud control plane. Sentinel owns cloud infra detections.</p>
+        </div>
+
+        <div class="migrate-criteria">
+          <h4 style="margin-top: 0; color: #22c55e;">✅ MIGRATE: SaaS Platforms</h4>
+          <p>Salesforce, Workday, NetSuite, ServiceNow, GitHub</p>
+          <p><strong>Why:</strong> XDR only covers Microsoft cloud apps (via MDA). Non-Microsoft SaaS requires Sentinel.</p>
+        </div>
+
+        <div class="migrate-criteria">
+          <h4 style="margin-top: 0; color: #22c55e;">✅ MIGRATE: Business Logic</h4>
+          <p>VIP monitoring, terminated employee correlation, data export thresholds</p>
+          <p><strong>Why:</strong> These are organization-specific. Microsoft cannot build detections for your business rules.</p>
+        </div>
+
+        <div class="migrate-criteria">
+          <h4 style="margin-top: 0; color: #22c55e;">✅ MIGRATE: Compliance / Governance</h4>
+          <p>Privileged access monitoring, audit trail alerts, policy violations</p>
+          <p><strong>Why:</strong> Compliance requirements often require deterministic rules, not ML-based detection.</p>
+        </div>
+
+        <!-- ==================== SECTION 3: DETECTION DOMAIN OWNERSHIP ==================== -->
+        <h2>3. Detection Domain Ownership</h2>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Detection Domain</th><th>Owner</th><th>Signal Source</th><th>Sentinel Ingestion</th></tr>
+              <tr><th>Domain</th><th>Owner</th><th>Sentinel Rules</th><th>Why</th></tr>
             </thead>
             <tbody>
               <tr style="background: rgba(34, 197, 94, 0.1);">
-                <td><strong>Endpoint (MDE)</strong></td>
-                <td>XDR</td>
-                <td>Process, file, network, registry behaviors</td>
-                <td>SecurityIncident + SecurityAlert only (NOT raw Device* tables)</td>
+                <td><strong>Endpoint</strong></td>
+                <td>XDR (MDE)</td>
+                <td>0 (XDR native)</td>
+                <td>Kernel visibility, AMSI, behavioral ML</td>
               </tr>
               <tr style="background: rgba(34, 197, 94, 0.1);">
-                <td><strong>Identity (Entra ID)</strong></td>
-                <td>XDR + Sentinel</td>
-                <td>Sign-in anomalies, privilege changes</td>
-                <td>XDR incidents + SigninLogs for higher-order correlation</td>
+                <td><strong>Identity</strong></td>
+                <td>XDR (MDI + Entra)</td>
+                <td>0 (XDR native)</td>
+                <td>DC sensors, identity attack patterns</td>
               </tr>
               <tr style="background: rgba(34, 197, 94, 0.1);">
-                <td><strong>Email (MDO)</strong></td>
-                <td>XDR</td>
-                <td>Phishing, BEC, malicious attachments</td>
-                <td>SecurityIncident only (NOT EmailEvents)</td>
+                <td><strong>Email</strong></td>
+                <td>XDR (MDO)</td>
+                <td>0 (XDR native)</td>
+                <td>Email headers, detonation, ML</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td><strong>Cloud Apps (M365)</strong></td>
+                <td>XDR (MDA)</td>
+                <td>0 (XDR native)</td>
+                <td>OAuth, shadow IT, anomalies</td>
               </tr>
               <tr style="background: rgba(59, 130, 246, 0.1);">
-                <td><strong>Network (Firewall)</strong></td>
+                <td><strong>Network</strong></td>
                 <td>Sentinel</td>
-                <td>C2 beaconing, DNS tunneling, exfiltration</td>
-                <td>CommonSecurityLog (full ingestion)</td>
+                <td>58</td>
+                <td>C2, exfil, VPN, attacks</td>
               </tr>
               <tr style="background: rgba(59, 130, 246, 0.1);">
-                <td><strong>Cloud Control Plane</strong></td>
+                <td><strong>Cloud Infrastructure</strong></td>
                 <td>Sentinel</td>
-                <td>Privilege escalation, resource changes</td>
-                <td>AzureActivity, AzureDiagnostics (full ingestion)</td>
+                <td>68</td>
+                <td>Azure + AWS control plane</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td><strong>SaaS (Non-Microsoft)</strong></td>
+                <td>Sentinel</td>
+                <td>87</td>
+                <td>Salesforce, Workday, NetSuite, GitHub</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td><strong>Business Logic</strong></td>
+                <td>Sentinel</td>
+                <td>52</td>
+                <td>Insider threat, VIP, termination</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td><strong>Compliance</strong></td>
+                <td>Sentinel</td>
+                <td>45</td>
+                <td>SOC 2, GDPR, admin monitoring</td>
               </tr>
               <tr style="background: rgba(59, 130, 246, 0.1);">
                 <td><strong>DLP</strong></td>
                 <td>Sentinel</td>
-                <td>Policy violations, exfiltration attempts</td>
-                <td>PurviewDLPLogs (full ingestion)</td>
+                <td>18</td>
+                <td>Purview correlation</td>
+              </tr>
+              <tr style="background: rgba(168, 85, 247, 0.1);">
+                <td><strong>Higher-Order Correlation</strong></td>
+                <td>Sentinel</td>
+                <td>19</td>
+                <td>XDR + network + SaaS context</td>
               </tr>
             </tbody>
           </table>
+        </div>
+
+        <!-- ==================== SECTION 4: REVFLOW RESULTS ==================== -->
+        <h2>4. RevFlow Migration Results</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">RevFlow Detection Migration Summary</span></div>
+          <pre><code>REVFLOW RSA → SENTINEL DETECTION MIGRATION RESULTS
+═══════════════════════════════════════════════════════════════════════════════
+
+BUSINESS CONTEXT: B2B SaaS Revenue Intelligence | SOC 2 + ISO 27001 + GDPR
+
+STARTING POINT: 487 RSA NetWitness Rules
+
+RSA RULE DISPOSITION:
+────────────────────────────────────────────────────────────────────────────────
+RETIRE — XDR Native         │ 312 rules │ 64%  │ XDR handles these techniques
+MIGRATE — Sentinel          │ 117 rules │ 24%  │ Network, cloud, SaaS rules
+DROP — Low Value            │  58 rules │ 12%  │ Noisy, stale, or unmappable
+────────────────────────────────────────────────────────────────────────────────
+TOTAL RSA                   │ 487 rules │ 100%
+
+SENTINEL RULES (FINAL):
+────────────────────────────────────────────────────────────────────────────────
+Migrated from RSA           │ 117 rules │ Network, cloud infra
+NEW Rules (Coverage Gaps)   │ 230 rules │ SaaS, business logic, compliance
+────────────────────────────────────────────────────────────────────────────────
+TOTAL SENTINEL              │ 347 rules │ Appropriate for B2B SaaS + SOC 2
+
+BY CATEGORY:
+────────────────────────────────────────────────────────────────────────────────
+Endpoint Behavior           │ 187 RSA → RETIRE (XDR native)
+Identity Attacks            │  89 RSA → RETIRE (XDR native)
+Email Threats               │  36 RSA → RETIRE (XDR native)
+Network Security            │  52 RSA →  58 Sentinel (expanded)
+Cloud Infrastructure        │  34 RSA →  68 Sentinel (Azure + AWS)
+SaaS Applications           │  17 RSA →  87 Sentinel (critical gap filled)
+Business Logic / Insider    │  14 RSA →  52 Sentinel (RevFlow-specific)
+Compliance & Audit          │   0 RSA →  45 Sentinel (SOC 2/GDPR new)
+DLP Correlation             │   0 RSA →  18 Sentinel (new capability)
+Higher-Order Correlation    │   0 RSA →  19 Sentinel (XDR + context)
+Low Value / Noisy           │  58 RSA → DROP
+
+═══════════════════════════════════════════════════════════════════════════════
+TOTAL COVERAGE: 312 XDR techniques + 347 Sentinel rules = 659 detections
+═══════════════════════════════════════════════════════════════════════════════</code></pre>
         </div>
 
         <div class="callout success">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            EU Detection Approach
-          </div>
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Why 347 Sentinel Rules is Correct</div>
           <div class="callout-content">
-            <p><strong>No special EU-only detections needed.</strong> Same detection rules apply globally. Access to EU-related logs restricted via RBAC. Retention minimized where possible.</p>
+            <p><strong>RSA had 487 rules → Sentinel has 347 rules.</strong> This is NOT a reduction in coverage.</p>
+            <p>XDR handles 312 endpoint/identity/email techniques natively — those don't need Sentinel rules.</p>
+            <p>Sentinel gained 230 NEW rules that RSA never had: comprehensive SaaS coverage (Salesforce, Workday, NetSuite, GitHub), business logic correlation, SOC 2/GDPR compliance monitoring, and XDR + network correlation.</p>
+            <p><strong>Total coverage: 659 detections</strong> (312 XDR + 347 Sentinel) — appropriate for a B2B SaaS company with SOC 2/ISO 27001 requirements.</p>
           </div>
         </div>
 
-        <h2>Threat-Intent Driven Detection</h2>
-        <p>Detection work was <strong>threat-intent driven and mapped to target controls</strong>, rather than being blocked by telemetry readiness.</p>
+        <!-- ==================== SECTION 5: VALIDATION ==================== -->
+        <h2>5. Validation Methodology</h2>
 
-        <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Why This Worked
-          </div>
-          <div class="callout-content">
-            <p><strong>MDE Rollout Started Early:</strong> After discovery, MDE deployment began immediately to establish endpoint telemetry before detection implementations started.</p>
-            <p><strong>Telemetry Ready First:</strong> By the time the detection translation catalog was finalized, sufficient endpoint telemetry was already available for validation and tuning.</p>
-            <p><strong>No Detection Blocking:</strong> Detection engineers could implement rules and immediately validate against real data — no waiting for telemetry to catch up.</p>
-          </div>
-        </div>
-
-        <div class="flow-diagram">
-          <div class="flow-step">
-            <div class="flow-step-number">1</div>
-            <div class="flow-step-content">
-              <strong>Threat Intent</strong><br>What are we trying to detect? (Account takeover, lateral movement, data exfil)
-            </div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-number">2</div>
-            <div class="flow-step-content">
-              <strong>Target Controls</strong><br>What signals would show this behavior? (Sign-in anomalies, process execution, network connections)
-            </div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-number">3</div>
-            <div class="flow-step-content">
-              <strong>Telemetry Validation</strong><br>Is the data flowing? (MDE already deployed → yes, telemetry available)
-            </div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-number">4</div>
-            <div class="flow-step-content">
-              <strong>Detection Implementation</strong><br>Enable built-in rules, translate custom rules, validate against real data
-            </div>
-          </div>
-        </div>
-
-        <h2>Rule Migration Strategy</h2>
-        <p>Don't migrate all rules blindly. Categorize and prioritize:</p>
+        <h3>5.1 How We Validated XDR Coverage</h3>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Category</th><th>% of Rules</th><th>Action</th></tr>
+              <tr><th>Technique Category</th><th>Validation Method</th><th>Result</th></tr>
             </thead>
             <tbody>
-              <tr><td>Never fired (12 months)</td><td>30-40%</td><td><span class="status-badge not-started">Discard</span></td></tr>
-              <tr><td>Constantly noisy</td><td>20-30%</td><td><span class="status-badge in-progress">Review/Fix or Discard</span></td></tr>
-              <tr><td>Covered by Microsoft content</td><td>20%</td><td><span class="status-badge complete">Use Microsoft version</span></td></tr>
-              <tr><td>Valuable custom rules</td><td>10-20%</td><td><span class="status-badge critical">Migrate & improve</span></td></tr>
-              <tr><td>Compliance-required</td><td>5-10%</td><td><span class="status-badge critical">Must migrate</span></td></tr>
+              <tr>
+                <td><strong>Ransomware (T1486)</strong></td>
+                <td>Atomic Red Team simulation</td>
+                <td>XDR alert fired within 30 seconds</td>
+              </tr>
+              <tr>
+                <td><strong>Credential Theft (T1003)</strong></td>
+                <td>Mimikatz simulation (safe)</td>
+                <td>MDE blocked + XDR alert</td>
+              </tr>
+              <tr>
+                <td><strong>Lateral Movement (T1021)</strong></td>
+                <td>Internal red team exercise</td>
+                <td>MDI + MDE correlated incident</td>
+              </tr>
+              <tr>
+                <td><strong>Phishing (T1566)</strong></td>
+                <td>Historical incident review</td>
+                <td>MDO catching 99.7% before delivery</td>
+              </tr>
+              <tr>
+                <td><strong>Persistence (T1547)</strong></td>
+                <td>Atomic Red Team simulation</td>
+                <td>XDR alert with full process tree</td>
+              </tr>
             </tbody>
           </table>
         </div>
 
-        <h2>Microsoft Content Hub</h2>
-        <p>Before writing custom rules, check Content Hub for free solutions:</p>
+        <h3>5.2 Validation KQL Query</h3>
 
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Solution</th><th>Detection Coverage</th><th>Install Priority</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><strong>Microsoft Entra ID</strong></td><td>Sign-in anomalies, risky users, MFA bypass</td><td>Week 1</td></tr>
-              <tr><td><strong>Microsoft 365 Defender</strong></td><td>Endpoint, email, identity threats</td><td>Week 1</td></tr>
-              <tr><td><strong>Azure Activity</strong></td><td>Resource changes, privilege escalation</td><td>Week 2</td></tr>
-              <tr><td><strong>Threat Intelligence</strong></td><td>IOC matching across all tables</td><td>Week 2</td></tr>
-              <tr><td><strong>UEBA</strong></td><td>User behavior anomalies</td><td>Week 4</td></tr>
-              <tr><td><strong>AWS</strong></td><td>CloudTrail anomalies, IAM changes</td><td>Week 4</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h2>RSA ESA to Sentinel KQL Translation</h2>
-
-        <h3>Example 1: Brute Force Detection</h3>
-        <div class="comparison-grid">
-          <div class="comparison-column">
-            <div class="comparison-header before">RSA ESA Rule</div>
-            <div class="comparison-content">
-              <div class="code-block" style="margin: 0; border: none;">
-                <pre><code>@RSAAlert(
-  name='Brute Force Attack',
-  severity='High'
-)
-SELECT * FROM Event
-WHERE device_type = 'winevent_nic'
-AND reference_id = '4625'
-GROUP BY src_ip
-HAVING COUNT(*) > 10
-WINDOW (SIZE 5 MINUTE)</code></pre>
-              </div>
-            </div>
-          </div>
-          <div class="comparison-column">
-            <div class="comparison-header after">Sentinel KQL</div>
-            <div class="comparison-content">
-              <div class="code-block" style="margin: 0; border: none;">
-                <pre><code>SecurityEvent
-| where TimeGenerated > ago(5m)
-| where EventID == 4625
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Validate XDR MITRE Coverage</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Check XDR alerts by MITRE technique over last 90 days
+SecurityAlert
+| where TimeGenerated > ago(90d)
+| where ProviderName in ("Microsoft 365 Defender", "MDATP", "OATP", "IPC")
+| extend MitreTechniques = parse_json(ExtendedProperties).["MitreTechniques"]
+| mv-expand MitreTechniques
 | summarize 
-    FailedAttempts = count(),
-    TargetAccounts = dcount(TargetUserName)
-    by IpAddress
-| where FailedAttempts > 10
-| extend AlertSeverity = "High"</code></pre>
-              </div>
-            </div>
-          </div>
+    AlertCount = count(),
+    IncidentCount = dcount(SystemAlertId)
+    by tostring(MitreTechniques)
+| order by AlertCount desc
+
+// Result: Shows which MITRE techniques XDR is actively detecting
+// Use this to validate coverage before retiring RSA rules</code></pre>
         </div>
 
-        <h3>Example 2: Salesforce Bulk Export Detection</h3>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL - Sentinel Analytics Rule</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code>// Detect unusual bulk record exports from Salesforce
-// Critical for RevFlow - protects customer CRM data
-
-SalesforceServiceCloud_CL
-| where TimeGenerated > ago(1h)
-| where EventType_s == "ReportExport" or EventType_s == "DataExport"
-| summarize 
-    ExportCount = count(),
-    TotalRecords = sum(toint(RowsProcessed_s)),
-    ExportTypes = make_set(EventType_s)
-    by UserId_s, UserName_s
-| where TotalRecords > 10000  // Threshold: 10k records
-| join kind=leftouter (
-    // Get user's baseline
-    SalesforceServiceCloud_CL
-    | where TimeGenerated > ago(30d) and TimeGenerated < ago(1h)
-    | where EventType_s in ("ReportExport", "DataExport")
-    | summarize BaselineAvg = avg(toint(RowsProcessed_s)) by UserId_s
-) on UserId_s
-| where TotalRecords > (BaselineAvg * 5) or isempty(BaselineAvg)
-| extend 
-    AlertName = "Salesforce Bulk Data Export",
-    AlertSeverity = "High",
-    Description = strcat(UserName_s, " exported ", TotalRecords, " records")</code></pre>
-        </div>
-
-        <h3>Example 3: Suspicious PowerShell Execution</h3>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">KQL</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code>// Detect encoded PowerShell and suspicious patterns
-DeviceProcessEvents
-| where TimeGenerated > ago(1h)
-| where FileName =~ "powershell.exe" or FileName =~ "pwsh.exe"
-| where ProcessCommandLine has_any (
-    "-enc", "-encodedcommand",
-    "-nop", "-noprofile",
-    "bypass", "-exec bypass",
-    "downloadstring", "downloadfile",
-    "invoke-webrequest", "iwr",
-    "invoke-expression", "iex",
-    "net.webclient",
-    "bitstransfer"
-)
-| extend 
-    EncodedCommand = ProcessCommandLine has_any ("-enc", "-encodedcommand"),
-    DownloadAttempt = ProcessCommandLine has_any ("downloadstring", "downloadfile", "invoke-webrequest"),
-    ExecutionBypass = ProcessCommandLine has_any ("bypass", "-exec bypass")
-| project 
-    TimeGenerated,
-    DeviceName,
-    AccountName,
-    ProcessCommandLine,
-    InitiatingProcessFileName,
-    EncodedCommand,
-    DownloadAttempt,
-    ExecutionBypass</code></pre>
-        </div>
-
-        <h3>Example 4: Impossible Travel</h3>
-        <div class="callout info">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Use Built-In</div>
-          <div class="callout-content"><p>Don't write custom impossible travel rules. Entra ID Identity Protection detects this natively and feeds into Sentinel via the connector. Enable the Microsoft Entra ID solution from Content Hub.</p></div>
-        </div>
-
-        <h2>Analytics Rule Configuration</h2>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">JSON - ARM Template</span><button class="code-copy-btn">Copy</button></div>
-          <pre><code>{
-  "type": "Microsoft.SecurityInsights/alertRules",
-  "apiVersion": "2022-11-01",
-  "name": "BruteForceDetection",
-  "kind": "Scheduled",
-  "properties": {
-    "displayName": "Brute Force Attack Detected",
-    "description": "Detects multiple failed login attempts from single IP",
-    "severity": "High",
-    "enabled": true,
-    "query": "SecurityEvent | where EventID == 4625 | summarize FailedAttempts = count() by IpAddress | where FailedAttempts > 10",
-    "queryFrequency": "PT5M",
-    "queryPeriod": "PT5M",
-    "triggerOperator": "GreaterThan",
-    "triggerThreshold": 0,
-    "suppressionDuration": "PT1H",
-    "suppressionEnabled": true,
-    "tactics": ["CredentialAccess"],
-    "techniques": ["T1110"],
-    "entityMappings": [
-      {
-        "entityType": "IP",
-        "fieldMappings": [{"identifier": "Address", "columnName": "IpAddress"}]
-      }
-    ]
-  }
-}</code></pre>
-        </div>
-
-        <h2>Testing & Validation</h2>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Test Type</th><th>Method</th><th>Success Criteria</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><strong>Syntax validation</strong></td><td>Run query in Log Analytics</td><td>No errors, returns results</td></tr>
-              <tr><td><strong>Historical data</strong></td><td>Query last 30 days</td><td>Expected alerts would have fired</td></tr>
-              <tr><td><strong>False positive rate</strong></td><td>Review first week of alerts</td><td>&lt;20% false positive rate</td></tr>
-              <tr><td><strong>Purple team</strong></td><td>Simulate attack</td><td>Detection within SLA</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h2>Industry Best Practices</h2>
-        
-        <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Detection Engineering Best Practices
-          </div>
-          <div class="callout-content">
-            <p><strong>MITRE ATT&CK Alignment:</strong></p>
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li><strong>Coverage Mapping:</strong> Map all detections to ATT&CK techniques for gap analysis</li>
-              <li><strong>Priority Focus:</strong> Focus on techniques used by threat actors targeting your industry</li>
-              <li><strong>Data Source Validation:</strong> Verify required data sources per ATT&CK technique</li>
-            </ul>
-            <p style="margin-top: 1rem;"><strong>Detection Development Lifecycle (Gartner/SANS):</strong></p>
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li><strong>Threat Intelligence → Detection Logic → Validation → Tuning → Production</strong></li>
-              <li><strong>Detection-as-Code:</strong> Version control all detection rules (Git)</li>
-              <li><strong>CI/CD for Detections:</strong> Automated testing before deployment</li>
-            </ul>
-          </div>
-        </div>
+        <!-- ==================== SECTION 6: COMMON MISTAKES ==================== -->
+        <h2>6. Common Mistakes to Avoid</h2>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Best Practice</th><th>Standard/Source</th><th>Our Implementation</th></tr>
+              <tr><th>Mistake</th><th>Why It's Wrong</th><th>Correct Approach</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>Map detections to ATT&CK framework</td>
-                <td>MITRE ATT&CK, CISA recommendations</td>
-                <td>All rules tagged with technique IDs</td>
+                <td><strong>1:1 rule translation</strong></td>
+                <td>Ignores XDR native coverage</td>
+                <td>Evaluate outcomes, not rule logic</td>
               </tr>
               <tr>
-                <td>Prioritize high-fidelity detections</td>
-                <td>Palantir Detection Engineering, Gartner</td>
-                <td>Built-in rules first, custom for gaps</td>
+                <td><strong>Migrating endpoint rules</strong></td>
+                <td>XDR has superior endpoint visibility</td>
+                <td>Retire endpoint rules → XDR handles</td>
               </tr>
               <tr>
-                <td>Maintain detection coverage metrics</td>
-                <td>SANS Detection Maturity Model</td>
-                <td>Weekly coverage review by ATT&CK tactic</td>
+                <td><strong>Migrating noisy rules</strong></td>
+                <td>Migration is a chance to clean house</td>
+                <td>Drop rules SOC ignored in RSA</td>
               </tr>
               <tr>
-                <td>Test detections with adversary simulation</td>
-                <td>MITRE Caldera, Atomic Red Team</td>
-                <td>Purple team validation for critical rules</td>
+                <td><strong>No documentation</strong></td>
+                <td>Can't justify decisions in audit</td>
+                <td>Document every disposition with justification</td>
               </tr>
               <tr>
-                <td>Document detection intent and limitations</td>
-                <td>Detection Engineering best practices</td>
-                <td>Each rule includes description, limitations, tuning notes</td>
-              </tr>
-              <tr>
-                <td>False positive rate &lt;20%</td>
-                <td>Industry benchmark</td>
-                <td>Track FP rate per rule, disable if >30%</td>
+                <td><strong>Rebuilding XDR correlation</strong></td>
+                <td>XDR already correlates within domains</td>
+                <td>Only build cross-domain correlation in Sentinel</td>
               </tr>
             </tbody>
           </table>

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alternative Architectures — What If Splunk Cloud? | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+    .vs-card { padding: 1.25rem; border-radius: 8px; }
+    .vs-card.microsoft { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); }
+    .vs-card.splunk { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); }
+    .vs-card h4 { margin: 0 0 0.75rem 0; display: flex; align-items: center; gap: 0.5rem; }
+    .vs-card.microsoft h4 { color: #3b82f6; }
+    .vs-card.splunk h4 { color: #22c55e; }
+    .decision-box { background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; }
+    .cost-table td:nth-child(2), .cost-table td:nth-child(3) { text-align: right; font-family: var(--font-mono); }
+    @media (max-width: 768px) { .vs-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="../infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="../operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="../operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="../resources/templates.html" class="nav-item">Templates</a>
+          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="../resources/alternative-architectures.html" class="nav-item active">Alternative Architectures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="../resources/incident-response.html" class="nav-item">Incident Response</a>
+          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="scripts.html">Resources</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Alternative Architectures</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Alternative Architectures — What If Splunk Cloud?</h1>
+          <p class="intro-text">This page documents what RevFlow's security architecture would look like if we chose Splunk Cloud + CrowdStrike instead of Microsoft Sentinel + Defender XDR. Understanding both approaches demonstrates vendor-agnostic thinking and architectural decision-making.</p>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Why This Matters</div>
+          <div class="callout-content">
+            <p>Security architects must evaluate platforms objectively, not advocate for a single vendor. This analysis shows:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Understanding of both SIEM-first and XDR-first architectures</li>
+              <li>Ability to make data-driven platform decisions</li>
+              <li>Recognition that "best" depends on context, not marketing</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 1: FUNDAMENTAL DIFFERENCE ==================== -->
+        <h2>1. The Fundamental Architectural Difference</h2>
+
+        <div class="vs-grid">
+          <div class="vs-card microsoft">
+            <h4>🔷 Microsoft: XDR-First</h4>
+            <p><strong>Detection ownership is shared.</strong></p>
+            <p>Microsoft builds and maintains detection logic for endpoint, identity, email, and cloud apps. You configure controls and write rules for domains XDR doesn't cover.</p>
+            <p style="margin-top: 0.75rem;"><strong>You own:</strong> Configuration, coverage validation, non-Microsoft detection rules</p>
+            <p><strong>Microsoft owns:</strong> Detection logic, ML models, correlation engine, threat intelligence</p>
+          </div>
+          <div class="vs-card splunk">
+            <h4>🟢 Splunk: SIEM-First</h4>
+            <p><strong>Detection ownership is 100% yours.</strong></p>
+            <p>Splunk is the correlation engine. You ingest everything, write all detection rules, and maintain all logic. Even "out-of-the-box" content requires tuning and ownership.</p>
+            <p style="margin-top: 0.75rem;"><strong>You own:</strong> All detection logic, all correlation rules, all tuning, all maintenance</p>
+            <p><strong>Splunk owns:</strong> Platform infrastructure, search performance, content library (optional starting point)</p>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>This Is NOT a Feature Comparison</div>
+          <div class="callout-content">
+            <p>This is a <strong>fundamentally different approach</strong> to security operations. Neither is objectively "better" — the right choice depends on your context, team capabilities, existing stack, and strategic direction.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 2: ARCHITECTURE COMPARISON ==================== -->
+        <h2>2. Full Stack Comparison</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Component</th><th>Microsoft Stack (Chosen)</th><th>Splunk Stack (Alternative)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SIEM</strong></td>
+                <td>Microsoft Sentinel</td>
+                <td>Splunk Cloud + Enterprise Security</td>
+              </tr>
+              <tr>
+                <td><strong>EDR</strong></td>
+                <td>Microsoft Defender for Endpoint</td>
+                <td>CrowdStrike Falcon or SentinelOne</td>
+              </tr>
+              <tr>
+                <td><strong>Identity Protection</strong></td>
+                <td>Microsoft Defender for Identity + Entra ID Protection</td>
+                <td>CrowdStrike Identity Threat Protection or Okta ThreatInsight</td>
+              </tr>
+              <tr>
+                <td><strong>Email Security</strong></td>
+                <td>Microsoft Defender for Office 365</td>
+                <td>Proofpoint or Mimecast</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud App Security</strong></td>
+                <td>Microsoft Defender for Cloud Apps</td>
+                <td>Netskope or Zscaler</td>
+              </tr>
+              <tr>
+                <td><strong>DLP</strong></td>
+                <td>Microsoft Purview</td>
+                <td>Symantec/Broadcom DLP or Forcepoint</td>
+              </tr>
+              <tr>
+                <td><strong>SOAR</strong></td>
+                <td>Sentinel built-in (Logic Apps)</td>
+                <td>Splunk SOAR (separate product)</td>
+              </tr>
+              <tr>
+                <td><strong>Threat Intelligence</strong></td>
+                <td>Microsoft TI (built-in)</td>
+                <td>Recorded Future, Anomali, or ThreatConnect</td>
+              </tr>
+              <tr>
+                <td><strong>XDR Correlation</strong></td>
+                <td>Microsoft Defender XDR (native)</td>
+                <td>None native — you build correlation in Splunk</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="decision-box">
+          <h4 style="margin-top: 0; color: #a855f7;">💡 Key Insight: Vendor Consolidation vs. Best-of-Breed</h4>
+          <p>Microsoft offers a <strong>consolidated stack</strong> where components share data natively. Splunk requires <strong>best-of-breed integration</strong> where you bring multiple vendors together.</p>
+          <p style="margin-top: 0.5rem;">Neither approach is wrong — consolidated reduces integration overhead but creates vendor lock-in; best-of-breed offers flexibility but requires more integration work.</p>
+        </div>
+
+        <!-- ==================== SECTION 3: DETECTION ENGINEERING DIFFERENCES ==================== -->
+        <h2>3. Detection Engineering: What Changes</h2>
+
+        <h3>3.1 The 6-Step Framework — Splunk Version</h3>
+
+        <p>Our <a href="../siem/detection-engineering.html">6-Step Decision Framework</a> fundamentally changes with Splunk because <strong>there is no XDR to retire rules to</strong>.</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Step</th><th>Microsoft Approach</th><th>Splunk Approach</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Classify Rule</strong></td>
+                <td>Same — identify what rule detects</td>
+                <td>Same — identify what rule detects</td>
+              </tr>
+              <tr>
+                <td><strong>2. Map to MITRE</strong></td>
+                <td>Same — every rule needs technique mapping</td>
+                <td>Same — every rule needs technique mapping</td>
+              </tr>
+              <tr>
+                <td><strong>3. Check XDR Coverage</strong></td>
+                <td>Does XDR detect this natively?</td>
+                <td><strong>N/A — No XDR. You must check EDR coverage instead.</strong></td>
+              </tr>
+              <tr>
+                <td><strong>4. Assign Disposition</strong></td>
+                <td>RETIRE to XDR, REWRITE in Sentinel, or DROP</td>
+                <td><strong>MIGRATE to Splunk, RELY ON EDR alerts, or DROP</strong></td>
+              </tr>
+              <tr>
+                <td><strong>5. Apply Drop Criteria</strong></td>
+                <td>Drop if XDR handles, IOC-based, noisy</td>
+                <td><strong>Drop only if EDR handles or noisy — you must write more rules</strong></td>
+              </tr>
+              <tr>
+                <td><strong>6. Document Decision</strong></td>
+                <td>Same — justify every decision</td>
+                <td>Same — justify every decision</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>3.2 Detection Count Comparison</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">RevFlow Detection Count — Microsoft vs. Splunk</span></div>
+          <pre><code>DETECTION COUNT COMPARISON
+═══════════════════════════════════════════════════════════════════════════════
+
+MICROSOFT STACK (CHOSEN):
+────────────────────────────────────────────────────────────────────────────────
+XDR Native Detections       │ 312    │ Microsoft-built, auto-updating
+Sentinel Analytics Rules    │ 347    │ Customer-authored KQL
+────────────────────────────────────────────────────────────────────────────────
+Total Detection Coverage    │ 659    │ Shared ownership
+
+SPLUNK STACK (ALTERNATIVE):
+────────────────────────────────────────────────────────────────────────────────
+CrowdStrike EDR Detections  │ ~200   │ Vendor-built endpoint detection
+Splunk ES Correlation Rules │ ~550   │ Customer-authored SPL
+Custom Detections           │ ~180   │ Environment-specific rules
+────────────────────────────────────────────────────────────────────────────────
+Total Detection Coverage    │ ~930   │ 95% customer ownership
+
+═══════════════════════════════════════════════════════════════════════════════
+KEY DIFFERENCE: Splunk requires ~200 MORE customer-authored rules because
+there's no XDR correlation engine handling endpoint/identity/email natively.
+═══════════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <h3>3.3 What You Would Write in Splunk (That XDR Handles)</h3>
+
+        <p>With Microsoft, these 312 detection types are handled by XDR natively. <strong>With Splunk, you write and maintain these yourself:</strong></p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Detection Category</th><th>Microsoft (XDR Native)</th><th>Splunk (You Write)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ransomware behavior</td>
+                <td>MDE detects natively</td>
+                <td>Write SPL correlation on CrowdStrike events</td>
+              </tr>
+              <tr>
+                <td>Credential theft (LSASS)</td>
+                <td>MDE + ASR blocks/detects</td>
+                <td>Write SPL on EDR process events</td>
+              </tr>
+              <tr>
+                <td>Kerberoasting</td>
+                <td>MDI detects natively</td>
+                <td>Write SPL on AD event logs + EDR</td>
+              </tr>
+              <tr>
+                <td>Phishing + payload execution</td>
+                <td>MDO + MDE correlation automatic</td>
+                <td>Write SPL joining email + endpoint events</td>
+              </tr>
+              <tr>
+                <td>Impossible travel</td>
+                <td>Entra ID Protection native</td>
+                <td>Write SPL geo-analysis on sign-in logs</td>
+              </tr>
+              <tr>
+                <td>Lateral movement correlation</td>
+                <td>XDR correlates endpoint + identity</td>
+                <td>Write SPL joining CrowdStrike + AD logs</td>
+              </tr>
+              <tr>
+                <td>Attack chain correlation</td>
+                <td>XDR incidents auto-correlate</td>
+                <td>Write Risk-Based Alerting rules manually</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>The Hidden Cost of SIEM-First</div>
+          <div class="callout-content">
+            <p><strong>Splunk requires a larger detection engineering team.</strong></p>
+            <p>With Microsoft XDR, detection logic for endpoint/identity/email is Microsoft's responsibility. With Splunk, every detection is your responsibility — including keeping up with new attack techniques, tuning false positives, and maintaining correlation logic.</p>
+            <p style="margin-top: 0.5rem;">Estimate: <strong>+2-3 FTE detection engineers</strong> to maintain equivalent coverage with Splunk.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 4: LOG INGESTION DIFFERENCES ==================== -->
+        <h2>4. Log Ingestion Strategy Differences</h2>
+
+        <h3>4.1 What Changes</h3>
+
+        <div class="vs-grid">
+          <div class="vs-card microsoft">
+            <h4>🔷 Microsoft: Selective Ingestion</h4>
+            <p><strong>XDR handles endpoint/identity/email correlation upstream.</strong></p>
+            <p>You ingest SecurityIncident + SecurityAlert from XDR, NOT raw Device* tables. Saves ~60% ingestion cost because correlation happens before Sentinel.</p>
+            <p style="margin-top: 0.75rem;"><strong>Raw logs ingested:</strong> Network, SaaS, cloud infrastructure, business apps</p>
+          </div>
+          <div class="vs-card splunk">
+            <h4>🟢 Splunk: Full Ingestion Required</h4>
+            <p><strong>Splunk IS the correlation engine.</strong></p>
+            <p>You must ingest ALL raw logs — endpoint, identity, email, network, cloud — because Splunk needs them for correlation. No upstream engine reduces volume.</p>
+            <p style="margin-top: 0.75rem;"><strong>Raw logs ingested:</strong> Everything — you're building the correlation yourself</p>
+          </div>
+        </div>
+
+        <h3>4.2 Daily Ingestion Volume Comparison</h3>
+
+        <div class="table-wrapper cost-table">
+          <table>
+            <thead>
+              <tr><th>Log Source</th><th>Microsoft Sentinel</th><th>Splunk Cloud</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Endpoint (EDR raw events)</td>
+                <td>0 GB/day (XDR handles)</td>
+                <td>~150 GB/day</td>
+              </tr>
+              <tr>
+                <td>XDR/EDR Alerts Only</td>
+                <td>~2 GB/day</td>
+                <td>~2 GB/day</td>
+              </tr>
+              <tr>
+                <td>Identity (Entra ID / AD)</td>
+                <td>~8 GB/day</td>
+                <td>~25 GB/day (full AD events)</td>
+              </tr>
+              <tr>
+                <td>Email Events</td>
+                <td>0 GB/day (XDR handles)</td>
+                <td>~40 GB/day</td>
+              </tr>
+              <tr>
+                <td>Network (Palo Alto)</td>
+                <td>~45 GB/day</td>
+                <td>~45 GB/day</td>
+              </tr>
+              <tr>
+                <td>Cloud Infrastructure</td>
+                <td>~12 GB/day</td>
+                <td>~12 GB/day</td>
+              </tr>
+              <tr>
+                <td>SaaS Applications</td>
+                <td>~18 GB/day</td>
+                <td>~18 GB/day</td>
+              </tr>
+              <tr style="font-weight: 600; background: var(--bg-tertiary);">
+                <td>TOTAL DAILY INGESTION</td>
+                <td>~85 GB/day</td>
+                <td>~292 GB/day</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 5: COST MODEL ==================== -->
+        <h2>5. Cost Model Comparison</h2>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Cost Estimates Only</div>
+          <div class="callout-content">
+            <p>These are rough estimates based on public pricing. Actual costs vary significantly based on commitment tiers, negotiated discounts, and specific configurations.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper cost-table">
+          <table>
+            <thead>
+              <tr><th>Component</th><th>Microsoft Stack</th><th>Splunk Stack</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SIEM Platform</td>
+                <td>~$180K/year (Sentinel, 85 GB/day)</td>
+                <td>~$650K/year (Splunk Cloud, 292 GB/day)</td>
+              </tr>
+              <tr>
+                <td>EDR</td>
+                <td>~$270K/year (MDE P2, 9K endpoints)</td>
+                <td>~$450K/year (CrowdStrike Falcon, 9K)</td>
+              </tr>
+              <tr>
+                <td>Identity Protection</td>
+                <td>Included in M365 E5</td>
+                <td>~$80K/year (CrowdStrike Identity)</td>
+              </tr>
+              <tr>
+                <td>Email Security</td>
+                <td>Included in M365 E5</td>
+                <td>~$120K/year (Proofpoint)</td>
+              </tr>
+              <tr>
+                <td>SOAR</td>
+                <td>Included (Logic Apps)</td>
+                <td>~$150K/year (Splunk SOAR)</td>
+              </tr>
+              <tr>
+                <td>Threat Intelligence</td>
+                <td>Included (Microsoft TI)</td>
+                <td>~$100K/year (Recorded Future)</td>
+              </tr>
+              <tr>
+                <td>Additional Detection Engineers</td>
+                <td>0 FTE (XDR handles)</td>
+                <td>+2.5 FTE (~$400K/year loaded)</td>
+              </tr>
+              <tr style="font-weight: 600; background: var(--bg-tertiary);">
+                <td>ESTIMATED ANNUAL TOTAL</td>
+                <td>~$450K/year</td>
+                <td>~$1.95M/year</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="decision-box">
+          <h4 style="margin-top: 0; color: #a855f7;">💡 Why Microsoft Was Chosen for RevFlow</h4>
+          <p>RevFlow is a Siemens subsidiary using Microsoft 365 E5. The Microsoft stack was chosen because:</p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li><strong>Existing M365 E5 investment</strong> — MDE, MDI, MDO, MDA included</li>
+            <li><strong>Siemens corporate alignment</strong> — Parent company uses Microsoft security stack</li>
+            <li><strong>XDR native correlation</strong> — Reduces detection engineering burden</li>
+            <li><strong>Lower total cost</strong> — ~$1.5M/year savings vs. Splunk stack</li>
+            <li><strong>Smaller team required</strong> — 2-3 fewer FTE detection engineers</li>
+          </ul>
+          <p style="margin-top: 0.75rem;"><strong>This doesn't mean Microsoft is always better.</strong> For organizations with existing Splunk investment, CrowdStrike deployment, or multi-cloud strategy, Splunk may be the right choice.</p>
+        </div>
+
+        <!-- ==================== SECTION 6: WHEN TO CHOOSE WHICH ==================== -->
+        <h2>6. When to Choose Which Platform</h2>
+
+        <h3>6.1 Choose Microsoft Sentinel + XDR When:</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Criteria</th><th>Why Microsoft Wins</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Heavy Microsoft 365 investment</td>
+                <td>XDR components included in E5 licensing</td>
+              </tr>
+              <tr>
+                <td>Azure-first cloud strategy</td>
+                <td>Native integration with Azure services</td>
+              </tr>
+              <tr>
+                <td>Smaller security team</td>
+                <td>XDR reduces detection engineering burden</td>
+              </tr>
+              <tr>
+                <td>Want vendor-managed detection</td>
+                <td>Microsoft maintains endpoint/identity/email detection</td>
+              </tr>
+              <tr>
+                <td>Cost-sensitive</td>
+                <td>Lower TCO with M365 E5 foundation</td>
+              </tr>
+              <tr>
+                <td>New security program</td>
+                <td>Faster time-to-value with built-in detection</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>6.2 Choose Splunk Cloud + Best-of-Breed When:</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Criteria</th><th>Why Splunk Wins</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Existing Splunk investment</td>
+                <td>Migration cost may exceed staying on Splunk</td>
+              </tr>
+              <tr>
+                <td>Multi-cloud / hybrid strategy</td>
+                <td>Splunk is cloud-agnostic; Sentinel favors Azure</td>
+              </tr>
+              <tr>
+                <td>CrowdStrike or SentinelOne deployed</td>
+                <td>No benefit to replacing working EDR with MDE</td>
+              </tr>
+              <tr>
+                <td>Large detection engineering team</td>
+                <td>Team can maintain custom detection at scale</td>
+              </tr>
+              <tr>
+                <td>Advanced SPL expertise</td>
+                <td>SPL is more powerful than KQL for complex queries</td>
+              </tr>
+              <tr>
+                <td>Operational + security unified</td>
+                <td>Splunk handles APM, security, IT ops in one platform</td>
+              </tr>
+              <tr>
+                <td>Custom detection requirements</td>
+                <td>Full control over all detection logic</td>
+              </tr>
+              <tr>
+                <td>Regulatory requirements for detection ownership</td>
+                <td>Some industries require you own detection logic</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 7: INTERVIEW TALKING POINTS ==================== -->
+        <h2>7. Interview Talking Points</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "Why did you choose Microsoft over Splunk?"</span></div>
+          <pre><code>"The decision was driven by context, not vendor preference.
+
+RevFlow is a Siemens subsidiary already invested in Microsoft 365 E5, which 
+includes MDE, MDI, MDO, and MDA. The incremental cost of Sentinel was 
+significantly lower than deploying Splunk Cloud + CrowdStrike + Proofpoint.
+
+More importantly, XDR fundamentally changes detection engineering. With 
+Microsoft, detection logic for endpoint, identity, and email is Microsoft's 
+responsibility — they maintain the ML models, update for new threats, and 
+handle correlation automatically. With Splunk, every detection rule is our 
+responsibility.
+
+For a 4,000-person company with a lean security team, XDR's shared 
+detection ownership was the right trade-off. We focus on coverage gaps 
+and business logic; Microsoft handles the rest.
+
+That said, if RevFlow had existing Splunk and CrowdStrike investments, 
+the math would be different. Platform decisions should be context-driven, 
+not vendor-driven."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "What would be different with Splunk?"</span></div>
+          <pre><code>"Three major differences:
+
+1. DETECTION OWNERSHIP
+   With Splunk, we'd write and maintain ~200 additional correlation rules 
+   that XDR handles natively. Ransomware detection, credential theft, 
+   phishing correlation — all become our SPL rules to maintain.
+
+2. LOG VOLUME
+   We'd need to ingest raw endpoint events (~150 GB/day) and email events 
+   (~40 GB/day) that XDR handles upstream. That's 3x the ingestion volume.
+
+3. TEAM SIZE
+   We'd need 2-3 additional detection engineers to maintain the larger 
+   rule set and keep up with threat evolution. XDR offloads that to Microsoft.
+
+The trade-off is control. With Splunk, you own everything — you can see 
+the detection logic, customize it, and aren't dependent on Microsoft's 
+update cycle. Some organizations prefer that control, especially in 
+regulated industries."</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Q: "When would you recommend Splunk over Microsoft?"</span></div>
+          <pre><code>"Several scenarios:
+
+1. EXISTING INVESTMENT
+   If you have 5 years of Splunk content, trained analysts, and mature 
+   processes, migration cost often exceeds the benefit.
+
+2. MULTI-CLOUD STRATEGY
+   Sentinel has Azure bias. Splunk is cloud-agnostic. For AWS-heavy or 
+   multi-cloud environments, Splunk may integrate more naturally.
+
+3. NON-MICROSOFT EDR
+   If you're committed to CrowdStrike or SentinelOne, the XDR value 
+   proposition weakens significantly. Splunk becomes more attractive.
+
+4. OPERATIONAL CONVERGENCE
+   If you want APM, security, and IT ops in one platform, Splunk's 
+   breadth is unmatched. Sentinel is security-only.
+
+5. DETECTION CONTROL REQUIREMENTS
+   Some industries require organizations to own detection logic — not 
+   rely on vendor black-box ML. Splunk provides that transparency.
+
+Platform decisions should answer: 'What's the right tool for THIS 
+organization's context?' — not 'Which vendor is best?'"</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 8: SUMMARY ==================== -->
+        <h2>8. Summary Comparison</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Microsoft vs. Splunk — Executive Summary</span></div>
+          <pre><code>MICROSOFT SENTINEL + DEFENDER XDR
+═══════════════════════════════════════════════════════════════════════════════
+Philosophy        │ XDR-First — detection ownership shared with Microsoft
+Detection Rules   │ 347 Sentinel + 312 XDR native = 659 total
+Log Ingestion     │ ~85 GB/day (XDR handles endpoint/email upstream)
+Annual Cost       │ ~$450K (with M365 E5 foundation)
+Team Required     │ Baseline security team
+Best For          │ Microsoft shops, smaller teams, cost-conscious orgs
+
+SPLUNK CLOUD + CROWDSTRIKE
+═══════════════════════════════════════════════════════════════════════════════
+Philosophy        │ SIEM-First — detection ownership 100% customer
+Detection Rules   │ ~730 Splunk + ~200 CrowdStrike = 930 total
+Log Ingestion     │ ~292 GB/day (full raw log ingestion required)
+Annual Cost       │ ~$1.95M (best-of-breed stack)
+Team Required     │ +2-3 FTE detection engineers
+Best For          │ Existing Splunk shops, multi-cloud, control-focused orgs
+
+═══════════════════════════════════════════════════════════════════════════════
+NEITHER IS OBJECTIVELY BETTER — THE RIGHT CHOICE DEPENDS ON CONTEXT
+═══════════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="splunk-reference.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Splunk Reference</span></a>
+          <a href="mde-onboarding.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">MDE Onboarding →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>
