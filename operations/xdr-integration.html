@@ -59,6 +59,7 @@
           <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
           <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
           <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/compensating-controls.html" class="nav-item">Compensating Controls</a>
           <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
           <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
         </div>
@@ -130,6 +131,7 @@
           <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
           <a href="../interview-prep.html" class="nav-item">Interview Prep (Full)</a>
           <a href="../interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
+          <a href="../interview-technical-reference.html" class="nav-item">Technical Reference</a>
         </div>
       </nav>
     </aside>
@@ -157,6 +159,18 @@
         </div>
 
         <!-- ==================== KEY INSIGHT ==================== -->
+        <div class="callout critical">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Detection-Driven Migration Philosophy
+          </div>
+          <div class="callout-content">
+            <p><strong>Our SIEM migration was detection-driven rather than log-first or 1-to-1 rule translation.</strong></p>
+            <p style="margin-top: 0.5rem;">Instead of mechanically porting every RSA NetWitness rule, we evaluated detection intent and leveraged Microsoft's XDR platform for domains where built-in detections already provide strong coverage — endpoint, identity, email, and cloud app activity.</p>
+            <p style="margin-top: 0.5rem;">This allowed us to retire redundant detections, reduce ingestion cost, and avoid duplicating logic that XDR already handles natively. Sentinel was then used where it adds the most value: cross-domain correlation, non-Microsoft telemetry, and detections that require broader context beyond XDR.</p>
+          </div>
+        </div>
+
         <div class="callout warning">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>

@@ -59,6 +59,7 @@
           <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
           <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
           <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/compensating-controls.html" class="nav-item">Compensating Controls</a>
           <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
           <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
         </div>
@@ -130,6 +131,7 @@
           <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
           <a href="../interview-prep.html" class="nav-item">Interview Prep (Full)</a>
           <a href="../interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
+          <a href="../interview-technical-reference.html" class="nav-item">Technical Reference</a>
         </div>
       </nav>
     </aside>
@@ -425,6 +427,413 @@ Purpose-fit platforms with clear ownership work better."</code></pre>
               </tr>
             </tbody>
           </table>
+        </div>
+
+        <!-- ==================== SPLUNK ES SECTION ==================== -->
+        <h2>What Splunk Enterprise Security (ES) Actually Adds</h2>
+
+        <div class="callout critical">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Critical Distinction
+          </div>
+          <div class="callout-content">
+            <p><strong>Splunk ES is NOT a SIEM engine by itself.</strong> It is a security solution layer that sits on top of Splunk Enterprise.</p>
+            <p style="margin-top: 0.5rem;">Think of it as:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Splunk Enterprise</strong> = Platform (data collection, indexing, search)</li>
+              <li><strong>Splunk ES</strong> = Security brain + SOC workflows + detection content</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">This is why ES licensing is expensive and separate — you're paying for content maturity and SOC-ready workflows, not just the platform.</p>
+          </div>
+        </div>
+
+        <h3>1. Prebuilt Security Content (Biggest Value)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>What ES Adds</th><th>Without ES</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Hundreds of prebuilt correlation searches</strong>
+                  <ul style="margin: 0.5rem 0; padding-left: 1.2rem;">
+                    <li>Mapped to MITRE ATT&CK</li>
+                    <li>Endpoint threats</li>
+                    <li>Identity abuse</li>
+                    <li>Network attacks</li>
+                    <li>Cloud misuse</li>
+                    <li>Malware, ransomware, lateral movement</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>You write everything yourself in SPL</li>
+                    <li>No standardized security logic</li>
+                    <li>No MITRE mapping out-of-box</li>
+                    <li>Months of detection engineering work</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Why ES Is Expensive
+          </div>
+          <div class="callout-content">
+            <p><strong>Content maturity.</strong> You're paying for years of security research, detection logic, and SOC workflow design — not just software licenses.</p>
+          </div>
+        </div>
+
+        <h3>2. CIM (Common Information Model) Enforcement</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>What ES Adds</th><th>Without ES</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Strong dependency on CIM-compliant data models</strong>
+                  <ul style="margin: 0.5rem 0; padding-left: 1.2rem;">
+                    <li>Normalized views: Authentication, Endpoint, Network Traffic, Malware, Change</li>
+                    <li>Cross-source correlation works automatically</li>
+                    <li>Vendor-agnostic detections</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>CIM is optional</li>
+                    <li>Correlation is manual and custom</li>
+                    <li>Each vendor requires separate detection logic</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">CIM Data Models</span></div>
+          <pre><code>CIM DATA MODELS IN SPLUNK ES
+═══════════════════════════════════════════════════════════════════════════════
+
+Authentication      → Login success/failure, MFA, session tracking
+Endpoint            → Process execution, file changes, registry
+Network Traffic     → Flows, connections, bytes transferred
+Malware             → AV detections, quarantine, file hashes
+Change              → Configuration changes, permission modifications
+Web                 → HTTP requests, proxy logs, URL access
+Email               → Sender, recipient, attachments, spam
+Intrusion Detection → IDS/IPS alerts
+
+WHY THIS MATTERS:
+┌────────────────────────────────────────────────────────────────────────────┐
+│ Without CIM: "Write detection for Palo Alto, then write same detection    │
+│              for Fortinet, then write same detection for Cisco..."        │
+│                                                                            │
+│ With CIM:    "Write one detection against Network Traffic data model.     │
+│              Works for all vendors that map to CIM."                       │
+└────────────────────────────────────────────────────────────────────────────┘</code></pre>
+        </div>
+
+        <h3>3. Risk-Based Alerting (RBA)</h3>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            This Dramatically Reduces Noise
+          </div>
+          <div class="callout-content">
+            <p><strong>Without RBA:</strong> Every alert fires independently. High alert fatigue.</p>
+            <p style="margin-top: 0.5rem;"><strong>With RBA:</strong> Events generate risk scores. Risk accumulates per user/host. Alert fires only when risk threshold is crossed.</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">RBA Flow</span></div>
+          <pre><code>RISK-BASED ALERTING FLOW
+═══════════════════════════════════════════════════════════════════════════════
+
+WITHOUT RBA (Traditional Alerting):
+  Failed login → ALERT!
+  PowerShell executed → ALERT!
+  Outbound connection → ALERT!
+  Result: 500 alerts/day, SOC overwhelmed
+
+WITH RBA:
+  Failed login      → +10 risk points to user "jsmith"
+  PowerShell abuse  → +25 risk points to user "jsmith"  
+  C2 beaconing      → +40 risk points to user "jsmith"
+  ─────────────────────────────────────────────────────
+  Total: 75 points  → EXCEEDS THRESHOLD (50) → ALERT!
+
+EXAMPLE SCENARIO:
+┌────────────────────────────────────────────────────────────────────────────┐
+│ One failed login                     = +5 points   → No alert             │
+│ Three failed logins                  = +15 points  → No alert             │
+│ Three failed + successful login      = +20 points  → No alert             │
+│ Above + PowerShell encoded command   = +45 points  → No alert             │
+│ Above + outbound to rare domain      = +70 points  → ALERT (threshold 50) │
+└────────────────────────────────────────────────────────────────────────────┘
+
+Result: High-fidelity alerts that represent actual risk accumulation,
+        not individual low-confidence events.</code></pre>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Sentinel Equivalent
+          </div>
+          <div class="callout-content">
+            <p>In Microsoft Sentinel, this concept is implemented through <strong>UEBA (User and Entity Behavior Analytics)</strong> and <strong>Fusion</strong> correlation.</p>
+            <p style="margin-top: 0.5rem;">UEBA assigns anomaly scores to entities. Fusion correlates low-fidelity signals into high-confidence incidents. Similar outcome, different implementation.</p>
+          </div>
+        </div>
+
+        <h3>4. SOC Workflow & Incident Management</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>What ES Adds</th><th>Without ES</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Notable Events System</strong>
+                  <ul style="margin: 0.5rem 0; padding-left: 1.2rem;">
+                    <li>Incident Review dashboard</li>
+                    <li>Status tracking: New → In Progress → Suppressed → Resolved</li>
+                    <li>Analyst assignment</li>
+                    <li>Commenting and audit trail</li>
+                    <li>SLA tracking</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>Splunk is just a search tool</li>
+                    <li>Incident tracking happens in ServiceNow, Jira, or Excel</li>
+                    <li>No native SOC workflow</li>
+                    <li>No analyst performance metrics</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Notable Event Lifecycle</span></div>
+          <pre><code>NOTABLE EVENT WORKFLOW IN SPLUNK ES
+═══════════════════════════════════════════════════════════════════════════════
+
+Correlation Search fires
+        ↓
+Notable Event created
+        ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ INCIDENT REVIEW DASHBOARD                                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Status: New → Assigned → In Progress → Pending → Resolved/Closed           │
+│                                                                             │
+│ Urgency: Critical | High | Medium | Low | Informational                    │
+│                                                                             │
+│ Owner: [Analyst Name]                                                       │
+│                                                                             │
+│ Comments: Analyst notes, investigation steps, findings                      │
+│                                                                             │
+│ Related Events: Drill-down to raw events, timeline view                     │
+│                                                                             │
+│ Disposition: True Positive | False Positive | Benign True Positive          │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Sentinel Equivalent: Incidents in M365 Defender unified queue (security.microsoft.com)
+                     Same workflow concept, different interface.</code></pre>
+        </div>
+
+        <h3>5. Threat Intelligence Framework</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>What ES Adds</th><th>Without ES</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Native TI Integration</strong>
+                  <ul style="margin: 0.5rem 0; padding-left: 1.2rem;">
+                    <li>Built-in indicator ingestion (STIX/TAXII, CSV, API)</li>
+                    <li>Automatic matching against events</li>
+                    <li>Confidence scoring per indicator</li>
+                    <li>Expiration handling (IOC TTL)</li>
+                    <li>TI correlation dashboards</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>TI ingestion is custom scripting</li>
+                    <li>Matching logic must be written manually</li>
+                    <li>No standard indicator schema</li>
+                    <li>No expiration management</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>6. Advanced Security Dashboards</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>What ES Adds</th><th>Without ES</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>SOC-Ready Dashboards</strong>
+                  <ul style="margin: 0.5rem 0; padding-left: 1.2rem;">
+                    <li>Security Posture dashboard</li>
+                    <li>MITRE ATT&CK coverage views</li>
+                    <li>Risk heatmaps (user/host)</li>
+                    <li>Analyst productivity metrics</li>
+                    <li>Detection coverage gap analysis</li>
+                    <li>Executive security summaries</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>You build dashboards from scratch</li>
+                    <li>No security-specific views out-of-box</li>
+                    <li>MITRE mapping is manual effort</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>What ES Does NOT Add (Important)</h3>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Common Misconceptions
+          </div>
+          <div class="callout-content">
+            <p><strong>ES does NOT:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>❌ Collect logs (forwarders do that)</li>
+              <li>❌ Index data (indexers do that)</li>
+              <li>❌ Replace EDR (you still need endpoint agents)</li>
+              <li>❌ Replace SOAR (Splunk SOAR is a separate product)</li>
+              <li>❌ Eliminate the need for tuning (content is a starting point, not finished)</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>ES assumes:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>✅ You already have good data (properly parsed, CIM-compliant)</li>
+              <li>✅ You already have log pipelines (forwarders configured)</li>
+              <li>✅ You will tune and maintain content</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>ES vs Sentinel Feature Mapping</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Splunk ES Feature</th><th>Microsoft Sentinel Equivalent</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Correlation Searches</td>
+                <td>Analytics Rules (Scheduled, NRT, Fusion)</td>
+              </tr>
+              <tr>
+                <td>Notable Events</td>
+                <td>Incidents</td>
+              </tr>
+              <tr>
+                <td>Risk-Based Alerting</td>
+                <td>UEBA + Fusion correlation</td>
+              </tr>
+              <tr>
+                <td>CIM Data Models</td>
+                <td>ASIM (Advanced Security Information Model)</td>
+              </tr>
+              <tr>
+                <td>Threat Intelligence</td>
+                <td>Threat Intelligence blade + MDTI integration</td>
+              </tr>
+              <tr>
+                <td>Incident Review</td>
+                <td>M365 Defender unified queue (security.microsoft.com)</td>
+              </tr>
+              <tr>
+                <td>MITRE Coverage</td>
+                <td>MITRE ATT&CK blade in Sentinel</td>
+              </tr>
+              <tr>
+                <td>Splunk SOAR</td>
+                <td>Logic Apps / Sentinel Playbooks</td>
+              </tr>
+              <tr>
+                <td>ES Content Update</td>
+                <td>Content Hub solutions</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success" style="border-left: 4px solid #22c55e;">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            🎯 Interview Answer: "What does Splunk ES add over base Splunk?"
+          </div>
+          <div class="callout-content">
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Response</span></div>
+              <pre><code>"Splunk ES is the security brain on top of Splunk Enterprise. The base 
+platform handles log collection and indexing. ES adds:
+
+1. PREBUILT DETECTION CONTENT
+   Hundreds of correlation searches mapped to MITRE ATT&CK. Without ES, 
+   you write everything from scratch.
+
+2. CIM ENFORCEMENT
+   Common Information Model normalizes data across vendors. Enables 
+   vendor-agnostic detections — write once, works for all.
+
+3. RISK-BASED ALERTING
+   Instead of alert-per-event, ES accumulates risk scores per entity. 
+   Alerts fire when threshold is crossed. Dramatically reduces noise.
+
+4. SOC WORKFLOW
+   Notable Events, Incident Review dashboard, analyst assignment, 
+   status tracking. Without ES, Splunk is just a search tool.
+
+5. THREAT INTELLIGENCE
+   Native TI ingestion, automatic matching, confidence scoring, 
+   expiration handling.
+
+ES is expensive because you're paying for content maturity and SOC-ready 
+workflows, not just software. In Sentinel, many of these features are 
+built-in (Analytics Rules, UEBA, Incidents, Content Hub) — it's a 
+different licensing model but similar capability."</code></pre>
+            </div>
+          </div>
         </div>
 
         <h2>SPL (Search Processing Language)</h2>

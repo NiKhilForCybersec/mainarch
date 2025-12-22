@@ -329,8 +329,8 @@ CROSS-CUTTING:
             <div class="say-this-box">
               <div class="label">Say This</div>
               <p>"I'll walk you through the RSA NetWitness to Sentinel migration I worked on. B2B SaaS company, about 4,000 employees, 9,000 endpoints.</p>
-              <p style="margin-top: 0.75rem;">This was part of a broader cloud transformation. Identity and infrastructure were already in progress — AD syncing to Entra, landing zone in place. I came in when the security tracks kicked off.</p>
-              <p style="margin-top: 0.75rem;">The key insight with Sentinel plus XDR is that it's fundamentally different from traditional SIEM. RSA is purely log-driven — you ingest everything and build detections on raw logs. With XDR, the detection model shifts. XDR handles most attack detection natively — endpoint, email, identity, cloud apps. So instead of asking 'what logs do we need for detection?', the question becomes 'what does XDR NOT cover?'</p>
+              <p style="margin-top: 0.75rem;">Our approach was detection-driven rather than log-first or 1-to-1 rule translation. Instead of mechanically porting every RSA rule, we evaluated detection intent and leveraged XDR for domains where built-in detections already provide strong coverage — endpoint, identity, email, cloud apps.</p>
+              <p style="margin-top: 0.75rem;">This allowed us to retire redundant detections, reduce ingestion cost, and avoid duplicating logic XDR handles natively. Sentinel was used where it adds the most value: cross-domain correlation, non-Microsoft telemetry, and detections requiring broader context.</p>
               <p style="margin-top: 0.75rem;">We prioritized identity control-plane logs first — Entra ID AuditLogs — because XDR detects identity attacks but not changes like role assignments. Then XDR alerts into Sentinel for correlation. Then sources XDR doesn't cover — network, SaaS, on-prem.</p>
               <p style="margin-top: 0.75rem;">We ran parallel operations for several months. Sentinel became primary only after critical sources were onboarded and we had 90 days of stable telemetry. RSA is now decommissioned, and I'm in handover."</p>
             </div>
@@ -338,21 +338,30 @@ CROSS-CUTTING:
             <div class="key-phrases">
               <h5>Key Phrases to Hit</h5>
               <ul>
-                <li>"Fundamentally different from traditional SIEM"</li>
-                <li>"XDR handles most attack detection natively"</li>
-                <li>"What does XDR NOT cover?"</li>
+                <li>"Detection-driven, not log-first or 1-to-1 rule translation"</li>
+                <li>"Evaluated detection intent"</li>
+                <li>"XDR for built-in coverage, Sentinel for cross-domain correlation"</li>
+                <li>"Retire redundant detections, reduce ingestion cost"</li>
                 <li>"XDR detects attacks, not changes"</li>
                 <li>"Parallel operations, 90 days stable telemetry"</li>
               </ul>
             </div>
             
-            <p class="flow-hint">💡 <strong>Flow tip:</strong> The XDR insight is your differentiator. Pause after "detection model shifts" to let it land.</p>
+            <p class="flow-hint">💡 <strong>Flow tip:</strong> Lead with "detection-driven" — it's your differentiator. Pause to let it land before explaining XDR strategy.</p>
           </div>
           
           <div id="q3-full" class="answer-content">
             <div class="code-block">
               <div class="code-header"><span class="code-lang">Full Detail</span></div>
-              <pre><code>CONTEXT:
+              <pre><code>APPROACH:
+Detection-driven migration, NOT log-first or 1-to-1 rule translation.
+• Evaluated detection intent for each RSA rule
+• Leveraged XDR for domains with built-in coverage
+• Retired redundant detections, reduced ingestion cost
+• Sentinel used for: cross-domain correlation, non-Microsoft telemetry,
+  detections requiring broader context beyond XDR
+
+CONTEXT:
 • B2B SaaS provider, 4,000 employees, 9,000 endpoints
 • Part of larger cloud transformation
 • Identity/Infrastructure already started (AD sync, landing zone)

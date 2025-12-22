@@ -102,6 +102,7 @@
           <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
           <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
           <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/compensating-controls.html" class="nav-item">Compensating Controls</a>
           <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
           <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
         </div>
@@ -173,6 +174,7 @@
           <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
           <a href="../interview-prep.html" class="nav-item">Interview Prep (Full)</a>
           <a href="../interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
+          <a href="../interview-technical-reference.html" class="nav-item">Technical Reference</a>
         </div>
       </nav>
     </aside>
@@ -194,6 +196,14 @@
             <span class="page-reading-time">Master Rule Disposition Registry</span>
           </div>
           <p class="intro-text">This catalog documents the systematic evaluation and disposition of <strong>1,247 RSA NetWitness detection rules</strong> migrated to Microsoft Sentinel + Defender XDR. Each rule was assessed using the <strong>6-disposition framework</strong> with documented evidence and justification.</p>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Detection-Driven Migration Philosophy</div>
+          <div class="callout-content">
+            <p><strong>This was detection-driven, not log-first or 1-to-1 rule translation.</strong> Instead of mechanically porting every RSA rule, we evaluated detection intent and leveraged XDR where built-in detections already provide strong coverage.</p>
+            <p style="margin-top: 0.5rem;"><strong>Result:</strong> 780 rules (63%) retired to XDR — not "lost," but handled by a more capable detection engine. Sentinel focuses on what it does best: cross-domain correlation, non-Microsoft telemetry, and broader context.</p>
+          </div>
         </div>
 
         <!-- ==================== MY ROLE ==================== -->

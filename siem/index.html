@@ -60,6 +60,7 @@
           <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
           <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
           <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/compensating-controls.html" class="nav-item">Compensating Controls</a>
           <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
           <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
         </div>
@@ -131,6 +132,7 @@
           <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
           <a href="../interview-prep.html" class="nav-item">Interview Prep (Full)</a>
           <a href="../interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
+          <a href="../interview-technical-reference.html" class="nav-item">Technical Reference</a>
         </div>
       </nav>
     </aside>
@@ -186,6 +188,23 @@
             <p><strong>SOC:</strong> Analysts trained and operational on M365 Defender unified queue (security.microsoft.com).</p>
             <p><strong>Detection Split:</strong> XDR handles 780 techniques automatically; Sentinel handles 485 rules for non-Microsoft sources, SaaS applications, business logic, and higher-order correlation.</p>
             <p><strong>Current Phase:</strong> Knowledge transfer and handover to internal security team.</p>
+          </div>
+        </div>
+
+        <div class="callout critical">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Detection-Driven Migration (Not Log-First or 1-to-1 Rule Translation)
+          </div>
+          <div class="callout-content">
+            <p><strong>Our SIEM migration was detection-driven.</strong> Instead of mechanically porting every RSA NetWitness rule, we evaluated detection intent and leveraged Microsoft's XDR platform for domains where built-in detections already provide strong coverage — endpoint, identity, email, and cloud app activity.</p>
+            <p style="margin-top: 0.5rem;"><strong>This allowed us to:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Retire redundant detections (780 techniques → XDR)</li>
+              <li>Reduce ingestion cost (don't ingest logs XDR already processes)</li>
+              <li>Avoid duplicating logic XDR handles natively</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Sentinel was used where it adds the most value:</strong> cross-domain correlation, non-Microsoft telemetry, and detections requiring broader context beyond XDR.</p>
           </div>
         </div>
 

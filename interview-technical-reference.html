@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical Interview Reference | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .quick-answer { background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05)); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 1rem; margin: 0.5rem 0; }
+    .quick-answer-label { font-size: 0.7rem; font-weight: 700; color: #22c55e; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .detailed-answer { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 1rem; margin: 0.5rem 0; }
+    .detailed-answer-label { font-size: 0.7rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .scenario-box { background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; border-left: 4px solid var(--accent-purple); }
+    .scenario-question { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1rem; }
+    .soundbite-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .soundbite-card { background: var(--bg-secondary); border-radius: 8px; padding: 1rem; border-left: 3px solid var(--accent-cyan); }
+    .soundbite-card h4 { margin: 0 0 0.75rem 0; color: var(--accent-cyan); font-size: 0.9rem; }
+    .soundbite-card ul { margin: 0; padding-left: 1.2rem; }
+    .soundbite-card li { margin-bottom: 0.4rem; font-size: 0.9rem; }
+    .number-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .number-card { background: var(--bg-secondary); border-radius: 8px; padding: 1rem; text-align: center; }
+    .number-card .number { font-size: 2rem; font-weight: 700; color: var(--accent-cyan); }
+    .number-card .label { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem; }
+    .flow-diagram { background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+    .flow-diagram pre { margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; line-height: 1.4; color: var(--text-primary); }
+    .qa-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    .qa-table th { background: var(--bg-secondary); padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid var(--border-primary); }
+    .qa-table td { padding: 0.75rem; border-bottom: 1px solid var(--border-primary); vertical-align: top; }
+    .qa-table td:first-child { width: 35%; font-weight: 500; color: var(--text-primary); }
+    .qa-table td:last-child { color: var(--text-secondary); }
+    .timing-badge { display: inline-block; background: rgba(34, 197, 94, 0.2); color: #22c55e; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; margin-left: 0.5rem; font-weight: 600; }
+    .section-nav { background: var(--bg-secondary); border-radius: 8px; padding: 1rem; margin-bottom: 2rem; }
+    .section-nav-title { font-weight: 600; margin-bottom: 0.75rem; color: var(--text-primary); }
+    .section-nav-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .section-nav-links a { background: var(--bg-tertiary); padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; color: var(--text-secondary); text-decoration: none; transition: all 0.2s; }
+    .section-nav-links a:hover { background: var(--accent-cyan); color: var(--bg-primary); }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="index.html" class="nav-item">Executive Summary</a>
+          <a href="company-profile.html" class="nav-item">Company Profile</a>
+          <a href="security-framework.html" class="nav-item">Security Framework</a>
+          <a href="program-structure.html" class="nav-item">Program Structure</a>
+          <a href="controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="siem/workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
+          <a href="siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="siem/casb-saas-security.html" class="nav-item">CASB &amp; SaaS Security</a>
+          <a href="siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="edr/compensating-controls.html" class="nav-item">Compensating Controls</a>
+          <a href="edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="resources/templates.html" class="nav-item">Templates</a>
+          <a href="resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="resources/alternative-architectures.html" class="nav-item">Alternative Architectures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="resources/incident-response.html" class="nav-item">Incident Response</a>
+          <a href="resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="interview-prep.html" class="nav-item">Interview Prep (Full)</a>
+          <a href="interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
+          <a href="interview-technical-reference.html" class="nav-item">Technical Reference</a>
+          <a href="interview-technical-reference.html" class="nav-item active">Technical Reference</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Technical Interview Reference</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Technical Interview Reference</h1>
+          <div class="page-header-meta">
+            <span class="page-badge">Quick Reference</span>
+            <span class="page-reading-time">Security Consulting Manager Interview</span>
+          </div>
+          <p class="intro-text">Rapid-fire answers, detailed responses, and technical scenarios mapped to job requirements. Use this for quick recall during technical interviews.</p>
+        </div>
+
+        <!-- ==================== SECTION NAV ==================== -->
+        <div class="section-nav">
+          <div class="section-nav-title">Jump to Section</div>
+          <div class="section-nav-links">
+            <a href="#decision-flow">Decision Flow</a>
+            <a href="#rapid-fire">Rapid-Fire Q&A</a>
+            <a href="#detailed-answers">Detailed Answers</a>
+            <a href="#scenarios">Technical Scenarios</a>
+            <a href="#soundbites">Soundbite Bank</a>
+            <a href="#numbers">Numbers to Know</a>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 1: DECISION FLOW ==================== -->
+        <h2 id="decision-flow">1. Strategic Decision Flow</h2>
+        
+        <p>This visual shows how all architectural decisions connect — from philosophy to implementation.</p>
+
+        <div class="flow-diagram">
+          <pre>
+                              XDR-FIRST ARCHITECTURE
+                                      │
+                                      ▼
+                    ┌─────────────────────────────────────┐
+                    │   DETECTION-DRIVEN MIGRATION        │
+                    │   (Not log-first or 1-to-1 rules)   │
+                    └─────────────────────────────────────┘
+                                      │
+            ┌─────────────────────────┼─────────────────────────┐
+            │                         │                         │
+            ▼                         ▼                         ▼
+    ┌───────────────┐       ┌───────────────┐       ┌───────────────┐
+    │   XDR OWNS    │       │ SENTINEL OWNS │       │ COMPENSATING  │
+    │ 780 techniques│       │  485 rules    │       │   CONTROLS    │
+    ├───────────────┤       ├───────────────┤       ├───────────────┤
+    │ • Endpoint    │       │ • Cross-domain│       │ • Defender    │
+    │ • Identity    │       │   correlation │       │   for IoT     │
+    │ • Email       │       │ • Non-MSFT    │       │ • Syslog      │
+    │ • Cloud apps  │       │ • Business    │       │ • Segmentation│
+    │               │       │   logic       │       │ • Alt EDR     │
+    └───────┬───────┘       └───────┬───────┘       └───────────────┘
+            │                       │
+            └───────────┬───────────┘
+                        ▼
+          ┌─────────────────────────────────────┐
+          │    CONTROLLED INGESTION STRATEGY    │
+          │  "Don't ingest logs you won't       │
+          │   detect on"                        │
+          └─────────────────────────────────────┘
+                        │
+          ┌─────────────┼─────────────┐
+          │             │             │
+          ▼             ▼             ▼
+    ┌───────────┐ ┌───────────┐ ┌───────────┐
+    │ ANALYTICS │ │   BASIC   │ │  ARCHIVE  │
+    │  (Active  │ │  (Search  │ │  (Long-   │
+    │detection) │ │   only)   │ │  term)    │
+    └───────────┘ └───────────┘ └───────────┘
+                        │
+                        ▼
+          ┌─────────────────────────────────────┐
+          │         COST OPTIMIZATION           │
+          │  • Commitment tiers (50% savings)   │
+          │  • E5 free grant (5MB/user/day)     │
+          │  • Alerts, not raw telemetry        │
+          └─────────────────────────────────────┘
+                        │
+                        ▼
+          ┌─────────────────────────────────────┐
+          │      DEPLOYMENT PHILOSOPHY          │
+          │  • Audit → Warn → Block             │
+          │  • Active-active coexistence        │
+          │  • Gate-based cutover               │
+          │  • Parallel operations 90+ days     │
+          └─────────────────────────────────────┘
+          </pre>
+        </div>
+
+        <!-- ==================== SECTION 2: RAPID-FIRE Q&A ==================== -->
+        <h2 id="rapid-fire">2. Rapid-Fire Q&A <span class="timing-badge">10-20 sec answers</span></h2>
+        
+        <p>Memorize these. Deliver confidently. Short, punchy, impressive.</p>
+
+        <!-- SIEM & Detection -->
+        <h3>SIEM Design & Detection Strategy</h3>
+        
+        <table class="qa-table">
+          <thead>
+            <tr><th>Question</th><th>10-20 Second Answer</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>"What's detection-driven migration?"</td>
+              <td>"Instead of porting every legacy rule 1-to-1, we evaluate detection intent. XDR handles endpoint, identity, email natively — those get retired. Sentinel handles cross-domain correlation and non-Microsoft sources. Result: 780 rules retired to XDR, 485 purpose-built Sentinel rules."</td>
+            </tr>
+            <tr>
+              <td>"Why XDR-first?"</td>
+              <td>"XDR has kernel-level visibility, AMSI integration, and ML-based detection that SIEM queries can't match. You configure controls, you don't write malware rules. Microsoft owns detection logic, we own trust decisions."</td>
+            </tr>
+            <tr>
+              <td>"Sentinel vs Splunk difference?"</td>
+              <td>"Splunk is SIEM-first — you ingest everything, build all detections yourself. Microsoft is XDR-first — correlation happens upstream, Sentinel fills gaps. It's not feature comparison, it's architectural difference."</td>
+            </tr>
+            <tr>
+              <td>"What does Splunk ES add?"</td>
+              <td>"ES is the security brain on top of Splunk Enterprise. Adds prebuilt correlation searches, CIM enforcement, risk-based alerting, SOC workflows, and threat intel framework. You're paying for content maturity."</td>
+            </tr>
+            <tr>
+              <td>"Single workspace or multiple?"</td>
+              <td>"Single workspace, multi-region DCRs for data residency. Simpler RBAC, unified correlation, easier management. Complexity is the enemy of security."</td>
+            </tr>
+            <tr>
+              <td>"How do you handle cost?"</td>
+              <td>"Detection-driven ingestion — don't ingest logs you won't detect on. Storage tiers for compliance data. Commitment tiers for 50% savings. E5 grants 5MB/user/day free. Design for cost from Day 1."</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Log Sources & Ingestion -->
+        <h3>Log Source Onboarding</h3>
+        
+        <table class="qa-table">
+          <thead>
+            <tr><th>Question</th><th>10-20 Second Answer</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>"How do you prioritize log sources?"</td>
+              <td>"What XDR doesn't cover comes first. Identity control-plane logs — XDR detects attacks, not changes like role assignments. Then XDR alerts for correlation. Then network and SaaS that XDR doesn't see."</td>
+            </tr>
+            <tr>
+              <td>"Why not ingest MDE telemetry to Sentinel?"</td>
+              <td>"50 million events per day, $15K/month, and XDR already has it. We ingest SecurityAlert and SecurityIncident — high value, low volume, often free. Query raw telemetry in XDR Advanced Hunting."</td>
+            </tr>
+            <tr>
+              <td>"Custom log onboarding process?"</td>
+              <td>"DCR with transformation at ingestion, not query time. Validate field parsing, timestamp accuracy, expected volume. Then align detections. Bad data equals bad detections."</td>
+            </tr>
+            <tr>
+              <td>"Sources that can't run agents?"</td>
+              <td>"Defender for IoT for passive monitoring. Syslog/CEF for network devices. API connectors for SaaS. Network segmentation for unmanaged. Every device: agent, logs, or network monitoring."</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Detection Engineering -->
+        <h3>Detection Engineering & MITRE</h3>
+        
+        <table class="qa-table">
+          <thead>
+            <tr><th>Question</th><th>10-20 Second Answer</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>"Built-in vs custom rules?"</td>
+              <td>"Content Hub first — 102 built-in rules enabled. Custom KQL only for gaps — 58 rules. Don't reinvent what Microsoft maintains and updates."</td>
+            </tr>
+            <tr>
+              <td>"How do you map to MITRE?"</td>
+              <td>"Every detection tagged with technique ID. ATT&CK blade in Sentinel for visualization. Focus on techniques attackers actually use against our industry, not checkbox completeness."</td>
+            </tr>
+            <tr>
+              <td>"Detection validation approach?"</td>
+              <td>"ATT&CK coverage mapping, SOC feedback loop, real incident analysis, and purple team exercises. Validate coverage, not just rule count."</td>
+            </tr>
+            <tr>
+              <td>"How do you reduce false positives?"</td>
+              <td>"Audit mode first, always. Build known-good baseline. Document every exclusion with business justification. Periodic review. False positives are expected — plan for them."</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Windows / Network -->
+        <h3>Windows, Network & Protocols</h3>
+        
+        <table class="qa-table">
+          <thead>
+            <tr><th>Question</th><th>10-20 Second Answer</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>"Critical Windows events?"</td>
+              <td>"4624/4625 for logon, 4688 for process creation with command line, 4720 for user creation, 7045 for service installation, 1102 for log clearing. But MDE captures this better than event logs."</td>
+            </tr>
+            <tr>
+              <td>"Lateral movement detection?"</td>
+              <td>"SMB, RDP, WMI, PsExec patterns — but XDR handles this natively with behavioral analysis. MDE sees the actual process chain, not just the network connection. SIEM can't match that fidelity."</td>
+            </tr>
+            <tr>
+              <td>"Network security monitoring?"</td>
+              <td>"Firewall logs to Sentinel, Defender for IoT for OT/IoT passive monitoring, NetFlow for traffic patterns. Segmentation isolates what we can't instrument. Layered visibility."</td>
+            </tr>
+            <tr>
+              <td>"Sysmon vs MDE?"</td>
+              <td>"MDE for everything it covers — kernel-level telemetry, behavioral detection, cloud-backed analysis. Sysmon only for legacy systems MDE can't protect. MDE is Sysmon on steroids."</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Deployment & Operations -->
+        <h3>Deployment & Operations</h3>
+        
+        <table class="qa-table">
+          <thead>
+            <tr><th>Question</th><th>10-20 Second Answer</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>"ASR deployment strategy?"</td>
+              <td>"Audit, Warn, Block — in that order. 4-8 weeks per wave. Build known-good baseline before enforcement. Never disrupt legitimate business workflows. XDR owns detection, we own trust decisions."</td>
+            </tr>
+            <tr>
+              <td>"EDR coexistence approach?"</td>
+              <td>"Active-active, not passive. Both ESET and MDE protecting simultaneously. Real detection comparison data. Zero protection gap at any point. Remove legacy only after new is proven."</td>
+            </tr>
+            <tr>
+              <td>"When do you cutover?"</td>
+              <td>"Gate-based, not calendar-based. 70-80% endpoint coverage, policy compliance, detection parity confirmed, 90 days stable telemetry. Cutover when ready, not when planned."</td>
+            </tr>
+            <tr>
+              <td>"SOC transition approach?"</td>
+              <td>"Parallel operations, both SIEMs running. KQL training before switch. Unified queue in M365 Defender as primary. Legacy stays until new is proven."</td>
+            </tr>
+            <tr>
+              <td>"How do you handle incidents?"</td>
+              <td>"Investigate in XDR — that's where raw telemetry lives. Correlate in Sentinel for broader context. M365 Defender unified queue is the SOC's home, not Sentinel."</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Scripting & Automation -->
+        <h3>Scripting & Automation</h3>
+        
+        <table class="qa-table">
+          <thead>
+            <tr><th>Question</th><th>10-20 Second Answer</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>"KQL vs SPL?"</td>
+              <td>"SPL is pipe-based like Unix, KQL is more SQL-like. Different syntax, same concepts. I work primarily in KQL now, but the detection logic transfers — time windows, aggregations, joins, thresholds."</td>
+            </tr>
+            <tr>
+              <td>"How do you automate?"</td>
+              <td>"Logic Apps for SOAR playbooks — auto-enrichment, ticket creation, containment actions. PowerShell for admin tasks. Python for data processing. Automate repetitive, keep humans for judgment."</td>
+            </tr>
+            <tr>
+              <td>"Favorite KQL technique?"</td>
+              <td>"Lookback joins with ago() and join kind=inner. Find event A, then look for event B in a time window. That's where correlation becomes powerful — single events aren't interesting, sequences are."</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ==================== SECTION 3: DETAILED ANSWERS ==================== -->
+        <h2 id="detailed-answers">3. Detailed Answers <span class="timing-badge">60-90 sec</span></h2>
+        
+        <p>For "walk me through" questions. Shows depth and experience.</p>
+
+        <!-- Answer 1 -->
+        <div class="scenario-box">
+          <div class="scenario-question">"Walk me through your SIEM migration approach"</div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed Response (60-90 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"Our migration was detection-driven, not log-first.
+
+<strong>PHASE 1 — DISCOVERY:</strong> Documented 1,247 RSA rules. But instead of translating them 1-to-1, we normalized them into security outcomes — credential abuse, lateral movement, data exfiltration.
+
+<strong>PHASE 2 — OWNERSHIP:</strong> For each outcome, we asked: does XDR handle this natively? MDE detects process injection better than any SIEM query. MDI detects Pass-the-Hash. MDO detects phishing. 780 rules retired to XDR — not lost, handled by a better engine.
+
+<strong>PHASE 3 — SENTINEL FOCUS:</strong> 485 rules for what Sentinel does best — cross-domain correlation, non-Microsoft telemetry, business logic. 255 migrated from RSA, plus 230 NEW rules RSA never had — SaaS coverage, compliance, XDR correlation.
+
+<strong>PHASE 4 — PARALLEL OPS:</strong> Both SIEMs running for 90+ days. Cutover only after gate criteria met.
+
+<strong>Result:</strong> 12-month timeline instead of 18, reduced ingestion cost, XDR detecting from Day 1."</pre>
+          </div>
+        </div>
+
+        <!-- Answer 2 -->
+        <div class="scenario-box">
+          <div class="scenario-question">"How do you handle systems where you can't install MDE?"</div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed Response (60-90 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"The goal is 100% visibility, not 100% agent deployment.
+
+For each asset class, we implement the right compensating control:
+
+<strong>NETWORK DEVICES</strong> — Firewalls, switches can't run agents. Syslog/CEF to Sentinel. NetFlow for traffic analysis.
+
+<strong>OT/IoT</strong> — Building management, cameras, printers. Defender for IoT provides passive network monitoring. No agent needed — analyzes traffic for anomalies.
+
+<strong>LEGACY OS</strong> — Server 2008, old Linux. Sysmon plus WEF for Windows, Auditd or Wazuh for Linux. Network segmentation limits blast radius.
+
+<strong>VENDOR-MANAGED</strong> — ERP systems, trading terminals. Require SOC 2, API log integration where possible, strict segmentation.
+
+<strong>SAAS</strong> — No endpoint at all. Defender for Cloud Apps as CASB. API connectors for audit logs.
+
+Every device either has an agent, sends logs, or is monitored passively on the network. That's 100% visibility."</pre>
+          </div>
+        </div>
+
+        <!-- Answer 3 -->
+        <div class="scenario-box">
+          <div class="scenario-question">"Explain your detection engineering methodology"</div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed Response (60-90 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"I follow a 5-phase outcome-driven approach:
+
+<strong>PHASE 1 — NORMALIZE TO OUTCOMES:</strong> Legacy SIEM tells you what behaviors mattered, not what rules to copy. 'Credential abuse' is an outcome. 'Rule #47: LSASS access' is implementation.
+
+<strong>PHASE 2 — DECIDE OWNERSHIP:</strong> For each outcome, who handles it better? XDR has kernel-level visibility for endpoint threats. SIEM has cross-domain context. Assign ownership, don't duplicate.
+
+<strong>PHASE 3 — DEFINE INGESTION:</strong> Ingestion follows detection, not the other way around. If XDR owns endpoint detection, don't ingest raw endpoint telemetry to Sentinel.
+
+<strong>PHASE 4 — DESIGN DETECTIONS:</strong> Content Hub first for commodity threats. Custom KQL for business-specific logic. Higher-order correlation that combines XDR alerts with network and SaaS signals.
+
+<strong>PHASE 5 — VALIDATE:</strong> ATT&CK mapping, SOC feedback, real incidents, purple team. Coverage validation, not rule count.
+
+This methodology compressed our migration from 18 months to 12 and gave us better coverage than the legacy SIEM ever had."</pre>
+          </div>
+        </div>
+
+        <!-- Answer 4 -->
+        <div class="scenario-box">
+          <div class="scenario-question">"How do you optimize Sentinel costs?"</div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed Response (60-90 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"Cost optimization starts at architecture, not after deployment.
+
+<strong>PRINCIPLE 1 — DETECTION-DRIVEN INGESTION:</strong> Every log source must justify itself with specific detection use cases. No 'ingest everything just in case.'
+
+<strong>PRINCIPLE 2 — XDR INDEPENDENCE:</strong> MDE telemetry goes to Defender backend directly. XDR works without Sentinel. We ingest alerts, not 50 million raw events per day.
+
+<strong>PRINCIPLE 3 — STORAGE TIERS:</strong> Analytics tier for active detections. Basic tier for search-only compliance logs — 60% cheaper. Archive for long-term retention at lowest cost.
+
+<strong>PRINCIPLE 4 — COMMITMENT TIERS:</strong> Design for commitment from start. 100GB/day commitment saves 50% vs pay-as-you-go. E5 license grants 5MB/user/day free — that's significant.
+
+<strong>PRINCIPLE 5 — TRANSFORMATION AT INGESTION:</strong> Filter and transform in DCRs before data hits the workspace. Don't pay to store fields you'll never query.
+
+<strong>Result:</strong> Sentinel costs about $12K/month for our environment instead of the $50K it would cost with naive ingestion."</pre>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 4: TECHNICAL SCENARIOS ==================== -->
+        <h2 id="scenarios">4. Technical Scenarios</h2>
+        
+        <p>Real-world scenarios a Security Consulting Manager would ask to test practical knowledge.</p>
+
+        <!-- Scenario Category 1: Detection Engineering -->
+        <h3>Detection Engineering Scenarios</h3>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"You discover a gap in MITRE ATT&CK coverage for T1059 (Command and Scripting Interpreter). Walk me through your approach."</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"First, check what XDR already covers — MDE detects malicious PowerShell, encoded commands, AMSI bypasses natively. If XDR handles it, document and move on. If there's a genuine gap — maybe specific script patterns for our environment — then build custom KQL using DeviceProcessEvents or SecurityEvent 4688 with command line logging."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"T1059 is broad — covers PowerShell, CMD, VBScript, Python, etc.
+
+<strong>STEP 1 — CHECK XDR COVERAGE:</strong> MDE has excellent coverage here. AMSI integration catches malicious PowerShell. Behavioral detection catches encoded commands, download cradles, LOLBins. Most T1059 sub-techniques are handled.
+
+<strong>STEP 2 — IDENTIFY THE GAP:</strong> Maybe it's a specific business app that uses scripts legitimately, and we need to detect abuse of that specific tool. Or a script interpreter XDR doesn't monitor.
+
+<strong>STEP 3 — DATA AVAILABILITY:</strong> Do we have command line logging? 4688 with command line audit policy, or DeviceProcessEvents from MDE.
+
+<strong>STEP 4 — BUILD DETECTION:</strong> If custom rule needed, I'd look for:
+• Encoded commands (-enc, -e flags)
+• Download patterns (IEX, WebClient, curl)
+• Unusual parent-child process relationships
+• Scripts spawning network connections
+
+<strong>STEP 5 — TUNE:</strong> Baseline legitimate use first. Exclude known-good admin scripts with specific paths or signers.
+
+But honestly, 90% of T1059 is XDR territory. I'd only build custom if there's a specific gap XDR doesn't cover."</pre>
+          </div>
+        </div>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"A detection rule is generating 500 alerts per day. How do you tune it?"</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"First, analyze the alerts — are they true positives being ignored, or false positives? If false positives, identify the pattern causing noise — usually a specific user, host, or application. Add targeted exclusions with documented business justification, or adjust thresholds. Never disable without understanding why it's firing."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"500 alerts/day means either the rule is broken or we have a real problem. Systematic approach:
+
+<strong>STEP 1 — SAMPLE ANALYSIS:</strong> Pull 50-100 alerts, manually triage. What percentage are true positives vs false positives?
+
+<strong>STEP 2 — IF TRUE POSITIVES:</strong> 500 real attacks per day is a bigger problem. Escalate, investigate root cause, maybe we have a compromised system or misconfiguration driving the activity.
+
+<strong>STEP 3 — IF FALSE POSITIVES:</strong> Identify the pattern. Usually it's:
+• Specific service account doing legitimate automation
+• IT admin tool triggering detection
+• Scheduled task or monitoring software
+• One misconfigured system
+
+<strong>STEP 4 — TARGETED EXCLUSION:</strong> Don't disable the rule. Add specific exclusion for the known-good activity. Document the business justification — what tool, what purpose, who approved.
+
+<strong>STEP 5 — THRESHOLD ADJUSTMENT:</strong> If it's a volumetric rule, maybe the threshold is too low for our environment. Baseline normal and set threshold above that.
+
+<strong>STEP 6 — VALIDATE:</strong> After tuning, monitor for a week. Did noise drop? Are we still catching real threats?
+
+The goal is fewer, higher-fidelity alerts — not zero alerts."</pre>
+          </div>
+        </div>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"You need to detect insider threat — specifically a terminated employee accessing data before their last day. How would you approach this?"</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"This is HR integration plus detection. Workday or HR system sends termination notice, we flag the user in a watchlist. Then correlate: bulk file downloads, SharePoint access spikes, email forwarding to personal accounts, USB activity via MDE device control. Trigger alert when terminated user exhibits any of these behaviors."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"Insider threat detection requires business context that pure security telemetry doesn't have.
+
+<strong>DATA SOURCES NEEDED:</strong>
+• HR feed: Termination date, notice period, department
+• Identity: Sign-in patterns, access times
+• File activity: SharePoint, OneDrive, file servers
+• Email: Forwarding rules, external sends, attachment volume
+• Endpoint: USB usage, cloud storage uploads, printing
+
+<strong>DETECTION LOGIC:</strong>
+1. HR feed flags user as 'termination pending'
+2. User added to elevated monitoring watchlist
+3. Correlate against suspicious behaviors:
+   • File downloads > 100 in 24 hours
+   • Access outside normal hours
+   • New email forwarding rules
+   • USB device insertion (if not normally used)
+   • Cloud storage upload (Dropbox, personal OneDrive)
+
+<strong>IMPLEMENTATION:</strong>
+• Watchlist in Sentinel with user identifiers
+• Analytics rule: Join HR feed with file/email activity
+• Higher sensitivity thresholds for watchlist users
+• Alert goes to HR and Security, not just SOC
+
+<strong>KEY INSIGHT:</strong> This is a business process detection, not just technical. Need HR partnership and legal sign-off on monitoring."</pre>
+          </div>
+        </div>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"A new zero-day is announced (let's say Log4Shell). How do you quickly assess exposure and implement detection?"</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"Three parallel tracks: First, asset inventory — what runs Java/Log4j? TVM in MDE helps here. Second, detection — implement known IOCs, JNDI lookup patterns in network logs, exploitation attempts in WAF. Third, hunting — proactive search for evidence of prior exploitation. All within first few hours."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"Zero-day response is a race. I'd run three parallel workstreams:
+
+<strong>TRACK 1 — EXPOSURE ASSESSMENT (First 2 hours):</strong>
+• Query TVM in MDE for Log4j vulnerabilities
+• Asset inventory: What runs Java? Application teams confirm
+• Internet-facing vs internal exposure
+• Prioritize: Internet-facing, critical systems first
+
+<strong>TRACK 2 — DETECTION IMPLEMENTATION (First 4 hours):</strong>
+• IOCs from threat intel (IPs, domains, hashes) into TI feed
+• Network detection: JNDI lookup patterns in firewall/proxy logs
+  ${jndi:ldap://}, ${jndi:rmi://}
+• WAF rules if available
+• Endpoint: Suspicious Java child processes, outbound LDAP
+
+<strong>TRACK 3 — THREAT HUNTING (First 24 hours):</strong>
+• Historical search: Did we see exploitation attempts before the CVE was public?
+• Network logs for JNDI patterns in past 30 days
+• Endpoint: Java spawning cmd/PowerShell/bash unexpectedly
+
+<strong>TRACK 4 — COMMUNICATION:</strong>
+• Status updates to leadership every 2 hours
+• Document exposure, detection coverage, gaps
+
+Within 24 hours: Exposure mapped, detection in place, hunting complete, patch prioritization delivered."</pre>
+          </div>
+        </div>
+
+        <!-- Scenario Category 2: Log Source & Ingestion -->
+        <h3>Log Source & Ingestion Scenarios</h3>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"A critical business application generates 500GB of logs per day. The team wants full visibility. How do you handle it?"</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"500GB at Sentinel rates is $1,000+ per day — unsustainable. First question: what detections require this data? Filter at source to security-relevant events only. Use Basic tier if needed for search without detection. Transform and summarize where possible. Maybe 500GB becomes 50GB of actual security value."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"500GB/day is a cost and architecture problem, not just ingestion.
+
+<strong>STEP 1 — QUESTION THE REQUIREMENT:</strong>
+'Full visibility' is rarely needed. What specific threats or use cases require this data? Usually it's:
+• Authentication events
+• Errors and failures
+• Admin actions
+• Specific transaction types
+
+<strong>STEP 2 — FILTER AT SOURCE:</strong>
+If the app generates 500GB but only auth events matter, filter in the DCR transformation. Maybe 500GB becomes 20GB.
+
+<strong>STEP 3 — TIERING STRATEGY:</strong>
+• Analytics tier: Only what has active detection rules
+• Basic tier: Search-only for troubleshooting, 60% cheaper
+• Don't ingest: Debug logs, performance metrics, verbose traces
+
+<strong>STEP 4 — SAMPLING:</strong>
+For some use cases, 10% sampling is statistically valid. Anomaly detection can work on sampled data.
+
+<strong>STEP 5 — ALTERNATIVE STORAGE:</strong>
+Maybe this belongs in Splunk (if SRE owns it) or Azure Data Explorer for cheap long-term retention with occasional query.
+
+<strong>STEP 6 — BUSINESS CONVERSATION:</strong>
+'Full visibility costs $365K/year. Targeted security visibility costs $36K/year. What threats justify 10x cost?'
+
+Usually, when you break down the actual detection requirements, 500GB becomes 50GB or less."</pre>
+          </div>
+        </div>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"Network team wants to onboard Palo Alto firewall logs. Walk me through the process."</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"First, confirm log format — CEF over syslog is standard for Palo Alto. Set up AMA with syslog collection, configure firewall to send logs. Build DCR for parsing if needed. Validate data quality — fields parsing, timestamps. Then enable built-in Palo Alto analytics rules from Content Hub and tune for environment."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"Palo Alto is a well-supported source, so mostly standard process:
+
+<strong>STEP 1 — REQUIREMENTS GATHERING:</strong>
+• Which log types? Traffic, Threat, URL, WildFire?
+• Volume estimate? Plan for DCR capacity
+• Retention requirements? Compliance drivers?
+• What detections will use this data?
+
+<strong>STEP 2 — ARCHITECTURE:</strong>
+• Syslog forwarding to Azure Monitor Agent
+• CEF format preferred (structured)
+• Log Analytics workspace destination
+• DCR for any transformations
+
+<strong>STEP 3 — FIREWALL CONFIGURATION:</strong>
+• Syslog server profile pointing to AMA collector
+• Select log types to forward
+• Severity filtering if needed (reduce noise)
+
+<strong>STEP 4 — VALIDATION:</strong>
+• Confirm logs arriving in CommonSecurityLog table
+• Check field parsing: SourceIP, DestIP, Action, etc.
+• Timestamp accuracy — critical for correlation
+• Volume matches expectations
+
+<strong>STEP 5 — DETECTION ENABLEMENT:</strong>
+• Content Hub: Palo Alto solution pack
+• Built-in rules for known threats
+• Custom rules for our specific use cases:
+  - Blocked-then-allowed patterns
+  - Geographic anomalies
+  - C2 beacon detection
+
+<strong>STEP 6 — DOCUMENTATION:</strong>
+• Log source in inventory
+• DCR configuration documented
+• Detection rules mapped to this source"</pre>
+          </div>
+        </div>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"You're getting duplicate events in Sentinel from the same source. How do you troubleshoot?"</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"Duplicates usually mean multiple collection paths. Check if both legacy Log Analytics agent and AMA are running. Or multiple DCRs targeting same source. Or the source itself is sending to multiple destinations. Query by _ResourceId and TimeGenerated to identify the duplicate pattern, then eliminate the redundant path."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"Duplicates waste money and break detection logic. Systematic debug:
+
+<strong>STEP 1 — CONFIRM IT'S ACTUALLY DUPLICATES:</strong>
+Query the table, look for identical events:
+| summarize count() by TimeGenerated, Computer, EventID
+| where count_ > 1
+
+Are they exact duplicates or similar events?
+
+<strong>STEP 2 — IDENTIFY THE SOURCE:</strong>
+• Check _ResourceId field — different resource IDs = multiple paths
+• Check Computer and source fields
+• Look at ingestion timestamps (_TimeReceived) vs event time
+
+<strong>STEP 3 — COMMON CAUSES:</strong>
+• Legacy agent AND AMA running simultaneously
+• Multiple DCRs collecting same data
+• Source configured to send to multiple destinations
+• Forwarding chain with multiple hops
+
+<strong>STEP 4 — RESOLUTION:</strong>
+If dual agents: Remove legacy agent, migrate to AMA only
+If multiple DCRs: Consolidate into single DCR
+If source misconfiguration: Fix at source
+
+<strong>STEP 5 — VALIDATION:</strong>
+After fix, monitor for 24 hours. Duplicates should stop.
+Check detection rules didn't break from the change.
+
+<strong>STEP 6 — COST RECOVERY:</strong>
+If duplicates ran for a while, calculate wasted spend. Document for future architecture decisions."</pre>
+          </div>
+        </div>
+
+        <!-- Scenario Category 3: Investigation & Response -->
+        <h3>Investigation & Response Scenarios</h3>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"You receive an alert for suspicious PowerShell execution on a finance workstation. Walk me through your investigation."</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"Start in XDR, not Sentinel — MDE has the process tree. Look at parent process, command line, what spawned it. Check for encoded commands, network connections, file writes. Pivot to user — is this their normal behavior? Check timeline before and after. Scope — did this happen on other machines? Contain if malicious, document if false positive."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"PowerShell alert on finance workstation — high priority. I investigate in XDR first because that's where telemetry lives.
+
+<strong>PHASE 1 — INITIAL TRIAGE (5 minutes):</strong>
+• Open alert in M365 Defender
+• Review command line — is it obviously malicious?
+  - Encoded (-enc)? Download cradle (IEX)?
+• Parent process — what spawned PowerShell?
+  - Explorer.exe (user) vs WMI vs scheduled task
+• User context — finance user running PowerShell unusual?
+
+<strong>PHASE 2 — PIVOT & SCOPE (10 minutes):</strong>
+• Device timeline: What happened before and after?
+• Network connections from this process
+• Files written or modified
+• Check other devices: Same command seen elsewhere?
+• User activity: Login anomalies? Other alerts?
+
+<strong>PHASE 3 — CONTEXT FROM SENTINEL (5 minutes):</strong>
+• Same user: Recent sign-in anomalies?
+• Same device: Other security events?
+• Cross-reference with email: Phishing received?
+
+<strong>PHASE 4 — DECISION:</strong>
+If malicious: Isolate device via MDE, reset user credentials, block indicators, full IR process
+If false positive: Identify root cause (IT tool, admin script), document and add exclusion, close alert with disposition
+
+<strong>PHASE 5 — DOCUMENTATION:</strong>
+Timeline, findings, actions taken, IOCs if any."</pre>
+          </div>
+        </div>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"You're seeing beaconing behavior in network logs — periodic connections to an external IP every 30 seconds. How do you investigate?"</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"Beaconing is classic C2. First, identify the process making connections — correlate network logs with endpoint telemetry. Check the destination IP/domain against threat intel. Analyze beacon characteristics — interval, jitter, payload size. If suspicious, isolate the endpoint, capture traffic, investigate what's running. Could be malware or could be legitimate heartbeat from monitoring software."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"30-second beaconing is highly suspicious — could be C2, could be heartbeat. Need to prove either way.
+
+<strong>PHASE 1 — CONFIRM THE PATTERN:</strong>
+• Query network logs: Connections to same IP, 30-sec intervals
+• How long has this been happening?
+• Only one host or multiple?
+• Consistent interval suggests automation (malware or legitimate)
+
+<strong>PHASE 2 — THREAT INTEL:</strong>
+• Check destination IP/domain against:
+  - MDTI (Microsoft Defender TI)
+  - VirusTotal
+  - Internal blocklists
+• Known malicious = high confidence, respond immediately
+
+<strong>PHASE 3 — ENDPOINT CORRELATION:</strong>
+• Which process is making connections?
+• Query MDE: DeviceNetworkEvents for that IP
+• Get process name, command line, file path
+• Check file hash against known malware
+
+<strong>PHASE 4 — BEACON ANALYSIS:</strong>
+• Perfect 30-sec interval = scripted
+• Slight jitter (28-32 sec) = sophisticated C2
+• Payload size consistent? Data exfil would vary.
+
+<strong>PHASE 5 — DECISION TREE:</strong>
+If process is known (Zoom, Teams, monitoring agent): False positive, document and tune
+If process is unknown or suspicious: Isolate endpoint, collect memory dump, block destination at firewall, full incident response
+
+<strong>PHASE 6 — HUNTING:</strong>
+Are other endpoints talking to this IP? Historical search — how long compromised?"</pre>
+          </div>
+        </div>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"A vendor-managed ERP system shows signs of compromise, but you don't have direct access. How do you investigate?"</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"Limited access means network-centric investigation. What do we have? Firewall logs for connections, proxy logs for web traffic, identity logs for user access. Look for anomalies: unusual outbound connections, off-hours access, data transfer patterns. Engage vendor immediately — they need to investigate internally while we monitor the perimeter. Document everything for potential legal action."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"Vendor-managed means no endpoint visibility, but we still have network and identity telemetry.
+
+<strong>AVAILABLE DATA:</strong>
+• Firewall logs: Connections to/from ERP system
+• Proxy logs: Web traffic if applicable
+• Identity: Who's authenticating to ERP
+• Application logs: If vendor shares or forwards them
+
+<strong>INVESTIGATION APPROACH:</strong>
+
+<strong>PHASE 1 — NETWORK ANALYSIS:</strong>
+• Unusual outbound destinations?
+• Large data transfers?
+• Connections to known-bad IPs?
+• New ports or protocols?
+
+<strong>PHASE 2 — IDENTITY ANALYSIS:</strong>
+• Unusual login times or locations?
+• New accounts accessing system?
+• Privilege escalation indicators?
+• Service account anomalies?
+
+<strong>PHASE 3 — VENDOR ENGAGEMENT (IMMEDIATE):</strong>
+• Contact vendor security team
+• Provide IOCs we've observed
+• Request their internal investigation
+• Define communication cadence
+
+<strong>PHASE 4 — CONTAINMENT OPTIONS:</strong>
+• Network segmentation: Restrict ERP traffic flows
+• Identity: Force password reset for ERP users
+• Block specific IOCs at perimeter
+• Can't touch the system, but can limit damage
+
+<strong>PHASE 5 — DOCUMENTATION:</strong>
+Critical for potential legal/contract action. Timeline of observations, communications with vendor, business impact assessment.
+
+<strong>PHASE 6 — LESSONS LEARNED:</strong>
+Log integration requirements for vendor contracts, monitoring capabilities for managed systems, segmentation improvements."</pre>
+          </div>
+        </div>
+
+        <!-- Scenario Category 4: Architecture & Design -->
+        <h3>Architecture & Design Scenarios</h3>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"You're designing SIEM architecture for a new company with 5,000 endpoints, hybrid cloud, and regulatory requirements (SOX, PCI). What's your approach?"</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"Start with compliance requirements — they drive retention and audit needs. XDR-first for endpoint and identity detection. Sentinel for compliance logs, network, and cross-domain correlation. Storage tiering: Analytics for active detection, Basic for compliance search, Archive for long-term. Single workspace with proper RBAC. Design for commitment tier from Day 1."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (90 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"5,000 endpoints, hybrid, SOX/PCI — this is a structured approach:
+
+<strong>PHASE 1 — REQUIREMENTS GATHERING:</strong>
+• Compliance: SOX needs audit trails, PCI needs cardholder data environment monitoring
+• Retention: SOX typically 7 years, PCI 1 year minimum
+• Data residency: Where can data live?
+• Budget: Drives tiering decisions
+
+<strong>PHASE 2 — ARCHITECTURE DECISIONS:</strong>
+Workspace: Single workspace, multi-region DCRs if needed
+Detection split: XDR for endpoint/identity, Sentinel for rest
+Tiering:
+• Analytics: Security events with active detections
+• Basic: Compliance/audit logs (search-only)
+• Archive: Long-term retention for SOX
+
+<strong>PHASE 3 — LOG SOURCE PRIORITIZATION:</strong>
+Priority 0 (Week 1-2): Identity (Entra ID) — SOX audit trail, XDR connector — detection foundation
+Priority 1 (Week 3-4): PCI zone: Firewalls, card data environment, Domain controllers
+Priority 2 (Month 2): Network infrastructure, SaaS applications, Custom applications
+
+<strong>PHASE 4 — DETECTION STRATEGY:</strong>
+• Content Hub for baseline detections
+• PCI-specific rules: Card data access, PCI zone violations
+• SOX-specific: Privileged access, separation of duties
+
+<strong>PHASE 5 — COMPLIANCE MAPPING:</strong>
+• Each requirement mapped to log source + detection
+• Evidence of monitoring for auditors
+• Workbooks for compliance reporting
+
+<strong>PHASE 6 — COST MODELING:</strong>
+• Estimate volume per source
+• Design for commitment tier threshold
+• Project 12-month cost before implementation
+
+<strong>DELIVERABLE:</strong> Architecture document with diagram, cost model, timeline, compliance mapping, and detection catalog."</pre>
+          </div>
+        </div>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"Leadership wants to consolidate from three SIEMs to one. How do you approach the migration?"</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"Don't do big bang. Parallel operation is mandatory. Inventory all three — log sources, detections, integrations, users. Find the overlap and unique value of each. Migrate detection coverage, not rules 1-to-1. Phase by business criticality, not by source SIEM. Maintain all three until target has proven coverage. Gate-based cutover, not calendar."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (90 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"Three SIEMs to one is high risk. Methodical approach:
+
+<strong>PHASE 1 — DISCOVERY (4-6 weeks):</strong>
+For each SIEM:
+• Log sources: What's ingested, volume, owner
+• Detections: Rule count, firing frequency, value
+• Integrations: Ticketing, SOAR, reporting
+• Users: Who uses it, for what
+• Cost: Licensing, infrastructure, operations
+
+<strong>PHASE 2 — RATIONALIZATION:</strong>
+• Overlap: Same logs in multiple SIEMs?
+• Unique value: What does each SIEM do that others don't?
+• Detection redundancy: Same threats detected multiple ways?
+• User consolidation: Can workflows merge?
+
+<strong>PHASE 3 — TARGET ARCHITECTURE:</strong>
+• Which platform is target? (Assume Sentinel based on strategy)
+• What moves vs what retires vs what stays (maybe Splunk for ops)
+• Detection ownership: XDR vs SIEM split
+
+<strong>PHASE 4 — MIGRATION WAVES:</strong>
+Wave 1: Highest-value, lowest-risk sources
+Wave 2: Complex sources, custom parsers
+Wave 3: Legacy, edge cases
+Each wave: Ingest → Detect → Validate → Cutover source
+
+<strong>PHASE 5 — PARALLEL OPERATIONS:</strong>
+• All SIEMs running during migration
+• Duplicate critical detections temporarily
+• Compare alert quality between platforms
+• SOC trained on target before any cutover
+
+<strong>PHASE 6 — CUTOVER CRITERIA (per SIEM):</strong>
+• All log sources migrated
+• Detection parity confirmed
+• 90 days stable
+• SOC sign-off
+• Then decommission
+
+<strong>TIMELINE:</strong> 12-18 months realistic. Don't promise 6 months."</pre>
+          </div>
+        </div>
+
+        <!-- Scenario Category 5: Troubleshooting -->
+        <h3>Troubleshooting Scenarios</h3>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"MDE alerts aren't appearing in Sentinel. How do you troubleshoot?"</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"Check the pipeline: M365 Defender connector enabled and healthy? Permissions correct — SecurityReader minimum? Check SecurityAlert and SecurityIncident tables for recent data. If connector shows healthy but no data, check filtering in connector settings. If data exists but alerts missing, check if XDR is actually generating alerts — might be suppressed or filtered upstream."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"MDE to Sentinel is a pipeline. Troubleshoot each step:
+
+<strong>STEP 1 — CONNECTOR STATUS:</strong>
+• Data connectors > Microsoft 365 Defender
+• Status should be 'Connected'
+• Check last data received timestamp
+• Review any error messages
+
+<strong>STEP 2 — PERMISSIONS:</strong>
+• Service principal or user needs SecurityReader
+• Check Azure AD app registration if using service principal
+• Verify tenant consent granted
+
+<strong>STEP 3 — DATA VERIFICATION:</strong>
+SecurityAlert | where ProviderName == 'MDATP' | where TimeGenerated > ago(24h) | count
+SecurityIncident | where TimeGenerated > ago(24h) | count
+
+<strong>STEP 4 — CONNECTOR CONFIGURATION:</strong>
+• Which data types enabled? Alerts? Incidents? Raw events?
+• Filtering applied? Maybe filtering out what you need
+• Check the specific products enabled (MDE, MDI, MDO, MDA)
+
+<strong>STEP 5 — UPSTREAM VERIFICATION:</strong>
+• Go to security.microsoft.com
+• Are alerts actually generating in XDR?
+• If no alerts in XDR, problem is MDE, not connector
+
+<strong>STEP 6 — COMMON ISSUES:</strong>
+• Connector disabled after tenant change
+• Permissions revoked
+• Filtering too aggressive
+• XDR alerts suppressed by automation rules
+• Time sync issues between tenants
+
+<strong>STEP 7 — RESOLUTION:</strong>
+Usually reconnecting with proper permissions fixes it. If persistent, open Microsoft support ticket."</pre>
+          </div>
+        </div>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"An ASR rule is blocking a legitimate business application. How do you handle it?"</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"First, confirm it's actually legitimate — verify with app owner. Then create targeted exclusion — file path, hash, or certificate — whatever is most specific. Document the business justification and get sign-off. Never disable the entire rule; just exclude the specific legitimate use. Test exclusion before broad deployment."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"ASR blocking legitimate app is expected during rollout. This is why we run audit mode first.
+
+<strong>STEP 1 — VERIFY LEGITIMACY:</strong>
+• What application? Who owns it?
+• Expected behavior or user workaround attempt?
+• Get confirmation from app owner/IT
+
+<strong>STEP 2 — UNDERSTAND THE BLOCK:</strong>
+• Which ASR rule triggered?
+• What specific action was blocked?
+• Review in M365 Defender > ASR rules report
+• Get: File path, process name, hash
+
+<strong>STEP 3 — DESIGN EXCLUSION:</strong>
+Options (most specific to least):
+1. Certificate-based: If app is signed, trust publisher
+2. File hash: Specific version of file
+3. File path: Last resort, be as specific as possible
+
+Avoid: Broad folder exclusions, disabling rule entirely
+
+<strong>STEP 4 — DOCUMENTATION:</strong>
+• Business justification documented
+• App owner sign-off
+• Risk acceptance if needed
+• Expiration/review date
+
+<strong>STEP 5 — IMPLEMENTATION:</strong>
+• Test exclusion in pilot group first
+• Deploy via Intune policy
+• Verify app works
+• Verify rule still blocks unknown threats
+
+<strong>STEP 6 — COMMUNICATE:</strong>
+• Update change record
+• Notify SOC of new exclusion
+• Add to monthly exclusion review list
+
+<strong>PRINCIPLE:</strong> Every exclusion is an accepted risk. Document and review regularly."</pre>
+          </div>
+        </div>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"You're seeing 30% of endpoints not reporting to MDE. How do you troubleshoot?"</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"30% is significant. Segment the problem: Check device inventory by OS, department, location. Common causes: Onboarding failed, connectivity issues (proxy/firewall), conflicting security software, machines offline. Use Intune compliance reports and MDE device health. For persistent issues, run MDE Client Analyzer on sample devices. Usually it's network connectivity or deployment gaps."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"30% gap is a major coverage issue. Systematic approach:
+
+<strong>STEP 1 — IDENTIFY THE 30%:</strong>
+• Export device inventory from Intune and MDE
+• Compare: What's in Intune but not in MDE?
+• Segment by: OS, department, location, device type
+
+<strong>STEP 2 — COMMON CAUSES:</strong>
+
+Onboarding Issues:
+• Package never deployed (Intune policy not assigned)
+• Deployment failed (check Intune deployment status)
+• Unsupported OS version
+
+Connectivity Issues:
+• Proxy blocking MDE URLs
+• Firewall rules blocking outbound
+• VPN split tunnel misconfiguration
+• Machines on isolated network
+
+Conflicting Software:
+• Old AV not removed
+• Security software conflict
+• EDR coexistence not configured
+
+Offline/Stale:
+• Machines powered off
+• Employees on leave
+• Decommissioned but not removed from inventory
+
+<strong>STEP 3 — DIAGNOSTIC TOOLS:</strong>
+• MDE Client Analyzer on sample devices
+• Test connectivity to MDE URLs
+• Check Windows event logs for sense service
+• Intune device compliance status
+
+<strong>STEP 4 — REMEDIATION:</strong>
+For each root cause:
+• Onboarding: Re-deploy package
+• Connectivity: Update proxy/firewall rules
+• Conflicts: Remove conflicting software
+• Stale: Clean up inventory
+
+<strong>STEP 5 — MONITORING:</strong>
+• Create dashboard for onboarding health
+• Alert on devices that stop reporting
+• Weekly review of coverage percentage
+
+<strong>TARGET:</strong> 95%+ coverage before considering EDR cutover."</pre>
+          </div>
+        </div>
+
+        <div class="scenario-box">
+          <div class="scenario-question">"Your Sentinel workspace is hitting performance issues — queries timing out, slow dashboards. How do you troubleshoot?"</div>
+          
+          <div class="quick-answer">
+            <div class="quick-answer-label">Quick (20 sec)</div>
+            <p>"Performance issues usually mean query inefficiency or volume problems. Check: Are queries scanning too much data? Missing time filters? Expensive joins? On the volume side: Any source spiking unexpectedly? Basic tier misused for complex queries? Solutions: Optimize queries with summarize and project early, use materialized views for dashboards, consider ADX for heavy analytics."</p>
+          </div>
+          
+          <div class="detailed-answer">
+            <div class="detailed-answer-label">Detailed (60 sec)</div>
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"Sentinel performance issues have predictable causes:
+
+<strong>DIAGNOSIS STEP 1 — IDENTIFY THE PROBLEM:</strong>
+• Which queries are slow? Specific tables?
+• Dashboards or ad-hoc hunting?
+• Recent changes in volume?
+
+<strong>DIAGNOSIS STEP 2 — COMMON CAUSES:</strong>
+
+Query Issues:
+• Missing time bounds: Always filter TimeGenerated first
+• Table scans: | where after | project = full scan
+• Expensive joins: Cross-table joins without time bounds
+• Too much data: Querying months when you need hours
+
+Volume Issues:
+• Log source spiking: Misconfiguration, attack, debug enabled
+• Duplicate ingestion: Double collection path
+• Verbose logging: Debug logs in production
+
+Architecture Issues:
+• Basic tier for complex queries: Basic is search-limited
+• Too many concurrent queries: Dashboard with 20 panels
+• Massive tables: Single table with billions of rows
+
+<strong>SOLUTIONS:</strong>
+
+Query Optimization:
+• TimeGenerated filter FIRST in every query
+• Project early, reduce columns
+• Summarize to reduce row count
+• Use let statements for reusable filters
+
+Volume Management:
+• Identify spike source, fix at ingestion
+• DCR filtering before workspace
+• Archive old data
+
+Architecture:
+• Materialized views for dashboard data
+• Summary tables for common aggregations
+• ADX for heavy analytics workloads
+• Pre-computed workbooks vs live queries
+
+<strong>Monitor:</strong> Set up Log Analytics workspace insights to catch issues early."</pre>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 5: SOUNDBITE BANK ==================== -->
+        <h2 id="soundbites">5. Soundbite Bank</h2>
+        
+        <p>Memorize these. Drop them naturally during conversation.</p>
+
+        <div class="soundbite-grid">
+          <div class="soundbite-card">
+            <h4>Detection Philosophy</h4>
+            <ul>
+              <li>"Detection-driven, not log-first"</li>
+              <li>"XDR owns detection, we own trust decisions"</li>
+              <li>"You configure controls, not detections"</li>
+              <li>"Outcome-driven, not rule-driven"</li>
+              <li>"780 retired to XDR, 485 in Sentinel"</li>
+            </ul>
+          </div>
+          <div class="soundbite-card">
+            <h4>Architecture</h4>
+            <ul>
+              <li>"Correlation is layered — XDR upstream, Sentinel enterprise"</li>
+              <li>"Different architecture, not feature comparison"</li>
+              <li>"Sentinel adds value where XDR stops"</li>
+              <li>"Complexity is the enemy of security"</li>
+            </ul>
+          </div>
+          <div class="soundbite-card">
+            <h4>Cost Optimization</h4>
+            <ul>
+              <li>"Don't ingest logs you won't detect on"</li>
+              <li>"Ingest alerts, not raw telemetry"</li>
+              <li>"Right tier for right use case"</li>
+              <li>"Design for commitment from Day 1"</li>
+              <li>"$12K vs $50K with naive ingestion"</li>
+            </ul>
+          </div>
+          <div class="soundbite-card">
+            <h4>Deployment Philosophy</h4>
+            <ul>
+              <li>"Audit first, always"</li>
+              <li>"Cutover when ready, not when planned"</li>
+              <li>"Legacy stays until new is proven"</li>
+              <li>"Both engines protecting simultaneously"</li>
+              <li>"Gate-based, not calendar-based"</li>
+            </ul>
+          </div>
+          <div class="soundbite-card">
+            <h4>Coverage Strategy</h4>
+            <ul>
+              <li>"100% visibility, not 100% agent deployment"</li>
+              <li>"Every device: agent, logs, or network monitoring"</li>
+              <li>"Isolate what you can't instrument"</li>
+              <li>"Right tool for each platform"</li>
+            </ul>
+          </div>
+          <div class="soundbite-card">
+            <h4>SOC Operations</h4>
+            <ul>
+              <li>"Investigate in XDR, correlate in Sentinel"</li>
+              <li>"Fewer, higher-fidelity alerts"</li>
+              <li>"False positives are expected — plan for them"</li>
+              <li>"Single events aren't interesting, sequences are"</li>
+            </ul>
+          </div>
+          <div class="soundbite-card">
+            <h4>Investigation Principles</h4>
+            <ul>
+              <li>"Start with the process tree, not the alert"</li>
+              <li>"Scope before you contain"</li>
+              <li>"Check the pipeline, step by step"</li>
+              <li>"Verify upstream before blaming downstream"</li>
+            </ul>
+          </div>
+          <div class="soundbite-card">
+            <h4>Troubleshooting Principles</h4>
+            <ul>
+              <li>"Most issues are connectivity or permissions"</li>
+              <li>"Never disable, always exclude specifically"</li>
+              <li>"Every exclusion is an accepted risk"</li>
+              <li>"Bad data equals bad detections"</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 6: NUMBERS TO KNOW ==================== -->
+        <h2 id="numbers">6. Numbers to Know</h2>
+        
+        <p>Key statistics from the project. Use these to add credibility.</p>
+
+        <div class="number-grid">
+          <div class="number-card">
+            <div class="number">1,247</div>
+            <div class="label">RSA rules evaluated</div>
+          </div>
+          <div class="number-card">
+            <div class="number">780</div>
+            <div class="label">Retired to XDR (63%)</div>
+          </div>
+          <div class="number-card">
+            <div class="number">255</div>
+            <div class="label">Migrated to Sentinel</div>
+          </div>
+          <div class="number-card">
+            <div class="number">230</div>
+            <div class="label">NEW Sentinel rules</div>
+          </div>
+          <div class="number-card">
+            <div class="number">485</div>
+            <div class="label">Total Sentinel rules</div>
+          </div>
+          <div class="number-card">
+            <div class="number">9,000</div>
+            <div class="label">Endpoints</div>
+          </div>
+          <div class="number-card">
+            <div class="number">4,000</div>
+            <div class="label">Employees</div>
+          </div>
+          <div class="number-card">
+            <div class="number">70-80%</div>
+            <div class="label">Coverage before cutover</div>
+          </div>
+          <div class="number-card">
+            <div class="number">90+</div>
+            <div class="label">Days parallel operation</div>
+          </div>
+          <div class="number-card">
+            <div class="number">4-8</div>
+            <div class="label">Weeks ASR audit period</div>
+          </div>
+          <div class="number-card">
+            <div class="number">18→12</div>
+            <div class="label">Months timeline compressed</div>
+          </div>
+          <div class="number-card">
+            <div class="number">$12K</div>
+            <div class="label">vs $50K naive ingestion</div>
+          </div>
+        </div>
+
+        <div class="callout info" style="margin-top: 2rem;">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            How to Use These Numbers
+          </div>
+          <div class="callout-content">
+            <p><strong>In context:</strong> "We evaluated 1,247 RSA rules, retired 780 to XDR because XDR handles them natively, and built 485 purpose-built Sentinel rules — 255 migrated plus 230 new coverage RSA never had."</p>
+            <p style="margin-top: 0.5rem;"><strong>For cost:</strong> "Our Sentinel costs about $12K/month. With naive ingestion — ingesting everything including raw MDE telemetry — it would have been $50K. That's the value of detection-driven architecture."</p>
+            <p style="margin-top: 0.5rem;"><strong>For timeline:</strong> "XDR-first approach compressed our timeline from 18 months to 12 months. We weren't wasting time building endpoint detections that XDR already handles."</p>
+          </div>
+        </div>
+
+        <!-- Page Navigation -->
+        <nav class="page-nav" style="margin-top: 3rem;">
+          <a href="interview-prep-v2.html" class="page-nav-link prev">
+            <span class="page-nav-label">Previous</span>
+            <span class="page-nav-title">← Interview Prep v2</span>
+          </a>
+          <a href="career-narrative.html" class="page-nav-link next">
+            <span class="page-nav-label">Next</span>
+            <span class="page-nav-title">Career Narrative →</span>
+          </a>
+        </nav>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

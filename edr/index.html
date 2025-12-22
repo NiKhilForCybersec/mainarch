@@ -59,6 +59,7 @@
           <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
           <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
           <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/compensating-controls.html" class="nav-item">Compensating Controls</a>
           <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
           <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
         </div>
@@ -130,6 +131,7 @@
           <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
           <a href="../interview-prep.html" class="nav-item">Interview Prep (Full)</a>
           <a href="../interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
+          <a href="../interview-technical-reference.html" class="nav-item">Technical Reference</a>
         </div>
       </nav>
     </aside>
@@ -225,6 +227,23 @@
             <p><strong>Microsoft does not force blind enforcement.</strong> XDR owns the detection logic — continuously updated, threat-intel-backed, behavioral. But the organization owns trust decisions: exclusions, scope, and blast-radius control.</p>
             <p><strong>False positives are expected early.</strong> Failure to plan for them is the real risk. We used audit mode for 4-8 weeks per ASR priority wave, built known-good baselines before enforcement, and documented every exclusion with business justification.</p>
             <p>👉 <strong><a href="asr-rules.html#false-positive-handling">Full False Positive Handling & Exclusion Process →</a></strong></p>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Not Everything Can Run MDE
+          </div>
+          <div class="callout-content">
+            <p><strong>The goal is security visibility, not agent deployment percentage.</strong> For systems where MDE can't be deployed — legacy OS, network devices, OT/IoT, vendor-managed systems — we implement compensating controls:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Defender for IoT:</strong> Passive network monitoring for OT/IoT</li>
+              <li><strong>Syslog → Sentinel:</strong> Log ingestion from network devices and appliances</li>
+              <li><strong>Network segmentation:</strong> Isolate unmanaged devices</li>
+              <li><strong>Defender for Cloud Apps:</strong> CASB for SaaS visibility</li>
+            </ul>
+            <p>👉 <strong><a href="compensating-controls.html">Full MDE Agent Gaps & Compensating Controls →</a></strong></p>
           </div>
         </div>
 

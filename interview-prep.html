@@ -130,6 +130,7 @@
           <a href="career-narrative.html" class="nav-item">Career Narrative</a>
           <a href="interview-prep.html" class="nav-item">Interview Prep (Full)</a>
           <a href="interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
+          <a href="interview-technical-reference.html" class="nav-item">Technical Reference</a>
         </div>
       </nav>
     </aside>
@@ -295,6 +296,17 @@ ensuring that knowledge transfers cleanly to the team that will run it."</code><
             <pre><code>"I'll walk you through the RSA NetWitness to Microsoft Sentinel migration 
 I worked on. The company was a B2B SaaS provider with about 4,000 employees, 
 9,000 endpoints, and global offices.
+
+APPROACH: Our SIEM migration was detection-driven rather than log-first 
+or 1-to-1 rule translation. Instead of mechanically porting every RSA 
+NetWitness rule, we evaluated detection intent and leveraged Microsoft's 
+XDR platform for domains where built-in detections already provide strong 
+coverage — endpoint, identity, email, and cloud app activity.
+
+This allowed us to retire redundant detections, reduce ingestion cost, 
+and avoid duplicating logic that XDR already handles natively. Sentinel 
+was then used where it adds the most value: cross-domain correlation, 
+non-Microsoft telemetry, and detections requiring broader context beyond XDR.
 
 CONTEXT: This was part of a larger cloud transformation. Identity and 
 Infrastructure migrations had already started — AD was being synced to 

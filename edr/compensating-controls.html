@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MDE Agent Gaps & Compensating Controls | EDR Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .gap-category { margin: 2rem 0; }
+    .gap-category h3 { color: var(--accent-cyan); border-bottom: 1px solid var(--border-primary); padding-bottom: 0.5rem; }
+    .control-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 4px; }
+    .control-tag.defender-iot { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+    .control-tag.syslog { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+    .control-tag.segmentation { background: rgba(251, 191, 36, 0.2); color: #fcd34d; }
+    .control-tag.casb { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; }
+    .control-tag.cloud { background: rgba(236, 72, 153, 0.2); color: #f9a8d4; }
+    .control-tag.pam { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+    .control-tag.alt-edr { background: rgba(20, 184, 166, 0.2); color: #5eead4; }
+    .control-tag.ca { background: rgba(249, 115, 22, 0.2); color: #fdba74; }
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .summary-card { background: var(--bg-secondary); border-radius: 8px; padding: 1rem; border-left: 3px solid var(--accent-cyan); }
+    .summary-card h4 { margin: 0 0 0.5rem 0; color: var(--text-primary); }
+    .summary-card p { margin: 0; font-size: 0.9rem; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="../siem/workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
+          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="../siem/casb-saas-security.html" class="nav-item">CASB &amp; SaaS Security</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/compensating-controls.html" class="nav-item">Compensating Controls</a>
+          <a href="../edr/compensating-controls.html" class="nav-item active">Compensating Controls</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="../infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="../operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="../operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="../resources/templates.html" class="nav-item">Templates</a>
+          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="../resources/alternative-architectures.html" class="nav-item">Alternative Architectures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="../resources/incident-response.html" class="nav-item">Incident Response</a>
+          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Prep (Full)</a>
+          <a href="../interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
+          <a href="../interview-technical-reference.html" class="nav-item">Technical Reference</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">EDR Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Compensating Controls</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>MDE Agent Gaps & Compensating Controls</h1>
+          <div class="page-header-meta">
+            <span class="page-badge edr">EDR Track</span>
+            <span class="page-reading-time">Comprehensive Coverage Strategy</span>
+          </div>
+          <p class="intro-text">Not everything can run an MDE agent. This page documents all asset categories where MDE cannot be deployed and the compensating controls we implement to maintain security visibility. The goal isn't 100% MDE coverage — it's 100% visibility through the right tool for each asset class.</p>
+        </div>
+
+        <!-- ==================== KEY PRINCIPLE ==================== -->
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Key Principle: Coverage ≠ Agent Deployment
+          </div>
+          <div class="callout-content">
+            <p><strong>The goal is security visibility, not agent deployment percentage.</strong></p>
+            <p style="margin-top: 0.5rem;">For systems where MDE can't be installed, we implement layered compensating controls:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Network-level visibility:</strong> Defender for IoT, NDR, firewall telemetry</li>
+              <li><strong>Log ingestion:</strong> Syslog, CEF, API integrations to Sentinel</li>
+              <li><strong>Network segmentation:</strong> Isolate unmanaged devices</li>
+              <li><strong>Access controls:</strong> Conditional Access, PAM, MFA</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ==================== CONTROL LEGEND ==================== -->
+        <h2>Compensating Control Types</h2>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <h4><span class="control-tag defender-iot">Defender for IoT</span></h4>
+            <p>Passive network monitoring for OT/IoT devices. No agent required — analyzes network traffic for anomalies and threats.</p>
+          </div>
+          <div class="summary-card">
+            <h4><span class="control-tag syslog">Syslog → Sentinel</span></h4>
+            <p>Log forwarding via Syslog, CEF, or LEEF. Brings device logs into Sentinel for detection and correlation.</p>
+          </div>
+          <div class="summary-card">
+            <h4><span class="control-tag segmentation">Network Segmentation</span></h4>
+            <p>VLANs, firewall rules, microsegmentation. Isolates unmanaged devices and limits blast radius.</p>
+          </div>
+          <div class="summary-card">
+            <h4><span class="control-tag casb">Defender for Cloud Apps</span></h4>
+            <p>CASB for SaaS visibility. OAuth app monitoring, session controls, data loss prevention.</p>
+          </div>
+          <div class="summary-card">
+            <h4><span class="control-tag cloud">Defender for Cloud</span></h4>
+            <p>Cloud security posture management. Protects Azure PaaS, serverless, containers without agents.</p>
+          </div>
+          <div class="summary-card">
+            <h4><span class="control-tag pam">PAM / Access Control</span></h4>
+            <p>CyberArk, PIM, session recording. Controls privileged access to sensitive systems.</p>
+          </div>
+          <div class="summary-card">
+            <h4><span class="control-tag alt-edr">Alternative EDR</span></h4>
+            <p>CrowdStrike Falcon, Carbon Black, Wazuh. For platforms MDE doesn't support (AIX, Solaris, etc.).</p>
+          </div>
+          <div class="summary-card">
+            <h4><span class="control-tag ca">Conditional Access</span></h4>
+            <p>Entra ID Conditional Access. Block non-compliant devices, enforce MFA, limit app access.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 1: UNSUPPORTED OS ==================== -->
+        <h2>1. Unsupported Operating Systems</h2>
+
+        <div class="gap-category">
+          <h3>1.1 Legacy Windows</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>System</th><th>Why No MDE</th><th>Compensating Controls</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Windows Server 2008 R2</strong> (no ESU)</td>
+                  <td>MDE requires Server 2012 R2+ or ESU for older</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <span class="control-tag segmentation">Segmentation</span>
+                    <br><small>Sysmon + WEF to Sentinel, network isolation, accelerate decommission</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Windows 7 Embedded</strong> (ATMs, kiosks)</td>
+                  <td>Embedded OS, no ESU</td>
+                  <td>
+                    <span class="control-tag segmentation">Segmentation</span>
+                    <span class="control-tag syslog">Syslog</span>
+                    <br><small>Dedicated VLAN, application whitelisting, Sysmon logging</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Windows XP/Vista</strong> (if any legacy)</td>
+                  <td>Completely unsupported</td>
+                  <td>
+                    <span class="control-tag segmentation">Segmentation</span>
+                    <br><small>Air-gap if possible, strict firewall rules, prioritize replacement</small>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="gap-category">
+          <h3>1.2 Legacy Linux</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>System</th><th>Why No MDE</th><th>Compensating Controls</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>RHEL 5/6, CentOS 6</strong></td>
+                  <td>Kernel too old, glibc incompatible</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <span class="control-tag alt-edr">Wazuh</span>
+                    <br><small>Auditd → Sentinel, Wazuh/OSSEC agent, network isolation</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Ubuntu 14.04 and earlier</strong></td>
+                  <td>EOL, unsupported kernel</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <span class="control-tag segmentation">Segmentation</span>
+                    <br><small>rsyslog to Sentinel, prioritize upgrade</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Custom/Embedded Linux</strong></td>
+                  <td>Non-standard kernel, no package support</td>
+                  <td>
+                    <span class="control-tag defender-iot">Defender for IoT</span>
+                    <span class="control-tag segmentation">Segmentation</span>
+                    <br><small>Passive network monitoring, strict segmentation</small>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="gap-category">
+          <h3>1.3 Unix & Mainframe</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>System</th><th>Why No MDE</th><th>Compensating Controls</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>AIX (IBM Power)</strong></td>
+                  <td>No MDE support</td>
+                  <td>
+                    <span class="control-tag alt-edr">CrowdStrike</span>
+                    <span class="control-tag syslog">Syslog</span>
+                    <br><small>CrowdStrike Falcon supports AIX, syslog to Sentinel</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>HP-UX</strong></td>
+                  <td>No MDE support</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <span class="control-tag segmentation">Segmentation</span>
+                    <br><small>Syslog forwarding, network isolation, host-based firewall</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Solaris (Oracle)</strong></td>
+                  <td>No MDE support</td>
+                  <td>
+                    <span class="control-tag alt-edr">CrowdStrike</span>
+                    <span class="control-tag syslog">Syslog</span>
+                    <br><small>CrowdStrike Falcon, BSM audit logs to Sentinel</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>z/OS (Mainframe)</strong></td>
+                  <td>Completely unsupported</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <span class="control-tag pam">PAM</span>
+                    <br><small>IBM zSecure, SMF records to Sentinel, RACF logging, strict access control</small>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="gap-category">
+          <h3>1.4 macOS</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>System</th><th>Why No MDE</th><th>Compensating Controls</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>macOS 10.14 (Mojave) and earlier</strong></td>
+                  <td>MDE requires macOS 10.15 (Catalina)+</td>
+                  <td>
+                    <span class="control-tag alt-edr">Jamf Protect</span>
+                    <span class="control-tag syslog">Syslog</span>
+                    <br><small>Jamf Protect, native Unified Logging to Sentinel, prioritize OS upgrade</small>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 2: NETWORK INFRASTRUCTURE ==================== -->
+        <h2>2. Network Infrastructure</h2>
+
+        <div class="gap-category">
+          <h3>2.1 Firewalls & Security Appliances</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Device Type</th><th>Examples at RevFlow</th><th>Why No MDE</th><th>Compensating Controls</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Next-Gen Firewalls</strong></td>
+                  <td>Palo Alto PA-series, Fortinet FortiGate</td>
+                  <td>Proprietary OS</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <br><small>CEF/Syslog → Sentinel, Palo Alto Cortex XDR integration, Threat Prevention logs</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>VPN Concentrators</strong></td>
+                  <td>Cisco AnyConnect, GlobalProtect</td>
+                  <td>Appliance-based</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <span class="control-tag ca">Conditional Access</span>
+                    <br><small>VPN logs → Sentinel, CA impossible travel detection, MFA enforcement</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Web Application Firewalls</strong></td>
+                  <td>F5 ASM, Azure WAF, Cloudflare</td>
+                  <td>SaaS/Appliance</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <br><small>WAF logs → Sentinel, Azure WAF native integration</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>NAC Appliances</strong></td>
+                  <td>Cisco ISE, Aruba ClearPass</td>
+                  <td>Proprietary</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <br><small>Syslog → Sentinel, posture assessment logs, 802.1X authentication logs</small>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="gap-category">
+          <h3>2.2 Routers, Switches & Network Equipment</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Device Type</th><th>Examples</th><th>Why No MDE</th><th>Compensating Controls</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Core/Distribution Switches</strong></td>
+                  <td>Cisco Catalyst, Nexus, Arista</td>
+                  <td>IOS/NX-OS — no agent</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <br><small>Syslog → Sentinel, NetFlow/IPFIX analysis, AAA logs, config change alerts</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Routers</strong></td>
+                  <td>Cisco ISR, Juniper MX</td>
+                  <td>IOS/JUNOS — no agent</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <br><small>Syslog → Sentinel, NetFlow, SNMP monitoring</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Wireless Controllers</strong></td>
+                  <td>Cisco WLC, Aruba</td>
+                  <td>Appliance OS</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <br><small>Syslog → Sentinel, RADIUS logs, rogue AP detection</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Load Balancers</strong></td>
+                  <td>F5 BIG-IP, Citrix NetScaler</td>
+                  <td>Proprietary appliance</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <br><small>F5 telemetry streaming, syslog → Sentinel, SSL/TLS logs</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>SD-WAN Appliances</strong></td>
+                  <td>Cisco Viptela, Palo Alto Prisma</td>
+                  <td>Proprietary</td>
+                  <td>
+                    <span class="control-tag syslog">Syslog</span>
+                    <br><small>Management plane logs → Sentinel, tunnel status monitoring</small>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 3: VIRTUALIZATION & STORAGE ==================== -->
+        <h2>3. Virtualization & Storage Infrastructure</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>System Type</th><th>Examples</th><th>Why No MDE</th><th>Compensating Controls</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>ESXi Hypervisors</strong></td>
+                <td>VMware vSphere hosts</td>
+                <td>No agent on hypervisor (only VMs)</td>
+                <td>
+                  <span class="control-tag syslog">Syslog</span>
+                  <br><small>vCenter logs → Sentinel, vRealize Log Insight, STIG hardening, vMotion monitoring</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Hyper-V Hosts</strong></td>
+                <td>Windows Server Hyper-V role</td>
+                <td>Agent on host OS only — limited hypervisor visibility</td>
+                <td>
+                  <span class="control-tag syslog">Syslog</span>
+                  <br><small>MDE on host OS (partial), Hyper-V audit events to Sentinel</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Storage Arrays</strong></td>
+                <td>NetApp, Dell EMC, Pure Storage</td>
+                <td>Proprietary firmware</td>
+                <td>
+                  <span class="control-tag syslog">Syslog</span>
+                  <span class="control-tag pam">PAM</span>
+                  <br><small>Storage audit logs → Sentinel, admin access via CyberArk, config change monitoring</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>SAN Switches</strong></td>
+                <td>Brocade, Cisco MDS</td>
+                <td>Fabric OS</td>
+                <td>
+                  <span class="control-tag syslog">Syslog</span>
+                  <br><small>Syslog → Sentinel, zoning change alerts, fabric login monitoring</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Backup Appliances</strong></td>
+                <td>Veeam, Commvault, Rubrik</td>
+                <td>Appliance OS</td>
+                <td>
+                  <span class="control-tag syslog">Syslog</span>
+                  <br><small>Backup job logs → Sentinel, ransomware detection (native), immutable backup verification</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>NAS Devices</strong></td>
+                <td>NetApp, Synology, QNAP</td>
+                <td>Embedded Linux/proprietary</td>
+                <td>
+                  <span class="control-tag syslog">Syslog</span>
+                  <br><small>File access audit logs → Sentinel, FPolicy integration (NetApp)</small>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 4: OT/ICS/IoT ==================== -->
+        <h2>4. OT/ICS/SCADA & IoT Devices</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Defender for IoT: The Primary Control for OT/IoT
+          </div>
+          <div class="callout-content">
+            <p><strong>Microsoft Defender for IoT</strong> provides agentless monitoring for OT and IoT environments:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Passive network sensor — no agent installation required</li>
+              <li>Asset discovery — automatically identifies devices</li>
+              <li>Anomaly detection — behavioral analysis for deviations</li>
+              <li>Vulnerability assessment — CVE matching for OT devices</li>
+              <li>Integrates with Sentinel for unified SOC visibility</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Device Type</th><th>Examples at RevFlow</th><th>Why No MDE</th><th>Compensating Controls</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Building Management Systems</strong></td>
+                <td>HVAC controllers, Honeywell BMS, Johnson Controls</td>
+                <td>Embedded real-time OS</td>
+                <td>
+                  <span class="control-tag defender-iot">Defender for IoT</span>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <br><small>Passive monitoring, dedicated OT VLAN, no internet access</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Physical Access Control</strong></td>
+                <td>Badge readers, door controllers, Lenel, HID</td>
+                <td>Embedded firmware</td>
+                <td>
+                  <span class="control-tag defender-iot">Defender for IoT</span>
+                  <span class="control-tag syslog">Syslog</span>
+                  <br><small>PACS logs → Sentinel, Defender for IoT, isolated network</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>UPS/Power Management</strong></td>
+                <td>APC, Eaton, Vertiv network cards</td>
+                <td>Embedded SNMP</td>
+                <td>
+                  <span class="control-tag syslog">Syslog</span>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <br><small>SNMP traps → Sentinel, out-of-band management network</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Environmental Sensors</strong></td>
+                <td>Temperature, humidity, leak detection</td>
+                <td>IoT devices, no OS</td>
+                <td>
+                  <span class="control-tag defender-iot">Defender for IoT</span>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <br><small>Defender for IoT passive monitoring, IoT VLAN isolation</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Printers/MFPs</strong></td>
+                <td>HP, Xerox, Canon enterprise</td>
+                <td>Embedded firmware</td>
+                <td>
+                  <span class="control-tag defender-iot">Defender for IoT</span>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <br><small>Defender for IoT, print server logs → Sentinel, disable unused protocols (FTP, Telnet)</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>IP Cameras</strong></td>
+                <td>Axis, Hikvision (security cameras)</td>
+                <td>Embedded Linux</td>
+                <td>
+                  <span class="control-tag defender-iot">Defender for IoT</span>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <br><small>Isolated camera VLAN, NVR logs → Sentinel, no internet egress</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Conference Room Tech</strong></td>
+                <td>Poly, Cisco Webex boards, smart displays</td>
+                <td>Embedded OS</td>
+                <td>
+                  <span class="control-tag defender-iot">Defender for IoT</span>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <br><small>Teams/Webex admin logs, network isolation, firmware updates</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>VoIP Phones</strong></td>
+                <td>Cisco IP phones, Poly</td>
+                <td>Embedded</td>
+                <td>
+                  <span class="control-tag syslog">Syslog</span>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <br><small>Call manager logs → Sentinel, voice VLAN isolation</small>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 5: SPECIALIZED FINANCIAL ==================== -->
+        <h2>5. Specialized Financial Systems</h2>
+
+        <div class="callout critical">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Financial Services Context
+          </div>
+          <div class="callout-content">
+            <p>As a financial analytics company, RevFlow has specialized systems that may have vendor-managed security or regulatory constraints preventing agent deployment.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>System Type</th><th>Examples</th><th>Why No MDE</th><th>Compensating Controls</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Trading Terminals</strong></td>
+                <td>Bloomberg Terminal, Reuters Eikon</td>
+                <td>Vendor-managed, locked down</td>
+                <td>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <span class="control-tag syslog">Syslog</span>
+                  <br><small>Vendor security controls (SOC 2), network segmentation, user activity monitoring</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Market Data Feeds</strong></td>
+                <td>Bloomberg B-PIPE, Reuters</td>
+                <td>Appliance/dedicated</td>
+                <td>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <br><small>Network monitoring, feed integrity checks, vendor SLA</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Payment Systems</strong></td>
+                <td>POS terminals (if any)</td>
+                <td>PCI compliance, vendor-managed</td>
+                <td>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <span class="control-tag pam">PAM</span>
+                  <br><small>PCI DSS controls, dedicated payment VLAN, QSA audits, P2PE encryption</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>HSMs (Hardware Security Modules)</strong></td>
+                <td>Thales Luna, nCipher</td>
+                <td>Air-gapped, no network agent</td>
+                <td>
+                  <span class="control-tag pam">PAM</span>
+                  <span class="control-tag syslog">Syslog</span>
+                  <br><small>Physical access controls, audit logs to SIEM, tamper detection, dual control</small>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 6: THIRD-PARTY & VENDOR ==================== -->
+        <h2>6. Third-Party & Vendor-Managed Systems</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>System Type</th><th>Examples</th><th>Why No MDE</th><th>Compensating Controls</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Vendor-Managed Servers</strong></td>
+                <td>ERP vendor, HR system (Workday on-prem components)</td>
+                <td>Contractual — vendor owns security</td>
+                <td>
+                  <span class="control-tag syslog">Syslog</span>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <br><small>Require SOC 2 Type II, API/log integration, network segmentation, vendor access monitoring</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Contractor Workstations</strong></td>
+                <td>Third-party consultants, auditors</td>
+                <td>BYOD or contractor-owned</td>
+                <td>
+                  <span class="control-tag ca">Conditional Access</span>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <br><small>CA: require compliant/managed device, MAM policies, VDI instead of direct access</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>MSP Remote Access</strong></td>
+                <td>Managed service providers</td>
+                <td>MSP-controlled</td>
+                <td>
+                  <span class="control-tag pam">PAM</span>
+                  <span class="control-tag ca">Conditional Access</span>
+                  <br><small>CyberArk/PIM, session recording, dedicated jump hosts, MFA, time-limited access</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Audit Firm Systems</strong></td>
+                <td>External auditors during SOX/compliance</td>
+                <td>Auditor-owned laptops</td>
+                <td>
+                  <span class="control-tag ca">Conditional Access</span>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <br><small>Guest network, VDI access only, no direct data access, time-limited credentials</small>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 7: CLOUD & SAAS ==================== -->
+        <h2>7. Cloud & SaaS Systems</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>System Type</th><th>Examples</th><th>Why No MDE</th><th>Compensating Controls</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SaaS Applications</strong></td>
+                <td>Salesforce, Workday, NetSuite, ServiceNow</td>
+                <td>No endpoint — it's SaaS</td>
+                <td>
+                  <span class="control-tag casb">Defender for Cloud Apps</span>
+                  <span class="control-tag syslog">API Logs</span>
+                  <br><small>CASB session controls, API log ingestion to Sentinel, OAuth app monitoring, DLP policies</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>AWS EC2 Instances</strong></td>
+                <td>If any AWS workloads</td>
+                <td>Can install MDE, but may use AWS-native</td>
+                <td>
+                  <span class="control-tag cloud">Defender for Cloud</span>
+                  <span class="control-tag syslog">CloudTrail</span>
+                  <br><small>MDE on EC2 (supported), OR GuardDuty + CloudTrail → Sentinel, Defender for Cloud multicloud</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Azure PaaS</strong></td>
+                <td>Azure SQL, App Service, Functions</td>
+                <td>Managed service — no OS access</td>
+                <td>
+                  <span class="control-tag cloud">Defender for Cloud</span>
+                  <br><small>Defender for Cloud (CSPM + CWP), Azure diagnostics → Sentinel, threat detection native</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Serverless / Functions</strong></td>
+                <td>Azure Functions, AWS Lambda</td>
+                <td>No persistent OS</td>
+                <td>
+                  <span class="control-tag cloud">Defender for Cloud</span>
+                  <span class="control-tag syslog">App Logs</span>
+                  <br><small>Application Insights, function logs → Sentinel, Defender for Cloud serverless protection</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Kubernetes / Containers</strong></td>
+                <td>AKS, EKS clusters</td>
+                <td>Container hosts need special approach</td>
+                <td>
+                  <span class="control-tag cloud">Defender for Containers</span>
+                  <br><small>Defender for Containers, runtime protection, image scanning, Kubernetes audit logs</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Database PaaS</strong></td>
+                <td>Azure SQL, Cosmos DB, RDS</td>
+                <td>Managed service</td>
+                <td>
+                  <span class="control-tag cloud">Defender for SQL</span>
+                  <span class="control-tag syslog">Audit Logs</span>
+                  <br><small>Defender for Cloud SQL, audit logs → Sentinel, Advanced Threat Protection</small>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 8: DEV/TEST ==================== -->
+        <h2>8. Development & Test Environments</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>System Type</th><th>Examples</th><th>Why No MDE</th><th>Compensating Controls</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Ephemeral Build Agents</strong></td>
+                <td>CI/CD runners, Azure DevOps agents</td>
+                <td>Short-lived, performance impact concerns</td>
+                <td>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <br><small>MDE in golden image (preferred), OR network isolation, limited prod access, pipeline security</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Developer Sandboxes</strong></td>
+                <td>Local VMs, Docker containers</td>
+                <td>Developer resistance, performance</td>
+                <td>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <span class="control-tag ca">Conditional Access</span>
+                  <br><small>Network isolation from prod, container scanning, limited cloud access from dev</small>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Security Test Lab</strong></td>
+                <td>Pen test systems, vuln scanners</td>
+                <td>Intentionally vulnerable systems</td>
+                <td>
+                  <span class="control-tag segmentation">Segmentation</span>
+                  <br><small>Air-gapped network, no prod connectivity, physical isolation, time-limited access</small>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 9: CONTROL MATRIX ==================== -->
+        <h2>9. Compensating Control Summary Matrix</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Control</th><th>Primary Use Case</th><th>Implementation Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="control-tag defender-iot">Defender for IoT</span></td>
+                <td>OT, IoT, unmanaged network devices</td>
+                <td>Deploy passive network sensor on SPAN port. No agent installation. Asset discovery + anomaly detection + vulnerability assessment.</td>
+              </tr>
+              <tr>
+                <td><span class="control-tag syslog">Syslog → Sentinel</span></td>
+                <td>Network devices, appliances, legacy systems</td>
+                <td>CEF/LEEF/Syslog via Azure Monitor Agent or legacy Log Analytics agent. Configure DCR for parsing.</td>
+              </tr>
+              <tr>
+                <td><span class="control-tag segmentation">Network Segmentation</span></td>
+                <td>All unmanaged/untrusted devices</td>
+                <td>VLANs, firewall rules, microsegmentation. Limit east-west traffic. No direct internet access for OT/IoT.</td>
+              </tr>
+              <tr>
+                <td><span class="control-tag casb">Defender for Cloud Apps</span></td>
+                <td>SaaS applications</td>
+                <td>CASB for shadow IT discovery, OAuth app monitoring, session controls, DLP for cloud apps.</td>
+              </tr>
+              <tr>
+                <td><span class="control-tag cloud">Defender for Cloud</span></td>
+                <td>Azure PaaS, serverless, containers, multicloud</td>
+                <td>CSPM + CWP. Enable Defender plans for SQL, Storage, Containers, App Service, etc.</td>
+              </tr>
+              <tr>
+                <td><span class="control-tag pam">PAM / Access Control</span></td>
+                <td>Vendor access, privileged systems, HSMs</td>
+                <td>CyberArk, Entra PIM. Session recording, time-limited access, MFA, approval workflows.</td>
+              </tr>
+              <tr>
+                <td><span class="control-tag alt-edr">Alternative EDR</span></td>
+                <td>Unix (AIX, Solaris), legacy Linux</td>
+                <td>CrowdStrike Falcon (broad OS support), Carbon Black, Wazuh/OSSEC (open source).</td>
+              </tr>
+              <tr>
+                <td><span class="control-tag ca">Conditional Access</span></td>
+                <td>BYOD, contractors, unmanaged devices</td>
+                <td>Require compliant device for app access. Block unmanaged devices from sensitive apps. Enforce MFA.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 10: INTERVIEW ==================== -->
+        <h2>10. Interview-Ready Summary</h2>
+
+        <div class="callout success" style="border-left: 4px solid #22c55e;">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            🎯 Interview Answer: "How do you handle systems where you can't install MDE?"
+          </div>
+          <div class="callout-content">
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Response</span></div>
+              <pre><code>"For systems where we can't deploy MDE — legacy OS, network infrastructure, 
+IoT devices, vendor-managed systems — we implement layered compensating controls:
+
+1. NETWORK-LEVEL VISIBILITY
+   Defender for IoT for passive monitoring of OT/IoT devices — no agent 
+   required, it analyzes network traffic for anomalies. Plus firewall and 
+   NDR telemetry to Sentinel.
+
+2. LOG INGESTION
+   Syslog, CEF, and API integrations bring device logs into Sentinel even 
+   without an endpoint agent. Firewalls, switches, storage arrays — they 
+   all send logs to Sentinel for detection and correlation.
+
+3. NETWORK SEGMENTATION
+   Unmanaged devices go into dedicated VLANs with strict firewall rules. 
+   OT/IoT networks have no direct internet access. Limits blast radius 
+   if a device is compromised.
+
+4. CLOUD/SAAS COVERAGE
+   For SaaS apps — Defender for Cloud Apps (CASB) provides visibility 
+   without endpoint agents. For Azure PaaS and containers — Defender 
+   for Cloud provides workload protection.
+
+5. ACCESS CONTROLS
+   Conditional Access blocks non-compliant devices from sensitive apps. 
+   PAM (CyberArk/PIM) controls vendor access with session recording.
+
+6. ALTERNATIVE EDR
+   For Unix systems like AIX or Solaris where MDE doesn't work — we can 
+   use CrowdStrike Falcon which has broader OS support, or open-source 
+   options like Wazuh.
+
+The goal isn't 100% MDE coverage — it's 100% visibility through the right 
+tool for each asset class. Every device either has an agent, sends logs, 
+or is monitored passively on the network."</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Key Phrases to Hit
+          </div>
+          <div class="callout-content">
+            <ul style="margin: 0; padding-left: 1.5rem;">
+              <li>"Layered compensating controls"</li>
+              <li>"Defender for IoT — passive network monitoring"</li>
+              <li>"Network segmentation — isolate unmanaged devices"</li>
+              <li>"100% visibility, not 100% agent deployment"</li>
+              <li>"Right tool for each asset class"</li>
+              <li>"Every device either has an agent, sends logs, or is monitored on the network"</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Page Navigation -->
+        <nav class="page-nav">
+          <a href="device-control.html" class="page-nav-link prev">
+            <span class="page-nav-label">Previous</span>
+            <span class="page-nav-title">← Device Control</span>
+          </a>
+          <a href="coexistence.html" class="page-nav-link next">
+            <span class="page-nav-label">Next</span>
+            <span class="page-nav-title">Coexistence Strategy →</span>
+          </a>
+        </nav>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
