@@ -320,6 +320,14 @@
               <p><em>"I don't ingest logs first and then write detections. I decide detections first, then ingest only the logs needed."</em></p>
             </div>
           </div>
+
+          <div class="callout info" style="margin-top: 1rem;">
+            <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>XDR Works Without Sentinel Ingestion</div>
+            <div class="callout-content">
+              <p><strong>This is what enables phased ingestion:</strong> MDE telemetry goes directly to the Defender backend. XDR detections work immediately — no Sentinel log ingestion required.</p>
+              <p style="margin-top: 0.5rem;">So during Months 0-3, we can roll out MDE, get XDR detecting from Day 1, while keeping Sentinel ingestion minimal until the detection catalog is finalized. See <a href="cost-optimization.html">Cost Optimization</a> for the phased timeline.</p>
+            </div>
+          </div>
           
           <div class="table-wrapper" style="margin-top: 1rem;">
             <table>
@@ -361,7 +369,7 @@
             </table>
           </div>
           
-          <p style="margin-top: 1rem;"><strong>Cost Implication:</strong> This approach reduces ingestion by 60-80% compared to "ingest everything" strategies.</p>
+          <p style="margin-top: 1rem;"><strong>Cost Implication:</strong> This approach reduces ingestion by 60-80% compared to "ingest everything" strategies. Combined with phased rollout, you avoid 2-3 months of paying for logs with no detections using them.</p>
         </div>
 
         <!-- PHASE 4 -->

@@ -167,8 +167,132 @@
           <p class="intro-text">This page covers Sentinel cost optimization — understanding log tiers (Analytics, Basic, Archive), commitment tiers, and strategies to reduce costs while maintaining security visibility.</p>
         </div>
 
-        <!-- ==================== SECTION 1: SENTINEL PRICING ==================== -->
-        <h2>1. Microsoft Sentinel Pricing Model</h2>
+        <!-- ==================== SECTION 1: DETECTION-DRIVEN INGESTION ==================== -->
+        <h2>1. Detection-Driven Ingestion: Design First, Ingest Second</h2>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>The #1 Cost Optimization: Don't Ingest Until You Know Why</div>
+          <div class="callout-content">
+            <p>The biggest cost mistake: <strong>ingesting everything on Day 1, then figuring out what you need.</strong></p>
+            <p style="margin-top: 0.5rem;">Instead: <strong>Build your detection catalog first, then ingest only the logs those detections require.</strong></p>
+          </div>
+        </div>
+
+        <h3>1.1 Why MDE/XDR Rollout Is Independent of Sentinel Ingestion</h3>
+
+        <p>This is a critical architectural point that enables the phased approach:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Component</th><th>Where Telemetry Goes</th><th>Sentinel Required?</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>MDE (Endpoint)</strong></td>
+                <td>Directly to Defender backend</td>
+                <td>❌ No — XDR detects without Sentinel</td>
+              </tr>
+              <tr>
+                <td><strong>MDI (Identity attacks)</strong></td>
+                <td>Directly to Defender backend</td>
+                <td>❌ No — XDR detects without Sentinel</td>
+              </tr>
+              <tr>
+                <td><strong>MDO (Email/Office)</strong></td>
+                <td>Directly to Defender backend</td>
+                <td>❌ No — XDR detects without Sentinel</td>
+              </tr>
+              <tr>
+                <td><strong>MDA (Cloud Apps)</strong></td>
+                <td>Directly to Defender backend</td>
+                <td>❌ No — XDR detects without Sentinel</td>
+              </tr>
+              <tr>
+                <td><strong>Sentinel</strong></td>
+                <td>Log Analytics (you pay for ingestion)</td>
+                <td>✅ Yes — used for SIEM correlation, network logs, custom detections</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Key Insight</div>
+          <div class="callout-content">
+            <p><strong>XDR detections work immediately</strong> when you deploy MDE agents — no Sentinel log ingestion required.</p>
+            <p style="margin-top: 0.5rem;">So you can:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Roll out MDE, configure ASR/AV/EDR ✅</li>
+              <li>Get XDR detections from Day 1 ✅</li>
+              <li>Keep Sentinel ingestion minimal while you design detection coverage ✅</li>
+              <li>Enable full ingestion only after detections are SOC-ready ✅</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>1.2 The Phased Ingestion Strategy</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Phased Ingestion Timeline</span></div>
+          <pre><code>PHASE 1: FOUNDATION (Months 0-2)
+════════════════════════════════════════════════════════════════════════════════
+Sentinel Ingestion: MINIMAL
+  • Identity logs (SignInLogs, AuditLogs) — needed for baseline
+  • Azure Activity — governance
+  • Security alerts from XDR connector — incidents only
+  
+Cost: Low (~50-100 GB/day)
+  
+MDE/XDR: ACTIVE
+  • MDE agents deploying
+  • XDR detections working immediately
+  • No dependency on Sentinel ingestion
+
+
+PHASE 2: DETECTION DESIGN (Months 1-3)
+════════════════════════════════════════════════════════════════════════════════
+Sentinel Ingestion: STILL MINIMAL (same as Phase 1)
+  • No new log sources yet
+  • Focus is on design, not ingestion
+  
+This phase is intellectual work:
+  • Build detection catalog (threats → MITRE mapping)
+  • Decide XDR ownership vs Sentinel ownership
+  • Identify which log sources each detection requires
+  • Design DCR filtering (Event IDs, severity, facilities)
+
+
+PHASE 3: CONTROLLED INGESTION (Months 3+)
+════════════════════════════════════════════════════════════════════════════════
+Sentinel Ingestion: SELECTIVE
+  • Enable connectors only for logs required by detections
+  • Apply DCR transformation rules
+  • Each log source justified by detection use case
+  
+Cost: Ramps based on actual need (~200-400 GB/day)
+
+Detection Rules: DEPLOYING
+  • Rules deployed alongside their required data
+  • SOC receives alerts that make sense
+
+
+PHASE 4: STEADY STATE (Months 6+)
+════════════════════════════════════════════════════════════════════════════════
+Sentinel Ingestion: OPTIMIZED
+  • Commitment tier once daily volume predictable
+  • Tier placement optimized (Analytics/Basic/Archive)
+  • Ongoing review of value vs cost
+  
+Cost: Predictable, justified, optimized</code></pre>
+        </div>
+
+        <div class="savings-callout">
+          <p><strong>Cost Impact:</strong> By delaying full ingestion until detections are designed, you avoid 2-3 months of paying for logs that generate no security value. At 400 GB/day average, that's <strong>~$35,000+ in savings</strong> vs ingesting everything from Day 1.</p>
+        </div>
+
+        <!-- ==================== SECTION 2: SENTINEL PRICING ==================== -->
+        <h2>2. Microsoft Sentinel Pricing Model</h2>
 
         <div class="callout info">
           <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Cost Components</div>

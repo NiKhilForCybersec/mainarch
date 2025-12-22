@@ -600,6 +600,137 @@
           </table>
         </div>
 
+        <!-- ==================== DETECTION-DRIVEN INGESTION ==================== -->
+        <h2>Detection-Driven Ingestion Strategy</h2>
+
+        <p>A key architectural decision: <strong>delay full Sentinel log ingestion until detections and use cases are defined</strong>, while rolling out MDE/XDR in parallel. This controls cost, avoids noise, and ensures telemetry is ingested with purpose.</p>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Why This Matters: Sentinel Is Cost-Driven by Ingestion
+          </div>
+          <div class="callout-content">
+            <p>Sentinel pricing is either pay-as-you-go or commitment tiers. <strong>Blindly ingesting everything early:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Burns budget on logs you may not need</li>
+              <li>Creates noise without detections to use the data</li>
+              <li>Produces alerts with no SOC-ready rules</li>
+              <li>Frustrates SOC teams with untuned data</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Mature teams avoid this.</strong> They design detection coverage first, then ingest only what's needed.</p>
+          </div>
+        </div>
+
+        <h3>Critical Insight: MDE/XDR Is Independent of Sentinel Ingestion</h3>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            XDR Works Without Sentinel
+          </div>
+          <div class="callout-content">
+            <p><strong>MDE telemetry goes directly to the Defender backend.</strong> XDR detections work immediately — no Sentinel required.</p>
+            <p style="margin-top: 0.5rem;"><strong>Sentinel ingestion is optional for XDR to function.</strong> It's used later for correlation and SIEM workflows.</p>
+            <p style="margin-top: 0.5rem;">So it's completely valid to:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Roll out MDE agents ✅</li>
+              <li>Configure ASR, AV, EDR ✅</li>
+              <li>Stabilize telemetry ✅</li>
+              <li>Let XDR start detecting immediately ✅</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>All without full Sentinel log ingestion yet.</strong></p>
+          </div>
+        </div>
+
+        <h3>The Phased Ingestion Timeline</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Phase</th><th>Timeline</th><th>Sentinel Ingestion</th><th>XDR/Detection Work</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Phase 1: Foundation</strong></td>
+                <td>Months 0–2</td>
+                <td>Minimal — identity logs, Azure activity only. Cost kept low.</td>
+                <td>MDE onboarding starts. XDR detections active from Day 1. Policies in audit → enforce.</td>
+              </tr>
+              <tr>
+                <td><strong>Phase 2: Detection Design</strong></td>
+                <td>Months 1–3</td>
+                <td>No new ingestion yet. Focus on designing, not ingesting.</td>
+                <td>Build detection catalog. Map threats → MITRE. Decide XDR vs Sentinel ownership. Identify which logs are actually needed.</td>
+              </tr>
+              <tr>
+                <td><strong>Phase 3: Controlled Ingestion</strong></td>
+                <td>Months 3+</td>
+                <td>Enable connectors selectively — only logs required by detections. Apply DCR filtering (Event IDs, severity).</td>
+                <td>Detection rules deployed. SOC processes refined. Tune volume based on actual usage.</td>
+              </tr>
+              <tr>
+                <td><strong>Phase 4: Steady State</strong></td>
+                <td>Months 6+</td>
+                <td>Move to commitment tier once daily volume is predictable. Optimize tier placement.</td>
+                <td>XDR handling 780 techniques. Sentinel handling 485 rules. Full coverage operational.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Comparison: Ingest-First vs. Design-First</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Factor</th><th style="background: #450a0a; color: #fecaca;">Ingest Everything First ❌</th><th style="background: #14532d; color: #bbf7d0;">Design First (Our Approach) ✓</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Early Cost</strong></td>
+                <td>High — paying for logs with no detections</td>
+                <td>Controlled — minimal until needed</td>
+              </tr>
+              <tr>
+                <td><strong>Data Quality</strong></td>
+                <td>Noisy — everything ingested</td>
+                <td>Purposeful — only detection-relevant data</td>
+              </tr>
+              <tr>
+                <td><strong>SOC Experience</strong></td>
+                <td>Overwhelmed — data without context</td>
+                <td>SOC-ready — detections deployed with data</td>
+              </tr>
+              <tr>
+                <td><strong>Tuning Approach</strong></td>
+                <td>Retrospective — ingest then figure out what you need</td>
+                <td>Proactive — design coverage then ingest</td>
+              </tr>
+              <tr>
+                <td><strong>Governance</strong></td>
+                <td>Weak — hard to justify each log source</td>
+                <td>Strong — every source tied to a detection use case</td>
+              </tr>
+              <tr>
+                <td><strong>XDR Benefit</strong></td>
+                <td>Delayed — waiting for Sentinel setup</td>
+                <td>Immediate — XDR works independently</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Interview Talking Point
+          </div>
+          <div class="callout-content">
+            <p><em>"We delayed full Sentinel log ingestion until our detection catalog was defined. MDE/XDR was rolled out in parallel and started detecting from Day 1 — it doesn't need Sentinel to function. During months 1–3, we built the detection catalog, mapped MITRE coverage, and decided what XDR handles vs what Sentinel needs to own. Only then did we enable selective ingestion — each log source tied to a specific detection use case. This kept costs controlled, avoided noisy data, and ensured SOC received purposeful telemetry with ready detections."</em></p>
+          </div>
+        </div>
+
         <h2>Governance Model</h2>
 
         <h3>Meeting Cadence</h3>

@@ -488,19 +488,20 @@ WHAT WE DON'T INGEST:
           <div id="q5-short" class="answer-content active">
             <div class="say-this-box">
               <div class="label">Say This</div>
-              <p>"The biggest optimization is XDR-first selective ingestion. With XDR enabled, we consume XDR incidents, not all raw Device tables. XDR already correlates that telemetry into high-fidelity incidents. Ingesting everything separately duplicates detection and wastes storage.</p>
-              <p style="margin-top: 0.75rem;">Before optimization, we were looking at 150 GB/day in endpoint data. After shifting to XDR incidents plus one selective table, about 25 GB/day. That's an 80% reduction.</p>
-              <p style="margin-top: 0.75rem;">We also use commitment tiers — 100 GB/day tier gives roughly 50% discount versus pay-as-you-go. For high-volume, low-query data like firewall logs, we use Basic tier at half the cost. And we filter at ingestion using DCRs, not after — don't pay to ingest data you'll never query.</p>
-              <p style="margin-top: 0.75rem;">Result: Sentinel costs us about $12K/month. Legacy RSA was $35K. That's 66% savings with better detection coverage."</p>
+              <p>"The number one optimization is detection-driven ingestion — design first, ingest second. We delayed full Sentinel ingestion until the detection catalog was defined. XDR works independently, so we rolled out MDE, got detections from Day 1, while keeping Sentinel ingestion minimal until we knew exactly what logs each detection needed.</p>
+              <p style="margin-top: 0.75rem;">The second big win is XDR-first selective ingestion. With XDR enabled, we consume XDR incidents, not all raw Device tables. XDR already correlates that telemetry into high-fidelity incidents. Before optimization: 150 GB/day in endpoint data. After: 25 GB/day. That's 80% reduction.</p>
+              <p style="margin-top: 0.75rem;">We also use commitment tiers — 100 GB/day tier gives roughly 50% discount. But we moved to commitment tier only after steady-state volume was known, not Day 1 when it was unpredictable.</p>
+              <p style="margin-top: 0.75rem;">Result: Sentinel costs about $12K/month. Legacy RSA was $35K. That's 66% savings with better coverage."</p>
             </div>
             
             <div class="key-phrases">
               <h5>Key Phrases to Hit</h5>
               <ul>
+                <li>"Detection-driven ingestion — design first, ingest second"</li>
+                <li>"XDR works independently of Sentinel"</li>
                 <li>"XDR-first selective ingestion"</li>
-                <li>"XDR incidents, not raw Device tables"</li>
                 <li>"80% reduction in endpoint data"</li>
-                <li>"Commitment tiers, Basic tier"</li>
+                <li>"Commitment tier after steady-state known"</li>
                 <li>"66% savings vs legacy SIEM"</li>
               </ul>
             </div>
@@ -509,7 +510,16 @@ WHAT WE DON'T INGEST:
           <div id="q5-full" class="answer-content">
             <div class="code-block">
               <div class="code-header"><span class="code-lang">Full Detail</span></div>
-              <pre><code>1. XDR-FIRST SELECTIVE INGESTION (Biggest Win):
+              <pre><code>0. DETECTION-DRIVEN INGESTION (Design First, Ingest Second):
+   Phase 1: Minimal ingestion while designing detection catalog
+   Phase 2: Build catalog, decide XDR vs Sentinel ownership
+   Phase 3: Enable connectors selectively based on detection needs
+   
+   Critical: XDR works WITHOUT Sentinel. Roll out MDE → XDR detects 
+   immediately → keep Sentinel minimal until detections are designed.
+   Avoids 2-3 months of paying for unused logs.
+
+1. XDR-FIRST SELECTIVE INGESTION (Biggest Win):
    Before: All Device* tables — ~150 GB/day
    After: XDR incidents + 1 table — ~25 GB/day
    Result: 80% reduction in endpoint data
@@ -527,6 +537,8 @@ WHAT WE DON'T INGEST:
    | 200 GB/day | ~55%     |
    | 400 GB/day | ~60%     |
    | 500+ GB    | ~65%     |
+   
+   Key: Move to commitment tier AFTER volume is predictable.
 
 4. FILTER AT INGESTION:
    • DCRs to filter Windows events to security-relevant IDs

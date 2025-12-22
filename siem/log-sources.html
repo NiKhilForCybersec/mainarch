@@ -306,6 +306,19 @@ THEREFORE:
 └─────────────────────────────────────────────────────────────────────────────┘</code></pre>
         </div>
 
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Phased Ingestion Strategy</div>
+          <div class="callout-content">
+            <p><strong>We don't ingest everything on Day 1.</strong> The log source map below shows what SHOULD be ingested — but we phase the rollout:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Phase 1 (Months 0-2):</strong> Identity logs (SigninLogs, AuditLogs), Azure Activity, XDR alerts only</li>
+              <li><strong>Phase 2 (Months 1-3):</strong> Detection catalog built — decide which logs each detection needs</li>
+              <li><strong>Phase 3 (Months 3+):</strong> Enable remaining connectors selectively, tied to detection use cases</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>MDE/XDR works immediately</strong> without Sentinel ingestion — so delaying full ingestion doesn't reduce security coverage. See <a href="../program-structure.html">Program Structure</a> and <a href="cost-optimization.html">Cost Optimization</a> for details.</p>
+          </div>
+        </div>
+
         <!-- ==================== SECTION 2: COMPLETE LOG SOURCE MAP ==================== -->
         <h2>2. Complete Log Source Map</h2>
 

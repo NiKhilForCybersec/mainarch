@@ -611,6 +611,23 @@ aws guardduty list-detectors</code></pre>
           </table>
         </div>
 
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Discovery Feeds Detection-Driven Ingestion
+          </div>
+          <div class="callout-content">
+            <p><strong>Discovery outputs inform what to ingest, but don't ingest everything immediately.</strong></p>
+            <p style="margin-top: 0.5rem;">The phased approach:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Phase 1:</strong> Minimal Sentinel ingestion (identity, Azure activity). XDR works independently — deploy MDE, get detections from Day 1.</li>
+              <li><strong>Phase 2:</strong> Use discovery outputs to build detection catalog. Decide XDR vs Sentinel ownership for each security outcome.</li>
+              <li><strong>Phase 3:</strong> Enable Sentinel connectors selectively — only log sources required by specific detections.</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Each log source in the inventory should map to a detection use case before being onboarded. See <a href="cost-optimization.html">Cost Optimization</a> for the full phased timeline.</p>
+          </div>
+        </div>
+
         <h2>Discovery Deliverables</h2>
 
         <p>

@@ -354,6 +354,19 @@
 
         <p><strong>Mental model:</strong> XDR is the first brain for Defender signals. Sentinel is the second brain for enterprise context.</p>
 
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Cost Implication: XDR Works Without Sentinel Ingestion</div>
+          <div class="callout-content">
+            <p><strong>MDE telemetry goes directly to the Defender backend</strong> — XDR detections work immediately without Sentinel log ingestion. This means you can:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Roll out MDE agents and enable XDR from Day 1</li>
+              <li>Delay full Sentinel log ingestion until detection catalog is designed</li>
+              <li>Control costs by ingesting only what Sentinel detections require</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">See <a href="../program-structure.html">Program Structure</a> for the phased ingestion timeline and <a href="../siem/cost-optimization.html">Cost Optimization</a> for detailed savings analysis.</p>
+          </div>
+        </div>
+
         <h4>Side-by-Side Comparison (Interview Gold)</h4>
 
         <div class="table-wrapper">

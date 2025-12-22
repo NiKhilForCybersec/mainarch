@@ -192,12 +192,13 @@
         <div class="callout warning">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-            XDR-First Approach
+            XDR-First + Detection-Driven Ingestion
           </div>
           <div class="callout-content">
             <p><strong>Key Insight:</strong> In the Microsoft ecosystem, correlation is layered — XDR handles endpoint + identity + email correlation upstream, and Sentinel handles network + Azure + higher-order correlation. This means you don't rebuild detections XDR handles natively.</p>
-            <p><strong>Result:</strong> 485 Sentinel rules (255 migrated + 230 new), 12-month timeline, XDR correlation benefits from Day 1.</p>
-            <p>👉 <strong><a href="../operations/xdr-integration.html">Full XDR-First Strategy Documentation →</a></strong></p>
+            <p style="margin-top: 0.5rem;"><strong>Cost Strategy:</strong> XDR works immediately without Sentinel log ingestion — so we delayed full ingestion until the detection catalog was defined. Each log source is justified by specific detection use cases.</p>
+            <p style="margin-top: 0.5rem;"><strong>Result:</strong> 485 Sentinel rules (255 migrated + 230 new), 12-month timeline, XDR correlation benefits from Day 1, cost-controlled ingestion.</p>
+            <p>👉 <strong><a href="../operations/xdr-integration.html">Full XDR-First Strategy →</a></strong> | <strong><a href="cost-optimization.html">Detection-Driven Ingestion →</a></strong></p>
           </div>
         </div>
 
