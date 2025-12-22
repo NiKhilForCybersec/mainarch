@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Mental Frameworks | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .framework-box { background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05)); border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; }
+    .framework-title { font-size: 1.2rem; font-weight: 700; color: #a78bfa; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .framework-subtitle { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; font-style: italic; }
+    .trigger-box { background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(251, 191, 36, 0.05)); border: 1px solid rgba(251, 191, 36, 0.4); border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+    .trigger-label { font-size: 0.75rem; font-weight: 700; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .arrow-flow { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin: 1rem 0; }
+    .arrow-flow .step { background: var(--bg-tertiary); padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500; }
+    .arrow-flow .arrow { color: var(--accent-cyan); font-weight: bold; }
+    .template-box { background: var(--bg-secondary); border-radius: 8px; padding: 1rem; margin: 1rem 0; border-left: 4px solid var(--accent-cyan); font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; }
+    .template-box .blank { color: #22c55e; font-weight: 600; }
+    .mind-map { background: var(--bg-secondary); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; }
+    .mind-map-center { text-align: center; font-size: 1.1rem; font-weight: 700; color: var(--accent-purple); padding: 1rem; background: rgba(139, 92, 246, 0.2); border-radius: 8px; margin-bottom: 1rem; }
+    .mind-map-branches { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .mind-map-branch { background: var(--bg-tertiary); padding: 1rem; border-radius: 8px; border-top: 3px solid var(--accent-cyan); }
+    .mind-map-branch h4 { margin: 0 0 0.5rem 0; color: var(--accent-cyan); font-size: 0.9rem; }
+    .mind-map-branch ul { margin: 0; padding-left: 1.2rem; font-size: 0.85rem; }
+    .mind-map-branch li { margin-bottom: 0.3rem; }
+    .question-pattern { display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin: 1rem 0; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; }
+    .question-pattern .pattern { font-weight: 600; color: var(--text-primary); }
+    .question-pattern .response { color: var(--text-secondary); }
+    .cheat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .cheat-card { background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; }
+    .cheat-card h4 { margin: 0 0 0.75rem 0; color: var(--accent-purple); font-size: 1rem; }
+    .cheat-card p { margin: 0; font-size: 0.9rem; color: var(--text-secondary); }
+    .number-trick { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; margin: 0.75rem 0; }
+    .number-trick .num { font-size: 2rem; font-weight: 700; color: var(--accent-cyan); min-width: 60px; text-align: center; }
+    .number-trick .desc { flex: 1; }
+    .comparison-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    .comparison-table th, .comparison-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border-primary); }
+    .comparison-table th { background: var(--bg-secondary); font-weight: 600; }
+    .highlight-box { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+    .highlight-box-title { font-weight: 600; color: #22c55e; margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="index.html" class="nav-item">Executive Summary</a>
+          <a href="company-profile.html" class="nav-item">Company Profile</a>
+          <a href="security-framework.html" class="nav-item">Security Framework</a>
+          <a href="program-structure.html" class="nav-item">Program Structure</a>
+          <a href="controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="interview-prep.html" class="nav-item">Interview Prep (Full)</a>
+          <a href="interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
+          <a href="interview-technical-reference.html" class="nav-item">Technical Reference</a>
+          <a href="interview-frameworks.html" class="nav-item">Mental Frameworks</a>
+          <a href="interview-frameworks.html" class="nav-item active">Mental Frameworks</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Mental Frameworks</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Interview Mental Frameworks</h1>
+          <div class="page-header-meta">
+            <span class="page-badge">Answer Structures</span>
+            <span class="page-reading-time">Muscle Memory Tricks</span>
+          </div>
+          <p class="intro-text">Structural frameworks to answer ANY question confidently, even if you forget specifics. Recognize the question type → Apply the framework → Fill in details.</p>
+        </div>
+
+        <!-- ==================== CORE PRINCIPLE ==================== -->
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            The Core Trick
+          </div>
+          <div class="callout-content">
+            <p><strong>You don't need to memorize answers. You need to recognize question patterns.</strong></p>
+            <p style="margin-top: 0.5rem;">Every interview question falls into a pattern. Once you recognize the pattern, you have a framework to fill in. Even if you forget the specifics, the structure makes you sound organized and thoughtful.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 1: THE THREE LAWS ==================== -->
+        <h2>1. The Three Laws (Use for EVERY Answer)</h2>
+
+        <p>Before speaking, run every answer through these three mental checks:</p>
+
+        <div class="framework-box">
+          <div class="framework-title">🧠 Law 1: WHO OWNS IT?</div>
+          <div class="framework-subtitle">For any security topic, first decide: XDR or SIEM?</div>
+          
+          <div class="arrow-flow">
+            <span class="step">Hear the topic</span>
+            <span class="arrow">→</span>
+            <span class="step">Ask: Can XDR see it?</span>
+            <span class="arrow">→</span>
+            <span class="step">Yes = XDR owns</span>
+            <span class="arrow">→</span>
+            <span class="step">No = Sentinel owns</span>
+          </div>
+
+          <div class="trigger-box">
+            <div class="trigger-label">Quick Mental Check</div>
+            <p><strong>XDR CAN see:</strong> Endpoint, Identity, Email, Cloud Apps (Microsoft)</p>
+            <p><strong>XDR CAN'T see:</strong> Network, Non-Microsoft SaaS, HR/Business context</p>
+          </div>
+        </div>
+
+        <div class="framework-box">
+          <div class="framework-title">🧠 Law 2: WHAT'S THE OUTCOME?</div>
+          <div class="framework-subtitle">Never talk about tools first. Talk about what you're trying to achieve.</div>
+          
+          <div class="template-box">
+            <strong>Instead of:</strong> "I configured Sentinel connectors and wrote KQL..."<br><br>
+            <strong>Say:</strong> "The outcome we needed was <span class="blank">[detecting insider threat]</span>. To achieve that, I <span class="blank">[correlated HR termination feed with file access]</span>."
+          </div>
+
+          <div class="highlight-box">
+            <div class="highlight-box-title">Why This Works</div>
+            <p>Outcome-first answers show you understand WHY, not just HOW. Senior roles require strategic thinking.</p>
+          </div>
+        </div>
+
+        <div class="framework-box">
+          <div class="framework-title">🧠 Law 3: WHAT'S THE TRADEOFF?</div>
+          <div class="framework-subtitle">Every decision has a cost. Acknowledge it.</div>
+          
+          <div class="template-box">
+            "We chose <span class="blank">[approach A]</span> because <span class="blank">[benefit]</span>. The tradeoff was <span class="blank">[cost/limitation]</span>, which we mitigated by <span class="blank">[compensating control]</span>."
+          </div>
+
+          <p style="margin-top: 1rem;"><strong>Examples:</strong></p>
+          <ul>
+            <li>"We chose XDR-first because detection quality is better. Tradeoff: less visibility in Sentinel. Mitigated by: ingesting XDR alerts for correlation."</li>
+            <li>"We chose Basic tier for compliance logs because 60% cost savings. Tradeoff: no analytics rules. Mitigated by: only search-only use cases go to Basic."</li>
+            <li>"We chose single workspace because simpler management. Tradeoff: RBAC complexity. Mitigated by: proper resource-based access control."</li>
+          </ul>
+        </div>
+
+        <!-- ==================== SECTION 2: QUESTION PATTERN RECOGNITION ==================== -->
+        <h2>2. Question Pattern Recognition</h2>
+
+        <p>Hear the question → Recognize the pattern → Apply the framework.</p>
+
+        <!-- Pattern 1: Walk me through -->
+        <div class="framework-box">
+          <div class="framework-title">📋 Pattern: "Walk me through..."</div>
+          <div class="framework-subtitle">They want to see your process. Use the 4-PHASE structure.</div>
+
+          <div class="trigger-box">
+            <div class="trigger-label">When You Hear</div>
+            <p>"Walk me through...", "How did you...", "Describe your approach to...", "Tell me about a time when..."</p>
+          </div>
+
+          <div class="arrow-flow">
+            <span class="step">1. SITUATION</span>
+            <span class="arrow">→</span>
+            <span class="step">2. APPROACH</span>
+            <span class="arrow">→</span>
+            <span class="step">3. ACTIONS</span>
+            <span class="arrow">→</span>
+            <span class="step">4. RESULT</span>
+          </div>
+
+          <div class="template-box">
+            "<strong>SITUATION:</strong> We had <span class="blank">[problem/context]</span>.<br><br>
+            <strong>APPROACH:</strong> My approach was <span class="blank">[high-level strategy]</span>. First, I needed to understand <span class="blank">[what]</span>.<br><br>
+            <strong>ACTIONS:</strong> Specifically, I <span class="blank">[action 1]</span>, then <span class="blank">[action 2]</span>, then <span class="blank">[action 3]</span>.<br><br>
+            <strong>RESULT:</strong> The outcome was <span class="blank">[measurable result]</span>."
+          </div>
+
+          <p style="margin-top: 1rem;"><strong>Example Application:</strong></p>
+          <p><em>"Walk me through your SIEM migration"</em></p>
+          <ul>
+            <li><strong>SITUATION:</strong> "We had 1,247 RSA rules and needed to migrate to Sentinel while maintaining detection coverage."</li>
+            <li><strong>APPROACH:</strong> "My approach was detection-driven, not log-first. First, I needed to understand which outcomes XDR already handles."</li>
+            <li><strong>ACTIONS:</strong> "I normalized rules to outcomes, decided XDR vs Sentinel ownership, defined ingestion requirements, then built detections."</li>
+            <li><strong>RESULT:</strong> "780 rules retired to XDR, 485 purpose-built Sentinel rules, 12-month timeline instead of 18."</li>
+          </ul>
+        </div>
+
+        <!-- Pattern 2: How do you -->
+        <div class="framework-box">
+          <div class="framework-title">📋 Pattern: "How do you...?"</div>
+          <div class="framework-subtitle">They want your methodology. Use the 3-LAYER structure.</div>
+
+          <div class="trigger-box">
+            <div class="trigger-label">When You Hear</div>
+            <p>"How do you...", "What's your process for...", "How would you handle..."</p>
+          </div>
+
+          <div class="arrow-flow">
+            <span class="step">1. PRINCIPLE</span>
+            <span class="arrow">→</span>
+            <span class="step">2. PROCESS</span>
+            <span class="arrow">→</span>
+            <span class="step">3. EXAMPLE</span>
+          </div>
+
+          <div class="template-box">
+            "<strong>PRINCIPLE:</strong> My guiding principle is <span class="blank">[philosophy]</span>.<br><br>
+            <strong>PROCESS:</strong> In practice, I <span class="blank">[step 1]</span>, then <span class="blank">[step 2]</span>, then <span class="blank">[step 3]</span>.<br><br>
+            <strong>EXAMPLE:</strong> For instance, when <span class="blank">[specific case]</span>, I <span class="blank">[what you did]</span>."
+          </div>
+
+          <p style="margin-top: 1rem;"><strong>Example Application:</strong></p>
+          <p><em>"How do you prioritize log sources?"</em></p>
+          <ul>
+            <li><strong>PRINCIPLE:</strong> "My principle is: ingest what XDR can't see, and what you'll actually detect on."</li>
+            <li><strong>PROCESS:</strong> "First, I check XDR coverage gaps. Then I identify business-context data. Then network and third-party SaaS."</li>
+            <li><strong>EXAMPLE:</strong> "For instance, Entra AuditLogs — XDR detects brute force, but not who got added to Global Admins. That's a control-plane log Sentinel needs."</li>
+          </ul>
+        </div>
+
+        <!-- Pattern 3: What's the difference -->
+        <div class="framework-box">
+          <div class="framework-title">📋 Pattern: "What's the difference between...?"</div>
+          <div class="framework-subtitle">They want comparison. Use the 3-COLUMN structure.</div>
+
+          <div class="trigger-box">
+            <div class="trigger-label">When You Hear</div>
+            <p>"What's the difference...", "Compare...", "How does X differ from Y...", "When would you use X vs Y..."</p>
+          </div>
+
+          <div class="template-box">
+            "<strong>The key difference is architectural, not features.</strong><br><br>
+            <span class="blank">[Thing A]</span> is designed for <span class="blank">[purpose A]</span>. It does <span class="blank">[strength A]</span> well, but <span class="blank">[limitation A]</span>.<br><br>
+            <span class="blank">[Thing B]</span> is designed for <span class="blank">[purpose B]</span>. It does <span class="blank">[strength B]</span> well, but <span class="blank">[limitation B]</span>.<br><br>
+            <strong>I use A when</strong> <span class="blank">[scenario]</span>. <strong>I use B when</strong> <span class="blank">[scenario]</span>."
+          </div>
+
+          <p style="margin-top: 1rem;"><strong>Example Application:</strong></p>
+          <p><em>"What's the difference between Splunk and Sentinel?"</em></p>
+          <ul>
+            <li><strong>Key difference:</strong> "The key difference is architectural, not features."</li>
+            <li><strong>Splunk:</strong> "Splunk is SIEM-first. You ingest everything, build all detections yourself. Great for full control, but you own all the detection logic."</li>
+            <li><strong>Sentinel:</strong> "Microsoft is XDR-first. Correlation happens upstream in Defender. Sentinel fills gaps. Less raw data in SIEM, but XDR handles heavy lifting."</li>
+            <li><strong>When to use:</strong> "I use Splunk when I need full control or non-Microsoft ecosystem. I use Sentinel when XDR handles most endpoint/identity/email detection."</li>
+          </ul>
+        </div>
+
+        <!-- Pattern 4: Troubleshooting -->
+        <div class="framework-box">
+          <div class="framework-title">📋 Pattern: "Something is broken / not working..."</div>
+          <div class="framework-subtitle">They want troubleshooting logic. Use the PIPELINE structure.</div>
+
+          <div class="trigger-box">
+            <div class="trigger-label">When You Hear</div>
+            <p>"How do you troubleshoot...", "X isn't working, what do you do...", "You're seeing errors in..."</p>
+          </div>
+
+          <div class="arrow-flow">
+            <span class="step">1. CONFIRM</span>
+            <span class="arrow">→</span>
+            <span class="step">2. ISOLATE</span>
+            <span class="arrow">→</span>
+            <span class="step">3. TRACE PIPELINE</span>
+            <span class="arrow">→</span>
+            <span class="step">4. FIX + VALIDATE</span>
+          </div>
+
+          <div class="template-box">
+            "<strong>CONFIRM:</strong> First, I confirm the problem is real. <span class="blank">[How you verify]</span>.<br><br>
+            <strong>ISOLATE:</strong> Then I isolate the scope. Is it <span class="blank">[one thing or many]</span>? <span class="blank">[Specific or widespread]</span>?<br><br>
+            <strong>TRACE PIPELINE:</strong> I trace the data/signal pipeline: <span class="blank">[source]</span> → <span class="blank">[transport]</span> → <span class="blank">[destination]</span>. Check each step.<br><br>
+            <strong>FIX + VALIDATE:</strong> Once I find the break, I fix it and validate for <span class="blank">[time period]</span>."
+          </div>
+
+          <p style="margin-top: 1rem;"><strong>Example Application:</strong></p>
+          <p><em>"MDE alerts aren't appearing in Sentinel"</em></p>
+          <ul>
+            <li><strong>CONFIRM:</strong> "First, I check SecurityAlert table — are there really no alerts, or just fewer than expected?"</li>
+            <li><strong>ISOLATE:</strong> "Is it all MDE alerts or specific types? One tenant or all?"</li>
+            <li><strong>TRACE PIPELINE:</strong> "MDE → Defender Portal → M365 Connector → Sentinel. Check each: Is XDR generating alerts? Is connector healthy? Are permissions right?"</li>
+            <li><strong>FIX + VALIDATE:</strong> "Usually it's connector permissions. Reconnect, validate for 24 hours."</li>
+          </ul>
+        </div>
+
+        <!-- Pattern 5: Design / Architecture -->
+        <div class="framework-box">
+          <div class="framework-title">📋 Pattern: "Design / Architect for..."</div>
+          <div class="framework-subtitle">They want strategic thinking. Use the REQUIREMENTS-FIRST structure.</div>
+
+          <div class="trigger-box">
+            <div class="trigger-label">When You Hear</div>
+            <p>"Design a...", "How would you architect...", "Build a SIEM for...", "What's your approach to greenfield..."</p>
+          </div>
+
+          <div class="arrow-flow">
+            <span class="step">1. REQUIREMENTS</span>
+            <span class="arrow">→</span>
+            <span class="step">2. CONSTRAINTS</span>
+            <span class="arrow">→</span>
+            <span class="step">3. ARCHITECTURE</span>
+            <span class="arrow">→</span>
+            <span class="step">4. TRADEOFFS</span>
+          </div>
+
+          <div class="template-box">
+            "<strong>REQUIREMENTS:</strong> First, I'd clarify requirements: <span class="blank">[compliance? coverage? budget?]</span>.<br><br>
+            <strong>CONSTRAINTS:</strong> Key constraints are <span class="blank">[budget, timeline, team skills, existing tech]</span>.<br><br>
+            <strong>ARCHITECTURE:</strong> Given that, I'd design: <span class="blank">[high-level approach]</span>. For <span class="blank">[component A]</span>, I'd use <span class="blank">[solution]</span>. For <span class="blank">[component B]</span>, I'd use <span class="blank">[solution]</span>.<br><br>
+            <strong>TRADEOFFS:</strong> The tradeoff with this approach is <span class="blank">[limitation]</span>, which I'd mitigate by <span class="blank">[how]</span>."
+          </div>
+        </div>
+
+        <!-- Pattern 6: Opinion / Best Practice -->
+        <div class="framework-box">
+          <div class="framework-title">📋 Pattern: "What's the best way to... / What do you think about..."</div>
+          <div class="framework-subtitle">They want your opinion WITH reasoning. Use the POSITION structure.</div>
+
+          <div class="trigger-box">
+            <div class="trigger-label">When You Hear</div>
+            <p>"What's the best...", "What do you recommend...", "What's your opinion on...", "Do you think..."</p>
+          </div>
+
+          <div class="template-box">
+            "<strong>POSITION:</strong> My view is <span class="blank">[clear stance]</span>.<br><br>
+            <strong>REASONING:</strong> The reason is <span class="blank">[why]</span>.<br><br>
+            <strong>EVIDENCE:</strong> In my experience, <span class="blank">[specific example]</span>.<br><br>
+            <strong>CAVEAT:</strong> That said, it depends on <span class="blank">[context]</span>. If <span class="blank">[different scenario]</span>, I'd consider <span class="blank">[alternative]</span>."
+          </div>
+
+          <p style="margin-top: 1rem;"><strong>Example Application:</strong></p>
+          <p><em>"What's the best way to handle SIEM cost?"</em></p>
+          <ul>
+            <li><strong>POSITION:</strong> "My view is: design for cost from Day 1, not after deployment."</li>
+            <li><strong>REASONING:</strong> "Because ingestion decisions are hard to reverse. Once teams expect data in SIEM, removing it is painful."</li>
+            <li><strong>EVIDENCE:</strong> "In my project, we saved $38K/month by not ingesting MDE raw telemetry — XDR already has it."</li>
+            <li><strong>CAVEAT:</strong> "That said, if you're a pure Sentinel shop without XDR, you might need that telemetry. Context matters."</li>
+          </ul>
+        </div>
+
+        <!-- ==================== SECTION 3: THE MENTAL MAPS ==================== -->
+        <h2>3. Mental Maps (Visual Triggers)</h2>
+
+        <p>When you hear a topic, visualize these maps to structure your answer.</p>
+
+        <!-- Map 1: XDR vs Sentinel -->
+        <div class="mind-map">
+          <div class="mind-map-center">🧠 "WHO HANDLES THIS?" MAP</div>
+          <div class="mind-map-branches">
+            <div class="mind-map-branch">
+              <h4>XDR Sees It? → XDR</h4>
+              <ul>
+                <li>Endpoint behavior</li>
+                <li>Identity attacks</li>
+                <li>Email threats</li>
+                <li>Cloud app (MSFT)</li>
+                <li>= Retire to XDR</li>
+              </ul>
+            </div>
+            <div class="mind-map-branch">
+              <h4>XDR Blind? → Sentinel</h4>
+              <ul>
+                <li>Network traffic</li>
+                <li>Non-MSFT SaaS</li>
+                <li>On-prem apps</li>
+                <li>Firewalls/Proxies</li>
+                <li>= Build in Sentinel</li>
+              </ul>
+            </div>
+            <div class="mind-map-branch">
+              <h4>Needs Context? → Sentinel</h4>
+              <ul>
+                <li>HR data (termination)</li>
+                <li>Business logic</li>
+                <li>Time-based rules</li>
+                <li>Role-based policies</li>
+                <li>= Correlation needed</li>
+              </ul>
+            </div>
+            <div class="mind-map-branch">
+              <h4>Multiple Sources? → Sentinel</h4>
+              <ul>
+                <li>XDR alert + network</li>
+                <li>Identity + file access</li>
+                <li>Email + endpoint + exfil</li>
+                <li>3+ data sources</li>
+                <li>= Higher-order correlation</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map 2: Deployment Phases -->
+        <div class="mind-map">
+          <div class="mind-map-center">🧠 "DEPLOYMENT / ROLLOUT" MAP</div>
+          <div class="mind-map-branches">
+            <div class="mind-map-branch">
+              <h4>Phase 1: DISCOVER</h4>
+              <ul>
+                <li>What exists?</li>
+                <li>What's the volume?</li>
+                <li>Who owns it?</li>
+                <li>What's the risk?</li>
+              </ul>
+            </div>
+            <div class="mind-map-branch">
+              <h4>Phase 2: DESIGN</h4>
+              <ul>
+                <li>Architecture decisions</li>
+                <li>Ownership split</li>
+                <li>Ingestion strategy</li>
+                <li>Cost model</li>
+              </ul>
+            </div>
+            <div class="mind-map-branch">
+              <h4>Phase 3: DEPLOY</h4>
+              <ul>
+                <li>Audit mode first</li>
+                <li>Pilot group</li>
+                <li>Monitor impact</li>
+                <li>Build baseline</li>
+              </ul>
+            </div>
+            <div class="mind-map-branch">
+              <h4>Phase 4: ENFORCE</h4>
+              <ul>
+                <li>Gate-based cutover</li>
+                <li>Parallel operation</li>
+                <li>Validation period</li>
+                <li>Decommission legacy</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map 3: Investigation Flow -->
+        <div class="mind-map">
+          <div class="mind-map-center">🧠 "INVESTIGATION" MAP</div>
+          <div class="mind-map-branches">
+            <div class="mind-map-branch">
+              <h4>1. TRIAGE</h4>
+              <ul>
+                <li>Is it real?</li>
+                <li>What's the severity?</li>
+                <li>Who/what is affected?</li>
+                <li>Start in XDR (telemetry)</li>
+              </ul>
+            </div>
+            <div class="mind-map-branch">
+              <h4>2. PIVOT</h4>
+              <ul>
+                <li>User → other devices</li>
+                <li>Device → other users</li>
+                <li>IP → other connections</li>
+                <li>Hash → other systems</li>
+              </ul>
+            </div>
+            <div class="mind-map-branch">
+              <h4>3. SCOPE</h4>
+              <ul>
+                <li>How widespread?</li>
+                <li>How long active?</li>
+                <li>What's the impact?</li>
+                <li>Use Sentinel for cross-domain</li>
+              </ul>
+            </div>
+            <div class="mind-map-branch">
+              <h4>4. ACT</h4>
+              <ul>
+                <li>Contain if malicious</li>
+                <li>Document if FP</li>
+                <li>Tune detection</li>
+                <li>Close with disposition</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map 4: Cost Optimization -->
+        <div class="mind-map">
+          <div class="mind-map-center">🧠 "COST OPTIMIZATION" MAP</div>
+          <div class="mind-map-branches">
+            <div class="mind-map-branch">
+              <h4>Don't Ingest</h4>
+              <ul>
+                <li>XDR has it already</li>
+                <li>No detection use case</li>
+                <li>Debug/verbose logs</li>
+                <li>"Just in case" data</li>
+              </ul>
+            </div>
+            <div class="mind-map-branch">
+              <h4>Filter at Source</h4>
+              <ul>
+                <li>DCR transformation</li>
+                <li>Security events only</li>
+                <li>Drop noise before ingest</li>
+                <li>500GB → 50GB</li>
+              </ul>
+            </div>
+            <div class="mind-map-branch">
+              <h4>Right Tier</h4>
+              <ul>
+                <li>Analytics = detections</li>
+                <li>Basic = search only</li>
+                <li>Archive = long-term</li>
+                <li>60% savings on Basic</li>
+              </ul>
+            </div>
+            <div class="mind-map-branch">
+              <h4>Commit to Save</h4>
+              <ul>
+                <li>Commitment tier = 50% off</li>
+                <li>E5 = 5MB/user/day free</li>
+                <li>Design for commitment</li>
+                <li>$12K vs $50K</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 4: THE 5-FINGER TRICKS ==================== -->
+        <h2>4. The 5-Finger Tricks</h2>
+
+        <p>When stuck, count on your fingers. Each finger = one thing to say.</p>
+
+        <div class="framework-box">
+          <div class="framework-title">✋ 5 Fingers: "Why XDR-First?"</div>
+          <div class="number-trick">
+            <div class="num">1</div>
+            <div class="desc"><strong>Kernel-level visibility</strong> — sees what logs can't</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">2</div>
+            <div class="desc"><strong>AMSI integration</strong> — decoded scripts, not encoded blobs</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">3</div>
+            <div class="desc"><strong>ML-based detection</strong> — behavioral, not signature</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">4</div>
+            <div class="desc"><strong>Microsoft maintains</strong> — they update, not you</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">5</div>
+            <div class="desc"><strong>Configure, don't write</strong> — trust decisions, not detection rules</div>
+          </div>
+        </div>
+
+        <div class="framework-box">
+          <div class="framework-title">✋ 5 Fingers: "Detection Engineering Process"</div>
+          <div class="number-trick">
+            <div class="num">1</div>
+            <div class="desc"><strong>Normalize to outcomes</strong> — "credential abuse" not "rule #47"</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">2</div>
+            <div class="desc"><strong>Decide ownership</strong> — XDR or Sentinel for each outcome</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">3</div>
+            <div class="desc"><strong>Define ingestion</strong> — only ingest what you'll detect on</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">4</div>
+            <div class="desc"><strong>Design detections</strong> — Content Hub first, custom for gaps</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">5</div>
+            <div class="desc"><strong>Validate coverage</strong> — ATT&CK mapping, SOC feedback, purple team</div>
+          </div>
+        </div>
+
+        <div class="framework-box">
+          <div class="framework-title">✋ 5 Fingers: "Log Source Priority"</div>
+          <div class="number-trick">
+            <div class="num">1</div>
+            <div class="desc"><strong>Identity control plane</strong> — role changes, not just attacks</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">2</div>
+            <div class="desc"><strong>XDR alerts</strong> — for cross-domain correlation</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">3</div>
+            <div class="desc"><strong>Network</strong> — XDR can't see this</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">4</div>
+            <div class="desc"><strong>Non-Microsoft SaaS</strong> — Salesforce, Workday, etc.</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">5</div>
+            <div class="desc"><strong>Business context</strong> — HR feeds, change windows</div>
+          </div>
+        </div>
+
+        <div class="framework-box">
+          <div class="framework-title">✋ 5 Fingers: "Troubleshooting Steps"</div>
+          <div class="number-trick">
+            <div class="num">1</div>
+            <div class="desc"><strong>Confirm</strong> — is the problem real?</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">2</div>
+            <div class="desc"><strong>Isolate</strong> — one thing or many?</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">3</div>
+            <div class="desc"><strong>Trace pipeline</strong> — source → transport → destination</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">4</div>
+            <div class="desc"><strong>Check common causes</strong> — permissions, connectivity, config</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">5</div>
+            <div class="desc"><strong>Fix and validate</strong> — don't just fix, confirm it stays fixed</div>
+          </div>
+        </div>
+
+        <div class="framework-box">
+          <div class="framework-title">✋ 5 Fingers: "ASR/Policy Deployment"</div>
+          <div class="number-trick">
+            <div class="num">1</div>
+            <div class="desc"><strong>Audit mode</strong> — always start here</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">2</div>
+            <div class="desc"><strong>Build baseline</strong> — what's normal?</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">3</div>
+            <div class="desc"><strong>Document exclusions</strong> — business justification required</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">4</div>
+            <div class="desc"><strong>Warn mode</strong> — test user impact</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">5</div>
+            <div class="desc"><strong>Block mode</strong> — enforce after validation</div>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 5: INSTANT ANSWER STARTERS ==================== -->
+        <h2>5. Instant Answer Starters</h2>
+
+        <p>When you don't know how to start, use these sentence templates.</p>
+
+        <div class="cheat-grid">
+          <div class="cheat-card">
+            <h4>When asked about PROCESS</h4>
+            <p>"My approach is <strong>[principle]</strong>-driven. In practice, I first <strong>[step 1]</strong>, then <strong>[step 2]</strong>, then <strong>[step 3]</strong>."</p>
+          </div>
+          <div class="cheat-card">
+            <h4>When asked about DECISIONS</h4>
+            <p>"The key decision point is <strong>[what]</strong>. If <strong>[condition A]</strong>, I go with <strong>[option A]</strong>. If <strong>[condition B]</strong>, I go with <strong>[option B]</strong>."</p>
+          </div>
+          <div class="cheat-card">
+            <h4>When asked about TOOLS</h4>
+            <p>"It depends on the use case. For <strong>[scenario A]</strong>, I use <strong>[tool A]</strong> because <strong>[reason]</strong>. For <strong>[scenario B]</strong>, I use <strong>[tool B]</strong>."</p>
+          </div>
+          <div class="cheat-card">
+            <h4>When asked about PROBLEMS</h4>
+            <p>"The first thing I'd check is <strong>[most common cause]</strong>. If that's not it, I'd trace the pipeline from <strong>[source]</strong> to <strong>[destination]</strong>."</p>
+          </div>
+          <div class="cheat-card">
+            <h4>When asked about TRADEOFFS</h4>
+            <p>"The tradeoff is between <strong>[thing A]</strong> and <strong>[thing B]</strong>. We prioritized <strong>[choice]</strong> because <strong>[reason]</strong>, and mitigated the downside by <strong>[how]</strong>."</p>
+          </div>
+          <div class="cheat-card">
+            <h4>When you DON'T KNOW</h4>
+            <p>"I haven't implemented that specific scenario, but my approach would be to first <strong>[understand X]</strong>, then <strong>[apply principle Y]</strong>."</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 6: THE PIVOT TRICKS ==================== -->
+        <h2>6. The Pivot Tricks</h2>
+
+        <p>When you're stuck or the question is vague, pivot to what you know.</p>
+
+        <div class="framework-box">
+          <div class="framework-title">🔄 Pivot: Vague to Specific</div>
+          <div class="template-box">
+            "That's a broad topic. In my experience, the most important aspect is <span class="blank">[specific thing you know well]</span>. For example, <span class="blank">[concrete example from your project]</span>."
+          </div>
+        </div>
+
+        <div class="framework-box">
+          <div class="framework-title">🔄 Pivot: Unknown to Known</div>
+          <div class="template-box">
+            "I haven't worked with <span class="blank">[specific thing]</span> directly, but the concept is similar to <span class="blank">[thing you know]</span>. The principles are the same: <span class="blank">[principle]</span>."
+          </div>
+        </div>
+
+        <div class="framework-box">
+          <div class="framework-title">🔄 Pivot: Theory to Practice</div>
+          <div class="template-box">
+            "In theory, you could <span class="blank">[textbook answer]</span>. But in practice, I've found that <span class="blank">[real-world insight]</span>. For instance, <span class="blank">[example]</span>."
+          </div>
+        </div>
+
+        <div class="framework-box">
+          <div class="framework-title">🔄 Pivot: Tool to Outcome</div>
+          <div class="template-box">
+            "The tool is less important than the outcome. What we're really trying to achieve is <span class="blank">[outcome]</span>. I've done this with <span class="blank">[tool you know]</span>, but the same approach works with <span class="blank">[other tools]</span>."
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 7: THE CONFIDENCE TRICKS ==================== -->
+        <h2>7. Confidence Tricks</h2>
+
+        <p>How to sound confident even when you're not sure.</p>
+
+        <table class="comparison-table">
+          <thead>
+            <tr><th>Weak Phrasing</th><th>Strong Phrasing</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>"I think maybe..."</td>
+              <td>"My approach is..."</td>
+            </tr>
+            <tr>
+              <td>"I'm not sure, but..."</td>
+              <td>"Based on my experience..."</td>
+            </tr>
+            <tr>
+              <td>"We kind of did..."</td>
+              <td>"We implemented..."</td>
+            </tr>
+            <tr>
+              <td>"I guess you could..."</td>
+              <td>"One effective approach is..."</td>
+            </tr>
+            <tr>
+              <td>"I don't really know..."</td>
+              <td>"I haven't implemented that specific scenario, but my approach would be..."</td>
+            </tr>
+            <tr>
+              <td>"That's hard to say..."</td>
+              <td>"It depends on the context. If [X], then [Y]. If [A], then [B]."</td>
+            </tr>
+            <tr>
+              <td>"I only did a little..."</td>
+              <td>"I contributed to [specific aspect]..."</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            The Power Phrase
+          </div>
+          <div class="callout-content">
+            <p>When you don't know something, say:</p>
+            <p style="margin-top: 0.5rem; font-style: italic; font-size: 1.1rem;">"I haven't implemented that specific scenario, but here's how I'd approach it..."</p>
+            <p style="margin-top: 0.5rem;">Then apply your frameworks. This shows intellectual honesty AND problem-solving ability.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 8: 30-SECOND RESET ==================== -->
+        <h2>8. The 30-Second Reset</h2>
+
+        <p>If you blank out during the interview, use this mental reset:</p>
+
+        <div class="framework-box">
+          <div class="framework-title">🧘 PAUSE → BREATHE → FRAMEWORK</div>
+          
+          <div class="number-trick">
+            <div class="num">1</div>
+            <div class="desc"><strong>PAUSE:</strong> "That's a great question. Let me think about that for a moment."</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">2</div>
+            <div class="desc"><strong>BREATHE:</strong> Take 3 seconds. It feels long to you, normal to them.</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">3</div>
+            <div class="desc"><strong>IDENTIFY PATTERN:</strong> Is this "walk me through," "how do you," "compare," or "troubleshoot"?</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">4</div>
+            <div class="desc"><strong>APPLY FRAMEWORK:</strong> Use the template for that pattern type.</div>
+          </div>
+          <div class="number-trick">
+            <div class="num">5</div>
+            <div class="desc"><strong>START TALKING:</strong> The framework will carry you. Details will come as you speak.</div>
+          </div>
+        </div>
+
+        <!-- ==================== FINAL SUMMARY ==================== -->
+        <h2>Quick Reference Card</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Print This / Screenshot This
+          </div>
+          <div class="callout-content">
+            <p><strong>THE THREE LAWS:</strong></p>
+            <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>WHO OWNS IT?</strong> — XDR sees it = XDR. XDR blind = Sentinel. Needs context = Sentinel.</li>
+              <li><strong>WHAT'S THE OUTCOME?</strong> — Lead with outcome, not tools.</li>
+              <li><strong>WHAT'S THE TRADEOFF?</strong> — Every decision has a cost. Acknowledge it.</li>
+            </ol>
+
+            <p style="margin-top: 1rem;"><strong>QUESTION PATTERNS:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>"Walk me through" → SITUATION → APPROACH → ACTIONS → RESULT</li>
+              <li>"How do you" → PRINCIPLE → PROCESS → EXAMPLE</li>
+              <li>"What's the difference" → PURPOSE A vs PURPOSE B + WHEN TO USE</li>
+              <li>"Troubleshoot" → CONFIRM → ISOLATE → TRACE PIPELINE → FIX</li>
+              <li>"Design/Architect" → REQUIREMENTS → CONSTRAINTS → ARCHITECTURE → TRADEOFFS</li>
+            </ul>
+
+            <p style="margin-top: 1rem;"><strong>WHEN STUCK:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Pause: "Great question. Let me think..."</li>
+              <li>Pivot to what you know</li>
+              <li>Use 5-finger trick (count the steps)</li>
+              <li>"I haven't implemented that specific scenario, but my approach would be..."</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Page Navigation -->
+        <nav class="page-nav" style="margin-top: 3rem;">
+          <a href="interview-technical-reference.html" class="page-nav-link prev">
+            <span class="page-nav-label">Previous</span>
+            <span class="page-nav-title">← Technical Reference</span>
+          </a>
+          <a href="career-narrative.html" class="page-nav-link next">
+            <span class="page-nav-label">Next</span>
+            <span class="page-nav-title">Career Narrative →</span>
+          </a>
+        </nav>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
