@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Dictionary — Master Table Reference | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .ingest-yes { background: rgba(34, 197, 94, 0.15); }
+    .ingest-no { background: rgba(239, 68, 68, 0.15); }
+    .ingest-selective { background: rgba(251, 191, 36, 0.15); }
+    .badge-ingest { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .badge-yes { background: #166534; color: #dcfce7; }
+    .badge-no { background: #991b1b; color: #fecaca; }
+    .badge-selective { background: #92400e; color: #fef3c7; }
+    .badge-xdr { background: #1e40af; color: #dbeafe; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+        <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="../siem/workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
+          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="../siem/casb-saas-security.html" class="nav-item">CASB &amp; SaaS Security</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="../infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="../operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="../operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="../resources/data-dictionary.html" class="nav-item active">Data Dictionary</a>
+          <a href="../resources/templates.html" class="nav-item">Templates</a>
+          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="../resources/alternative-architectures.html" class="nav-item">Alternative Architectures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="../resources/incident-response.html" class="nav-item">Incident Response</a>
+          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="infrastructure-reference.html">Resources</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Data Dictionary</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Data Dictionary — Master Table Reference</h1>
+          <div class="page-header-meta">
+            <span class="page-badge siem">SIEM</span>
+            <span class="page-badge edr" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">XDR</span>
+          </div>
+          <p class="intro-text">Authoritative reference for <strong>every table</strong> in our environment. Each table is annotated with whether it's ingested into Sentinel, handled by XDR, or requires selective ingestion. Use this to understand <strong>where data lives</strong> and <strong>where to query it</strong>.</p>
+        </div>
+
+        <!-- ==================== LEGEND ==================== -->
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Legend</div>
+          <div class="callout-content">
+            <p><span class="badge-ingest badge-yes">INGEST</span> — Table is ingested into Sentinel. Query in Azure Portal → Sentinel → Logs.</p>
+            <p><span class="badge-ingest badge-no">DO NOT INGEST</span> — Table stays in XDR. Query in security.microsoft.com → Advanced Hunting.</p>
+            <p><span class="badge-ingest badge-selective">SELECTIVE</span> — High volume; ingest to Basic tier or filter before ingestion.</p>
+            <p><span class="badge-ingest badge-xdr">XDR HANDLES</span> — XDR detects attacks on this data; no need to build Sentinel detections.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 1: XDR TABLES ==================== -->
+        <h2>1. XDR Tables — Microsoft Defender Raw Telemetry</h2>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Cost Warning</div>
+          <div class="callout-content">
+            <p>Ingesting XDR raw telemetry would cost <strong>~$15,000/month</strong>. We save this by keeping raw data in XDR and ingesting only alerts/incidents (~$50/month).</p>
+          </div>
+        </div>
+
+        <h3>1.1 MDE Tables (Endpoint) — Query in XDR Advanced Hunting</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Ingest?</th><th>Volume</th><th>Where to Query</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ingest-no">
+                <td><code>DeviceProcessEvents</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>~50M/day</td>
+                <td>XDR Advanced Hunting</td>
+                <td>XDR detects malware, LOLBins. Query on-demand for investigation.</td>
+              </tr>
+              <tr class="ingest-no">
+                <td><code>DeviceNetworkEvents</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>~30M/day</td>
+                <td>XDR Advanced Hunting</td>
+                <td>XDR detects C2. Query for network forensics.</td>
+              </tr>
+              <tr class="ingest-no">
+                <td><code>DeviceFileEvents</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>~40M/day</td>
+                <td>XDR Advanced Hunting</td>
+                <td>XDR detects ransomware. Query for file timeline.</td>
+              </tr>
+              <tr class="ingest-no">
+                <td><code>DeviceRegistryEvents</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>~20M/day</td>
+                <td>XDR Advanced Hunting</td>
+                <td>XDR detects persistence. Query for registry forensics.</td>
+              </tr>
+              <tr class="ingest-no">
+                <td><code>DeviceImageLoadEvents</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>~10M/day</td>
+                <td>XDR Advanced Hunting</td>
+                <td>XDR detects DLL injection. Rarely queried.</td>
+              </tr>
+              <tr class="ingest-selective">
+                <td><code>DeviceLogonEvents</code></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
+                <td>~5M/day</td>
+                <td>XDR or Sentinel</td>
+                <td>Ingest only if Sentinel rule needs endpoint logon correlation.</td>
+              </tr>
+              <tr class="ingest-no">
+                <td><code>DeviceInfo</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>Low</td>
+                <td>XDR Advanced Hunting</td>
+                <td>Device inventory. Query via API if needed.</td>
+              </tr>
+              <tr class="ingest-no">
+                <td><code>DeviceTvmSoftwareInventory</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>Low</td>
+                <td>XDR Advanced Hunting</td>
+                <td>TVM software list. Query for vulnerability context.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>1.2 MDO Tables (Email) — Query in XDR Advanced Hunting</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Ingest?</th><th>Volume</th><th>Where to Query</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ingest-no">
+                <td><code>EmailEvents</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>~1M/day</td>
+                <td>XDR Advanced Hunting</td>
+                <td>XDR detects phishing. Query for email investigation.</td>
+              </tr>
+              <tr class="ingest-no">
+                <td><code>EmailAttachmentInfo</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>~100K/day</td>
+                <td>XDR Advanced Hunting</td>
+                <td>XDR detects malicious attachments. Query for IOC lookup.</td>
+              </tr>
+              <tr class="ingest-no">
+                <td><code>EmailUrlInfo</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>~500K/day</td>
+                <td>XDR Advanced Hunting</td>
+                <td>XDR detects phishing URLs. Query for URL investigation.</td>
+              </tr>
+              <tr class="ingest-no">
+                <td><code>UrlClickEvents</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>~50K/day</td>
+                <td>XDR Advanced Hunting</td>
+                <td>Safe Links clicks. Query to see who clicked phishing link.</td>
+              </tr>
+              <tr class="ingest-selective">
+                <td><code>EmailPostDeliveryEvents</code></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
+                <td>Low</td>
+                <td>XDR or Sentinel</td>
+                <td>Ingest if tracking ZAP remediation in Sentinel.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>1.3 MDI Tables (Identity Attacks) — Query in XDR Advanced Hunting</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Ingest?</th><th>Volume</th><th>Where to Query</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ingest-no">
+                <td><code>IdentityLogonEvents</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>~2M/day</td>
+                <td>XDR Advanced Hunting</td>
+                <td>MDI detects Pass-the-Hash, NTLM relay. Query for AD auth forensics.</td>
+              </tr>
+              <tr class="ingest-no">
+                <td><code>IdentityQueryEvents</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>~500K/day</td>
+                <td>XDR Advanced Hunting</td>
+                <td>MDI detects LDAP recon. Query for recon investigation.</td>
+              </tr>
+              <tr class="ingest-no">
+                <td><code>IdentityDirectoryEvents</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>~100K/day</td>
+                <td>XDR Advanced Hunting</td>
+                <td>MDI detects DCSync. Query for AD change forensics.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>MDI Detects Attacks, NOT Audit Logs</div>
+          <div class="callout-content">
+            <p><strong>MDI does NOT tell you who was added to Domain Admins.</strong> It detects attacks like Pass-the-Hash and Kerberoasting.</p>
+            <p>For "who changed what" audit logs, you need <strong>Entra ID AuditLogs</strong> (ingested to Sentinel).</p>
+          </div>
+        </div>
+
+        <h3>1.4 MDA Tables (Cloud Apps) — Query in XDR Advanced Hunting</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Ingest?</th><th>Volume</th><th>Where to Query</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ingest-no">
+                <td><code>CloudAppEvents</code></td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>~1M/day</td>
+                <td>XDR Advanced Hunting</td>
+                <td>MDA detects shadow IT, risky OAuth. Query for SaaS investigation.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>1.5 XDR Alerts & Incidents — ALWAYS INGEST</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Ingest?</th><th>Volume</th><th>Where to Query</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ingest-yes">
+                <td><code>SecurityAlert</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>~200/day</td>
+                <td>Sentinel Logs</td>
+                <td>All XDR alerts for Sentinel correlation rules.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>SecurityIncident</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>~50/day</td>
+                <td>Sentinel Logs</td>
+                <td>XDR incidents for unified case management.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>AlertEvidence</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>~500/day</td>
+                <td>Sentinel Logs</td>
+                <td>Entity context (devices, users, IPs) for alerts.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>AlertInfo</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>~200/day</td>
+                <td>Sentinel Logs</td>
+                <td>Alert metadata for investigation.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 2: ENTRA ID TABLES ==================== -->
+        <h2>2. Entra ID Tables — Identity Control-Plane</h2>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>XDR Does NOT Provide These Logs</div>
+          <div class="callout-content">
+            <p><strong>These tables MUST be ingested into Sentinel.</strong> XDR (MDI) detects identity attacks but does NOT log who was added to Global Admins, who changed MFA, or who modified CA policies.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Ingest?</th><th>Tier</th><th>Volume</th><th>What It Contains</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ingest-yes">
+                <td><code>AuditLogs</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>~50K/day</td>
+                <td>User/group/role changes, CA policy changes, app registrations, MFA changes</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>SigninLogs</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>~200K/day</td>
+                <td>Interactive sign-ins, MFA challenges, CA evaluation, location</td>
+              </tr>
+              <tr class="ingest-selective">
+                <td><code>AADNonInteractiveUserSignInLogs</code></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
+                <td>Basic</td>
+                <td>~500K/day</td>
+                <td>Token refreshes, background auth. High volume — Basic tier.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>AADServicePrincipalSignInLogs</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>~100K/day</td>
+                <td>App/automation authentication. Critical for service account monitoring.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>AADManagedIdentitySignInLogs</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>~50K/day</td>
+                <td>Managed identity usage. Track Azure automation.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>AADProvisioningLogs</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>~10K/day</td>
+                <td>HR sync from Workday, user provisioning events.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>AADRiskyUsers</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>Low</td>
+                <td>Identity Protection risk state. Correlation with sign-in anomalies.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>AADUserRiskEvents</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>Low</td>
+                <td>Leaked credentials, impossible travel detections.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 3: M365 & AZURE TABLES ==================== -->
+        <h2>3. Microsoft 365 & Azure Tables</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Ingest?</th><th>Tier</th><th>Volume</th><th>What It Contains</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ingest-yes">
+                <td><code>OfficeActivity</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>~300K/day</td>
+                <td>SharePoint access, Exchange admin, Teams events. XDR doesn't cover M365 audit.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>AzureActivity</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Free</td>
+                <td>~50K/day</td>
+                <td>Azure RBAC changes, resource CRUD, policy changes. FREE TIER.</td>
+              </tr>
+              <tr class="ingest-selective">
+                <td><code>AzureDiagnostics</code></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
+                <td>Basic</td>
+                <td>Varies</td>
+                <td>Key Vault access, Storage operations. Ingest selectively by resource.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>AzureDevOpsAuditing</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>~10K/day</td>
+                <td>Pipeline changes, repo access. XDR doesn't cover DevOps.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 4: NETWORK TABLES ==================== -->
+        <h2>4. Network Tables — XDR Does NOT Cover</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>No XDR Coverage</div>
+          <div class="callout-content">
+            <p>XDR does NOT detect network-layer attacks (C2 beaconing, DNS tunneling, network exfiltration). These logs MUST be ingested into Sentinel.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Ingest?</th><th>Tier</th><th>Source</th><th>What It Contains</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ingest-yes">
+                <td><code>CommonSecurityLog</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>Palo Alto (CEF)</td>
+                <td>Firewall threat logs, deny events. Critical for network detection.</td>
+              </tr>
+              <tr class="ingest-selective">
+                <td><code>Syslog</code></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
+                <td>Basic</td>
+                <td>Palo Alto, VPN</td>
+                <td>VPN/GlobalProtect logs, traffic logs. High volume — filter or Basic tier.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>DnsEvents</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>Windows DNS</td>
+                <td>DNS queries. Detect DNS tunneling, DGA domains.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 5: SAAS TABLES ==================== -->
+        <h2>5. SaaS Application Tables (Custom)</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Outside XDR Scope</div>
+          <div class="callout-content">
+            <p>XDR covers Microsoft cloud apps via MDA. Non-Microsoft SaaS apps (Salesforce, Workday, NetSuite) require custom connectors.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Ingest?</th><th>Connector</th><th>What It Contains</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ingest-yes">
+                <td><code>Salesforce_CL</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Azure Function</td>
+                <td>Data exports, bulk downloads, admin actions. Data exfil detection.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>Workday_CL</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Azure Function</td>
+                <td>Termination events. "Terminated employee with active session" rule.</td>
+              </tr>
+              <tr class="ingest-selective">
+                <td><code>NetSuite_CL</code></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
+                <td>Azure Function</td>
+                <td>Financial transactions. BEC prevention.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>GitHub_CL</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Azure Function</td>
+                <td>Code access, PAT creation, repo visibility changes.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 6: INTUNE TABLES ==================== -->
+        <h2>6. Intune Tables — Device Management</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Ingest?</th><th>Tier</th><th>What It Contains</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ingest-yes">
+                <td><code>IntuneAuditLogs</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>Policy changes, admin actions. Compliance monitoring.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>IntuneDeviceComplianceOrg</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>Compliance state. Correlate with CA evaluation.</td>
+              </tr>
+              <tr class="ingest-selective">
+                <td><code>IntuneDevices</code></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
+                <td>Basic</td>
+                <td>Device inventory. High volume — Basic tier.</td>
+              </tr>
+              <tr class="ingest-selective">
+                <td><code>IntuneOperationalLogs</code></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
+                <td>Basic</td>
+                <td>Enrollment, sync issues. Troubleshooting only.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 7: DLP TABLES ==================== -->
+        <h2>7. DLP Tables — Microsoft Purview</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>DLP Logs Are Separate from XDR</div>
+          <div class="callout-content">
+            <p>XDR doesn't handle DLP. Purview DLP logs must be ingested separately for data exfiltration correlation.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Ingest?</th><th>Tier</th><th>What It Contains</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ingest-yes">
+                <td><code>PurviewDLPLogs</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>DLP policy matches, actions taken. Correlate with identity/network.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td><code>InformationProtectionLogs_CL</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>Sensitivity labels, classification. Track labeled doc access.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 8: WINDOWS SECURITY EVENTS ==================== -->
+        <h2>8. Windows Security Events</h2>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>MDE Covers Workstations</div>
+          <div class="callout-content">
+            <p><strong>Do NOT ingest SecurityEvent from workstations.</strong> MDE already collects and analyzes this data. Only ingest from Domain Controllers for detailed AD audit.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Table</th><th>Source</th><th>Ingest?</th><th>Tier</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ingest-yes">
+                <td><code>SecurityEvent</code></td>
+                <td>Domain Controllers only</td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>Tier 0 monitoring. Detailed AD logon/account events.</td>
+              </tr>
+              <tr class="ingest-no">
+                <td><code>SecurityEvent</code></td>
+                <td>Workstations/Servers</td>
+                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
+                <td>N/A</td>
+                <td>MDE covers. Avoid duplication and cost.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 9: QUICK REFERENCE ==================== -->
+        <h2>9. Quick Reference: Where to Query</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Question</th><th>Query In</th><th>Table</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Who was added to Global Admins?</td>
+                <td><strong>Sentinel</strong></td>
+                <td><code>AuditLogs</code></td>
+                <td>XDR doesn't log role changes</td>
+              </tr>
+              <tr>
+                <td>Who signed in from unusual location?</td>
+                <td><strong>Sentinel</strong></td>
+                <td><code>SigninLogs</code></td>
+                <td>XDR doesn't log sign-in details</td>
+              </tr>
+              <tr>
+                <td>What XDR alerts fired for this user?</td>
+                <td><strong>Sentinel</strong></td>
+                <td><code>SecurityAlert</code></td>
+                <td>XDR alerts are ingested</td>
+              </tr>
+              <tr>
+                <td>What processes did malware spawn?</td>
+                <td><strong>XDR</strong></td>
+                <td><code>DeviceProcessEvents</code></td>
+                <td>Not ingested — query in XDR</td>
+              </tr>
+              <tr>
+                <td>What network connections did it make?</td>
+                <td><strong>XDR</strong></td>
+                <td><code>DeviceNetworkEvents</code></td>
+                <td>Not ingested — query in XDR</td>
+              </tr>
+              <tr>
+                <td>Who clicked the phishing link?</td>
+                <td><strong>XDR</strong></td>
+                <td><code>UrlClickEvents</code></td>
+                <td>Not ingested — query in XDR</td>
+              </tr>
+              <tr>
+                <td>What files were downloaded from SharePoint?</td>
+                <td><strong>Sentinel</strong></td>
+                <td><code>OfficeActivity</code></td>
+                <td>M365 audit is ingested</td>
+              </tr>
+              <tr>
+                <td>What firewall blocked this IP?</td>
+                <td><strong>Sentinel</strong></td>
+                <td><code>CommonSecurityLog</code></td>
+                <td>Network logs are ingested</td>
+              </tr>
+              <tr>
+                <td>What Salesforce records were exported?</td>
+                <td><strong>Sentinel</strong></td>
+                <td><code>Salesforce_CL</code></td>
+                <td>Custom SaaS connector</td>
+              </tr>
+              <tr>
+                <td>Is there a Pass-the-Hash attack?</td>
+                <td><strong>XDR</strong></td>
+                <td><code>IdentityLogonEvents</code></td>
+                <td>MDI detects and alerts — check SecurityAlert</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 10: COST SUMMARY ==================== -->
+        <h2>10. Cost Impact Summary</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Ingestion Cost Comparison</span></div>
+          <pre><code>SENTINEL INGESTION COST SUMMARY
+═══════════════════════════════════════════════════════════════════════════════
+
+WHAT WE INGEST INTO SENTINEL:
+├── Entra ID (AuditLogs, SigninLogs, etc.)      ~1M events/day    ~$1,200/month
+├── XDR Alerts + Incidents                        ~1K events/day    ~$50/month
+├── Network (Palo Alto threat logs)             ~500K events/day    ~$800/month
+├── M365 (OfficeActivity)                       ~300K events/day    ~$500/month
+├── SaaS (Salesforce, Workday, etc.)            ~100K events/day    ~$200/month
+├── Azure (AzureActivity - FREE)                 ~50K events/day    FREE
+└── TOTAL                                                           ~$2,750/month
+
+WHAT WE DO NOT INGEST (Query in XDR):
+├── DeviceProcessEvents                          ~50M events/day    SAVED: ~$8,000/month
+├── DeviceNetworkEvents                          ~30M events/day    SAVED: ~$4,500/month
+├── DeviceFileEvents                             ~40M events/day    SAVED: ~$6,000/month
+├── DeviceRegistryEvents                         ~20M events/day    SAVED: ~$3,000/month
+├── EmailEvents                                   ~1M events/day    SAVED: ~$150/month
+└── TOTAL SAVINGS                                                   ~$21,650/month
+
+NET RESULT:
+• Sentinel cost: ~$2,750/month (plus ~$3,000/month commitment tier discount)
+• Avoided cost: ~$21,650/month by keeping XDR telemetry in XDR
+• Effective savings: ~85% compared to "ingest everything" approach</code></pre>
+        </div>
+
+        <nav class="page-nav">
+          <a href="scripts.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Scripts & Automation</span></a>
+          <a href="templates.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Templates →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

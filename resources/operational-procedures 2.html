@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operational Procedures | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="layout">
+        <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="../siem/workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
+          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="../siem/casb-saas-security.html" class="nav-item">CASB &amp; SaaS Security</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="../infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="../operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="../operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="../resources/templates.html" class="nav-item">Templates</a>
+          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="../resources/alternative-architectures.html" class="nav-item">Alternative Architectures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="../resources/incident-response.html" class="nav-item">Incident Response</a>
+          <a href="../resources/operational-procedures.html" class="nav-item active">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="templates.html">Resources</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Operational Procedures</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Operational Procedures</h1>
+          <div class="page-header-meta">
+            <span class="page-badge siem">SOC Operations</span>
+            <span class="page-reading-time">Operational Runbook</span>
+          </div>
+          <p class="intro-text">
+            Day-to-day operational procedures for managing Microsoft Sentinel, MDE, and Purview DLP. These procedures ensure consistent operations across the security team.
+          </p>
+        </div>
+
+        <!-- ==================== SECTION 1: DAILY OPERATIONS ==================== -->
+        <h2>1. Daily Operations Checklist</h2>
+
+        <h3>1.1 Morning Shift Handoff (08:00)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Task</th><th>Tool</th><th>Expected Output</th><th>Escalation Trigger</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Review overnight incidents</td>
+                <td>Sentinel Incidents</td>
+                <td>All High/Critical triaged</td>
+                <td>Unassigned Critical &gt; 1 hour</td>
+              </tr>
+              <tr>
+                <td>Check connector health</td>
+                <td>Sentinel Data Connectors</td>
+                <td>All connectors green</td>
+                <td>Any connector red &gt; 30 min</td>
+              </tr>
+              <tr>
+                <td>Review MDE alerts</td>
+                <td>M365 Defender</td>
+                <td>Active alerts reviewed</td>
+                <td>High severity untriaged</td>
+              </tr>
+              <tr>
+                <td>Check device health</td>
+                <td>MDE Device Inventory</td>
+                <td>&lt; 5% inactive devices</td>
+                <td>&gt; 5% devices inactive</td>
+              </tr>
+              <tr>
+                <td>Review DLP violations</td>
+                <td>Purview DLP Dashboard</td>
+                <td>High-risk violations reviewed</td>
+                <td>PCI/PHI violation unaddressed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>1.2 Health Check Queries</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Daily Health Check Dashboard</span></div>
+          <pre><code>// Data connector health - last 24 hours
+let ConnectorHealth = 
+Heartbeat
+| where TimeGenerated > ago(24h)
+| summarize LastHeartbeat = max(TimeGenerated) by Computer, SourceComputerId
+| extend Status = iff(LastHeartbeat < ago(30m), "Unhealthy", "Healthy");
+
+// Log ingestion volume trend
+let IngestionTrend =
+Usage
+| where TimeGenerated > ago(7d)
+| summarize DailyGB = sum(Quantity) / 1024 by bin(TimeGenerated, 1d), DataType
+| order by TimeGenerated desc;
+
+// Incident metrics
+let IncidentMetrics =
+SecurityIncident
+| where TimeGenerated > ago(24h)
+| summarize 
+    TotalIncidents = count(),
+    CriticalCount = countif(Severity == "High"),
+    OpenCount = countif(Status == "New" or Status == "Active"),
+    ClosedCount = countif(Status == "Closed"),
+    MTTR = avg(datetime_diff('hour', ClosedTime, CreatedTime));
+
+// Alert rule health
+let RuleHealth =
+SentinelHealth
+| where TimeGenerated > ago(24h)
+| where SentinelResourceType == "Analytic Rule"
+| summarize 
+    TotalRuns = count(),
+    FailedRuns = countif(Status == "Failure"),
+    SuccessRate = round(100.0 * countif(Status == "Success") / count(), 2)
+    by SentinelResourceName
+| where FailedRuns > 0;
+
+// Output all metrics
+ConnectorHealth | where Status == "Unhealthy"</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 2: CONNECTOR MANAGEMENT ==================== -->
+        <h2>2. Connector Management</h2>
+
+        <h3>2.1 Connector Health Monitoring</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Connector Last Data Received</span></div>
+          <pre><code>// Check when each table last received data
+union withsource=TableName *
+| summarize LastData = max(TimeGenerated) by TableName
+| extend HoursSinceData = datetime_diff('hour', now(), LastData)
+| where HoursSinceData > 1
+| order by HoursSinceData desc
+
+// Specific connector checks
+// Windows Security Events
+SecurityEvent
+| summarize LastEvent = max(TimeGenerated), EventCount = count() by Computer
+| where LastEvent < ago(1h)
+| order by LastEvent asc
+
+// Palo Alto Firewall
+CommonSecurityLog
+| where DeviceVendor == "Palo Alto Networks"
+| summarize LastLog = max(TimeGenerated), LogCount = count()
+| extend MinutesSinceLog = datetime_diff('minute', now(), LastLog)
+
+// MDE Connector
+DeviceInfo
+| summarize LastSeen = max(TimeGenerated) by DeviceName
+| where LastSeen < ago(24h)
+| order by LastSeen asc</code></pre>
+        </div>
+
+        <h3>2.2 Connector Troubleshooting</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Connector</th><th>Common Issues</th><th>Resolution Steps</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Windows Security Events (AMA)</strong></td>
+                <td>Agent offline, DCR not applied, firewall blocking</td>
+                <td>1. Check AMA service on host<br>2. Verify DCR assignment<br>3. Test connectivity to Log Analytics endpoint</td>
+              </tr>
+              <tr>
+                <td><strong>Palo Alto (CEF)</strong></td>
+                <td>Syslog forwarder down, port blocked, parsing errors</td>
+                <td>1. Check rsyslog/syslog-ng service<br>2. Verify port 514/TCP open<br>3. Check CEF format compliance</td>
+              </tr>
+              <tr>
+                <td><strong>M365 Defender</strong></td>
+                <td>API permissions, connector disabled, license issue</td>
+                <td>1. Verify app registration permissions<br>2. Re-enable connector in portal<br>3. Check M365 E5/MDE license</td>
+              </tr>
+              <tr>
+                <td><strong>Entra ID</strong></td>
+                <td>Diagnostic settings removed, Log Analytics disconnected</td>
+                <td>1. Verify diagnostic settings in Entra ID<br>2. Check Log Analytics workspace connection<br>3. Re-add diagnostic settings</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 3: ANALYTICS RULE MANAGEMENT ==================== -->
+        <h2>3. Analytics Rule Management</h2>
+
+        <h3>3.1 Rule Health Check</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Analytics Rule Execution Status</span></div>
+          <pre><code>// Check rule execution health
+SentinelHealth
+| where TimeGenerated > ago(24h)
+| where SentinelResourceType == "Analytic Rule"
+| summarize 
+    LastRun = max(TimeGenerated),
+    TotalRuns = count(),
+    SuccessCount = countif(Status == "Success"),
+    FailureCount = countif(Status == "Failure"),
+    SuccessRate = round(100.0 * countif(Status == "Success") / count(), 2)
+    by SentinelResourceName
+| extend 
+    HealthStatus = case(
+        SuccessRate == 100, "Healthy",
+        SuccessRate >= 90, "Warning",
+        "Critical"
+    )
+| where HealthStatus != "Healthy"
+| order by SuccessRate asc
+
+// Get failure details
+SentinelHealth
+| where TimeGenerated > ago(24h)
+| where Status == "Failure"
+| project TimeGenerated, SentinelResourceName, Description, ExtendedProperties
+| order by TimeGenerated desc</code></pre>
+        </div>
+
+        <h3>3.2 Common Rule Failures</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Error Type</th><th>Cause</th><th>Resolution</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>"Semantic error"</td>
+                <td>KQL syntax error, missing column</td>
+                <td>Edit rule, fix query syntax, verify table schema</td>
+              </tr>
+              <tr>
+                <td>"Query timeout"</td>
+                <td>Query too complex, large time range</td>
+                <td>Optimize query, reduce lookback period, add filters</td>
+              </tr>
+              <tr>
+                <td>"No data"</td>
+                <td>Data source not ingesting, filter too restrictive</td>
+                <td>Check connector health, broaden filters</td>
+              </tr>
+              <tr>
+                <td>"Throttled"</td>
+                <td>Too many rules running simultaneously</td>
+                <td>Stagger rule schedules, reduce frequency</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>3.3 Tuning False Positives</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Identify Noisy Rules</span></div>
+          <pre><code>// Find rules generating most false positives
+SecurityIncident
+| where TimeGenerated > ago(30d)
+| where Classification == "FalsePositive" or Classification == "BenignPositive"
+| summarize FalsePositiveCount = count() by AlertProductNames
+| order by FalsePositiveCount desc
+| take 10
+
+// Detailed false positive analysis for a specific rule
+let RuleName = "Suspicious PowerShell Execution";
+SecurityIncident
+| where TimeGenerated > ago(30d)
+| where Title has RuleName
+| where Classification == "FalsePositive"
+| extend Entities = parse_json(Entities)
+| mv-expand Entities
+| where Entities.Type == "host" or Entities.Type == "account"
+| summarize 
+    FPCount = count(),
+    ExampleTitles = make_set(Title, 3)
+    by tostring(Entities.Name)
+| order by FPCount desc</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 4: MDE OPERATIONS ==================== -->
+        <h2>4. MDE Operations</h2>
+
+        <h3>4.1 Device Inventory Management</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Device Inventory Queries</span></div>
+          <pre><code>// Devices not seen in 7 days (potentially offline)
+DeviceInfo
+| summarize LastSeen = max(TimeGenerated) by DeviceName, DeviceId, OSPlatform
+| where LastSeen < ago(7d)
+| order by LastSeen asc
+
+// Devices with outdated definitions
+DeviceTvmSoftwareInventory
+| where SoftwareName == "windows_defender_antivirus"
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| extend DaysSinceUpdate = datetime_diff('day', now(), TimeGenerated)
+| where DaysSinceUpdate > 3
+| project DeviceName, SoftwareVersion, DaysSinceUpdate
+
+// Devices missing MDE
+// Compare with CMDB or Intune device list
+let MDEDevices = DeviceInfo
+| summarize by DeviceName;
+// Intune devices (if ingested)
+// IntuneDevices | where DeviceName !in (MDEDevices)</code></pre>
+        </div>
+
+        <h3>4.2 Threat & Vulnerability Management</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - TVM Priority Vulnerabilities</span></div>
+          <pre><code>// Critical vulnerabilities by device
+DeviceTvmSoftwareVulnerabilities
+| where VulnerabilitySeverityLevel == "Critical"
+| summarize 
+    CriticalVulns = dcount(CveId),
+    Vulnerabilities = make_set(CveId, 10)
+    by DeviceName
+| order by CriticalVulns desc
+| take 20
+
+// Vulnerabilities with known exploits
+DeviceTvmSoftwareVulnerabilities
+| where IsExploitAvailable == true
+| summarize 
+    AffectedDevices = dcount(DeviceName),
+    Devices = make_set(DeviceName, 10)
+    by CveId, VulnerabilitySeverityLevel
+| order by AffectedDevices desc
+
+// Software requiring patching
+DeviceTvmSoftwareVulnerabilities
+| summarize VulnCount = count() by SoftwareName, SoftwareVersion
+| where VulnCount > 5
+| order by VulnCount desc</code></pre>
+        </div>
+
+        <h3>4.3 ASR Rules Monitoring</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - ASR Rule Audit</span></div>
+          <pre><code>// ASR rule blocks and audits
+DeviceEvents
+| where TimeGenerated > ago(7d)
+| where ActionType startswith "Asr"
+| summarize 
+    BlockCount = countif(ActionType endswith "Blocked"),
+    AuditCount = countif(ActionType endswith "Audited"),
+    Devices = dcount(DeviceName)
+    by ActionType
+| order by BlockCount desc
+
+// Potential false positives (frequent blocks on same process)
+DeviceEvents
+| where TimeGenerated > ago(7d)
+| where ActionType endswith "Blocked"
+| summarize 
+    BlockCount = count(),
+    Devices = dcount(DeviceName),
+    Users = dcount(AccountName)
+    by FileName, FolderPath, ActionType
+| where BlockCount > 50
+| order by BlockCount desc</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 5: DLP OPERATIONS ==================== -->
+        <h2>5. DLP Operations</h2>
+
+        <h3>5.1 Policy Violation Review</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - DLP Violation Summary</span></div>
+          <pre><code>// Daily DLP violation summary
+PurviewDLPLogs
+| where TimeGenerated > ago(24h)
+| summarize 
+    TotalViolations = count(),
+    UniqueUsers = dcount(User),
+    BlockedActions = countif(ActionsTaken has "Block"),
+    WarnActions = countif(ActionsTaken has "Notify")
+    by PolicyName
+| order by TotalViolations desc
+
+// High-risk violations requiring immediate review
+PurviewDLPLogs
+| where TimeGenerated > ago(24h)
+| where SensitiveInfoType has_any ("Credit Card", "SSN", "Bank Account", "Protected Health Information")
+| where ActionsTaken has "Block"
+| project 
+    TimeGenerated,
+    User,
+    PolicyName,
+    SensitiveInfoType,
+    Workload,
+    ItemPath,
+    Recipients
+| order by TimeGenerated desc
+
+// Repeat offenders
+PurviewDLPLogs
+| where TimeGenerated > ago(30d)
+| summarize ViolationCount = count() by User
+| where ViolationCount > 10
+| order by ViolationCount desc</code></pre>
+        </div>
+
+        <h3>5.2 DLP Policy Effectiveness</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Policy Effectiveness Metrics</span></div>
+          <pre><code>// Policy trigger trends (weekly)
+PurviewDLPLogs
+| where TimeGenerated > ago(30d)
+| summarize ViolationCount = count() by PolicyName, bin(TimeGenerated, 1w)
+| order by TimeGenerated desc, ViolationCount desc
+
+// Action distribution by policy
+PurviewDLPLogs
+| where TimeGenerated > ago(30d)
+| extend Action = case(
+    ActionsTaken has "Block", "Blocked",
+    ActionsTaken has "Notify", "Warned",
+    "Logged"
+)
+| summarize Count = count() by PolicyName, Action
+| order by PolicyName, Count desc</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 6: REPORTING ==================== -->
+        <h2>6. Reporting Procedures</h2>
+
+        <h3>6.1 Weekly Security Report</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - Weekly Metrics Query</span></div>
+          <pre><code>// Weekly security metrics summary
+let StartDate = startofweek(ago(7d));
+let EndDate = startofweek(now());
+
+// Incident metrics
+let IncidentMetrics = SecurityIncident
+| where TimeGenerated between (StartDate .. EndDate)
+| summarize 
+    TotalIncidents = count(),
+    CriticalHigh = countif(Severity in ("High", "Critical")),
+    Resolved = countif(Status == "Closed"),
+    AvgMTTR = avg(datetime_diff('hour', ClosedTime, CreatedTime))
+| extend ResolvedPct = round(100.0 * Resolved / TotalIncidents, 1);
+
+// Alert metrics
+let AlertMetrics = SecurityAlert
+| where TimeGenerated between (StartDate .. EndDate)
+| summarize 
+    TotalAlerts = count(),
+    HighSeverity = countif(AlertSeverity == "High")
+| extend AlertsPerDay = round(1.0 * TotalAlerts / 7, 0);
+
+// MDE metrics
+let MDEMetrics = DeviceInfo
+| summarize 
+    TotalDevices = dcount(DeviceId),
+    OnboardedThisWeek = dcountif(DeviceId, FirstSeen > StartDate);
+
+// Output report
+print "Weekly Security Report"
+| extend WeekStart = StartDate, WeekEnd = EndDate
+| extend 
+    Incidents_Total = toscalar(IncidentMetrics | project TotalIncidents),
+    Incidents_CriticalHigh = toscalar(IncidentMetrics | project CriticalHigh),
+    Incidents_ResolvedPct = toscalar(IncidentMetrics | project ResolvedPct),
+    Incidents_AvgMTTR = toscalar(IncidentMetrics | project AvgMTTR),
+    Alerts_Total = toscalar(AlertMetrics | project TotalAlerts),
+    Alerts_PerDay = toscalar(AlertMetrics | project AlertsPerDay),
+    Devices_Total = toscalar(MDEMetrics | project TotalDevices),
+    Devices_NewOnboarded = toscalar(MDEMetrics | project OnboardedThisWeek)</code></pre>
+        </div>
+
+        <h3>6.2 Monthly Executive Report</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Metric</th><th>Target</th><th>How to Calculate</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Mean Time to Detect (MTTD)</td>
+                <td>&lt; 4 hours</td>
+                <td>Time from attack start to alert generation</td>
+              </tr>
+              <tr>
+                <td>Mean Time to Respond (MTTR)</td>
+                <td>&lt; 24 hours</td>
+                <td>Time from alert to incident closure</td>
+              </tr>
+              <tr>
+                <td>Incident Resolution Rate</td>
+                <td>&gt; 95%</td>
+                <td>Closed incidents / Total incidents</td>
+              </tr>
+              <tr>
+                <td>False Positive Rate</td>
+                <td>&lt; 20%</td>
+                <td>FP incidents / Total incidents</td>
+              </tr>
+              <tr>
+                <td>Endpoint Coverage</td>
+                <td>&gt; 98%</td>
+                <td>MDE devices / Total devices in CMDB</td>
+              </tr>
+              <tr>
+                <td>DLP Violation Trend</td>
+                <td>Decreasing</td>
+                <td>Month-over-month violation count</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 7: CHANGE MANAGEMENT ==================== -->
+        <h2>7. Change Management</h2>
+
+        <h3>7.1 Analytics Rule Changes</h3>
+
+        <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li><strong>Document change request</strong> with justification</li>
+          <li><strong>Test in dev/test workspace</strong> if available</li>
+          <li><strong>Peer review</strong> query changes</li>
+          <li><strong>Schedule change window</strong> (avoid peak hours)</li>
+          <li><strong>Implement change</strong> with rollback plan</li>
+          <li><strong>Monitor for 24 hours</strong> post-change</li>
+          <li><strong>Document outcome</strong> in change log</li>
+        </ol>
+
+        <h3>7.2 MDE Policy Changes</h3>
+
+        <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li><strong>Create change request</strong> with impact assessment</li>
+          <li><strong>Test on pilot group</strong> (10-50 devices)</li>
+          <li><strong>Monitor pilot for 1 week</strong></li>
+          <li><strong>Review for false positives</strong> or user impact</li>
+          <li><strong>Expand to production</strong> in waves (25% → 50% → 100%)</li>
+          <li><strong>Document exceptions</strong> if needed</li>
+        </ol>
+
+        <h3>7.3 DLP Policy Changes</h3>
+
+        <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li><strong>Business stakeholder approval</strong> required</li>
+          <li><strong>Legal review</strong> for new sensitive info types</li>
+          <li><strong>Deploy in test mode</strong> first</li>
+          <li><strong>Review simulated matches</strong> for 2 weeks</li>
+          <li><strong>Enable enforcement</strong> after validation</li>
+          <li><strong>User communication</strong> before enforcement</li>
+        </ol>
+
+        <!-- ==================== SECTION 8: ESCALATION ==================== -->
+        <h2>8. Escalation Matrix</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Situation</th><th>L1 Response Time</th><th>Escalate To</th><th>Notification</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Critical incident (ransomware, breach)</td>
+                <td>Immediate</td>
+                <td>SOC Lead → Security Manager → CISO</td>
+                <td>Phone + Email + Teams</td>
+              </tr>
+              <tr>
+                <td>High incident (malware, compromised account)</td>
+                <td>15 minutes</td>
+                <td>SOC Lead → Security Manager</td>
+                <td>Email + Teams</td>
+              </tr>
+              <tr>
+                <td>Connector down &gt; 1 hour</td>
+                <td>30 minutes</td>
+                <td>Platform Engineer</td>
+                <td>Teams</td>
+              </tr>
+              <tr>
+                <td>MDE coverage drop &gt; 5%</td>
+                <td>4 hours</td>
+                <td>Platform Engineer → Security Manager</td>
+                <td>Email</td>
+              </tr>
+              <tr>
+                <td>DLP PCI/PHI violation</td>
+                <td>1 hour</td>
+                <td>Compliance Team → Legal</td>
+                <td>Email</td>
+              </tr>
+              <tr>
+                <td>Executive account compromise</td>
+                <td>Immediate</td>
+                <td>CISO → CEO</td>
+                <td>Phone</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="incident-response.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Incident Response</span></a>
+          <a href="resources/data-dictionary.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Data Dictionary →</span></a>
+        </nav>
+
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

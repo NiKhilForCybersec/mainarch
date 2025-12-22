@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detection Engineering — 6-Step Migration Framework | SIEM Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .disposition-retire { background: #166534; color: #dcfce7; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .disposition-replace { background: #1e40af; color: #dbeafe; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .disposition-rewrite { background: #92400e; color: #fef3c7; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .disposition-keep { background: #374151; color: #d1d5db; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .step-box { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+    .step-number { display: inline-block; background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 700; margin-right: 0.75rem; }
+    .step-title { font-size: 1.1rem; font-weight: 600; display: inline; }
+    .drop-criteria { background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 1rem 1.5rem; margin: 1rem 0; }
+    .migrate-criteria { background: rgba(34, 197, 94, 0.1); border-left: 4px solid #22c55e; padding: 1rem 1.5rem; margin: 1rem 0; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="../siem/detection-engineering.html" class="nav-item active">Detection Engineering</a>
+          <a href="../siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="../siem/workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
+          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="../siem/casb-saas-security.html" class="nav-item">CASB &amp; SaaS Security</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="../infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="../operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="../operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="../resources/templates.html" class="nav-item">Templates</a>
+          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="../resources/alternative-architectures.html" class="nav-item">Alternative Architectures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="../resources/incident-response.html" class="nav-item">Incident Response</a>
+          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">SIEM Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Detection Engineering</span>
+        </nav>
+
+        <div class="page-header">
+          <h1>Detection Engineering — 6-Step Migration Framework</h1>
+          <div class="page-header-meta">
+            <span class="page-badge siem">SIEM Track</span>
+            <span class="page-reading-time">Authoritative Methodology</span>
+          </div>
+          <p class="intro-text">We migrate detections based on <strong>outcomes and coverage</strong>, not rule equivalence. If XDR reliably detects the same attack technique, the SIEM rule is retired. This page documents our authoritative 6-step decision framework for RSA NetWitness → Microsoft Sentinel migration.</p>
+        </div>
+
+        <!-- ==================== CORE PRINCIPLE ==================== -->
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Core Principle</div>
+          <div class="callout-content">
+            <p><strong>We do NOT translate rules 1:1.</strong></p>
+            <p>We evaluate whether the <em>attack technique</em> is detected — not whether the <em>rule logic</em> is preserved. If Microsoft Defender XDR reliably detects the technique, we retire the RSA rule. Period.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 1: THE 6-STEP FRAMEWORK ==================== -->
+        <h2>1. The 6-Step Decision Framework</h2>
+
+        <p>This framework is applied to every RSA NetWitness detection rule. No exceptions.</p>
+
+        <!-- STEP 1 -->
+        <div class="step-box">
+          <div><span class="step-number">1</span><span class="step-title">Classify Every RSA Rule by Purpose</span></div>
+          <p style="margin-top: 1rem;">For each RSA detection, identify <strong>what it is trying to detect</strong> — not <em>how</em> it does it.</p>
+          
+          <div class="table-wrapper" style="margin-top: 1rem;">
+            <table>
+              <thead>
+                <tr><th>Category</th><th>Examples</th><th>Likely Disposition</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Endpoint Behavior</strong></td>
+                  <td>Process injection, ransomware, persistence, LOLBins</td>
+                  <td><span class="disposition-retire">RETIRE → XDR</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Identity Attack</strong></td>
+                  <td>Credential theft, lateral movement, Kerberoasting</td>
+                  <td><span class="disposition-retire">RETIRE → XDR</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Email Threat</strong></td>
+                  <td>Phishing, BEC, malware attachment</td>
+                  <td><span class="disposition-retire">RETIRE → XDR</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Network IOC</strong></td>
+                  <td>C2 traffic, DNS tunneling, beaconing</td>
+                  <td><span class="disposition-rewrite">REWRITE → Sentinel</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Audit / Governance</strong></td>
+                  <td>Admin changes, privilege escalation, policy violations</td>
+                  <td><span class="disposition-rewrite">REWRITE → Sentinel</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Business Logic</strong></td>
+                  <td>VIP access, terminated employee, data export</td>
+                  <td><span class="disposition-rewrite">REWRITE → Sentinel</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <p style="margin-top: 1rem;"><strong>This classification is critical.</strong> It determines the likely disposition before you even look at rule logic.</p>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step-box">
+          <div><span class="step-number">2</span><span class="step-title">Map Each Rule to MITRE ATT&CK</span></div>
+          <p style="margin-top: 1rem;">Every rule must map to a MITRE ATT&CK technique. If it cannot be mapped, that's already a red flag.</p>
+          
+          <div class="code-block" style="margin-top: 1rem;">
+            <div class="code-header"><span class="code-lang">Example MITRE Mapping</span></div>
+            <pre><code>RSA RULE: "Rapid file rename activity"
+├── Tactic: Impact
+├── Technique: T1486 – Data Encrypted for Impact
+├── Sub-technique: N/A
+└── Detection Goal: Ransomware encryption behavior
+
+RSA RULE: "LSASS memory access"
+├── Tactic: Credential Access
+├── Technique: T1003.001 – LSASS Memory
+├── Sub-technique: OS Credential Dumping
+└── Detection Goal: Mimikatz / credential theft
+
+RSA RULE: "PowerShell encoded command"
+├── Tactic: Execution
+├── Technique: T1059.001 – PowerShell
+├── Sub-technique: Command and Scripting Interpreter
+└── Detection Goal: Obfuscated script execution</code></pre>
+          </div>
+          
+          <div class="callout warning" style="margin-top: 1rem;">
+            <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>If No MITRE Mapping</div>
+            <div class="callout-content">
+              <p>Rules that cannot map to MITRE are often low-value, overly specific, or operational noise. These are candidates for immediate retirement without replacement.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step-box">
+          <div><span class="step-number">3</span><span class="step-title">Check XDR Native Coverage (Not Rule Logic)</span></div>
+          <p style="margin-top: 1rem;"><strong>You do NOT look for equivalent rules.</strong> You check whether XDR produces alerts for that technique.</p>
+          
+          <h4 style="margin-top: 1.5rem;">How to Validate XDR Coverage</h4>
+          <div class="table-wrapper" style="margin-top: 0.5rem;">
+            <table>
+              <thead>
+                <tr><th>Method</th><th>Description</th><th>When to Use</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Microsoft Documentation</strong></td>
+                  <td>Review Defender coverage for MITRE techniques</td>
+                  <td>Initial assessment</td>
+                </tr>
+                <tr>
+                  <td><strong>Historical Incidents</strong></td>
+                  <td>Check if XDR has fired alerts for this technique before</td>
+                  <td>Validation of coverage claims</td>
+                </tr>
+                <tr>
+                  <td><strong>Attack Simulation</strong></td>
+                  <td>Run Atomic Red Team / safe simulations</td>
+                  <td>High-risk techniques, audit requirements</td>
+                </tr>
+                <tr>
+                  <td><strong>Red Team Tests</strong></td>
+                  <td>Real adversary simulation</td>
+                  <td>Critical techniques, compliance</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <h4 style="margin-top: 1.5rem;">Outcome-Based Check (Not Logic-Based)</h4>
+          <div class="code-block" style="margin-top: 0.5rem;">
+            <div class="code-header"><span class="code-lang">Validation Questions</span></div>
+            <pre><code>OUTCOME-BASED VALIDATION CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+For each MITRE technique the RSA rule covers, answer:
+
+1. Does XDR alert fire when this technique executes?
+   □ Yes → Candidate for RETIRE
+   □ No  → Candidate for REWRITE
+
+2. Is the alert correlated into an incident?
+   □ Yes → High confidence in XDR coverage
+   □ No  → May need Sentinel correlation
+
+3. Is severity appropriate for SOC triage?
+   □ Yes → XDR coverage sufficient
+   □ No  → May need Sentinel enrichment
+
+4. Does XDR provide sufficient context?
+   □ Yes → Retire RSA rule
+   □ No  → Consider Sentinel enrichment rule
+
+═══════════════════════════════════════════════════════════════════════════════
+KEY: You are validating OUTCOMES, not comparing RULE LOGIC.
+═══════════════════════════════════════════════════════════════════════════════</code></pre>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="step-box">
+          <div><span class="step-number">4</span><span class="step-title">Assign a Disposition to Each RSA Rule</span></div>
+          <p style="margin-top: 1rem;">Each rule gets one of four outcomes:</p>
+          
+          <div class="table-wrapper" style="margin-top: 1rem;">
+            <table>
+              <thead>
+                <tr><th>Disposition</th><th>Meaning</th><th>Action</th></tr>
+              </thead>
+              <tbody>
+                <tr style="background: rgba(34, 197, 94, 0.1);">
+                  <td><span class="disposition-retire">RETIRE — XDR Native</span></td>
+                  <td>XDR reliably detects this technique</td>
+                  <td>Do not migrate. Document XDR coverage.</td>
+                </tr>
+                <tr style="background: rgba(59, 130, 246, 0.1);">
+                  <td><span class="disposition-replace">REPLACE — Sentinel</span></td>
+                  <td>Needs non-Defender telemetry</td>
+                  <td>Create Sentinel rule using network/SaaS/cloud logs.</td>
+                </tr>
+                <tr style="background: rgba(234, 179, 8, 0.1);">
+                  <td><span class="disposition-rewrite">REWRITE — Sentinel</span></td>
+                  <td>Business / deterministic logic required</td>
+                  <td>Create custom Sentinel analytics rule.</td>
+                </tr>
+                <tr style="background: rgba(107, 114, 128, 0.1);">
+                  <td><span class="disposition-keep">KEEP TEMPORARILY</span></td>
+                  <td>Validation phase only</td>
+                  <td>Run parallel until XDR coverage confirmed.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="step-box">
+          <div><span class="step-number">5</span><span class="step-title">Apply Clear Drop Criteria (This Is Key)</span></div>
+          <p style="margin-top: 1rem;">You <strong>DROP / DO NOT TRANSLATE</strong> an RSA rule if <strong>any</strong> of the following are true:</p>
+          
+          <div class="drop-criteria">
+            <h4 style="margin-top: 0; color: #ef4444;">🚫 DROP CRITERION 1: Endpoint-Centric Behavior</h4>
+            <p>Examples: Ransomware, LOLBins, credential dumping, persistence mechanisms, process injection, suspicious child processes</p>
+            <p><strong>Rationale:</strong> MDE/XDR has kernel-level visibility, AMSI integration, and behavioral ML. SIEM rules using DeviceProcessEvents cannot match this fidelity.</p>
+          </div>
+          
+          <div class="drop-criteria">
+            <h4 style="margin-top: 0; color: #ef4444;">🚫 DROP CRITERION 2: Signature / IOC-Based Logic</h4>
+            <p>Examples: Static file hashes, known bad domains, simple IP matches, specific malware signatures</p>
+            <p><strong>Rationale:</strong> XDR + Threat Intelligence handles this better. Microsoft TI is continuously updated; static SIEM rules go stale.</p>
+          </div>
+          
+          <div class="drop-criteria">
+            <h4 style="margin-top: 0; color: #ef4444;">🚫 DROP CRITERION 3: Low-Fidelity / Noisy Rules</h4>
+            <p>Examples: High false positive rules, threshold-based heuristics, rules SOC routinely ignored</p>
+            <p><strong>Rationale:</strong> Migration is a chance to clean house. Don't migrate noise.</p>
+          </div>
+          
+          <div class="drop-criteria">
+            <h4 style="margin-top: 0; color: #ef4444;">🚫 DROP CRITERION 4: Redundant Correlation</h4>
+            <p>Examples: Endpoint + endpoint correlation, identity + identity correlation</p>
+            <p><strong>Rationale:</strong> XDR already correlates within its domains natively. Don't rebuild what XDR does automatically.</p>
+          </div>
+        </div>
+
+        <!-- STEP 6 -->
+        <div class="step-box">
+          <div><span class="step-number">6</span><span class="step-title">Document the Decision (Non-Negotiable)</span></div>
+          <p style="margin-top: 1rem;"><strong>Every dropped rule is documented</strong> with RSA rule name, MITRE mapping, disposition, and justification.</p>
+          
+          <div class="table-wrapper" style="margin-top: 1rem;">
+            <table>
+              <thead>
+                <tr><th>RSA Rule</th><th>MITRE</th><th>Disposition</th><th>Justification</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Rapid file rename activity</td>
+                  <td>T1486</td>
+                  <td><span class="disposition-retire">RETIRE</span></td>
+                  <td>XDR ransomware detection covers this technique</td>
+                </tr>
+                <tr>
+                  <td>Mimikatz string detection</td>
+                  <td>T1003.001</td>
+                  <td><span class="disposition-retire">RETIRE</span></td>
+                  <td>MDE credential theft detection + ASR LSASS rule</td>
+                </tr>
+                <tr>
+                  <td>NTLM relay abuse</td>
+                  <td>T1550.002</td>
+                  <td><span class="disposition-retire">RETIRE</span></td>
+                  <td>MDI + XDR correlation handles this natively</td>
+                </tr>
+                <tr>
+                  <td>Palo Alto C2 beaconing</td>
+                  <td>T1071.001</td>
+                  <td><span class="disposition-rewrite">REWRITE</span></td>
+                  <td>XDR has no firewall visibility — Sentinel required</td>
+                </tr>
+                <tr>
+                  <td>Terminated employee data export</td>
+                  <td>T1567</td>
+                  <td><span class="disposition-rewrite">REWRITE</span></td>
+                  <td>Business logic requiring Workday + Salesforce correlation</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="callout success" style="margin-top: 1rem;">
+            <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Why Documentation Matters</div>
+            <div class="callout-content">
+              <p>This documentation protects you during:</p>
+              <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                <li><strong>Audits</strong> — "Why don't you have a rule for X?" → "XDR covers T1003.001 natively."</li>
+                <li><strong>Handover</strong> — New team understands decisions</li>
+                <li><strong>Incident review</strong> — "Did we have coverage for this?" → Check the catalog</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 2: WHAT ALWAYS GETS MIGRATED ==================== -->
+        <h2>2. What Always Gets Migrated to Sentinel</h2>
+        
+        <p>In contrast to the drop criteria, these rule categories <strong>always</strong> get migrated because XDR has no visibility:</p>
+
+        <div class="migrate-criteria">
+          <h4 style="margin-top: 0; color: #22c55e;">✅ MIGRATE: Network Telemetry</h4>
+          <p>Firewalls (Palo Alto), proxy, DNS, VPN, WAF</p>
+          <p><strong>Why:</strong> XDR has no network visibility. All network-based detections belong in Sentinel.</p>
+        </div>
+
+        <div class="migrate-criteria">
+          <h4 style="margin-top: 0; color: #22c55e;">✅ MIGRATE: Cloud Platforms</h4>
+          <p>AWS CloudTrail, Azure Activity, GCP audit logs</p>
+          <p><strong>Why:</strong> XDR covers M365/Azure AD but not cloud control plane. Sentinel owns cloud infra detections.</p>
+        </div>
+
+        <div class="migrate-criteria">
+          <h4 style="margin-top: 0; color: #22c55e;">✅ MIGRATE: SaaS Platforms</h4>
+          <p>Salesforce, Workday, NetSuite, ServiceNow, GitHub</p>
+          <p><strong>Why:</strong> XDR only covers Microsoft cloud apps (via MDA). Non-Microsoft SaaS requires Sentinel.</p>
+        </div>
+
+        <div class="migrate-criteria">
+          <h4 style="margin-top: 0; color: #22c55e;">✅ MIGRATE: Business Logic</h4>
+          <p>VIP monitoring, terminated employee correlation, data export thresholds</p>
+          <p><strong>Why:</strong> These are organization-specific. Microsoft cannot build detections for your business rules.</p>
+        </div>
+
+        <div class="migrate-criteria">
+          <h4 style="margin-top: 0; color: #22c55e;">✅ MIGRATE: Compliance / Governance</h4>
+          <p>Privileged access monitoring, audit trail alerts, policy violations</p>
+          <p><strong>Why:</strong> Compliance requirements often require deterministic rules, not ML-based detection.</p>
+        </div>
+
+        <!-- ==================== SECTION 3: DETECTION DOMAIN OWNERSHIP ==================== -->
+        <h2>3. Detection Domain Ownership</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Domain</th><th>Owner</th><th>Sentinel Rules</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td><strong>Endpoint</strong></td>
+                <td>XDR (MDE)</td>
+                <td>0 (XDR native)</td>
+                <td>Kernel visibility, AMSI, behavioral ML</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td><strong>Identity</strong></td>
+                <td>XDR (MDI + Entra)</td>
+                <td>0 (XDR native)</td>
+                <td>DC sensors, identity attack patterns</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td><strong>Email</strong></td>
+                <td>XDR (MDO)</td>
+                <td>0 (XDR native)</td>
+                <td>Email headers, detonation, ML</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td><strong>Cloud Apps (M365)</strong></td>
+                <td>XDR (MDA)</td>
+                <td>0 (XDR native)</td>
+                <td>OAuth, shadow IT, anomalies</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td><strong>Network</strong></td>
+                <td>Sentinel</td>
+                <td>58</td>
+                <td>C2, exfil, VPN, attacks</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td><strong>Cloud Infrastructure</strong></td>
+                <td>Sentinel</td>
+                <td>68</td>
+                <td>Azure + AWS control plane</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td><strong>SaaS (Non-Microsoft)</strong></td>
+                <td>Sentinel</td>
+                <td>87</td>
+                <td>Salesforce, Workday, NetSuite, GitHub</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td><strong>Business Logic</strong></td>
+                <td>Sentinel</td>
+                <td>52</td>
+                <td>Insider threat, VIP, termination</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td><strong>Compliance</strong></td>
+                <td>Sentinel</td>
+                <td>45</td>
+                <td>SOC 2, GDPR, admin monitoring</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td><strong>DLP</strong></td>
+                <td>Sentinel</td>
+                <td>18</td>
+                <td>Purview correlation</td>
+              </tr>
+              <tr style="background: rgba(168, 85, 247, 0.1);">
+                <td><strong>Higher-Order Correlation</strong></td>
+                <td>Sentinel</td>
+                <td>19</td>
+                <td>XDR + network + SaaS context</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 4: REVFLOW RESULTS ==================== -->
+        <h2>4. RevFlow Migration Results</h2>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">RevFlow Detection Migration Summary</span></div>
+          <pre><code>REVFLOW RSA → SENTINEL DETECTION MIGRATION RESULTS
+═══════════════════════════════════════════════════════════════════════════════
+
+BUSINESS CONTEXT: B2B SaaS Revenue Intelligence | SOC 2 + ISO 27001 + GDPR
+
+STARTING POINT: 487 RSA NetWitness Rules
+
+RSA RULE DISPOSITION:
+────────────────────────────────────────────────────────────────────────────────
+RETIRE — XDR Native         │ 312 rules │ 64%  │ XDR handles these techniques
+MIGRATE — Sentinel          │ 117 rules │ 24%  │ Network, cloud, SaaS rules
+DROP — Low Value            │  58 rules │ 12%  │ Noisy, stale, or unmappable
+────────────────────────────────────────────────────────────────────────────────
+TOTAL RSA                   │ 487 rules │ 100%
+
+SENTINEL RULES (FINAL):
+────────────────────────────────────────────────────────────────────────────────
+Migrated from RSA           │ 117 rules │ Network, cloud infra
+NEW Rules (Coverage Gaps)   │ 230 rules │ SaaS, business logic, compliance
+────────────────────────────────────────────────────────────────────────────────
+TOTAL SENTINEL              │ 347 rules │ Appropriate for B2B SaaS + SOC 2
+
+BY CATEGORY:
+────────────────────────────────────────────────────────────────────────────────
+Endpoint Behavior           │ 187 RSA → RETIRE (XDR native)
+Identity Attacks            │  89 RSA → RETIRE (XDR native)
+Email Threats               │  36 RSA → RETIRE (XDR native)
+Network Security            │  52 RSA →  58 Sentinel (expanded)
+Cloud Infrastructure        │  34 RSA →  68 Sentinel (Azure + AWS)
+SaaS Applications           │  17 RSA →  87 Sentinel (critical gap filled)
+Business Logic / Insider    │  14 RSA →  52 Sentinel (RevFlow-specific)
+Compliance & Audit          │   0 RSA →  45 Sentinel (SOC 2/GDPR new)
+DLP Correlation             │   0 RSA →  18 Sentinel (new capability)
+Higher-Order Correlation    │   0 RSA →  19 Sentinel (XDR + context)
+Low Value / Noisy           │  58 RSA → DROP
+
+═══════════════════════════════════════════════════════════════════════════════
+TOTAL COVERAGE: 312 XDR techniques + 347 Sentinel rules = 659 detections
+═══════════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Why 347 Sentinel Rules is Correct</div>
+          <div class="callout-content">
+            <p><strong>RSA had 487 rules → Sentinel has 347 rules.</strong> This is NOT a reduction in coverage.</p>
+            <p><strong>XDR handles 312 techniques natively</strong> — endpoint, identity, email detections don't need Sentinel rules.</p>
+            <p><strong>230 NEW rules built from scratch</strong> — NOT migrated from RSA because RSA never had them:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>SaaS coverage: Salesforce, Workday, NetSuite, GitHub (RSA had 17 rules total for all SaaS)</li>
+              <li>Business logic: Terminated employee correlation, VIP monitoring (RSA couldn't integrate with HR)</li>
+              <li>Compliance: SOC 2 controls, GDPR data access (RSA had zero compliance rules)</li>
+              <li>XDR correlation: Higher-order detection (RSA had no XDR to correlate with)</li>
+            </ul>
+            <p><strong>Total coverage: 659 detections</strong> (312 XDR + 347 Sentinel) — this is EXPANSION, not reduction.</p>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Common Misconception</div>
+          <div class="callout-content">
+            <p><strong>Misconception:</strong> "If RSA had proper coverage, new rules should come from RSA."</p>
+            <p><strong>Reality:</strong> RSA did NOT have proper coverage. It was deployed in 2018 for an on-prem environment. By 2024, RevFlow was 90% cloud with crown jewels in SaaS apps RSA never monitored. Migration exposed the gaps; it didn't create them.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 5: VALIDATION ==================== -->
+        <h2>5. Validation Methodology</h2>
+
+        <h3>5.1 How We Validated XDR Coverage</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Technique Category</th><th>Validation Method</th><th>Result</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Ransomware (T1486)</strong></td>
+                <td>Atomic Red Team simulation</td>
+                <td>XDR alert fired within 30 seconds</td>
+              </tr>
+              <tr>
+                <td><strong>Credential Theft (T1003)</strong></td>
+                <td>Mimikatz simulation (safe)</td>
+                <td>MDE blocked + XDR alert</td>
+              </tr>
+              <tr>
+                <td><strong>Lateral Movement (T1021)</strong></td>
+                <td>Internal red team exercise</td>
+                <td>MDI + MDE correlated incident</td>
+              </tr>
+              <tr>
+                <td><strong>Phishing (T1566)</strong></td>
+                <td>Historical incident review</td>
+                <td>MDO catching 99.7% before delivery</td>
+              </tr>
+              <tr>
+                <td><strong>Persistence (T1547)</strong></td>
+                <td>Atomic Red Team simulation</td>
+                <td>XDR alert with full process tree</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>5.2 Validation KQL Query</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL — Validate XDR MITRE Coverage</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Check XDR alerts by MITRE technique over last 90 days
+SecurityAlert
+| where TimeGenerated > ago(90d)
+| where ProviderName in ("Microsoft 365 Defender", "MDATP", "OATP", "IPC")
+| extend MitreTechniques = parse_json(ExtendedProperties).["MitreTechniques"]
+| mv-expand MitreTechniques
+| summarize 
+    AlertCount = count(),
+    IncidentCount = dcount(SystemAlertId)
+    by tostring(MitreTechniques)
+| order by AlertCount desc
+
+// Result: Shows which MITRE techniques XDR is actively detecting
+// Use this to validate coverage before retiring RSA rules</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 6: COMMON MISTAKES ==================== -->
+        <h2>6. Common Mistakes to Avoid</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Mistake</th><th>Why It's Wrong</th><th>Correct Approach</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Assuming legacy SIEM had adequate coverage</strong></td>
+                <td>RSA was deployed for 2018 threat landscape; crown jewels moved to SaaS since then</td>
+                <td>Assess current crown jewels → build coverage for actual risks, not just what RSA had</td>
+              </tr>
+              <tr>
+                <td><strong>1:1 rule translation</strong></td>
+                <td>Ignores XDR native coverage</td>
+                <td>Evaluate outcomes, not rule logic</td>
+              </tr>
+              <tr>
+                <td><strong>Migrating endpoint rules</strong></td>
+                <td>XDR has superior endpoint visibility</td>
+                <td>Retire endpoint rules → XDR handles</td>
+              </tr>
+              <tr>
+                <td><strong>Migrating noisy rules</strong></td>
+                <td>Migration is a chance to clean house</td>
+                <td>Drop rules SOC ignored in RSA</td>
+              </tr>
+              <tr>
+                <td><strong>No documentation</strong></td>
+                <td>Can't justify decisions in audit</td>
+                <td>Document every disposition with justification</td>
+              </tr>
+              <tr>
+                <td><strong>Rebuilding XDR correlation</strong></td>
+                <td>XDR already correlates within domains</td>
+                <td>Only build cross-domain correlation in Sentinel</td>
+              </tr>
+              <tr>
+                <td><strong>Not building new coverage</strong></td>
+                <td>Migration exposes gaps legacy SIEM never addressed</td>
+                <td>Use migration as opportunity to modernize detection program</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <nav class="page-nav">
+          <a href="threat-intelligence.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Threat Intelligence</span></a>
+          <a href="detection-catalog.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Detection Catalog →</span></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>
