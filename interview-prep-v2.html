@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Preparation v2 | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .interview-question { margin-bottom: 2.5rem; padding: 1.5rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-blue); }
+    .interview-question h3 { margin-top: 0; color: var(--accent-blue); }
+    .interview-context { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; font-style: italic; }
+    
+    .answer-tabs { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid var(--border-primary); }
+    .answer-tab { padding: 0.75rem 1.5rem; cursor: pointer; border: none; background: transparent; color: var(--text-muted); font-weight: 500; transition: all 0.2s; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+    .answer-tab:hover { color: var(--text-primary); }
+    .answer-tab.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); background: var(--bg-tertiary); }
+    .answer-tab.say-this { border-left: 3px solid #22c55e; }
+    .answer-tab.full-detail { border-left: 3px solid #8b5cf6; }
+    
+    .answer-content { display: none; padding: 1rem 0; }
+    .answer-content.active { display: block; }
+    
+    .say-this-box { background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05)); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; }
+    .say-this-box .label { color: #22c55e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .say-this-box .label::before { content: "🎯"; }
+    .say-this-box p { margin: 0; line-height: 1.7; color: var(--text-primary); }
+    
+    .timing-badge { display: inline-block; background: var(--bg-tertiary); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; color: var(--text-muted); margin-left: 0.5rem; }
+    
+    .key-phrases { margin-top: 1rem; padding: 1rem; background: var(--bg-tertiary); border-radius: 6px; }
+    .key-phrases h5 { margin: 0 0 0.5rem 0; color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; }
+    .key-phrases ul { margin: 0; padding-left: 1.25rem; }
+    .key-phrases li { margin-bottom: 0.25rem; font-size: 0.9rem; }
+    
+    .flow-hint { color: var(--text-muted); font-size: 0.85rem; font-style: italic; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-primary); }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="index.html" class="nav-item">Executive Summary</a>
+          <a href="company-profile.html" class="nav-item">Company Profile</a>
+          <a href="security-framework.html" class="nav-item">Security Framework</a>
+          <a href="program-structure.html" class="nav-item">Program Structure</a>
+          <a href="controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="siem/workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
+          <a href="siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="siem/casb-saas-security.html" class="nav-item">CASB &amp; SaaS Security</a>
+          <a href="siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="resources/templates.html" class="nav-item">Templates</a>
+          <a href="resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="resources/alternative-architectures.html" class="nav-item">Alternative Architectures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="resources/incident-response.html" class="nav-item">Incident Response</a>
+          <a href="resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="interview-prep.html" class="nav-item">Interview Prep (Full)</a>
+          <a href="interview-prep-v2.html" class="nav-item active">Interview Prep v2</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <h1>Interview Prep v2</h1>
+          <p class="intro-text">Each question has two versions: <strong style="color: #22c55e;">🎯 Say This</strong> (natural, 30-60 seconds) and <strong style="color: #8b5cf6;">📋 Full Detail</strong> (for follow-ups). Practice the "Say This" version out loud.</p>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>How to Use This</div>
+          <div class="callout-content">
+            <p><strong>Before interview:</strong> Read "Say This" versions out loud 3-5 times. They should feel natural, not memorized.</p>
+            <p><strong>During interview:</strong> Give the short version first. If they want more detail, you have it ready.</p>
+            <p><strong>Key principle:</strong> Start concise, expand if asked. Never data-dump.</p>
+          </div>
+        </div>
+
+        <!-- ==================== QUESTION 1 ==================== -->
+        <h2>Block 1: Opening</h2>
+
+        <div class="interview-question" id="q1">
+          <h3>1. Tell me about yourself</h3>
+          <p class="interview-context">What they want: 2-minute structured story. Not your resume — your narrative.</p>
+          
+          <div class="answer-tabs">
+            <button class="answer-tab say-this active" onclick="showTab(this, 'q1-short')">🎯 Say This <span class="timing-badge">90 sec</span></button>
+            <button class="answer-tab full-detail" onclick="showTab(this, 'q1-full')">📋 Full Detail</button>
+          </div>
+          
+          <div id="q1-short" class="answer-content active">
+            <div class="say-this-box">
+              <div class="label">Say This</div>
+              <p>"I have about five years in cybersecurity, focused on SIEM, detection engineering, and endpoint security.</p>
+              <p style="margin-top: 0.75rem;">I started in a SOC at Cognizant working with Splunk — alert triage, investigations, learning what analysts actually need. Then I moved into security engineering at Infosys, where I worked with FireEye, Symantec DLP, and supported an EDR migration project.</p>
+              <p style="margin-top: 0.75rem;">Most recently, I've been at a Siemens subsidiary leading a security transformation — migrating from RSA NetWitness to Microsoft Sentinel, rolling out Defender for Endpoint across 9,000 devices, and migrating DLP from Symantec to Purview. I'm currently in the handover phase, doing knowledge transfer to the internal team.</p>
+              <p style="margin-top: 0.75rem;">The thread through all of it is building security platforms that actually work for the people using them — reliable telemetry, tuned detections, and solutions teams can operate after I leave."</p>
+            </div>
+            
+            <div class="key-phrases">
+              <h5>Key Phrases to Hit</h5>
+              <ul>
+                <li>"Five years in cybersecurity"</li>
+                <li>"Started in SOC... moved to engineering"</li>
+                <li>"RSA to Sentinel, ESET to MDE, Symantec to Purview"</li>
+                <li>"Handover phase, knowledge transfer"</li>
+                <li>"Reliable telemetry, tuned detections"</li>
+              </ul>
+            </div>
+            
+            <p class="flow-hint">💡 <strong>Flow tip:</strong> Pause briefly after "five years in cybersecurity" — let them absorb before continuing.</p>
+          </div>
+          
+          <div id="q1-full" class="answer-content">
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Full Detail (for follow-ups)</span></div>
+              <pre><code>CAREER PROGRESSION:
+
+COGNIZANT (SOC Analyst):
+• Splunk-based SOC operations
+• Alert triage, incident investigations
+• Learned what analysts need vs. what engineers build
+• Foundation in log analysis and IR workflows
+
+INFOSYS (Security Engineer):
+• FireEye stack (HX, NX, EX)
+• Symantec DLP administration
+• EDR migration project support
+• First exposure to platform engineering
+
+SIEMENS SUBSIDIARY (Security Engineer):
+• Led SIEM migration: RSA NetWitness → Microsoft Sentinel
+• Led EDR migration: ESET → Microsoft Defender for Endpoint
+• Supporting DLP migration: Symantec → Microsoft Purview
+• Full lifecycle: discovery, deployment, stabilization, handover
+
+CURRENT STATE:
+• All tracks complete, platforms operational
+• Final handover phase with knowledge transfer
+• Documentation, KT sessions, ensuring team readiness</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== QUESTION 2 ==================== -->
+        <div class="interview-question" id="q2">
+          <h3>2. Walk me through your day-to-day responsibilities</h3>
+          <p class="interview-context">What they probe: What you actually do, not job description language.</p>
+          
+          <div class="answer-tabs">
+            <button class="answer-tab say-this active" onclick="showTab(this, 'q2-short')">🎯 Say This <span class="timing-badge">60 sec</span></button>
+            <button class="answer-tab full-detail" onclick="showTab(this, 'q2-full')">📋 Full Detail</button>
+          </div>
+          
+          <div id="q2-short" class="answer-content active">
+            <div class="say-this-box">
+              <div class="label">Say This</div>
+              <p>"Currently, I'm in the final handover phase of a security transformation. Day to day, that means finalizing documentation, running KT sessions, and making sure the internal team is ready to operate what we built.</p>
+              <p style="margin-top: 0.75rem;">Before handover, my focus was SIEM and EDR. On the SIEM side, I was working with log source owners, configuring connectors and DCRs, validating data quality, troubleshooting ingestion issues. For EDR, I coordinated deployment waves with IT, monitored onboarding coverage, configured ASR rules, and managed exclusions with application teams.</p>
+              <p style="margin-top: 0.75rem;">DLP came later because it needed legal alignment and data classification first. We migrated Symantec to Purview, and that's now in handover too.</p>
+              <p style="margin-top: 0.75rem;">Throughout all of it, I worked closely with SOC as the consumers of our telemetry, and with business stakeholders to make sure controls didn't break workflows."</p>
+            </div>
+            
+            <div class="key-phrases">
+              <h5>Key Phrases to Hit</h5>
+              <ul>
+                <li>"Final handover phase"</li>
+                <li>"Log source owners, DCRs, data quality"</li>
+                <li>"Deployment waves, ASR rules, exclusions"</li>
+                <li>"Legal alignment, data classification" (for DLP)</li>
+                <li>"SOC as consumers, business stakeholders"</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div id="q2-full" class="answer-content">
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Full Detail</span></div>
+              <pre><code>CURRENT PHASE (Handover):
+• Finalizing documentation
+• Conducting KT sessions
+• Ensuring team readiness for steady-state operations
+
+SIEM PHASE (M1-M6):
+• Met with log source owners
+• Configured connectors and DCRs
+• Validated data quality
+• Troubleshot ingestion issues
+• Implemented detection rules
+
+EDR PHASE (M1-M10):
+• Coordinated deployment waves with IT
+• Monitored onboarding coverage
+• Configured security policies and ASR rules
+• Managed exclusions with application teams
+• Validated XDR integration with Sentinel
+
+DLP PHASE (M6-M12):
+• Started later due to dependencies (legal, classification)
+• Migrated Symantec Endpoint DLP to Purview
+• Policy translation and validation
+• Currently in handover
+
+CROSS-CUTTING:
+• SOC teams = primary consumers of telemetry
+• Business stakeholders = workflow validation
+• IT = deployment coordination
+• Legal = DLP policy alignment</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== QUESTION 3 ==================== -->
+        <h2>Block 2: SIEM Core</h2>
+
+        <div class="interview-question" id="q3">
+          <h3>3. Walk me through a SIEM deployment you worked on end-to-end</h3>
+          <p class="interview-context">What they expect: Discovery → Ingestion → Detection → Cutover. Show the journey.</p>
+          
+          <div class="answer-tabs">
+            <button class="answer-tab say-this active" onclick="showTab(this, 'q3-short')">🎯 Say This <span class="timing-badge">90 sec</span></button>
+            <button class="answer-tab full-detail" onclick="showTab(this, 'q3-full')">📋 Full Detail</button>
+          </div>
+          
+          <div id="q3-short" class="answer-content active">
+            <div class="say-this-box">
+              <div class="label">Say This</div>
+              <p>"I'll walk you through the RSA NetWitness to Sentinel migration I worked on. B2B SaaS company, about 4,000 employees, 9,000 endpoints.</p>
+              <p style="margin-top: 0.75rem;">This was part of a broader cloud transformation. Identity and infrastructure were already in progress — AD syncing to Entra, landing zone in place. I came in when the security tracks kicked off.</p>
+              <p style="margin-top: 0.75rem;">The key insight with Sentinel plus XDR is that it's fundamentally different from traditional SIEM. RSA is purely log-driven — you ingest everything and build detections on raw logs. With XDR, the detection model shifts. XDR handles most attack detection natively — endpoint, email, identity, cloud apps. So instead of asking 'what logs do we need for detection?', the question becomes 'what does XDR NOT cover?'</p>
+              <p style="margin-top: 0.75rem;">We prioritized identity control-plane logs first — Entra ID AuditLogs — because XDR detects identity attacks but not changes like role assignments. Then XDR alerts into Sentinel for correlation. Then sources XDR doesn't cover — network, SaaS, on-prem.</p>
+              <p style="margin-top: 0.75rem;">We ran parallel operations for several months. Sentinel became primary only after critical sources were onboarded and we had 90 days of stable telemetry. RSA is now decommissioned, and I'm in handover."</p>
+            </div>
+            
+            <div class="key-phrases">
+              <h5>Key Phrases to Hit</h5>
+              <ul>
+                <li>"Fundamentally different from traditional SIEM"</li>
+                <li>"XDR handles most attack detection natively"</li>
+                <li>"What does XDR NOT cover?"</li>
+                <li>"XDR detects attacks, not changes"</li>
+                <li>"Parallel operations, 90 days stable telemetry"</li>
+              </ul>
+            </div>
+            
+            <p class="flow-hint">💡 <strong>Flow tip:</strong> The XDR insight is your differentiator. Pause after "detection model shifts" to let it land.</p>
+          </div>
+          
+          <div id="q3-full" class="answer-content">
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Full Detail</span></div>
+              <pre><code>CONTEXT:
+• B2B SaaS provider, 4,000 employees, 9,000 endpoints
+• Part of larger cloud transformation
+• Identity/Infrastructure already started (AD sync, landing zone)
+• Security tracks (SIEM, EDR) started at M1
+• DLP started at M6 (legal/classification dependencies)
+
+DISCOVERY (Weeks 1-2):
+• Documented RSA environment
+• Inventoried log sources, parsers, detection rules
+• Met with IT, infrastructure, application teams
+• Assessed logging capabilities
+
+LOG SOURCE STRATEGY (XDR-First):
+Traditional SIEM: Ingest everything → build detections on raw logs
+Sentinel + XDR: XDR detects attacks → Sentinel fills gaps
+
+Priority 0: Identity control-plane (Entra ID AuditLogs, SigninLogs)
+  → XDR detects identity ATTACKS but not CHANGES
+Priority 1: XDR alerts/incidents (M365 Defender connector)
+  → Low volume, high value
+Priority 2: What XDR doesn't cover
+  → Network, SaaS, on-prem infrastructure
+
+INGESTION:
+• Built-in connectors where available
+• Custom DCRs for on-prem sources
+• Validated: fields parsing, timestamps, volume
+
+DETECTION ALIGNMENT:
+• XDR handles most attack detection
+• Sentinel rules focused on:
+  1. XDR correlation (alert + identity change)
+  2. Control-plane changes XDR doesn't see
+  3. Sources outside Defender ecosystem
+• Content Hub first, custom only for gaps
+
+PARALLEL OPS & CUTOVER:
+• Ran RSA + Sentinel in parallel for months
+• Cutover criteria: critical sources onboarded, 90+ days stable
+• SOC trained on KQL and new workflows
+
+CURRENT STATE:
+• RSA decommissioned
+• All tracks complete
+• Handover phase</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== QUESTION 4 ==================== -->
+        <div class="interview-question" id="q4">
+          <h3>4. How do you decide which log sources to onboard first?</h3>
+          <p class="interview-context">What they want: Prioritization logic, not just a list.</p>
+          
+          <div class="answer-tabs">
+            <button class="answer-tab say-this active" onclick="showTab(this, 'q4-short')">🎯 Say This <span class="timing-badge">60 sec</span></button>
+            <button class="answer-tab full-detail" onclick="showTab(this, 'q4-full')">📋 Full Detail</button>
+          </div>
+          
+          <div id="q4-short" class="answer-content active">
+            <div class="say-this-box">
+              <div class="label">Say This</div>
+              <p>"My approach starts with a critical distinction: Defender products detect attacks; Entra ID logs record changes.</p>
+              <p style="margin-top: 0.75rem;">MDI detects Pass-the-Hash, but it doesn't tell you who was added to Global Admins — that's in Entra ID AuditLogs. Understanding this separation drives the entire log strategy.</p>
+              <p style="margin-top: 0.75rem;">So priority zero is what XDR doesn't provide — identity control-plane logs, Office activity for permission changes. Priority one is XDR alerts flowing into Sentinel — low volume, high value, often free. Priority two is what XDR doesn't cover at all — network logs, SaaS apps outside Microsoft, on-prem infrastructure.</p>
+              <p style="margin-top: 0.75rem;">What we don't ingest: raw MDE telemetry like DeviceProcessEvents. That stays in XDR for Advanced Hunting. Ingesting it would cost thousands per month and duplicate detection XDR already does."</p>
+            </div>
+            
+            <div class="key-phrases">
+              <h5>Key Phrases to Hit</h5>
+              <ul>
+                <li>"Defender detects attacks; Entra logs record changes"</li>
+                <li>"MDI detects Pass-the-Hash, not who was added to Global Admins"</li>
+                <li>"What XDR doesn't provide"</li>
+                <li>"Low volume, high value"</li>
+                <li>"Don't ingest raw MDE telemetry — query in XDR for free"</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div id="q4-full" class="answer-content">
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Full Detail</span></div>
+              <pre><code>CORE PRINCIPLE:
+Defender products detect ATTACKS
+Entra ID logs record CHANGES
+This separation drives log strategy.
+
+PRIORITY 0 — WHAT XDR DOESN'T PROVIDE (Must Ingest):
+• Entra ID AuditLogs, SigninLogs
+  - User creation, group changes, role assignments
+  - XDR detects identity ATTACKS not CHANGES
+• OfficeActivity
+  - SharePoint permissions, mailbox forwarding
+  - MDO detects phishing not permission changes
+
+PRIORITY 1 — XDR ALERTS (Low Volume, High Value):
+• SecurityAlert, SecurityIncident from M365 Defender connector
+• This is how XDR detections flow to Sentinel
+• ~$50/month, NOT $15K/month for raw telemetry
+
+PRIORITY 2 — WHAT XDR DOESN'T COVER:
+• Network: Firewall, VPN, DNS (XDR is endpoint-focused)
+• SaaS: Salesforce, Workday (outside Defender scope)
+• Tier 0: Domain Controllers, CA servers
+
+PRIORITY 3 — SELECTIVE FORENSICS:
+• High-volume, low-query: NSG flows, firewall traffic
+• Use Basic tier (~$0.50/GB vs $2.76/GB)
+
+WHAT WE DON'T INGEST:
+• MDE raw telemetry (DeviceProcessEvents, etc.)
+• Query in XDR Advanced Hunting at no cost
+• Ingesting = ~$15K/month, duplicates XDR detection</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== QUESTION 5 ==================== -->
+        <div class="interview-question" id="q5">
+          <h3>5. How do you manage SIEM ingestion cost?</h3>
+          <p class="interview-context">Very common for Sentinel roles. Show you think about money.</p>
+          
+          <div class="answer-tabs">
+            <button class="answer-tab say-this active" onclick="showTab(this, 'q5-short')">🎯 Say This <span class="timing-badge">60 sec</span></button>
+            <button class="answer-tab full-detail" onclick="showTab(this, 'q5-full')">📋 Full Detail</button>
+          </div>
+          
+          <div id="q5-short" class="answer-content active">
+            <div class="say-this-box">
+              <div class="label">Say This</div>
+              <p>"The biggest optimization is XDR-first selective ingestion. With XDR enabled, we consume XDR incidents, not all raw Device tables. XDR already correlates that telemetry into high-fidelity incidents. Ingesting everything separately duplicates detection and wastes storage.</p>
+              <p style="margin-top: 0.75rem;">Before optimization, we were looking at 150 GB/day in endpoint data. After shifting to XDR incidents plus one selective table, about 25 GB/day. That's an 80% reduction.</p>
+              <p style="margin-top: 0.75rem;">We also use commitment tiers — 100 GB/day tier gives roughly 50% discount versus pay-as-you-go. For high-volume, low-query data like firewall logs, we use Basic tier at half the cost. And we filter at ingestion using DCRs, not after — don't pay to ingest data you'll never query.</p>
+              <p style="margin-top: 0.75rem;">Result: Sentinel costs us about $12K/month. Legacy RSA was $35K. That's 66% savings with better detection coverage."</p>
+            </div>
+            
+            <div class="key-phrases">
+              <h5>Key Phrases to Hit</h5>
+              <ul>
+                <li>"XDR-first selective ingestion"</li>
+                <li>"XDR incidents, not raw Device tables"</li>
+                <li>"80% reduction in endpoint data"</li>
+                <li>"Commitment tiers, Basic tier"</li>
+                <li>"66% savings vs legacy SIEM"</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div id="q5-full" class="answer-content">
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Full Detail</span></div>
+              <pre><code>1. XDR-FIRST SELECTIVE INGESTION (Biggest Win):
+   Before: All Device* tables — ~150 GB/day
+   After: XDR incidents + 1 table — ~25 GB/day
+   Result: 80% reduction in endpoint data
+
+2. LEVERAGE FREE DATA:
+   • XDR incidents (SecurityIncident, SecurityAlert) — free
+   • Azure Activity Logs — free
+   • Defender for Cloud alerts — free
+   • M365 E5 benefit: 5 MB/user/day free grant
+
+3. COMMITMENT TIERS:
+   | Tier       | Discount |
+   |------------|----------|
+   | 100 GB/day | ~50%     |
+   | 200 GB/day | ~55%     |
+   | 400 GB/day | ~60%     |
+   | 500+ GB    | ~65%     |
+
+4. FILTER AT INGESTION:
+   • DCRs to filter Windows events to security-relevant IDs
+   • Don't ingest verbose debug logs
+   • NSG flows: selective subnets
+
+5. APPROPRIATE LOG TIERS:
+   • Analytics: Frequently queried (detections)
+   • Basic: High-volume, low-query (~50% cheaper)
+   • Archive: Long-term compliance (cheapest)
+
+6. COST MONITORING:
+   • Weekly review via Usage workbook
+   • Alert on >20% volume spikes
+   • Identify fastest-growing tables
+
+RESULT:
+• Sentinel: ~$12K/month
+• Legacy RSA: ~$35K/month
+• Savings: 66%</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== QUESTION 6 ==================== -->
+        <h2>Block 3: Detection Engineering</h2>
+
+        <div class="interview-question" id="q6">
+          <h3>6. How do you translate security requirements into detection use cases?</h3>
+          <p class="interview-context">Maps directly to JD. Show threat-thinking, not just rule-writing.</p>
+          
+          <div class="answer-tabs">
+            <button class="answer-tab say-this active" onclick="showTab(this, 'q6-short')">🎯 Say This <span class="timing-badge">45 sec</span></button>
+            <button class="answer-tab full-detail" onclick="showTab(this, 'q6-full')">📋 Full Detail</button>
+          </div>
+          
+          <div id="q6-short" class="answer-content active">
+            <div class="say-this-box">
+              <div class="label">Say This</div>
+              <p>"I use a threat-intent approach, not rule-first. Start with business risk — what does the company care about? Customer data exposure, account takeover, IP theft.</p>
+              <p style="margin-top: 0.75rem;">Then map to threat scenarios. For account takeover: credential phishing, token theft, MFA bypass. What would we see in telemetry if this happened? Impossible travel, sign-in from new device followed by sensitive action, failed MFA then success from different IP.</p>
+              <p style="margin-top: 0.75rem;">Check if we have the data. Then check Content Hub for built-in rules before writing custom. Enable, tune thresholds, validate with SOC.</p>
+              <p style="margin-top: 0.75rem;">The key is: Business Risk → Threat → Behavior → Telemetry → Detection. Not: Tool → Rule → Hope it catches something."</p>
+            </div>
+            
+            <div class="key-phrases">
+              <h5>Key Phrases to Hit</h5>
+              <ul>
+                <li>"Threat-intent approach, not rule-first"</li>
+                <li>"Business Risk → Threat → Behavior → Telemetry → Detection"</li>
+                <li>"Content Hub before custom"</li>
+                <li>"Tune thresholds, validate with SOC"</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div id="q6-full" class="answer-content">
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Full Detail</span></div>
+              <pre><code>THE FRAMEWORK:
+
+1. START WITH BUSINESS RISK
+   What does the business care about?
+   • Customer data exposure
+   • Account takeover
+   • IP theft
+
+2. MAP TO THREAT SCENARIOS
+   For account takeover:
+   • Credential phishing → compromised password
+   • Token theft → session hijack
+   • MFA bypass → SIM swap, fatigue attack
+
+3. IDENTIFY OBSERVABLE BEHAVIORS
+   What would we see in telemetry?
+   • Impossible travel
+   • Sign-in from new device + sensitive action
+   • Failed MFA followed by success from different IP
+
+4. CHECK TELEMETRY AVAILABILITY
+   Do we have the data?
+   • SigninLogs for sign-in anomalies ✓
+   • AuditLogs for sensitive actions ✓
+   • RiskySignIns for ML signals ✓
+
+5. IMPLEMENT DETECTION
+   • Check Content Hub first
+   • Enable and tune thresholds
+   • Custom KQL only if no native equivalent
+
+6. VALIDATE
+   • Does it fire on known-bad?
+   • What's the FP rate?
+   • Can SOC investigate?
+
+THE PRINCIPLE:
+Business Risk → Threat → Behavior → Telemetry → Detection
+NOT: Tool → Rule → Hope</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== QUESTION 7 ==================== -->
+        <div class="interview-question" id="q7">
+          <h3>7. How do you decide between built-in detections vs custom rules?</h3>
+          <p class="interview-context">Great consultant question. Efficiency and maintainability.</p>
+          
+          <div class="answer-tabs">
+            <button class="answer-tab say-this active" onclick="showTab(this, 'q7-short')">🎯 Say This <span class="timing-badge">45 sec</span></button>
+            <button class="answer-tab full-detail" onclick="showTab(this, 'q7-full')">📋 Full Detail</button>
+          </div>
+          
+          <div id="q7-short" class="answer-content active">
+            <div class="say-this-box">
+              <div class="label">Say This</div>
+              <p>"My default is built-in first, custom only when necessary.</p>
+              <p style="margin-top: 0.75rem;">Built-in when Microsoft provides a native equivalent, the logic is well-maintained, and you want automatic updates when new threats emerge. I enabled Microsoft's AiTM phishing detection rather than writing custom KQL — they have more threat intel and update it constantly.</p>
+              <p style="margin-top: 0.75rem;">Custom when it's business-specific logic, environment-specific thresholds, or no built-in exists. We wrote custom for 'service principal granted privileged role outside change window' — that requires knowing our change windows.</p>
+              <p style="margin-top: 0.75rem;">Every custom rule is technical debt — you maintain it forever. In our migration, about 70% came from built-in rules enabled and tuned, 30% custom for genuine gaps."</p>
+            </div>
+            
+            <div class="key-phrases">
+              <h5>Key Phrases to Hit</h5>
+              <ul>
+                <li>"Built-in first, custom when necessary"</li>
+                <li>"Microsoft has more threat intel"</li>
+                <li>"Every custom rule is technical debt"</li>
+                <li>"70% built-in, 30% custom"</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div id="q7-full" class="answer-content">
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Full Detail</span></div>
+              <pre><code>USE BUILT-IN WHEN:
+• Microsoft provides native equivalent (Content Hub)
+• Detection logic is well-maintained by vendor
+• Covers common attack patterns
+• Want automatic updates for new threats
+
+Example: Enabled "Possible AiTM phishing attempt" 
+rather than custom KQL. Microsoft has more threat 
+intel and updates constantly.
+
+USE CUSTOM WHEN:
+• Business-specific logic (our Salesforce patterns)
+• Environment-specific thresholds (what's "normal" for us)
+• No built-in equivalent exists
+• Need specific cross-source correlation
+
+Example: "Service principal granted privileged role 
+outside change window" — requires our change windows.
+
+DECISION PROCESS:
+1. Check Content Hub
+2. Enable and test built-in
+3. Tune thresholds
+4. Custom only for gaps
+
+MAINTAINABILITY:
+• Built-in: Microsoft maintains, you tune
+• Custom: You maintain forever
+• Every custom rule = technical debt
+
+OUR RATIO:
+• 70% built-in (enabled and tuned)
+• 30% custom (genuine gaps)</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== QUESTION 8 ==================== -->
+        <h2>Block 4: Operations</h2>
+
+        <div class="interview-question" id="q8">
+          <h3>8. How do you reduce alert fatigue?</h3>
+          <p class="interview-context">Very common question. Show operational thinking.</p>
+          
+          <div class="answer-tabs">
+            <button class="answer-tab say-this active" onclick="showTab(this, 'q8-short')">🎯 Say This <span class="timing-badge">45 sec</span></button>
+            <button class="answer-tab full-detail" onclick="showTab(this, 'q8-full')">📋 Full Detail</button>
+          </div>
+          
+          <div id="q8-short" class="answer-content active">
+            <div class="say-this-box">
+              <div class="label">Say This</div>
+              <p>"Alert fatigue is one of the biggest operational problems. My approach:</p>
+              <p style="margin-top: 0.75rem;">First, tune before you enable. Never enable a detection at vendor defaults. Run in audit mode first, analyze the FP rate, then adjust thresholds before going live. We reduced initial alert volume by 75% through pre-deployment tuning.</p>
+              <p style="margin-top: 0.75rem;">Second, environment-specific exclusions. Whitelist known-good behavior — service accounts that legitimately do suspicious things, scheduled tasks that look like persistence but aren't.</p>
+              <p style="margin-top: 0.75rem;">Third, correlation and grouping. Combine related low-confidence signals into higher-confidence incidents. Ten alerts, one incident to triage.</p>
+              <p style="margin-top: 0.75rem;">And finally, retire bad detections. If a rule has less than 10% true positive rate after tuning, disable it. A rule generating 100 false positives and 1 true positive is worse than no rule. Our SOC went from 800 alerts per day to about 150 through systematic tuning."</p>
+            </div>
+            
+            <div class="key-phrases">
+              <h5>Key Phrases to Hit</h5>
+              <ul>
+                <li>"Tune before you enable"</li>
+                <li>"75% reduction through pre-deployment tuning"</li>
+                <li>"Environment-specific exclusions"</li>
+                <li>"Ten alerts, one incident"</li>
+                <li>"800 to 150 alerts/day"</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div id="q8-full" class="answer-content">
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Full Detail</span></div>
+              <pre><code>1. TUNE BEFORE ENABLE
+   • Never enable at vendor defaults
+   • Run in audit mode first
+   • Analyze FP rate before going live
+   • Result: 75% reduction in initial volume
+
+2. ENVIRONMENT-SPECIFIC EXCLUSIONS
+   • Whitelist known-good behavior
+   • Service accounts doing legitimate "suspicious" things
+   • Scheduled tasks that look like persistence
+   • Example: Backup service triggers "sensitive file access" 
+     → exclude service account, keep for everyone else
+
+3. CORRELATION AND GROUPING
+   • Fusion rules for related low-confidence signals
+   • Group alerts into incidents
+   • 10 alerts → 1 incident to triage
+   • Cross-table correlation for higher confidence
+
+4. SEVERITY ALIGNMENT
+   • Low = informational, doesn't page
+   • Medium = review during business hours
+   • High = investigate within SLA
+   • Critical = immediate response
+   • Be honest about severity
+
+5. MEASURE AND ITERATE
+   • Track: alerts/day, incidents/day, TP rate
+   • Target: <200 alerts/day, >80% TP rate
+   • Weekly review of noisy detections
+
+6. RETIRE BAD DETECTIONS
+   • <10% TP rate after tuning → disable
+   • 100 FPs + 1 TP = worse than no rule
+
+RESULT:
+• Before: 800+ alerts/day
+• After: ~150 alerts/day</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== QUESTION 9 ==================== -->
+        <h2>Block 5: Consulting Mindset</h2>
+
+        <div class="interview-question" id="q9">
+          <h3>9. How do you handle conflicts between business requirements and security?</h3>
+          <p class="interview-context">Classic consultant scenario. Risk trade-offs, not "security says no."</p>
+          
+          <div class="answer-tabs">
+            <button class="answer-tab say-this active" onclick="showTab(this, 'q9-short')">🎯 Say This <span class="timing-badge">45 sec</span></button>
+            <button class="answer-tab full-detail" onclick="showTab(this, 'q9-full')">📋 Full Detail</button>
+          </div>
+          
+          <div id="q9-short" class="answer-content active">
+            <div class="say-this-box">
+              <div class="label">Say This</div>
+              <p>"My approach is risk-based trade-offs, not 'security says no.'</p>
+              <p style="margin-top: 0.75rem;">First, understand the business need. Why do they need this? What outcome are they trying to achieve? Often there's a secure way to get the same result.</p>
+              <p style="margin-top: 0.75rem;">Then quantify the risk. Don't say 'that's insecure.' Say 'if we do this, here's the specific risk — unauthorized access to customer data — and the likelihood based on these factors.'</p>
+              <p style="margin-top: 0.75rem;">Offer alternatives. 'I understand you need to share files externally. Instead of disabling DLP, let's create an approved channel with logging. You get functionality, we keep visibility.'</p>
+              <p style="margin-top: 0.75rem;">Real example: An app team wanted to exclude their entire server from MDE because of performance issues. Instead of saying no, I worked with them to find the three specific processes causing overhead. They got their performance, we kept detection coverage for everything else.</p>
+              <p style="margin-top: 0.75rem;">Security's job isn't to say no — it's to help the business achieve goals securely."</p>
+            </div>
+            
+            <div class="key-phrases">
+              <h5>Key Phrases to Hit</h5>
+              <ul>
+                <li>"Risk-based trade-offs, not 'security says no'"</li>
+                <li>"Understand the business need first"</li>
+                <li>"Quantify the risk"</li>
+                <li>"Offer alternatives"</li>
+                <li>"Help the business achieve goals securely"</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div id="q9-full" class="answer-content">
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Full Detail</span></div>
+              <pre><code>1. UNDERSTAND BUSINESS NEED FIRST
+   Before pushing back, ask: Why? What outcome?
+   Often there's a secure way to achieve it.
+
+2. QUANTIFY THE RISK
+   Don't say: "That's insecure"
+   Say: "If we do this, here's the specific risk: 
+   unauthorized access to customer data. 
+   Likelihood is medium because..."
+
+3. OFFER ALTERNATIVES
+   "I understand you need to share files externally. 
+   Instead of disabling DLP, let's create an approved 
+   channel with logging. You get functionality, we 
+   keep visibility."
+
+4. DOCUMENT THE DECISION
+   If business accepts risk:
+   • What's the risk?
+   • Who accepted it?
+   • What compensating controls?
+   • When do we revisit?
+
+REAL EXAMPLE:
+App team wanted to exclude entire server from MDE 
+due to performance issues.
+
+My response: "Let's investigate specific processes 
+causing overhead and create targeted exclusions."
+
+Result: Found 3 processes to exclude. They got 
+performance, we kept detection for everything else.
+
+PRINCIPLE:
+Security's job isn't to say no — it's to help 
+business achieve goals securely. If we block 
+everything, people find worse workarounds.</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== QUESTION 10 ==================== -->
+        <div class="interview-question" id="q10">
+          <h3>10. Why do you want to move into a consulting role?</h3>
+          <p class="interview-context">Expect growth, architecture mindset, variety.</p>
+          
+          <div class="answer-tabs">
+            <button class="answer-tab say-this active" onclick="showTab(this, 'q10-short')">🎯 Say This <span class="timing-badge">45 sec</span></button>
+            <button class="answer-tab full-detail" onclick="showTab(this, 'q10-full')">📋 Full Detail</button>
+          </div>
+          
+          <div id="q10-short" class="answer-content active">
+            <div class="say-this-box">
+              <div class="label">Say This</div>
+              <p>"I've spent the last several years in hands-on security engineering — designing, deploying, and stabilizing platforms like SIEM, EDR, and DLP in production environments.</p>
+              <p style="margin-top: 0.75rem;">Through that work, I realized the part I enjoy most is understanding an organization's architecture end-to-end, identifying gaps, and helping shape how security should be built — rather than just operating one environment long-term.</p>
+              <p style="margin-top: 0.75rem;">A consulting role lets me apply that engineering foundation across different environments, industries, and architectures. I like walking into new organizations, quickly understanding their business and control planes, and mapping the right security strategy to their risk profile.</p>
+              <p style="margin-top: 0.75rem;">My background fits well because I've worked across SIEM, EDR, DLP, and identity. Consulting lets me leverage that breadth and contribute earlier in design and decision-making."</p>
+            </div>
+            
+            <div class="key-phrases">
+              <h5>Key Phrases to Hit</h5>
+              <ul>
+                <li>"Hands-on security engineering"</li>
+                <li>"Architecture end-to-end"</li>
+                <li>"Apply engineering foundation across environments"</li>
+                <li>"Contribute earlier in design and decision-making"</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div id="q10-full" class="answer-content">
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Full Detail</span></div>
+              <pre><code>EXPERIENCE BASE:
+• Hands-on security engineering
+• Designing, deploying, stabilizing SIEM, EDR, DLP
+• Real production environments
+
+REALIZATION:
+• Most engaging work = understanding architecture 
+  end-to-end, identifying gaps, shaping how 
+  security should be built
+• Less engaging = operating single environment long-term
+
+WHY CONSULTING FITS:
+• Apply engineering foundation across environments
+• Different industries and architectures
+• Walk in, understand business + control planes, 
+  map security to risk profile
+• Contribute earlier in design decisions
+
+BACKGROUND FIT:
+• Worked across SIEM, EDR, DLP, identity
+• Breadth enables cross-domain perspective
+• Can see how pieces connect
+
+VALUE ADD:
+• Engineering depth + architecture thinking
+• Know what works in practice, not just theory
+• Can implement, not just recommend</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUICK REFERENCE -->
+        <h2>Quick Reference Card</h2>
+        
+        <div class="callout info">
+          <div class="callout-title">The 5 Blocks</div>
+          <div class="callout-content">
+            <table style="width: 100%;">
+              <tr><td><strong>1. Opening</strong></td><td>Your story in 90 seconds</td></tr>
+              <tr><td><strong>2. SIEM Core</strong></td><td>XDR-first, attacks vs changes, cost</td></tr>
+              <tr><td><strong>3. Detection</strong></td><td>Threat-intent, built-in first, validate</td></tr>
+              <tr><td><strong>4. Operations</strong></td><td>Tune before enable, reduce fatigue</td></tr>
+              <tr><td><strong>5. Consulting</strong></td><td>Trade-offs not "no", architecture mindset</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">Key Differentiators (Say These)</div>
+          <div class="callout-content">
+            <ul style="margin: 0; padding-left: 1.5rem;">
+              <li>"XDR detects attacks; Entra ID logs record changes"</li>
+              <li>"Sentinel + XDR is fundamentally different from traditional SIEM"</li>
+              <li>"What does XDR NOT cover?"</li>
+              <li>"Built-in first, custom only for gaps"</li>
+              <li>"Tune before you enable"</li>
+              <li>"Risk-based trade-offs, not 'security says no'"</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function showTab(button, contentId) {
+      // Find parent question
+      const question = button.closest('.interview-question');
+      
+      // Deactivate all tabs in this question
+      question.querySelectorAll('.answer-tab').forEach(tab => tab.classList.remove('active'));
+      
+      // Deactivate all content in this question
+      question.querySelectorAll('.answer-content').forEach(content => content.classList.remove('active'));
+      
+      // Activate clicked tab and corresponding content
+      button.classList.add('active');
+      document.getElementById(contentId).classList.add('active');
+    }
+  </script>
+  <script src="js/main.js"></script>
+</body>
+</html>

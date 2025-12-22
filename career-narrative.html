@@ -128,7 +128,8 @@
         <div class="nav-section">
           <div class="nav-section-title">Career</div>
           <a href="career-narrative.html" class="nav-item">Career Narrative</a>
-          <a href="interview-prep.html" class="nav-item">Interview Prep</a>
+          <a href="interview-prep.html" class="nav-item">Interview Prep (Full)</a>
+          <a href="interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
         </div>
       </nav>
     </aside>
@@ -281,37 +282,37 @@
 
         <div class="code-block">
           <div class="code-header"><span class="code-lang">What Do You Do Day-to-Day?</span></div>
-          <pre><code>"For the last couple of months, my current responsibilities have been 
-focused on supporting the DLP track, primarily in audit mode. This work 
-involves reviewing DLP events, validating policy behavior against real 
-business workflows, identifying false positives, and tuning conditions 
-and exclusions before any enforcement decisions are made. My involvement 
-here is mainly around validation and stabilization rather than leading 
-the overall DLP program.
+          <pre><code>"Currently, I'm in the final handover phase of a security transformation 
+program. Over the last couple of months, my focus has been on the DLP 
+track, supporting knowledge transfer and operational handover to the 
+internal security team. Day to day, this involves finalizing documentation, 
+conducting KT sessions, and ensuring the team is ready to take over 
+steady-state operations.
 
-Before this recent DLP phase, my primary responsibilities were on the 
-SIEM and EDR tracks. During the SIEM discovery and foundation phase, 
-I designed the log ingestion strategy around an XDR-first model — 
-understanding that Defender products detect attacks while Entra ID logs 
-capture control-plane changes. This drove decisions about what to ingest: 
-XDR alerts and incidents flow to Sentinel for correlation, while raw MDE 
-telemetry stays in XDR for Advanced Hunting. Entra ID AuditLogs and 
-SigninLogs are separately ingested because XDR doesn't provide identity 
-control-plane visibility.
+Before handover, my focus was SIEM and EDR, building security platforms 
+on top of an already-established cloud foundation. Identity, network, and 
+infrastructure migrations had begun prior to my joining, and I came in as 
+the security workstreams formally kicked off.
 
-In parallel, once the SIEM foundation was established, I was involved 
-in the Microsoft Defender for Endpoint rollout. This included agent 
-onboarding across 9,000 endpoints, policy configuration, ASR rules, 
-exclusions, and ensuring XDR integration was properly feeding Sentinel 
-with unified attack detection.
+On the SIEM side, I was involved from discovery through foundation — 
+working with log source owners, identifying and prioritizing telemetry, 
+configuring connectors and DCRs, validating data quality, and troubleshooting 
+ingestion issues. In parallel, I worked on the Microsoft Defender for 
+Endpoint rollout, coordinating deployment waves with IT, monitoring 
+onboarding coverage, configuring security policies and ASR rules, and 
+managing exclusions in collaboration with application teams.
 
-As the SIEM and MDE environments reached a stable operational state, 
-my focus shifted temporarily to supporting the DLP audit phase.
+The DLP track started later due to its dependency on legal alignment, 
+data classification, and business validation. We migrated Symantec 
+Endpoint DLP to Microsoft Purview, and that work is now in its final 
+handover phase.
 
-Across all phases, my role has been to ensure security platforms are 
-deployed in a controlled and scalable way, telemetry is reliable, and 
-controls are tuned in close collaboration with SOC teams and business 
-stakeholders."</code></pre>
+Across all phases, I worked closely with SOC teams as the primary 
+consumers of telemetry and detections, and with business stakeholders 
+to ensure controls were effective without disrupting workflows. The 
+common thread in my role has been deploying security platforms in a 
+controlled, scalable way, ensuring reliable telemetry, and leaving 
+behind a solution that the internal team can confidently operate."</code></pre>
         </div>
 
         <h2>Why Consulting? (From Security Engineering)</h2>

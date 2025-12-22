@@ -128,7 +128,8 @@
         <div class="nav-section">
           <div class="nav-section-title">Career</div>
           <a href="career-narrative.html" class="nav-item">Career Narrative</a>
-          <a href="interview-prep.html" class="nav-item">Interview Prep</a>
+          <a href="interview-prep.html" class="nav-item">Interview Prep (Full)</a>
+          <a href="interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
         </div>
       </nav>
     </aside>
@@ -307,19 +308,33 @@ log sources were configured, what parsers were in use, what detection rules
 existed. I met with IT, infrastructure, and application teams to understand 
 their logging capabilities.
 
-LOG SOURCE STRATEGY: We prioritized based on detection value. Identity logs 
-first — Entra ID sign-ins, audit logs — because identity is our primary 
-detection anchor. Then endpoint telemetry through the M365 Defender connector, 
-which is free. Then cloud control plane, network, and SaaS applications.
+LOG SOURCE STRATEGY: This is where migrating to Sentinel with XDR is 
+fundamentally different from a traditional SIEM migration. RSA NetWitness 
+is purely log-driven — you ingest everything and build detections on raw 
+logs. With Sentinel + Defender XDR, the detection model shifts completely.
+
+XDR handles most attack detections natively — endpoint threats, email 
+phishing, identity attacks, cloud app anomalies — all detected by Defender 
+products without needing raw logs in Sentinel. So instead of asking 
+'what logs do we need for detection?', the question becomes 'what does 
+XDR NOT cover that Sentinel needs to see?'
+
+We prioritized: Identity control-plane logs first (Entra ID AuditLogs, 
+SigninLogs) because XDR detects identity ATTACKS but not CHANGES like 
+role assignments or CA policy modifications. Then XDR alerts and incidents 
+via the M365 Defender connector — this is how attack detections flow to 
+Sentinel for correlation. Then sources XDR doesn't cover: network logs, 
+SaaS audit logs, on-prem infrastructure.
 
 INGESTION: For each source, I configured the appropriate connector — built-in 
 where available, custom DCRs for on-prem sources. We validated data quality: 
 are fields parsing correctly? Are timestamps accurate? Is the volume expected?
 
-DETECTION ALIGNMENT: We started MDE deployment early so endpoint telemetry 
-was already flowing when we implemented detections. I enabled built-in rules 
-from Content Hub and implemented rules from our detection translation catalog 
-where we had native Sentinel equivalents.
+DETECTION ALIGNMENT: Because XDR handles most attack detection, our Sentinel 
+rules focused on three areas: (1) correlating XDR alerts with other signals, 
+(2) detecting control-plane changes XDR doesn't see, and (3) coverage for 
+sources outside the Defender ecosystem. We enabled built-in rules from 
+Content Hub and translated RSA rules only where we had genuine gaps.
 
 PARALLEL OPERATIONS & CUTOVER:
 We ran RSA and Sentinel in parallel for several months. Sentinel became the 
