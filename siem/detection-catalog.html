@@ -366,6 +366,19 @@ discovered — they're coverage for a threat landscape RSA never addressed.</cod
           </div>
         </div>
 
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>How We Validated XDR Coverage (My Contribution)</div>
+          <div class="callout-content">
+            <p><strong>We didn't trust documentation alone.</strong> For RETIRE decisions, we required evidence that XDR actually detects the technique:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>DOC:</strong> Microsoft documentation explicitly confirms detection capability</li>
+              <li><strong>TEST:</strong> Simulation/purple team test triggered XDR alert (e.g., Mimikatz, Atomic Red Team)</li>
+              <li><strong>HIST:</strong> Historical incidents in production show XDR detected reliably</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Example:</strong> For LSASS credential theft (RSA-EP-001), I ran Mimikatz simulation in a test environment with MDE in audit mode. XDR fired the alert within 30 seconds. This evidence justified retirement — not just documentation.</p>
+          </div>
+        </div>
+
         <div class="methodology-step">
           <div class="methodology-step-number">5</div>
           <div class="methodology-step-content">

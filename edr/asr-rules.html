@@ -217,9 +217,235 @@
 
         <div class="flow-steps">
           <div class="flow-step"><div class="flow-step-number">1</div><div class="flow-step-content"><strong>Audit Mode (2-8 weeks)</strong><br>Deploy to pilot group. Monitor DeviceEvents for Asr*Audited events. Identify legitimate business processes that would be blocked.</div></div>
-          <div class="flow-step"><div class="flow-step-number">2</div><div class="flow-step-content"><strong>Create Exclusions</strong><br>Add path/process exclusions for legitimate applications. Test exclusions in pilot before broad deployment.</div></div>
-          <div class="flow-step"><div class="flow-step-number">3</div><div class="flow-step-content"><strong>Warn Mode (1-2 weeks)</strong><br>Users see warnings but can proceed. Validates exclusions are working. Catches edge cases.</div></div>
-          <div class="flow-step"><div class="flow-step-number">4</div><div class="flow-step-content"><strong>Block Mode</strong><br>Full enforcement. Actions are blocked. Monitor for helpdesk tickets and adjust exclusions.</div></div>
+          <div class="flow-step"><div class="flow-step-number">2</div><div class="flow-step-content"><strong>Create Exclusions</strong><br>Add path/process exclusions for legitimate applications. Document each exclusion with business justification.</div></div>
+          <div class="flow-step"><div class="flow-step-number">3</div><div class="flow-step-content"><strong>Warn Mode (1-2 weeks)</strong><br>Users see warnings but can proceed. Validates exclusions are working. Catches edge cases before full enforcement.</div></div>
+          <div class="flow-step"><div class="flow-step-number">4</div><div class="flow-step-content"><strong>Block Mode</strong><br>Full enforcement. Actions are blocked. Monitor for helpdesk tickets and adjust exclusions as needed.</div></div>
+        </div>
+
+        <!-- ==================== FALSE POSITIVE HANDLING ==================== -->
+        <h3>1.3 False Positive Handling & Exclusion Management</h3>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Key Principle: XDR Owns Detection, You Own Trust Decisions</div>
+          <div class="callout-content">
+            <p><strong>Microsoft does not force blind enforcement.</strong> XDR owns the detection logic — continuously updated, threat-intel-backed, behavioral. But the organization owns trust decisions: exclusions, scope, and blast-radius control.</p>
+            <p style="margin-top: 0.5rem;"><strong>False positives from XDR are expected early. Failure to plan for them is the real risk.</strong> Mature orgs don't aim for zero false positives — they aim for fast recovery + controlled exceptions.</p>
+          </div>
+        </div>
+
+        <h4>What Happens When XDR Breaks a Legitimate Workflow</h4>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Real Scenario: Legitimate Script Blocked</span></div>
+          <pre><code>SCENARIO:
+─────────────────────────────────────────────────────────────────────────────────
+A company-owned automation script:
+• Uses PowerShell, WMI, or API calls
+• Looks suspicious to behavioral detection
+• XDR flags it as malicious
+
+AUTOMATED RESPONSE (if enabled):
+─────────────────────────────────────────────────────────────────────────────────
+• Process killed
+• File quarantined
+• Device isolated (if high severity)
+• Business workflow breaks
+
+KEY INSIGHT:
+─────────────────────────────────────────────────────────────────────────────────
+This DOES happen — especially early in rollouts.
+This is WHY we use audit mode first.
+Everything is reversible. Nothing is final.</code></pre>
+        </div>
+
+        <h4>Step-by-Step Recovery Process</h4>
+
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <strong>Detection Fires → Incident Created</strong><br>
+              Alert raised in M365 Defender portal. Automated response executed (if enabled). SOC notified via Sentinel incident. At this stage: nothing is final, everything is reversible.
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <strong>SOC Validates Legitimacy (Critical Step)</strong><br>
+              SOC determines: Is this a known internal script? A sanctioned admin tool? A scheduled automation? Was the behavior expected for this host/user/time? If yes → false positive with business context.
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <strong>Immediate Recovery Actions</strong><br>
+              Built-in actions (not custom hacks): Restore quarantined file, release device isolation, re-enable blocked process, resume service. Standard playbook, executed within minutes.
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-content">
+              <strong>Permanent Fix: Codify Trust (Not Disable Detection)</strong><br>
+              You do NOT disable XDR globally. You scope trust precisely: file/process allowlisting, ASR rule exclusions, automation account scoping. Every exclusion documented.
+            </div>
+          </div>
+        </div>
+
+        <h4>Exclusion Types & When to Use Each</h4>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Exclusion Type</th><th>Scope Method</th><th>When to Use</th><th>Security Risk</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>File Hash</strong></td>
+                <td>SHA-256 of specific file</td>
+                <td>Stable, controlled scripts that don't change</td>
+                <td><span class="status-badge risk-low">Low</span> — Most precise</td>
+              </tr>
+              <tr>
+                <td><strong>Certificate Signer</strong></td>
+                <td>Code signing certificate</td>
+                <td>Vendor-signed applications (e.g., Adobe, Autodesk)</td>
+                <td><span class="status-badge risk-low">Low</span> — Trusts vendor</td>
+              </tr>
+              <tr>
+                <td><strong>File Path</strong></td>
+                <td>Specific file location</td>
+                <td>Scripts in protected directories (e.g., C:\Scripts\Approved)</td>
+                <td><span class="status-badge risk-medium">Medium</span> — Requires folder ACLs</td>
+              </tr>
+              <tr>
+                <td><strong>Process Name</strong></td>
+                <td>Executable name</td>
+                <td>Known-good processes (use sparingly)</td>
+                <td><span class="status-badge risk-medium">Medium</span> — Name can be spoofed</td>
+              </tr>
+              <tr>
+                <td><strong>Folder Path</strong></td>
+                <td>Entire directory</td>
+                <td>Vendor installation directories (last resort)</td>
+                <td><span class="status-badge risk-high">High</span> — Use sparingly</td>
+              </tr>
+              <tr>
+                <td><strong>ASR Rule + Process</strong></td>
+                <td>Specific rule for specific process</td>
+                <td>Allow one process to bypass one ASR rule</td>
+                <td><span class="status-badge risk-low">Low</span> — Surgically scoped</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Exclusion Documentation Requirements (Audit-Ready)</h4>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Exclusion Request Template</span></div>
+          <pre><code>EXCLUSION REQUEST #EXC-2024-047
+═══════════════════════════════════════════════════════════════════════════════
+
+REQUEST DETAILS:
+─────────────────────────────────────────────────────────────────────────────────
+Requested By:      [Name, Team]
+Date:              [Request Date]
+Urgency:           [Critical/High/Normal]
+
+WHAT IS BEING EXCLUDED:
+─────────────────────────────────────────────────────────────────────────────────
+File/Process:      C:\Scripts\Automation\SalesforceSync.ps1
+Hash (SHA-256):    a1b2c3d4e5f6... (full hash)
+Signer:            N/A (internal script)
+Exclusion Type:    File Hash + ASR Rule Exclusion
+ASR Rules Affected: #7 (Block obfuscated scripts)
+
+BUSINESS JUSTIFICATION:
+─────────────────────────────────────────────────────────────────────────────────
+This script runs nightly at 2:00 AM to sync Salesforce data with the data 
+warehouse. It uses PowerShell with encoded commands (base64) to handle special 
+characters in API responses. The script is owned by the Data Engineering team 
+and stored in a protected directory with restricted write access.
+
+SCOPE & BLAST RADIUS:
+─────────────────────────────────────────────────────────────────────────────────
+Hosts Affected:    PROD-ETL-01, PROD-ETL-02 (2 servers only)
+Service Account:   svc-salesforce-sync
+Run Window:        2:00 AM - 4:00 AM EST daily
+
+RISK ASSESSMENT:
+─────────────────────────────────────────────────────────────────────────────────
+If excluded: Script runs normally, workflow unblocked
+If NOT excluded: Nightly sync fails, sales data stale by morning
+Compensating controls: Script hash verified, folder ACLs, service account limited
+
+APPROVALS:
+─────────────────────────────────────────────────────────────────────────────────
+[ ] Security Team:     _____________ Date: _______
+[ ] Script Owner:      _____________ Date: _______
+[ ] Change Advisory:   _____________ Date: _______
+
+REVIEW SCHEDULE:
+─────────────────────────────────────────────────────────────────────────────────
+Next Review:       [Date + 90 days]
+Expiration:        [Date + 365 days or "Permanent with annual review"]
+Owner:             [Data Engineering Team Lead]</code></pre>
+        </div>
+
+        <h4>How We Prevented Breakage Upfront (RevFlow Approach)</h4>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Pre-Enforcement Baseline</div>
+          <div class="callout-content">
+            <p><strong>Before enforcing any ASR rule or XDR policy, we built a known-good baseline:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Inventory Phase (Week 1-2):</strong> Collected all admin scripts, automation tools, service accounts from IT, DevOps, and application teams</li>
+              <li><strong>Pre-approval:</strong> Documented 47 internal scripts and 23 vendor tools BEFORE deployment</li>
+              <li><strong>Exclusion Package:</strong> Built initial exclusion set based on inventory — ready on Day 1</li>
+              <li><strong>Result:</strong> Dramatically reduced "surprise" blocks during rollout</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Phase</th><th>Activity</th><th>Duration</th><th>Outcome</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="status-badge priority-1">Baseline</span></td>
+                <td>Inventory scripts, tools, service accounts</td>
+                <td>2 weeks</td>
+                <td>47 scripts, 23 tools, 12 service accounts documented</td>
+              </tr>
+              <tr>
+                <td><span class="status-badge priority-2">Audit</span></td>
+                <td>ASR in Audit mode, EDR detect-only</td>
+                <td>4-8 weeks per priority wave</td>
+                <td>~150 additional exclusion candidates identified</td>
+              </tr>
+              <tr>
+                <td><span class="status-badge priority-3">Pilot</span></td>
+                <td>Enforce on IT → Power Users → Business-critical → Broad</td>
+                <td>2-3 weeks per ring</td>
+                <td>Blast radius controlled, edge cases caught</td>
+              </tr>
+              <tr>
+                <td><span class="status-badge priority-4">Document</span></td>
+                <td>Every exclusion documented with justification + owner</td>
+                <td>Ongoing</td>
+                <td>Audit-ready, SOC 2 compliant exclusion register</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Interview Talking Point</div>
+          <div class="callout-content">
+            <p><em>"False positives from XDR are expected early — failure to plan for them is the real risk. We used audit mode for 4-8 weeks per priority wave, built a known-good baseline before enforcement, and documented every exclusion with business justification. The goal isn't zero false positives — it's fast recovery plus controlled exceptions."</em></p>
+          </div>
         </div>
 
         <!-- ==================== SECTION 2: COMPLETE RULE LIST ==================== -->

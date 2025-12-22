@@ -839,7 +839,26 @@ RESULT:
    • What compensating controls?
    • When do we revisit?
 
-REAL EXAMPLE:
+REAL EXAMPLE (ASR/XDR ROLLOUT):
+═════════════════════════════════════════════════════════════════════════
+We used AUDIT MODE FIRST for 4-8 weeks per ASR priority wave.
+
+Why? False positives from XDR are expected early — 
+failure to plan for them is the real risk.
+
+Process:
+1. Deploy ASR in Audit mode (not Block)
+2. Monitor DeviceEvents for Asr*Audited events
+3. Identify legitimate scripts/tools that would be blocked
+4. Create targeted exclusions BEFORE enforcement
+5. Document each exclusion with business justification
+6. Move to Warn mode, then Block mode
+
+Result: We inventoried 47 internal scripts and 23 vendor tools
+BEFORE deployment. Built initial exclusion set ready on Day 1.
+Dramatically reduced "surprise" blocks during rollout.
+
+REAL EXAMPLE (MDE PERFORMANCE):
 App team wanted to exclude entire server from MDE 
 due to performance issues.
 
@@ -849,10 +868,11 @@ causing overhead and create targeted exclusions."
 Result: Found 3 processes to exclude. They got 
 performance, we kept detection for everything else.
 
-PRINCIPLE:
-Security's job isn't to say no — it's to help 
-business achieve goals securely. If we block 
-everything, people find worse workarounds.</code></pre>
+KEY PRINCIPLE:
+XDR owns detection logic. The organization owns trust decisions.
+Microsoft does not force blind enforcement. You scope trust precisely.
+Mature orgs don't aim for zero false positives — 
+they aim for fast recovery + controlled exceptions.</code></pre>
             </div>
           </div>
         </div>
