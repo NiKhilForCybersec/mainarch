@@ -265,7 +265,159 @@
           </pre>
         </div>
 
-        <!-- ==================== SECTION 2: RAPID-FIRE Q&A ==================== -->
+        <!-- ==================== XDR VS SENTINEL REFERENCE ==================== -->
+        <h3>XDR vs Sentinel: What Goes Where (Memorize This)</h3>
+        
+        <p>This is the most important mental model for interviews. Know specific examples.</p>
+
+        <div class="table-wrapper">
+          <table class="qa-table">
+            <thead>
+              <tr><th style="width: 50%;">XDR HANDLES (Retire from SIEM)</th><th style="width: 50%;">SENTINEL HANDLES (Build/Migrate)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="2" style="background: var(--bg-tertiary); font-weight: 600; color: var(--accent-cyan);">ENDPOINT THREATS</td>
+              </tr>
+              <tr>
+                <td>
+                  ✓ Malicious PowerShell (AMSI integration)<br>
+                  ✓ LSASS credential dumping<br>
+                  ✓ Ransomware encryption behavior<br>
+                  ✓ Process injection techniques<br>
+                  ✓ Known malware (cloud protection)<br>
+                  ✓ LOLBins abuse (certutil, mshta, etc.)<br>
+                  ✓ Fileless malware in memory
+                </td>
+                <td>
+                  ✓ Script execution BY terminated employee<br>
+                  ✓ Admin tool usage outside change window<br>
+                  ✓ Process execution + VPN from unusual country<br>
+                  ✓ Endpoint alert + simultaneous SaaS anomaly
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="background: var(--bg-tertiary); font-weight: 600; color: var(--accent-cyan);">IDENTITY ATTACKS</td>
+              </tr>
+              <tr>
+                <td>
+                  ✓ Brute force / password spray<br>
+                  ✓ Impossible travel<br>
+                  ✓ Pass-the-Hash / Pass-the-Ticket<br>
+                  ✓ Kerberoasting<br>
+                  ✓ Suspicious sign-in patterns (ML)<br>
+                  ✓ Token replay attacks
+                </td>
+                <td>
+                  ✓ MFA reset + password change + new device (sequence)<br>
+                  ✓ Privileged role assigned to new user<br>
+                  ✓ Service account used interactively<br>
+                  ✓ Sign-in from VPN + sensitive file access<br>
+                  ✓ Conditional Access policy modification<br>
+                  ✓ Login after HR termination flag
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="background: var(--bg-tertiary); font-weight: 600; color: var(--accent-cyan);">EMAIL THREATS</td>
+              </tr>
+              <tr>
+                <td>
+                  ✓ Phishing URL detection<br>
+                  ✓ Malicious attachment (sandbox)<br>
+                  ✓ Business email compromise patterns<br>
+                  ✓ Spoofing detection<br>
+                  ✓ Safe Links / Safe Attachments
+                </td>
+                <td>
+                  ✓ New inbox rule + external forwarding<br>
+                  ✓ Email from first-time sender + attachment + click<br>
+                  ✓ Executive impersonation + wire transfer keywords<br>
+                  ✓ Mailbox delegation added by non-admin
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="background: var(--bg-tertiary); font-weight: 600; color: var(--accent-cyan);">CLOUD APPS</td>
+              </tr>
+              <tr>
+                <td>
+                  ✓ Risky OAuth app consent<br>
+                  ✓ Mass file download (MCAS)<br>
+                  ✓ Anomalous cloud activity (UEBA)<br>
+                  ✓ Shadow IT detection
+                </td>
+                <td>
+                  ✓ OAuth consent + external sharing + data download (sequence)<br>
+                  ✓ SaaS access from country with no employees<br>
+                  ✓ Bulk SharePoint access after resignation notice<br>
+                  ✓ Personal OneDrive upload of corporate files
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="background: var(--bg-tertiary); font-weight: 600; color: var(--accent-cyan);">NETWORK (Sentinel owns — XDR doesn't see)</td>
+              </tr>
+              <tr>
+                <td style="color: var(--text-secondary);">
+                  ✗ XDR has no visibility here
+                </td>
+                <td>
+                  ✓ Firewall blocked → allowed → blocked pattern<br>
+                  ✓ Beaconing to rare external domain<br>
+                  ✓ Lateral movement via network (non-MDE systems)<br>
+                  ✓ DNS tunneling<br>
+                  ✓ Geographic anomaly in VPN logs<br>
+                  ✓ Port scan from internal host
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="background: var(--bg-tertiary); font-weight: 600; color: var(--accent-cyan);">BUSINESS LOGIC (Sentinel owns — requires context XDR doesn't have)</td>
+              </tr>
+              <tr>
+                <td style="color: var(--text-secondary);">
+                  ✗ XDR doesn't have HR/business context
+                </td>
+                <td>
+                  ✓ Terminated employee data access<br>
+                  ✓ VIP/executive anomalous behavior<br>
+                  ✓ Access outside business hours for role<br>
+                  ✓ SAP privileged transaction outside change window<br>
+                  ✓ Contractor accessing resources after project end<br>
+                  ✓ Database query volume spike by single user
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="background: var(--bg-tertiary); font-weight: 600; color: var(--accent-cyan);">HIGHER-ORDER CORRELATION (Sentinel owns — multiple signals)</td>
+              </tr>
+              <tr>
+                <td style="color: var(--text-secondary);">
+                  ✗ XDR correlates within its domain only
+                </td>
+                <td>
+                  ✓ XDR alert + network anomaly + SaaS access (3 sources)<br>
+                  ✓ Failed VPN + successful VPN + file download + USB copy<br>
+                  ✓ Password reset + MFA change + new device + sensitive file<br>
+                  ✓ Phishing click + endpoint alert + data exfil attempt<br>
+                  ✓ TI match on IP + successful connection + lateral movement
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success" style="margin-top: 1rem;">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Key Interview Insight
+          </div>
+          <div class="callout-content">
+            <p><strong>When asked "what goes to Sentinel?"</strong> — Answer with this framework:</p>
+            <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>What XDR can't SEE:</strong> Network, non-Microsoft SaaS, on-prem apps</li>
+              <li><strong>What XDR can't KNOW:</strong> HR context (termination), business logic (change windows), role-based policies</li>
+              <li><strong>What XDR can't CORRELATE:</strong> Cross-domain sequences spanning 3+ data sources</li>
+            </ol>
+            <p style="margin-top: 0.5rem;">If it's a pure endpoint/identity/email attack → XDR. If it needs context or correlation → Sentinel.</p>
+          </div>
+        </div>
         <h2 id="rapid-fire">2. Rapid-Fire Q&A <span class="timing-badge">10-20 sec answers</span></h2>
         
         <p>Memorize these. Deliver confidently. Short, punchy, impressive.</p>
@@ -280,11 +432,11 @@
           <tbody>
             <tr>
               <td>"What's detection-driven migration?"</td>
-              <td>"Instead of porting every legacy rule 1-to-1, we evaluate detection intent. XDR handles endpoint, identity, email natively — those get retired. Sentinel handles cross-domain correlation and non-Microsoft sources. Result: 780 rules retired to XDR, 485 purpose-built Sentinel rules."</td>
+              <td>"Instead of porting every legacy rule 1-to-1, we evaluate detection intent. XDR handles endpoint, identity, email natively — suspicious PowerShell, LSASS dumps, phishing — those get retired. Sentinel handles what XDR can't see — terminated employee data access, cross-domain correlation, business logic. Result: 780 rules retired to XDR, 485 purpose-built Sentinel rules."</td>
             </tr>
             <tr>
               <td>"Why XDR-first?"</td>
-              <td>"XDR has kernel-level visibility, AMSI integration, and ML-based detection that SIEM queries can't match. You configure controls, you don't write malware rules. Microsoft owns detection logic, we own trust decisions."</td>
+              <td>"XDR has kernel-level visibility, AMSI integration, and ML-based detection that SIEM queries can't match. Example: LSASS credential dumping — MDE sees the memory access attempt before any log is written. PowerShell — AMSI shows decoded script content. Phishing — MDO detonates attachments in sandbox. You configure controls, you don't write malware rules. Microsoft owns detection logic, we own trust decisions."</td>
             </tr>
             <tr>
               <td>"Sentinel vs Splunk difference?"</td>
@@ -315,7 +467,7 @@
           <tbody>
             <tr>
               <td>"How do you prioritize log sources?"</td>
-              <td>"What XDR doesn't cover comes first. Identity control-plane logs — XDR detects attacks, not changes like role assignments. Then XDR alerts for correlation. Then network and SaaS that XDR doesn't see."</td>
+              <td>"What XDR doesn't cover comes first. Identity control-plane logs — Entra AuditLogs — because XDR detects brute force and impossible travel, but NOT who got added to Global Admins. Then XDR alerts for correlation. Then network logs XDR can't see — firewalls, proxies, VPN. Then SaaS apps outside Microsoft — Salesforce, Workday audit logs."</td>
             </tr>
             <tr>
               <td>"Why not ingest MDE telemetry to Sentinel?"</td>
@@ -342,7 +494,7 @@
           <tbody>
             <tr>
               <td>"Built-in vs custom rules?"</td>
-              <td>"Content Hub first — 102 built-in rules enabled. Custom KQL only for gaps — 58 rules. Don't reinvent what Microsoft maintains and updates."</td>
+              <td>"Content Hub first — 102 built-in rules enabled for commodity threats like known malware, brute force, suspicious sign-ins. Custom KQL only for gaps — 58 rules for business-specific: terminated employee correlation, service account misuse, SAP transactions outside change windows, VPN + file access patterns. Don't reinvent what Microsoft maintains."</td>
             </tr>
             <tr>
               <td>"How do you map to MITRE?"</td>
@@ -373,7 +525,7 @@
             </tr>
             <tr>
               <td>"Lateral movement detection?"</td>
-              <td>"SMB, RDP, WMI, PsExec patterns — but XDR handles this natively with behavioral analysis. MDE sees the actual process chain, not just the network connection. SIEM can't match that fidelity."</td>
+              <td>"For MDE-covered endpoints, XDR handles it — SMB abuse, RDP pivoting, WMI execution, PsExec patterns. MDE sees the actual process chain and behavioral intent. Where Sentinel adds value: lateral movement involving non-MDE systems, or correlation with network logs showing the actual traffic flows. Also, lateral movement BY a compromised account flagged in identity signals."</td>
             </tr>
             <tr>
               <td>"Network security monitoring?"</td>
@@ -381,7 +533,7 @@
             </tr>
             <tr>
               <td>"Sysmon vs MDE?"</td>
-              <td>"MDE for everything it covers — kernel-level telemetry, behavioral detection, cloud-backed analysis. Sysmon only for legacy systems MDE can't protect. MDE is Sysmon on steroids."</td>
+              <td>"MDE for everything it covers — kernel-level telemetry, behavioral detection, cloud-backed ML. Sysmon logs process creation, but MDE understands intent — is this PowerShell malicious? Sysmon gives you event ID 1; MDE gives you 'Suspicious credential access.' Sysmon only for legacy systems MDE can't protect — Server 2008, old Linux. For modern systems, MDE is Sysmon on steroids."</td>
             </tr>
           </tbody>
         </table>
@@ -455,7 +607,23 @@
 
 <strong>PHASE 1 — DISCOVERY:</strong> Documented 1,247 RSA rules. But instead of translating them 1-to-1, we normalized them into security outcomes — credential abuse, lateral movement, data exfiltration.
 
-<strong>PHASE 2 — OWNERSHIP:</strong> For each outcome, we asked: does XDR handle this natively? MDE detects process injection better than any SIEM query. MDI detects Pass-the-Hash. MDO detects phishing. 780 rules retired to XDR — not lost, handled by a better engine.
+<strong>PHASE 2 — OWNERSHIP:</strong> For each outcome, we asked: does XDR handle this natively?
+
+<strong>Examples we RETIRED to XDR (780 rules):</strong>
+• Malicious PowerShell patterns → MDE has AMSI, sees decoded scripts
+• LSASS memory access → MDE kernel-level credential guard integration
+• Suspicious email attachments → MDO sandbox detonation
+• Brute force authentication → MDI + Entra ID Protection
+• Lateral movement via SMB/RDP → MDE behavioral detection
+• Known malware hashes → MDE cloud protection, real-time updates
+
+<strong>Examples we KEPT/BUILT in Sentinel (485 rules):</strong>
+• Terminated employee accessing sensitive data → HR feed + SharePoint logs
+• VPN from impossible location + file download → Network + identity correlation
+• Service account interactive login → Not an "attack," but policy violation
+• Firewall blocked → allowed → blocked pattern → Network behavioral
+• OAuth app consent from risky user → MCAS + identity risk score
+• Off-hours SAP transaction → Business app + time-based logic
 
 <strong>PHASE 3 — SENTINEL FOCUS:</strong> 485 rules for what Sentinel does best — cross-domain correlation, non-Microsoft telemetry, business logic. 255 migrated from RSA, plus 230 NEW rules RSA never had — SaaS coverage, compliance, XDR correlation.
 
@@ -499,9 +667,26 @@ Every device either has an agent, sends logs, or is monitored passively on the n
 
 <strong>PHASE 1 — NORMALIZE TO OUTCOMES:</strong> Legacy SIEM tells you what behaviors mattered, not what rules to copy. 'Credential abuse' is an outcome. 'Rule #47: LSASS access' is implementation.
 
-<strong>PHASE 2 — DECIDE OWNERSHIP:</strong> For each outcome, who handles it better? XDR has kernel-level visibility for endpoint threats. SIEM has cross-domain context. Assign ownership, don't duplicate.
+<strong>PHASE 2 — DECIDE OWNERSHIP:</strong> For each outcome, who handles it better? Let me give you concrete examples:
 
-<strong>PHASE 3 — DEFINE INGESTION:</strong> Ingestion follows detection, not the other way around. If XDR owns endpoint detection, don't ingest raw endpoint telemetry to Sentinel.
+<strong>XDR HANDLES (Retire from SIEM):</strong>
+• Suspicious PowerShell execution → MDE has AMSI integration, sees script content
+• LSASS credential dumping → MDE has kernel-level visibility, behavioral detection
+• Phishing email with malicious attachment → MDO detonates in sandbox
+• Impossible travel sign-in → MDI + Entra ID Protection, ML-based
+• Pass-the-Hash → MDI detects authentication anomalies
+• Ransomware encryption behavior → MDE behavioral blocking
+
+<strong>SENTINEL HANDLES (Build/Migrate):</strong>
+• VPN login from terminated employee → Requires HR feed + identity correlation
+• Bulk SharePoint download after resignation notice → Business context needed
+• Firewall allow after multiple blocks from same IP → Network + threat intel
+• Service account used interactively → Identity governance rule
+• Data exfil to personal OneDrive → MCAS + DLP + user risk correlation
+• SAP privileged transaction outside change window → Business app + time logic
+• Same user: MFA reset + password change + new device + sensitive file access within 1 hour → Higher-order correlation across 4 data sources
+
+<strong>PHASE 3 — DEFINE INGESTION:</strong> Ingestion follows detection, not the other way around. Since XDR owns PowerShell, LSASS, malware detection — I don't ingest DeviceProcessEvents to Sentinel. That's 50M events/day we don't pay for.
 
 <strong>PHASE 4 — DESIGN DETECTIONS:</strong> Content Hub first for commodity threats. Custom KQL for business-specific logic. Higher-order correlation that combines XDR alerts with network and SaaS signals.
 
@@ -546,28 +731,33 @@ This methodology compressed our migration from 18 months to 12 and gave us bette
           
           <div class="quick-answer">
             <div class="quick-answer-label">Quick (20 sec)</div>
-            <p>"First, check what XDR already covers — MDE detects malicious PowerShell, encoded commands, AMSI bypasses natively. If XDR handles it, document and move on. If there's a genuine gap — maybe specific script patterns for our environment — then build custom KQL using DeviceProcessEvents or SecurityEvent 4688 with command line logging."</p>
+            <p>"First, check what XDR already covers — MDE detects malicious PowerShell, encoded commands, AMSI bypasses natively. If XDR handles it, document and move on. If there's a genuine gap — maybe abuse of a business-specific script or interpreter XDR doesn't monitor — then build custom KQL."</p>
           </div>
           
           <div class="detailed-answer">
             <div class="detailed-answer-label">Detailed (60 sec)</div>
-            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"T1059 is broad — covers PowerShell, CMD, VBScript, Python, etc.
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">"T1059 is broad — covers PowerShell, CMD, VBScript, Python, etc. First, I check XDR coverage:
 
-<strong>STEP 1 — CHECK XDR COVERAGE:</strong> MDE has excellent coverage here. AMSI integration catches malicious PowerShell. Behavioral detection catches encoded commands, download cradles, LOLBins. Most T1059 sub-techniques are handled.
+<strong>T1059 SUB-TECHNIQUES XDR HANDLES (Don't build in Sentinel):</strong>
+• T1059.001 PowerShell → MDE AMSI integration, sees decoded content
+• T1059.003 Windows CMD → MDE behavioral, parent-child analysis
+• T1059.005 VBScript → MDE script block logging integration
+• T1059.007 JavaScript → MDE + MDO for email-based delivery
+• Encoded commands (-enc) → MDE decodes and analyzes
+• Download cradles (IEX, WebClient) → MDE network + process correlation
 
-<strong>STEP 2 — IDENTIFY THE GAP:</strong> Maybe it's a specific business app that uses scripts legitimately, and we need to detect abuse of that specific tool. Or a script interpreter XDR doesn't monitor.
+<strong>WHAT MIGHT NEED SENTINEL:</strong>
+• Business-specific script interpreter XDR doesn't know
+• Python scripts on servers (if not MDE-covered Linux)
+• Script execution + network connection to rare domain (correlation)
+• Script execution by terminated employee (business context)
 
-<strong>STEP 3 — DATA AVAILABILITY:</strong> Do we have command line logging? 4688 with command line audit policy, or DeviceProcessEvents from MDE.
+<strong>IF CUSTOM RULE NEEDED:</strong>
+• Check data availability: 4688 with command line, or DeviceProcessEvents
+• Build detection: Encoded commands, download patterns, unusual parent-child
+• Tune: Baseline legitimate admin scripts, exclude by path or signer
 
-<strong>STEP 4 — BUILD DETECTION:</strong> If custom rule needed, I'd look for:
-• Encoded commands (-enc, -e flags)
-• Download patterns (IEX, WebClient, curl)
-• Unusual parent-child process relationships
-• Scripts spawning network connections
-
-<strong>STEP 5 — TUNE:</strong> Baseline legitimate use first. Exclude known-good admin scripts with specific paths or signers.
-
-But honestly, 90% of T1059 is XDR territory. I'd only build custom if there's a specific gap XDR doesn't cover."</pre>
+But honestly, 90% of T1059 is XDR territory. I'd only build custom if there's a specific gap XDR doesn't cover — and I'd document why XDR doesn't cover it."</pre>
           </div>
         </div>
 
@@ -1295,6 +1485,33 @@ Architecture:
         <p>Memorize these. Drop them naturally during conversation.</p>
 
         <div class="soundbite-grid">
+          <div class="soundbite-card" style="grid-column: span 2; border-left-color: #22c55e;">
+            <h4 style="color: #22c55e;">🎯 XDR vs Sentinel Examples (Memorize These)</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div>
+                <strong style="color: var(--text-primary);">XDR Handles:</strong>
+                <ul style="margin: 0.25rem 0;">
+                  <li>Malicious PowerShell (AMSI)</li>
+                  <li>LSASS credential dumping</li>
+                  <li>Pass-the-Hash (MDI)</li>
+                  <li>Phishing attachments (MDO sandbox)</li>
+                  <li>Impossible travel</li>
+                  <li>Ransomware behavior</li>
+                </ul>
+              </div>
+              <div>
+                <strong style="color: var(--text-primary);">Sentinel Handles:</strong>
+                <ul style="margin: 0.25rem 0;">
+                  <li>Terminated employee data access</li>
+                  <li>VPN + file download correlation</li>
+                  <li>Service account interactive login</li>
+                  <li>Firewall blocked→allowed pattern</li>
+                  <li>SAP transaction outside change window</li>
+                  <li>MFA reset + password change + new device</li>
+                </ul>
+              </div>
+            </div>
+          </div>
           <div class="soundbite-card">
             <h4>Detection Philosophy</h4>
             <ul>
