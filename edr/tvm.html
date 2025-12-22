@@ -168,86 +168,268 @@
           <h1>Vulnerability Management — Automated Risk-Based Prioritization</h1>
           <div class="page-header-meta">
             <span class="page-badge edr">EDR Track</span>
-            <span class="page-reading-time">TVM & Automation</span>
+            <span class="page-reading-time">MDVM & Custom Automation</span>
           </div>
-          <p class="intro-text">This page documents our automated vulnerability management workflow — integrating Qualys and MDE TVM data, enriching with EPSS, CISA KEV, and CMDB, then automatically prioritizing, alerting, and creating tickets for remediation.</p>
+          <p class="intro-text">This page documents our automated vulnerability management workflow. Both Microsoft Defender Vulnerability Management (MDVM, formerly TVM) and Qualys now provide EPSS scores, CISA KEV status, and exposure metrics natively. Our automation adds an <strong>additional layer</strong> — unifying data from both platforms, adding CMDB business context, and implementing custom risk prioritization beyond what either tool provides out of the box.</p>
         </div>
 
-        <!-- ==================== SECTION 1: THE PROBLEM ==================== -->
-        <h2>1. The Problem: Multiple Consoles, No Unified View</h2>
+        <!-- ==================== WHAT TOOLS PROVIDE NATIVELY ==================== -->
+        <h2>1. What MDVM & Qualys Already Provide (Native Capabilities)</h2>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Both Platforms Now Include Exploit Intelligence</div>
+          <div class="callout-content">
+            <p><strong>Modern vulnerability scanners have evolved.</strong> Both MDVM and Qualys now provide EPSS, CISA KEV, and exposure scoring natively — you don't need custom automation just for basic exploit intelligence. Our automation adds value <em>beyond</em> these native capabilities.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Capability</th><th>Microsoft MDVM</th><th>Qualys VMDR</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>CVSS Score</strong></td>
+                <td>✅ Yes (v2, v3, v3.1)</td>
+                <td>✅ Yes (v2, v3, v3.1)</td>
+                <td>Standard severity rating</td>
+              </tr>
+              <tr>
+                <td><strong>EPSS Score</strong></td>
+                <td>✅ Yes (native)</td>
+                <td>✅ Yes (TruRisk includes EPSS)</td>
+                <td>Exploit prediction probability</td>
+              </tr>
+              <tr>
+                <td><strong>CISA KEV Status</strong></td>
+                <td>✅ Yes (native)</td>
+                <td>✅ Yes (Real-Time Threat Indicators)</td>
+                <td>Known exploited in the wild</td>
+              </tr>
+              <tr>
+                <td><strong>Exposure Score</strong></td>
+                <td>✅ Yes (0-100 per device + org-wide)</td>
+                <td>✅ Yes (TruRisk factor)</td>
+                <td>Attack surface context</td>
+              </tr>
+              <tr>
+                <td><strong>Exploitability</strong></td>
+                <td>✅ Yes (Verified/Likely/Unlikely)</td>
+                <td>✅ Yes (Exploit Code Maturity)</td>
+                <td>How likely to be exploited</td>
+              </tr>
+              <tr>
+                <td><strong>Threat Actor Context</strong></td>
+                <td>✅ Yes (linked to threat campaigns)</td>
+                <td>✅ Yes (Active Threats feed)</td>
+                <td>APT/ransomware associations</td>
+              </tr>
+              <tr>
+                <td><strong>Patch Availability</strong></td>
+                <td>✅ Yes</td>
+                <td>✅ Yes</td>
+                <td>Is a fix available?</td>
+              </tr>
+              <tr>
+                <td><strong>Security Recommendations</strong></td>
+                <td>✅ Yes (with remediation steps)</td>
+                <td>✅ Yes (with solutions)</td>
+                <td>Guidance for fixing</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>1.1 Microsoft Defender Vulnerability Management (MDVM)</h3>
+
+        <div class="enrichment-card">
+          <h4><span class="source-badge mde">MDVM</span> Native Risk Prioritization Features</h4>
+          <p><strong>MDVM (formerly TVM) now includes comprehensive threat intelligence:</strong></p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li><strong>Exposure Score:</strong> 0-100 score reflecting organizational attack surface based on vulnerabilities, misconfigurations, and security controls</li>
+            <li><strong>Device Exposure Level:</strong> Per-device risk scoring (Low/Medium/High)</li>
+            <li><strong>EPSS Integration:</strong> Native display of exploit prediction scores</li>
+            <li><strong>CISA KEV Tagging:</strong> Automatic flagging of known exploited vulnerabilities</li>
+            <li><strong>Exploitability:</strong> Verified (exploit exists), Likely (conditions favorable), Unlikely</li>
+            <li><strong>Threat Insights:</strong> Links CVEs to active threat campaigns and APT groups</li>
+            <li><strong>Security Recommendations:</strong> Prioritized remediation guidance with impact assessment</li>
+            <li><strong>Browser Extension Vulnerabilities:</strong> Detects vulnerable browser add-ons</li>
+            <li><strong>Certificate Issues:</strong> Identifies expiring or weak certificates</li>
+          </ul>
+          <p style="margin-top: 0.75rem;"><strong>API endpoint:</strong> <code>https://api.securitycenter.microsoft.com/api/vulnerabilities</code></p>
+          <p><strong>Key advantage:</strong> Correlates with MDE alerts — if a vulnerability is being actively exploited on a device, you see it immediately in the same console</p>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">MDVM API Response — Rich Native Data</span></div>
+          <pre><code>// Example MDVM vulnerability response
+{
+    "id": "CVE-2024-21351",
+    "name": "Windows SmartScreen Security Feature Bypass",
+    "severity": "High",
+    "cvssV3": 7.8,
+    "epssScore": 0.45,           // ← Native EPSS
+    "epssPercentile": 0.92,      // ← Top 8% most likely to be exploited
+    "isKnownExploited": true,    // ← Native KEV flag
+    "exploitabilityLevel": "ExploitIsVerified",
+    "exposedMachines": 847,
+    "organizationExposureLevel": "High",
+    "publicExploit": true,
+    "exploitTypes": ["Remote", "Local"],
+    "exploitUris": ["https://github.com/..."],
+    "threatInfo": {
+        "associatedThreats": ["Ransomware", "APT29"],
+        "lastSeenInWild": "2024-02-15"
+    },
+    "recommendedSecurityUpdate": "KB5034763",
+    "patchReleaseDate": "2024-02-13"
+}</code></pre>
+        </div>
+
+        <h3>1.2 Qualys VMDR (Vulnerability Management, Detection & Response)</h3>
+
+        <div class="enrichment-card">
+          <h4><span class="source-badge qualys">QUALYS</span> TruRisk & Real-Time Threat Indicators</h4>
+          <p><strong>Qualys VMDR includes similar intelligence capabilities:</strong></p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li><strong>TruRisk Score:</strong> Composite risk score factoring CVSS, exploit maturity, EPSS, and business context</li>
+            <li><strong>Real-Time Threat Indicators (RTI):</strong> Active exploitation, weaponized, malware, wormable, denial of service flags</li>
+            <li><strong>EPSS Integration:</strong> Exploit prediction scores displayed natively</li>
+            <li><strong>CISA KEV Status:</strong> Automatic tagging of known exploited vulnerabilities</li>
+            <li><strong>Exploit Code Maturity:</strong> Functional, POC, Unproven categories</li>
+            <li><strong>Ransomware Association:</strong> Links to known ransomware families</li>
+            <li><strong>Asset Criticality Tags:</strong> User-defined business criticality (though requires setup)</li>
+          </ul>
+          <p style="margin-top: 0.75rem;"><strong>API endpoint:</strong> <code>/api/2.0/fo/asset/host/vm/detection/</code></p>
+        </div>
+
+        <!-- ==================== SECTION 2: THE GAP ==================== -->
+        <h2>2. The Gap: Why We Still Built Automation</h2>
 
         <div class="callout warning">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>The Challenge</div>
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>What Native Tools DON'T Provide</div>
           <div class="callout-content">
-            <p>RevFlow had vulnerabilities scattered across <strong>two platforms</strong> — Qualys scanner and MDE TVM. Analysts had to switch between consoles, manually correlate findings, and make prioritization decisions without complete context. This was inefficient and error-prone.</p>
+            <p>Even with EPSS, KEV, and exposure scores built into both platforms, RevFlow still had operational challenges that required custom automation:</p>
           </div>
         </div>
 
-        <p>The operational challenges:</p>
-        <ul>
-          <li><strong>Console switching:</strong> Analysts juggling Qualys portal and Microsoft 365 Defender portal</li>
-          <li><strong>Manual correlation:</strong> Same CVE on same host reported differently in each tool</li>
-          <li><strong>No unified prioritization:</strong> Each tool has its own severity rating with no business context</li>
-          <li><strong>Missing exploit intelligence:</strong> Neither tool tells you if a CVE is actively exploited in the wild</li>
-          <li><strong>No asset context:</strong> Scanners don't know which servers are Tier 1 production vs. test environments</li>
-        </ul>
-
-        <p><strong>Our solution:</strong> Build a single pane of glass — an automated pipeline that aggregates, enriches, and prioritizes vulnerabilities from all sources.</p>
-
-        <!-- ==================== SECTION 2: ARCHITECTURE ==================== -->
-        <h2>2. Solution Architecture — Single Pane of Glass</h2>
-
-        <div class="flow-diagram">
-          <pre><code>VULNERABILITY MANAGEMENT AUTOMATION — DEPLOYMENT ARCHITECTURE
-════════════════════════════════════════════════════════════════════════════════
-
-                    ┌─────────────────────────────────────────┐
-                    │         AZURE FUNCTION                   │
-                    │         (Timer Trigger - Daily)          │
-                    │         Python runtime                   │
-                    └─────────────────┬───────────────────────┘
-                                      │
-              ┌───────────────────────┼───────────────────────┐
-              │                       │                       │
-              ▼                       ▼                       ▼
-┌─────────────────────┐ ┌─────────────────────┐ ┌─────────────────────┐
-│   QUALYS API        │ │   MDE TVM API       │ │   ENRICHMENT APIs   │
-│   Vulnerability     │ │   Microsoft 365     │ │   • FIRST.org EPSS  │
-│   Detections        │ │   Defender          │ │   • CISA KEV JSON   │
-└─────────────────────┘ └─────────────────────┘ │   • ServiceNow CMDB │
-              │                       │         └─────────────────────┘
-              │                       │                       │
-              └───────────────────────┼───────────────────────┘
-                                      │
-                                      ▼
-                    ┌─────────────────────────────────────────┐
-                    │   AZURE FUNCTION PROCESSING              │
-                    │   1. Aggregate vulnerabilities           │
-                    │   2. Deduplicate by CVE + Host           │
-                    │   3. Enrich with EPSS, KEV, CMDB         │
-                    │   4. Calculate risk score                │
-                    │   5. Assign priority                     │
-                    └─────────────────┬───────────────────────┘
-                                      │
-              ┌───────────────────────┼───────────────────────┐
-              │                       │                       │
-              ▼                       ▼                       ▼
-┌─────────────────────┐ ┌─────────────────────┐ ┌─────────────────────┐
-│  LOG ANALYTICS      │ │  SERVICENOW         │ │  EMAIL/TEAMS        │
-│  Custom Table:      │ │  Auto-create ticket │ │  Notify asset       │
-│  VulnInventory_CL   │ │  for Critical/High  │ │  owners             │
-└─────────────────────┘ └─────────────────────┘ └─────────────────────┘
-              │
-              ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  MICROSOFT SENTINEL                                                          │
-│  • Workbook dashboard (single pane of glass)                                 │
-│  • Analytics rules for new Critical findings                                 │
-│  • Integration with incident management                                      │
-└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Challenge</th><th>What Native Tools Miss</th><th>Our Automation Solution</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Two Consoles</strong></td>
+                <td>MDVM sees endpoints; Qualys sees network assets. Analysts switch between portals.</td>
+                <td>Single Sentinel workbook with unified view</td>
+              </tr>
+              <tr>
+                <td><strong>Duplicate Findings</strong></td>
+                <td>Same CVE on same host appears in both tools with different scores</td>
+                <td>Deduplication by CVE + hostname</td>
+              </tr>
+              <tr>
+                <td><strong>CMDB Context</strong></td>
+                <td>Native tools don't know Tier 1 vs Tier 3 or business owner</td>
+                <td>ServiceNow CMDB enrichment</td>
+              </tr>
+              <tr>
+                <td><strong>Custom Prioritization</strong></td>
+                <td>Native scoring doesn't weight by RevFlow's specific risk appetite</td>
+                <td>Custom risk score formula</td>
+              </tr>
+              <tr>
+                <td><strong>Auto-Ticketing</strong></td>
+                <td>Manual ticket creation for each finding</td>
+                <td>Auto-create ServiceNow incidents for Critical/High</td>
+              </tr>
+              <tr>
+                <td><strong>SLA Tracking</strong></td>
+                <td>No unified view of remediation SLA compliance</td>
+                <td>Custom tracking in Sentinel workbook</td>
+              </tr>
+              <tr>
+                <td><strong>Historical Trending</strong></td>
+                <td>Native dashboards show point-in-time, not trends</td>
+                <td>Log Analytics retention enables trend analysis</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <h3>2.1 Deployment Options</h3>
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Interview Talking Point</div>
+          <div class="callout-content">
+            <p><em>"MDVM and Qualys both provide EPSS and KEV data natively now — that's table stakes. Our automation adds value on top: unifying data from both scanners, enriching with CMDB business context, applying custom risk scoring aligned to our risk appetite, and auto-creating tickets. The native tools tell you WHAT's vulnerable; our automation tells you what to fix FIRST based on business impact."</em></p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 3: ARCHITECTURE ==================== -->
+        <h2>3. Solution Architecture — Unified Dashboard + Custom Prioritization</h2>
+
+        <p><strong>Key principle:</strong> We're not replacing native EPSS/KEV capabilities — we're building an aggregation and enrichment layer on top that unifies multiple scanners with business context.</p>
+
+        <div class="flow-diagram">
+          <pre><code>VULNERABILITY MANAGEMENT AUTOMATION — AGGREGATION & ENRICHMENT LAYER
+════════════════════════════════════════════════════════════════════════════════
+
+NATIVE CAPABILITIES (Already in Tools):
+┌─────────────────────────────┐     ┌─────────────────────────────┐
+│   QUALYS VMDR               │     │   MICROSOFT MDVM            │
+│   ✓ CVSS, EPSS, KEV         │     │   ✓ CVSS, EPSS, KEV         │
+│   ✓ TruRisk Score           │     │   ✓ Exposure Score          │
+│   ✓ Exploit Maturity        │     │   ✓ Exploitability Level    │
+│   ✓ Network/Agent Scanning  │     │   ✓ Threat Insights         │
+└──────────────┬──────────────┘     └──────────────┬──────────────┘
+               │                                    │
+               │     OUR AUTOMATION ADDS:           │
+               │                                    │
+               └────────────────┬───────────────────┘
+                                │
+                    ┌───────────▼───────────┐
+                    │   AZURE FUNCTION      │
+                    │   (Daily Aggregation) │
+                    └───────────┬───────────┘
+                                │
+         ┌──────────────────────┼──────────────────────┐
+         │                      │                      │
+         ▼                      ▼                      ▼
+┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+│  DEDUPLICATION  │  │  CMDB ENRICHMENT│  │  CUSTOM SCORING │
+│  CVE + Hostname │  │  Tier 1/2/3     │  │  RevFlow Risk   │
+│  across tools   │  │  Business Owner │  │  Appetite       │
+└─────────────────┘  │  Environment    │  │  Aligned        │
+                     └─────────────────┘  └─────────────────┘
+                                │
+                    ┌───────────▼───────────┐
+                    │   UNIFIED OUTPUTS     │
+                    └───────────┬───────────┘
+                                │
+         ┌──────────────────────┼──────────────────────┐
+         │                      │                      │
+         ▼                      ▼                      ▼
+┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+│  SENTINEL       │  │  SERVICENOW     │  │  EMAIL/TEAMS    │
+│  Workbook       │  │  Auto-Tickets   │  │  Notifications  │
+│  (Single View)  │  │  (Crit/High)    │  │  (Asset Owners) │
+└─────────────────┘  └─────────────────┘  └─────────────────┘
+
+VALUE PROPOSITION:
+═══════════════════════════════════════════════════════════════════════════════
+│ Native Tools Provide:          │ Our Automation Adds:                       │
+│ • EPSS scores                  │ • Unified view across Qualys + MDVM        │
+│ • CISA KEV status              │ • CMDB business context (Tier 1/2/3)       │
+│ • Exposure scoring             │ • Custom risk formula for our environment  │
+│ • Exploit intelligence         │ • Automatic ticket creation                │
+│ • Per-tool dashboards          │ • Single Sentinel workbook                 │
+│                                │ • Historical trending in Log Analytics     │
+│                                │ • Owner notifications                      │
+═══════════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <h3>3.1 Deployment Options</h3>
 
         <div class="table-wrapper">
           <table>
@@ -286,246 +468,799 @@
           </div>
         </div>
 
-        <h3>2.2 Data Flow Summary</h3>
+        <h3>3.2 Data Flow Summary</h3>
 
         <div class="flow-diagram">
-          <pre><code>DATA FLOW — FROM SCANNERS TO SINGLE DASHBOARD
+          <pre><code>DATA FLOW — FROM SCANNERS TO UNIFIED DASHBOARD
 ════════════════════════════════════════════════════════════════════════════════
 
 BEFORE (Manual):
-┌──────────┐     ┌──────────┐
-│  Qualys  │     │  MDE     │     Analyst switches between 2 consoles
-│  Portal  │ ←→  │  Portal  │     Manual correlation, inconsistent priority
-└──────────┘     └──────────┘
+┌──────────────────────┐     ┌──────────────────────┐
+│  Qualys Portal       │     │  M365 Defender       │
+│  (has EPSS, KEV)     │ ←→  │  (has EPSS, KEV)     │     ← 2 consoles
+│  but no CMDB context │     │  but no CMDB context │
+└──────────────────────┘     └──────────────────────┘
 
 AFTER (Automated):
-┌──────────┐     ┌──────────┐     ┌──────────┐     ┌──────────┐
-│  Qualys  │────▶│  Azure   │────▶│  Log     │────▶│ Sentinel │
-│  API     │     │ Function │     │Analytics │     │ Workbook │
-└──────────┘     │          │     │          │     │          │
-┌──────────┐     │ Enrich:  │     │ Custom   │     │ Single   │
-│  MDE     │────▶│ +EPSS    │     │ Table    │     │ Pane of  │
-│  API     │     │ +KEV     │     │          │     │ Glass    │
-└──────────┘     │ +CMDB    │     └──────────┘     └──────────┘
-                 │ +Score   │            │
-                 └────┬─────┘            │
-                      │                  ▼
-                      │         ┌──────────────────┐
-                      └────────▶│  ServiceNow      │
-                                │  Auto-Tickets    │
-                                └──────────────────┘</code></pre>
+┌──────────────────────┐     ┌──────────────────────┐
+│  Qualys API          │     │  MDVM API            │
+│  • CVE, CVSS         │     │  • CVE, CVSS         │
+│  • EPSS (native)     │     │  • EPSS (native)     │
+│  • KEV (native)      │     │  • KEV (native)      │
+│  • Exploitability    │     │  • Exposure Score    │
+└──────────┬───────────┘     └──────────┬───────────┘
+           │                            │
+           └────────────┬───────────────┘
+                        ▼
+            ┌───────────────────────┐
+            │   AZURE FUNCTION      │
+            │   • Deduplicate       │
+            │   • Add CMDB context  │  ← THIS IS THE VALUE-ADD
+            │   • Custom scoring    │
+            │   • Auto-ticketing    │
+            └───────────┬───────────┘
+                        │
+         ┌──────────────┼──────────────┐
+         ▼              ▼              ▼
+┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+│  SENTINEL   │  │  SERVICENOW │  │  TEAMS      │
+│  Workbook   │  │  Tickets    │  │  Alerts     │
+│  (unified)  │  │  (Crit/High)│  │  (owners)   │
+└─────────────┘  └─────────────┘  └─────────────┘</code></pre>
         </div>
 
-        <!-- ==================== SECTION 3: ENRICHMENT SOURCES ==================== -->
-        <h2>3. Enrichment Sources Deep Dive</h2>
+        <!-- ==================== SECTION 4: ENRICHMENT SOURCES ==================== -->
+        <h2>4. CMDB Enrichment (The Key Value-Add)</h2>
 
-        <div class="enrichment-card">
-          <h4><span class="source-badge qualys">QUALYS</span> Qualys Vulnerability Scanner</h4>
-          <p><strong>What it provides:</strong> Network-based and agent-based vulnerability scanning</p>
-          <p><strong>Key data:</strong></p>
-          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-            <li>CVE ID, QID (Qualys ID)</li>
-            <li>CVSS score (v2, v3)</li>
-            <li>Affected host, IP, OS</li>
-            <li>Detection date, last seen</li>
-            <li>Port, service, protocol</li>
-            <li>Patch availability</li>
-          </ul>
-          <p><strong>API endpoint:</strong> <code>/api/2.0/fo/asset/host/vm/detection/</code></p>
-        </div>
-
-        <div class="enrichment-card">
-          <h4><span class="source-badge mde">MDE TVM</span> Microsoft Defender Threat & Vulnerability Management</h4>
-          <p><strong>What it provides:</strong> Agent-based vulnerability assessment integrated with EDR</p>
-          <p><strong>Key data:</strong></p>
-          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-            <li>CVE ID, software name/version</li>
-            <li>Severity (Critical/High/Medium/Low)</li>
-            <li>Exposure score (0-100)</li>
-            <li>Exploitability (verified, likely, unlikely)</li>
-            <li>Security recommendations</li>
-            <li>Device exposure level</li>
-          </ul>
-          <p><strong>API endpoint:</strong> <code>https://api.securitycenter.microsoft.com/api/vulnerabilities</code></p>
-          <p><strong>Advantage:</strong> Correlates with MDE alerts — if a vulnerability is being actively exploited on a device, we see it</p>
-        </div>
-
-        <div class="enrichment-card">
-          <h4><span class="source-badge epss">EPSS</span> Exploit Prediction Scoring System (FIRST.org)</h4>
-          <p><strong>What it provides:</strong> Probability that a vulnerability will be exploited in the wild within 30 days</p>
-          <p><strong>Key data:</strong></p>
-          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-            <li>EPSS score (0.0 - 1.0)</li>
-            <li>Percentile ranking</li>
-            <li>Updated daily</li>
-          </ul>
-          <p><strong>API endpoint:</strong> <code>https://api.first.org/data/v1/epss?cve=CVE-XXXX-XXXX</code></p>
-          <p><strong>Why it matters:</strong></p>
-          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-            <li>EPSS > 0.1 (10%): Elevated risk</li>
-            <li>EPSS > 0.4 (40%): High exploitation likelihood</li>
-            <li>EPSS > 0.7 (70%): Very likely to be exploited</li>
-          </ul>
-          <p><strong>Example:</strong> CVE-2023-23397 (Outlook privilege escalation) had EPSS of 0.97 — almost certain exploitation</p>
-        </div>
-
-        <div class="enrichment-card">
-          <h4><span class="source-badge kev">CISA KEV</span> Known Exploited Vulnerabilities Catalog</h4>
-          <p><strong>What it provides:</strong> Authoritative list of CVEs actively exploited in the wild</p>
-          <p><strong>Key data:</strong></p>
-          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-            <li>CVE ID</li>
-            <li>Vendor, product</li>
-            <li>Vulnerability name</li>
-            <li>Date added to KEV</li>
-            <li>Due date for federal agencies</li>
-            <li>Required action</li>
-          </ul>
-          <p><strong>API endpoint:</strong> <code>https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json</code></p>
-          <p><strong>Policy implication:</strong> Federal agencies MUST patch KEV vulnerabilities within specified timeframe. Many enterprises adopt KEV as mandatory patch list.</p>
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Business Context is What Native Tools Lack</div>
+          <div class="callout-content">
+            <p><strong>EPSS and KEV are built into MDVM and Qualys.</strong> What neither tool knows is which assets matter most to YOUR business. A CVSS 9.8 on a test VM doesn't matter as much as a CVSS 7.5 on a Tier 1 production server handling customer payments. CMDB provides that context.</p>
+          </div>
         </div>
 
         <div class="enrichment-card">
           <h4><span class="source-badge cmdb">CMDB</span> Configuration Management Database (ServiceNow)</h4>
-          <p><strong>What it provides:</strong> Asset context and business metadata</p>
+          <p><strong>What it provides:</strong> Asset context and business metadata that scanners don't have</p>
           <p><strong>Key data:</strong></p>
           <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-            <li>Asset name, IP, hostname</li>
-            <li>Business criticality (Tier 1 = mission-critical, Tier 2 = important, Tier 3 = standard)</li>
-            <li>Environment (Production, Staging, Development, Test)</li>
-            <li>Exposure (Internet-facing, Internal, DMZ)</li>
-            <li>Owner (department, contact email)</li>
-            <li>Support group</li>
-            <li>EOL/EOS status</li>
+            <li><strong>Business Criticality:</strong> Tier 1 = mission-critical (revenue, customer data), Tier 2 = important (internal systems), Tier 3 = standard (workstations, test systems)</li>
+            <li><strong>Environment:</strong> Production, Staging, Development, Test</li>
+            <li><strong>Exposure:</strong> Internet-facing, DMZ, Internal-only</li>
+            <li><strong>Owner:</strong> Department, support group, contact email</li>
+            <li><strong>Data Classification:</strong> Confidential, Internal, Public</li>
+            <li><strong>Compliance Scope:</strong> SOC 2, PCI, HIPAA, GDPR systems</li>
+            <li><strong>EOL/EOS Status:</strong> End-of-life systems needing replacement</li>
           </ul>
-          <p><strong>Why it matters:</strong> A critical vulnerability on a Tier 1 production server needs immediate attention. The same vulnerability on a Tier 3 test server can wait.</p>
+          <p style="margin-top: 0.75rem;"><strong>Why it matters:</strong> A critical vulnerability on a Tier 1 internet-facing production server needs immediate attention. The same vulnerability on a Tier 3 internal test server can wait.</p>
         </div>
 
-        <!-- ==================== SECTION 4: RISK SCORING MODEL ==================== -->
-        <h2>4. Risk Scoring Model</h2>
-
-        <p>We calculate a composite risk score that determines prioritization:</p>
+        <h3>4.1 Correlation Logic</h3>
 
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">Risk Score Calculation</span></div>
-          <pre><code># RevFlow Risk Score Formula
-# ═══════════════════════════════════════════════════════════════════════════════
-
-BASE_SCORE = CVSS_Score  # 0-10
-
-# Exploitation likelihood multiplier
-if CVE in CISA_KEV:
-    EXPLOIT_MULTIPLIER = 2.0     # Confirmed active exploitation
-elif EPSS > 0.7:
-    EXPLOIT_MULTIPLIER = 1.8     # Very high exploitation probability
-elif EPSS > 0.4:
-    EXPLOIT_MULTIPLIER = 1.5     # High exploitation probability
-elif EPSS > 0.1:
-    EXPLOIT_MULTIPLIER = 1.2     # Elevated exploitation probability
-else:
-    EXPLOIT_MULTIPLIER = 1.0     # Standard
-
-# Asset criticality multiplier
-if Asset_Tier == "Tier 1":
-    ASSET_MULTIPLIER = 2.0       # Mission-critical systems
-elif Asset_Tier == "Tier 2":
-    ASSET_MULTIPLIER = 1.5       # Important systems
-else:
-    ASSET_MULTIPLIER = 1.0       # Standard systems
-
-# Exposure multiplier
-if Exposure == "Internet-facing":
-    EXPOSURE_MULTIPLIER = 2.0    # Directly exposed to attackers
-elif Exposure == "DMZ":
-    EXPOSURE_MULTIPLIER = 1.5    # Partially exposed
-else:
-    EXPOSURE_MULTIPLIER = 1.0    # Internal only
-
-# Environment multiplier
-if Environment == "Production":
-    ENV_MULTIPLIER = 1.5
-elif Environment == "Staging":
-    ENV_MULTIPLIER = 1.2
-else:
-    ENV_MULTIPLIER = 1.0         # Dev/Test
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# FINAL RISK SCORE
-# ═══════════════════════════════════════════════════════════════════════════════
-RISK_SCORE = BASE_SCORE × EXPLOIT_MULTIPLIER × ASSET_MULTIPLIER 
-             × EXPOSURE_MULTIPLIER × ENV_MULTIPLIER
-
-# Priority assignment
-if RISK_SCORE >= 50 or CVE in CISA_KEV:
-    PRIORITY = "CRITICAL"    # Remediate within 24-48 hours
-elif RISK_SCORE >= 30:
-    PRIORITY = "HIGH"        # Remediate within 7 days
-elif RISK_SCORE >= 15:
-    PRIORITY = "MEDIUM"      # Remediate within 30 days
-else:
-    PRIORITY = "LOW"         # Remediate within 90 days or accept risk</code></pre>
+          <div class="code-header"><span class="code-lang">CMDB Lookup & Correlation</span></div>
+          <pre><code># CMDB enrichment function
+def enrich_with_cmdb(vulnerabilities: list) -> list:
+    """
+    Enrich vulnerabilities with business context from ServiceNow CMDB
+    Matches by hostname → FQDN → IP address
+    """
+    for vuln in vulnerabilities:
+        # Try hostname first, then FQDN, then IP
+        asset = None
+        if vuln.get('hostname'):
+            asset = cmdb_lookup(hostname=vuln['hostname'])
+        if not asset and vuln.get('fqdn'):
+            asset = cmdb_lookup(fqdn=vuln['fqdn'])
+        if not asset and vuln.get('ip_address'):
+            asset = cmdb_lookup(ip=vuln['ip_address'])
+        
+        if asset:
+            vuln['asset_tier'] = asset.get('u_business_criticality', 'Tier 3')
+            vuln['environment'] = asset.get('u_environment', 'Unknown')
+            vuln['exposure'] = asset.get('u_network_zone', 'Internal')
+            vuln['owner_email'] = asset.get('owned_by.email', '')
+            vuln['support_group'] = asset.get('support_group.name', '')
+            vuln['data_class'] = asset.get('u_data_classification', 'Internal')
+            vuln['compliance_scope'] = asset.get('u_compliance_tags', [])
+        else:
+            # Unknown assets default to medium risk (investigate)
+            vuln['asset_tier'] = 'Unknown'
+            vuln['environment'] = 'Unknown'
+            vuln['exposure'] = 'Unknown'
+    
+    return vulnerabilities</code></pre>
         </div>
 
-        <h3>4.1 Risk Score Examples</h3>
+        <h3>4.2 EPSS & KEV: Native but Passed Through</h3>
+
+        <p>Our automation still references EPSS and KEV scores, but now we pull them from the native scanner responses rather than making separate API calls:</p>
 
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>CVE</th><th>CVSS</th><th>EPSS</th><th>KEV</th><th>Asset</th><th>Exposure</th><th>Env</th><th>Risk Score</th><th>Priority</th></tr>
+              <tr><th>Data</th><th>MDVM Source</th><th>Qualys Source</th><th>Fallback</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>CVE-2023-23397</td>
+                <td><strong>EPSS Score</strong></td>
+                <td><code>epssScore</code> field</td>
+                <td>TruRisk EPSS component</td>
+                <td>FIRST.org API (if missing)</td>
+              </tr>
+              <tr>
+                <td><strong>KEV Status</strong></td>
+                <td><code>isKnownExploited</code></td>
+                <td>RTI "Active Exploitation" flag</td>
+                <td>CISA KEV JSON (if missing)</td>
+              </tr>
+              <tr>
+                <td><strong>Exploitability</strong></td>
+                <td><code>exploitabilityLevel</code></td>
+                <td>Exploit Code Maturity</td>
+                <td>N/A</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Why Keep EPSS/KEV API Fallback?</div>
+          <div class="callout-content">
+            <p>Some older Qualys scans may not include EPSS. Some assets may only be scanned by network-based Qualys (no agent) and lack MDVM data. The FIRST.org EPSS API and CISA KEV JSON provide a safety net for these edge cases.</p>
+          </div>
+        </div>
+
+        <h3>4.3 Decision Framework: When to Build Custom Automation</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Scenario</th><th>Use Native Tools</th><th>Build Custom Automation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Single scanner environment</strong></td>
+                <td>✅ Native MDVM or Qualys dashboard</td>
+                <td>❌ Not needed</td>
+              </tr>
+              <tr>
+                <td><strong>Multi-scanner environment</strong></td>
+                <td>❌ Console switching, duplicates</td>
+                <td>✅ Unified view + deduplication</td>
+              </tr>
+              <tr>
+                <td><strong>No CMDB / asset inventory</strong></td>
+                <td>✅ Native exposure scores are enough</td>
+                <td>❌ Can't enrich without data</td>
+              </tr>
+              <tr>
+                <td><strong>Mature CMDB with business criticality</strong></td>
+                <td>❌ Native tools don't know Tier 1/2/3</td>
+                <td>✅ CMDB-aware prioritization</td>
+              </tr>
+              <tr>
+                <td><strong>Manual ticketing acceptable</strong></td>
+                <td>✅ Create tickets from portal</td>
+                <td>❌ Overkill</td>
+              </tr>
+              <tr>
+                <td><strong>High volume, auto-ticketing needed</strong></td>
+                <td>❌ Too many manual clicks</td>
+                <td>✅ Auto-create with SLA assignment</td>
+              </tr>
+              <tr>
+                <td><strong>SOC uses Sentinel for everything</strong></td>
+                <td>❌ Another console to monitor</td>
+                <td>✅ Vuln data in same workbook as alerts</td>
+              </tr>
+              <tr>
+                <td><strong>Compliance requires trend reporting</strong></td>
+                <td>❌ Point-in-time views only</td>
+                <td>✅ Log Analytics retention for historical</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Don't Over-Engineer</div>
+          <div class="callout-content">
+            <p><strong>If you only use MDVM</strong> and your asset inventory is basic, the native MDVM dashboard with its built-in EPSS, KEV, and exposure scoring is probably sufficient. Custom automation adds complexity that must be maintained.</p>
+            <p style="margin-top: 0.5rem;"><strong>We built this because:</strong> RevFlow has both Qualys (network scanning) and MDVM (agent-based), a mature ServiceNow CMDB, SOC lives in Sentinel, and we need auto-ticketing for Critical/High at scale.</p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 5: RISK SCORING MODEL ==================== -->
+        <h2>5. Custom Risk Scoring Model</h2>
+
+        <p>We combine multiple scoring inputs — CVSS, tool-native scores (MDVM Exposure Score, Qualys TruRisk), and CMDB context — into a unified risk score:</p>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Why Not Just Use CVSS?</div>
+          <div class="callout-content">
+            <p><strong>CVSS alone is insufficient.</strong> A CVSS 9.8 on a test VM matters less than a CVSS 7.0 on a Tier 1 payment server. We combine three layers:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>CVSS:</strong> Technical severity (0-10)</li>
+              <li><strong>Tool Scores:</strong> MDVM Exposure Score (0-100) or Qualys TruRisk — these already factor in EPSS, KEV, exploitability</li>
+              <li><strong>CMDB Context:</strong> Business criticality, environment, network exposure</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>5.1 Input Scores from Each Tool</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Score</th><th>Source</th><th>Range</th><th>What It Includes</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>CVSS</strong></td>
+                <td>Both tools</td>
+                <td>0-10</td>
+                <td>Technical severity only (attack vector, complexity, impact)</td>
+              </tr>
+              <tr>
+                <td><strong>MDVM Exposure Score</strong></td>
+                <td>Microsoft MDVM</td>
+                <td>0-100</td>
+                <td>CVSS + EPSS + KEV + exploitability + device exposure + threat insights</td>
+              </tr>
+              <tr>
+                <td><strong>Qualys TruRisk</strong></td>
+                <td>Qualys VMDR</td>
+                <td>0-1000</td>
+                <td>CVSS + EPSS + exploit maturity + RTI (ransomware, active exploitation) + asset criticality tags</td>
+              </tr>
+              <tr>
+                <td><strong>EPSS</strong></td>
+                <td>Both (native)</td>
+                <td>0.0-1.0</td>
+                <td>Probability of exploitation in 30 days</td>
+              </tr>
+              <tr>
+                <td><strong>KEV Status</strong></td>
+                <td>Both (native)</td>
+                <td>Yes/No</td>
+                <td>Confirmed active exploitation in the wild</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>5.2 Unified Risk Score Formula</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">RevFlow Unified Risk Score Calculation</span></div>
+          <pre><code># RevFlow Risk Score Formula — Combining CVSS + Tool Scores + CMDB Context
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def calculate_risk_score(vuln: dict) -> float:
+    """
+    Combines:
+    - CVSS (technical severity)
+    - Tool-native score (MDVM Exposure or Qualys TruRisk)
+    - CMDB business context
+    """
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # STEP 1: Get base technical score (CVSS)
+    # ─────────────────────────────────────────────────────────────────────────
+    cvss = vuln.get('cvss_v3', vuln.get('cvss_v2', 5.0))  # 0-10
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # STEP 2: Get tool-native score (already includes EPSS, KEV, exploitability)
+    # ─────────────────────────────────────────────────────────────────────────
+    if vuln.get('source') == 'MDVM':
+        # MDVM Exposure Score: 0-100, normalize to 0-10
+        tool_score = vuln.get('mdvm_exposure_score', 50) / 10
+    elif vuln.get('source') == 'Qualys':
+        # Qualys TruRisk: 0-1000, normalize to 0-10
+        tool_score = vuln.get('qualys_trurisk', 500) / 100
+    else:
+        # Fallback: calculate from EPSS + KEV
+        tool_score = calculate_epss_kev_score(vuln)
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # STEP 3: Blend CVSS + Tool Score (weighted average)
+    # ─────────────────────────────────────────────────────────────────────────
+    # Tool score carries more weight because it includes threat intel
+    TECHNICAL_SCORE = (cvss * 0.4) + (tool_score * 0.6)  # 0-10
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # STEP 4: Apply CMDB multipliers (what tools DON'T know)
+    # ─────────────────────────────────────────────────────────────────────────
+    
+    # Asset criticality from CMDB
+    tier = vuln.get('asset_tier', 'Tier 3')
+    ASSET_MULTIPLIER = {'Tier 1': 2.0, 'Tier 2': 1.5, 'Tier 3': 1.0}.get(tier, 1.0)
+    
+    # Network exposure from CMDB
+    exposure = vuln.get('network_exposure', 'Internal')
+    EXPOSURE_MULTIPLIER = {
+        'Internet-facing': 2.0,
+        'DMZ': 1.5,
+        'Internal': 1.0
+    }.get(exposure, 1.0)
+    
+    # Environment from CMDB
+    env = vuln.get('environment', 'Development')
+    ENV_MULTIPLIER = {
+        'Production': 1.5,
+        'Staging': 1.2,
+        'Development': 1.0,
+        'Test': 0.8
+    }.get(env, 1.0)
+    
+    # Compliance scope boost
+    compliance = vuln.get('compliance_scope', [])
+    COMPLIANCE_MULTIPLIER = 1.3 if ('PCI' in compliance or 'SOC2' in compliance) else 1.0
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # STEP 5: Calculate final score
+    # ─────────────────────────────────────────────────────────────────────────
+    RISK_SCORE = (TECHNICAL_SCORE 
+                  * ASSET_MULTIPLIER 
+                  * EXPOSURE_MULTIPLIER 
+                  * ENV_MULTIPLIER 
+                  * COMPLIANCE_MULTIPLIER)
+    
+    return round(RISK_SCORE, 1)
+
+
+def calculate_epss_kev_score(vuln: dict) -> float:
+    """Fallback if tool score is missing"""
+    base = vuln.get('cvss_v3', 5.0)
+    epss = vuln.get('epss', 0.0)
+    kev = vuln.get('is_kev', False)
+    
+    if kev:
+        return min(base * 2.0, 10.0)
+    elif epss > 0.7:
+        return min(base * 1.8, 10.0)
+    elif epss > 0.4:
+        return min(base * 1.5, 10.0)
+    elif epss > 0.1:
+        return min(base * 1.2, 10.0)
+    return base
+
+
+def assign_priority(risk_score: float, is_kev: bool) -> str:
+    """Assign priority based on risk score"""
+    if risk_score >= 50 or is_kev:
+        return "CRITICAL"    # Remediate within 24-48 hours
+    elif risk_score >= 30:
+        return "HIGH"        # Remediate within 7 days
+    elif risk_score >= 15:
+        return "MEDIUM"      # Remediate within 30 days
+    else:
+        return "LOW"         # Remediate within 90 days or accept risk</code></pre>
+        </div>
+
+        <h3>5.3 Risk Score Examples (With Tool Scores)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>CVE</th>
+                <th>CVSS</th>
+                <th>MDVM Exp.</th>
+                <th>Qualys TruRisk</th>
+                <th>EPSS</th>
+                <th>KEV</th>
+                <th>Tier</th>
+                <th>Exposure</th>
+                <th>Env</th>
+                <th>Risk Score</th>
+                <th>Priority</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>CVE-2023-23397</code></td>
                 <td>9.8</td>
+                <td>95</td>
+                <td>920</td>
                 <td>0.97</td>
-                <td>✅ Yes</td>
+                <td>✅</td>
                 <td>Tier 1</td>
                 <td>Internet</td>
                 <td>Prod</td>
-                <td><strong>117.6</strong></td>
+                <td><strong>85.5</strong></td>
                 <td><span class="priority-badge critical">CRITICAL</span></td>
               </tr>
               <tr>
-                <td>CVE-2024-21351</td>
+                <td><code>CVE-2024-21351</code></td>
                 <td>7.8</td>
+                <td>72</td>
+                <td>650</td>
                 <td>0.45</td>
-                <td>❌ No</td>
+                <td>✅</td>
                 <td>Tier 2</td>
                 <td>Internet</td>
                 <td>Prod</td>
-                <td><strong>52.7</strong></td>
+                <td><strong>58.3</strong></td>
                 <td><span class="priority-badge critical">CRITICAL</span></td>
               </tr>
               <tr>
-                <td>CVE-2024-12345</td>
+                <td><code>CVE-2024-38063</code></td>
+                <td>9.8</td>
+                <td>85</td>
+                <td>780</td>
+                <td>0.82</td>
+                <td>❌</td>
+                <td>Tier 1</td>
+                <td>DMZ</td>
+                <td>Prod</td>
+                <td><strong>51.2</strong></td>
+                <td><span class="priority-badge critical">CRITICAL</span></td>
+              </tr>
+              <tr>
+                <td><code>CVE-2024-12345</code></td>
                 <td>7.5</td>
+                <td>45</td>
+                <td>380</td>
                 <td>0.08</td>
-                <td>❌ No</td>
+                <td>❌</td>
                 <td>Tier 1</td>
                 <td>Internal</td>
                 <td>Prod</td>
-                <td><strong>22.5</strong></td>
+                <td><strong>18.9</strong></td>
                 <td><span class="priority-badge medium">MEDIUM</span></td>
               </tr>
               <tr>
-                <td>CVE-2024-99999</td>
+                <td><code>CVE-2024-99999</code></td>
                 <td>9.0</td>
+                <td>55</td>
+                <td>420</td>
                 <td>0.02</td>
-                <td>❌ No</td>
+                <td>❌</td>
                 <td>Tier 3</td>
                 <td>Internal</td>
                 <td>Dev</td>
-                <td><strong>9.0</strong></td>
+                <td><strong>5.2</strong></td>
                 <td><span class="priority-badge low">LOW</span></td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <!-- ==================== SECTION 5: IMPLEMENTATION ==================== -->
-        <h2>5. Implementation — Azure Function Deployment</h2>
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Key Insight</div>
+          <div class="callout-content">
+            <p><strong>Notice CVE-2024-99999:</strong> CVSS 9.0 (Critical by CVSS alone) but our Risk Score is only 5.2 (LOW priority). Why? It's on a Tier 3 internal development box with low EPSS (0.02) and no KEV. The business context matters.</p>
+          </div>
+        </div>
 
-        <h3>5.1 Azure Function Structure</h3>
+        <!-- ==================== OUTPUT TABLE: WHAT SOC SEES ==================== -->
+        <h3>5.4 Output Table: What SOC Analysts See</h3>
+
+        <p>After aggregation, enrichment, and scoring, this is the actual data that lands in the Sentinel workbook and ServiceNow tickets:</p>
+
+        <div class="flow-diagram">
+          <pre><code>UNIFIED VULNERABILITY INVENTORY — SOC WORKQUEUE VIEW
+════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+┌────────────────┬───────────┬────────────────────────────────────┬───────┬────────┬───────┬──────────┬────────────┬─────────┬───────────────┬───────────┬────────────────────────────┐
+│ CVE            │ PRIORITY  │ AFFECTED HOST                      │ CVSS  │ MDVM   │ EPSS  │ KEV      │ ASSET TIER │ NETWORK │ ENVIRONMENT   │ RISK      │ OWNER                      │
+│                │           │                                    │       │ SCORE  │       │          │            │         │               │ SCORE     │                            │
+├────────────────┼───────────┼────────────────────────────────────┼───────┼────────┼───────┼──────────┼────────────┼─────────┼───────────────┼───────────┼────────────────────────────┤
+│ CVE-2023-23397 │ CRITICAL  │ PROD-EXCH-01.revflow.local         │ 9.8   │ 95     │ 0.97  │ ✅ Yes   │ Tier 1     │ Internet│ Production    │ 85.5      │ messaging-team@revflow.com │
+│ CVE-2024-21351 │ CRITICAL  │ PROD-WEB-03.revflow.local          │ 7.8   │ 72     │ 0.45  │ ✅ Yes   │ Tier 2     │ Internet│ Production    │ 58.3      │ webops@revflow.com         │
+│ CVE-2024-38063 │ CRITICAL  │ PROD-DC-02.revflow.local           │ 9.8   │ 85     │ 0.82  │ ❌ No    │ Tier 1     │ DMZ     │ Production    │ 51.2      │ infra-team@revflow.com     │
+│ CVE-2024-30088 │ HIGH      │ PROD-APP-07.revflow.local          │ 7.0   │ 62     │ 0.35  │ ❌ No    │ Tier 1     │ Internal│ Production    │ 38.4      │ app-team@revflow.com       │
+│ CVE-2024-12345 │ MEDIUM    │ PROD-DB-01.revflow.local           │ 7.5   │ 45     │ 0.08  │ ❌ No    │ Tier 1     │ Internal│ Production    │ 18.9      │ dba-team@revflow.com       │
+│ CVE-2024-55555 │ MEDIUM    │ STG-APP-02.revflow.local           │ 8.1   │ 58     │ 0.12  │ ❌ No    │ Tier 2     │ Internal│ Staging       │ 16.2      │ app-team@revflow.com       │
+│ CVE-2024-99999 │ LOW       │ DEV-TEST-15.revflow.local          │ 9.0   │ 55     │ 0.02  │ ❌ No    │ Tier 3     │ Internal│ Development   │ 5.2       │ dev-team@revflow.com       │
+└────────────────┴───────────┴────────────────────────────────────┴───────┴────────┴───────┴──────────┴────────────┴─────────┴───────────────┴───────────┴────────────────────────────┘
+
+ADDITIONAL FIELDS AVAILABLE (expandable in workbook):
+• Software: Affected application/component name and version
+• Patch KB: Microsoft KB number or vendor patch identifier
+• First Seen: Date vulnerability was first detected
+• Days Open: How long remediation has been pending
+• SLA Status: On Track / At Risk / Breached
+• ServiceNow Ticket: INC0012345 (auto-linked)
+• Qualys QID: If detected by Qualys
+• Recommendation: Remediation guidance from MDVM/Qualys
+</code></pre>
+        </div>
+
+        <h3>5.5 Sample ServiceNow Ticket (Auto-Created)</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">ServiceNow Incident — Auto-Generated for Critical/High</span></div>
+          <pre><code>═══════════════════════════════════════════════════════════════════════════════
+INCIDENT: INC0012847
+═══════════════════════════════════════════════════════════════════════════════
+
+SHORT DESCRIPTION:
+[CRITICAL] CVE-2023-23397 on PROD-EXCH-01 — Remediate within 48 hours
+
+PRIORITY: 1 - Critical
+CATEGORY: Vulnerability Management
+ASSIGNMENT GROUP: Messaging Team
+ASSIGNED TO: (Auto-routed based on CMDB owner)
+
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+A CRITICAL vulnerability has been detected requiring immediate remediation.
+
+VULNERABILITY DETAILS:
+• CVE: CVE-2023-23397
+• Title: Microsoft Outlook Elevation of Privilege Vulnerability
+• CVSS Score: 9.8 (Critical)
+• MDVM Exposure Score: 95/100
+• EPSS: 0.97 (97% likelihood of exploitation within 30 days)
+• CISA KEV: ✅ YES — Actively exploited in the wild
+
+AFFECTED ASSET:
+• Hostname: PROD-EXCH-01.revflow.local
+• IP Address: 10.50.1.25
+• Operating System: Windows Server 2019
+• Asset Tier: Tier 1 (Mission-Critical)
+• Environment: Production
+• Network Zone: Internet-facing
+• Business Function: Corporate email server
+
+RISK ASSESSMENT:
+• RevFlow Risk Score: 85.5
+• SLA: 48 hours (Critical)
+• SLA Deadline: 2024-12-24 14:00 UTC
+
+REMEDIATION:
+• Recommended Action: Apply KB5034763 (February 2024 Cumulative Update)
+• Patch Release Date: 2024-02-13
+• Workaround: Disable NTLM or block outbound SMB (445/TCP) if patching delayed
+
+INTELLIGENCE:
+• Threat Actors: APT28 (Fancy Bear) actively exploiting this vulnerability
+• Malware Families: Associated with credential theft campaigns
+• Attack Vector: Specially crafted email triggers NTLM relay without user interaction
+
+LINKS:
+• Microsoft Advisory: https://msrc.microsoft.com/update-guide/vulnerability/CVE-2023-23397
+• CISA KEV Entry: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+
+────────────────────────────────────────────────────────────────────────────────
+AUTO-GENERATED BY: Vulnerability Enrichment Pipeline
+SOURCE: MDVM + Qualys (deduplicated)
+CREATED: 2024-12-22 06:45 UTC
+═══════════════════════════════════════════════════════════════════════════════</code></pre>
+        </div>
+
+        <!-- ==================== MANUAL SOC WORKFLOWS ==================== -->
+        <h3>5.6 Manual SOC Workflows: False Positives, Remediation & Exceptions</h3>
+
+        <p>Automation handles aggregation and prioritization, but <strong>humans are essential</strong> for validation, remediation decisions, and exceptions. Here's what SOC analysts and asset owners work on manually:</p>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Automation vs. Human Work</div>
+          <div class="callout-content">
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Automation does:</strong> Aggregate, deduplicate, enrich, score, create tickets, track SLAs</li>
+              <li><strong>Humans do:</strong> Validate FPs, decide remediation path, apply patches, approve exceptions, verify fixes</li>
+            </ul>
+          </div>
+        </div>
+
+        <h4>Workflow 1: False Positive Handling</h4>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">False Positive Workflow — SOC Analyst</span></div>
+          <pre><code>FALSE POSITIVE SCENARIO:
+═══════════════════════════════════════════════════════════════════════════════
+Scanner detected: CVE-2024-12345 on PROD-APP-03
+Reality: Patch KB5034123 was applied last week, but scanner hasn't re-scanned
+
+SOC ANALYST ACTIONS:
+────────────────────────────────────────────────────────────────────────────────
+
+1. VERIFY THE FALSE POSITIVE
+   • Check patch history in SCCM/Intune: Was KB5034123 deployed?
+   • Check installed updates on host: Get-HotFix | Where-Object {$_.HotFixID -eq "KB5034123"}
+   • Check MDVM "Security Recommendations" — does it still show as vulnerable?
+   • If patched but still showing: Scanner lag or detection logic issue
+
+2. DOCUMENT IN SERVICENOW TICKET
+   ┌───────────────────────────────────────────────────────────────────────────┐
+   │ INC0012850 — CVE-2024-12345 on PROD-APP-03                                │
+   ├───────────────────────────────────────────────────────────────────────────┤
+   │ Resolution Code: False Positive                                          │
+   │ Resolution Notes:                                                         │
+   │   Verified KB5034123 installed on 2024-12-18.                            │
+   │   MDVM shows vulnerability due to scan lag.                              │
+   │   Requested rescan via MDVM portal.                                      │
+   │   Evidence: Screenshot of Get-HotFix output attached.                    │
+   └───────────────────────────────────────────────────────────────────────────┘
+
+3. UPDATE EXCLUSION LIST (if recurring FP)
+   • If same FP appears repeatedly, add to automation exclusion list
+   • Exclusion format: CVE + Hostname + Justification + Expiry date
+   • Exclusions reviewed quarterly
+
+4. REQUEST RESCAN
+   • MDVM: Device page → "Run antivirus scan" or wait for next scheduled scan
+   • Qualys: Request on-demand scan from Qualys admin
+
+FEEDBACK LOOP TO AUTOMATION:
+────────────────────────────────────────────────────────────────────────────────
+FP data is added to exclusion table in Azure Function:
+┌──────────────────┬─────────────────────────┬──────────────────┬────────────┐
+│ CVE              │ Hostname                │ Reason           │ Expiry     │
+├──────────────────┼─────────────────────────┼──────────────────┼────────────┤
+│ CVE-2024-12345   │ PROD-APP-03             │ Scan lag after   │ 2025-01-15 │
+│                  │                         │ KB5034123        │            │
+└──────────────────┴─────────────────────────┴──────────────────┴────────────┘
+
+Next pipeline run will skip this CVE+Host combination until expiry.</code></pre>
+        </div>
+
+        <h4>Workflow 2: Remediation & Patch Management</h4>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Remediation Workflow — Asset Owner + Patch Team</span></div>
+          <pre><code>REMEDIATION SCENARIO:
+═══════════════════════════════════════════════════════════════════════════════
+Ticket: INC0012847 — CVE-2023-23397 on PROD-EXCH-01
+Priority: CRITICAL (48-hour SLA)
+Assigned To: Messaging Team
+
+REMEDIATION STEPS:
+────────────────────────────────────────────────────────────────────────────────
+
+1. TRIAGE (Asset Owner — within 2 hours of ticket creation)
+   • Review ticket details: Is this server still in use? Correct owner?
+   • Check CMDB: Confirm asset tier, maintenance window, dependencies
+   • Acknowledge ticket: "Investigating" status
+
+2. PLAN REMEDIATION
+   ┌───────────────────────────────────────────────────────────────────────────┐
+   │ REMEDIATION OPTIONS:                                                      │
+   ├───────────────────────────────────────────────────────────────────────────┤
+   │ A. Apply Patch (preferred)                                                │
+   │    • KB5034763 (February 2024 Cumulative Update)                         │
+   │    • Requires reboot — schedule during maintenance window                │
+   │    • ETA: Tonight at 2 AM EST                                            │
+   │                                                                           │
+   │ B. Workaround (if patch delayed)                                         │
+   │    • Disable NTLM authentication (may break legacy apps)                 │
+   │    • Block outbound SMB (445/TCP) at firewall                            │
+   │    • Apply immediately, patch within 7 days                              │
+   │                                                                           │
+   │ C. Compensating Controls (if cannot patch)                               │
+   │    • Enhanced monitoring: Custom Sentinel rule for exploitation attempt  │
+   │    • Network segmentation: Move to isolated VLAN                         │
+   │    • Document risk acceptance if choosing this path                      │
+   └───────────────────────────────────────────────────────────────────────────┘
+
+3. EXECUTE PATCH (Patch Team)
+   • Deploy KB5034763 via SCCM/Intune
+   • Monitor deployment status
+   • Verify successful installation: Get-HotFix -Id KB5034763
+   • Reboot server if required
+   • Validate Exchange services healthy post-reboot
+
+4. VERIFY REMEDIATION
+   • MDVM: Check device page — vulnerability should clear after next scan
+   • Qualys: Request on-demand scan, confirm CVE no longer detected
+   • Update ServiceNow ticket: "Resolved — Patch Applied"
+
+5. CLOSE TICKET
+   ┌───────────────────────────────────────────────────────────────────────────┐
+   │ INC0012847 — RESOLVED                                                     │
+   ├───────────────────────────────────────────────────────────────────────────┤
+   │ Resolution Code: Patch Applied                                            │
+   │ Resolution Notes:                                                         │
+   │   KB5034763 deployed 2024-12-23 02:15 EST.                               │
+   │   Server rebooted, Exchange services verified healthy.                   │
+   │   MDVM rescan requested, vulnerability cleared.                          │
+   │   SLA: Met (within 48 hours)                                             │
+   └───────────────────────────────────────────────────────────────────────────┘
+
+PATCH MANAGEMENT INTEGRATION:
+────────────────────────────────────────────────────────────────────────────────
+Our automation integrates with SCCM/Intune:
+• Ticket includes KB number from MDVM/Qualys recommendation
+• Patch team can filter SCCM by KB to find applicable deployment
+• Post-patch, automation checks for ticket closure when CVE clears</code></pre>
+        </div>
+
+        <h4>Workflow 3: Risk Acceptance / Exception Handling</h4>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Exception Workflow — When Patching Is Not Possible</span></div>
+          <pre><code>EXCEPTION SCENARIO:
+═══════════════════════════════════════════════════════════════════════════════
+Ticket: INC0012855 — CVE-2024-30088 on PROD-LEGACY-01
+Problem: Legacy application requires Windows Server 2012 R2, vendor no longer 
+         supports newer OS. Patch not available for this OS version.
+
+EXCEPTION REQUEST PROCESS:
+────────────────────────────────────────────────────────────────────────────────
+
+1. ASSET OWNER INITIATES EXCEPTION REQUEST
+   • Cannot patch — document why
+   • Propose compensating controls
+   • Submit via ServiceNow exception workflow
+
+2. EXCEPTION REQUEST FORM
+   ┌───────────────────────────────────────────────────────────────────────────┐
+   │ VULNERABILITY EXCEPTION REQUEST                                           │
+   ├───────────────────────────────────────────────────────────────────────────┤
+   │ CVE: CVE-2024-30088                                                       │
+   │ Host: PROD-LEGACY-01                                                      │
+   │ Asset Owner: John Smith (Operations Manager)                              │
+   │                                                                           │
+   │ REASON PATCHING IS NOT POSSIBLE:                                          │
+   │ Legacy inventory management application (VendorApp v3.2) only runs on    │
+   │ Windows Server 2012 R2. Vendor went out of business in 2019. Application │
+   │ replacement project scheduled for Q3 2025 (Project ID: PRJ-2024-087).    │
+   │                                                                           │
+   │ PROPOSED COMPENSATING CONTROLS:                                           │
+   │ [✓] Network segmentation — isolated VLAN 192.168.50.0/24                 │
+   │ [✓] Host-based firewall — only allows traffic from 3 specific IPs       │
+   │ [✓] Enhanced monitoring — Sentinel rule for exploitation patterns        │
+   │ [✓] No internet access — internal only                                   │
+   │ [✓] Privileged access restricted — only 2 service accounts               │
+   │                                                                           │
+   │ BUSINESS IMPACT IF SYSTEM OFFLINE:                                        │
+   │ Warehouse operations halt. ~$50K/day revenue impact.                     │
+   │                                                                           │
+   │ REQUESTED EXCEPTION DURATION: 180 days (until replacement project)       │
+   │ NEXT REVIEW DATE: 2025-03-22                                             │
+   └───────────────────────────────────────────────────────────────────────────┘
+
+3. SECURITY REVIEW
+   • Security team reviews compensating controls
+   • Validates controls are actually in place (not just proposed)
+   • May request additional controls
+   • Documents residual risk
+
+4. APPROVAL CHAIN
+   ┌─────────────────┬───────────────────┬────────────────┬───────────────────┐
+   │ Role            │ Approver          │ Status         │ Date              │
+   ├─────────────────┼───────────────────┼────────────────┼───────────────────┤
+   │ Asset Owner     │ John Smith        │ ✅ Approved    │ 2024-12-22        │
+   │ Security Team   │ Jane Doe (SecOps) │ ✅ Approved    │ 2024-12-22        │
+   │ IT Manager      │ Bob Wilson        │ ✅ Approved    │ 2024-12-23        │
+   │ CISO            │ Sarah Johnson     │ ✅ Approved    │ 2024-12-23        │
+   └─────────────────┴───────────────────┴────────────────┴───────────────────┘
+
+5. EXCEPTION DOCUMENTED
+   • Exception logged in risk register
+   • Ticket updated: "Exception Approved — Review by 2025-03-22"
+   • Automation marks CVE+Host as "Accepted Risk" (won't auto-ticket)
+   • Calendar reminder for review date
+
+EXCEPTION TRACKING IN AUTOMATION:
+────────────────────────────────────────────────────────────────────────────────
+Exceptions table in Azure Function:
+┌──────────────────┬─────────────────────┬─────────────┬────────────┬──────────┐
+│ CVE              │ Hostname            │ Approved By │ Expiry     │ Status   │
+├──────────────────┼─────────────────────┼─────────────┼────────────┼──────────┤
+│ CVE-2024-30088   │ PROD-LEGACY-01      │ S. Johnson  │ 2025-06-22 │ Active   │
+│ CVE-2023-44487   │ PROD-PROXY-02       │ S. Johnson  │ 2025-01-15 │ Active   │
+│ CVE-2024-21413   │ PROD-APP-05         │ S. Johnson  │ 2024-12-01 │ Expired  │
+└──────────────────┴─────────────────────┴─────────────┴────────────┴──────────┘
+
+Expired exceptions auto-reopen tickets for re-review.</code></pre>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Interview Talking Point</div>
+          <div class="callout-content">
+            <p><em>"Automation handles aggregation, scoring, and ticket creation — but humans are essential. SOC analysts validate false positives and feed that back to the exclusion list. Asset owners plan and execute remediation with the patch team. For exceptions, we have a formal approval chain: asset owner, security team, IT manager, CISO. Every exception has an expiration date, and automation auto-reopens tickets when exceptions expire."</em></p>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 6: IMPLEMENTATION ==================== -->
+        <h2>6. Implementation — Azure Function Deployment</h2>
+
+        <h3>6.1 Azure Function Structure</h3>
 
         <div class="code-block">
           <div class="code-header"><span class="code-lang">Azure Function Project Structure</span></div>
@@ -1222,7 +1957,7 @@ def process_vulnerabilities(vulnerabilities):
         </div>
 
         <!-- ==================== SECTION 6: DASHBOARD ==================== -->
-        <h2>6. Vulnerability Dashboard</h2>
+        <h2>7. Vulnerability Dashboard</h2>
 
         <div class="metric-grid">
           <div class="metric-card">
@@ -1289,7 +2024,7 @@ VulnerabilityAlerts_CL
         </div>
 
         <!-- ==================== SECTION 7: MANUAL WORKFLOW ==================== -->
-        <h2>7. Manual Workflow — Analysts and Business Owners</h2>
+        <h2>8. Manual Workflow — Analysts and Business Owners</h2>
 
         <p>While automation handles initial triage and ticket creation, humans are essential for:</p>
 
@@ -1329,7 +2064,7 @@ VulnerabilityAlerts_CL
         </div>
 
         <!-- ==================== SECTION 8: INTERVIEW ANSWERS ==================== -->
-        <h2>8. Interview-Ready Answers</h2>
+        <h2>9. Interview-Ready Answers</h2>
 
         <div class="code-block">
           <div class="code-header"><span class="code-lang">Q: "Tell me about a vulnerability management process you implemented"</span></div>
@@ -1453,6 +2188,45 @@ COMPENSATING CONTROLS we commonly apply:
 
 All exceptions are tracked in ServiceNow with expiration dates. 
 The Function checks for expired exceptions and auto-reopens tickets."</code></pre>
+        </div>
+
+        <!-- ==================== FINAL INTERVIEW SUMMARY ==================== -->
+        <h2>10. Interview Summary: Vulnerability Management</h2>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Key Talking Points</div>
+          <div class="callout-content">
+            <p><strong>On Native Capabilities:</strong></p>
+            <p style="margin-left: 1rem;"><em>"MDVM — which used to be called TVM — now includes EPSS scores, CISA KEV status, and exposure scoring natively. Qualys has similar capabilities with TruRisk. That's table stakes now — you don't need custom automation just for exploit intelligence."</em></p>
+            
+            <p style="margin-top: 1rem;"><strong>On Why We Built Automation:</strong></p>
+            <p style="margin-left: 1rem;"><em>"Our automation adds value on top: unifying data from both MDVM and Qualys since we use both, enriching with CMDB business context that scanners don't know — like which servers are Tier 1 production versus test environments — applying a custom risk formula aligned to our risk appetite, and auto-creating ServiceNow tickets for Critical and High findings. The native tools tell you what's vulnerable; our automation tells you what to fix first based on business impact."</em></p>
+            
+            <p style="margin-top: 1rem;"><strong>On the Custom Risk Formula:</strong></p>
+            <p style="margin-left: 1rem;"><em>"We multiply CVSS by exploitation likelihood — using KEV status and EPSS — then by asset criticality from CMDB and network exposure. A CVSS 7.5 on a Tier 1 internet-facing production server scores higher than a CVSS 9.8 on a Tier 3 internal test box. That's business-aware prioritization."</em></p>
+            
+            <p style="margin-top: 1rem;"><strong>On When NOT to Build This:</strong></p>
+            <p style="margin-left: 1rem;"><em>"If you only have one scanner and no mature CMDB, the native dashboard is probably sufficient. Don't over-engineer. We built this because we have dual scanners, a mature ServiceNow CMDB, and our SOC lives in Sentinel — we wanted vulnerability data in the same workbook as security alerts."</em></p>
+          </div>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-card">
+            <div class="value">1</div>
+            <div class="label">Unified Dashboard</div>
+          </div>
+          <div class="metric-card">
+            <div class="value">2</div>
+            <div class="label">Scanner Sources (MDVM + Qualys)</div>
+          </div>
+          <div class="metric-card">
+            <div class="value">4</div>
+            <div class="label">Risk Multipliers (EPSS, KEV, Tier, Exposure)</div>
+          </div>
+          <div class="metric-card">
+            <div class="value">Auto</div>
+            <div class="label">Ticketing for Crit/High</div>
+          </div>
         </div>
 
         <nav class="page-nav">
