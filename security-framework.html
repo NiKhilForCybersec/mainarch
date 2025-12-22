@@ -257,6 +257,384 @@ Data    = BUSINESS
 Ops     = CHANGE</code></pre>
         </div>
 
+        <!-- NEW: Comprehensive Tools by Plane Section -->
+        <h2>🔧 Tools & Controls by Plane (Microsoft Stack)</h2>
+        <p>This is the <strong>interview-ready reference</strong> — which tools fit where, and what each does.</p>
+
+        <!-- CONTROL PLANE DETAILED -->
+        <h3 style="color: var(--accent-blue); border-bottom: 2px solid var(--accent-blue); padding-bottom: 0.5rem;">🟦 Control Plane — Identity & Access</h3>
+        
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Category</th><th>Tool</th><th>Purpose</th><th>Key Capability</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="3"><strong>Prevention</strong></td>
+                <td>Multi-Factor Authentication (MFA)</td>
+                <td>Block credential-only attacks</td>
+                <td>Requires second factor even if password compromised</td>
+              </tr>
+              <tr>
+                <td>Conditional Access (CA)</td>
+                <td>Context-based access decisions</td>
+                <td>Block/allow based on device, location, risk, app</td>
+              </tr>
+              <tr>
+                <td>Privileged Identity Management (PIM)</td>
+                <td>Just-in-time privileged access</td>
+                <td>No standing admin rights — activate when needed</td>
+              </tr>
+              <tr>
+                <td rowspan="3"><strong>Detection</strong></td>
+                <td>Microsoft Defender for Identity (MDI)</td>
+                <td>Identity threat detection</td>
+                <td>Pass-the-Hash, Kerberoasting, DCSync, lateral movement</td>
+              </tr>
+              <tr>
+                <td>Entra ID Protection</td>
+                <td>Risk-based sign-in analysis</td>
+                <td>Risky sign-ins, compromised credentials, impossible travel</td>
+              </tr>
+              <tr>
+                <td>Entra ID Audit/Sign-in Logs</td>
+                <td>Identity control-plane visibility</td>
+                <td>Who did what, when, from where — the audit trail</td>
+              </tr>
+              <tr>
+                <td rowspan="2"><strong>Response</strong></td>
+                <td>Entra ID — Revoke Sessions</td>
+                <td>Immediate session termination</td>
+                <td>Force re-authentication for compromised accounts</td>
+              </tr>
+              <tr>
+                <td>Entra ID — Block User</td>
+                <td>Account lockout</td>
+                <td>Prevent all sign-ins during investigation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Critical Distinction (Interview Gold)
+          </div>
+          <div class="callout-content">
+            <p><strong>MDI detects ATTACKS</strong> (Pass-the-Hash, Kerberoasting)</p>
+            <p><strong>Entra ID Logs record CHANGES</strong> (user created, role assigned, CA policy modified)</p>
+            <p>You need BOTH. MDI won't tell you who was added to Global Admins — that's in AuditLogs.</p>
+          </div>
+        </div>
+
+        <!-- DATA PLANE DETAILED -->
+        <h3 style="color: var(--accent-green); border-bottom: 2px solid var(--accent-green); padding-bottom: 0.5rem;">🟩 Data Plane — Endpoints, Apps & Data</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Category</th><th>Tool</th><th>Purpose</th><th>Key Capability</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="4"><strong>Endpoint</strong></td>
+                <td>Microsoft Defender for Endpoint (MDE)</td>
+                <td>Endpoint protection & detection</td>
+                <td>AV, EDR, threat detection, Advanced Hunting</td>
+              </tr>
+              <tr>
+                <td>Attack Surface Reduction (ASR) Rules</td>
+                <td>Block risky behaviors</td>
+                <td>Block Office macros, credential theft, script abuse</td>
+              </tr>
+              <tr>
+                <td>Device Control</td>
+                <td>USB and removable media control</td>
+                <td>Block/audit USB drives, external storage</td>
+              </tr>
+              <tr>
+                <td>Threat & Vulnerability Management (TVM)</td>
+                <td>Vulnerability visibility</td>
+                <td>Software vulnerabilities, misconfigurations, exposure score</td>
+              </tr>
+              <tr>
+                <td rowspan="3"><strong>Email & Collaboration</strong></td>
+                <td>Microsoft Defender for Office 365 (MDO)</td>
+                <td>Email threat protection</td>
+                <td>Phishing, BEC, malicious attachments, Safe Links/Attachments</td>
+              </tr>
+              <tr>
+                <td>Safe Attachments</td>
+                <td>Attachment sandboxing</td>
+                <td>Detonates attachments in sandbox before delivery</td>
+              </tr>
+              <tr>
+                <td>Safe Links</td>
+                <td>URL protection</td>
+                <td>Time-of-click URL scanning and rewriting</td>
+              </tr>
+              <tr>
+                <td rowspan="3"><strong>Cloud Apps & SaaS</strong></td>
+                <td>Microsoft Defender for Cloud Apps (MDA)</td>
+                <td>CASB — Cloud app security</td>
+                <td>Shadow IT discovery, session controls, OAuth governance</td>
+              </tr>
+              <tr>
+                <td>App Governance</td>
+                <td>OAuth app monitoring</td>
+                <td>Track third-party apps with access to M365 data</td>
+              </tr>
+              <tr>
+                <td>Conditional Access App Control</td>
+                <td>Session-level controls</td>
+                <td>Block download on unmanaged devices, watermarking</td>
+              </tr>
+              <tr>
+                <td rowspan="3"><strong>Data Protection</strong></td>
+                <td>Microsoft Purview DLP</td>
+                <td>Data loss prevention</td>
+                <td>Detect/block sensitive data sharing via email, endpoint, Teams</td>
+              </tr>
+              <tr>
+                <td>Sensitivity Labels</td>
+                <td>Data classification</td>
+                <td>Label documents, apply encryption, control sharing</td>
+              </tr>
+              <tr>
+                <td>Information Barriers</td>
+                <td>Communication boundaries</td>
+                <td>Prevent specific groups from communicating (compliance)</td>
+              </tr>
+              <tr>
+                <td rowspan="2"><strong>Network</strong></td>
+                <td>Azure Firewall / Palo Alto</td>
+                <td>Network perimeter control</td>
+                <td>Allow/deny traffic based on IP, port, protocol</td>
+              </tr>
+              <tr>
+                <td>NSG / Azure Network Watcher</td>
+                <td>Cloud network visibility</td>
+                <td>Network flow logs, traffic analytics</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            XDR Integration
+          </div>
+          <div class="callout-content">
+            <p>MDE + MDO + MDI + MDA = <strong>Microsoft Defender XDR</strong></p>
+            <p>All alerts correlate automatically into unified incidents. Query across all sources with Advanced Hunting (KQL).</p>
+          </div>
+        </div>
+
+        <!-- OPERATIONS PLANE DETAILED -->
+        <h3 style="color: var(--accent-yellow); border-bottom: 2px solid var(--accent-yellow); padding-bottom: 0.5rem;">🟨 Operations Plane — Change & Automation</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Category</th><th>Tool</th><th>Purpose</th><th>Key Capability</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="3"><strong>Cloud Management</strong></td>
+                <td>Azure Activity Logs</td>
+                <td>Control-plane audit trail</td>
+                <td>Who created/modified/deleted Azure resources</td>
+              </tr>
+              <tr>
+                <td>Azure Policy</td>
+                <td>Guardrails and compliance</td>
+                <td>Enforce configurations, deny non-compliant deployments</td>
+              </tr>
+              <tr>
+                <td>Microsoft Defender for Cloud</td>
+                <td>Cloud security posture management</td>
+                <td>Misconfigurations, compliance scoring, recommendations</td>
+              </tr>
+              <tr>
+                <td rowspan="2"><strong>DevOps Security</strong></td>
+                <td>GitHub Advanced Security</td>
+                <td>Code and supply chain security</td>
+                <td>Secret scanning, code scanning, dependency review</td>
+              </tr>
+              <tr>
+                <td>Azure DevOps Audit Logs</td>
+                <td>Pipeline and repo audit trail</td>
+                <td>Who modified pipelines, pushed code, changed permissions</td>
+              </tr>
+              <tr>
+                <td rowspan="2"><strong>Automation Security</strong></td>
+                <td>Service Principal Monitoring</td>
+                <td>Non-human identity oversight</td>
+                <td>Track what automation accounts can do and are doing</td>
+              </tr>
+              <tr>
+                <td>Workload Identities (Managed Identities)</td>
+                <td>Secure automation authentication</td>
+                <td>No credentials to steal — identity managed by Azure</td>
+              </tr>
+              <tr>
+                <td rowspan="2"><strong>Security Operations</strong></td>
+                <td>Microsoft Sentinel</td>
+                <td>SIEM — Centralized detection & response</td>
+                <td>Log correlation, analytics rules, SOAR, workbooks</td>
+              </tr>
+              <tr>
+                <td>Logic Apps / Playbooks</td>
+                <td>Security automation (SOAR)</td>
+                <td>Auto-enrich, auto-respond, auto-notify on alerts</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TELEMETRY FLOW VISUALIZATION -->
+        <h2>📊 Telemetry Flow: What Logs Where</h2>
+        <p>Understanding which logs come from which plane — critical for log source strategy.</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Plane</th><th>Log Source</th><th>Sentinel Table</th><th>What You See</th></tr>
+            </thead>
+            <tbody>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td rowspan="4"><strong style="color: var(--accent-blue);">🟦 Control</strong></td>
+                <td>Entra ID Sign-ins</td>
+                <td><code>SigninLogs</code></td>
+                <td>Authentication events, MFA status, CA evaluation</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td>Entra ID Audit</td>
+                <td><code>AuditLogs</code></td>
+                <td>User/group/role changes, app consent, CA policy changes</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td>MDI Alerts</td>
+                <td><code>SecurityAlert</code></td>
+                <td>Identity-based attack detections</td>
+              </tr>
+              <tr style="background: rgba(59, 130, 246, 0.1);">
+                <td>Azure Activity</td>
+                <td><code>AzureActivity</code></td>
+                <td>Azure resource management operations</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td rowspan="5"><strong style="color: var(--accent-green);">🟩 Data</strong></td>
+                <td>MDE Telemetry</td>
+                <td><code>Device*</code> tables</td>
+                <td>Process, network, file, registry activity</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td>MDO Alerts</td>
+                <td><code>SecurityAlert</code></td>
+                <td>Email threat detections</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td>MDA Activity</td>
+                <td><code>CloudAppEvents</code></td>
+                <td>SaaS app activity, OAuth events</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td>Office Activity</td>
+                <td><code>OfficeActivity</code></td>
+                <td>SharePoint, Exchange, Teams activity</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td>DLP Activity</td>
+                <td><code>PurviewDLP*</code></td>
+                <td>Sensitive data matches, policy actions</td>
+              </tr>
+              <tr style="background: rgba(234, 179, 8, 0.1);">
+                <td rowspan="3"><strong style="color: var(--accent-yellow);">🟨 Ops</strong></td>
+                <td>Defender for Cloud</td>
+                <td><code>SecurityAlert</code></td>
+                <td>Cloud posture alerts, misconfigurations</td>
+              </tr>
+              <tr style="background: rgba(234, 179, 8, 0.1);">
+                <td>GitHub Audit</td>
+                <td><code>GitHubAuditLog*</code></td>
+                <td>Repo, pipeline, permission changes</td>
+              </tr>
+              <tr style="background: rgba(234, 179, 8, 0.1);">
+                <td>Sentinel Analytics</td>
+                <td><code>SecurityIncident</code></td>
+                <td>Correlated incidents from all sources</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Cost Tip
+          </div>
+          <div class="callout-content">
+            <p><strong>Don't ingest raw MDE Device* tables to Sentinel!</strong></p>
+            <p>Query them in XDR Advanced Hunting for free. Only ingest XDR alerts (<code>SecurityAlert</code>, <code>SecurityIncident</code>).</p>
+          </div>
+        </div>
+
+        <!-- QUICK REFERENCE CARD -->
+        <h2>📋 Quick Reference: Tools by Function</h2>
+
+        <div class="card-grid" style="grid-template-columns: repeat(2, 1fr);">
+          <div class="card">
+            <div class="card-title">🛡️ Prevention</div>
+            <ul style="margin: 0.5rem 0; padding-left: 1.2rem; font-size: 0.9rem;">
+              <li><strong>MFA</strong> — Block password-only attacks</li>
+              <li><strong>Conditional Access</strong> — Context-based access</li>
+              <li><strong>PIM</strong> — Just-in-time admin</li>
+              <li><strong>ASR Rules</strong> — Block risky behaviors</li>
+              <li><strong>Safe Attachments/Links</strong> — Email protection</li>
+              <li><strong>DLP</strong> — Block data exfiltration</li>
+              <li><strong>Azure Policy</strong> — Enforce configurations</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">🔍 Detection</div>
+            <ul style="margin: 0.5rem 0; padding-left: 1.2rem; font-size: 0.9rem;">
+              <li><strong>MDE</strong> — Endpoint threats</li>
+              <li><strong>MDI</strong> — Identity attacks</li>
+              <li><strong>MDO</strong> — Email threats</li>
+              <li><strong>MDA</strong> — Cloud app anomalies</li>
+              <li><strong>Entra ID Protection</strong> — Risky sign-ins</li>
+              <li><strong>Defender for Cloud</strong> — Posture issues</li>
+              <li><strong>Sentinel</strong> — Cross-source correlation</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">⚡ Response</div>
+            <ul style="margin: 0.5rem 0; padding-left: 1.2rem; font-size: 0.9rem;">
+              <li><strong>MDE Live Response</strong> — Remote investigation</li>
+              <li><strong>Device Isolation</strong> — Network quarantine</li>
+              <li><strong>Session Revoke</strong> — Force re-auth</li>
+              <li><strong>Account Block</strong> — Stop sign-ins</li>
+              <li><strong>Sentinel Playbooks</strong> — Auto-response</li>
+              <li><strong>XDR Automated Actions</strong> — Built-in response</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">📈 Visibility</div>
+            <ul style="margin: 0.5rem 0; padding-left: 1.2rem; font-size: 0.9rem;">
+              <li><strong>Entra ID Logs</strong> — Identity audit trail</li>
+              <li><strong>Azure Activity</strong> — Cloud management trail</li>
+              <li><strong>Advanced Hunting</strong> — Cross-XDR queries</li>
+              <li><strong>Sentinel Workbooks</strong> — Dashboards</li>
+              <li><strong>TVM</strong> — Vulnerability posture</li>
+              <li><strong>Secure Score</strong> — Security posture</li>
+            </ul>
+          </div>
+        </div>
+
         <h2>3️⃣ Assets (WHAT matters)</h2>
         <p>Now you list important things in each plane. <strong>You don't protect everything equally.</strong></p>
 
