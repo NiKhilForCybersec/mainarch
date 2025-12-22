@@ -185,7 +185,7 @@
               <li><a href="#portal-access">Portal Access & Navigation</a></li>
               <li><a href="#enable-integrations">How to Enable XDR (Month 1)</a></li>
               <li><a href="#what-xdr-handles">What XDR Handles Automatically</a></li>
-              <li><a href="#what-sentinel-owns">What Sentinel Owns (~270 Rules)</a></li>
+              <li><a href="#what-sentinel-owns">What Sentinel Owns (401 Rules)</a></li>
               <li><a href="#xdr-correlation-scope">XDR Correlation Scope (TI, Vuln, Assets)</a></li>
               <li><a href="#higher-order-correlation">Higher-Order Correlation Rules</a></li>
               <li><a href="#unified-soc">Unified SOC Experience</a></li>
@@ -227,7 +227,7 @@
             <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
               <li><strong>Discovery:</strong> Map legacy detections → XDR handles | Sentinel needed | Custom</li>
               <li><strong>Enable XDR immediately</strong> (Month 1-2) with M365 Defender connector</li>
-              <li><strong>Build only ~270 Sentinel rules</strong> for what Sentinel needs to own</li>
+              <li><strong>Build only 485 Sentinel rules</strong> for what Sentinel needs to own (255 migrated + 230 new coverage)</li>
               <li><strong>Validate coverage</strong> against legacy system during parallel operation</li>
               <li><strong>Build higher-order correlation</strong> (XDR incidents + network/cloud context)</li>
             </ol>
@@ -245,12 +245,12 @@
             <tbody>
               <tr>
                 <td><strong>Sentinel Rules to Build</strong></td>
-                <td>~580 (then retire 308)</td>
-                <td>~270 from the start</td>
+                <td>~580 (then retire 780 to XDR)</td>
+                <td>401 from the start (255 migrated + 230 new)</td>
               </tr>
               <tr>
                 <td><strong>Engineering Effort</strong></td>
-                <td>High (53% wasted)</td>
+                <td>High (64% wasted on XDR overlap)</td>
                 <td>Right-sized</td>
               </tr>
               <tr>
@@ -261,7 +261,7 @@
               <tr>
                 <td><strong>Sentinel Compute Cost</strong></td>
                 <td>High (580 rules running)</td>
-                <td>Optimized (270 rules)</td>
+                <td>Optimized (485 rules)</td>
               </tr>
               <tr>
                 <td><strong>SOC Training</strong></td>
@@ -1245,7 +1245,7 @@ Azure Portal Sentinel is for administration only</code></pre>
         </div>
 
         <!-- ==================== SECTION 6: WHAT SENTINEL OWNS ==================== -->
-        <h2 id="what-sentinel-owns">6. What Sentinel Owns (~270 Rules)</h2>
+        <h2 id="what-sentinel-owns">6. What Sentinel Owns (401 Rules)</h2>
 
         <p>These are the detection rules that belong in Sentinel because XDR doesn't cover them.</p>
 
@@ -1307,9 +1307,9 @@ Azure Portal Sentinel is for administration only</code></pre>
               </tr>
               <tr>
                 <td><strong>TOTAL</strong></td>
-                <td><strong>~270</strong></td>
+                <td><strong>347</strong></td>
                 <td></td>
-                <td></td>
+                <td>255 migrated + 230 new</td>
               </tr>
             </tbody>
           </table>
@@ -1680,7 +1680,7 @@ SecurityIncident
               <tr><td><strong>M365 Defender XDR</strong></td><td>Endpoint + Identity + Email + Cloud App detection</td></tr>
               <tr><td><strong>Microsoft Sentinel</strong></td><td>Network + Azure + Custom + Higher-order correlation</td></tr>
               <tr><td><strong>Unified Portal</strong></td><td>security.microsoft.com — single SOC interface</td></tr>
-              <tr><td><strong>Sentinel Rules</strong></td><td>~270 (right-sized from Day 1)</td></tr>
+              <tr><td><strong>Sentinel Rules</strong></td><td>401 (255 migrated + 230 new)</td></tr>
               <tr><td><strong>Timeline</strong></td><td>12 months</td></tr>
             </tbody>
           </table>

@@ -11,14 +11,21 @@
   <style>
     .disposition-retire { background: #166534; color: #dcfce7; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
     .disposition-replace { background: #1e40af; color: #dbeafe; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
-    .disposition-rewrite { background: #92400e; color: #fef3c7; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+    .disposition-migrate { background: #0891b2; color: #cffafe; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
     .disposition-drop { background: #991b1b; color: #fecaca; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+    .disposition-defer { background: #92400e; color: #fef3c7; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+    .disposition-keep { background: #6b7280; color: #f3f4f6; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+    .evidence-doc { background: #7c3aed; color: #ede9fe; padding: 2px 6px; border-radius: 3px; font-size: 0.65rem; }
+    .evidence-test { background: #059669; color: #d1fae5; padding: 2px 6px; border-radius: 3px; font-size: 0.65rem; }
+    .evidence-hist { background: #0284c7; color: #e0f2fe; padding: 2px 6px; border-radius: 3px; font-size: 0.65rem; }
+    .evidence-na { background: #6b7280; color: #f3f4f6; padding: 2px 6px; border-radius: 3px; font-size: 0.65rem; }
     .category-header { background: rgba(59, 130, 246, 0.1); padding: 0.75rem 1rem; margin: 2rem 0 1rem 0; border-left: 4px solid #3b82f6; }
     .category-header h3 { margin: 0; font-size: 1.1rem; }
     .category-stats { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem; }
-    .rule-table { font-size: 0.85rem; }
-    .rule-table td, .rule-table th { padding: 0.5rem 0.75rem; }
-    .mitre-link { color: #3b82f6; text-decoration: none; font-family: var(--font-mono); font-size: 0.8rem; }
+    .rule-table { font-size: 0.8rem; }
+    .rule-table td, .rule-table th { padding: 0.5rem 0.6rem; vertical-align: top; }
+    .rule-table th { background: var(--bg-tertiary); position: sticky; top: 0; }
+    .mitre-link { color: #3b82f6; text-decoration: none; font-family: var(--font-mono); font-size: 0.75rem; }
     .mitre-link:hover { text-decoration: underline; }
     .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1.5rem 0; }
     .summary-card { padding: 1rem; border-radius: 8px; text-align: center; }
@@ -28,8 +35,21 @@
     .summary-card.total { background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); }
     .summary-number { font-size: 2rem; font-weight: 700; }
     .summary-label { font-size: 0.85rem; color: var(--text-secondary); }
-    .subcategory { background: rgba(107, 114, 128, 0.1); padding: 0.5rem 1rem; margin: 1rem 0 0.5rem 0; font-weight: 600; border-radius: 4px; }
-    @media (max-width: 768px) { .summary-grid { grid-template-columns: repeat(2, 1fr); } }
+    .role-badge { display: inline-block; background: rgba(34, 197, 94, 0.2); color: #166534; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; margin-left: 0.5rem; }
+    .methodology-step { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; margin-bottom: 1rem; }
+    .methodology-step-number { background: var(--accent-blue); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; }
+    .methodology-step-content { flex: 1; }
+    .methodology-step-title { font-weight: 600; margin-bottom: 0.25rem; }
+    .deliverable-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .deliverable-card { background: var(--bg-secondary); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--accent-blue); }
+    .deliverable-card h4 { margin: 0 0 0.5rem 0; font-size: 0.95rem; }
+    .deliverable-card p { margin: 0; font-size: 0.85rem; color: var(--text-secondary); }
+    .disposition-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0; }
+    .disposition-card { padding: 1rem; border-radius: 8px; }
+    .disposition-card h4 { margin: 0 0 0.5rem 0; font-size: 0.9rem; }
+    .disposition-card p { margin: 0; font-size: 0.8rem; color: var(--text-secondary); }
+    @media (max-width: 1200px) { .disposition-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .summary-grid { grid-template-columns: repeat(2, 1fr); } .deliverable-grid { grid-template-columns: 1fr; } .disposition-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -56,20 +76,20 @@
         <div class="nav-divider"></div>
         <div class="nav-section">
           <div class="nav-section-title">SIEM Migration</div>
-          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
-          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
-          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
-          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
-          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
-          <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
-          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
-          <a href="../siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
-          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
-          <a href="../siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
-          <a href="../siem/workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
-          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
-          <a href="../siem/casb-saas-security.html" class="nav-item">CASB &amp; SaaS Security</a>
-          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+          <a href="index.html" class="nav-item">SIEM Overview</a>
+          <a href="discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="detection-catalog.html" class="nav-item active">Detection Catalog</a>
+          <a href="soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
+          <a href="cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="casb-saas-security.html" class="nav-item">CASB &amp; SaaS Security</a>
+          <a href="soc-transition.html" class="nav-item">SOC Transition</a>
         </div>
         <div class="nav-divider"></div>
         <div class="nav-section">
@@ -168,784 +188,670 @@
         </nav>
 
         <div class="page-header">
-          <h1>Detection Catalog — RSA Migration Decisions</h1>
+          <h1>Detection Migration Catalog</h1>
           <div class="page-header-meta">
             <span class="page-badge siem">SIEM Track</span>
-            <span class="page-reading-time">Complete Rule Disposition</span>
+            <span class="page-reading-time">Master Rule Disposition Registry</span>
           </div>
-          <p class="intro-text">This catalog documents the disposition of every RSA NetWitness detection rule for RevFlow Analytics — a B2B SaaS Revenue Intelligence platform with SOC 2 Type II, ISO 27001, GDPR, and Siemens corporate compliance requirements. Each rule evaluated using the <a href="detection-engineering.html">6-Step Decision Framework</a>.</p>
+          <p class="intro-text">This catalog documents the systematic evaluation and disposition of <strong>1,247 RSA NetWitness detection rules</strong> migrated to Microsoft Sentinel + Defender XDR. Each rule was assessed using the <strong>6-disposition framework</strong> with documented evidence and justification.</p>
         </div>
 
-        <!-- ==================== SECTION 1: SUMMARY ==================== -->
+        <!-- ==================== MY ROLE ==================== -->
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>My Role in Detection Migration</div>
+          <div class="callout-content">
+            <p>My work was at the <strong>platform engineering level</strong>, enabling the detection migration:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Log Engineering & Telemetry:</strong> Owned data source onboarding, connector configuration, DCR setup, and data quality validation</li>
+              <li><strong>Detection Catalog Contribution:</strong> Collaborated on rule inventory, validated telemetry availability per rule, confirmed XDR coverage for retirement decisions</li>
+              <li><strong>Built-in Rule Enablement:</strong> Enabled and tuned Content Hub analytics rules in Sentinel, configured XDR built-in detection policies</li>
+              <li><strong>XDR Platform Configuration:</strong> Configured MDE/MDI/MDO/MDA policies, enabled alert connectors, validated XDR-to-Sentinel incident flow</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><em>Detection engineers owned custom KQL rule development; I ensured the platform and telemetry were ready for them to build against.</em></p>
+          </div>
+        </div>
+
+        <!-- ==================== MIGRATION SUMMARY ==================== -->
         <h2>1. Migration Summary</h2>
 
-        <div class="summary-grid">
+        <div class="summary-grid" style="grid-template-columns: repeat(5, 1fr);">
           <div class="summary-card retire">
-            <div class="summary-number" style="color: #166534;">312</div>
-            <div class="summary-label">RETIRE → XDR Native</div>
+            <div class="summary-number" style="color: #166534;">780</div>
+            <div class="summary-label">RETIRE → XDR</div>
           </div>
           <div class="summary-card sentinel">
-            <div class="summary-number" style="color: #1e40af;">347</div>
-            <div class="summary-label">SENTINEL RULES</div>
+            <div class="summary-number" style="color: #1e40af;">255</div>
+            <div class="summary-label">MIGRATE (RSA)</div>
+          </div>
+          <div class="summary-card" style="background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3);">
+            <div class="summary-number" style="color: #7c3aed;">230</div>
+            <div class="summary-label">NEW (Gaps)</div>
           </div>
           <div class="summary-card drop">
-            <div class="summary-number" style="color: #991b1b;">58</div>
-            <div class="summary-label">DROP → No Value</div>
+            <div class="summary-number" style="color: #991b1b;">212</div>
+            <div class="summary-label">DROP</div>
           </div>
           <div class="summary-card total">
-            <div class="summary-number" style="color: #7c3aed;">717</div>
+            <div class="summary-number" style="color: #059669;">1,265</div>
             <div class="summary-label">TOTAL COVERAGE</div>
           </div>
         </div>
 
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Migration Summary</span></div>
+          <pre><code>RSA NETWITNESS → SENTINEL + XDR MIGRATION
+═══════════════════════════════════════════════════════════════════════════════
+
+STARTING POINT: 1,247 RSA NetWitness Rules
+
+RSA RULE DISPOSITION:
+────────────────────────────────────────────────────────────────────────────────
+RETIRE → XDR Native           780 (63%)   MDE/MDI/MDO/MDA handles natively
+├── Endpoint Behavior         478         MDE behavioral + ASR rules
+├── Identity Attacks          198         MDI DC sensor detection
+└── Email Threats             104         MDO Safe Links/Attachments
+
+MIGRATE → Sentinel            255 (20%)   Network, Cloud, SaaS, Business Logic
+├── REPLACE (Content Hub)     102         Built-in rules enabled & tuned
+├── MIGRATE (Custom KQL)      128         Detection engineer developed
+└── DEFER (Missing Data)       25         Awaiting telemetry onboarding
+
+DROP → No Value                212 (17%)   Noisy, stale, or obsolete
+────────────────────────────────────────────────────────────────────────────────
+TOTAL RSA EVALUATED           1,247
+
+NEW SENTINEL RULES (Coverage Gaps RSA Never Had):
+────────────────────────────────────────────────────────────────────────────────
+SaaS Applications              70         Salesforce, Workday, NetSuite, GitHub
+Business Logic / Insider       38         Termination, VIP, contractor anomalies
+Compliance Monitoring          45         SOC 2, GDPR, admin change auditing
+Cloud Infrastructure           34         Azure + AWS deep monitoring
+DLP Correlation                18         Purview + identity + network
+XDR Higher-Order Correlation   19         XDR incident + network + SaaS context
+Network Enhanced                6         New patterns RSA didn't cover
+────────────────────────────────────────────────────────────────────────────────
+TOTAL NEW RULES               230         Coverage gaps RSA was never designed for
+
+FINAL DETECTION COVERAGE:
+────────────────────────────────────────────────────────────────────────────────
+Microsoft Defender XDR        780 techniques   Endpoint + Identity + Email
+Microsoft Sentinel            485 rules        255 migrated + 230 new
+────────────────────────────────────────────────────────────────────────────────
+TOTAL COVERAGE                1,265 detections
+
+KEY INSIGHT:
+Migration is NOT lift-and-shift — it's detection modernization.
+RSA was deployed in 2018 when 70% on-prem. By 2024, 90% cloud with crown
+jewels in Salesforce and Workday. The 230 new rules aren't gaps we 
+discovered — they're coverage for a threat landscape RSA never addressed.</code></pre>
+        </div>
+
         <div class="callout critical">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Why Migration ≠ Lift-and-Shift</div>
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Why RSA Had Coverage Gaps</div>
           <div class="callout-content">
-            <p><strong>RSA NetWitness did NOT have adequate coverage.</strong> It was deployed in 2018 when RevFlow was primarily on-prem with limited cloud/SaaS adoption. The rule set reflected that era — network-centric, endpoint-focused, with minimal cloud coverage.</p>
-            <p>This migration is a <strong>detection modernization</strong>, not a translation exercise.</p>
+            <p><strong>RSA NetWitness was deployed in 2018</strong> when RevFlow was primarily on-prem with limited cloud/SaaS adoption. The rule set reflected that era — network-centric, endpoint-focused, with minimal cloud coverage.</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>SaaS:</strong> RSA had 17 rules total — no Salesforce, Workday, NetSuite, GitHub coverage despite these being crown jewels → we added 70</li>
+              <li><strong>Business Logic:</strong> No HR system integration, no terminated employee correlation, no VIP monitoring → we added 38</li>
+              <li><strong>Compliance:</strong> Zero SOC 2 control monitoring, no GDPR data access tracking → we added 45</li>
+              <li><strong>XDR Correlation:</strong> ESET had no SIEM integration — no higher-order correlation possible → we added 19</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ==================== 6-DISPOSITION FRAMEWORK ==================== -->
+        <h2>2. The 6-Disposition Framework</h2>
+        <p>Every RSA rule was assigned one of six dispositions. This prevents "convert everything" paralysis and ensures decisions are justified and auditable.</p>
+
+        <div class="disposition-grid">
+          <div class="disposition-card" style="background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e;">
+            <h4><span class="disposition-retire">RETIRE → XDR</span></h4>
+            <p>XDR detects this technique natively with superior fidelity. Do not migrate — document XDR coverage.</p>
+          </div>
+          <div class="disposition-card" style="background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6;">
+            <h4><span class="disposition-replace">REPLACE → Content Hub</span></h4>
+            <p>Sentinel Content Hub has equivalent rule. Enable built-in, tune thresholds, no custom KQL needed.</p>
+          </div>
+          <div class="disposition-card" style="background: rgba(8, 145, 178, 0.1); border-left: 3px solid #0891b2;">
+            <h4><span class="disposition-migrate">MIGRATE → Custom KQL</span></h4>
+            <p>No XDR or Content Hub coverage. Requires custom Sentinel analytics rule development.</p>
+          </div>
+          <div class="disposition-card" style="background: rgba(234, 179, 8, 0.1); border-left: 3px solid #eab308;">
+            <h4><span class="disposition-defer">DEFER</span></h4>
+            <p>Blocked by missing telemetry. Track dependency, enable when data source is onboarded.</p>
+          </div>
+          <div class="disposition-card" style="background: rgba(107, 114, 128, 0.1); border-left: 3px solid #6b7280;">
+            <h4><span class="disposition-keep">KEEP TEMP</span></h4>
+            <p>Run in RSA during parallel operations. Maintain until Sentinel coverage is validated.</p>
+          </div>
+          <div class="disposition-card" style="background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444;">
+            <h4><span class="disposition-drop">DROP</span></h4>
+            <p>No value — noisy, stale IOCs, or obsolete technology. Migration cleans house.</p>
+          </div>
+        </div>
+
+        <!-- ==================== METHODOLOGY ==================== -->
+        <h2>3. Migration Methodology</h2>
+        <p>Step-by-step process applied to each RSA rule. Items I owned or contributed to are marked.</p>
+
+        <div class="methodology-step">
+          <div class="methodology-step-number">1</div>
+          <div class="methodology-step-content">
+            <div class="methodology-step-title">Export & Normalize Intent</div>
+            <p style="margin: 0; font-size: 0.9rem;">Extract RSA rule details (name, logic, data sources, severity). Write single "intent" sentence describing what behavior the rule detects.</p>
+          </div>
+        </div>
+
+        <div class="methodology-step">
+          <div class="methodology-step-number">2</div>
+          <div class="methodology-step-content">
+            <div class="methodology-step-title">Map to MITRE ATT&CK + Business Objective</div>
+            <p style="margin: 0; font-size: 0.9rem;">Identify technique ID and business risk category. Rules that can't map to MITRE are candidates for DROP.</p>
+          </div>
+        </div>
+
+        <div class="methodology-step">
+          <div class="methodology-step-number">3</div>
+          <div class="methodology-step-content">
+            <div class="methodology-step-title">Check Telemetry Availability <span class="role-badge">My Role</span></div>
+            <p style="margin: 0; font-size: 0.9rem;">Validate: Is the required data source onboarded? Is it normalized? Is data quality acceptable? Mark as DEFER if blocked.</p>
+          </div>
+        </div>
+
+        <div class="methodology-step">
+          <div class="methodology-step-number">4</div>
+          <div class="methodology-step-content">
+            <div class="methodology-step-title">Check XDR Native Coverage <span class="role-badge">My Role</span></div>
+            <p style="margin: 0; font-size: 0.9rem;">Does MDE/MDI/MDO/MDA detect this technique? Evidence required: Microsoft docs, historical alerts, or simulation test.</p>
+          </div>
+        </div>
+
+        <div class="methodology-step">
+          <div class="methodology-step-number">5</div>
+          <div class="methodology-step-content">
+            <div class="methodology-step-title">Check Content Hub & Enable Built-ins <span class="role-badge">My Role</span></div>
+            <p style="margin: 0; font-size: 0.9rem;">Does Sentinel Content Hub have equivalent? If yes, enable, tune thresholds, configure entity mapping — no custom KQL needed.</p>
+          </div>
+        </div>
+
+        <div class="methodology-step">
+          <div class="methodology-step-number">6</div>
+          <div class="methodology-step-content">
+            <div class="methodology-step-title">Assign Disposition & Document</div>
+            <p style="margin: 0; font-size: 0.9rem;">Record final decision with evidence type, justification, owner, and date. This is the audit trail for compliance.</p>
+          </div>
+        </div>
+
+        <!-- ==================== EVIDENCE TYPES ==================== -->
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Evidence Types for Retirement Decisions</div>
+          <div class="callout-content">
+            <p>
+              <span class="evidence-doc">DOC</span> Microsoft documentation confirms XDR coverage &nbsp;
+              <span class="evidence-test">TEST</span> Simulation/purple team validated detection fired &nbsp;
+              <span class="evidence-hist">HIST</span> Historical incidents show XDR detected reliably &nbsp;
+              <span class="evidence-na">N/A</span> Not applicable (DROP or Content Hub)
+            </p>
+          </div>
+        </div>
+
+        <!-- ==================== SAMPLE CATALOG - 25 RULES ==================== -->
+        <h2>4. Sample Detection Catalog (25 Rules)</h2>
+        <p>Representative rules from each disposition category showing the actual catalog structure.</p>
+
+        <!-- RETIRE TO XDR - 10 examples -->
+        <div class="category-header" style="border-color: #22c55e; background: rgba(34, 197, 94, 0.1);">
+          <h3>4.1 RETIRE → XDR Native (780 Rules)</h3>
+          <div class="category-stats">Endpoint (478) + Identity (198) + Email (104) — XDR handles with superior fidelity</div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="rule-table">
+            <thead>
+              <tr>
+                <th>RSA Rule ID</th>
+                <th>Intent</th>
+                <th>MITRE</th>
+                <th>Domain</th>
+                <th>Disposition</th>
+                <th>Evidence</th>
+                <th>XDR Product</th>
+                <th>Justification</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>RSA-EP-001</code></td>
+                <td>Detect LSASS memory access for credential theft</td>
+                <td><a class="mitre-link" href="#">T1003.001</a></td>
+                <td>Endpoint</td>
+                <td><span class="disposition-retire">RETIRE</span></td>
+                <td><span class="evidence-test">TEST</span></td>
+                <td>MDE</td>
+                <td>MDE Credential Guard + behavioral detection; Mimikatz simulation triggered alert</td>
+              </tr>
+              <tr>
+                <td><code>RSA-EP-012</code></td>
+                <td>Detect ransomware file encryption behavior</td>
+                <td><a class="mitre-link" href="#">T1486</a></td>
+                <td>Endpoint</td>
+                <td><span class="disposition-retire">RETIRE</span></td>
+                <td><span class="evidence-doc">DOC</span></td>
+                <td>MDE</td>
+                <td>MDE ransomware protection + controlled folder access; documented coverage</td>
+              </tr>
+              <tr>
+                <td><code>RSA-EP-023</code></td>
+                <td>Detect Office spawning suspicious child process</td>
+                <td><a class="mitre-link" href="#">T1566.001</a></td>
+                <td>Endpoint</td>
+                <td><span class="disposition-retire">RETIRE</span></td>
+                <td><span class="evidence-hist">HIST</span></td>
+                <td>MDE + ASR</td>
+                <td>ASR blocks + MDE alerts; 14 historical true positives in XDR</td>
+              </tr>
+              <tr>
+                <td><code>RSA-EP-034</code></td>
+                <td>Detect PowerShell encoded command execution</td>
+                <td><a class="mitre-link" href="#">T1059.001</a></td>
+                <td>Endpoint</td>
+                <td><span class="disposition-retire">RETIRE</span></td>
+                <td><span class="evidence-test">TEST</span></td>
+                <td>MDE</td>
+                <td>MDE AMSI integration + script block logging; Atomic Red Team validated</td>
+              </tr>
+              <tr>
+                <td><code>RSA-EP-045</code></td>
+                <td>Detect scheduled task persistence</td>
+                <td><a class="mitre-link" href="#">T1053.005</a></td>
+                <td>Endpoint</td>
+                <td><span class="disposition-retire">RETIRE</span></td>
+                <td><span class="evidence-hist">HIST</span></td>
+                <td>MDE</td>
+                <td>MDE persistence detection; 8 historical incidents detected</td>
+              </tr>
+              <tr>
+                <td><code>RSA-EP-056</code></td>
+                <td>Detect process injection techniques</td>
+                <td><a class="mitre-link" href="#">T1055</a></td>
+                <td>Endpoint</td>
+                <td><span class="disposition-retire">RETIRE</span></td>
+                <td><span class="evidence-doc">DOC</span></td>
+                <td>MDE</td>
+                <td>MDE kernel-level visibility; behavioral process injection detection</td>
+              </tr>
+              <tr>
+                <td><code>RSA-ID-003</code></td>
+                <td>Detect Kerberoasting activity</td>
+                <td><a class="mitre-link" href="#">T1558.003</a></td>
+                <td>Identity</td>
+                <td><span class="disposition-retire">RETIRE</span></td>
+                <td><span class="evidence-test">TEST</span></td>
+                <td>MDI</td>
+                <td>MDI DC sensor detects SPN enumeration; Rubeus simulation validated</td>
+              </tr>
+              <tr>
+                <td><code>RSA-ID-011</code></td>
+                <td>Detect Pass-the-Hash lateral movement</td>
+                <td><a class="mitre-link" href="#">T1550.002</a></td>
+                <td>Identity</td>
+                <td><span class="disposition-retire">RETIRE</span></td>
+                <td><span class="evidence-doc">DOC</span></td>
+                <td>MDI</td>
+                <td>MDI PtH detection with DC-level NTLM visibility; documented</td>
+              </tr>
+              <tr>
+                <td><code>RSA-ID-019</code></td>
+                <td>Detect DCSync replication attack</td>
+                <td><a class="mitre-link" href="#">T1003.006</a></td>
+                <td>Identity</td>
+                <td><span class="disposition-retire">RETIRE</span></td>
+                <td><span class="evidence-test">TEST</span></td>
+                <td>MDI</td>
+                <td>MDI malicious replication detection; Mimikatz DCSync test validated</td>
+              </tr>
+              <tr>
+                <td><code>RSA-EM-002</code></td>
+                <td>Detect phishing email with malicious attachment</td>
+                <td><a class="mitre-link" href="#">T1566.001</a></td>
+                <td>Email</td>
+                <td><span class="disposition-retire">RETIRE</span></td>
+                <td><span class="evidence-hist">HIST</span></td>
+                <td>MDO</td>
+                <td>MDO Safe Attachments detonation; 47 historical phishing catches</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- REPLACE WITH CONTENT HUB - 6 examples -->
+        <div class="category-header" style="border-color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
+          <h3>4.2 REPLACE → Content Hub (102 Rules) <span class="role-badge">My Role: Enabled & Tuned</span></h3>
+          <div class="category-stats">Built-in Sentinel rules — no custom KQL needed, just enable and tune</div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="rule-table">
+            <thead>
+              <tr>
+                <th>RSA Rule ID</th>
+                <th>Intent</th>
+                <th>MITRE</th>
+                <th>Disposition</th>
+                <th>Content Hub Rule Enabled</th>
+                <th>Tuning Applied</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>RSA-ID-022</code></td>
+                <td>Detect brute force authentication attempts</td>
+                <td><a class="mitre-link" href="#">T1110.001</a></td>
+                <td><span class="disposition-replace">REPLACE</span></td>
+                <td>Brute force attack against Azure Portal</td>
+                <td>Threshold: 10→25 attempts; excluded service accounts</td>
+              </tr>
+              <tr>
+                <td><code>RSA-ID-028</code></td>
+                <td>Detect sign-in from anonymous proxy/VPN</td>
+                <td><a class="mitre-link" href="#">T1090</a></td>
+                <td><span class="disposition-replace">REPLACE</span></td>
+                <td>Sign-ins from IPs that attempt to hide their true IP</td>
+                <td>Enabled as-is; medium severity</td>
+              </tr>
+              <tr>
+                <td><code>RSA-ID-035</code></td>
+                <td>Detect impossible travel sign-in anomaly</td>
+                <td><a class="mitre-link" href="#">T1078</a></td>
+                <td><span class="disposition-replace">REPLACE</span></td>
+                <td>Anomalous sign-in location by user principal</td>
+                <td>Excluded corporate VPN egress IPs from detection</td>
+              </tr>
+              <tr>
+                <td><code>RSA-CL-008</code></td>
+                <td>Detect Azure Key Vault secret access anomaly</td>
+                <td><a class="mitre-link" href="#">T1555</a></td>
+                <td><span class="disposition-replace">REPLACE</span></td>
+                <td>Sensitive Azure Key Vault operations</td>
+                <td>Added automation service principal to exclusion list</td>
+              </tr>
+              <tr>
+                <td><code>RSA-CL-015</code></td>
+                <td>Detect new user added to privileged Azure AD role</td>
+                <td><a class="mitre-link" href="#">T1098.001</a></td>
+                <td><span class="disposition-replace">REPLACE</span></td>
+                <td>User added to Azure AD privileged groups</td>
+                <td>Scoped to Global Admin, Security Admin, Exchange Admin only</td>
+              </tr>
+              <tr>
+                <td><code>RSA-NW-018</code></td>
+                <td>Detect potential DNS tunneling activity</td>
+                <td><a class="mitre-link" href="#">T1071.004</a></td>
+                <td><span class="disposition-replace">REPLACE</span></td>
+                <td>DNS events related to ToR proxies</td>
+                <td>Added custom DNS tunneling domain patterns</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- MIGRATE TO CUSTOM KQL - 6 examples -->
+        <div class="category-header" style="border-color: #0891b2; background: rgba(8, 145, 178, 0.1);">
+          <h3>4.3 MIGRATE → Custom KQL (128 Rules)</h3>
+          <div class="category-stats">Network (32) + SaaS (26) + Business Logic (18) + Cloud (9) — Detection engineer developed</div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="rule-table">
+            <thead>
+              <tr>
+                <th>RSA Rule ID</th>
+                <th>Intent</th>
+                <th>MITRE</th>
+                <th>Domain</th>
+                <th>Disposition</th>
+                <th>Data Source</th>
+                <th>New Sentinel Rule</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>RSA-NW-003</code></td>
+                <td>Detect VPN login from new geographic location</td>
+                <td><a class="mitre-link" href="#">T1133</a></td>
+                <td>Network</td>
+                <td><span class="disposition-migrate">MIGRATE</span></td>
+                <td>Palo Alto GlobalProtect</td>
+                <td><code>VPN-NewGeoLocation</code></td>
+              </tr>
+              <tr>
+                <td><code>RSA-NW-011</code></td>
+                <td>Detect large outbound data transfer</td>
+                <td><a class="mitre-link" href="#">T1048</a></td>
+                <td>Network</td>
+                <td><span class="disposition-migrate">MIGRATE</span></td>
+                <td>Palo Alto Traffic</td>
+                <td><code>NET-LargeOutboundTransfer</code></td>
+              </tr>
+              <tr>
+                <td><code>RSA-SA-002</code></td>
+                <td>Detect Salesforce bulk data export by user</td>
+                <td><a class="mitre-link" href="#">T1530</a></td>
+                <td>SaaS</td>
+                <td><span class="disposition-migrate">MIGRATE</span></td>
+                <td>Salesforce EventLog</td>
+                <td><code>SF-BulkDataExport</code></td>
+              </tr>
+              <tr>
+                <td><code>RSA-SA-009</code></td>
+                <td>Detect Workday sensitive HR report access</td>
+                <td><a class="mitre-link" href="#">T1213</a></td>
+                <td>SaaS</td>
+                <td><span class="disposition-migrate">MIGRATE</span></td>
+                <td>Workday Audit</td>
+                <td><code>WD-SensitiveReportAccess</code></td>
+              </tr>
+              <tr>
+                <td><code>RSA-BL-001</code></td>
+                <td>Detect terminated employee accessing systems</td>
+                <td><a class="mitre-link" href="#">T1078</a></td>
+                <td>Business</td>
+                <td><span class="disposition-migrate">MIGRATE</span></td>
+                <td>Workday + SigninLogs</td>
+                <td><code>BL-TerminatedEmployeeAccess</code></td>
+              </tr>
+              <tr>
+                <td><code>RSA-BL-007</code></td>
+                <td>Detect VIP account anomalous activity pattern</td>
+                <td><a class="mitre-link" href="#">T1078</a></td>
+                <td>Business</td>
+                <td><span class="disposition-migrate">MIGRATE</span></td>
+                <td>SigninLogs + Watchlist</td>
+                <td><code>BL-VIPAnomalousActivity</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- DEFER - 2 examples -->
+        <div class="category-header" style="border-color: #eab308; background: rgba(234, 179, 8, 0.1);">
+          <h3>4.4 DEFER — Missing Telemetry (25 Rules) <span class="role-badge">My Role: Tracking</span></h3>
+          <div class="category-stats">Blocked by data source onboarding — tracked for future enablement</div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="rule-table">
+            <thead>
+              <tr>
+                <th>RSA Rule ID</th>
+                <th>Intent</th>
+                <th>Domain</th>
+                <th>Disposition</th>
+                <th>Missing Data Source</th>
+                <th>ETA</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>RSA-SA-015</code></td>
+                <td>Detect NetSuite sensitive transaction modification</td>
+                <td>SaaS</td>
+                <td><span class="disposition-defer">DEFER</span></td>
+                <td>NetSuite Audit Logs</td>
+                <td>M9</td>
+                <td>Custom connector in development</td>
+              </tr>
+              <tr>
+                <td><code>RSA-CL-022</code></td>
+                <td>Detect AWS IAM policy modification</td>
+                <td>Cloud</td>
+                <td><span class="disposition-defer">DEFER</span></td>
+                <td>AWS CloudTrail</td>
+                <td>M10</td>
+                <td>AWS workload migration in progress</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- DROP - 5 examples -->
+        <div class="category-header" style="border-color: #ef4444; background: rgba(239, 68, 68, 0.1);">
+          <h3>4.5 DROP — No Value (212 Rules)</h3>
+          <div class="category-stats">Noisy, stale, or obsolete — migration is a chance to clean house, not migrate noise</div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="rule-table">
+            <thead>
+              <tr>
+                <th>RSA Rule ID</th>
+                <th>Original Intent</th>
+                <th>Disposition</th>
+                <th>Drop Reason</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>RSA-GEN-001</code></td>
+                <td>Process started (generic telemetry)</td>
+                <td><span class="disposition-drop">DROP</span></td>
+                <td>Base telemetry, not detection — generates 50K+ events/day with no context</td>
+                <td>SOC feedback: "always ignored"</td>
+              </tr>
+              <tr>
+                <td><code>RSA-GEN-008</code></td>
+                <td>Single failed login event</td>
+                <td><span class="disposition-drop">DROP</span></td>
+                <td>No attack context — users fat-finger passwords constantly</td>
+                <td>99.8% false positive rate</td>
+              </tr>
+              <tr>
+                <td><code>RSA-IOC-012</code></td>
+                <td>Connection to known bad IP (2019 static list)</td>
+                <td><span class="disposition-drop">DROP</span></td>
+                <td>Stale IOCs — indicators from 5 years ago no longer relevant</td>
+                <td>0 true positives in 18 months</td>
+              </tr>
+              <tr>
+                <td><code>RSA-IOC-023</code></td>
+                <td>Malware hash match (static hash list)</td>
+                <td><span class="disposition-drop">DROP</span></td>
+                <td>XDR + Microsoft Threat Intelligence handles this with live feeds</td>
+                <td>Superseded by MDE + MDTI integration</td>
+              </tr>
+              <tr>
+                <td><code>RSA-OP-005</code></td>
+                <td>Windows Update successfully installed</td>
+                <td><span class="disposition-drop">DROP</span></td>
+                <td>IT operations event, not security — belongs in ITSM not SIEM</td>
+                <td>Not a threat detection</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== DELIVERABLES ==================== -->
+        <h2>5. Migration Deliverables</h2>
+        <p>Artifacts produced during detection migration. Items I owned or contributed to are marked.</p>
+
+        <div class="deliverable-grid">
+          <div class="deliverable-card" style="border-color: #22c55e;">
+            <h4>📋 Detection Migration Catalog <span class="role-badge">Contributed</span></h4>
+            <p>Master spreadsheet with 1,247 rules, disposition decisions, evidence, justifications. Backbone of weekly review meetings.</p>
+          </div>
+          <div class="deliverable-card" style="border-color: #22c55e;">
+            <h4>📊 Telemetry Readiness Matrix <span class="role-badge">Owned</span></h4>
+            <p>Data source availability per detection rule. Tracked DEFER rules and onboarding ETAs for unblocking.</p>
+          </div>
+          <div class="deliverable-card" style="border-color: #22c55e;">
+            <h4>🔌 XDR Connector Configuration <span class="role-badge">Owned</span></h4>
+            <p>M365 Defender data connector setup, bi-directional sync, incident flow validation, alert filtering rules.</p>
+          </div>
+          <div class="deliverable-card" style="border-color: #22c55e;">
+            <h4>✅ Content Hub Enablement Register <span class="role-badge">Owned</span></h4>
+            <p>102 built-in analytics rules enabled across 8 Content Hub solutions. Tuning documentation for each rule.</p>
+          </div>
+          <div class="deliverable-card" style="border-color: #22c55e;">
+            <h4>🛡️ XDR Detection Policy Config <span class="role-badge">Owned</span></h4>
+            <p>MDE detection policies, MDI sensor configuration, MDO Safe Links/Attachments settings, MDA OAuth app policies.</p>
+          </div>
+          <div class="deliverable-card" style="border-color: #22c55e;">
+            <h4>🧪 XDR Coverage Validation <span class="role-badge">Contributed</span></h4>
+            <p>Evidence collection for RETIRE decisions: Microsoft doc references, historical alert analysis, simulation test results.</p>
+          </div>
+          <div class="deliverable-card">
+            <h4>📝 Custom KQL Rule Repository</h4>
+            <p>128 analytics rules developed by detection engineers. I validated telemetry readiness for each before development.</p>
+          </div>
+          <div class="deliverable-card" style="border-color: #22c55e;">
+            <h4>📈 Platform Health Workbooks <span class="role-badge">Owned</span></h4>
+            <p>Dashboards tracking XDR-to-Sentinel alert flow, ingestion health, detection rule firing rates, connector status.</p>
+          </div>
+        </div>
+
+        <!-- ==================== INTERVIEW TALKING POINTS ==================== -->
+        <h2>6. Interview Talking Points</h2>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>How to Describe Your Role</div>
+          <div class="callout-content">
+            <p><em>"My work on Sentinel and MDE was at the platform engineering level. I owned telemetry onboarding, connector configuration, and platform readiness. I worked closely with detection engineers and SOC teams — they owned custom KQL rule development, while I ensured the data sources were ready and the platform was stable for them to build against.</em></p>
+            <p style="margin-top: 0.5rem;"><em>I also contributed to the detection catalog — particularly around validating XDR coverage for rules we were considering for retirement. For example, I confirmed through simulation testing that MDE reliably detected credential theft scenarios, which allowed us to retire 780 RSA rules to XDR rather than recreating them in Sentinel.</em></p>
+            <p style="margin-top: 0.5rem;"><em>On the Sentinel side, I enabled and tuned 102 Content Hub built-in rules rather than writing custom KQL for everything. But the bigger story is the 230 new rules we added — RSA was deployed in 2018 when the company was 70% on-prem. By 2024, we were 90% cloud with crown jewels in Salesforce and Workday. RSA had 17 SaaS rules total; we needed 70. The 230 new rules aren't gaps we discovered — they're coverage for a threat landscape RSA was never designed to address."</em></p>
           </div>
         </div>
 
         <div class="callout info">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Understanding the Numbers</div>
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Key Numbers to Remember</div>
           <div class="callout-content">
-            <p><strong>487 RSA rules evaluated:</strong></p>
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li><strong>312 retired to XDR</strong> — Endpoint, identity, email detection now handled by Microsoft Defender with superior fidelity</li>
-              <li><strong>117 migrated to Sentinel</strong> — Network, cloud infrastructure rules rewritten in KQL</li>
-              <li><strong>58 dropped</strong> — Stale IOCs, generic thresholds, single-event noise with no detection value</li>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+              <li><strong>1,247 RSA rules</strong> evaluated systematically using 6-disposition framework</li>
+              <li><strong>780 retired to XDR</strong> (63%) — MDE/MDI/MDO/MDA handles natively</li>
+              <li><strong>255 migrated to Sentinel</strong> (20%) — network, cloud, SaaS, business logic</li>
+              <li><strong>230 NEW rules</strong> — coverage gaps RSA never had (SaaS, compliance, XDR correlation)</li>
+              <li><strong>485 total Sentinel rules</strong> = 255 migrated + 230 new</li>
+              <li><strong>1,265 total detections</strong> = 780 XDR + 485 Sentinel</li>
+              <li><strong>102 Content Hub rules</strong> enabled and tuned (my responsibility)</li>
+              <li><strong>212 rules dropped</strong> — migration cleans house, doesn't migrate noise</li>
             </ul>
-            <p style="margin-top: 0.75rem;"><strong>+230 new Sentinel rules</strong> — NOT derived from RSA. Built from scratch to cover gaps RSA never addressed:</p>
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              <li>SaaS application monitoring (Salesforce, Workday, NetSuite, GitHub) — RSA had no connectors</li>
-              <li>Business logic detection (terminated employee correlation, VIP monitoring) — RSA couldn't correlate with HR systems</li>
-              <li>Compliance monitoring (SOC 2 controls, GDPR data access) — RSA had no compliance framework</li>
-              <li>Higher-order XDR correlation — RSA had no XDR to correlate with</li>
-            </ul>
-            <p style="margin-top: 0.75rem;"><strong>Total Sentinel detection rules: 347</strong> — appropriate for B2B SaaS with SOC 2/ISO 27001.</p>
           </div>
-        </div>
-
-        <h3>1.1 RSA NetWitness Coverage Gaps (Why New Rules Were Needed)</h3>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Coverage Domain</th><th>RSA State (2018-2024)</th><th>Gap</th><th>New Sentinel Rules</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>SaaS Applications</strong></td>
-                <td>17 rules — basic OAuth/API abuse only</td>
-                <td>No Salesforce, Workday, NetSuite, GitHub coverage despite these being crown jewels</td>
-                <td>+70 new SaaS rules</td>
-              </tr>
-              <tr>
-                <td><strong>Business Logic</strong></td>
-                <td>14 rules — generic insider threat</td>
-                <td>No HR system integration, no terminated employee correlation, no VIP monitoring</td>
-                <td>+38 new business logic rules</td>
-              </tr>
-              <tr>
-                <td><strong>Compliance Monitoring</strong></td>
-                <td>0 rules</td>
-                <td>No SOC 2 control monitoring, no GDPR data access tracking, no admin change auditing</td>
-                <td>+45 new compliance rules</td>
-              </tr>
-              <tr>
-                <td><strong>Cloud Infrastructure</strong></td>
-                <td>34 rules — basic AWS only</td>
-                <td>Limited Azure coverage, no IAM deep monitoring, no data plane detection</td>
-                <td>+34 new cloud rules</td>
-              </tr>
-              <tr>
-                <td><strong>DLP Correlation</strong></td>
-                <td>0 rules</td>
-                <td>Symantec DLP was not integrated with RSA — siloed alerting</td>
-                <td>+18 new DLP correlation rules</td>
-              </tr>
-              <tr>
-                <td><strong>XDR Correlation</strong></td>
-                <td>0 rules (no XDR)</td>
-                <td>ESET had no SIEM integration — no higher-order correlation possible</td>
-                <td>+19 new XDR correlation rules</td>
-              </tr>
-              <tr>
-                <td><strong>Network Security</strong></td>
-                <td>52 rules</td>
-                <td>Coverage existed but needed KQL rewrite + modernization</td>
-                <td>+6 enhanced network rules</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="callout success">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Interview Talking Point</div>
-          <div class="callout-content">
-            <p><em>"The RSA migration wasn't lift-and-shift — it was detection modernization. RSA was deployed in 2018 when the company was 70% on-prem. By 2024, we were 90% cloud with crown jewels in Salesforce and Workday. RSA had 17 SaaS rules total; we needed 87. It had zero compliance monitoring; we needed 45 rules for SOC 2. The 230 new rules aren't gaps we discovered — they're coverage for a threat landscape RSA was never designed to address."</em></p>
-          </div>
-        </div>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>Category</th><th>RSA Rules</th><th>Disposition</th><th>Sentinel Rules</th></tr>
-            </thead>
-            <tbody>
-              <tr style="background: rgba(34, 197, 94, 0.1);">
-                <td><strong>Endpoint Behavior</strong></td>
-                <td>187</td>
-                <td><span class="disposition-retire">100% RETIRE → XDR</span></td>
-                <td>0 (XDR native)</td>
-              </tr>
-              <tr style="background: rgba(34, 197, 94, 0.1);">
-                <td><strong>Identity Attacks</strong></td>
-                <td>89</td>
-                <td><span class="disposition-retire">100% RETIRE → XDR</span></td>
-                <td>0 (XDR native)</td>
-              </tr>
-              <tr style="background: rgba(34, 197, 94, 0.1);">
-                <td><strong>Email Threats</strong></td>
-                <td>36</td>
-                <td><span class="disposition-retire">100% RETIRE → XDR</span></td>
-                <td>0 (XDR native)</td>
-              </tr>
-              <tr style="background: rgba(59, 130, 246, 0.1);">
-                <td><strong>Network Security</strong></td>
-                <td>52</td>
-                <td><span class="disposition-rewrite">100% REWRITE</span></td>
-                <td>58</td>
-              </tr>
-              <tr style="background: rgba(59, 130, 246, 0.1);">
-                <td><strong>Cloud Infrastructure</strong></td>
-                <td>34</td>
-                <td><span class="disposition-rewrite">100% REWRITE</span></td>
-                <td>68</td>
-              </tr>
-              <tr style="background: rgba(59, 130, 246, 0.1);">
-                <td><strong>SaaS Applications</strong></td>
-                <td>17</td>
-                <td><span class="disposition-rewrite">REWRITE + NEW</span></td>
-                <td>87</td>
-              </tr>
-              <tr style="background: rgba(59, 130, 246, 0.1);">
-                <td><strong>Business Logic / Insider</strong></td>
-                <td>14</td>
-                <td><span class="disposition-rewrite">REWRITE + NEW</span></td>
-                <td>52</td>
-              </tr>
-              <tr style="background: rgba(59, 130, 246, 0.1);">
-                <td><strong>Compliance & Audit</strong></td>
-                <td>0</td>
-                <td><span class="disposition-rewrite">NEW</span></td>
-                <td>45</td>
-              </tr>
-              <tr style="background: rgba(59, 130, 246, 0.1);">
-                <td><strong>DLP Correlation</strong></td>
-                <td>0</td>
-                <td><span class="disposition-rewrite">NEW</span></td>
-                <td>18</td>
-              </tr>
-              <tr style="background: rgba(168, 85, 247, 0.1);">
-                <td><strong>Higher-Order Correlation</strong></td>
-                <td>0</td>
-                <td><span class="disposition-rewrite">NEW</span></td>
-                <td>19</td>
-              </tr>
-              <tr style="background: rgba(239, 68, 68, 0.1);">
-                <td><strong>Low Value / Noisy</strong></td>
-                <td>58</td>
-                <td><span class="disposition-drop">100% DROP</span></td>
-                <td>0</td>
-              </tr>
-              <tr style="font-weight: 600; background: var(--bg-tertiary);">
-                <td><strong>TOTAL</strong></td>
-                <td>487</td>
-                <td>—</td>
-                <td>347</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 2: RETIRED TO XDR ==================== -->
-        <div class="category-header" style="border-color: #22c55e; background: rgba(34, 197, 94, 0.1);">
-          <h3>2. Retired to XDR — 312 Rules</h3>
-          <div class="category-stats">Endpoint (187) + Identity (89) + Email (36) | XDR handles natively</div>
-        </div>
-
-        <p>These rules are <strong>not translated to Sentinel</strong>. XDR detects these techniques with superior fidelity using kernel-level visibility, AMSI integration, behavioral ML, and DC sensors.</p>
-
-        <div class="subcategory">2.1 Endpoint Behavior — 187 Rules → RETIRE</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Detection Category</th><th>RSA Rules</th><th>XDR Coverage</th></tr></thead>
-            <tbody>
-              <tr><td>Ransomware / Encryption</td><td>23</td><td>MDE behavioral ransomware detection + controlled folder access</td></tr>
-              <tr><td>Credential Theft (LSASS, SAM, DCSync)</td><td>31</td><td>MDE + MDI credential theft detection + ASR rules</td></tr>
-              <tr><td>Persistence Mechanisms</td><td>28</td><td>MDE persistence detection (registry, scheduled tasks, services)</td></tr>
-              <tr><td>Process Injection</td><td>19</td><td>MDE behavioral process injection detection</td></tr>
-              <tr><td>LOLBins Abuse</td><td>34</td><td>MDE signed binary proxy execution detection</td></tr>
-              <tr><td>Lateral Movement (WMI, PsExec)</td><td>22</td><td>MDE + MDI remote execution detection</td></tr>
-              <tr><td>Defense Evasion</td><td>18</td><td>MDE tamper protection + evasion detection</td></tr>
-              <tr><td>Malware / Trojans</td><td>12</td><td>MDE signature + behavioral + cloud ML detection</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">2.2 Identity Attacks — 89 Rules → RETIRE</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Detection Category</th><th>RSA Rules</th><th>XDR Coverage</th></tr></thead>
-            <tbody>
-              <tr><td>Kerberos Attacks (Kerberoasting, Golden/Silver Ticket)</td><td>18</td><td>MDI Kerberos attack detection</td></tr>
-              <tr><td>Credential Attacks (Pass-the-Hash, Pass-the-Ticket)</td><td>14</td><td>MDI + MDE credential attack correlation</td></tr>
-              <tr><td>Brute Force / Password Spray</td><td>12</td><td>Entra ID Protection password attack detection</td></tr>
-              <tr><td>Suspicious Sign-in Patterns</td><td>21</td><td>Entra ID Protection (impossible travel, anomalies)</td></tr>
-              <tr><td>Privilege Escalation</td><td>15</td><td>MDI sensitive group / privilege monitoring</td></tr>
-              <tr><td>AD Reconnaissance (LDAP, BloodHound)</td><td>9</td><td>MDI AD enumeration detection</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">2.3 Email Threats — 36 Rules → RETIRE</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Detection Category</th><th>RSA Rules</th><th>XDR Coverage</th></tr></thead>
-            <tbody>
-              <tr><td>Phishing / Credential Harvesting</td><td>14</td><td>MDO phishing detection + Safe Links</td></tr>
-              <tr><td>Malicious Attachments</td><td>11</td><td>MDO Safe Attachments detonation</td></tr>
-              <tr><td>Business Email Compromise</td><td>8</td><td>MDO BEC detection (behavioral + ML)</td></tr>
-              <tr><td>Email-based Persistence</td><td>3</td><td>MDO inbox rule monitoring</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 3: NETWORK SECURITY ==================== -->
-        <div class="category-header">
-          <h3>3. Network Security — 58 Sentinel Rules</h3>
-          <div class="category-stats">XDR has no network visibility | Palo Alto, DNS, Proxy telemetry</div>
-        </div>
-
-        <div class="subcategory">3.1 Command & Control Detection — 18 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Data Source</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>C2 Beaconing Pattern Detection</td><td>T1071.001</td><td>PAN-OS Traffic</td><td>Periodic outbound connections with consistent intervals</td></tr>
-              <tr><td>DNS Tunneling Detection</td><td>T1071.004</td><td>DNS Logs</td><td>High entropy / long DNS queries indicating tunneling</td></tr>
-              <tr><td>DGA Domain Detection</td><td>T1568.002</td><td>DNS Logs</td><td>Algorithmically generated domain patterns</td></tr>
-              <tr><td>Known Bad Domain Access</td><td>T1071.001</td><td>PAN-OS URL</td><td>TI indicator match on domain access</td></tr>
-              <tr><td>Known Malicious IP Connection</td><td>T1071</td><td>PAN-OS Traffic</td><td>TI indicator match on destination IP</td></tr>
-              <tr><td>Tor Exit Node Connection</td><td>T1090.003</td><td>PAN-OS Traffic</td><td>Connection to known Tor infrastructure</td></tr>
-              <tr><td>Fast Flux DNS Detection</td><td>T1568.001</td><td>DNS Logs</td><td>Rapid IP rotation for single domain</td></tr>
-              <tr><td>Unusual Port Usage</td><td>T1571</td><td>PAN-OS Traffic</td><td>Standard protocols on non-standard ports</td></tr>
-              <tr><td>Encrypted Channel to Rare TLD</td><td>T1573</td><td>PAN-OS Traffic</td><td>TLS to suspicious TLDs (.xyz, .top, etc.)</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 9 additional C2 detection rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">3.2 Data Exfiltration Detection — 14 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Data Source</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Large Outbound Data Transfer</td><td>T1048</td><td>PAN-OS Traffic</td><td>Bytes sent > threshold to external IP</td></tr>
-              <tr><td>Cloud Storage Exfiltration</td><td>T1567.002</td><td>PAN-OS URL</td><td>Large uploads to Dropbox, Google Drive, etc.</td></tr>
-              <tr><td>File Sharing Site Upload</td><td>T1567.002</td><td>PAN-OS URL</td><td>Uploads to WeTransfer, Mega, etc.</td></tr>
-              <tr><td>After-Hours Large Transfer</td><td>T1048</td><td>PAN-OS Traffic</td><td>Unusual data transfer outside business hours</td></tr>
-              <tr><td>Protocol Tunneling (HTTP/DNS)</td><td>T1048.003</td><td>PAN-OS Traffic</td><td>Data exfil over allowed protocols</td></tr>
-              <tr><td>Steganography Upload Pattern</td><td>T1027.003</td><td>PAN-OS Traffic</td><td>Large image uploads to unusual destinations</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 8 additional exfiltration rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">3.3 Network Reconnaissance & Attacks — 15 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Data Source</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Internal Port Scan</td><td>T1046</td><td>PAN-OS Traffic</td><td>Single source hitting multiple ports/hosts</td></tr>
-              <tr><td>SMB Lateral Movement</td><td>T1021.002</td><td>PAN-OS Traffic</td><td>Internal SMB traffic patterns</td></tr>
-              <tr><td>RDP Brute Force (Network)</td><td>T1110</td><td>PAN-OS Traffic</td><td>Multiple RDP connection attempts</td></tr>
-              <tr><td>ICMP Tunnel Detection</td><td>T1095</td><td>PAN-OS Traffic</td><td>Unusual ICMP payload sizes</td></tr>
-              <tr><td>SQL Injection Attempt</td><td>T1190</td><td>WAF Logs</td><td>SQLi patterns in web traffic</td></tr>
-              <tr><td>Web Shell Traffic Pattern</td><td>T1505.003</td><td>WAF Logs</td><td>POST requests to unusual paths</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 9 additional network attack rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">3.4 VPN & Remote Access — 11 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Data Source</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>VPN from Sanctioned Country</td><td>T1133</td><td>GlobalProtect</td><td>VPN connection from restricted geography</td></tr>
-              <tr><td>VPN Impossible Travel</td><td>T1133</td><td>GlobalProtect</td><td>VPN from geographically impossible location</td></tr>
-              <tr><td>Concurrent VPN Sessions</td><td>T1133</td><td>GlobalProtect</td><td>Same user connected from multiple locations</td></tr>
-              <tr><td>VPN Outside Business Hours</td><td>T1133</td><td>GlobalProtect</td><td>Unusual connection timing for user profile</td></tr>
-              <tr><td>VPN from Residential ISP (Sensitive User)</td><td>T1133</td><td>GlobalProtect</td><td>Executive/admin VPN from unexpected ISP</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 6 additional VPN monitoring rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 4: CLOUD INFRASTRUCTURE ==================== -->
-        <div class="category-header">
-          <h3>4. Cloud Infrastructure — 68 Sentinel Rules</h3>
-          <div class="category-stats">Azure (45) + AWS Legacy (23) | Control plane monitoring</div>
-        </div>
-
-        <div class="subcategory">4.1 Azure Privilege & Access — 18 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Data Source</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Subscription Owner Added</td><td>T1098</td><td>AzureActivity</td><td>New owner role assignment</td></tr>
-              <tr><td>Custom Role with Dangerous Permissions</td><td>T1098</td><td>AzureActivity</td><td>Role with */write or */delete</td></tr>
-              <tr><td>Service Principal Created</td><td>T1136.003</td><td>AuditLogs</td><td>New service principal registration</td></tr>
-              <tr><td>Service Principal Secret Added</td><td>T1098.001</td><td>AuditLogs</td><td>Credential added to existing SP</td></tr>
-              <tr><td>Management Group Policy Change</td><td>T1098</td><td>AzureActivity</td><td>Policy modification at management group level</td></tr>
-              <tr><td>PIM Role Activated (High Risk)</td><td>T1078.004</td><td>AuditLogs</td><td>Privileged role activation</td></tr>
-              <tr><td>Guest User Granted Admin Role</td><td>T1098</td><td>AuditLogs</td><td>External user elevated to admin</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 11 additional Azure access rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">4.2 Azure Resource Security — 16 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Data Source</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Storage Account Public Access Enabled</td><td>T1530</td><td>AzureActivity</td><td>Blob container set to public</td></tr>
-              <tr><td>NSG Opened to Internet (0.0.0.0/0)</td><td>T1562.007</td><td>AzureActivity</td><td>Security group allowing all inbound</td></tr>
-              <tr><td>Key Vault Soft Delete Disabled</td><td>T1485</td><td>AzureActivity</td><td>Removal of deletion protection</td></tr>
-              <tr><td>VM Disk Encryption Disabled</td><td>T1486</td><td>AzureActivity</td><td>Encryption removed from disk</td></tr>
-              <tr><td>SQL Firewall Rule Added (Any IP)</td><td>T1562.007</td><td>AzureDiagnostics</td><td>Database opened to internet</td></tr>
-              <tr><td>Diagnostic Setting Deleted</td><td>T1562.008</td><td>AzureActivity</td><td>Logging configuration removed</td></tr>
-              <tr><td>Unusual Resource Creation Region</td><td>T1578.002</td><td>AzureActivity</td><td>Resources in non-approved regions</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 9 additional Azure resource rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">4.3 Azure Data Plane — 11 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Data Source</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Key Vault Secret Accessed (Unusual)</td><td>T1552.001</td><td>AzureDiagnostics</td><td>Secret access from new IP/identity</td></tr>
-              <tr><td>Mass Key Vault Operations</td><td>T1552.001</td><td>AzureDiagnostics</td><td>Bulk secret enumeration</td></tr>
-              <tr><td>Storage Account Anomalous Access</td><td>T1530</td><td>StorageBlobLogs</td><td>Unusual blob download pattern</td></tr>
-              <tr><td>SQL Database Bulk Export</td><td>T1567</td><td>AzureDiagnostics</td><td>Large query result export</td></tr>
-              <tr><td>Cosmos DB Cross-Tenant Query</td><td>T1530</td><td>AzureDiagnostics</td><td>Queries spanning tenant boundaries</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 6 additional data plane rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">4.4 AWS (Legacy Workloads) — 23 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Data Source</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Root Account Login</td><td>T1078.004</td><td>AWSCloudTrail</td><td>AWS root account console/API access</td></tr>
-              <tr><td>Root Account MFA Disabled</td><td>T1556</td><td>AWSCloudTrail</td><td>MFA removed from root</td></tr>
-              <tr><td>IAM Policy Attached to User</td><td>T1098.001</td><td>AWSCloudTrail</td><td>Direct policy attachment (not role)</td></tr>
-              <tr><td>S3 Bucket Made Public</td><td>T1530</td><td>AWSCloudTrail</td><td>Bucket ACL or policy allowing public</td></tr>
-              <tr><td>CloudTrail Logging Disabled</td><td>T1562.008</td><td>AWSCloudTrail</td><td>Audit logging turned off</td></tr>
-              <tr><td>Security Group Opened (0.0.0.0/0)</td><td>T1562.007</td><td>AWSCloudTrail</td><td>SG allowing all inbound traffic</td></tr>
-              <tr><td>EC2 Instance Launched in Non-Standard Region</td><td>T1578.002</td><td>AWSCloudTrail</td><td>Compute in non-approved region</td></tr>
-              <tr><td>Lambda Function Created with Admin Role</td><td>T1078.004</td><td>AWSCloudTrail</td><td>Over-privileged Lambda execution</td></tr>
-              <tr><td>Access Key Created for Root</td><td>T1098.001</td><td>AWSCloudTrail</td><td>Programmatic access for root</td></tr>
-              <tr><td>KMS Key Deletion Scheduled</td><td>T1485</td><td>AWSCloudTrail</td><td>Encryption key marked for deletion</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 13 additional AWS rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 5: SAAS APPLICATIONS ==================== -->
-        <div class="category-header">
-          <h3>5. SaaS Applications — 87 Sentinel Rules</h3>
-          <div class="category-stats">Salesforce (28) + Workday (18) + NetSuite (17) + GitHub (15) + ServiceNow (9)</div>
         </div>
 
         <div class="callout warning">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Critical for RevFlow</div>
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Why This Approach Works</div>
           <div class="callout-content">
-            <p>As a B2B SaaS Revenue Intelligence platform, RevFlow's crown jewels are in <strong>Salesforce</strong> (customer CRM data), <strong>NetSuite</strong> (financials), and <strong>GitHub</strong> (IP/code). Comprehensive SaaS detection is essential for SOC 2 compliance.</p>
+            <p><strong>Outcome-driven, not rule-driven.</strong> We didn't translate rules 1:1. We evaluated whether the attack technique was detected — not whether the rule logic was preserved.</p>
+            <p style="margin-top: 0.5rem;"><strong>Ingestion follows ownership.</strong> We decided what platform owns each detection FIRST, then ingested only the logs needed. This reduced costs by 60-80% compared to "ingest everything" approaches.</p>
+            <p style="margin-top: 0.5rem;"><strong>Built-in before custom.</strong> Every custom KQL rule is technical debt. We used Content Hub wherever possible — 102 of 255 migrated Sentinel rules were built-ins, not custom.</p>
+            <p style="margin-top: 0.5rem;"><strong>Modernization, not migration.</strong> The 230 new rules are the real value — we didn't just move rules, we built coverage for a modern threat landscape RSA couldn't address.</p>
           </div>
-        </div>
-
-        <div class="subcategory">5.1 Salesforce — 28 Rules (Critical)</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Data Source</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Mass Record Export (>10K records)</td><td>T1567</td><td>Salesforce_CL</td><td>Data export exceeding threshold</td></tr>
-              <tr><td>Report Download Spike</td><td>T1213</td><td>Salesforce_CL</td><td>Unusual volume of report downloads</td></tr>
-              <tr><td>API Data Query Anomaly</td><td>T1213</td><td>Salesforce_CL</td><td>Bulk API queries from unusual source</td></tr>
-              <tr><td>Permission Set Assigned (Admin)</td><td>T1098</td><td>Salesforce_CL</td><td>Admin permission set granted</td></tr>
-              <tr><td>Profile Cloned with Elevated Perms</td><td>T1098</td><td>Salesforce_CL</td><td>Profile created with admin capabilities</td></tr>
-              <tr><td>Connected App Created</td><td>T1098.001</td><td>Salesforce_CL</td><td>OAuth application registered</td></tr>
-              <tr><td>Connected App with Dangerous Scopes</td><td>T1098.001</td><td>Salesforce_CL</td><td>App requesting full access</td></tr>
-              <tr><td>Login from New Country</td><td>T1078</td><td>Salesforce_CL</td><td>Geo anomaly for Salesforce login</td></tr>
-              <tr><td>Login from Anonymizing Proxy</td><td>T1090.003</td><td>Salesforce_CL</td><td>VPN/Tor access to Salesforce</td></tr>
-              <tr><td>Field History Tracking Disabled</td><td>T1562.001</td><td>Salesforce_CL</td><td>Audit trail disabled on sensitive object</td></tr>
-              <tr><td>Custom Object with PII Created</td><td>T1213</td><td>Salesforce_CL</td><td>New object storing sensitive data</td></tr>
-              <tr><td>Setup Audit Trail Access</td><td>T1087</td><td>Salesforce_CL</td><td>User viewing admin audit logs</td></tr>
-              <tr><td>Apex Class Deployed</td><td>T1059</td><td>Salesforce_CL</td><td>Code deployment to production</td></tr>
-              <tr><td>Sharing Rule Modified</td><td>T1484</td><td>Salesforce_CL</td><td>Data access sharing changed</td></tr>
-              <tr><td>Login During User's Vacation</td><td>T1078</td><td>Salesforce_CL + Workday</td><td>Access while user on PTO</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 13 additional Salesforce rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">5.2 Workday — 18 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Data Source</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Compensation Data Bulk Access</td><td>T1213</td><td>Workday_CL</td><td>Mass view of salary information</td></tr>
-              <tr><td>SSN/SIN Field Accessed</td><td>T1213</td><td>Workday_CL</td><td>PII field view</td></tr>
-              <tr><td>Employee Data Export</td><td>T1567</td><td>Workday_CL</td><td>HR data download</td></tr>
-              <tr><td>Direct Deposit Change</td><td>T1098</td><td>Workday_CL</td><td>Bank account modification</td></tr>
-              <tr><td>Payroll Run Modification</td><td>T1098</td><td>Workday_CL</td><td>Changes to payroll processing</td></tr>
-              <tr><td>Terminated Employee Record Access</td><td>T1213</td><td>Workday_CL</td><td>Viewing terminated employee data</td></tr>
-              <tr><td>Org Chart Bulk Export</td><td>T1087.004</td><td>Workday_CL</td><td>Organization structure download</td></tr>
-              <tr><td>Security Role Assignment Change</td><td>T1098</td><td>Workday_CL</td><td>Permission modifications</td></tr>
-              <tr><td>Integration System User Activity</td><td>T1078.004</td><td>Workday_CL</td><td>Service account data access</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 9 additional Workday rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">5.3 NetSuite — 17 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Data Source</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Financial Report Bulk Export</td><td>T1567</td><td>NetSuite_CL</td><td>Large financial data download</td></tr>
-              <tr><td>Vendor Master Record Change</td><td>T1098</td><td>NetSuite_CL</td><td>Vendor bank account modification</td></tr>
-              <tr><td>Journal Entry Anomaly</td><td>T1565</td><td>NetSuite_CL</td><td>Unusual journal entry pattern</td></tr>
-              <tr><td>Customer Payment Method Change</td><td>T1098</td><td>NetSuite_CL</td><td>Payment info modification</td></tr>
-              <tr><td>Role Assignment to Financial Module</td><td>T1098</td><td>NetSuite_CL</td><td>Access to sensitive financial area</td></tr>
-              <tr><td>Saved Search Created (Financial Data)</td><td>T1213</td><td>NetSuite_CL</td><td>Custom search targeting financials</td></tr>
-              <tr><td>Subsidiary Access Change</td><td>T1098</td><td>NetSuite_CL</td><td>Cross-entity access modification</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 10 additional NetSuite rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">5.4 GitHub — 15 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Data Source</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Repository Made Public</td><td>T1213.003</td><td>GitHub_CL</td><td>Private repo visibility changed</td></tr>
-              <tr><td>Secret Exposed in Commit</td><td>T1552.001</td><td>GitHub_CL</td><td>Secret scanning alert</td></tr>
-              <tr><td>Branch Protection Removed</td><td>T1562.001</td><td>GitHub_CL</td><td>PR review requirements disabled</td></tr>
-              <tr><td>Outside Collaborator Added</td><td>T1098</td><td>GitHub_CL</td><td>External user granted access</td></tr>
-              <tr><td>Deploy Key Created</td><td>T1098.001</td><td>GitHub_CL</td><td>New deployment credential</td></tr>
-              <tr><td>GitHub Actions Workflow Modified</td><td>T1059</td><td>GitHub_CL</td><td>CI/CD pipeline change</td></tr>
-              <tr><td>Repository Clone Spike</td><td>T1213.003</td><td>GitHub_CL</td><td>Mass code download</td></tr>
-              <tr><td>Personal Access Token Created</td><td>T1098.001</td><td>GitHub_CL</td><td>Long-lived API credential</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 7 additional GitHub rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">5.5 ServiceNow — 9 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Data Source</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Admin Role Granted</td><td>T1098</td><td>ServiceNow_CL</td><td>Elevated permission assignment</td></tr>
-              <tr><td>Sensitive Incident Accessed</td><td>T1213</td><td>ServiceNow_CL</td><td>Security incident record viewed</td></tr>
-              <tr><td>ACL Rule Modified</td><td>T1098</td><td>ServiceNow_CL</td><td>Access control change</td></tr>
-              <tr><td>Script Include Modified</td><td>T1059</td><td>ServiceNow_CL</td><td>Server-side code change</td></tr>
-              <tr><td>MID Server Configuration Change</td><td>T1098</td><td>ServiceNow_CL</td><td>Integration server modification</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 4 additional ServiceNow rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 6: BUSINESS LOGIC ==================== -->
-        <div class="category-header">
-          <h3>6. Business Logic & Insider Threat — 52 Sentinel Rules</h3>
-          <div class="category-stats">RevFlow-specific detection | Cross-source correlation</div>
-        </div>
-
-        <div class="subcategory">6.1 Terminated Employee Correlation — 12 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>Data Sources</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Terminated Employee Salesforce Access</td><td>Workday + Salesforce</td><td>Access after termination date</td></tr>
-              <tr><td>Terminated Employee Network Access</td><td>Workday + GlobalProtect</td><td>VPN/network access post-termination</td></tr>
-              <tr><td>Terminated Employee Code Access</td><td>Workday + GitHub</td><td>Repository access after term</td></tr>
-              <tr><td>Pre-Termination Data Export Spike</td><td>Workday + Multiple</td><td>Mass downloads before term date</td></tr>
-              <tr><td>Resignation + Salesforce Export</td><td>Workday + Salesforce</td><td>Data export after resignation submitted</td></tr>
-              <tr><td>Resignation + Cloud Storage Upload</td><td>Workday + PAN-OS</td><td>Personal cloud uploads after resignation</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 6 additional termination correlation rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">6.2 VIP & Executive Monitoring — 10 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>Data Sources</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Executive Login from New Device</td><td>Watchlist + SigninLogs</td><td>C-level login from unknown device</td></tr>
-              <tr><td>Executive Login from New Location</td><td>Watchlist + SigninLogs</td><td>C-level geo anomaly</td></tr>
-              <tr><td>VIP Account Password Reset</td><td>Watchlist + AuditLogs</td><td>Credential change for monitored account</td></tr>
-              <tr><td>Executive Email Forwarding Rule</td><td>Watchlist + OfficeActivity</td><td>Auto-forward created on VIP mailbox</td></tr>
-              <tr><td>VIP Salesforce Data Export</td><td>Watchlist + Salesforce</td><td>Bulk export by executive</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 5 additional VIP monitoring rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">6.3 Contractor & Third-Party Access — 8 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>Data Sources</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Contractor Accessing Customer Data</td><td>Workday + Salesforce</td><td>Non-employee accessing CRM</td></tr>
-              <tr><td>Contractor After-Hours Activity</td><td>Workday + Multiple</td><td>Contractor access outside contract hours</td></tr>
-              <tr><td>Third-Party API Anomaly</td><td>API Logs</td><td>Partner API unusual behavior</td></tr>
-              <tr><td>Guest User Sensitive File Access</td><td>OfficeActivity</td><td>External user accessing sensitive content</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 4 additional third-party rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">6.4 Data Access Anomalies — 14 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>Data Sources</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>First-Time Access to Sensitive Data</td><td>Multiple SaaS</td><td>User accessing data type for first time</td></tr>
-              <tr><td>Bulk Download Deviation from Baseline</td><td>Multiple SaaS</td><td>Download volume > 3 stddev from user norm</td></tr>
-              <tr><td>Cross-Department Data Access</td><td>Workday + Salesforce</td><td>Sales accessing engineering data</td></tr>
-              <tr><td>Print Volume Spike</td><td>Print Logs</td><td>Unusual print activity</td></tr>
-              <tr><td>Email to Competitor Domain</td><td>OfficeActivity</td><td>Outbound email to known competitors</td></tr>
-              <tr><td>USB + Sensitive File Access</td><td>MDE + Purview</td><td>USB connection correlated with data access</td></tr>
-              <tr><td>Personal Cloud App + Data Download</td><td>MDA + Multiple</td><td>Shadow IT correlated with data access</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 7 additional data anomaly rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">6.5 After-Hours & Privilege Abuse — 8 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>Data Sources</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Admin Activity During PTO</td><td>Workday + AuditLogs</td><td>Privileged actions while on vacation</td></tr>
-              <tr><td>After-Hours Privileged Access</td><td>PIM + AuditLogs</td><td>Admin role used outside business hours</td></tr>
-              <tr><td>Weekend Database Query</td><td>AzureDiagnostics</td><td>Production DB access on weekends</td></tr>
-              <tr><td>Holiday Admin Activity</td><td>Calendar + AuditLogs</td><td>Admin actions during company holidays</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 4 additional timing rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 7: COMPLIANCE ==================== -->
-        <div class="category-header">
-          <h3>7. Compliance & Audit — 45 Sentinel Rules</h3>
-          <div class="category-stats">SOC 2 Type II + ISO 27001 + GDPR + Siemens Corporate</div>
-        </div>
-
-        <div class="subcategory">7.1 SOC 2 Control Monitoring — 18 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>SOC 2 Criteria</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>MFA Disabled for User</td><td>CC6.1</td><td>Multi-factor removed</td></tr>
-              <tr><td>Conditional Access Policy Disabled</td><td>CC6.1</td><td>Access control weakened</td></tr>
-              <tr><td>Password Policy Changed</td><td>CC6.1</td><td>Password requirements modified</td></tr>
-              <tr><td>Encryption Disabled on Resource</td><td>CC6.7</td><td>Data protection removed</td></tr>
-              <tr><td>Audit Log Export</td><td>CC7.2</td><td>Audit data accessed</td></tr>
-              <tr><td>Security Alert Dismissed</td><td>CC7.3</td><td>Alert closed without investigation</td></tr>
-              <tr><td>Backup Configuration Changed</td><td>A1.2</td><td>Backup settings modified</td></tr>
-              <tr><td>DR Failover Test</td><td>A1.2</td><td>Disaster recovery testing</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 10 additional SOC 2 rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">7.2 GDPR / PIPEDA Data Protection — 12 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>Regulation</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>EU User PII Accessed from Non-EU</td><td>GDPR Art. 44</td><td>Cross-border data access</td></tr>
-              <tr><td>Bulk EU Customer Data Export</td><td>GDPR Art. 32</td><td>Large EU data download</td></tr>
-              <tr><td>Data Subject Access Request Pattern</td><td>GDPR Art. 15</td><td>DSAR-related queries</td></tr>
-              <tr><td>Right to Erasure Execution</td><td>GDPR Art. 17</td><td>Data deletion tracking</td></tr>
-              <tr><td>Consent Record Modified</td><td>GDPR Art. 7</td><td>Consent data changes</td></tr>
-              <tr><td>Canadian PII Accessed from Outside CA</td><td>PIPEDA</td><td>Cross-border Canadian data</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 6 additional privacy rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="subcategory">7.3 Administrative Change Monitoring — 15 Rules</div>
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>MITRE</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>Global Admin Role Assigned</td><td>T1098</td><td>Highest privilege granted</td></tr>
-              <tr><td>Exchange Admin Role Assigned</td><td>T1098</td><td>Email admin access</td></tr>
-              <tr><td>Security Admin Role Assigned</td><td>T1098</td><td>Security management access</td></tr>
-              <tr><td>Application Admin Role Assigned</td><td>T1098</td><td>App registration control</td></tr>
-              <tr><td>Audit Logs Cleared</td><td>T1070.001</td><td>Audit trail deletion attempt</td></tr>
-              <tr><td>Mailbox Audit Bypassed</td><td>T1562.008</td><td>Exchange logging circumvented</td></tr>
-              <tr><td>External Sharing Policy Changed</td><td>T1537</td><td>SharePoint sharing modified</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 8 additional admin monitoring rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 8: DLP CORRELATION ==================== -->
-        <div class="category-header">
-          <h3>8. DLP Correlation — 18 Sentinel Rules</h3>
-          <div class="category-stats">Purview DLP + Identity + Network correlation</div>
-        </div>
-
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>Data Sources</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>High Severity DLP + New Location</td><td>Purview + SigninLogs</td><td>Sensitive data action from unusual geo</td></tr>
-              <tr><td>DLP Block + Large Network Transfer</td><td>Purview + PAN-OS</td><td>Block correlated with exfil attempt</td></tr>
-              <tr><td>Repeated DLP Violations (Same User)</td><td>Purview</td><td>Pattern of policy violations</td></tr>
-              <tr><td>DLP Violation + USB Device</td><td>Purview + MDE</td><td>Sensitive data + removable media</td></tr>
-              <tr><td>DLP Violation by Contractor</td><td>Purview + Workday</td><td>Third-party sensitive data access</td></tr>
-              <tr><td>DLP Warn Override Pattern</td><td>Purview</td><td>User repeatedly bypassing warnings</td></tr>
-              <tr><td>DLP + Cloud Storage Upload</td><td>Purview + MDA</td><td>Sensitive data to shadow IT</td></tr>
-              <tr><td>Source Code in Email Attachment</td><td>Purview</td><td>Code sharing via email</td></tr>
-              <tr><td>Customer List in Cloud Storage</td><td>Purview</td><td>CRM data in personal storage</td></tr>
-              <tr><td>Financial Data to Personal Email</td><td>Purview + OfficeActivity</td><td>Finance docs to non-corp email</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 8 additional DLP correlation rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 9: HIGHER-ORDER CORRELATION ==================== -->
-        <div class="category-header" style="border-color: #a855f7; background: rgba(168, 85, 247, 0.1);">
-          <h3>9. Higher-Order Correlation — 19 Sentinel Rules</h3>
-          <div class="category-stats">XDR Incident + Network + SaaS + Business Context</div>
-        </div>
-
-        <div class="callout success">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Where Sentinel Adds Value to XDR</div>
-          <div class="callout-content">
-            <p>These rules correlate XDR incidents with data sources XDR cannot see: network telemetry, SaaS applications, and business context. This is where Sentinel provides value <em>beyond</em> XDR.</p>
-          </div>
-        </div>
-
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Sentinel Rule</th><th>Data Sources</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>XDR Incident + Large Outbound Transfer</td><td>SecurityIncident + PAN-OS</td><td>Endpoint incident correlated with exfil</td></tr>
-              <tr><td>XDR Incident + C2 Beaconing</td><td>SecurityIncident + PAN-OS</td><td>Endpoint infection with network C2</td></tr>
-              <tr><td>XDR Identity Alert + Salesforce Export</td><td>SecurityIncident + Salesforce</td><td>Compromised identity + data access</td></tr>
-              <tr><td>XDR Alert + VPN from New Country</td><td>SecurityAlert + GlobalProtect</td><td>Suspicious activity with geo anomaly</td></tr>
-              <tr><td>XDR Phishing Alert + Credential Use</td><td>SecurityIncident + SigninLogs</td><td>Phishing click followed by credential use</td></tr>
-              <tr><td>MDE Alert + Cloud Storage Upload</td><td>SecurityAlert + PAN-OS</td><td>Endpoint threat + data exfil</td></tr>
-              <tr><td>Identity Risk + Financial System Access</td><td>AADUserRiskEvents + NetSuite</td><td>Risky user accessing financials</td></tr>
-              <tr><td>Multi-Domain Attack Chain</td><td>Multiple XDR + Network + SaaS</td><td>Cross-domain attack correlation</td></tr>
-              <tr><td>XDR Incident + Terminated Employee</td><td>SecurityIncident + Workday</td><td>Incident involving recent term</td></tr>
-              <tr><td>XDR Lateral Movement + Network Spread</td><td>SecurityIncident + PAN-OS</td><td>Endpoint lateral with network confirmation</td></tr>
-              <tr><td colspan="4" style="text-align: center; font-style: italic;">+ 9 additional correlation rules</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 10: DROPPED RULES ==================== -->
-        <div class="category-header" style="border-color: #ef4444; background: rgba(239, 68, 68, 0.1);">
-          <h3>10. Dropped Rules — No Value (58 Rules)</h3>
-          <div class="category-stats">Low fidelity, noisy, stale, or unmappable</div>
-        </div>
-
-        <p>These RSA rules were dropped during migration. Migration is a chance to clean house — don't migrate noise.</p>
-
-        <div class="table-wrapper">
-          <table class="rule-table">
-            <thead><tr><th>Category</th><th>Count</th><th>Examples</th><th>Drop Reason</th></tr></thead>
-            <tbody>
-              <tr><td>Generic Telemetry</td><td>18</td><td>Process started, file created, registry changed</td><td>Base telemetry, not detection</td></tr>
-              <tr><td>Single Event (No Correlation)</td><td>15</td><td>Failed login (single), USB connected</td><td>No attack context, noise generator</td></tr>
-              <tr><td>Stale IOCs</td><td>12</td><td>2019 malware hashes, deprecated domains</td><td>Indicators no longer relevant</td></tr>
-              <tr><td>Operational (Not Security)</td><td>8</td><td>AV update, Windows Update, lockout</td><td>IT ops, not threat detection</td></tr>
-              <tr><td>Threshold Too Generic</td><td>5</td><td>Large file download, network share access</td><td>99% false positive rate</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ==================== SECTION 11: SUMMARY ==================== -->
-        <h2>11. Final Detection Coverage Summary</h2>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">RevFlow Analytics Detection Coverage</span></div>
-          <pre><code>REVFLOW ANALYTICS — FINAL DETECTION COVERAGE
-═══════════════════════════════════════════════════════════════════════════════
-
-BUSINESS CONTEXT:
-• B2B SaaS Revenue Intelligence Platform
-• Siemens Subsidiary
-• SOC 2 Type II, ISO 27001, GDPR, PIPEDA, Siemens Corporate
-• 4,000 employees, 9,000 endpoints
-• Crown Jewels: Customer CRM Data, Financial Data, Source Code
-
-DETECTION OWNERSHIP:
-────────────────────────────────────────────────────────────────────────────────
-Microsoft Defender XDR    │ 312 techniques │ Endpoint, Identity, Email, M365 Apps
-Microsoft Sentinel        │ 347 rules      │ Network, Cloud, SaaS, Business Logic
-────────────────────────────────────────────────────────────────────────────────
-Total Coverage            │ 659 detections │
-
-SENTINEL RULES BY CATEGORY:
-────────────────────────────────────────────────────────────────────────────────
-Network Security          │  58 rules │ C2, exfil, VPN, recon, attacks
-Cloud Infrastructure      │  68 rules │ Azure (45) + AWS (23)
-SaaS Applications         │  87 rules │ Salesforce, Workday, NetSuite, GitHub
-Business Logic / Insider  │  52 rules │ Termination, VIP, contractor, anomalies
-Compliance & Audit        │  45 rules │ SOC 2, GDPR, admin monitoring
-DLP Correlation           │  18 rules │ Purview + identity + network
-Higher-Order Correlation  │  19 rules │ XDR + network + SaaS context
-────────────────────────────────────────────────────────────────────────────────
-TOTAL SENTINEL            │ 347 rules │
-
-MIGRATION SUMMARY:
-────────────────────────────────────────────────────────────────────────────────
-RSA Rules Evaluated       │ 487
-├── Retired to XDR        │ 312 (64%) — XDR handles natively
-├── Migrated to Sentinel  │ 117 (24%) — Network, cloud, SaaS
-└── Dropped (No Value)    │  58 (12%) — Noisy, stale, operational
-
-New Sentinel Rules        │ 230 — Coverage gaps RSA never had
-────────────────────────────────────────────────────────────────────────────────
-
-═══════════════════════════════════════════════════════════════════════════════
-This detection coverage is appropriate for a B2B SaaS company with
-SOC 2/ISO 27001 requirements serving enterprise customers globally.
-═══════════════════════════════════════════════════════════════════════════════</code></pre>
         </div>
 
         <nav class="page-nav">
           <a href="detection-engineering.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Detection Engineering</span></a>
-          <a href="soc-transition.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">SOC Transition →</span></a>
+          <a href="soar-automation.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">SOAR & Automation →</span></a>
         </nav>
       </div>
     </main>

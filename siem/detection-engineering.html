@@ -156,13 +156,354 @@
         </nav>
 
         <div class="page-header">
-          <h1>Detection Engineering — 6-Step Migration Framework</h1>
+          <h1>Detection Engineering — Outcome-Driven Strategy</h1>
           <div class="page-header-meta">
             <span class="page-badge siem">SIEM Track</span>
             <span class="page-reading-time">Authoritative Methodology</span>
           </div>
-          <p class="intro-text">We migrate detections based on <strong>outcomes and coverage</strong>, not rule equivalence. If XDR reliably detects the same attack technique, the SIEM rule is retired. This page documents our authoritative 6-step decision framework for RSA NetWitness → Microsoft Sentinel migration.</p>
+          <p class="intro-text">We migrate detections based on <strong>outcomes and coverage</strong>, not rule equivalence. If XDR reliably detects the same attack technique, the SIEM rule is retired. This page documents our authoritative methodology for RSA NetWitness → Microsoft Sentinel migration.</p>
         </div>
+
+        <!-- ==================== INTERVIEW-READY METHODOLOGY ==================== -->
+        <div class="callout success" style="border-left: 4px solid #22c55e;">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>🎯 Interview-Ready Answer: Detection Engineering Strategy</div>
+          <div class="callout-content">
+            <p style="font-style: italic; margin-bottom: 1rem;">"After discovery from a legacy SIEM, my detection engineering strategy is <strong>outcome-driven</strong> rather than rule-driven."</p>
+            <ol style="margin: 0; padding-left: 1.5rem;">
+              <li><strong>Normalize discovery into security outcomes</strong>, not existing rules</li>
+              <li><strong>Decide ownership</strong> for each outcome (XDR vs SIEM)</li>
+              <li><strong>Define log ingestion</strong> based on ownership decisions</li>
+              <li><strong>Design fewer, higher-fidelity detections</strong> focused on correlation</li>
+              <li><strong>Validate coverage</strong> using ATT&CK, SOC feedback, and real incidents</li>
+            </ol>
+          </div>
+        </div>
+
+        <h2>The Complete Detection Strategy (5 Phases)</h2>
+        <p>This methodology connects <strong>Discovery → Outcomes → Ownership → Ingestion → Detection → Validation</strong>.</p>
+
+        <!-- PHASE 1 -->
+        <div class="step-box" style="border-left: 4px solid var(--accent-blue);">
+          <div><span class="step-number" style="background: var(--accent-blue);">1</span><span class="step-title">Discovery Output → Security Outcomes (Not Rules)</span></div>
+          <p style="margin-top: 1rem;"><strong>Key Insight:</strong> Legacy SIEM discovery tells you what <em>behaviors</em> mattered, not what rules to copy.</p>
+          
+          <div class="callout info" style="margin-top: 1rem;">
+            <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Say This</div>
+            <div class="callout-content">
+              <p><em>"I normalize what we learned during discovery into security outcomes and attack behaviors, not existing rules."</em></p>
+            </div>
+          </div>
+          
+          <h4 style="margin-top: 1rem;">Examples of Security Outcomes (Not Rules)</h4>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Security Outcome</th><th>Attack Behaviors</th><th>NOT This (Rule-Thinking)</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Credential Abuse</strong></td>
+                  <td>Credential theft, Pass-the-Hash, MFA bypass</td>
+                  <td>❌ "Migrate rule #47: LSASS access"</td>
+                </tr>
+                <tr>
+                  <td><strong>Lateral Movement</strong></td>
+                  <td>SMB abuse, RDP pivoting, WMI execution</td>
+                  <td>❌ "Migrate rule #112: Remote service creation"</td>
+                </tr>
+                <tr>
+                  <td><strong>Malware Execution</strong></td>
+                  <td>Ransomware, LOLBins, persistence</td>
+                  <td>❌ "Migrate rule #89: PowerShell encoded command"</td>
+                </tr>
+                <tr>
+                  <td><strong>Cloud IAM Misuse</strong></td>
+                  <td>Privilege escalation, risky OAuth, role abuse</td>
+                  <td>❌ "Migrate rule #201: Admin role change"</td>
+                </tr>
+                <tr>
+                  <td><strong>Data Exfiltration</strong></td>
+                  <td>Bulk downloads, external sharing, USB copy</td>
+                  <td>❌ "Migrate rule #156: Large file transfer"</td>
+                </tr>
+                <tr>
+                  <td><strong>VPN/Network Abuse</strong></td>
+                  <td>Impossible travel, unusual hours, geo anomalies</td>
+                  <td>❌ "Migrate rule #78: VPN from new country"</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <p style="margin-top: 1rem;"><strong>Why This Matters:</strong> Rules are implementation. Outcomes are intent. Thinking in outcomes lets you choose the <em>right tool</em> for each behavior.</p>
+        </div>
+
+        <!-- PHASE 2 -->
+        <div class="step-box" style="border-left: 4px solid var(--accent-green);">
+          <div><span class="step-number" style="background: var(--accent-green);">2</span><span class="step-title">Decide Ownership for Each Outcome (XDR vs SIEM)</span></div>
+          <p style="margin-top: 1rem;"><strong>Key Insight:</strong> Not everything belongs in the SIEM. XDR handles most attack detection natively.</p>
+          
+          <div class="callout info" style="margin-top: 1rem;">
+            <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Say This</div>
+            <div class="callout-content">
+              <p><em>"I decide ownership for each outcome. Endpoint, identity, and email behaviors are primarily handled by XDR. Network, cloud control-plane, SaaS, and business-logic detections remain in SIEM."</em></p>
+            </div>
+          </div>
+          
+          <div class="table-wrapper" style="margin-top: 1rem;">
+            <table>
+              <thead>
+                <tr><th>Security Outcome</th><th>Primary Domain</th><th>Owner</th><th>Rationale</th></tr>
+              </thead>
+              <tbody>
+                <tr style="background: rgba(34, 197, 94, 0.1);">
+                  <td><strong>Credential Abuse</strong></td>
+                  <td>Endpoint + Identity</td>
+                  <td><span class="disposition-retire">XDR</span></td>
+                  <td>MDE + MDI have kernel/DC-level visibility</td>
+                </tr>
+                <tr style="background: rgba(34, 197, 94, 0.1);">
+                  <td><strong>Lateral Movement</strong></td>
+                  <td>Endpoint + Identity</td>
+                  <td><span class="disposition-retire">XDR</span></td>
+                  <td>XDR correlates endpoint + identity natively</td>
+                </tr>
+                <tr style="background: rgba(34, 197, 94, 0.1);">
+                  <td><strong>Malware Execution</strong></td>
+                  <td>Endpoint</td>
+                  <td><span class="disposition-retire">XDR</span></td>
+                  <td>MDE has behavioral ML, AMSI, kernel hooks</td>
+                </tr>
+                <tr style="background: rgba(34, 197, 94, 0.1);">
+                  <td><strong>Email Threats</strong></td>
+                  <td>Email</td>
+                  <td><span class="disposition-retire">XDR</span></td>
+                  <td>MDO handles phishing, BEC natively</td>
+                </tr>
+                <tr style="background: rgba(59, 130, 246, 0.1);">
+                  <td><strong>Cloud IAM Misuse</strong></td>
+                  <td>Cloud Control-Plane</td>
+                  <td><span class="disposition-rewrite">SIEM</span></td>
+                  <td>XDR detects attacks, not CHANGES</td>
+                </tr>
+                <tr style="background: rgba(59, 130, 246, 0.1);">
+                  <td><strong>VPN/Network Abuse</strong></td>
+                  <td>Network</td>
+                  <td><span class="disposition-rewrite">SIEM</span></td>
+                  <td>XDR has no network visibility</td>
+                </tr>
+                <tr style="background: rgba(59, 130, 246, 0.1);">
+                  <td><strong>SaaS Data Exfil</strong></td>
+                  <td>SaaS Apps</td>
+                  <td><span class="disposition-rewrite">SIEM</span></td>
+                  <td>Salesforce, Workday outside XDR scope</td>
+                </tr>
+                <tr style="background: rgba(59, 130, 246, 0.1);">
+                  <td><strong>Business Logic</strong></td>
+                  <td>Custom</td>
+                  <td><span class="disposition-rewrite">SIEM</span></td>
+                  <td>VIP monitoring, terminated employee, etc.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PHASE 3 -->
+        <div class="step-box" style="border-left: 4px solid var(--accent-yellow);">
+          <div><span class="step-number" style="background: var(--accent-yellow);">3</span><span class="step-title">Define Log Ingestion Based on Ownership (Not Before)</span></div>
+          <p style="margin-top: 1rem;"><strong>Key Insight:</strong> You don't ingest logs first and then write detections. You decide detections first, then ingest only the logs needed.</p>
+          
+          <div class="callout critical" style="margin-top: 1rem;">
+            <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Critical: Ingestion Follows Ownership</div>
+            <div class="callout-content">
+              <p><em>"I don't ingest logs first and then write detections. I decide detections first, then ingest only the logs needed."</em></p>
+            </div>
+          </div>
+          
+          <div class="table-wrapper" style="margin-top: 1rem;">
+            <table>
+              <thead>
+                <tr><th>Outcome</th><th>Owner</th><th>Log Ingestion Decision</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Endpoint Malware</td>
+                  <td>XDR</td>
+                  <td>❌ No need to ingest verbose endpoint logs — XDR handles it</td>
+                </tr>
+                <tr>
+                  <td>Identity Attacks</td>
+                  <td>XDR</td>
+                  <td>❌ MDI handles — BUT still need AuditLogs for CHANGES</td>
+                </tr>
+                <tr>
+                  <td>VPN Abuse</td>
+                  <td>SIEM</td>
+                  <td>✅ VPN logs required — SIEM detection</td>
+                </tr>
+                <tr>
+                  <td>Cloud IAM Misuse</td>
+                  <td>SIEM</td>
+                  <td>✅ Entra ID AuditLogs required — control-plane visibility</td>
+                </tr>
+                <tr>
+                  <td>SaaS Exfiltration</td>
+                  <td>SIEM</td>
+                  <td>✅ Salesforce/Workday audit logs required</td>
+                </tr>
+                <tr>
+                  <td>XDR Correlation</td>
+                  <td>SIEM</td>
+                  <td>✅ SecurityAlert + SecurityIncident — low volume, high value</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <p style="margin-top: 1rem;"><strong>Cost Implication:</strong> This approach reduces ingestion by 60-80% compared to "ingest everything" strategies.</p>
+        </div>
+
+        <!-- PHASE 4 -->
+        <div class="step-box" style="border-left: 4px solid #8b5cf6;">
+          <div><span class="step-number" style="background: #8b5cf6;">4</span><span class="step-title">Design Fewer, Higher-Fidelity Detections</span></div>
+          <p style="margin-top: 1rem;"><strong>Key Insight:</strong> Avoid recreating low-level detections. Focus on cross-domain correlation, business risk, and attack progression.</p>
+          
+          <div class="callout info" style="margin-top: 1rem;">
+            <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Say This</div>
+            <div class="callout-content">
+              <p><em>"I avoid recreating low-level detections from the legacy SIEM. Instead, I design fewer, higher-fidelity detections focused on cross-domain correlation, business risk, and attack progression."</em></p>
+            </div>
+          </div>
+          
+          <h4 style="margin-top: 1rem;">What We DON'T Write (Trust XDR)</h4>
+          <ul>
+            <li>❌ "Office spawning PowerShell" — MDE handles this</li>
+            <li>❌ "Suspicious process execution" — MDE behavioral ML</li>
+            <li>❌ "LSASS memory access" — MDE credential theft detection</li>
+            <li>❌ "Ransomware file rename" — MDE ransomware protection</li>
+          </ul>
+          
+          <h4 style="margin-top: 1rem;">What We DO Write (SIEM Value-Add)</h4>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Detection Pattern</th><th>Example</th><th>Why SIEM</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>XDR + Identity Correlation</strong></td>
+                  <td>XDR malware alert + MFA method changed in last 24h</td>
+                  <td>Cross-domain context XDR doesn't provide</td>
+                </tr>
+                <tr>
+                  <td><strong>XDR + Network Correlation</strong></td>
+                  <td>XDR alert + VPN from unusual country</td>
+                  <td>Network visibility outside XDR</td>
+                </tr>
+                <tr>
+                  <td><strong>Identity + SaaS Correlation</strong></td>
+                  <td>Risky sign-in + Salesforce bulk export</td>
+                  <td>SaaS outside XDR scope</td>
+                </tr>
+                <tr>
+                  <td><strong>Control-Plane Changes</strong></td>
+                  <td>Privileged role assigned outside change window</td>
+                  <td>XDR detects attacks, not changes</td>
+                </tr>
+                <tr>
+                  <td><strong>Business Logic</strong></td>
+                  <td>Terminated employee accessing sensitive data</td>
+                  <td>Requires HR system correlation</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="code-block" style="margin-top: 1rem;">
+            <div class="code-header"><span class="code-lang">Fidelity Principle</span></div>
+            <pre><code>DETECTION PHILOSOPHY
+═══════════════════════════════════════════════════════════════════════════════
+
+LEGACY APPROACH (Rule-Driven):
+• 324 rules migrated 1:1
+• High false positive rate
+• SOC overwhelmed
+• Many duplicate XDR coverage
+
+MODERN APPROACH (Outcome-Driven):
+• 324 rules → 45 high-fidelity detections
+• 60% RETIRED (XDR native)
+• 20% REPLACED (Content Hub)
+• 17% REWRITTEN (correlation-focused)
+• 3% DEPRECATED (obsolete)
+
+RESULT:
+• Fewer alerts
+• Higher confidence
+• SOC trusts detections
+• Each alert = actionable</code></pre>
+          </div>
+        </div>
+
+        <!-- PHASE 5 -->
+        <div class="step-box" style="border-left: 4px solid #ec4899;">
+          <div><span class="step-number" style="background: #ec4899;">5</span><span class="step-title">Validate Coverage (ATT&CK + SOC + Incidents)</span></div>
+          <p style="margin-top: 1rem;"><strong>Key Insight:</strong> Coverage validation is ongoing, not one-time. Real incidents are your best feedback.</p>
+          
+          <div class="callout info" style="margin-top: 1rem;">
+            <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Say This</div>
+            <div class="callout-content">
+              <p><em>"I validate coverage using ATT&CK mapping, SOC feedback, and post-deployment monitoring, and iteratively refine detections based on real incidents rather than one-time parity with the legacy SIEM."</em></p>
+            </div>
+          </div>
+          
+          <h4 style="margin-top: 1rem;">Validation Methods</h4>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Method</th><th>What It Validates</th><th>Frequency</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>ATT&CK Coverage Map</strong></td>
+                  <td>Technique coverage across XDR + SIEM</td>
+                  <td>Quarterly review</td>
+                </tr>
+                <tr>
+                  <td><strong>SOC Feedback</strong></td>
+                  <td>False positive rates, investigation quality</td>
+                  <td>Weekly sync</td>
+                </tr>
+                <tr>
+                  <td><strong>Incident Timelines</strong></td>
+                  <td>What detected first? What added value?</td>
+                  <td>Per incident</td>
+                </tr>
+                <tr>
+                  <td><strong>Purple Team Exercises</strong></td>
+                  <td>Detection gaps, response effectiveness</td>
+                  <td>Quarterly</td>
+                </tr>
+                <tr>
+                  <td><strong>Detection Metrics</strong></td>
+                  <td>True positive rate, MTTD, alert volume</td>
+                  <td>Monthly</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="callout warning" style="margin-top: 1rem;">
+            <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>What We Don't Claim</div>
+            <div class="callout-content">
+              <p>We do NOT claim "perfect coverage" or "rule parity." This signals realism to interviewers.</p>
+              <p><em>"We validate continuously. Real incidents tell us more than any pre-migration assessment."</em></p>
+            </div>
+          </div>
+        </div>
+
+        <hr style="margin: 3rem 0; border: none; border-top: 2px solid var(--border-primary);">
 
         <!-- ==================== CORE PRINCIPLE ==================== -->
         <div class="callout critical">
@@ -174,7 +515,7 @@
         </div>
 
         <!-- ==================== SECTION 1: THE 6-STEP FRAMEWORK ==================== -->
-        <h2>1. The 6-Step Decision Framework</h2>
+        <h2>The 6-Step Decision Framework (Per-Rule)</h2>
 
         <p>This framework is applied to every RSA NetWitness detection rule. No exceptions.</p>
 
@@ -574,47 +915,47 @@ KEY: You are validating OUTCOMES, not comparing RULE LOGIC.
 
 BUSINESS CONTEXT: B2B SaaS Revenue Intelligence | SOC 2 + ISO 27001 + GDPR
 
-STARTING POINT: 487 RSA NetWitness Rules
+STARTING POINT: 1,247 RSA NetWitness Rules
 
 RSA RULE DISPOSITION:
 ────────────────────────────────────────────────────────────────────────────────
-RETIRE — XDR Native         │ 312 rules │ 64%  │ XDR handles these techniques
-MIGRATE — Sentinel          │ 117 rules │ 24%  │ Network, cloud, SaaS rules
-DROP — Low Value            │  58 rules │ 12%  │ Noisy, stale, or unmappable
+RETIRE — XDR Native         │ 780 rules │ 63%  │ XDR handles these techniques
+MIGRATE — Sentinel          │ 255 rules │ 20%  │ Network, cloud, SaaS rules
+DROP — Low Value            │ 212 rules │ 18%  │ Noisy, stale, or unmappable
 ────────────────────────────────────────────────────────────────────────────────
-TOTAL RSA                   │ 487 rules │ 100%
+TOTAL RSA                   │ 1,247 rules │ 100%
 
 SENTINEL RULES (FINAL):
 ────────────────────────────────────────────────────────────────────────────────
-Migrated from RSA           │ 117 rules │ Network, cloud infra
+Migrated from RSA           │ 255 rules │ Network, cloud infra
 NEW Rules (Coverage Gaps)   │ 230 rules │ SaaS, business logic, compliance
 ────────────────────────────────────────────────────────────────────────────────
-TOTAL SENTINEL              │ 347 rules │ Appropriate for B2B SaaS + SOC 2
+TOTAL SENTINEL              │ 485 rules │ Appropriate for B2B SaaS + SOC 2
 
 BY CATEGORY:
 ────────────────────────────────────────────────────────────────────────────────
-Endpoint Behavior           │ 187 RSA → RETIRE (XDR native)
-Identity Attacks            │  89 RSA → RETIRE (XDR native)
-Email Threats               │  36 RSA → RETIRE (XDR native)
-Network Security            │  52 RSA →  58 Sentinel (expanded)
-Cloud Infrastructure        │  34 RSA →  68 Sentinel (Azure + AWS)
-SaaS Applications           │  17 RSA →  87 Sentinel (critical gap filled)
-Business Logic / Insider    │  14 RSA →  52 Sentinel (RevFlow-specific)
+Endpoint Behavior           │ 478 RSA → RETIRE (XDR native)
+Identity Attacks            │ 198 RSA → RETIRE (XDR native)
+Email Threats               │  69 RSA → RETIRE (XDR native)
+Network Security            │  76 RSA →  85 Sentinel (expanded)
+Cloud Infrastructure        │  50 RSA →  68 Sentinel (Azure + AWS)
+SaaS Applications           │  25 RSA →  87 Sentinel (critical gap filled)
+Business Logic / Insider    │  20 RSA →  52 Sentinel (RevFlow-specific)
 Compliance & Audit          │   0 RSA →  45 Sentinel (SOC 2/GDPR new)
 DLP Correlation             │   0 RSA →  18 Sentinel (new capability)
 Higher-Order Correlation    │   0 RSA →  19 Sentinel (XDR + context)
-Low Value / Noisy           │  58 RSA → DROP
+Low Value / Noisy           │ 152 RSA → DROP
 
 ═══════════════════════════════════════════════════════════════════════════════
-TOTAL COVERAGE: 312 XDR techniques + 347 Sentinel rules = 659 detections
+TOTAL COVERAGE: 780 XDR techniques + 485 Sentinel rules = 1,265 detections
 ═══════════════════════════════════════════════════════════════════════════════</code></pre>
         </div>
 
         <div class="callout success">
-          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Why 347 Sentinel Rules is Correct</div>
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Why 485 Sentinel Rules is Correct</div>
           <div class="callout-content">
-            <p><strong>RSA had 487 rules → Sentinel has 347 rules.</strong> This is NOT a reduction in coverage.</p>
-            <p><strong>XDR handles 312 techniques natively</strong> — endpoint, identity, email detections don't need Sentinel rules.</p>
+            <p><strong>RSA had 1,247 rules → Sentinel has 485 rules.</strong> This is NOT a reduction in coverage.</p>
+            <p><strong>XDR handles 780 techniques natively</strong> — endpoint, identity, email detections don't need Sentinel rules.</p>
             <p><strong>230 NEW rules built from scratch</strong> — NOT migrated from RSA because RSA never had them:</p>
             <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
               <li>SaaS coverage: Salesforce, Workday, NetSuite, GitHub (RSA had 17 rules total for all SaaS)</li>
@@ -622,7 +963,7 @@ TOTAL COVERAGE: 312 XDR techniques + 347 Sentinel rules = 659 detections
               <li>Compliance: SOC 2 controls, GDPR data access (RSA had zero compliance rules)</li>
               <li>XDR correlation: Higher-order detection (RSA had no XDR to correlate with)</li>
             </ul>
-            <p><strong>Total coverage: 659 detections</strong> (312 XDR + 347 Sentinel) — this is EXPANSION, not reduction.</p>
+            <p><strong>Total coverage: 1,265 detections</strong> (780 XDR + 485 Sentinel) — this is EXPANSION, not reduction.</p>
           </div>
         </div>
 

@@ -320,10 +320,10 @@
 
 MICROSOFT STACK (CHOSEN):
 ────────────────────────────────────────────────────────────────────────────────
-XDR Native Detections       │ 312    │ Microsoft-built, auto-updating
-Sentinel Analytics Rules    │ 347    │ Customer-authored KQL
+XDR Native Detections       │ 780    │ Microsoft-built, auto-updating
+Sentinel Analytics Rules    │ 485    │ Customer-authored KQL
 ────────────────────────────────────────────────────────────────────────────────
-Total Detection Coverage    │ 659    │ Shared ownership
+Total Detection Coverage    │ 1,265  │ Shared ownership
 
 SPLUNK STACK (ALTERNATIVE):
 ────────────────────────────────────────────────────────────────────────────────
@@ -341,7 +341,7 @@ there's no XDR correlation engine handling endpoint/identity/email natively.
 
         <h3>3.3 What You Would Write in Splunk (That XDR Handles)</h3>
 
-        <p>With Microsoft, these 312 detection types are handled by XDR natively. <strong>With Splunk, you write and maintain these yourself:</strong></p>
+        <p>With Microsoft, these 780 detection types are handled by XDR natively. <strong>With Splunk, you write and maintain these yourself:</strong></p>
 
         <div class="table-wrapper">
           <table>
@@ -710,7 +710,7 @@ organization's context?' — not 'Which vendor is best?'"</code></pre>
           <pre><code>MICROSOFT SENTINEL + DEFENDER XDR
 ═══════════════════════════════════════════════════════════════════════════════
 Philosophy        │ XDR-First — detection ownership shared with Microsoft
-Detection Rules   │ 347 Sentinel + 312 XDR native = 659 total
+Detection Rules   │ 485 Sentinel + 780 XDR native = 1,265 total
 Log Ingestion     │ ~85 GB/day (XDR handles endpoint/email upstream)
 Annual Cost       │ ~$450K (with M365 E5 foundation)
 Team Required     │ Baseline security team

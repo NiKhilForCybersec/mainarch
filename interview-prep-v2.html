@@ -196,7 +196,7 @@
               <div class="label">Say This</div>
               <p>"I have about five years in cybersecurity, focused on SIEM, detection engineering, and endpoint security.</p>
               <p style="margin-top: 0.75rem;">I started in a SOC at Cognizant working with Splunk — alert triage, investigations, learning what analysts actually need. Then I moved into security engineering at Infosys, where I worked with FireEye, Symantec DLP, and supported an EDR migration project.</p>
-              <p style="margin-top: 0.75rem;">Most recently, I've been at a Siemens subsidiary leading a security transformation — migrating from RSA NetWitness to Microsoft Sentinel, rolling out Defender for Endpoint across 9,000 devices, and migrating DLP from Symantec to Purview. I'm currently in the handover phase, doing knowledge transfer to the internal team.</p>
+              <p style="margin-top: 0.75rem;">Most recently, I've been at a Siemens subsidiary working on a security transformation — specifically the SIEM and EDR tracks. I migrated the SIEM from RSA NetWitness to Microsoft Sentinel and handled the Defender for Endpoint rollout across 9,000 devices. I also contributed to the DLP migration from Symantec to Purview. I'm currently in the handover phase, doing knowledge transfer to the internal team.</p>
               <p style="margin-top: 0.75rem;">The thread through all of it is building security platforms that actually work for the people using them — reliable telemetry, tuned detections, and solutions teams can operate after I leave."</p>
             </div>
             
@@ -382,12 +382,16 @@ INGESTION:
 • Validated: fields parsing, timestamps, volume
 
 DETECTION ALIGNMENT:
-• XDR handles most attack detection
-• Sentinel rules focused on:
-  1. XDR correlation (alert + identity change)
-  2. Control-plane changes XDR doesn't see
-  3. Sources outside Defender ecosystem
-• Content Hub first, custom only for gaps
+• 1,247 RSA rules evaluated, 780 retired to XDR (63%)
+• XDR handles endpoint, identity, email detection natively
+• 255 RSA rules migrated to Sentinel
+• +230 NEW rules for coverage gaps RSA never had:
+  - SaaS (Salesforce, Workday) - RSA had 17, we needed 70
+  - Business logic (termination, VIP monitoring)
+  - Compliance (SOC 2, GDPR)
+  - XDR correlation (alert + network + SaaS)
+• 485 total Sentinel rules = 255 migrated + 230 new
+• Content Hub first (102 built-ins), custom only for gaps (58 KQL)
 
 PARALLEL OPS & CUTOVER:
 • Ran RSA + Sentinel in parallel for months

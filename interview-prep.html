@@ -204,7 +204,7 @@ shifted more toward SIEM and platform engineering. I was involved in a
 migration from RSA NetWitness to Microsoft Sentinel, contributing from 
 the discovery and foundation phase — log source identification, ingestion 
 strategy, onboarding data using built-in and custom connectors, and 
-validating data quality for detection use cases. In parallel, I led the 
+validating data quality for detection use cases. In parallel, I worked on the 
 Microsoft Defender for Endpoint track, handling agent onboarding, policy 
 configuration, exclusions, and stabilization to ensure reliable endpoint 
 telemetry integrated with Sentinel.
@@ -1703,7 +1703,7 @@ the timeline, and force SOC retraining.
 The right approach:
 1. Enable M365 Defender XDR connector in Month 1
 2. Map legacy detections: XDR handles | Sentinel needed | Custom
-3. Build ~270 Sentinel rules (not 500+) for Sentinel's domain
+3. Build 485 Sentinel rules (255 migrated + 230 new) for Sentinel's domain
 4. Get XDR correlation benefits from Day 1
 
 DETECTION OWNERSHIP MODEL:
@@ -1713,7 +1713,7 @@ XDR handles (automatic, don't rebuild):
 • Email: Phishing, BEC, malicious attachments
 • Cloud Apps: OAuth abuse, mass download, unusual access
 
-Sentinel handles (~270 rules):
+Sentinel handles (485 rules = 255 migrated + 230 new):
 • Network: Firewall denies, C2 beaconing, DNS tunneling
 • Azure: Resource deletion, NSG changes, Key Vault access
 • DLP: Purview policy violations, exfiltration correlation
@@ -1887,7 +1887,7 @@ a SIEM, which misses the point.
 
 The right framing: 'XDR handles endpoint/identity/email detection with 
 Microsoft-managed, continuously updated detections. Sentinel handles 
-~270 rules for network, Azure, DLP, and higher-order correlation.'"</code></pre>
+485 rules for network, cloud, SaaS, DLP, and higher-order correlation.'"</code></pre>
           </div>
         </div>
 

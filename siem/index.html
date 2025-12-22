@@ -181,10 +181,10 @@
             Current State
           </div>
           <div class="callout-content">
-            <p><strong>Sentinel + XDR:</strong> XDR-first architecture operational from Day 1. M365 Defender handles endpoint, identity, and email detection; Sentinel owns network, Azure, and higher-order correlation (~270 rules). RSA NetWitness decommissioned.</p>
+            <p><strong>Sentinel + XDR:</strong> XDR-first architecture operational from Day 1. M365 Defender handles endpoint, identity, and email detection (780 techniques); Sentinel owns network, cloud, SaaS, and higher-order correlation (485 rules = 255 migrated + 230 new). RSA NetWitness decommissioned.</p>
             <p><strong>Log Sources:</strong> All critical sources onboarded via built-in connectors and custom DCRs.</p>
             <p><strong>SOC:</strong> Analysts trained and operational on M365 Defender unified queue (security.microsoft.com).</p>
-            <p><strong>Detection Split:</strong> XDR handles ~350 detection types automatically; Sentinel handles ~270 rules for non-Microsoft sources and higher-order correlation.</p>
+            <p><strong>Detection Split:</strong> XDR handles 780 techniques automatically; Sentinel handles 485 rules for non-Microsoft sources, SaaS applications, business logic, and higher-order correlation.</p>
             <p><strong>Current Phase:</strong> Knowledge transfer and handover to internal security team.</p>
           </div>
         </div>
@@ -196,7 +196,7 @@
           </div>
           <div class="callout-content">
             <p><strong>Key Insight:</strong> In the Microsoft ecosystem, correlation is layered — XDR handles endpoint + identity + email correlation upstream, and Sentinel handles network + Azure + higher-order correlation. This means you don't rebuild detections XDR handles natively.</p>
-            <p><strong>Result:</strong> ~270 Sentinel rules (not 500+), 12-month timeline, XDR correlation benefits from Day 1.</p>
+            <p><strong>Result:</strong> 485 Sentinel rules (255 migrated + 230 new), 12-month timeline, XDR correlation benefits from Day 1.</p>
             <p>👉 <strong><a href="../operations/xdr-integration.html">Full XDR-First Strategy Documentation →</a></strong></p>
           </div>
         </div>

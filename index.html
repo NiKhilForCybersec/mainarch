@@ -174,7 +174,7 @@
           </div>
           <div class="callout-content">
             <p><strong>All tracks complete.</strong> Sentinel primary (RSA decommissioned). MDE fully deployed (ESET removed). DLP enforcement active (Symantec EDLP decommissioned).</p>
-            <p><strong>XDR-First Architecture:</strong> M365 Defender XDR enabled from Day 1. XDR handles endpoint, identity, email, and cloud app detection (~350 detection types). Sentinel owns network, Azure, DLP, and higher-order correlation (~270 rules).</p>
+            <p><strong>XDR-First Architecture:</strong> M365 Defender XDR enabled from Day 1. XDR handles endpoint, identity, email, and cloud app detection (780 techniques retired from RSA). Sentinel owns network, cloud, SaaS, DLP, and higher-order correlation (485 rules = 255 migrated + 230 new for coverage gaps RSA never had).</p>
             <p><strong>Unified SOC Interface:</strong> Analysts work in security.microsoft.com — both XDR and Sentinel incidents appear in a single queue.</p>
             <p><strong>Current Phase:</strong> Knowledge transfer and final handover to internal security team.</p>
           </div>
@@ -183,14 +183,15 @@
         <div class="callout info">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Role Scope (Security Engineer)
+            My Role (Security Engineer — SIEM & EDR Tracks)
           </div>
           <div class="callout-content">
-            <p><strong>Context:</strong> Identity and Infrastructure migrations had already started before I joined — they were the cloud foundation that needed to be in place first. I joined when the security tracks began.</p>
-            <p><strong>SIEM Track (M1, Started Here):</strong> Log source identification, stakeholder coordination, ingestion strategy, Sentinel workspace setup, connector configuration, custom log onboarding. Also worked on detection engineering — implementing built-in detection rules from the translation catalog, enabling native equivalents in Sentinel and M365 Defender.</p>
-            <p><strong>EDR Track (M1, Track Lead):</strong> MDE deployment, policy configuration, ASR rollout, exclusions management, coexistence handling, operational tuning across 9,000 endpoints.</p>
-            <p><strong>Parallel SIEM & EDR:</strong> Worked both tracks in parallel — ensuring consistent telemetry flow and detection alignment across platforms.</p>
-            <p><strong>DLP Track (M6+, Current — Wind-Up):</strong> DLP started later as it needs more groundwork — legal alignment, cross-team coordination, data classification. Migrating Symantec Endpoint DLP → Purview. Symantec Network DLP continues; plan to discontinue after complete Azure transformation. Recently moved to support final KT and handover.</p>
+            <p><strong>Context:</strong> This was a larger transformation program with multiple workstreams. Identity and Infrastructure migrations had already started before I joined — they were the cloud foundation that needed to be in place first. I joined when the security tracks began and worked specifically on SIEM and EDR.</p>
+            <p><strong>SIEM Track (M1):</strong> Log source identification, stakeholder coordination, ingestion strategy, Sentinel workspace setup, connector configuration, custom log onboarding. Also contributed to detection migration — validating XDR coverage, enabling Content Hub rules, supporting telemetry readiness for detection engineers.</p>
+            <p><strong>EDR Track (M1):</strong> MDE deployment, policy configuration, ASR rollout, exclusions management, coexistence handling, operational tuning across 9,000 endpoints.</p>
+            <p><strong>Parallel Work:</strong> Worked both SIEM and EDR tracks in parallel — ensuring consistent telemetry flow and detection alignment across platforms.</p>
+            <p><strong>DLP Track (M6+, Contributed):</strong> DLP started later due to legal alignment requirements. Contributed to Symantec Endpoint DLP → Purview migration. Currently supporting final knowledge transfer and handover.</p>
+            <p><em>Note: I didn't lead the overall transformation program — I worked on the SIEM and EDR tracks and contributed to DLP.</em></p>
           </div>
         </div>
 
@@ -275,7 +276,7 @@
           </div>
           <div class="callout-content">
             <p>In Splunk, correlation is centralized — all telemetry goes to the SIEM. In the Microsoft ecosystem, <strong>correlation is layered</strong>: XDR handles endpoint + identity + email correlation upstream, and Sentinel handles network + Azure + higher-order correlation.</p>
-            <p style="margin-top: 0.5rem;"><strong>Result:</strong> ~270 Sentinel rules (not 500+), 12-month timeline, XDR correlation benefits from Day 1.</p>
+            <p style="margin-top: 0.5rem;"><strong>Result:</strong> 485 Sentinel rules (255 migrated + 230 new), 12-month timeline, XDR correlation benefits from Day 1.</p>
           </div>
         </div>
 
@@ -286,7 +287,7 @@
           </div>
           <div class="callout-content">
             <p><strong>XDR Enabled Early:</strong> M365 Defender connector and incident sync enabled in Month 1. XDR provides immediate value even during MDE rollout.</p>
-            <p><strong>Detection Ownership Defined Upfront:</strong> Instead of building 500+ rules then retiring half, we build only what Sentinel needs to own (~270 rules).</p>
+            <p><strong>Detection Ownership Defined Upfront:</strong> Instead of building 500+ rules then retiring half, we build only what Sentinel needs (485 rules = 255 migrated + 230 new coverage).</p>
             <p><strong>DLP Started Later:</strong> DLP depends on data classification framework and business alignment, so it was introduced later and initially operated in audit mode.</p>
             <p><strong>Unified SOC from Start:</strong> SOC trains on the unified Defender portal (security.microsoft.com), not separate tools.</p>
           </div>

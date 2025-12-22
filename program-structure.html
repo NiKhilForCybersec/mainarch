@@ -298,7 +298,7 @@
           <div class="callout-content">
             <p><strong>Identity:</strong> AD synced to Entra ID. Future: decommission on-prem AD after complete cloud migration.</p>
             <p><strong>Infrastructure:</strong> Azure landing zone operational. Network architecture stable.</p>
-            <p><strong>SIEM + XDR:</strong> Sentinel primary with M365 Defender XDR integration from Day 1. XDR handles endpoint, identity, and email detection natively; Sentinel owns network, Azure, and higher-order correlation (~270 rules). RSA decommissioned.</p>
+            <p><strong>SIEM + XDR:</strong> Sentinel primary with M365 Defender XDR integration from Day 1. XDR handles endpoint, identity, and email detection natively (780 techniques); Sentinel owns network, cloud, SaaS, and higher-order correlation (485 rules = 255 migrated + 230 new). RSA decommissioned.</p>
             <p><strong>EDR:</strong> MDE fully deployed. ESET removed.</p>
             <p><strong>DLP:</strong> Purview EDLP enforcement complete. Symantec EDLP decommissioned. NDLP continues.</p>
             <p><strong>Current Phase:</strong> Knowledge transfer and final handover to internal security team.</p>
@@ -380,11 +380,11 @@
             Role Scope: Security Engineer (This Documentation)
           </div>
           <div class="callout-content">
-            <p><strong>SIEM Track:</strong> Log source identification, stakeholder coordination, ingestion strategy, Sentinel workspace setup, connector configuration, custom log onboarding. Detection engineering — implemented built-in detection rules from translation catalog, enabled native Sentinel/Defender equivalents, aligned endpoint telemetry correlation.</p>
-            <p><strong>EDR Track (Lead):</strong> MDE deployment, policy configuration, ASR rollout, exclusions management, coexistence handling, operational tuning. Ensured consistent telemetry flow and detection alignment.</p>
+            <p><strong>SIEM Track:</strong> Log source identification, stakeholder coordination, ingestion strategy, Sentinel workspace setup, connector configuration, custom log onboarding. Enabled built-in detection rules from Content Hub, configured XDR connectors, aligned endpoint telemetry correlation.</p>
+            <p><strong>EDR Track:</strong> MDE deployment, policy configuration, ASR rollout, exclusions management, coexistence handling, operational tuning. Ensured consistent telemetry flow and detection alignment.</p>
             <p><strong>Parallel Operations:</strong> Worked both SIEM and EDR tracks in parallel after MDE rollout began.</p>
             <p><strong>DLP Track (Supporting):</strong> Audit mode monitoring, tuning, and validation after SIEM/EDR stabilized.</p>
-            <p><strong>Detection Handoff:</strong> Detailed custom detection development and ongoing fine-tuning handled by SOC analysts and dedicated detection engineers.</p>
+            <p><strong>Detection Handoff:</strong> Detailed custom KQL detection development and ongoing fine-tuning handled by SOC analysts and dedicated detection engineers.</p>
           </div>
         </div>
 
@@ -415,9 +415,9 @@
                 <td colspan="3" style="background-color: var(--bg-tertiary); font-weight: 600;">Security Engineering (Platform & Deployment)</td>
               </tr>
               <tr>
-                <td><strong>Security Engineer (SIEM/EDR Lead)</strong></td>
+                <td><strong>Security Engineer (SIEM/EDR)</strong></td>
                 <td>SIEM → EDR → DLP</td>
-                <td>Log source onboarding, connector configuration, MDE deployment, policy configuration, ASR rollout, operational tuning, stakeholder coordination</td>
+                <td>Log source onboarding, connector configuration, MDE deployment, policy configuration, ASR rollout, Content Hub enablement, operational tuning, stakeholder coordination</td>
               </tr>
               <tr>
                 <td><strong>Security Engineers</strong></td>
