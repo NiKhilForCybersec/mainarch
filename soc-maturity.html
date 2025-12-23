@@ -1,0 +1,3133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOC Maturity Roadmap | Security Modernization</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Additional styles for this page */
+    .maturity-level-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.02));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+    }
+    
+    .maturity-level-card.level-1 {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.02));
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    
+    .maturity-level-card.level-2 {
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(249, 115, 22, 0.02));
+      border-color: rgba(249, 115, 22, 0.3);
+    }
+    
+    .maturity-level-card.level-3 {
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(234, 179, 8, 0.02));
+      border-color: rgba(234, 179, 8, 0.3);
+    }
+    
+    .maturity-level-card.level-4 {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.02));
+      border-color: rgba(34, 197, 94, 0.3);
+    }
+    
+    .maturity-level-card.level-5 {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(6, 182, 212, 0.02));
+      border-color: rgba(6, 182, 212, 0.3);
+    }
+    
+    .level-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .level-badge {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+    }
+    
+    .level-1 .level-badge { background: linear-gradient(135deg, #ef4444, #dc2626); }
+    .level-2 .level-badge { background: linear-gradient(135deg, #f97316, #ea580c); }
+    .level-3 .level-badge { background: linear-gradient(135deg, #eab308, #ca8a04); }
+    .level-4 .level-badge { background: linear-gradient(135deg, #22c55e, #16a34a); }
+    .level-5 .level-badge { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+    
+    .level-title {
+      flex: 1;
+    }
+    
+    .level-title h3 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+    
+    .level-title .subtitle {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+    
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    
+    .pillar-card {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1.25rem;
+    }
+    
+    .pillar-card h4 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0 0 1rem 0;
+      font-size: 1rem;
+      color: var(--accent-primary);
+    }
+    
+    .pillar-card ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      font-size: 0.9rem;
+    }
+    
+    .pillar-card li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+    
+    .symptoms-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .symptoms-box h4 {
+      color: #ef4444;
+      margin: 0 0 0.75rem 0;
+      font-size: 0.95rem;
+    }
+    
+    .risks-box {
+      background: rgba(249, 115, 22, 0.1);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .risks-box h4 {
+      color: #f97316;
+      margin: 0 0 0.75rem 0;
+      font-size: 0.95rem;
+    }
+    
+    .transition-roadmap {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.02));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .transition-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .transition-arrow {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    
+    .phase-timeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    
+    .phase-card {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 1.25rem;
+      border-left: 4px solid var(--accent-primary);
+    }
+    
+    .phase-card h4 {
+      margin: 0 0 0.5rem 0;
+      color: var(--accent-primary);
+      font-size: 0.95rem;
+    }
+    
+    .phase-card .timeframe {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+    
+    .phase-card ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      font-size: 0.85rem;
+    }
+    
+    .metrics-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    
+    .metrics-table th,
+    .metrics-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .metrics-table th {
+      background: rgba(139, 92, 246, 0.2);
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+    
+    .metrics-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    
+    .cost-indicator {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .cost-low { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+    .cost-medium { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+    .cost-high { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+    .cost-very-high { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    
+    .assessment-section {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+    }
+    
+    .question-list {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .question-list h4 {
+      margin: 0 0 1rem 0;
+      color: var(--accent-primary);
+    }
+    
+    .question-item {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.9rem;
+    }
+    
+    .question-item:last-child {
+      border-bottom: none;
+    }
+    
+    .scoring-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    
+    .score-cell {
+      text-align: center;
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+    
+    .score-1 { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.3); }
+    .score-2 { background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.3); }
+    .score-3 { background: rgba(234, 179, 8, 0.2); border: 1px solid rgba(234, 179, 8, 0.3); }
+    .score-4 { background: rgba(34, 197, 94, 0.2); border: 1px solid rgba(34, 197, 94, 0.3); }
+    .score-5 { background: rgba(6, 182, 212, 0.2); border: 1px solid rgba(6, 182, 212, 0.3); }
+    
+    .toc-box {
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin: 2rem 0;
+    }
+    
+    .toc-box h3 {
+      margin: 0 0 1rem 0;
+      color: var(--accent-primary);
+    }
+    
+    .toc-columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .toc-column ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      font-size: 0.9rem;
+    }
+    
+    .toc-column li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .toc-column a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+    
+    .toc-column a:hover {
+      color: var(--accent-primary);
+    }
+    
+    .key-insight {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.02));
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .key-insight h4 {
+      color: #22c55e;
+      margin: 0 0 0.5rem 0;
+      font-size: 0.95rem;
+    }
+    
+    .comparison-visual {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.25rem;
+      margin: 1.5rem 0;
+    }
+    
+    .comparison-column {
+      text-align: center;
+    }
+    
+    .comparison-column .level-num {
+      font-size: 1.5rem;
+      font-weight: 700;
+      padding: 1rem;
+      border-radius: 8px 8px 0 0;
+    }
+    
+    .comparison-column.l1 .level-num { background: rgba(239, 68, 68, 0.3); color: #ef4444; }
+    .comparison-column.l2 .level-num { background: rgba(249, 115, 22, 0.3); color: #f97316; }
+    .comparison-column.l3 .level-num { background: rgba(234, 179, 8, 0.3); color: #eab308; }
+    .comparison-column.l4 .level-num { background: rgba(34, 197, 94, 0.3); color: #22c55e; }
+    .comparison-column.l5 .level-num { background: rgba(6, 182, 212, 0.3); color: #06b6d4; }
+    
+    .comparison-column .level-name {
+      font-size: 0.8rem;
+      padding: 0.5rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 0 0 8px 8px;
+    }
+    
+    .deep-dive-section {
+      border-left: 4px solid var(--accent-primary);
+      padding-left: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .checklist-box {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+    
+    .checklist-item input[type="checkbox"] {
+      margin-top: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="main-nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">Security Transformation</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="siem/index.html">SIEM</a>
+        <a href="edr/index.html">EDR</a>
+        <a href="dlp/index.html">DLP</a>
+        <a href="interview-technical-reference.html">Interview Prep</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="content-wrapper">
+    <div class="content-container">
+
+      <!-- ==================== HEADER ==================== -->
+      <header class="page-header">
+        <h1>SOC Maturity Roadmap</h1>
+        <p class="subtitle">A comprehensive guide to assess, plan, and execute security operations transformation from Level 1 to Level 5</p>
+      </header>
+
+      <!-- ==================== TABLE OF CONTENTS ==================== -->
+      <div class="toc-box">
+        <h3>📚 Table of Contents</h3>
+        <div class="toc-columns">
+          <div class="toc-column">
+            <ul>
+              <li><a href="#overview">1. SOC Maturity Overview</a></li>
+              <li><a href="#four-pillars">2. The Four Pillars</a></li>
+              <li><a href="#maturity-levels">3. Maturity Level Definitions</a></li>
+              <li><a href="#level-1">3.1 Level 1: Initial</a></li>
+              <li><a href="#level-2">3.2 Level 2: Developing</a></li>
+              <li><a href="#level-3">3.3 Level 3: Defined</a></li>
+              <li><a href="#level-4">3.4 Level 4: Managed</a></li>
+              <li><a href="#level-5">3.5 Level 5: Optimizing</a></li>
+            </ul>
+          </div>
+          <div class="toc-column">
+            <ul>
+              <li><a href="#assessment">4. Assessment Framework</a></li>
+              <li><a href="#transitions">5. Transition Roadmaps</a></li>
+              <li><a href="#1-to-2">5.1 Level 1 → 2</a></li>
+              <li><a href="#2-to-3">5.2 Level 2 → 3</a></li>
+              <li><a href="#3-to-4">5.3 Level 3 → 4</a></li>
+              <li><a href="#4-to-5">5.4 Level 4 → 5</a></li>
+              <li><a href="#metrics">6. Metrics & KPIs</a></li>
+            </ul>
+          </div>
+          <div class="toc-column">
+            <ul>
+              <li><a href="#people-deep-dive">7. People Pillar Deep Dive</a></li>
+              <li><a href="#process-deep-dive">8. Process Pillar Deep Dive</a></li>
+              <li><a href="#technology-deep-dive">9. Technology Pillar Deep Dive</a></li>
+              <li><a href="#governance-deep-dive">10. Governance Deep Dive</a></li>
+              <li><a href="#pitfalls">11. Common Pitfalls</a></li>
+              <li><a href="#budget">12. Budget Planning</a></li>
+              <li><a href="#case-study">13. Case Study</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== SECTION 1: OVERVIEW ==================== -->
+      <section id="overview">
+        <h2>1. SOC Maturity Overview</h2>
+
+        <h3>What is SOC Maturity?</h3>
+        <p>SOC Maturity is a measure of how effectively your Security Operations Center detects, responds to, and prevents security threats. It's not just about having the right tools—it's about the <strong>combination of people, processes, technology, and governance</strong> working together as a cohesive system.</p>
+
+        <p>A mature SOC doesn't just react to alerts—it <strong>anticipates threats</strong>, <strong>measures effectiveness</strong>, and <strong>continuously improves</strong>.</p>
+
+        <div class="key-insight">
+          <h4>💡 Key Insight</h4>
+          <p>Maturity is not about perfection. It's about <strong>knowing where you are</strong>, <strong>understanding where you need to be</strong>, and having a <strong>realistic path to get there</strong>. Most organizations don't need Level 5—they need the right level for their risk profile and resources.</p>
+        </div>
+
+        <h3>Why Maturity Matters</h3>
+
+        <div class="pillar-grid">
+          <div class="pillar-card">
+            <h4>🎯 Risk Reduction</h4>
+            <ul>
+              <li>Lower MTTD (Mean Time to Detect)</li>
+              <li>Lower MTTR (Mean Time to Respond)</li>
+              <li>Fewer successful breaches</li>
+              <li>Reduced blast radius when incidents occur</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>💰 Cost Efficiency</h4>
+            <ul>
+              <li>Automation reduces manual effort</li>
+              <li>Better tool utilization</li>
+              <li>Reduced incident costs</li>
+              <li>Optimized staffing</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>📋 Compliance</h4>
+            <ul>
+              <li>Meet regulatory requirements</li>
+              <li>Audit-ready documentation</li>
+              <li>Demonstrable security posture</li>
+              <li>Third-party assurance</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>🏢 Business Alignment</h4>
+            <ul>
+              <li>Security enables business</li>
+              <li>Executive confidence</li>
+              <li>Customer trust</li>
+              <li>Competitive advantage</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>The Maturity Spectrum</h3>
+
+        <div class="comparison-visual">
+          <div class="comparison-column l1">
+            <div class="level-num">1</div>
+            <div class="level-name">Initial<br><small>Ad-hoc, Reactive</small></div>
+          </div>
+          <div class="comparison-column l2">
+            <div class="level-num">2</div>
+            <div class="level-name">Developing<br><small>Some Process</small></div>
+          </div>
+          <div class="comparison-column l3">
+            <div class="level-num">3</div>
+            <div class="level-name">Defined<br><small>Standardized</small></div>
+          </div>
+          <div class="comparison-column l4">
+            <div class="level-num">4</div>
+            <div class="level-name">Managed<br><small>Measured</small></div>
+          </div>
+          <div class="comparison-column l5">
+            <div class="level-num">5</div>
+            <div class="level-name">Optimizing<br><small>Continuous</small></div>
+          </div>
+        </div>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Aspect</th>
+              <th>Level 1</th>
+              <th>Level 3</th>
+              <th>Level 5</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Detection</strong></td>
+              <td>Rely on vendor defaults</td>
+              <td>Custom rules for environment</td>
+              <td>ML-driven, predictive</td>
+            </tr>
+            <tr>
+              <td><strong>Response</strong></td>
+              <td>Manual, inconsistent</td>
+              <td>Playbook-driven</td>
+              <td>Automated orchestration</td>
+            </tr>
+            <tr>
+              <td><strong>Metrics</strong></td>
+              <td>Ticket count only</td>
+              <td>MTTD, MTTR tracked</td>
+              <td>Business impact measured</td>
+            </tr>
+            <tr>
+              <td><strong>Threat Intel</strong></td>
+              <td>None or basic feeds</td>
+              <td>Integrated, actionable</td>
+              <td>Proactive hunting, sharing</td>
+            </tr>
+            <tr>
+              <td><strong>Staffing</strong></td>
+              <td>Understaffed, burnout</td>
+              <td>Adequate, defined roles</td>
+              <td>Optimized, specialized</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ==================== SECTION 2: FOUR PILLARS ==================== -->
+      <section id="four-pillars">
+        <h2>2. The Four Pillars of SOC Maturity</h2>
+
+        <p>SOC maturity is evaluated across four interconnected pillars. <strong>All four must progress together</strong>—advancing technology without improving process creates expensive shelfware.</p>
+
+        <div class="pillar-grid">
+          <div class="pillar-card">
+            <h4>👥 PEOPLE</h4>
+            <p>The human element—team structure, skills, training, culture, and career development.</p>
+            <ul>
+              <li>Team size and structure</li>
+              <li>Skills and certifications</li>
+              <li>Training programs</li>
+              <li>Shift coverage models</li>
+              <li>Career paths and retention</li>
+              <li>Culture and morale</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>📋 PROCESS</h4>
+            <p>How work gets done—documented procedures, workflows, and continuous improvement.</p>
+            <ul>
+              <li>Playbooks and runbooks</li>
+              <li>Incident response procedures</li>
+              <li>Escalation paths</li>
+              <li>Change management</li>
+              <li>Knowledge management</li>
+              <li>Continuous improvement</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>🖥️ TECHNOLOGY</h4>
+            <p>The tools and platforms—SIEM, EDR, SOAR, and how well they're utilized.</p>
+            <ul>
+              <li>SIEM capabilities</li>
+              <li>EDR/XDR coverage</li>
+              <li>SOAR automation</li>
+              <li>Threat intelligence</li>
+              <li>Detection coverage</li>
+              <li>Tool integration</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>📊 GOVERNANCE</h4>
+            <p>Oversight and alignment—policies, metrics, compliance, and executive reporting.</p>
+            <ul>
+              <li>Security policies</li>
+              <li>Compliance requirements</li>
+              <li>KPIs and SLAs</li>
+              <li>Executive reporting</li>
+              <li>Budget and planning</li>
+              <li>Risk management</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            The Integration Trap
+          </div>
+          <div class="callout-content">
+            <p><strong>Common mistake:</strong> Organizations buy advanced SIEM/SOAR tools (Technology Level 4) but have ad-hoc processes (Process Level 1) and undertrained staff (People Level 2). Result: Expensive tools sitting unused, frustrated teams, and no improvement in security outcomes.</p>
+            <p style="margin-top: 0.5rem;"><strong>Rule of thumb:</strong> Your effective maturity level is your <em>lowest</em> pillar, not your highest.</p>
+          </div>
+        </div>
+
+        <h3>Pillar Interdependencies</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>If you improve...</th>
+              <th>You also need...</th>
+              <th>Otherwise...</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Technology</strong> (new SIEM)</td>
+              <td>Process (detection rules, playbooks)<br>People (training, skills)</td>
+              <td>Expensive shelfware, alert fatigue</td>
+            </tr>
+            <tr>
+              <td><strong>Process</strong> (new playbooks)</td>
+              <td>People (training to follow them)<br>Governance (enforcement)</td>
+              <td>Documentation nobody reads</td>
+            </tr>
+            <tr>
+              <td><strong>People</strong> (more staff)</td>
+              <td>Process (roles, responsibilities)<br>Technology (tools to be effective)</td>
+              <td>Confused team, duplicated effort</td>
+            </tr>
+            <tr>
+              <td><strong>Governance</strong> (new metrics)</td>
+              <td>Technology (data to measure)<br>Process (activities to track)</td>
+              <td>Meaningless numbers, gaming metrics</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ==================== SECTION 3: MATURITY LEVELS ==================== -->
+      <section id="maturity-levels">
+        <h2>3. Maturity Level Definitions</h2>
+
+        <p>Each level represents a distinct stage of capability. Understanding these levels helps you <strong>accurately assess current state</strong> and <strong>set realistic targets</strong>.</p>
+
+        <!-- ===== LEVEL 1 ===== -->
+        <div id="level-1" class="maturity-level-card level-1">
+          <div class="level-header">
+            <div class="level-badge">1</div>
+            <div class="level-title">
+              <h3>Level 1: Initial (Ad-hoc, Reactive)</h3>
+              <div class="subtitle">"We're putting out fires every day"</div>
+            </div>
+          </div>
+
+          <p>Security operations exist but are <strong>chaotic and inconsistent</strong>. Success depends on individual heroics rather than repeatable processes. The team is constantly overwhelmed, and there's no visibility into actual security posture.</p>
+
+          <div class="pillar-grid">
+            <div class="pillar-card">
+              <h4>👥 People</h4>
+              <ul>
+                <li>1-3 analysts, often part-time or shared</li>
+                <li>No defined roles—everyone does everything</li>
+                <li>High turnover, burnout common</li>
+                <li>Minimal training budget</li>
+                <li>Business hours only (8x5)</li>
+                <li>No career path defined</li>
+                <li>Tribal knowledge dominates</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>📋 Process</h4>
+              <ul>
+                <li>No documented playbooks</li>
+                <li>"It depends on who's on shift"</li>
+                <li>Inconsistent incident handling</li>
+                <li>No escalation procedures</li>
+                <li>Reactive only—no proactive activities</li>
+                <li>No post-incident reviews</li>
+                <li>Knowledge lost when people leave</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>🖥️ Technology</h4>
+              <ul>
+                <li>Basic SIEM or just log aggregation</li>
+                <li>Default vendor rules only</li>
+                <li>No tuning—massive alert fatigue</li>
+                <li>Basic or no EDR</li>
+                <li>No SOAR/automation</li>
+                <li>Tools not integrated</li>
+                <li>Partial visibility (major gaps)</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>📊 Governance</h4>
+              <ul>
+                <li>No formal security policies</li>
+                <li>No metrics tracked</li>
+                <li>No SLAs defined</li>
+                <li>Reactive budget ("we need $X now!")</li>
+                <li>No executive reporting</li>
+                <li>Compliance is checkbox exercise</li>
+                <li>No risk framework</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="symptoms-box">
+            <h4>🚨 Symptoms You're at Level 1</h4>
+            <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.9rem; columns: 2;">
+              <li>Analysts drowning in alerts (1000s/day)</li>
+              <li>"We don't have time to tune rules"</li>
+              <li>Same incidents keep recurring</li>
+              <li>No idea what your MTTD or MTTR is</li>
+              <li>Discovered breaches from external parties</li>
+              <li>Can't answer "are we secure?"</li>
+              <li>New analyst = months to get productive</li>
+              <li>Major knowledge loss when someone leaves</li>
+              <li>Security is seen as blocker, not enabler</li>
+              <li>Constant firefighting, no improvement time</li>
+            </ul>
+          </div>
+
+          <div class="risks-box">
+            <h4>⚠️ Threat Categories You CAN'T Handle</h4>
+            <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.9rem;">
+              <li><strong>APT/Nation-state:</strong> Zero chance of detecting sophisticated, low-and-slow attacks</li>
+              <li><strong>Insider threats:</strong> No behavioral baselines, no anomaly detection</li>
+              <li><strong>Living-off-the-land:</strong> Default rules miss legitimate tool abuse</li>
+              <li><strong>Supply chain:</strong> No visibility into third-party risk</li>
+              <li><strong>Zero-days:</strong> Signature-based only, no behavioral detection</li>
+              <li><strong>Data exfiltration:</strong> Likely to go unnoticed for weeks/months</li>
+            </ul>
+          </div>
+
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Typical Level 1 Value</th>
+                <th>What It Means</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Alert Volume</td>
+                <td>1,000-10,000/day</td>
+                <td>Unmanageable, most ignored</td>
+              </tr>
+              <tr>
+                <td>False Positive Rate</td>
+                <td>90%+</td>
+                <td>Analysts tune out alerts</td>
+              </tr>
+              <tr>
+                <td>MTTD</td>
+                <td>Unknown (weeks-months)</td>
+                <td>Breaches discovered externally</td>
+              </tr>
+              <tr>
+                <td>MTTR</td>
+                <td>Unknown (days-weeks)</td>
+                <td>No measurement, no baseline</td>
+              </tr>
+              <tr>
+                <td>Detection Coverage</td>
+                <td>&lt;20% of ATT&CK</td>
+                <td>Massive blind spots</td>
+              </tr>
+              <tr>
+                <td>Staff Turnover</td>
+                <td>40-60% annual</td>
+                <td>Constant knowledge loss</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ===== LEVEL 2 ===== -->
+        <div id="level-2" class="maturity-level-card level-2">
+          <div class="level-header">
+            <div class="level-badge">2</div>
+            <div class="level-title">
+              <h3>Level 2: Developing (Repeatable)</h3>
+              <div class="subtitle">"We have some processes, but they're not always followed"</div>
+            </div>
+          </div>
+
+          <p>Basic processes exist and are sometimes followed. The team is starting to get organized, but <strong>consistency is the challenge</strong>. Some documentation exists, but it's often outdated or incomplete.</p>
+
+          <div class="pillar-grid">
+            <div class="pillar-card">
+              <h4>👥 People</h4>
+              <ul>
+                <li>3-6 dedicated analysts</li>
+                <li>Basic role separation (L1/L2)</li>
+                <li>Some formal training</li>
+                <li>Extended hours (12x5 or partial 24x5)</li>
+                <li>Key person dependencies</li>
+                <li>Starting to define career paths</li>
+                <li>Still reactive mindset</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>📋 Process</h4>
+              <ul>
+                <li>Some playbooks exist (top 5-10 alert types)</li>
+                <li>Basic escalation procedures</li>
+                <li>Incident tickets created consistently</li>
+                <li>Some post-incident reviews</li>
+                <li>Documentation exists but often stale</li>
+                <li>Processes followed ~50-70% of time</li>
+                <li>Starting knowledge base</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>🖥️ Technology</h4>
+              <ul>
+                <li>SIEM deployed with some custom rules</li>
+                <li>Basic tuning performed</li>
+                <li>EDR deployed on most endpoints</li>
+                <li>Some log sources integrated</li>
+                <li>No SOAR yet</li>
+                <li>Basic threat intel feeds</li>
+                <li>~50-70% visibility coverage</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>📊 Governance</h4>
+              <ul>
+                <li>Basic security policies exist</li>
+                <li>Some metrics tracked (ticket count, volume)</li>
+                <li>Informal SLAs</li>
+                <li>Annual budget planning</li>
+                <li>Occasional executive updates</li>
+                <li>Compliance requirements known</li>
+                <li>Starting risk discussions</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="symptoms-box">
+            <h4>🚨 Symptoms You're at Level 2</h4>
+            <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.9rem; columns: 2;">
+              <li>"We have playbooks, but not everyone follows them"</li>
+              <li>Alert volume reduced but still high (500-2000/day)</li>
+              <li>Some tuning done, but FP rate still ~70%</li>
+              <li>Know MTTD/MTTR roughly but don't track formally</li>
+              <li>Key person leaves = major disruption</li>
+              <li>Documentation exists but "where is it again?"</li>
+              <li>Occasional threat hunting, not systematic</li>
+              <li>Some automation scripts, not orchestrated</li>
+              <li>Compliance audits are stressful</li>
+              <li>Security requests take too long</li>
+            </ul>
+          </div>
+
+          <div class="risks-box">
+            <h4>⚠️ Threat Categories You Still Struggle With</h4>
+            <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.9rem;">
+              <li><strong>APT/Nation-state:</strong> Still very difficult to detect</li>
+              <li><strong>Insider threats:</strong> Limited behavioral analysis</li>
+              <li><strong>Living-off-the-land:</strong> Some detection, but gaps remain</li>
+              <li><strong>Coordinated attacks:</strong> Hard to correlate across domains</li>
+              <li><strong>Novel techniques:</strong> Still signature-dependent</li>
+            </ul>
+          </div>
+
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Typical Level 2 Value</th>
+                <th>Improvement from L1</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Alert Volume</td>
+                <td>500-2,000/day</td>
+                <td>Reduced through basic tuning</td>
+              </tr>
+              <tr>
+                <td>False Positive Rate</td>
+                <td>60-80%</td>
+                <td>Some improvement</td>
+              </tr>
+              <tr>
+                <td>MTTD</td>
+                <td>Days to weeks</td>
+                <td>Starting to measure</td>
+              </tr>
+              <tr>
+                <td>MTTR</td>
+                <td>Hours to days</td>
+                <td>Playbooks help consistency</td>
+              </tr>
+              <tr>
+                <td>Detection Coverage</td>
+                <td>30-50% of ATT&CK</td>
+                <td>Custom rules added</td>
+              </tr>
+              <tr>
+                <td>Staff Turnover</td>
+                <td>25-40% annual</td>
+                <td>Better but still challenging</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ===== LEVEL 3 ===== -->
+        <div id="level-3" class="maturity-level-card level-3">
+          <div class="level-header">
+            <div class="level-badge">3</div>
+            <div class="level-title">
+              <h3>Level 3: Defined (Standardized)</h3>
+              <div class="subtitle">"We have documented processes that are consistently followed"</div>
+            </div>
+          </div>
+
+          <p>Processes are <strong>documented, standardized, and consistently followed</strong>. The organization knows what "good" looks like and can replicate success. This is where most mature organizations should target.</p>
+
+          <div class="pillar-grid">
+            <div class="pillar-card">
+              <h4>👥 People</h4>
+              <ul>
+                <li>6-12 analysts with clear tiers (L1/L2/L3)</li>
+                <li>Defined roles and responsibilities</li>
+                <li>Formal training program</li>
+                <li>24x5 or 24x7 coverage</li>
+                <li>Specialists emerging (threat intel, IR)</li>
+                <li>Career paths documented</li>
+                <li>Reasonable turnover (&lt;25%)</li>
+                <li>Cross-training programs</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>📋 Process</h4>
+              <ul>
+                <li>Comprehensive playbook library</li>
+                <li>Playbooks followed &gt;90% of time</li>
+                <li>Formal escalation matrix</li>
+                <li>Regular post-incident reviews</li>
+                <li>Change management process</li>
+                <li>Knowledge base maintained</li>
+                <li>Scheduled process reviews</li>
+                <li>Lessons learned incorporated</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>🖥️ Technology</h4>
+              <ul>
+                <li>SIEM with custom detection engineering</li>
+                <li>Alert volume manageable (&lt;500/day)</li>
+                <li>EDR/XDR fully deployed</li>
+                <li>SOAR for common workflows</li>
+                <li>Threat intel integrated</li>
+                <li>Regular threat hunting</li>
+                <li>~70-85% visibility coverage</li>
+                <li>MITRE ATT&CK mapping</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>📊 Governance</h4>
+              <ul>
+                <li>Formal security policy framework</li>
+                <li>MTTD/MTTR tracked and reported</li>
+                <li>Defined SLAs, mostly met</li>
+                <li>Regular executive reporting</li>
+                <li>Multi-year roadmap</li>
+                <li>Compliance integrated into operations</li>
+                <li>Risk register maintained</li>
+                <li>Security in business decisions</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="key-insight">
+            <h4>💡 Level 3 is the Target for Most Organizations</h4>
+            <p>Level 3 represents a <strong>well-functioning SOC</strong> that can handle most threats effectively. For many organizations, the investment required to reach Level 4-5 isn't justified by the incremental risk reduction. Focus on sustaining Level 3 before pursuing higher levels.</p>
+          </div>
+
+          <div class="symptoms-box" style="background: rgba(234, 179, 8, 0.1); border-color: rgba(234, 179, 8, 0.3);">
+            <h4 style="color: #eab308;">✅ Signs You've Reached Level 3</h4>
+            <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.9rem; columns: 2;">
+              <li>Analysts can handle most alerts without escalation</li>
+              <li>New analyst productive in weeks, not months</li>
+              <li>Playbooks cover 80%+ of common scenarios</li>
+              <li>Know your MTTD and MTTR numbers</li>
+              <li>False positive rate &lt;40%</li>
+              <li>Regular threat hunting activities</li>
+              <li>Compliance audits are routine, not stressful</li>
+              <li>Executive understands security posture</li>
+              <li>Team morale is good, turnover manageable</li>
+              <li>Can articulate detection coverage gaps</li>
+            </ul>
+          </div>
+
+          <div class="risks-box" style="background: rgba(234, 179, 8, 0.1); border-color: rgba(234, 179, 8, 0.3);">
+            <h4 style="color: #eab308;">⚠️ Threats That Remain Challenging</h4>
+            <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.9rem;">
+              <li><strong>APT/Nation-state:</strong> Can detect some, but sophisticated actors still challenging</li>
+              <li><strong>Zero-days:</strong> Behavioral detection improving but not comprehensive</li>
+              <li><strong>Novel attack chains:</strong> May miss creative combinations</li>
+            </ul>
+          </div>
+
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Typical Level 3 Value</th>
+                <th>Target Range</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Alert Volume</td>
+                <td>200-500/day</td>
+                <td>Manageable by team</td>
+              </tr>
+              <tr>
+                <td>False Positive Rate</td>
+                <td>30-50%</td>
+                <td>&lt;40% target</td>
+              </tr>
+              <tr>
+                <td>MTTD</td>
+                <td>Hours to days</td>
+                <td>&lt;24 hours for high severity</td>
+              </tr>
+              <tr>
+                <td>MTTR</td>
+                <td>Hours</td>
+                <td>&lt;4 hours for critical</td>
+              </tr>
+              <tr>
+                <td>Detection Coverage</td>
+                <td>50-70% of ATT&CK</td>
+                <td>Focus on relevant techniques</td>
+              </tr>
+              <tr>
+                <td>SLA Compliance</td>
+                <td>80-90%</td>
+                <td>&gt;85% target</td>
+              </tr>
+              <tr>
+                <td>Staff Turnover</td>
+                <td>15-25% annual</td>
+                <td>Industry acceptable</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ===== LEVEL 4 ===== -->
+        <div id="level-4" class="maturity-level-card level-4">
+          <div class="level-header">
+            <div class="level-badge">4</div>
+            <div class="level-title">
+              <h3>Level 4: Managed (Quantitatively Measured)</h3>
+              <div class="subtitle">"We measure everything and use data to drive decisions"</div>
+            </div>
+          </div>
+
+          <p>Operations are <strong>quantitatively measured and controlled</strong>. Decisions are data-driven. The organization can predict outcomes and proactively improve. <strong>This is where most Fortune 500 security teams operate.</strong></p>
+
+          <div class="pillar-grid">
+            <div class="pillar-card">
+              <h4>👥 People</h4>
+              <ul>
+                <li>12-25+ analysts, specialized teams</li>
+                <li>Dedicated threat hunters</li>
+                <li>Detection engineers</li>
+                <li>Threat intel analysts</li>
+                <li>24x7 coverage with follow-the-sun</li>
+                <li>Formal career progression</li>
+                <li>Internal mobility programs</li>
+                <li>Industry-leading retention</li>
+                <li>Thought leadership encouraged</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>📋 Process</h4>
+              <ul>
+                <li>Playbooks continuously improved</li>
+                <li>Process metrics tracked and optimized</li>
+                <li>Formal threat hunting program</li>
+                <li>Regular purple team exercises</li>
+                <li>Automated process compliance</li>
+                <li>Predictive process improvement</li>
+                <li>Cross-functional collaboration</li>
+                <li>Runbook automation</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>🖥️ Technology</h4>
+              <ul>
+                <li>Advanced SIEM with UEBA/ML</li>
+                <li>Extensive SOAR automation</li>
+                <li>Comprehensive XDR integration</li>
+                <li>Advanced threat intel platform</li>
+                <li>Deception technology</li>
+                <li>Attack surface management</li>
+                <li>~85-95% visibility coverage</li>
+                <li>Custom detection development</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>📊 Governance</h4>
+              <ul>
+                <li>Real-time security dashboards</li>
+                <li>Predictive analytics</li>
+                <li>SLA compliance &gt;95%</li>
+                <li>Risk quantification (cyber risk $)</li>
+                <li>Board-level reporting</li>
+                <li>Security integrated into all projects</li>
+                <li>Vendor risk management mature</li>
+                <li>Industry benchmarking</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="key-insight">
+            <h4>💡 Level 4 Requires Significant Investment</h4>
+            <p>Moving from Level 3 to Level 4 typically requires <strong>2-3x the budget</strong> and <strong>specialized talent</strong> that's hard to find. Only pursue Level 4 if your risk profile justifies it—high-value targets, regulated industries, or critical infrastructure.</p>
+          </div>
+
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Typical Level 4 Value</th>
+                <th>Key Differentiator</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Alert Volume</td>
+                <td>&lt;200/day (high fidelity)</td>
+                <td>ML reduces noise significantly</td>
+              </tr>
+              <tr>
+                <td>False Positive Rate</td>
+                <td>&lt;20%</td>
+                <td>Continuous tuning and ML</td>
+              </tr>
+              <tr>
+                <td>MTTD</td>
+                <td>Minutes to hours</td>
+                <td>Proactive hunting catches early</td>
+              </tr>
+              <tr>
+                <td>MTTR</td>
+                <td>Minutes to hours</td>
+                <td>SOAR automation</td>
+              </tr>
+              <tr>
+                <td>Detection Coverage</td>
+                <td>70-85% of ATT&CK</td>
+                <td>Comprehensive, tested coverage</td>
+              </tr>
+              <tr>
+                <td>Automation Rate</td>
+                <td>60-80% of Tier 1</td>
+                <td>SOAR handles routine work</td>
+              </tr>
+              <tr>
+                <td>Threat Hunting</td>
+                <td>Weekly hypothesis-driven</td>
+                <td>Proactive, not reactive</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ===== LEVEL 5 ===== -->
+        <div id="level-5" class="maturity-level-card level-5">
+          <div class="level-header">
+            <div class="level-badge">5</div>
+            <div class="level-title">
+              <h3>Level 5: Optimizing (Continuous Improvement)</h3>
+              <div class="subtitle">"We continuously innovate and lead the industry"</div>
+            </div>
+          </div>
+
+          <p>The organization is <strong>continuously improving and innovating</strong>. Security is a competitive advantage. The team contributes to the broader security community and often defines industry best practices. <strong>Very few organizations truly operate at this level.</strong></p>
+
+          <div class="pillar-grid">
+            <div class="pillar-card">
+              <h4>👥 People</h4>
+              <ul>
+                <li>25+ specialists across disciplines</li>
+                <li>Industry-recognized experts</li>
+                <li>Research and development team</li>
+                <li>Conference speakers, researchers</li>
+                <li>Attract top talent globally</li>
+                <li>Internal innovation programs</li>
+                <li>Cross-industry collaboration</li>
+                <li>Security as strategic differentiator</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>📋 Process</h4>
+              <ul>
+                <li>Continuous process optimization</li>
+                <li>AI-assisted decision making</li>
+                <li>Predictive threat modeling</li>
+                <li>Autonomous response capabilities</li>
+                <li>Process innovation initiatives</li>
+                <li>Industry-leading practices</li>
+                <li>Published methodologies</li>
+                <li>Chaos engineering for security</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>🖥️ Technology</h4>
+              <ul>
+                <li>Custom-built security tools</li>
+                <li>ML/AI-driven detection</li>
+                <li>Autonomous response systems</li>
+                <li>Zero-day detection capabilities</li>
+                <li>Advanced deception grids</li>
+                <li>Threat intelligence production</li>
+                <li>&gt;95% visibility coverage</li>
+                <li>Continuous red team operations</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>📊 Governance</h4>
+              <ul>
+                <li>Security as business enabler</li>
+                <li>Cyber risk quantification mature</li>
+                <li>Predictive risk analytics</li>
+                <li>Industry leadership position</li>
+                <li>Regulatory influence</li>
+                <li>Supply chain security leadership</li>
+                <li>Ecosystem security responsibility</li>
+                <li>Security culture embedded</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout warning">
+            <div class="callout-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+              Reality Check: Level 5 is Rare
+            </div>
+            <div class="callout-content">
+              <p>True Level 5 organizations are <strong>exceptionally rare</strong>—think major tech companies (Google, Microsoft), large financial institutions, and defense contractors. Most organizations claiming Level 5 are actually strong Level 4.</p>
+              <p style="margin-top: 0.5rem;">Level 5 requires <strong>10x+ the investment</strong> of Level 3 and is only justified for organizations where security IS the business (security vendors) or where the threat landscape demands it (nation-state targets).</p>
+            </div>
+          </div>
+
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Typical Level 5 Value</th>
+                <th>Key Differentiator</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>MTTD</td>
+                <td>Minutes</td>
+                <td>ML/behavioral catches novel attacks</td>
+              </tr>
+              <tr>
+                <td>MTTR</td>
+                <td>Minutes (automated)</td>
+                <td>Autonomous containment</td>
+              </tr>
+              <tr>
+                <td>Detection Coverage</td>
+                <td>&gt;85% of ATT&CK</td>
+                <td>Including novel techniques</td>
+              </tr>
+              <tr>
+                <td>Zero-Day Detection</td>
+                <td>Regular</td>
+                <td>Behavioral, not signature</td>
+              </tr>
+              <tr>
+                <td>Automation Rate</td>
+                <td>&gt;90% of Tier 1</td>
+                <td>Humans focus on novel threats</td>
+              </tr>
+              <tr>
+                <td>Threat Intel</td>
+                <td>Producer, not just consumer</td>
+                <td>Sharing with community</td>
+              </tr>
+              <tr>
+                <td>Industry Recognition</td>
+                <td>Benchmark organization</td>
+                <td>Others learn from you</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 4: ASSESSMENT FRAMEWORK ==================== -->
+      <section id="assessment">
+        <h2>4. Assessment Framework</h2>
+
+        <p>A structured assessment helps you <strong>objectively evaluate current state</strong>, <strong>identify gaps</strong>, and <strong>build a defensible roadmap</strong>. This framework is designed to be completed in 2-4 weeks.</p>
+
+        <h3>4.1 Assessment Process Overview</h3>
+
+        <div class="phase-timeline">
+          <div class="phase-card">
+            <h4>Phase 1: Planning</h4>
+            <div class="timeframe">Days 1-3</div>
+            <ul>
+              <li>Define scope and objectives</li>
+              <li>Identify stakeholders</li>
+              <li>Schedule interviews</li>
+              <li>Request documentation</li>
+              <li>Set up assessment workspace</li>
+            </ul>
+          </div>
+          <div class="phase-card">
+            <h4>Phase 2: Discovery</h4>
+            <div class="timeframe">Days 4-10</div>
+            <ul>
+              <li>Stakeholder interviews</li>
+              <li>Documentation review</li>
+              <li>Technology inventory</li>
+              <li>Process observation</li>
+              <li>Metrics collection</li>
+            </ul>
+          </div>
+          <div class="phase-card">
+            <h4>Phase 3: Analysis</h4>
+            <div class="timeframe">Days 11-15</div>
+            <ul>
+              <li>Score each pillar</li>
+              <li>Identify gaps</li>
+              <li>Prioritize findings</li>
+              <li>Develop recommendations</li>
+              <li>Build roadmap options</li>
+            </ul>
+          </div>
+          <div class="phase-card">
+            <h4>Phase 4: Delivery</h4>
+            <div class="timeframe">Days 16-20</div>
+            <ul>
+              <li>Draft report</li>
+              <li>Stakeholder review</li>
+              <li>Finalize recommendations</li>
+              <li>Executive presentation</li>
+              <li>Handoff and next steps</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>4.2 Assessment Questions by Pillar</h3>
+
+        <div class="assessment-section">
+          <h4>👥 People Assessment Questions</h4>
+          
+          <div class="question-list">
+            <h4>Team Structure</h4>
+            <div class="question-item">• How many dedicated security analysts do you have? (FTE count)</div>
+            <div class="question-item">• What is your analyst-to-endpoint ratio?</div>
+            <div class="question-item">• How is the team structured? (L1/L2/L3 tiers, specializations)</div>
+            <div class="question-item">• What are the reporting lines? (CISO → SOC Manager → Analysts)</div>
+            <div class="question-item">• Do you have dedicated roles for: threat hunting, detection engineering, threat intel?</div>
+          </div>
+
+          <div class="question-list">
+            <h4>Coverage & Capacity</h4>
+            <div class="question-item">• What hours is the SOC staffed? (8x5, 12x5, 24x5, 24x7)</div>
+            <div class="question-item">• How do you handle after-hours alerts?</div>
+            <div class="question-item">• What is your average alert-to-analyst ratio per shift?</div>
+            <div class="question-item">• How often are analysts working overtime?</div>
+            <div class="question-item">• What happens when someone is sick or on vacation?</div>
+          </div>
+
+          <div class="question-list">
+            <h4>Skills & Training</h4>
+            <div class="question-item">• What certifications does your team hold? (GIAC, CompTIA, vendor certs)</div>
+            <div class="question-item">• How much training budget per analyst per year?</div>
+            <div class="question-item">• How long does it take a new analyst to become productive?</div>
+            <div class="question-item">• Do you have a formal skills matrix?</div>
+            <div class="question-item">• What cross-training programs exist?</div>
+          </div>
+
+          <div class="question-list">
+            <h4>Retention & Culture</h4>
+            <div class="question-item">• What is your annual turnover rate?</div>
+            <div class="question-item">• What is the average tenure of analysts?</div>
+            <div class="question-item">• Are there defined career paths?</div>
+            <div class="question-item">• What would analysts say about team morale?</div>
+            <div class="question-item">• How often do analysts get time for professional development?</div>
+          </div>
+        </div>
+
+        <div class="assessment-section">
+          <h4>📋 Process Assessment Questions</h4>
+          
+          <div class="question-list">
+            <h4>Playbooks & Documentation</h4>
+            <div class="question-item">• How many documented playbooks exist?</div>
+            <div class="question-item">• What percentage of alert types have playbooks?</div>
+            <div class="question-item">• When were playbooks last reviewed/updated?</div>
+            <div class="question-item">• How do analysts access playbooks during incidents?</div>
+            <div class="question-item">• What happens when an analyst encounters an alert without a playbook?</div>
+          </div>
+
+          <div class="question-list">
+            <h4>Incident Response</h4>
+            <div class="question-item">• Describe your incident response process end-to-end.</div>
+            <div class="question-item">• How are incidents categorized and prioritized?</div>
+            <div class="question-item">• What are your escalation criteria and paths?</div>
+            <div class="question-item">• How do you handle major incidents vs. routine alerts?</div>
+            <div class="question-item">• Do you conduct post-incident reviews? How often?</div>
+          </div>
+
+          <div class="question-list">
+            <h4>Continuous Improvement</h4>
+            <div class="question-item">• How do lessons learned get incorporated into operations?</div>
+            <div class="question-item">• How often are processes reviewed and updated?</div>
+            <div class="question-item">• Who is responsible for process improvement?</div>
+            <div class="question-item">• How do you track process compliance?</div>
+            <div class="question-item">• Give an example of a recent process improvement.</div>
+          </div>
+        </div>
+
+        <div class="assessment-section">
+          <h4>🖥️ Technology Assessment Questions</h4>
+          
+          <div class="question-list">
+            <h4>SIEM & Detection</h4>
+            <div class="question-item">• What SIEM platform do you use? Version?</div>
+            <div class="question-item">• How many log sources are integrated?</div>
+            <div class="question-item">• What is your daily ingestion volume (GB/day)?</div>
+            <div class="question-item">• How many detection rules are active? (built-in vs. custom)</div>
+            <div class="question-item">• How do you measure detection coverage? (MITRE ATT&CK mapping?)</div>
+            <div class="question-item">• What is your estimated false positive rate?</div>
+          </div>
+
+          <div class="question-list">
+            <h4>EDR/XDR</h4>
+            <div class="question-item">• What EDR/XDR solution do you use?</div>
+            <div class="question-item">• What is your endpoint coverage percentage?</div>
+            <div class="question-item">• Which devices can't run the agent? How are they monitored?</div>
+            <div class="question-item">• What prevention policies are enabled? (ASR, behavioral blocking)</div>
+            <div class="question-item">• How is EDR integrated with SIEM?</div>
+          </div>
+
+          <div class="question-list">
+            <h4>Automation & Orchestration</h4>
+            <div class="question-item">• Do you have a SOAR platform? Which one?</div>
+            <div class="question-item">• How many automated playbooks are in production?</div>
+            <div class="question-item">• What percentage of Tier 1 alerts are auto-resolved?</div>
+            <div class="question-item">• What manual tasks are you most eager to automate?</div>
+            <div class="question-item">• What integrations exist between your security tools?</div>
+          </div>
+
+          <div class="question-list">
+            <h4>Visibility & Coverage</h4>
+            <div class="question-item">• What assets do you have visibility into? (endpoints, servers, cloud, network)</div>
+            <div class="question-item">• What are your known visibility gaps?</div>
+            <div class="question-item">• Do you have a complete asset inventory?</div>
+            <div class="question-item">• How do you discover shadow IT?</div>
+            <div class="question-item">• What cloud security tools are deployed?</div>
+          </div>
+        </div>
+
+        <div class="assessment-section">
+          <h4>📊 Governance Assessment Questions</h4>
+          
+          <div class="question-list">
+            <h4>Policies & Standards</h4>
+            <div class="question-item">• What security policies exist? When were they last updated?</div>
+            <div class="question-item">• How are policies communicated and enforced?</div>
+            <div class="question-item">• What compliance frameworks apply? (SOC 2, ISO 27001, NIST, PCI)</div>
+            <div class="question-item">• When was your last compliance audit? Results?</div>
+            <div class="question-item">• How is security integrated into project/change management?</div>
+          </div>
+
+          <div class="question-list">
+            <h4>Metrics & Reporting</h4>
+            <div class="question-item">• What security metrics do you track?</div>
+            <div class="question-item">• Do you measure MTTD and MTTR? What are your numbers?</div>
+            <div class="question-item">• How often do you report to executives? What's included?</div>
+            <div class="question-item">• Do you have defined SLAs? Are they being met?</div>
+            <div class="question-item">• How do you benchmark against industry?</div>
+          </div>
+
+          <div class="question-list">
+            <h4>Strategy & Planning</h4>
+            <div class="question-item">• Is there a multi-year security roadmap?</div>
+            <div class="question-item">• How is the security budget determined?</div>
+            <div class="question-item">• How does security participate in business planning?</div>
+            <div class="question-item">• Do you have a risk register? How is it maintained?</div>
+            <div class="question-item">• How are security investments prioritized?</div>
+          </div>
+        </div>
+
+        <h3>4.3 Scoring Rubric</h3>
+
+        <p>For each pillar, score on a 1-5 scale based on the assessment findings:</p>
+
+        <div class="scoring-grid">
+          <div class="score-cell score-1">
+            <strong>1</strong><br>
+            <small>Ad-hoc/<br>None</small>
+          </div>
+          <div class="score-cell score-2">
+            <strong>2</strong><br>
+            <small>Some/<br>Inconsistent</small>
+          </div>
+          <div class="score-cell score-3">
+            <strong>3</strong><br>
+            <small>Defined/<br>Consistent</small>
+          </div>
+          <div class="score-cell score-4">
+            <strong>4</strong><br>
+            <small>Measured/<br>Optimized</small>
+          </div>
+          <div class="score-cell score-5">
+            <strong>5</strong><br>
+            <small>Innovating/<br>Leading</small>
+          </div>
+        </div>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Score</th>
+              <th>People</th>
+              <th>Process</th>
+              <th>Technology</th>
+              <th>Governance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1</strong></td>
+              <td>Understaffed, no training, high turnover</td>
+              <td>No playbooks, inconsistent response</td>
+              <td>Basic tools, default configs, major gaps</td>
+              <td>No policies, no metrics</td>
+            </tr>
+            <tr>
+              <td><strong>2</strong></td>
+              <td>Adequate staff, some training, key dependencies</td>
+              <td>Some playbooks, ~50% followed</td>
+              <td>Tools deployed, some tuning, partial visibility</td>
+              <td>Basic policies, some metrics</td>
+            </tr>
+            <tr>
+              <td><strong>3</strong></td>
+              <td>Right-sized, formal training, career paths</td>
+              <td>Comprehensive playbooks, &gt;90% followed</td>
+              <td>Full stack, integrated, good coverage</td>
+              <td>Mature policies, MTTD/MTTR tracked</td>
+            </tr>
+            <tr>
+              <td><strong>4</strong></td>
+              <td>Specialists, excellent retention, talent magnet</td>
+              <td>Optimized processes, continuous improvement</td>
+              <td>Advanced automation, ML/UEBA, threat hunting</td>
+              <td>Data-driven, risk quantified, board reporting</td>
+            </tr>
+            <tr>
+              <td><strong>5</strong></td>
+              <td>Industry leaders, R&D, thought leadership</td>
+              <td>Innovating, publishing methodologies</td>
+              <td>Custom tools, autonomous response</td>
+              <td>Industry benchmark, regulatory influence</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="key-insight">
+          <h4>💡 Calculating Overall Maturity</h4>
+          <p><strong>Your effective maturity is your LOWEST pillar score</strong>, not the average. A SOC with People: 4, Process: 2, Technology: 4, Governance: 3 is effectively Level 2 because process is the bottleneck.</p>
+          <p style="margin-top: 0.5rem;">Focus improvement efforts on your lowest-scoring pillars first.</p>
+        </div>
+      </section>
+
+      <!-- Continued in next section... -->
+
+      <!-- ==================== SECTION 5: TRANSITION ROADMAPS ==================== -->
+      <section id="transitions">
+        <h2>5. Transition Roadmaps</h2>
+
+        <p>Moving between maturity levels requires <strong>deliberate planning and sustained effort</strong>. Each transition has specific prerequisites, milestones, and success criteria. Don't try to skip levels—the foundation matters.</p>
+
+        <!-- ===== LEVEL 1 → 2 ===== -->
+        <div id="1-to-2" class="transition-roadmap">
+          <div class="transition-header">
+            <div class="transition-arrow">
+              <span style="color: #ef4444;">Level 1</span>
+              <span>→</span>
+              <span style="color: #f97316;">Level 2</span>
+            </div>
+            <div style="margin-left: auto;">
+              <span class="cost-indicator cost-medium">Timeline: 6-12 months</span>
+            </div>
+          </div>
+
+          <h4>Goal: Establish Foundation</h4>
+          <p>Transform from chaotic firefighting to <strong>repeatable basic operations</strong>. Success means having documented processes that are sometimes followed, basic tools that are somewhat tuned, and a team that isn't constantly drowning.</p>
+
+          <h4>Prerequisites (Must Have Before Starting)</h4>
+          <ul>
+            <li>Executive sponsorship for security improvement</li>
+            <li>Budget allocated for basic tooling and training</li>
+            <li>At least 2-3 dedicated security personnel</li>
+            <li>Basic IT infrastructure (identity, endpoints managed)</li>
+          </ul>
+
+          <div class="phase-timeline">
+            <div class="phase-card">
+              <h4>🎯 Quick Wins (0-90 days)</h4>
+              <div class="timeframe">Demonstrate Value</div>
+              <ul>
+                <li><strong>Triage the noise:</strong> Disable or tune top 10 noisiest rules</li>
+                <li><strong>Document top 5 alerts:</strong> Create basic playbooks for most common alert types</li>
+                <li><strong>Asset inventory:</strong> Know what you have (endpoints, servers, critical systems)</li>
+                <li><strong>Basic metrics:</strong> Start tracking ticket count, alert volume</li>
+                <li><strong>Identify crown jewels:</strong> What data/systems matter most?</li>
+                <li><strong>Quick training:</strong> Get team basic SIEM query skills</li>
+              </ul>
+            </div>
+            <div class="phase-card">
+              <h4>📈 Medium-Term (3-6 months)</h4>
+              <div class="timeframe">Build Foundation</div>
+              <ul>
+                <li><strong>SIEM tuning:</strong> Reduce FP rate from 90% to 70%</li>
+                <li><strong>EDR deployment:</strong> Get agent on 70%+ of endpoints</li>
+                <li><strong>Playbook expansion:</strong> Cover top 20 alert types</li>
+                <li><strong>Escalation process:</strong> Define when and how to escalate</li>
+                <li><strong>Incident ticketing:</strong> Consistent ticket creation for all incidents</li>
+                <li><strong>Shift coverage:</strong> Extend to 12x5 if business hours only</li>
+                <li><strong>Knowledge base:</strong> Start documenting tribal knowledge</li>
+              </ul>
+            </div>
+            <div class="phase-card">
+              <h4>🏁 Long-Term (6-12 months)</h4>
+              <div class="timeframe">Stabilize</div>
+              <ul>
+                <li><strong>Full EDR coverage:</strong> 90%+ endpoints</li>
+                <li><strong>Log source expansion:</strong> Add critical sources (identity, network)</li>
+                <li><strong>Basic threat intel:</strong> Enable vendor feeds</li>
+                <li><strong>MTTD/MTTR baseline:</strong> Start measuring (even if numbers are bad)</li>
+                <li><strong>Post-incident reviews:</strong> Conduct for major incidents</li>
+                <li><strong>Policy basics:</strong> Document key security policies</li>
+                <li><strong>Training program:</strong> Formal onboarding for new analysts</li>
+              </ul>
+            </div>
+          </div>
+
+          <h4>Success Criteria for Level 2</h4>
+          <div class="checklist-box">
+            <div class="checklist-item">☐ Alert volume reduced to &lt;2000/day</div>
+            <div class="checklist-item">☐ False positive rate &lt;80%</div>
+            <div class="checklist-item">☐ Playbooks exist for top 20 alert types</div>
+            <div class="checklist-item">☐ EDR on 80%+ endpoints</div>
+            <div class="checklist-item">☐ Basic MTTD/MTTR being tracked</div>
+            <div class="checklist-item">☐ Escalation process documented and followed</div>
+            <div class="checklist-item">☐ New analyst productive in &lt;3 months</div>
+            <div class="checklist-item">☐ Knowledge base started</div>
+          </div>
+
+          <h4>Budget Estimate</h4>
+          <table class="metrics-table">
+            <thead>
+              <tr><th>Category</th><th>Investment</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>SIEM (if new/upgrade)</td><td>$50K-150K/year</td><td>Or optimize existing</td></tr>
+              <tr><td>EDR (if new)</td><td>$20-50/endpoint/year</td><td>MDE included with M365 E5</td></tr>
+              <tr><td>Training</td><td>$5K-15K</td><td>Basic certs, vendor training</td></tr>
+              <tr><td>Staff (if adding)</td><td>$80K-120K/analyst</td><td>Fully loaded cost</td></tr>
+              <tr><td><strong>Total (typical)</strong></td><td><strong>$100K-300K</strong></td><td>Depends on starting point</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ===== LEVEL 2 → 3 ===== -->
+        <div id="2-to-3" class="transition-roadmap">
+          <div class="transition-header">
+            <div class="transition-arrow">
+              <span style="color: #f97316;">Level 2</span>
+              <span>→</span>
+              <span style="color: #eab308;">Level 3</span>
+            </div>
+            <div style="margin-left: auto;">
+              <span class="cost-indicator cost-medium">Timeline: 12-18 months</span>
+            </div>
+          </div>
+
+          <h4>Goal: Standardize and Professionalize</h4>
+          <p>Transform from inconsistent to <strong>standardized, professional operations</strong>. Success means documented processes that are consistently followed, well-tuned tools with good coverage, and a stable team with defined roles.</p>
+
+          <h4>Prerequisites</h4>
+          <ul>
+            <li>Level 2 capabilities stable for 6+ months</li>
+            <li>Basic playbooks in place and sometimes followed</li>
+            <li>EDR deployed on majority of endpoints</li>
+            <li>Team of 4+ dedicated analysts</li>
+            <li>Executive support for continued investment</li>
+          </ul>
+
+          <div class="phase-timeline">
+            <div class="phase-card">
+              <h4>🎯 Quick Wins (0-90 days)</h4>
+              <div class="timeframe">Demonstrate Value</div>
+              <ul>
+                <li><strong>Playbook audit:</strong> Review all playbooks, identify gaps</li>
+                <li><strong>Process compliance:</strong> Measure how often playbooks are followed</li>
+                <li><strong>Role clarification:</strong> Define L1/L2/L3 responsibilities clearly</li>
+                <li><strong>MITRE mapping:</strong> Map existing detections to ATT&CK</li>
+                <li><strong>Escalation matrix:</strong> Formalize escalation criteria and paths</li>
+                <li><strong>Knowledge base cleanup:</strong> Organize and update documentation</li>
+              </ul>
+            </div>
+            <div class="phase-card">
+              <h4>📈 Medium-Term (3-9 months)</h4>
+              <div class="timeframe">Standardize</div>
+              <ul>
+                <li><strong>Comprehensive playbooks:</strong> Cover 80%+ of alert types</li>
+                <li><strong>Process enforcement:</strong> Playbooks followed &gt;90%</li>
+                <li><strong>Detection engineering:</strong> Custom rules for your environment</li>
+                <li><strong>Threat intel integration:</strong> Actionable, not just feeds</li>
+                <li><strong>Post-incident reviews:</strong> Regular, with action items tracked</li>
+                <li><strong>SOAR basics:</strong> Automate top 5 repetitive tasks</li>
+                <li><strong>24x5 coverage:</strong> Extend monitoring hours</li>
+                <li><strong>Formal training:</strong> Structured program, career paths</li>
+              </ul>
+            </div>
+            <div class="phase-card">
+              <h4>🏁 Long-Term (9-18 months)</h4>
+              <div class="timeframe">Professionalize</div>
+              <ul>
+                <li><strong>Full XDR integration:</strong> Endpoint + identity + email + cloud</li>
+                <li><strong>Threat hunting program:</strong> Regular, scheduled hunting</li>
+                <li><strong>Detection coverage:</strong> 60%+ of relevant ATT&CK techniques</li>
+                <li><strong>SLA definition:</strong> Formal SLAs with tracking</li>
+                <li><strong>Executive reporting:</strong> Regular cadence, meaningful metrics</li>
+                <li><strong>Compliance integration:</strong> Security controls mapped to frameworks</li>
+                <li><strong>24x7 consideration:</strong> Evaluate need, plan if required</li>
+                <li><strong>Change management:</strong> Formal process for detection changes</li>
+              </ul>
+            </div>
+          </div>
+
+          <h4>Success Criteria for Level 3</h4>
+          <div class="checklist-box">
+            <div class="checklist-item">☐ Alert volume &lt;500/day with &lt;40% FP rate</div>
+            <div class="checklist-item">☐ Playbooks followed &gt;90% of time</div>
+            <div class="checklist-item">☐ MTTD &lt;24 hours for high severity</div>
+            <div class="checklist-item">☐ MTTR &lt;4 hours for critical incidents</div>
+            <div class="checklist-item">☐ Detection coverage &gt;50% of relevant ATT&CK</div>
+            <div class="checklist-item">☐ SLA compliance &gt;85%</div>
+            <div class="checklist-item">☐ Regular threat hunting (weekly/monthly)</div>
+            <div class="checklist-item">☐ Staff turnover &lt;25%</div>
+            <div class="checklist-item">☐ New analyst productive in &lt;6 weeks</div>
+            <div class="checklist-item">☐ Executive understands security posture</div>
+          </div>
+
+          <h4>Budget Estimate</h4>
+          <table class="metrics-table">
+            <thead>
+              <tr><th>Category</th><th>Investment</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>SOAR platform</td><td>$50K-150K/year</td><td>Or use Logic Apps/native</td></tr>
+              <tr><td>Threat intel platform</td><td>$30K-100K/year</td><td>May be included in SIEM</td></tr>
+              <tr><td>Additional staff (2-3)</td><td>$200K-400K/year</td><td>L2/L3, specialists</td></tr>
+              <tr><td>Training & certs</td><td>$20K-50K/year</td><td>GIAC, vendor certs</td></tr>
+              <tr><td>Detection engineering</td><td>$50K-100K</td><td>Contractor or internal</td></tr>
+              <tr><td><strong>Total (typical)</strong></td><td><strong>$300K-700K</strong></td><td>Over 18 months</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ===== LEVEL 3 → 4 ===== -->
+        <div id="3-to-4" class="transition-roadmap">
+          <div class="transition-header">
+            <div class="transition-arrow">
+              <span style="color: #eab308;">Level 3</span>
+              <span>→</span>
+              <span style="color: #22c55e;">Level 4</span>
+            </div>
+            <div style="margin-left: auto;">
+              <span class="cost-indicator cost-high">Timeline: 18-24 months</span>
+            </div>
+          </div>
+
+          <h4>Goal: Measure and Optimize</h4>
+          <p>Transform from standardized to <strong>data-driven, optimized operations</strong>. Success means decisions are based on metrics, automation handles routine work, and the team focuses on advanced threats.</p>
+
+          <div class="callout warning">
+            <div class="callout-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+              Before You Start
+            </div>
+            <div class="callout-content">
+              <p>Level 4 requires <strong>significant investment</strong> and <strong>specialized talent</strong>. Before pursuing this:</p>
+              <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 0.9rem;">
+                <li>Confirm Level 3 has been stable for 12+ months</li>
+                <li>Validate business need justifies 2-3x budget increase</li>
+                <li>Ensure executive commitment for multi-year program</li>
+                <li>Assess talent availability in your market</li>
+              </ul>
+            </div>
+          </div>
+
+          <h4>Prerequisites</h4>
+          <ul>
+            <li>Level 3 stable and sustained for 12+ months</li>
+            <li>Strong executive sponsorship and budget commitment</li>
+            <li>Ability to attract/retain specialized talent</li>
+            <li>Business risk profile justifies investment</li>
+            <li>Mature IT infrastructure and asset management</li>
+          </ul>
+
+          <div class="phase-timeline">
+            <div class="phase-card">
+              <h4>🎯 Quick Wins (0-90 days)</h4>
+              <div class="timeframe">Foundation for Measurement</div>
+              <ul>
+                <li><strong>Metrics framework:</strong> Define comprehensive KPIs</li>
+                <li><strong>Baseline everything:</strong> Current MTTD, MTTR, coverage</li>
+                <li><strong>Automation inventory:</strong> What's automated vs. manual</li>
+                <li><strong>Talent assessment:</strong> Skills gaps for Level 4</li>
+                <li><strong>Tool assessment:</strong> What's needed for ML/UEBA</li>
+                <li><strong>Roadmap development:</strong> Detailed 24-month plan</li>
+              </ul>
+            </div>
+            <div class="phase-card">
+              <h4>📈 Medium-Term (3-12 months)</h4>
+              <div class="timeframe">Build Advanced Capabilities</div>
+              <ul>
+                <li><strong>UEBA/ML deployment:</strong> Behavioral analytics</li>
+                <li><strong>SOAR expansion:</strong> 60%+ Tier 1 automated</li>
+                <li><strong>Threat hunting formalization:</strong> Dedicated hunters, weekly cadence</li>
+                <li><strong>Purple team exercises:</strong> Regular, documented</li>
+                <li><strong>Specialist hiring:</strong> Detection engineers, threat intel</li>
+                <li><strong>Attack surface management:</strong> External visibility</li>
+                <li><strong>Deception technology:</strong> Honeypots, decoys</li>
+              </ul>
+            </div>
+            <div class="phase-card">
+              <h4>🏁 Long-Term (12-24 months)</h4>
+              <div class="timeframe">Optimize and Measure</div>
+              <ul>
+                <li><strong>Predictive analytics:</strong> Trend analysis, forecasting</li>
+                <li><strong>Risk quantification:</strong> Cyber risk in $ terms</li>
+                <li><strong>Continuous optimization:</strong> Data-driven improvement</li>
+                <li><strong>Industry benchmarking:</strong> Compare against peers</li>
+                <li><strong>Advanced detection:</strong> Custom ML models</li>
+                <li><strong>Autonomous response:</strong> Auto-containment for known patterns</li>
+                <li><strong>Board reporting:</strong> Risk-based, business-aligned</li>
+              </ul>
+            </div>
+          </div>
+
+          <h4>Success Criteria for Level 4</h4>
+          <div class="checklist-box">
+            <div class="checklist-item">☐ MTTD &lt;4 hours for all severities</div>
+            <div class="checklist-item">☐ MTTR &lt;1 hour for critical (automated containment)</div>
+            <div class="checklist-item">☐ False positive rate &lt;20%</div>
+            <div class="checklist-item">☐ Automation rate &gt;60% for Tier 1</div>
+            <div class="checklist-item">☐ Detection coverage &gt;70% of relevant ATT&CK</div>
+            <div class="checklist-item">☐ Weekly hypothesis-driven threat hunting</div>
+            <div class="checklist-item">☐ Quarterly purple team exercises</div>
+            <div class="checklist-item">☐ Risk quantified and reported to board</div>
+            <div class="checklist-item">☐ All metrics tracked and trending positive</div>
+            <div class="checklist-item">☐ Industry benchmark comparisons favorable</div>
+          </div>
+
+          <h4>Budget Estimate</h4>
+          <table class="metrics-table">
+            <thead>
+              <tr><th>Category</th><th>Investment</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>UEBA/Advanced SIEM</td><td>$100K-300K/year</td><td>Sentinel + UEBA, or Splunk UBA</td></tr>
+              <tr><td>Advanced SOAR</td><td>$100K-200K/year</td><td>Enterprise-grade</td></tr>
+              <tr><td>Threat intel platform</td><td>$100K-200K/year</td><td>Premium feeds + platform</td></tr>
+              <tr><td>Deception technology</td><td>$50K-150K/year</td><td>Honeypots, decoys</td></tr>
+              <tr><td>Additional specialists (3-5)</td><td>$400K-700K/year</td><td>Hunters, detection engineers</td></tr>
+              <tr><td>Purple team/Red team</td><td>$100K-300K/year</td><td>Internal or contracted</td></tr>
+              <tr><td>Training & development</td><td>$50K-100K/year</td><td>Advanced certs, conferences</td></tr>
+              <tr><td><strong>Total (typical)</strong></td><td><strong>$1M-2M/year</strong></td><td>Significant investment</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ===== LEVEL 4 → 5 ===== -->
+        <div id="4-to-5" class="transition-roadmap">
+          <div class="transition-header">
+            <div class="transition-arrow">
+              <span style="color: #22c55e;">Level 4</span>
+              <span>→</span>
+              <span style="color: #06b6d4;">Level 5</span>
+            </div>
+            <div style="margin-left: auto;">
+              <span class="cost-indicator cost-very-high">Timeline: 24-36+ months</span>
+            </div>
+          </div>
+
+          <h4>Goal: Innovate and Lead</h4>
+          <p>Transform from optimized to <strong>industry-leading, continuously innovating</strong>. Success means defining best practices, contributing to the security community, and operating at the cutting edge.</p>
+
+          <div class="callout warning">
+            <div class="callout-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+              Reality Check
+            </div>
+            <div class="callout-content">
+              <p><strong>Very few organizations need or can achieve Level 5.</strong> This level is appropriate for:</p>
+              <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 0.9rem;">
+                <li>Security vendors (where security IS the product)</li>
+                <li>Critical infrastructure operators</li>
+                <li>Organizations facing nation-state threats</li>
+                <li>Large financial institutions</li>
+                <li>Major technology companies</li>
+              </ul>
+              <p style="margin-top: 0.5rem;">For most organizations, <strong>sustained Level 4 is the appropriate target</strong>.</p>
+            </div>
+          </div>
+
+          <h4>Level 5 Characteristics</h4>
+          <div class="pillar-grid">
+            <div class="pillar-card">
+              <h4>Research & Development</h4>
+              <ul>
+                <li>Security R&D team</li>
+                <li>Custom tool development</li>
+                <li>Novel detection techniques</li>
+                <li>Academic partnerships</li>
+                <li>Patent development</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>Community Leadership</h4>
+              <ul>
+                <li>Publish methodologies</li>
+                <li>Conference presentations</li>
+                <li>Open-source contributions</li>
+                <li>Threat intel sharing</li>
+                <li>Industry working groups</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>Autonomous Operations</h4>
+              <ul>
+                <li>AI-driven detection</li>
+                <li>Autonomous response</li>
+                <li>Self-healing systems</li>
+                <li>Predictive threat models</li>
+                <li>Continuous red team</li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <h4>Business Integration</h4>
+              <ul>
+                <li>Security as differentiator</li>
+                <li>Revenue-enabling security</li>
+                <li>Customer trust programs</li>
+                <li>Supply chain leadership</li>
+                <li>Ecosystem responsibility</li>
+              </ul>
+            </div>
+          </div>
+
+          <h4>Budget Estimate</h4>
+          <table class="metrics-table">
+            <thead>
+              <tr><th>Category</th><th>Investment</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Security R&D team</td><td>$500K-1M+/year</td><td>Researchers, data scientists</td></tr>
+              <tr><td>Custom tool development</td><td>$200K-500K/year</td><td>Internal development</td></tr>
+              <tr><td>Advanced AI/ML</td><td>$200K-500K/year</td><td>Custom models, infrastructure</td></tr>
+              <tr><td>Continuous red team</td><td>$300K-500K/year</td><td>Internal team or premium contractors</td></tr>
+              <tr><td>Industry leadership</td><td>$100K-200K/year</td><td>Conferences, publications, memberships</td></tr>
+              <tr><td><strong>Total (typical)</strong></td><td><strong>$3M-5M+/year</strong></td><td>On top of Level 4 costs</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 6: METRICS & KPIs ==================== -->
+      <section id="metrics">
+        <h2>6. Metrics & KPIs by Maturity Level</h2>
+
+        <p>What you measure changes as you mature. <strong>Level 1 organizations can't measure MTTD because they don't know when detection occurred.</strong> Build measurement capability progressively.</p>
+
+        <h3>6.1 Metric Categories</h3>
+
+        <div class="pillar-grid">
+          <div class="pillar-card">
+            <h4>📊 Operational Metrics</h4>
+            <p>Day-to-day SOC performance</p>
+            <ul>
+              <li>Alert volume</li>
+              <li>Ticket count</li>
+              <li>Queue depth</li>
+              <li>Alerts per analyst</li>
+              <li>Escalation rate</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>⏱️ Efficiency Metrics</h4>
+            <p>Speed and effectiveness</p>
+            <ul>
+              <li>MTTD (Mean Time to Detect)</li>
+              <li>MTTR (Mean Time to Respond)</li>
+              <li>MTTC (Mean Time to Contain)</li>
+              <li>Dwell time</li>
+              <li>Time to close</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>🎯 Quality Metrics</h4>
+            <p>Detection and response quality</p>
+            <ul>
+              <li>False positive rate</li>
+              <li>False negative rate</li>
+              <li>Detection coverage</li>
+              <li>SLA compliance</li>
+              <li>Reopen rate</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>💰 Business Metrics</h4>
+            <p>Business impact and value</p>
+            <ul>
+              <li>Cost per incident</li>
+              <li>Risk reduction</li>
+              <li>Compliance score</li>
+              <li>Business impact avoided</li>
+              <li>ROI on security tools</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>6.2 Metrics by Maturity Level</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Metrics to Track</th>
+              <th>Why These Metrics</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Level 1</strong></td>
+              <td>
+                • Alert volume (daily)<br>
+                • Ticket count<br>
+                • Open tickets (backlog)
+              </td>
+              <td>Basic awareness of workload. Can't measure timing accurately yet.</td>
+            </tr>
+            <tr>
+              <td><strong>Level 2</strong></td>
+              <td>
+                • All Level 1 metrics<br>
+                • False positive rate (estimated)<br>
+                • Escalation rate<br>
+                • MTTD/MTTR (rough estimates)<br>
+                • Incidents by severity
+              </td>
+              <td>Starting to understand quality and efficiency. Building measurement capability.</td>
+            </tr>
+            <tr>
+              <td><strong>Level 3</strong></td>
+              <td>
+                • All Level 2 metrics<br>
+                • MTTD/MTTR (accurate)<br>
+                • Detection coverage (ATT&CK %)<br>
+                • SLA compliance<br>
+                • FP rate by rule<br>
+                • Analyst utilization<br>
+                • Process compliance rate
+              </td>
+              <td>Comprehensive operational measurement. Data-informed decisions.</td>
+            </tr>
+            <tr>
+              <td><strong>Level 4</strong></td>
+              <td>
+                • All Level 3 metrics<br>
+                • MTTD/MTTR by severity/type<br>
+                • Automation rate<br>
+                • Threat hunting findings<br>
+                • Purple team results<br>
+                • Cost per incident<br>
+                • Risk quantification ($)<br>
+                • Industry benchmarks
+              </td>
+              <td>Optimization focus. Measuring ROI and business impact.</td>
+            </tr>
+            <tr>
+              <td><strong>Level 5</strong></td>
+              <td>
+                • All Level 4 metrics<br>
+                • Novel threat detection rate<br>
+                • Zero-day detection<br>
+                • Predictive accuracy<br>
+                • Community contribution metrics<br>
+                • Innovation pipeline<br>
+                • Business enablement metrics
+              </td>
+              <td>Innovation and leadership. Measuring things others can't yet.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>6.3 Key Metric Definitions</h3>
+
+        <div class="assessment-section">
+          <h4>⏱️ MTTD (Mean Time to Detect)</h4>
+          <p><strong>Definition:</strong> Average time from when an attack begins to when it's detected by the SOC.</p>
+          <p><strong>Formula:</strong> Sum of (Detection Time - Attack Start Time) / Number of Incidents</p>
+          <p><strong>Challenges:</strong> Requires knowing when the attack actually started, which is often discovered during investigation.</p>
+          
+          <table class="metrics-table">
+            <thead>
+              <tr><th>Level</th><th>Typical MTTD</th><th>Target</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Level 1</td><td>Unknown (weeks-months)</td><td>Start measuring</td></tr>
+              <tr><td>Level 2</td><td>Days to weeks</td><td>&lt;1 week</td></tr>
+              <tr><td>Level 3</td><td>Hours to days</td><td>&lt;24 hours (high severity)</td></tr>
+              <tr><td>Level 4</td><td>Minutes to hours</td><td>&lt;4 hours</td></tr>
+              <tr><td>Level 5</td><td>Minutes</td><td>&lt;1 hour</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="assessment-section">
+          <h4>⏱️ MTTR (Mean Time to Respond/Resolve)</h4>
+          <p><strong>Definition:</strong> Average time from detection to containment/resolution.</p>
+          <p><strong>Formula:</strong> Sum of (Resolution Time - Detection Time) / Number of Incidents</p>
+          <p><strong>Note:</strong> Some organizations separate MTTR (Respond) from MTTC (Contain) from MTTR (Resolve).</p>
+          
+          <table class="metrics-table">
+            <thead>
+              <tr><th>Level</th><th>Typical MTTR</th><th>Target (Critical)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Level 1</td><td>Unknown (days-weeks)</td><td>Start measuring</td></tr>
+              <tr><td>Level 2</td><td>Hours to days</td><td>&lt;24 hours</td></tr>
+              <tr><td>Level 3</td><td>Hours</td><td>&lt;4 hours</td></tr>
+              <tr><td>Level 4</td><td>Minutes to hours</td><td>&lt;1 hour</td></tr>
+              <tr><td>Level 5</td><td>Minutes (automated)</td><td>&lt;15 minutes</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="assessment-section">
+          <h4>🎯 Detection Coverage</h4>
+          <p><strong>Definition:</strong> Percentage of relevant MITRE ATT&CK techniques you can detect.</p>
+          <p><strong>Formula:</strong> (Techniques with active detection / Total relevant techniques) × 100</p>
+          <p><strong>Key:</strong> "Relevant" is important—not every technique applies to every environment. Focus on techniques threat actors use against your industry.</p>
+          
+          <table class="metrics-table">
+            <thead>
+              <tr><th>Level</th><th>Typical Coverage</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Level 1</td><td>&lt;20%</td><td>Vendor defaults only</td></tr>
+              <tr><td>Level 2</td><td>30-50%</td><td>Some custom rules</td></tr>
+              <tr><td>Level 3</td><td>50-70%</td><td>Focused on high-risk techniques</td></tr>
+              <tr><td>Level 4</td><td>70-85%</td><td>Comprehensive, tested</td></tr>
+              <tr><td>Level 5</td><td>&gt;85%</td><td>Including novel detection</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="assessment-section">
+          <h4>📉 False Positive Rate</h4>
+          <p><strong>Definition:</strong> Percentage of alerts that turn out to be benign/not actionable.</p>
+          <p><strong>Formula:</strong> (False Positive Alerts / Total Alerts) × 100</p>
+          <p><strong>Impact:</strong> High FP rate = analyst fatigue, missed real alerts, wasted resources.</p>
+          
+          <table class="metrics-table">
+            <thead>
+              <tr><th>Level</th><th>Typical FP Rate</th><th>Target</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Level 1</td><td>90%+</td><td>Reduce to &lt;80%</td></tr>
+              <tr><td>Level 2</td><td>60-80%</td><td>Reduce to &lt;60%</td></tr>
+              <tr><td>Level 3</td><td>30-50%</td><td>Reduce to &lt;40%</td></tr>
+              <tr><td>Level 4</td><td>10-30%</td><td>Reduce to &lt;20%</td></tr>
+              <tr><td>Level 5</td><td>&lt;10%</td><td>Continuous optimization</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 7-10: PILLAR DEEP DIVES ==================== -->
+      <section id="people-deep-dive">
+        <h2>7. People Pillar Deep Dive</h2>
+
+        <p>People are the most important—and often most neglected—aspect of SOC maturity. <strong>You can buy the best tools, but without skilled, motivated people, they're useless.</strong></p>
+
+        <h3>7.1 Team Structure Evolution</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr><th>Level</th><th>Typical Structure</th><th>Key Roles</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Level 1</strong></td>
+              <td>1-3 generalists, no tiers</td>
+              <td>Security Analyst (does everything)</td>
+            </tr>
+            <tr>
+              <td><strong>Level 2</strong></td>
+              <td>3-6 analysts, basic tiering</td>
+              <td>L1 Analyst, L2 Analyst, SOC Lead</td>
+            </tr>
+            <tr>
+              <td><strong>Level 3</strong></td>
+              <td>6-12 analysts, clear tiers</td>
+              <td>L1/L2/L3 Analysts, SOC Manager, Threat Intel (part-time)</td>
+            </tr>
+            <tr>
+              <td><strong>Level 4</strong></td>
+              <td>12-25 specialists</td>
+              <td>L1/L2/L3, Threat Hunters, Detection Engineers, TI Analysts, SOC Manager, SOAR Engineer</td>
+            </tr>
+            <tr>
+              <td><strong>Level 5</strong></td>
+              <td>25+ with R&D</td>
+              <td>All Level 4 + Security Researchers, Data Scientists, Tool Developers</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>7.2 Role Definitions</h3>
+
+        <div class="pillar-grid">
+          <div class="pillar-card">
+            <h4>L1 / Tier 1 Analyst</h4>
+            <ul>
+              <li>Initial alert triage</li>
+              <li>Follow playbooks</li>
+              <li>Escalate when needed</li>
+              <li>Basic investigation</li>
+              <li>Ticket documentation</li>
+            </ul>
+            <p><small><strong>Typical experience:</strong> 0-2 years</small></p>
+          </div>
+          <div class="pillar-card">
+            <h4>L2 / Tier 2 Analyst</h4>
+            <ul>
+              <li>Deep investigation</li>
+              <li>Handle escalations</li>
+              <li>Incident response</li>
+              <li>Playbook development</li>
+              <li>Mentor L1s</li>
+            </ul>
+            <p><small><strong>Typical experience:</strong> 2-5 years</small></p>
+          </div>
+          <div class="pillar-card">
+            <h4>L3 / Tier 3 Analyst</h4>
+            <ul>
+              <li>Complex investigations</li>
+              <li>Malware analysis</li>
+              <li>Forensics</li>
+              <li>Major incident lead</li>
+              <li>Process improvement</li>
+            </ul>
+            <p><small><strong>Typical experience:</strong> 5+ years</small></p>
+          </div>
+          <div class="pillar-card">
+            <h4>Threat Hunter</h4>
+            <ul>
+              <li>Hypothesis-driven hunting</li>
+              <li>Proactive threat discovery</li>
+              <li>Detection gap identification</li>
+              <li>Adversary research</li>
+              <li>Hunt playbook development</li>
+            </ul>
+            <p><small><strong>Typical experience:</strong> 5+ years</small></p>
+          </div>
+          <div class="pillar-card">
+            <h4>Detection Engineer</h4>
+            <ul>
+              <li>Detection rule development</li>
+              <li>SIEM query optimization</li>
+              <li>False positive tuning</li>
+              <li>ATT&CK coverage mapping</li>
+              <li>Detection lifecycle management</li>
+            </ul>
+            <p><small><strong>Typical experience:</strong> 3-5 years</small></p>
+          </div>
+          <div class="pillar-card">
+            <h4>Threat Intel Analyst</h4>
+            <ul>
+              <li>Threat landscape monitoring</li>
+              <li>IOC management</li>
+              <li>Adversary tracking</li>
+              <li>Intel report creation</li>
+              <li>Feed evaluation</li>
+            </ul>
+            <p><small><strong>Typical experience:</strong> 3-5 years</small></p>
+          </div>
+        </div>
+
+        <h3>7.3 Staffing Ratios</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr><th>Metric</th><th>Level 2-3 Target</th><th>Level 4+ Target</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Analysts per 1,000 endpoints</td>
+              <td>0.5-1.0</td>
+              <td>1.0-2.0</td>
+            </tr>
+            <tr>
+              <td>Analysts per 1,000 employees</td>
+              <td>1-2</td>
+              <td>2-4</td>
+            </tr>
+            <tr>
+              <td>Alerts per analyst per day</td>
+              <td>50-100</td>
+              <td>20-50</td>
+            </tr>
+            <tr>
+              <td>L1:L2:L3 ratio</td>
+              <td>4:2:1</td>
+              <td>3:2:1</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>7.4 Training & Development</h3>
+
+        <div class="assessment-section">
+          <h4>Recommended Certifications by Level</h4>
+          
+          <table class="metrics-table">
+            <thead>
+              <tr><th>Role</th><th>Entry Level</th><th>Mid Level</th><th>Advanced</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SOC Analyst</strong></td>
+                <td>Security+, CySA+</td>
+                <td>GCIA, GCIH, BTL1</td>
+                <td>GSOM, GCFA</td>
+              </tr>
+              <tr>
+                <td><strong>Detection Engineer</strong></td>
+                <td>Vendor certs (Splunk, Sentinel)</td>
+                <td>GCIA, GCIH</td>
+                <td>GREM, custom</td>
+              </tr>
+              <tr>
+                <td><strong>Threat Hunter</strong></td>
+                <td>GCIH, GCFA</td>
+                <td>GREM, GCTI</td>
+                <td>GXPN, custom</td>
+              </tr>
+              <tr>
+                <td><strong>SOC Manager</strong></td>
+                <td>CISSP, CISM</td>
+                <td>GSOM</td>
+                <td>Executive programs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>7.5 Retention Strategies</h3>
+
+        <div class="pillar-grid">
+          <div class="pillar-card">
+            <h4>💰 Compensation</h4>
+            <ul>
+              <li>Competitive base salary</li>
+              <li>Shift differentials</li>
+              <li>On-call compensation</li>
+              <li>Certification bonuses</li>
+              <li>Retention bonuses</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>📈 Growth</h4>
+            <ul>
+              <li>Clear career paths</li>
+              <li>Training budget</li>
+              <li>Conference attendance</li>
+              <li>Rotation programs</li>
+              <li>Project opportunities</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>⚖️ Work-Life Balance</h4>
+            <ul>
+              <li>Predictable schedules</li>
+              <li>Remote work options</li>
+              <li>Adequate staffing</li>
+              <li>PTO policies</li>
+              <li>Mental health support</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>🎯 Engagement</h4>
+            <ul>
+              <li>Challenging work</li>
+              <li>Autonomy</li>
+              <li>Recognition</li>
+              <li>Team culture</li>
+              <li>Modern tools</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="process-deep-dive">
+        <h2>8. Process Pillar Deep Dive</h2>
+
+        <h3>8.1 Playbook Development</h3>
+
+        <p>Playbooks are the backbone of consistent SOC operations. A good playbook answers: <strong>What happened? Is it bad? What do I do?</strong></p>
+
+        <div class="assessment-section">
+          <h4>Playbook Template Structure</h4>
+          
+          <ol>
+            <li><strong>Alert Overview</strong>
+              <ul>
+                <li>What does this alert mean?</li>
+                <li>What triggers it?</li>
+                <li>Severity and priority</li>
+                <li>MITRE ATT&CK mapping</li>
+              </ul>
+            </li>
+            <li><strong>Initial Triage</strong>
+              <ul>
+                <li>Key fields to check</li>
+                <li>Quick validation steps</li>
+                <li>Known false positive patterns</li>
+                <li>Escalation criteria</li>
+              </ul>
+            </li>
+            <li><strong>Investigation Steps</strong>
+              <ul>
+                <li>Step-by-step investigation</li>
+                <li>Queries to run</li>
+                <li>Data sources to check</li>
+                <li>What to look for</li>
+              </ul>
+            </li>
+            <li><strong>Response Actions</strong>
+              <ul>
+                <li>Containment options</li>
+                <li>Eradication steps</li>
+                <li>Recovery procedures</li>
+                <li>Communication requirements</li>
+              </ul>
+            </li>
+            <li><strong>Documentation</strong>
+              <ul>
+                <li>What to document</li>
+                <li>Ticket fields to fill</li>
+                <li>Evidence to preserve</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+
+        <h3>8.2 Incident Response Process</h3>
+
+        <div class="phase-timeline">
+          <div class="phase-card">
+            <h4>1. Detection & Triage</h4>
+            <ul>
+              <li>Alert received</li>
+              <li>Initial validation</li>
+              <li>Severity assignment</li>
+              <li>Ticket creation</li>
+            </ul>
+          </div>
+          <div class="phase-card">
+            <h4>2. Investigation</h4>
+            <ul>
+              <li>Scope determination</li>
+              <li>Evidence collection</li>
+              <li>Root cause analysis</li>
+              <li>Impact assessment</li>
+            </ul>
+          </div>
+          <div class="phase-card">
+            <h4>3. Containment</h4>
+            <ul>
+              <li>Isolate affected systems</li>
+              <li>Block malicious indicators</li>
+              <li>Prevent spread</li>
+              <li>Preserve evidence</li>
+            </ul>
+          </div>
+          <div class="phase-card">
+            <h4>4. Eradication</h4>
+            <ul>
+              <li>Remove malware</li>
+              <li>Close attack vector</li>
+              <li>Patch vulnerabilities</li>
+              <li>Reset credentials</li>
+            </ul>
+          </div>
+          <div class="phase-card">
+            <h4>5. Recovery</h4>
+            <ul>
+              <li>Restore systems</li>
+              <li>Validate clean state</li>
+              <li>Return to production</li>
+              <li>Monitor for recurrence</li>
+            </ul>
+          </div>
+          <div class="phase-card">
+            <h4>6. Lessons Learned</h4>
+            <ul>
+              <li>Post-incident review</li>
+              <li>Documentation update</li>
+              <li>Process improvement</li>
+              <li>Detection enhancement</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>8.3 Escalation Matrix</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr><th>Severity</th><th>Definition</th><th>Response Time</th><th>Escalation Path</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Critical (P1)</strong></td>
+              <td>Active breach, data exfil, ransomware</td>
+              <td>Immediate (15 min)</td>
+              <td>L1 → L3 → SOC Manager → CISO → Exec</td>
+            </tr>
+            <tr>
+              <td><strong>High (P2)</strong></td>
+              <td>Confirmed malware, compromised account</td>
+              <td>1 hour</td>
+              <td>L1 → L2 → L3 if needed</td>
+            </tr>
+            <tr>
+              <td><strong>Medium (P3)</strong></td>
+              <td>Suspicious activity, policy violation</td>
+              <td>4 hours</td>
+              <td>L1 → L2 if needed</td>
+            </tr>
+            <tr>
+              <td><strong>Low (P4)</strong></td>
+              <td>Informational, minor policy issue</td>
+              <td>24 hours</td>
+              <td>L1 handles</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="technology-deep-dive">
+        <h2>9. Technology Pillar Deep Dive</h2>
+
+        <h3>9.1 SOC Technology Stack Evolution</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr><th>Level</th><th>Core Stack</th><th>Additional Tools</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Level 1</strong></td>
+              <td>Basic SIEM (default config), Basic AV</td>
+              <td>Ticketing system, Email</td>
+            </tr>
+            <tr>
+              <td><strong>Level 2</strong></td>
+              <td>Tuned SIEM, EDR, Basic threat intel</td>
+              <td>Ticketing, Wiki, Basic automation scripts</td>
+            </tr>
+            <tr>
+              <td><strong>Level 3</strong></td>
+              <td>Advanced SIEM, XDR, TI Platform, Basic SOAR</td>
+              <td>Case management, Knowledge base, Vuln scanner</td>
+            </tr>
+            <tr>
+              <td><strong>Level 4</strong></td>
+              <td>SIEM+UEBA, Full XDR, Advanced SOAR, TIP</td>
+              <td>Deception, ASM, Threat hunting tools, ML analytics</td>
+            </tr>
+            <tr>
+              <td><strong>Level 5</strong></td>
+              <td>Custom platforms, AI/ML, Autonomous response</td>
+              <td>Custom tools, Research platforms, Continuous red team</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>9.2 SIEM Maturity Progression</h3>
+
+        <div class="assessment-section">
+          <h4>From Basic to Advanced SIEM Usage</h4>
+          
+          <table class="metrics-table">
+            <thead>
+              <tr><th>Aspect</th><th>Basic (L1-2)</th><th>Intermediate (L3)</th><th>Advanced (L4-5)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Rules</strong></td>
+                <td>Vendor defaults only</td>
+                <td>Custom rules, regular tuning</td>
+                <td>ML-based, continuous optimization</td>
+              </tr>
+              <tr>
+                <td><strong>Log Sources</strong></td>
+                <td>Endpoints, servers</td>
+                <td>+ Network, cloud, identity</td>
+                <td>+ Everything, optimized ingestion</td>
+              </tr>
+              <tr>
+                <td><strong>Correlation</strong></td>
+                <td>Single-source alerts</td>
+                <td>Cross-source correlation</td>
+                <td>Behavioral, entity-based</td>
+              </tr>
+              <tr>
+                <td><strong>Threat Intel</strong></td>
+                <td>None or basic feeds</td>
+                <td>Integrated, automated matching</td>
+                <td>Enrichment, custom intel production</td>
+              </tr>
+              <tr>
+                <td><strong>Automation</strong></td>
+                <td>None</td>
+                <td>Basic enrichment, ticketing</td>
+                <td>Automated response, ML triage</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>9.3 Detection Coverage Framework</h3>
+
+        <p>Use MITRE ATT&CK to measure and improve detection coverage systematically.</p>
+
+        <div class="pillar-grid">
+          <div class="pillar-card">
+            <h4>Step 1: Identify Relevant Techniques</h4>
+            <ul>
+              <li>Not all 200+ techniques apply</li>
+              <li>Focus on your threat model</li>
+              <li>Consider your industry</li>
+              <li>Review threat reports</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>Step 2: Map Current Detections</h4>
+            <ul>
+              <li>Tag each rule to technique</li>
+              <li>Identify coverage gaps</li>
+              <li>Note detection quality</li>
+              <li>Document data sources needed</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>Step 3: Prioritize Gaps</h4>
+            <ul>
+              <li>High-risk techniques first</li>
+              <li>Consider data availability</li>
+              <li>Balance across tactics</li>
+              <li>Quick wins vs. long-term</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>Step 4: Build & Validate</h4>
+            <ul>
+              <li>Develop new detections</li>
+              <li>Test with purple team</li>
+              <li>Tune for environment</li>
+              <li>Document and maintain</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="governance-deep-dive">
+        <h2>10. Governance Pillar Deep Dive</h2>
+
+        <h3>10.1 Security Policy Framework</h3>
+
+        <div class="assessment-section">
+          <h4>Essential SOC Policies</h4>
+          
+          <table class="metrics-table">
+            <thead>
+              <tr><th>Policy</th><th>Purpose</th><th>Level Required</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Incident Response Policy</td>
+                <td>Define IR process, roles, communications</td>
+                <td>Level 2+</td>
+              </tr>
+              <tr>
+                <td>Security Monitoring Policy</td>
+                <td>What's monitored, retention, access</td>
+                <td>Level 2+</td>
+              </tr>
+              <tr>
+                <td>Escalation Policy</td>
+                <td>When and how to escalate</td>
+                <td>Level 2+</td>
+              </tr>
+              <tr>
+                <td>Change Management Policy</td>
+                <td>How detection rules are changed</td>
+                <td>Level 3+</td>
+              </tr>
+              <tr>
+                <td>Threat Hunting Policy</td>
+                <td>Hunting scope, authorization, reporting</td>
+                <td>Level 3+</td>
+              </tr>
+              <tr>
+                <td>Threat Intelligence Policy</td>
+                <td>Intel sources, sharing, handling</td>
+                <td>Level 3+</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>10.2 Executive Reporting</h3>
+
+        <div class="pillar-grid">
+          <div class="pillar-card">
+            <h4>Level 2 Reporting</h4>
+            <ul>
+              <li>Monthly frequency</li>
+              <li>Ticket counts</li>
+              <li>Major incidents summary</li>
+              <li>Basic trends</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>Level 3 Reporting</h4>
+            <ul>
+              <li>Weekly/Monthly</li>
+              <li>MTTD/MTTR metrics</li>
+              <li>SLA compliance</li>
+              <li>Coverage improvements</li>
+              <li>Risk highlights</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>Level 4 Reporting</h4>
+            <ul>
+              <li>Real-time dashboards</li>
+              <li>Risk quantification ($)</li>
+              <li>Industry benchmarks</li>
+              <li>Predictive trends</li>
+              <li>Board-ready format</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>Level 5 Reporting</h4>
+            <ul>
+              <li>Business impact metrics</li>
+              <li>Security as enabler</li>
+              <li>Innovation pipeline</li>
+              <li>Industry leadership</li>
+              <li>Strategic alignment</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 11: COMMON PITFALLS ==================== -->
+      <section id="pitfalls">
+        <h2>11. Common Pitfalls & Anti-Patterns</h2>
+
+        <p>Learn from others' mistakes. These are the most common reasons SOC maturity initiatives fail.</p>
+
+        <div class="pillar-grid">
+          <div class="pillar-card" style="border-color: rgba(239, 68, 68, 0.5);">
+            <h4 style="color: #ef4444;">❌ Tool-First Thinking</h4>
+            <p><strong>Mistake:</strong> "We'll buy the best SIEM and everything will be fixed."</p>
+            <p><strong>Reality:</strong> Tools without process and skilled people become expensive shelfware.</p>
+            <p><strong>Fix:</strong> Assess people and process gaps before buying technology.</p>
+          </div>
+          <div class="pillar-card" style="border-color: rgba(239, 68, 68, 0.5);">
+            <h4 style="color: #ef4444;">❌ Skipping Levels</h4>
+            <p><strong>Mistake:</strong> "We'll go straight from Level 1 to Level 4."</p>
+            <p><strong>Reality:</strong> Each level builds foundation for the next. Skipping creates unstable operations.</p>
+            <p><strong>Fix:</strong> Progress through each level, ensuring stability before advancing.</p>
+          </div>
+          <div class="pillar-card" style="border-color: rgba(239, 68, 68, 0.5);">
+            <h4 style="color: #ef4444;">❌ Metric Gaming</h4>
+            <p><strong>Mistake:</strong> Optimizing for metrics rather than outcomes.</p>
+            <p><strong>Reality:</strong> MTTR of 5 minutes is meaningless if incidents aren't actually resolved.</p>
+            <p><strong>Fix:</strong> Use metrics to identify problems, not as goals themselves.</p>
+          </div>
+          <div class="pillar-card" style="border-color: rgba(239, 68, 68, 0.5);">
+            <h4 style="color: #ef4444;">❌ Automation Without Understanding</h4>
+            <p><strong>Mistake:</strong> Automating processes that aren't yet understood or documented.</p>
+            <p><strong>Reality:</strong> You automate the chaos and scale the problems.</p>
+            <p><strong>Fix:</strong> Document and optimize manually first, then automate.</p>
+          </div>
+          <div class="pillar-card" style="border-color: rgba(239, 68, 68, 0.5);">
+            <h4 style="color: #ef4444;">❌ Understaffing</h4>
+            <p><strong>Mistake:</strong> Expecting 3 analysts to run a 24x7 SOC.</p>
+            <p><strong>Reality:</strong> Burnout, turnover, and missed alerts.</p>
+            <p><strong>Fix:</strong> Staff appropriately or adjust coverage expectations.</p>
+          </div>
+          <div class="pillar-card" style="border-color: rgba(239, 68, 68, 0.5);">
+            <h4 style="color: #ef4444;">❌ No Executive Sponsorship</h4>
+            <p><strong>Mistake:</strong> Trying to mature SOC without leadership support.</p>
+            <p><strong>Reality:</strong> No budget, no organizational change, no progress.</p>
+            <p><strong>Fix:</strong> Build business case, get executive champion.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 12: BUDGET PLANNING ==================== -->
+      <section id="budget">
+        <h2>12. Budget Planning</h2>
+
+        <h3>12.1 Budget by Maturity Level</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr><th>Level</th><th>Typical Annual Budget</th><th>Key Cost Drivers</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Level 1 → 2</strong></td>
+              <td>$150K - $400K</td>
+              <td>SIEM licensing, EDR, 1-2 additional staff, basic training</td>
+            </tr>
+            <tr>
+              <td><strong>Level 2 → 3</strong></td>
+              <td>$400K - $800K</td>
+              <td>SOAR, threat intel, 2-4 additional staff, advanced training</td>
+            </tr>
+            <tr>
+              <td><strong>Level 3 → 4</strong></td>
+              <td>$1M - $2.5M</td>
+              <td>UEBA/ML, specialists (hunters, engineers), advanced tools</td>
+            </tr>
+            <tr>
+              <td><strong>Level 4 → 5</strong></td>
+              <td>$3M - $5M+</td>
+              <td>R&D team, custom development, continuous red team</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><em>Note: These are incremental costs to advance to the next level, not total SOC budget.</em></p>
+
+        <h3>12.2 Budget Allocation Guidelines</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr><th>Category</th><th>Level 2</th><th>Level 3</th><th>Level 4</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>People (salary, training)</strong></td>
+              <td>50-60%</td>
+              <td>45-55%</td>
+              <td>40-50%</td>
+            </tr>
+            <tr>
+              <td><strong>Technology (tools, licensing)</strong></td>
+              <td>30-40%</td>
+              <td>35-40%</td>
+              <td>35-45%</td>
+            </tr>
+            <tr>
+              <td><strong>Process (consulting, documentation)</strong></td>
+              <td>5-10%</td>
+              <td>5-10%</td>
+              <td>5-10%</td>
+            </tr>
+            <tr>
+              <td><strong>Governance (audits, compliance)</strong></td>
+              <td>5-10%</td>
+              <td>5-10%</td>
+              <td>5-10%</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ==================== SECTION 13: CASE STUDY ==================== -->
+      <section id="case-study">
+        <h2>13. Case Study: Security Modernization</h2>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Real-World Example: Manufacturing Subsidiary
+          </div>
+          <div class="callout-content">
+            <p>This case study is based on a security transformation at a 4,000-employee manufacturing subsidiary, progressing from approximately Level 2 toward Level 4 over 18 months.</p>
+          </div>
+        </div>
+
+        <h3>Starting Point Assessment (Level 2)</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr><th>Pillar</th><th>Initial State</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>People</strong></td>
+              <td>Small team, key person dependencies, limited training</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td><strong>Process</strong></td>
+              <td>Some playbooks, inconsistently followed, limited documentation</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td><strong>Technology</strong></td>
+              <td>RSA NetWitness (1,247 rules), ESET AV, partial coverage</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td><strong>Governance</strong></td>
+              <td>Basic policies, limited metrics, compliance-focused</td>
+              <td>2</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Transformation Approach</h3>
+
+        <div class="phase-timeline">
+          <div class="phase-card">
+            <h4>Phase 1: Foundation</h4>
+            <div class="timeframe">Months 1-6</div>
+            <ul>
+              <li>MDE deployment (9,000 endpoints)</li>
+              <li>ASR rules in audit mode</li>
+              <li>Detection audit of legacy SIEM</li>
+              <li>XDR-first architecture decision</li>
+            </ul>
+          </div>
+          <div class="phase-card">
+            <h4>Phase 2: Migration</h4>
+            <div class="timeframe">Months 6-12</div>
+            <ul>
+              <li>Sentinel deployment</li>
+              <li>Detection-driven rule migration</li>
+              <li>780 rules retired to XDR</li>
+              <li>485 Sentinel rules built</li>
+            </ul>
+          </div>
+          <div class="phase-card">
+            <h4>Phase 3: Optimization</h4>
+            <div class="timeframe">Months 12-18</div>
+            <ul>
+              <li>SOAR automation</li>
+              <li>Threat hunting program</li>
+              <li>DLP migration</li>
+              <li>Process documentation</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Key Decisions & Results</h3>
+
+        <div class="pillar-grid">
+          <div class="pillar-card">
+            <h4>Detection-Driven Migration</h4>
+            <p>Instead of porting all 1,247 rules, evaluated each for detection intent. XDR handles endpoint/identity/email; Sentinel handles cross-domain and business logic.</p>
+            <p><strong>Result:</strong> Better coverage with fewer rules</p>
+          </div>
+          <div class="pillar-card">
+            <h4>Cost Optimization</h4>
+            <p>XDR-first approach avoided ingesting raw MDE telemetry. Strategic tiering (Analytics vs Basic). Commitment tier planning.</p>
+            <p><strong>Result:</strong> $38K/month savings vs naive ingestion</p>
+          </div>
+          <div class="pillar-card">
+            <h4>Parallel Operations</h4>
+            <p>Ran both SIEMs for 90+ days. Gate-based cutover, not calendar-based. Detection parity validated before transition.</p>
+            <p><strong>Result:</strong> Zero coverage gaps during migration</p>
+          </div>
+          <div class="pillar-card">
+            <h4>Process Documentation</h4>
+            <p>Created runbooks for MDE onboarding, troubleshooting. Documented every exclusion with business justification.</p>
+            <p><strong>Result:</strong> Repeatable processes, reduced key-person dependency</p>
+          </div>
+        </div>
+
+        <h3>Current State Assessment (Level 3+)</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr><th>Pillar</th><th>Current State</th><th>Score</th><th>Improvement</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>People</strong></td>
+              <td>Defined roles, training program, documentation</td>
+              <td>3</td>
+              <td>+1</td>
+            </tr>
+            <tr>
+              <td><strong>Process</strong></td>
+              <td>Comprehensive playbooks, consistent following, regular reviews</td>
+              <td>3</td>
+              <td>+1</td>
+            </tr>
+            <tr>
+              <td><strong>Technology</strong></td>
+              <td>XDR + Sentinel integrated, SOAR automation, good coverage</td>
+              <td>3-4</td>
+              <td>+1.5</td>
+            </tr>
+            <tr>
+              <td><strong>Governance</strong></td>
+              <td>Metrics tracked, regular reporting, compliance aligned</td>
+              <td>3</td>
+              <td>+1</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Lessons Learned</h3>
+
+        <ul>
+          <li><strong>Detection-driven beats log-first:</strong> Don't ingest logs you won't build detections for</li>
+          <li><strong>XDR-first reduces complexity:</strong> Let specialized tools handle what they do best</li>
+          <li><strong>Audit mode is essential:</strong> Always test security controls before enforcement</li>
+          <li><strong>Documentation prevents knowledge loss:</strong> Runbooks saved time repeatedly</li>
+          <li><strong>Gate-based migration reduces risk:</strong> Don't cutover until ready, regardless of timeline pressure</li>
+        </ul>
+      </section>
+
+      <!-- ==================== FOOTER ==================== -->
+      <div class="callout success" style="margin-top: 3rem;">
+        <div class="callout-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Key Takeaways
+        </div>
+        <div class="callout-content">
+          <ul style="margin: 0; padding-left: 1.2rem;">
+            <li><strong>Maturity is a journey, not a destination.</strong> Focus on sustainable progress.</li>
+            <li><strong>Your effective level is your lowest pillar.</strong> Balance all four.</li>
+            <li><strong>Level 3 is the right target for most organizations.</strong> Don't over-invest.</li>
+            <li><strong>People and process before technology.</strong> Tools amplify capability, they don't create it.</li>
+            <li><strong>Measure to improve, not to impress.</strong> Honest assessment enables real progress.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
