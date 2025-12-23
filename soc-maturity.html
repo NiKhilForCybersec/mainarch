@@ -421,37 +421,52 @@
         <h3>📚 Table of Contents</h3>
         <div class="toc-columns">
           <div class="toc-column">
+            <p><strong>Foundations</strong></p>
             <ul>
               <li><a href="#overview">1. SOC Maturity Overview</a></li>
               <li><a href="#four-pillars">2. The Four Pillars</a></li>
               <li><a href="#maturity-levels">3. Maturity Level Definitions</a></li>
-              <li><a href="#level-1">3.1 Level 1: Initial</a></li>
-              <li><a href="#level-2">3.2 Level 2: Developing</a></li>
-              <li><a href="#level-3">3.3 Level 3: Defined</a></li>
-              <li><a href="#level-4">3.4 Level 4: Managed</a></li>
-              <li><a href="#level-5">3.5 Level 5: Optimizing</a></li>
+              <li><a href="#level-1">↳ Level 1: Initial</a></li>
+              <li><a href="#level-2">↳ Level 2: Developing</a></li>
+              <li><a href="#level-3">↳ Level 3: Defined</a></li>
+              <li><a href="#level-4">↳ Level 4: Managed</a></li>
+              <li><a href="#level-5">↳ Level 5: Optimizing</a></li>
             </ul>
           </div>
           <div class="toc-column">
+            <p><strong>Assessment & Roadmaps</strong></p>
             <ul>
               <li><a href="#assessment">4. Assessment Framework</a></li>
               <li><a href="#transitions">5. Transition Roadmaps</a></li>
-              <li><a href="#1-to-2">5.1 Level 1 → 2</a></li>
-              <li><a href="#2-to-3">5.2 Level 2 → 3</a></li>
-              <li><a href="#3-to-4">5.3 Level 3 → 4</a></li>
-              <li><a href="#4-to-5">5.4 Level 4 → 5</a></li>
+              <li><a href="#1-to-2">↳ Level 1 → 2</a></li>
+              <li><a href="#2-to-3">↳ Level 2 → 3</a></li>
+              <li><a href="#3-to-4">↳ Level 3 → 4</a></li>
+              <li><a href="#4-to-5">↳ Level 4 → 5</a></li>
               <li><a href="#metrics">6. Metrics & KPIs</a></li>
             </ul>
           </div>
           <div class="toc-column">
+            <p><strong>Pillar Deep Dives</strong></p>
             <ul>
-              <li><a href="#people-deep-dive">7. People Pillar Deep Dive</a></li>
-              <li><a href="#process-deep-dive">8. Process Pillar Deep Dive</a></li>
-              <li><a href="#technology-deep-dive">9. Technology Pillar Deep Dive</a></li>
-              <li><a href="#governance-deep-dive">10. Governance Deep Dive</a></li>
+              <li><a href="#people-deep-dive">7. People Pillar</a></li>
+              <li><a href="#process-deep-dive">8. Process Pillar</a></li>
+              <li><a href="#technology-deep-dive">9. Technology Pillar</a></li>
+              <li><a href="#governance-deep-dive">10. Governance Pillar</a></li>
               <li><a href="#pitfalls">11. Common Pitfalls</a></li>
               <li><a href="#budget">12. Budget Planning</a></li>
               <li><a href="#case-study">13. Case Study</a></li>
+            </ul>
+          </div>
+          <div class="toc-column">
+            <p><strong>Advanced Topics</strong></p>
+            <ul>
+              <li><a href="#day-in-life">14. Day in the Life</a></li>
+              <li><a href="#detection-maturity">15. Detection Engineering</a></li>
+              <li><a href="#hunting-maturity">16. Threat Hunting</a></li>
+              <li><a href="#interview-points">17. Interview Talking Points</a></li>
+              <li><a href="#automation-maturity">18. Automation & SOAR</a></li>
+              <li><a href="#checklists">19. Practical Checklists</a></li>
+              <li><a href="#tools">20. Tool Recommendations</a></li>
             </ul>
           </div>
         </div>
@@ -3109,7 +3124,1365 @@
         </ul>
       </section>
 
-      <!-- ==================== FOOTER ==================== -->
+      <!-- ==================== SECTION 14: DAY IN THE LIFE ==================== -->
+      <section id="day-in-life">
+        <h2>14. Day in the Life: SOC at Each Level</h2>
+
+        <p>Understanding what daily operations look like at each level helps you <strong>visualize the target state</strong> and <strong>identify gaps in your current operations</strong>.</p>
+
+        <!-- LEVEL 1 DAY -->
+        <div class="maturity-level-card level-1">
+          <div class="level-header">
+            <div class="level-badge">1</div>
+            <div class="level-title">
+              <h3>Day in the Life: Level 1 SOC</h3>
+              <div class="subtitle">Chaos and Firefighting</div>
+            </div>
+          </div>
+
+          <div class="assessment-section">
+            <h4>🌅 Morning (8:00 AM)</h4>
+            <ul>
+              <li><strong>8:00 AM:</strong> Analyst arrives, opens SIEM. <span style="color: #ef4444;">2,847 alerts overnight.</span> Sighs.</li>
+              <li><strong>8:15 AM:</strong> Starts scrolling through alerts. No idea where to start. Picks randomly.</li>
+              <li><strong>8:30 AM:</strong> First alert: "Suspicious PowerShell." No playbook. Googles "how to investigate PowerShell alert."</li>
+              <li><strong>9:00 AM:</strong> Still on first alert. Unsure if it's malicious. Asks colleague. Colleague shrugs.</li>
+              <li><strong>9:30 AM:</strong> Marks alert as "reviewed" without resolution. Moves to next alert.</li>
+              <li><strong>10:00 AM:</strong> <span style="color: #ef4444;">Phone rings: "Our website is down!"</span> Drops everything.</li>
+            </ul>
+
+            <h4>☀️ Midday (12:00 PM)</h4>
+            <ul>
+              <li><strong>12:00 PM:</strong> Still dealing with website issue. Turns out it wasn't security-related. Wasted 2 hours.</li>
+              <li><strong>12:30 PM:</strong> Back to alerts. <span style="color: #ef4444;">Now 3,200 alerts.</span> Queue growing faster than can process.</li>
+              <li><strong>1:00 PM:</strong> Manager asks for "security status." Analyst says "we're monitoring." No actual metrics.</li>
+              <li><strong>2:00 PM:</strong> Another analyst calls in sick. Now alone for the afternoon.</li>
+            </ul>
+
+            <h4>🌙 Afternoon/Evening (4:00 PM)</h4>
+            <ul>
+              <li><strong>4:00 PM:</strong> Realizes haven't looked at email all day. 47 unread security emails.</li>
+              <li><strong>5:00 PM:</strong> Supposed to leave, but guilt about alert queue. Stays late.</li>
+              <li><strong>6:00 PM:</strong> Goes home. <span style="color: #ef4444;">Alert queue at 3,500.</span> Tomorrow will be worse.</li>
+              <li><strong>Night:</strong> No coverage. Alerts pile up. Attackers know this.</li>
+            </ul>
+
+            <div class="symptoms-box">
+              <h4>🚨 Level 1 Reality</h4>
+              <p><strong>Alerts investigated:</strong> ~50 (of 3,000+)</p>
+              <p><strong>True positives found:</strong> Unknown (no way to know what was missed)</p>
+              <p><strong>Process followed:</strong> None (no process exists)</p>
+              <p><strong>Documentation created:</strong> Minimal ticket notes</p>
+              <p><strong>Feeling at end of day:</strong> Overwhelmed, defeated, considering new job</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEVEL 3 DAY -->
+        <div class="maturity-level-card level-3">
+          <div class="level-header">
+            <div class="level-badge">3</div>
+            <div class="level-title">
+              <h3>Day in the Life: Level 3 SOC</h3>
+              <div class="subtitle">Structured and Professional</div>
+            </div>
+          </div>
+
+          <div class="assessment-section">
+            <h4>🌅 Morning (8:00 AM)</h4>
+            <ul>
+              <li><strong>8:00 AM:</strong> Analyst arrives, checks shift handoff notes from overnight team.</li>
+              <li><strong>8:05 AM:</strong> Opens dashboard. <span style="color: #22c55e;">127 alerts in queue.</span> Sorted by severity.</li>
+              <li><strong>8:10 AM:</strong> 3 High severity alerts flagged. Starts with those.</li>
+              <li><strong>8:15 AM:</strong> First alert: "Suspicious PowerShell - encoded command." Opens playbook.</li>
+              <li><strong>8:20 AM:</strong> Follows playbook: Check parent process, decode command, check user context.</li>
+              <li><strong>8:35 AM:</strong> <span style="color: #22c55e;">Determined: IT admin running legitimate script.</span> Documents, closes as FP.</li>
+              <li><strong>8:40 AM:</strong> Adds pattern to known-good list to prevent future FPs.</li>
+              <li><strong>9:00 AM:</strong> Second high severity: Potential credential dumping. Escalates to L2.</li>
+              <li><strong>10:00 AM:</strong> L2 confirms false positive (security tool behavior). Updates detection rule.</li>
+            </ul>
+
+            <h4>☀️ Midday (12:00 PM)</h4>
+            <ul>
+              <li><strong>11:00 AM:</strong> Daily standup: Team reviews overnight incidents, discusses trends.</li>
+              <li><strong>11:30 AM:</strong> Assigned to work on playbook update based on yesterday's incident.</li>
+              <li><strong>12:00 PM:</strong> Lunch break (actual break, not eating at desk while triaging).</li>
+              <li><strong>1:00 PM:</strong> Weekly threat intel review: New campaign targeting manufacturing sector.</li>
+              <li><strong>1:30 PM:</strong> Detection engineer adds new rule for campaign IOCs.</li>
+              <li><strong>2:00 PM:</strong> Back to queue. <span style="color: #22c55e;">Queue at 85 alerts.</span> Manageable.</li>
+            </ul>
+
+            <h4>🌙 Afternoon/Evening (4:00 PM)</h4>
+            <ul>
+              <li><strong>3:00 PM:</strong> True positive! Phishing email clicked, malware downloaded.</li>
+              <li><strong>3:05 PM:</strong> Follows IR playbook: Isolate endpoint, preserve evidence, notify user's manager.</li>
+              <li><strong>3:30 PM:</strong> Incident contained. User's machine being reimaged.</li>
+              <li><strong>4:00 PM:</strong> Documents incident, creates ticket, schedules post-incident review.</li>
+              <li><strong>4:30 PM:</strong> Updates daily metrics dashboard.</li>
+              <li><strong>5:00 PM:</strong> Shift handoff to evening team. Clear notes on open items.</li>
+              <li><strong>5:15 PM:</strong> Goes home. <span style="color: #22c55e;">Evening team has coverage.</span></li>
+            </ul>
+
+            <div class="key-insight">
+              <h4>✅ Level 3 Reality</h4>
+              <p><strong>Alerts investigated:</strong> All high/medium, sampled low (~150)</p>
+              <p><strong>True positives found:</strong> 2 (both handled per playbook)</p>
+              <p><strong>Process followed:</strong> 100% (playbooks for everything)</p>
+              <p><strong>Documentation created:</strong> Full incident documentation, metrics updated</p>
+              <p><strong>Feeling at end of day:</strong> Productive, professional, sustainable</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEVEL 5 DAY -->
+        <div class="maturity-level-card level-5">
+          <div class="level-header">
+            <div class="level-badge">5</div>
+            <div class="level-title">
+              <h3>Day in the Life: Level 5 SOC</h3>
+              <div class="subtitle">Proactive and Innovative</div>
+            </div>
+          </div>
+
+          <div class="assessment-section">
+            <h4>🌅 Morning (8:00 AM)</h4>
+            <ul>
+              <li><strong>8:00 AM:</strong> Threat hunter arrives. Overnight automation handled 94% of alerts.</li>
+              <li><strong>8:05 AM:</strong> Reviews 12 alerts flagged for human review (novel patterns).</li>
+              <li><strong>8:30 AM:</strong> <span style="color: #06b6d4;">ML model flagged unusual authentication pattern.</span> Not a known attack.</li>
+              <li><strong>9:00 AM:</strong> Investigates: New attack technique not in any threat intel.</li>
+              <li><strong>9:30 AM:</strong> Confirms: Novel credential harvesting technique. <span style="color: #06b6d4;">Zero-day detection!</span></li>
+              <li><strong>10:00 AM:</strong> Automated response already contained. Now documenting for community.</li>
+              <li><strong>10:30 AM:</strong> Writes threat intel report to share with ISACs and partners.</li>
+            </ul>
+
+            <h4>☀️ Midday (12:00 PM)</h4>
+            <ul>
+              <li><strong>11:00 AM:</strong> Presents finding to security research team.</li>
+              <li><strong>11:30 AM:</strong> Data scientist begins building ML detection for similar patterns.</li>
+              <li><strong>12:00 PM:</strong> Lunch meeting: Planning presentation for upcoming conference.</li>
+              <li><strong>1:00 PM:</strong> Works on research paper about detection methodology.</li>
+              <li><strong>2:00 PM:</strong> Red team reports new technique they developed. Collaborates on detection.</li>
+              <li><strong>3:00 PM:</strong> Reviews PR from junior analyst for new detection rule. Mentoring.</li>
+            </ul>
+
+            <h4>🌙 Afternoon/Evening (4:00 PM)</h4>
+            <ul>
+              <li><strong>4:00 PM:</strong> Weekly metrics review: MTTD down 15% this quarter.</li>
+              <li><strong>4:30 PM:</strong> Board security briefing prep with CISO.</li>
+              <li><strong>5:00 PM:</strong> Industry working group call on emerging threats.</li>
+              <li><strong>5:30 PM:</strong> <span style="color: #06b6d4;">Autonomous systems handling operations.</span> Focus on innovation.</li>
+            </ul>
+
+            <div class="key-insight" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(6, 182, 212, 0.02)); border-color: rgba(6, 182, 212, 0.3);">
+              <h4 style="color: #06b6d4;">🚀 Level 5 Reality</h4>
+              <p><strong>Alerts auto-resolved:</strong> 94%</p>
+              <p><strong>Novel threats discovered:</strong> 1 (shared with community)</p>
+              <p><strong>Time on routine work:</strong> ~10%</p>
+              <p><strong>Time on innovation/research:</strong> ~60%</p>
+              <p><strong>Feeling at end of day:</strong> Leading the industry, meaningful contribution</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 15: DETECTION ENGINEERING MATURITY ==================== -->
+      <section id="detection-maturity">
+        <h2>15. Detection Engineering Maturity</h2>
+
+        <p>Detection engineering is a specific capability that evolves with SOC maturity. This section provides detailed guidance on <strong>building detection capability</strong> from scratch to world-class.</p>
+
+        <h3>15.1 Detection Maturity Model</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Detection Approach</th>
+              <th>Rule Management</th>
+              <th>Coverage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Level 1</strong></td>
+              <td>Vendor defaults only</td>
+              <td>No management, enable all</td>
+              <td>&lt;20% ATT&CK, unknown gaps</td>
+            </tr>
+            <tr>
+              <td><strong>Level 2</strong></td>
+              <td>Defaults + some custom</td>
+              <td>Ad-hoc tuning when noisy</td>
+              <td>30-50% ATT&CK, gaps identified</td>
+            </tr>
+            <tr>
+              <td><strong>Level 3</strong></td>
+              <td>Curated detection catalog</td>
+              <td>Lifecycle management, regular review</td>
+              <td>50-70% ATT&CK, prioritized coverage</td>
+            </tr>
+            <tr>
+              <td><strong>Level 4</strong></td>
+              <td>Threat-informed detection</td>
+              <td>CI/CD for detections, testing</td>
+              <td>70-85% ATT&CK, validated coverage</td>
+            </tr>
+            <tr>
+              <td><strong>Level 5</strong></td>
+              <td>Behavioral + ML detection</td>
+              <td>Automated optimization</td>
+              <td>&gt;85% ATT&CK, novel detection</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>15.2 Detection Development Lifecycle</h3>
+
+        <div class="assessment-section">
+          <h4>Level 1-2: Ad-Hoc Detection</h4>
+          <p><strong>How it works:</strong></p>
+          <ol>
+            <li>Analyst sees interesting attack in the news</li>
+            <li>Writes a quick query</li>
+            <li>Enables it... maybe</li>
+            <li>Forgets about it</li>
+            <li>Alert fires months later, nobody remembers what it means</li>
+          </ol>
+          <p><strong>Problems:</strong> No documentation, no testing, no maintenance, unknown coverage</p>
+        </div>
+
+        <div class="assessment-section">
+          <h4>Level 3: Structured Detection Development</h4>
+          <p><strong>How it works:</strong></p>
+          <ol>
+            <li><strong>Requirement:</strong> Threat intel identifies relevant technique</li>
+            <li><strong>Design:</strong> Detection engineer analyzes technique, identifies data sources</li>
+            <li><strong>Develop:</strong> Write detection logic with documentation</li>
+            <li><strong>Test:</strong> Validate against sample data, check for FPs</li>
+            <li><strong>Deploy:</strong> Enable in audit mode first</li>
+            <li><strong>Tune:</strong> Adjust thresholds based on real data</li>
+            <li><strong>Maintain:</strong> Regular review, update as needed</li>
+          </ol>
+
+          <h4>Detection Documentation Template (Level 3)</h4>
+          <div class="code-block">
+            <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem;">
+<span style="color: #f97316;">Detection Name:</span> Suspicious LSASS Access
+<span style="color: #f97316;">MITRE ATT&CK:</span> T1003.001 - OS Credential Dumping: LSASS Memory
+<span style="color: #f97316;">Severity:</span> High
+<span style="color: #f97316;">Data Source:</span> Microsoft Defender for Endpoint
+
+<span style="color: #f97316;">Description:</span>
+Detects processes accessing LSASS memory, which may indicate credential 
+dumping attempts. LSASS (Local Security Authority Subsystem Service) 
+stores credentials in memory and is a common target for attackers.
+
+<span style="color: #f97316;">Detection Logic:</span>
+DeviceProcessEvents
+| where Timestamp > ago(1h)
+| where FileName =~ "lsass.exe"
+| where ActionType == "ProcessAccessed"
+| where InitiatingProcessFileName !in~ (
+    "MsMpEng.exe",      // Windows Defender
+    "csrss.exe",        // Windows system
+    "services.exe",     // Windows system  
+    "svchost.exe",      // Windows system
+    "WmiPrvSE.exe"      // WMI Provider
+)
+| project Timestamp, DeviceName, InitiatingProcessFileName, 
+          InitiatingProcessCommandLine, AccountName
+
+<span style="color: #f97316;">Known False Positives:</span>
+- Security tools performing memory scanning
+- Backup software accessing system processes
+- Some legitimate admin tools
+
+<span style="color: #f97316;">Tuning Guidance:</span>
+- Add legitimate security tools to exclusion list
+- Monitor for new FP patterns weekly for first month
+- Consider adding process hash allowlist for known-good
+
+<span style="color: #f97316;">Response Actions:</span>
+1. Isolate endpoint immediately
+2. Capture memory dump if possible
+3. Check for lateral movement from this host
+4. Reset credentials for logged-in users
+5. Escalate to IR team
+
+<span style="color: #f97316;">References:</span>
+- https://attack.mitre.org/techniques/T1003/001/
+- Internal IR playbook: CRED-001
+
+<span style="color: #f97316;">Owner:</span> Detection Engineering Team
+<span style="color: #f97316;">Created:</span> 2024-01-15
+<span style="color: #f97316;">Last Reviewed:</span> 2024-06-15
+<span style="color: #f97316;">Version:</span> 1.3
+            </pre>
+          </div>
+        </div>
+
+        <div class="assessment-section">
+          <h4>Level 4: Detection-as-Code</h4>
+          <p><strong>How it works:</strong></p>
+          <ol>
+            <li><strong>Version Control:</strong> All detections in Git repository</li>
+            <li><strong>Code Review:</strong> PRs for new detections, peer review</li>
+            <li><strong>Automated Testing:</strong> Unit tests with sample data</li>
+            <li><strong>CI/CD Pipeline:</strong> Automated deployment to SIEM</li>
+            <li><strong>Metrics:</strong> Automated tracking of FP rate, detection rate</li>
+            <li><strong>Feedback Loop:</strong> SOC feedback automatically creates issues</li>
+          </ol>
+
+          <h4>Example: Detection CI/CD Pipeline</h4>
+          <div class="code-block">
+            <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem;">
+<span style="color: #22c55e;"># .github/workflows/detection-pipeline.yml</span>
+
+name: Detection Deployment Pipeline
+
+on:
+  push:
+    paths:
+      - 'detections/**'
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Validate KQL Syntax
+        run: |
+          python scripts/validate_kql.py detections/
+      
+      - name: Check ATT&CK Mapping
+        run: |
+          python scripts/check_attack_mapping.py detections/
+      
+      - name: Run Unit Tests
+        run: |
+          python scripts/test_detections.py detections/
+
+  deploy-staging:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Staging Sentinel
+        run: |
+          az sentinel alert-rule create --workspace staging ...
+      
+      - name: Run Integration Tests
+        run: |
+          python scripts/integration_test.py
+
+  deploy-production:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Deploy to Production
+        run: |
+          az sentinel alert-rule create --workspace production ...
+      
+      - name: Notify SOC
+        run: |
+          python scripts/notify_soc.py "New detection deployed"
+            </pre>
+          </div>
+        </div>
+
+        <h3>15.3 Detection Coverage Analysis</h3>
+
+        <p>Use this framework to systematically analyze and improve detection coverage:</p>
+
+        <div class="pillar-grid">
+          <div class="pillar-card">
+            <h4>Step 1: Threat Profiling</h4>
+            <p>Identify relevant threats for YOUR organization:</p>
+            <ul>
+              <li>Industry-specific threat reports</li>
+              <li>Historical incidents</li>
+              <li>Regulatory requirements</li>
+              <li>Crown jewels analysis</li>
+              <li>Threat actor targeting patterns</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>Step 2: Technique Prioritization</h4>
+            <p>Not all ATT&CK techniques are equal:</p>
+            <ul>
+              <li><strong>High:</strong> Used by your threat actors</li>
+              <li><strong>Medium:</strong> Common attack techniques</li>
+              <li><strong>Low:</strong> Rare or not applicable</li>
+              <li>Consider: Data availability, FP potential</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>Step 3: Coverage Mapping</h4>
+            <p>Map current detections to techniques:</p>
+            <ul>
+              <li>Tag each rule with technique ID</li>
+              <li>Rate coverage quality (1-3)</li>
+              <li>Identify gaps</li>
+              <li>Document data source requirements</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>Step 4: Gap Prioritization</h4>
+            <p>Prioritize what to build next:</p>
+            <ul>
+              <li>High-priority technique + no coverage = urgent</li>
+              <li>Consider quick wins vs. complex</li>
+              <li>Balance across kill chain</li>
+              <li>Factor in data availability</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>15.4 XDR vs SIEM Detection Ownership</h3>
+
+        <p>In modern environments, deciding <strong>what detects where</strong> is critical for efficiency.</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Detection Type</th>
+              <th>XDR (MDE/M365D)</th>
+              <th>SIEM (Sentinel)</th>
+              <th>Why</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Malicious PowerShell</td>
+              <td>✅ Primary</td>
+              <td>❌ Retire</td>
+              <td>XDR has AMSI, sees decoded content</td>
+            </tr>
+            <tr>
+              <td>LSASS credential dumping</td>
+              <td>✅ Primary</td>
+              <td>❌ Retire</td>
+              <td>XDR has kernel-level visibility</td>
+            </tr>
+            <tr>
+              <td>Phishing attachment</td>
+              <td>✅ Primary (MDO)</td>
+              <td>❌ Retire</td>
+              <td>Email security has sandbox</td>
+            </tr>
+            <tr>
+              <td>Impossible travel</td>
+              <td>✅ Primary (MDI)</td>
+              <td>❌ Retire</td>
+              <td>Identity protection specializes</td>
+            </tr>
+            <tr>
+              <td>Terminated employee data access</td>
+              <td>❌ Can't see</td>
+              <td>✅ Primary</td>
+              <td>Needs HR feed correlation</td>
+            </tr>
+            <tr>
+              <td>Service account interactive login</td>
+              <td>❌ No context</td>
+              <td>✅ Primary</td>
+              <td>Needs identity governance</td>
+            </tr>
+            <tr>
+              <td>Multi-stage attack correlation</td>
+              <td>❌ Limited</td>
+              <td>✅ Primary</td>
+              <td>Cross-domain correlation</td>
+            </tr>
+            <tr>
+              <td>Firewall + endpoint correlation</td>
+              <td>❌ No network</td>
+              <td>✅ Primary</td>
+              <td>SIEM sees network logs</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="key-insight">
+          <h4>💡 The Detection-Driven Principle</h4>
+          <p><strong>Don't ingest logs you won't build detections for.</strong></p>
+          <p>For each log source, ask: "What detections require this data that XDR doesn't already handle?" If the answer is "none," don't ingest it to SIEM.</p>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 16: THREAT HUNTING MATURITY ==================== -->
+      <section id="hunting-maturity">
+        <h2>16. Threat Hunting Maturity</h2>
+
+        <p>Threat hunting is the <strong>proactive search for threats</strong> that have evaded existing detections. It's a capability that emerges at Level 3 and becomes central at Level 4-5.</p>
+
+        <h3>16.1 Hunting Maturity Levels</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Hunting Approach</th>
+              <th>Frequency</th>
+              <th>Staffing</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>HM0</strong></td>
+              <td>No hunting (fully reactive)</td>
+              <td>Never</td>
+              <td>None</td>
+            </tr>
+            <tr>
+              <td><strong>HM1</strong></td>
+              <td>IOC-based searching</td>
+              <td>When threat intel arrives</td>
+              <td>Analysts when time permits</td>
+            </tr>
+            <tr>
+              <td><strong>HM2</strong></td>
+              <td>Procedure-based hunting</td>
+              <td>Weekly/Monthly scheduled</td>
+              <td>Part-time hunter role</td>
+            </tr>
+            <tr>
+              <td><strong>HM3</strong></td>
+              <td>Hypothesis-driven hunting</td>
+              <td>Weekly cadence</td>
+              <td>Dedicated hunter(s)</td>
+            </tr>
+            <tr>
+              <td><strong>HM4</strong></td>
+              <td>Intelligence-driven + ML-assisted</td>
+              <td>Continuous</td>
+              <td>Hunting team</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>16.2 Hypothesis-Driven Hunting Process</h3>
+
+        <div class="phase-timeline">
+          <div class="phase-card">
+            <h4>1. Form Hypothesis</h4>
+            <ul>
+              <li>Based on threat intel</li>
+              <li>Coverage gaps</li>
+              <li>Industry trends</li>
+              <li>Anomaly observations</li>
+            </ul>
+            <p><em>Example: "Attackers may be using scheduled tasks for persistence in our environment"</em></p>
+          </div>
+          <div class="phase-card">
+            <h4>2. Plan Hunt</h4>
+            <ul>
+              <li>Identify data sources</li>
+              <li>Define scope (time, systems)</li>
+              <li>Determine success criteria</li>
+              <li>Estimate time needed</li>
+            </ul>
+          </div>
+          <div class="phase-card">
+            <h4>3. Execute Hunt</h4>
+            <ul>
+              <li>Run queries</li>
+              <li>Analyze results</li>
+              <li>Investigate anomalies</li>
+              <li>Document findings</li>
+            </ul>
+          </div>
+          <div class="phase-card">
+            <h4>4. Conclude Hunt</h4>
+            <ul>
+              <li>Confirm/deny hypothesis</li>
+              <li>Identify detection gaps</li>
+              <li>Create new detections</li>
+              <li>Share learnings</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>16.3 Example Hunt: Scheduled Task Persistence</h3>
+
+        <div class="assessment-section">
+          <h4>Hunt Documentation Template</h4>
+          
+          <div class="code-block">
+            <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem;">
+<span style="color: #f97316;">Hunt ID:</span> HUNT-2024-042
+<span style="color: #f97316;">Hypothesis:</span> Attackers are using scheduled tasks for persistence
+<span style="color: #f97316;">MITRE ATT&CK:</span> T1053.005 - Scheduled Task/Job
+<span style="color: #f97316;">Scope:</span> All Windows endpoints, last 30 days
+<span style="color: #f97316;">Data Sources:</span> DeviceProcessEvents, DeviceRegistryEvents
+
+<span style="color: #22c55e;">// Hunt Query 1: Scheduled tasks created via command line</span>
+DeviceProcessEvents
+| where Timestamp > ago(30d)
+| where FileName in~ ("schtasks.exe", "at.exe")
+| where ProcessCommandLine has_any ("/create", "-create")
+| summarize 
+    Count = count(),
+    Devices = dcount(DeviceName),
+    Commands = make_set(ProcessCommandLine, 10)
+    by InitiatingProcessFileName, AccountName
+| where Count < 10  // Focus on rare activity
+| order by Count asc
+
+<span style="color: #22c55e;">// Hunt Query 2: Tasks running from unusual locations</span>
+DeviceProcessEvents
+| where Timestamp > ago(30d)
+| where InitiatingProcessFileName =~ "svchost.exe"
+| where InitiatingProcessCommandLine has "Schedule"
+| where FolderPath !startswith "C:\\Windows"
+| where FolderPath !startswith "C:\\Program Files"
+| summarize Count = count() by FolderPath, FileName
+| order by Count asc
+
+<span style="color: #22c55e;">// Hunt Query 3: Tasks created via COM objects (stealthier)</span>
+DeviceRegistryEvents
+| where Timestamp > ago(30d)
+| where RegistryKey has "Schedule\\TaskCache\\Tasks"
+| where ActionType == "RegistryKeyCreated"
+| summarize Count = count() by DeviceName, InitiatingProcessFileName
+
+<span style="color: #f97316;">Findings:</span>
+- 3 suspicious scheduled tasks identified
+- 2 were legitimate IT automation (documented)
+- 1 requires investigation (unknown binary in AppData)
+
+<span style="color: #f97316;">Actions Taken:</span>
+- Escalated suspicious task to IR (Ticket: INC-4521)
+- Created detection rule for tasks in AppData folders
+- Updated scheduled task baseline documentation
+
+<span style="color: #f97316;">Detection Gap Identified:</span>
+- No alert for scheduled tasks pointing to user-writable directories
+- Created new rule: DETECT-0087
+
+<span style="color: #f97316;">Hunt Duration:</span> 4 hours
+<span style="color: #f97316;">Hunter:</span> [Analyst Name]
+<span style="color: #f97316;">Date:</span> 2024-06-20
+            </pre>
+          </div>
+        </div>
+
+        <h3>16.4 Hunt Ideas by Technique</h3>
+
+        <div class="pillar-grid">
+          <div class="pillar-card">
+            <h4>Initial Access Hunts</h4>
+            <ul>
+              <li>Phishing links clicked but not alerted</li>
+              <li>Drive-by download patterns</li>
+              <li>Exploitation attempts in logs</li>
+              <li>Rogue OAuth applications</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>Persistence Hunts</h4>
+            <ul>
+              <li>New scheduled tasks</li>
+              <li>Registry run key changes</li>
+              <li>New services created</li>
+              <li>Startup folder additions</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>Lateral Movement Hunts</h4>
+            <ul>
+              <li>Unusual RDP connections</li>
+              <li>WMI remote execution</li>
+              <li>PsExec-like behavior</li>
+              <li>Admin share access patterns</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>Exfiltration Hunts</h4>
+            <ul>
+              <li>Large data transfers</li>
+              <li>Cloud storage uploads</li>
+              <li>Unusual DNS query volumes</li>
+              <li>Encrypted channel anomalies</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 17: INTERVIEW TALKING POINTS ==================== -->
+      <section id="interview-points">
+        <h2>17. Interview-Ready Talking Points</h2>
+
+        <p>Use these prepared answers for SOC maturity assessment questions in interviews.</p>
+
+        <div class="assessment-section">
+          <h4>Q: "How would you conduct a SOC maturity assessment?"</h4>
+          
+          <div class="code-block">
+            <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.9rem; white-space: pre-wrap;">
+"I assess across four dimensions: People, Process, Technology, and Governance.
+
+<span style="color: #22c55e;">PEOPLE:</span> Team size and structure, skills and certifications, training programs, coverage model, retention rates. Key questions: How many analysts? What's your L1:L2:L3 ratio? What's turnover like?
+
+<span style="color: #22c55e;">PROCESS:</span> Playbook coverage and compliance, incident response maturity, escalation procedures, continuous improvement. Key questions: What percentage of alert types have playbooks? How often are they followed?
+
+<span style="color: #22c55e;">TECHNOLOGY:</span> SIEM capabilities, EDR/XDR coverage, automation level, detection coverage against ATT&CK. Key questions: What's your false positive rate? How much is automated?
+
+<span style="color: #22c55e;">GOVERNANCE:</span> Policies, metrics tracked, SLA compliance, executive reporting. Key questions: Do you measure MTTD/MTTR? How often do you report to leadership?
+
+I rate each dimension 1-5, but here's the key insight: <span style="color: #f97316;">Your effective maturity is your LOWEST pillar, not your average.</span> A SOC with great tools but no process is still Level 1-2.
+
+<span style="color: #22c55e;">DELIVERABLE:</span> Assessment report with current maturity scores, gap analysis, and prioritized roadmap with quick wins in the first 90 days."</pre>
+          </div>
+        </div>
+
+        <div class="assessment-section">
+          <h4>Q: "What does a Level 3 SOC look like?"</h4>
+          
+          <div class="code-block">
+            <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.9rem; white-space: pre-wrap;">
+"Level 3 is where most organizations should target. It means:
+
+<span style="color: #22c55e;">CONSISTENT OPERATIONS:</span> Playbooks exist for 80%+ of alert types and are followed 90%+ of the time. New analysts can get productive in weeks, not months, because everything is documented.
+
+<span style="color: #22c55e;">MANAGEABLE ALERT VOLUME:</span> Under 500 alerts per day with less than 40% false positive rate. Analysts aren't drowning.
+
+<span style="color: #22c55e;">MEASURED PERFORMANCE:</span> MTTD under 24 hours for high severity. MTTR under 4 hours for critical. SLAs defined and tracked.
+
+<span style="color: #22c55e;">PROACTIVE ELEMENTS:</span> Regular threat hunting, not just reactive triage. Threat intel is actionable, not just feeds.
+
+<span style="color: #22c55e;">PROFESSIONAL TEAM:</span> Clear L1/L2/L3 structure, defined career paths, turnover under 25%.
+
+The key difference from Level 2: At Level 2, processes exist but aren't always followed. At Level 3, they're standardized and consistent."</pre>
+          </div>
+        </div>
+
+        <div class="assessment-section">
+          <h4>Q: "How do you prioritize SOC improvements?"</h4>
+          
+          <div class="code-block">
+            <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.9rem; white-space: pre-wrap;">
+"I use a framework that balances quick wins with strategic improvements:
+
+<span style="color: #22c55e;">QUICK WINS (0-90 days):</span>
+- Tune top 10 noisiest rules to reduce alert fatigue immediately
+- Document playbooks for the most common alert types
+- Establish basic metrics so we have a baseline
+
+<span style="color: #22c55e;">MEDIUM-TERM (3-6 months):</span>
+- Address the lowest-scoring pillar (remember, effective maturity = lowest pillar)
+- Expand playbook coverage to 80%+
+- Implement basic automation for repetitive tasks
+
+<span style="color: #22c55e;">LONG-TERM (6-12 months):</span>
+- Build detection engineering capability
+- Establish threat hunting program
+- Advanced automation and orchestration
+
+<span style="color: #f97316;">Key principle:</span> Fix people and process gaps before buying more technology. I've seen organizations buy million-dollar SIEM/SOAR tools that sit unused because they didn't have the process maturity to leverage them."</pre>
+          </div>
+        </div>
+
+        <div class="assessment-section">
+          <h4>Q: "What metrics matter for a SOC?"</h4>
+          
+          <div class="code-block">
+            <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.9rem; white-space: pre-wrap;">
+"The metrics that matter depend on your maturity level:
+
+<span style="color: #22c55e;">LEVEL 1-2 (Getting Started):</span>
+- Alert volume (are we drowning?)
+- Queue depth (is it growing?)
+- Ticket count (are we doing anything?)
+
+<span style="color: #22c55e;">LEVEL 3 (Operational Excellence):</span>
+- MTTD: Mean Time to Detect (how fast do we catch things?)
+- MTTR: Mean Time to Respond (how fast do we fix things?)
+- False Positive Rate (are we efficient?)
+- SLA Compliance (are we meeting commitments?)
+
+<span style="color: #22c55e;">LEVEL 4+ (Business Value):</span>
+- Detection Coverage (ATT&CK percentage)
+- Automation Rate (what percentage is auto-handled?)
+- Cost per Incident
+- Risk Reduction (quantified in dollars)
+
+<span style="color: #f97316;">Warning:</span> Don't game metrics. An MTTR of 5 minutes is meaningless if incidents aren't actually resolved. Metrics should drive improvement, not just look good on dashboards."</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 18: AUTOMATION MATURITY ==================== -->
+      <section id="automation-maturity">
+        <h2>18. Automation & SOAR Maturity</h2>
+
+        <p>Automation is the key to scaling SOC operations. Without it, you need to hire linearly as threats grow. With it, you can handle exponential growth with incremental staff.</p>
+
+        <h3>18.1 Automation Maturity Levels</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Automation State</th>
+              <th>% Tier 1 Automated</th>
+              <th>Tools Used</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Level 1</strong></td>
+              <td>No automation</td>
+              <td>0%</td>
+              <td>None</td>
+            </tr>
+            <tr>
+              <td><strong>Level 2</strong></td>
+              <td>Scripts for specific tasks</td>
+              <td>5-15%</td>
+              <td>PowerShell, Python scripts</td>
+            </tr>
+            <tr>
+              <td><strong>Level 3</strong></td>
+              <td>Basic orchestration</td>
+              <td>20-40%</td>
+              <td>Logic Apps, basic SOAR</td>
+            </tr>
+            <tr>
+              <td><strong>Level 4</strong></td>
+              <td>Advanced orchestration</td>
+              <td>50-70%</td>
+              <td>Full SOAR platform</td>
+            </tr>
+            <tr>
+              <td><strong>Level 5</strong></td>
+              <td>Autonomous response</td>
+              <td>80-95%</td>
+              <td>AI-assisted SOAR</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>18.2 What to Automate (and What NOT to)</h3>
+
+        <div class="pillar-grid">
+          <div class="pillar-card" style="border-color: rgba(34, 197, 94, 0.5);">
+            <h4 style="color: #22c55e;">✅ Good Automation Candidates</h4>
+            <ul>
+              <li><strong>Enrichment:</strong> IP/hash/domain lookups</li>
+              <li><strong>Triage:</strong> Known-good pattern dismissal</li>
+              <li><strong>Ticketing:</strong> Auto-create tickets</li>
+              <li><strong>Notifications:</strong> Alert routing</li>
+              <li><strong>Containment:</strong> Auto-isolate for known-bad</li>
+              <li><strong>Reporting:</strong> Metrics collection</li>
+              <li><strong>Data collection:</strong> Gather context for analyst</li>
+            </ul>
+          </div>
+          <div class="pillar-card" style="border-color: rgba(239, 68, 68, 0.5);">
+            <h4 style="color: #ef4444;">❌ Risky to Automate</h4>
+            <ul>
+              <li><strong>Novel threats:</strong> Need human judgment</li>
+              <li><strong>Business impact decisions:</strong> Need context</li>
+              <li><strong>Executive communication:</strong> Need nuance</li>
+              <li><strong>Ambiguous alerts:</strong> Risk of wrong action</li>
+              <li><strong>Sensitive data access:</strong> Privacy concerns</li>
+              <li><strong>Permanent actions:</strong> Hard to undo</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>18.3 SOAR Playbook Examples</h3>
+
+        <div class="assessment-section">
+          <h4>Example: Phishing Email Auto-Triage</h4>
+          <p><strong>Trigger:</strong> Phishing alert from Microsoft Defender for Office 365</p>
+          
+          <div class="phase-timeline">
+            <div class="phase-card">
+              <h4>Step 1: Enrich</h4>
+              <ul>
+                <li>Extract sender domain, URLs, attachments</li>
+                <li>Check domain reputation (VirusTotal)</li>
+                <li>Check URL against threat intel</li>
+                <li>Check if sender is known contact</li>
+              </ul>
+            </div>
+            <div class="phase-card">
+              <h4>Step 2: Classify</h4>
+              <ul>
+                <li>All indicators clean → Low confidence</li>
+                <li>1+ bad indicators → High confidence</li>
+                <li>Apply risk score</li>
+              </ul>
+            </div>
+            <div class="phase-card">
+              <h4>Step 3: Act</h4>
+              <ul>
+                <li>High confidence: Delete from all mailboxes</li>
+                <li>Low confidence: Quarantine, create ticket</li>
+                <li>Medium: Flag for analyst review</li>
+              </ul>
+            </div>
+            <div class="phase-card">
+              <h4>Step 4: Document</h4>
+              <ul>
+                <li>Create ticket with enrichment</li>
+                <li>Log actions taken</li>
+                <li>Notify user (if appropriate)</li>
+                <li>Update metrics</li>
+              </ul>
+            </div>
+          </div>
+
+          <h4>Example Logic Apps Pseudo-Code</h4>
+          <div class="code-block">
+            <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem;">
+<span style="color: #22c55e;">// Trigger: When Sentinel alert fires for Phishing</span>
+trigger: SentinelAlert
+  where AlertName contains "Phishing"
+
+<span style="color: #22c55e;">// Step 1: Parse alert entities</span>
+entities = ParseAlertEntities(alert)
+sender_domain = entities.sender.domain
+urls = entities.urls
+attachments = entities.attachments
+
+<span style="color: #22c55e;">// Step 2: Enrich with threat intel</span>
+domain_reputation = VirusTotal.CheckDomain(sender_domain)
+url_reputation = VirusTotal.CheckURLs(urls)
+file_hashes = GetFileHashes(attachments)
+hash_reputation = VirusTotal.CheckHashes(file_hashes)
+
+<span style="color: #22c55e;">// Step 3: Calculate risk score</span>
+risk_score = 0
+if domain_reputation.malicious: risk_score += 40
+if url_reputation.any_malicious: risk_score += 30
+if hash_reputation.any_malicious: risk_score += 30
+if sender_domain.age_days < 30: risk_score += 20
+
+<span style="color: #22c55e;">// Step 4: Take action based on risk</span>
+if risk_score >= 70:
+    MDO.DeleteFromAllMailboxes(message_id)
+    Sentinel.CloseAlert(alert, "True Positive - Auto Remediated")
+    ServiceNow.CreateTicket(severity="High", auto_resolved=true)
+elif risk_score >= 40:
+    MDO.QuarantineMessage(message_id)
+    ServiceNow.CreateTicket(severity="Medium", needs_review=true)
+else:
+    ServiceNow.CreateTicket(severity="Low", needs_review=true)
+
+<span style="color: #22c55e;">// Step 5: Always document</span>
+Sentinel.AddComment(alert, enrichment_results)
+Metrics.LogAutomation(playbook="Phishing", risk_score, action_taken)
+            </pre>
+          </div>
+        </div>
+
+        <h3>18.4 Automation ROI Calculator</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Before Automation</th>
+              <th>After Automation</th>
+              <th>Savings</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Phishing alerts per day</td>
+              <td>50</td>
+              <td>50</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>Time per alert (manual)</td>
+              <td>15 minutes</td>
+              <td>2 minutes (review only)</td>
+              <td>13 min/alert</td>
+            </tr>
+            <tr>
+              <td>Auto-resolved (no review)</td>
+              <td>0%</td>
+              <td>70%</td>
+              <td>35 alerts/day</td>
+            </tr>
+            <tr>
+              <td>Daily analyst time</td>
+              <td>12.5 hours</td>
+              <td>2.5 hours</td>
+              <td>10 hours/day</td>
+            </tr>
+            <tr>
+              <td><strong>Annual time savings</strong></td>
+              <td>-</td>
+              <td>-</td>
+              <td><strong>2,600 hours</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Annual cost savings</strong></td>
+              <td>-</td>
+              <td>-</td>
+              <td><strong>~$130,000</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><em>Assumptions: $50/hour fully loaded analyst cost, 260 working days/year</em></p>
+      </section>
+
+      <!-- ==================== SECTION 19: PRACTICAL CHECKLISTS ==================== -->
+      <section id="checklists">
+        <h2>19. Practical Checklists</h2>
+
+        <p>Use these checklists to track your progress through each maturity level.</p>
+
+        <h3>19.1 Level 2 Readiness Checklist</h3>
+        
+        <div class="checklist-box">
+          <h4 style="color: var(--accent-primary); margin-bottom: 1rem;">✅ Prerequisites to Start Level 2 Journey</h4>
+          
+          <div class="checklist-item">☐ Executive sponsorship secured for security improvement</div>
+          <div class="checklist-item">☐ Budget allocated for tools and training</div>
+          <div class="checklist-item">☐ At least 2-3 dedicated security personnel</div>
+          <div class="checklist-item">☐ Basic IT infrastructure in place (AD, endpoint management)</div>
+          <div class="checklist-item">☐ Current state documented (even if informal)</div>
+        </div>
+
+        <div class="checklist-box">
+          <h4 style="color: var(--accent-primary); margin-bottom: 1rem;">✅ Level 2 Achievement Criteria</h4>
+          
+          <p><strong>People</strong></p>
+          <div class="checklist-item">☐ 3-6 dedicated security analysts</div>
+          <div class="checklist-item">☐ Basic L1/L2 role separation defined</div>
+          <div class="checklist-item">☐ At least one analyst with SIEM training/certification</div>
+          <div class="checklist-item">☐ Extended coverage (at least 12x5)</div>
+          <div class="checklist-item">☐ Onboarding documentation exists</div>
+          
+          <p style="margin-top: 1rem;"><strong>Process</strong></p>
+          <div class="checklist-item">☐ Playbooks exist for top 10-20 alert types</div>
+          <div class="checklist-item">☐ Basic escalation procedure documented</div>
+          <div class="checklist-item">☐ Incident tickets created for all security events</div>
+          <div class="checklist-item">☐ Post-incident reviews conducted for major incidents</div>
+          <div class="checklist-item">☐ Knowledge base started (wiki, SharePoint, etc.)</div>
+          
+          <p style="margin-top: 1rem;"><strong>Technology</strong></p>
+          <div class="checklist-item">☐ SIEM deployed with some custom rules</div>
+          <div class="checklist-item">☐ Alert volume reduced to &lt;2,000/day</div>
+          <div class="checklist-item">☐ EDR deployed on 80%+ endpoints</div>
+          <div class="checklist-item">☐ Basic threat intel feeds enabled</div>
+          <div class="checklist-item">☐ Log retention meets compliance requirements</div>
+          
+          <p style="margin-top: 1rem;"><strong>Governance</strong></p>
+          <div class="checklist-item">☐ Basic security policies documented</div>
+          <div class="checklist-item">☐ Alert volume and ticket count tracked</div>
+          <div class="checklist-item">☐ MTTD/MTTR being measured (even if rough)</div>
+          <div class="checklist-item">☐ Periodic updates to management</div>
+        </div>
+
+        <h3>19.2 Level 3 Readiness Checklist</h3>
+        
+        <div class="checklist-box">
+          <h4 style="color: var(--accent-primary); margin-bottom: 1rem;">✅ Level 3 Achievement Criteria</h4>
+          
+          <p><strong>People</strong></p>
+          <div class="checklist-item">☐ 6-12 analysts with clear L1/L2/L3 structure</div>
+          <div class="checklist-item">☐ Formal training program with budget</div>
+          <div class="checklist-item">☐ 24x5 or 24x7 coverage</div>
+          <div class="checklist-item">☐ Career paths documented</div>
+          <div class="checklist-item">☐ Turnover under 25%</div>
+          <div class="checklist-item">☐ Cross-training program in place</div>
+          
+          <p style="margin-top: 1rem;"><strong>Process</strong></p>
+          <div class="checklist-item">☐ Playbooks cover 80%+ of alert types</div>
+          <div class="checklist-item">☐ Playbook compliance &gt;90%</div>
+          <div class="checklist-item">☐ Formal escalation matrix with SLAs</div>
+          <div class="checklist-item">☐ Regular post-incident reviews with action tracking</div>
+          <div class="checklist-item">☐ Change management for detection rules</div>
+          <div class="checklist-item">☐ Scheduled process reviews (quarterly)</div>
+          
+          <p style="margin-top: 1rem;"><strong>Technology</strong></p>
+          <div class="checklist-item">☐ Alert volume &lt;500/day with &lt;40% FP rate</div>
+          <div class="checklist-item">☐ Full XDR integration (endpoint + identity + email)</div>
+          <div class="checklist-item">☐ SOAR handling at least 5 automated workflows</div>
+          <div class="checklist-item">☐ Detection coverage mapped to MITRE ATT&CK</div>
+          <div class="checklist-item">☐ Regular threat hunting (weekly/monthly)</div>
+          <div class="checklist-item">☐ Threat intel integrated and actionable</div>
+          
+          <p style="margin-top: 1rem;"><strong>Governance</strong></p>
+          <div class="checklist-item">☐ MTTD &lt;24 hours for high severity</div>
+          <div class="checklist-item">☐ MTTR &lt;4 hours for critical</div>
+          <div class="checklist-item">☐ SLA compliance &gt;85%</div>
+          <div class="checklist-item">☐ Regular executive reporting (monthly)</div>
+          <div class="checklist-item">☐ Multi-year security roadmap</div>
+          <div class="checklist-item">☐ Compliance requirements mapped to controls</div>
+        </div>
+
+        <h3>19.3 Quick Assessment Scorecard</h3>
+
+        <p>Rate your organization on each dimension (1-5) to get a quick maturity snapshot:</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Question</th>
+              <th>Score (1-5)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="4"><strong>People</strong></td>
+              <td>Are analyst roles clearly defined (L1/L2/L3)?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td>Is there a formal training program?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td>Is turnover manageable (&lt;25%)?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td>Is coverage adequate for your risk profile?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td rowspan="4"><strong>Process</strong></td>
+              <td>Do playbooks exist for most alert types?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td>Are playbooks consistently followed?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td>Is there a formal incident response process?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td>Are lessons learned incorporated?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td rowspan="4"><strong>Technology</strong></td>
+              <td>Is alert volume manageable?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td>Is false positive rate acceptable (&lt;50%)?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td>Is there automation for routine tasks?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td>Is detection coverage mapped and measured?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td rowspan="4"><strong>Governance</strong></td>
+              <td>Are MTTD/MTTR tracked?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td>Are there defined and tracked SLAs?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td>Is there regular executive reporting?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr>
+              <td>Is there a security roadmap?</td>
+              <td style="text-align: center;">____</td>
+            </tr>
+            <tr style="background: rgba(139, 92, 246, 0.1);">
+              <td colspan="2"><strong>TOTAL (out of 80)</strong></td>
+              <td style="text-align: center;"><strong>____</strong></td>
+            </tr>
+            <tr style="background: rgba(139, 92, 246, 0.1);">
+              <td colspan="2"><strong>LOWEST DIMENSION SCORE (effective level)</strong></td>
+              <td style="text-align: center;"><strong>____</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="key-insight">
+          <h4>💡 Interpreting Your Score</h4>
+          <ul>
+            <li><strong>Total 16-32:</strong> Level 1-2 maturity, focus on fundamentals</li>
+            <li><strong>Total 33-48:</strong> Level 2-3 maturity, standardizing operations</li>
+            <li><strong>Total 49-64:</strong> Level 3-4 maturity, measuring and optimizing</li>
+            <li><strong>Total 65-80:</strong> Level 4-5 maturity, industry-leading</li>
+          </ul>
+          <p style="margin-top: 0.5rem;"><strong>Remember:</strong> Your effective level is your LOWEST dimension score, not your total or average.</p>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 20: TOOL RECOMMENDATIONS ==================== -->
+      <section id="tools">
+        <h2>20. Technology Stack Recommendations</h2>
+
+        <p>This section provides guidance on technology selection based on maturity level and budget.</p>
+
+        <h3>20.1 SIEM Selection by Maturity</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Budget Tier</th>
+              <th>Recommended Options</th>
+              <th>Key Considerations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="2"><strong>Level 1-2</strong></td>
+              <td>Low</td>
+              <td>Wazuh, Security Onion, Elastic SIEM</td>
+              <td>Open source, requires expertise to manage</td>
+            </tr>
+            <tr>
+              <td>Medium</td>
+              <td>Microsoft Sentinel (pay-as-you-go), Splunk Cloud (limited)</td>
+              <td>Lower barrier, pay for what you use</td>
+            </tr>
+            <tr>
+              <td rowspan="2"><strong>Level 3</strong></td>
+              <td>Medium</td>
+              <td>Microsoft Sentinel + M365 Defender, Splunk Enterprise</td>
+              <td>Full features, commitment pricing</td>
+            </tr>
+            <tr>
+              <td>High</td>
+              <td>Splunk Enterprise Security, CrowdStrike Falcon LogScale</td>
+              <td>Advanced analytics, premium support</td>
+            </tr>
+            <tr>
+              <td><strong>Level 4-5</strong></td>
+              <td>High</td>
+              <td>Splunk ES + UEBA, Sentinel + UEBA, Exabeam, Securonix</td>
+              <td>ML/behavioral analytics, advanced correlation</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>20.2 Microsoft Security Stack (If You're in Microsoft Ecosystem)</h3>
+
+        <div class="assessment-section">
+          <h4>The XDR-First Architecture</h4>
+          
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>What It Does</th>
+                <th>License Requirement</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Microsoft Defender for Endpoint</strong></td>
+                <td>Endpoint protection, EDR, ASR</td>
+                <td>M365 E5 or standalone</td>
+              </tr>
+              <tr>
+                <td><strong>Microsoft Defender for Identity</strong></td>
+                <td>Identity threat detection (AD/Entra)</td>
+                <td>M365 E5 or standalone</td>
+              </tr>
+              <tr>
+                <td><strong>Microsoft Defender for Office 365</strong></td>
+                <td>Email security, phishing protection</td>
+                <td>M365 E5 or standalone</td>
+              </tr>
+              <tr>
+                <td><strong>Microsoft Defender for Cloud Apps</strong></td>
+                <td>CASB, SaaS security</td>
+                <td>M365 E5 or standalone</td>
+              </tr>
+              <tr>
+                <td><strong>Microsoft 365 Defender</strong></td>
+                <td>XDR correlation, unified investigation</td>
+                <td>Included with above components</td>
+              </tr>
+              <tr>
+                <td><strong>Microsoft Sentinel</strong></td>
+                <td>SIEM, cross-domain correlation</td>
+                <td>Pay-as-you-go or commitment</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="key-insight">
+            <h4>💡 The XDR-First Principle</h4>
+            <p><strong>Let XDR handle what it does best.</strong> Don't duplicate endpoint detections in SIEM. Use Sentinel for:</p>
+            <ul style="margin-top: 0.5rem;">
+              <li>Cross-domain correlation (endpoint + network + identity + business apps)</li>
+              <li>Data sources XDR can't see (firewalls, custom apps, non-Microsoft)</li>
+              <li>Business logic detections (HR data, change windows, governance)</li>
+              <li>Long-term retention and compliance</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>20.3 SOAR Options</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Best For</th>
+              <th>Pros</th>
+              <th>Cons</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Azure Logic Apps</strong></td>
+              <td>Sentinel users, Azure-native</td>
+              <td>Integrated, pay-per-use, no separate license</td>
+              <td>Limited advanced features</td>
+            </tr>
+            <tr>
+              <td><strong>Power Automate</strong></td>
+              <td>M365 shops, simple workflows</td>
+              <td>Included in M365, easy to use</td>
+              <td>Not security-focused</td>
+            </tr>
+            <tr>
+              <td><strong>Palo Alto XSOAR</strong></td>
+              <td>Multi-vendor environments</td>
+              <td>Extensive integrations, marketplace</td>
+              <td>Expensive, complex</td>
+            </tr>
+            <tr>
+              <td><strong>Splunk SOAR</strong></td>
+              <td>Splunk users</td>
+              <td>Deep Splunk integration</td>
+              <td>Requires Splunk expertise</td>
+            </tr>
+            <tr>
+              <td><strong>Tines / Shuffle</strong></td>
+              <td>Modern teams, API-first</td>
+              <td>Flexible, developer-friendly</td>
+              <td>Newer, smaller community</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ==================== UPDATED FOOTER ==================== -->
       <div class="callout success" style="margin-top: 3rem;">
         <div class="callout-title">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>

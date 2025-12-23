@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Director Interview Prep | Final Round - Security Consulting</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .interview-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.02));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .question-block {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+      border-left: 4px solid var(--accent-primary);
+    }
+    
+    .question-block h4 {
+      color: var(--accent-primary);
+      margin: 0 0 0.75rem 0;
+      font-size: 1rem;
+    }
+    
+    .answer-text {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 0.75rem 0;
+      font-style: italic;
+      line-height: 1.6;
+    }
+    
+    .answer-text::before {
+      content: "💬 ";
+    }
+    
+    .key-points {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+    }
+    
+    .key-points strong {
+      color: var(--accent-primary);
+    }
+    
+    .category-header {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05));
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      margin: 2rem 0 1rem 0;
+      border-left: 4px solid var(--accent-primary);
+    }
+    
+    .category-header h3 {
+      margin: 0;
+      color: var(--accent-primary);
+    }
+    
+    .category-header p {
+      margin: 0.5rem 0 0 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    
+    .tip-box {
+      background: rgba(234, 179, 8, 0.1);
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .tip-box h4 {
+      color: #eab308;
+      margin: 0 0 0.5rem 0;
+    }
+    
+    .warning-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .warning-box h4 {
+      color: #ef4444;
+      margin: 0 0 0.5rem 0;
+    }
+    
+    .director-mindset {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(6, 182, 212, 0.02));
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .director-mindset h3 {
+      color: #06b6d4;
+      margin-top: 0;
+    }
+    
+    .two-column {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+    
+    .column-card {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1.25rem;
+    }
+    
+    .column-card h4 {
+      color: var(--accent-primary);
+      margin-top: 0;
+    }
+    
+    .quick-ref {
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .stat-highlight {
+      color: #22c55e;
+      font-weight: 600;
+    }
+    
+    .time-indicator {
+      display: inline-block;
+      background: rgba(139, 92, 246, 0.2);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-left: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="main-nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">Security Transformation</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="siem/index.html">SIEM</a>
+        <a href="edr/index.html">EDR</a>
+        <a href="interview-technical-reference.html">Interview Prep</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="content-wrapper">
+    <div class="content-container">
+
+      <header class="page-header">
+        <h1>🎯 Director Interview Prep</h1>
+        <p class="subtitle">Final Round: Director of Security Consulting | Accenture</p>
+      </header>
+
+      <!-- ==================== DIRECTOR MINDSET ==================== -->
+      <div class="director-mindset">
+        <h3>🧠 What the Director is Evaluating</h3>
+        <p>This is NOT just a technical interview. The Director is assessing:</p>
+        
+        <div class="two-column">
+          <div class="column-card">
+            <h4>Client-Facing Potential</h4>
+            <ul>
+              <li>Can I put you in front of a client?</li>
+              <li>Will you represent Accenture well?</li>
+              <li>Can you translate technical to business?</li>
+              <li>How do you handle difficult conversations?</li>
+            </ul>
+          </div>
+          <div class="column-card">
+            <h4>Team Fit</h4>
+            <ul>
+              <li>Will you collaborate or compete?</li>
+              <li>How do you handle ambiguity?</li>
+              <li>Are you coachable?</li>
+              <li>Do you have growth mindset?</li>
+            </ul>
+          </div>
+          <div class="column-card">
+            <h4>Strategic Thinking</h4>
+            <ul>
+              <li>Do you see the big picture?</li>
+              <li>Can you prioritize what matters?</li>
+              <li>Do you think like a consultant?</li>
+              <li>Business outcomes, not just technical?</li>
+            </ul>
+          </div>
+          <div class="column-card">
+            <h4>Consulting Aptitude</h4>
+            <ul>
+              <li>Can you handle multiple clients?</li>
+              <li>Are you comfortable with travel/change?</li>
+              <li>Do you understand billable work?</li>
+              <li>Will you own outcomes, not just tasks?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== QUICK STATS ==================== -->
+      <div class="quick-ref">
+        <h4>📊 Your Numbers to Drop Naturally</h4>
+        <p>
+          <span class="stat-highlight">5 years</span> experience • 
+          <span class="stat-highlight">1,200+</span> legacy rules evaluated • 
+          <span class="stat-highlight">9,000</span> endpoints • 
+          <span class="stat-highlight">$38K/month</span> cost savings • 
+          <span class="stat-highlight">780</span> rules retired to XDR • 
+          <span class="stat-highlight">485</span> Sentinel rules • 
+          <span class="stat-highlight">90+ days</span> parallel operation
+        </p>
+      </div>
+
+      <!-- ==================== SECTION 1: TELL ME ABOUT YOURSELF ==================== -->
+      <div class="category-header">
+        <h3>1️⃣ Tell Me About Yourself</h3>
+        <p>The Director version — more strategic, consulting-focused</p>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: Tell me about yourself / Walk me through your background <span class="time-indicator">90-120 sec</span></h4>
+        
+        <div class="answer-text">
+          I have about 5 years in cybersecurity, with a focus on SIEM engineering and endpoint security—but what I enjoy most is the intersection of technical work and business outcomes.
+          <br><br>
+          I started as a SOC analyst at Cognizant, working with Splunk on alert triage and incident investigations. That gave me a strong foundation in understanding how security operations actually function day-to-day—what works, what creates friction.
+          <br><br>
+          I then moved into security engineering at Infosys, working with enterprise platforms like FireEye and Symantec DLP. I was involved in a major EDR evaluation project where I helped compare Trellix against Cortex XDR and presented recommendations to stakeholders. That experience taught me how to frame technical decisions in business terms.
+          <br><br>
+          After relocating to Canada, I joined a Siemens subsidiary leading a security modernization initiative. I was involved in migrating from RSA NetWitness to Microsoft Sentinel—we evaluated over 1,200 legacy detection rules and took a detection-driven approach rather than just porting everything. In parallel, I led the endpoint track—MDE deployment across 9,000 endpoints. The result was better detection coverage at $38K/month less cost.
+          <br><br>
+          What excites me about this role is applying what I've done internally in a consulting capacity—assessing client environments, identifying gaps, building roadmaps, and delivering measurable outcomes. That's essentially what I've been doing, and I'm ready to do it across diverse clients.
+        </div>
+
+        <div class="key-points">
+          <strong>Key elements:</strong> Foundation → Growth → Impact → Why Consulting
+          <br><strong>Numbers to hit:</strong> 5 years, 1,200 rules, 9,000 endpoints, $38K savings
+          <br><strong>Consulting hook:</strong> "Technical work AND business outcomes" + "Ready to apply across diverse clients"
+        </div>
+      </div>
+
+      <!-- ==================== SECTION 2: WHY CONSULTING ==================== -->
+      <div class="category-header">
+        <h3>2️⃣ Why Consulting? Why Accenture?</h3>
+        <p>They want to know you understand consulting life and are choosing it deliberately</p>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: Why consulting? Why not stay in-house? <span class="time-indicator">60 sec</span></h4>
+        
+        <div class="answer-text">
+          I've realized that what I enjoy most isn't just the technical work—it's the problem-solving at the start of projects. Assessing the current state, identifying gaps, designing the approach, building the roadmap. At Siemens, once we got things running smoothly, I found myself looking for the next problem to solve.
+          <br><br>
+          Consulting gives me that variety—new clients, new challenges, new environments. Instead of solving the same organization's problems repeatedly, I get to apply what I've learned across different industries and contexts. And honestly, I think I'll learn faster by seeing 10 different security programs than by staying in one.
+        </div>
+
+        <div class="key-points">
+          <strong>Key message:</strong> You're choosing consulting for the right reasons—variety, learning, impact
+          <br><strong>Avoid:</strong> "I want to travel" or "Higher pay" — focus on professional growth
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: Why Accenture specifically? <span class="time-indicator">45 sec</span></h4>
+        
+        <div class="answer-text">
+          Three reasons. First, scale—Accenture works with the largest, most complex organizations. That's the environment where I can have the most impact and learn the fastest.
+          <br><br>
+          Second, the security consulting practice here isn't just about assessments—it's about implementation and transformation. I want to be involved end-to-end, not just write reports that sit on shelves.
+          <br><br>
+          Third, from my research and conversations, there's a strong culture of developing people. I'm looking for a place where I can grow into a senior consultant and eventually lead engagements myself.
+        </div>
+
+        <div class="key-points">
+          <strong>Key message:</strong> You've done research, you know what Accenture offers, it aligns with your goals
+          <br><strong>Do your homework:</strong> Look up recent Accenture Security acquisitions, offerings, leadership
+        </div>
+      </div>
+
+      <!-- ==================== SECTION 3: CONSULTING FIT ==================== -->
+      <div class="category-header">
+        <h3>3️⃣ Consulting Skills & Client Scenarios</h3>
+        <p>These questions test if you can handle real consulting situations</p>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: Tell me about a time you had to explain something technical to a non-technical audience <span class="time-indicator">60-90 sec</span></h4>
+        
+        <div class="answer-text">
+          During the Sentinel migration, I had to present our detection strategy to the CISO and IT leadership—people who understand security at a strategic level but don't want to hear about KQL queries.
+          <br><br>
+          Instead of explaining the technical approach, I framed it around business outcomes. I showed them: "We have 1,200 rules today. 60% overlap with what XDR already handles natively. If we port everything, we'll spend $50K/month on Sentinel. If we take a detection-driven approach—retire what XDR handles, build Sentinel rules for gaps—we get better coverage at $12K/month."
+          <br><br>
+          I used a simple visual: a pie chart showing what XDR covers vs. what needs Sentinel. They didn't need to understand the technology—they needed to understand the decision.
+          <br><br>
+          The result was immediate approval. They appreciated that I gave them options with clear trade-offs, not just a technical recommendation they had to trust blindly.
+        </div>
+
+        <div class="key-points">
+          <strong>Structure:</strong> Situation → How you translated → Visual/Framework used → Result
+          <br><strong>Key phrase:</strong> "Options with clear trade-offs"
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: How would you handle a client who disagrees with your recommendation? <span class="time-indicator">60 sec</span></h4>
+        
+        <div class="answer-text">
+          First, I'd listen to understand their concern—is it technical, budget, political, or something else? Often pushback isn't about the recommendation itself, it's about something we haven't surfaced.
+          <br><br>
+          If it's a genuine technical disagreement, I'd present data. "Here's why I recommended this approach—here's the evidence, here's the risk if we go another direction." But I'd also acknowledge their expertise in their own environment—they know things I don't.
+          <br><br>
+          If it's a budget or political constraint, I'd work with them to find an alternative that achieves the same outcome within their constraints. Maybe it's a phased approach, or a different technology.
+          <br><br>
+          What I wouldn't do is dig in just to be right. My job is to help them succeed, not to win arguments. If they have good reasons to go a different direction, I document the trade-offs and support their decision.
+        </div>
+
+        <div class="key-points">
+          <strong>Key message:</strong> You're collaborative, not combative. Outcomes over ego.
+          <br><strong>Structure:</strong> Listen → Understand root cause → Present options → Support their decision
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: A client asks you to do something you think is wrong. What do you do? <span class="time-indicator">60 sec</span></h4>
+        
+        <div class="answer-text">
+          It depends on what kind of "wrong" we're talking about.
+          <br><br>
+          If it's technically suboptimal—like they want to ingest all logs to SIEM even though XDR handles most of it—I'd push back with data and recommendations, but ultimately it's their decision. I'd document the trade-offs and move forward.
+          <br><br>
+          If it's ethically wrong or creates unacceptable risk—like skipping security controls to meet a deadline—that's different. I'd escalate within Accenture, document my concerns, and work with my leadership to have the right conversation with the client.
+          <br><br>
+          The key is distinguishing between "I disagree" and "this is actually harmful." For the first, I advise and support. For the second, I escalate.
+        </div>
+
+        <div class="key-points">
+          <strong>Key message:</strong> You have judgment. You know when to push and when to escalate.
+          <br><strong>Show:</strong> You understand Accenture's reputation matters
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: How do you handle working with multiple clients at once? <span class="time-indicator">45 sec</span></h4>
+        
+        <div class="answer-text">
+          I've had experience juggling parallel workstreams—at Siemens, I was simultaneously managing MDE deployment, contributing to the Sentinel migration, and supporting the DLP project. Different stakeholders, different priorities.
+          <br><br>
+          My approach is: clear priorities, proactive communication, and no surprises. I keep a running list of commitments with deadlines, and I communicate early if something is at risk. Stakeholders can handle delays if you tell them in advance—they can't handle surprises.
+          <br><br>
+          I also try to find leverage—things I learn on one project that apply to another. Documentation I create for one client might be a template for the next.
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: What would you do if you're on an engagement and realize you don't know how to solve the problem? <span class="time-indicator">45 sec</span></h4>
+        
+        <div class="answer-text">
+          First, I'd be honest with myself about what I don't know. Then I'd leverage resources—Accenture has deep expertise across the organization. I'd reach out to colleagues who've solved similar problems, check internal knowledge bases, and pull in the right people.
+          <br><br>
+          With the client, I'd be transparent without undermining confidence. Something like: "This is a complex scenario. I want to bring in a colleague who has specific experience with this to make sure we get it right." Clients appreciate thoroughness over false confidence.
+          <br><br>
+          What I wouldn't do is fake it or struggle alone. That's how you deliver bad work and damage the relationship.
+        </div>
+
+        <div class="key-points">
+          <strong>Key message:</strong> You're humble, resourceful, and client-focused
+          <br><strong>Show:</strong> You know when to ask for help
+        </div>
+      </div>
+
+      <!-- ==================== SECTION 4: BEHAVIORAL / STAR ==================== -->
+      <div class="category-header">
+        <h3>4️⃣ Behavioral Questions (STAR Format)</h3>
+        <p>Directors love these—they reveal character and judgment</p>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: Tell me about a time you had to influence without authority <span class="time-indicator">90 sec</span></h4>
+        
+        <div class="answer-text">
+          <strong>Situation:</strong> During the MDE deployment, IT Ops had created a golden image with the MDE agent pre-installed. When they deployed it, 50+ devices ended up with duplicate device IDs—they couldn't be uniquely identified in the console.
+          <br><br>
+          <strong>Task:</strong> IT Ops wanted to re-image all affected machines. That would take weeks and disrupt users. I needed to convince them there was a better way—but I had no authority over their team.
+          <br><br>
+          <strong>Action:</strong> Instead of arguing, I offered to prove it. I took 5 pilot machines, ran the offboarding script, let them sit for the required period, then re-onboarded. Each got a clean, unique device ID.
+          <br><br>
+          I documented the process, showed them the results, and offered to create the remediation script for the rest. I also helped them update the golden image SOP so it wouldn't happen again.
+          <br><br>
+          <strong>Result:</strong> They agreed to my approach. We fixed all 50 devices without re-imaging. More importantly, IT Ops started coming to me for advice on other MDE issues because I'd proven I was there to help, not criticize.
+        </div>
+
+        <div class="key-points">
+          <strong>Key elements:</strong> Proved with evidence, didn't argue, made their life easier, built relationship
+          <br><strong>Consulting angle:</strong> This is exactly how you influence clients
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: Tell me about your biggest failure <span class="time-indicator">60-90 sec</span></h4>
+        
+        <div class="answer-text">
+          <strong>Situation:</strong> I enabled an ASR rule that blocks unsigned PowerShell scripts. I tested it in audit mode for one week—no alerts, looked clean.
+          <br><br>
+          <strong>What went wrong:</strong> A week after enforcement, Finance reported their weekly reporting script failed. It only runs on Fridays—I had enabled the rule on a Monday, so my one-week audit completely missed it.
+          <br><br>
+          <strong>Impact:</strong> Finance couldn't run their weekly reports. I had to create an emergency exclusion while we fixed it properly.
+          <br><br>
+          <strong>What I learned:</strong> Audit windows need to cover full business cycles, not arbitrary time periods. Now I run audit mode for 2-3 weeks minimum, and I specifically ask stakeholders about scheduled tasks and end-of-month processes.
+          <br><br>
+          <strong>Process improvement:</strong> I created a pre-enforcement checklist that includes confirming with business units about periodic scripts. That checklist is now part of our standard process.
+        </div>
+
+        <div class="key-points">
+          <strong>Structure:</strong> What happened → Why it happened → What you learned → Process improvement
+          <br><strong>Key:</strong> Show you own failures and create systems to prevent recurrence
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: Tell me about a time you had to deliver bad news <span class="time-indicator">60 sec</span></h4>
+        
+        <div class="answer-text">
+          <strong>Situation:</strong> During the detection migration assessment, I found that many of our legacy SIEM rules weren't actually providing value—they were generating alerts nobody acted on. But leadership had invested years building them.
+          <br><br>
+          <strong>Approach:</strong> I didn't frame it as "your rules are bad." I framed it as "here's an opportunity to improve coverage and reduce cost." I showed the data: "60% of these rules overlap with XDR capabilities. Retiring them doesn't reduce security—it reduces noise and cost."
+          <br><br>
+          I gave options: Option A (port everything) costs X and maintains current issues. Option B (detection-driven) costs Y and improves coverage. Here are the trade-offs.
+          <br><br>
+          <strong>Result:</strong> Leadership appreciated the honest assessment and the fact that I presented solutions, not just problems. We went with Option B—$38K/month savings, better detection coverage.
+        </div>
+
+        <div class="key-points">
+          <strong>Key:</strong> Reframe bad news as opportunity, bring data, present options
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: Tell me about a time you went above and beyond <span class="time-indicator">60 sec</span></h4>
+        
+        <div class="answer-text">
+          <strong>Situation:</strong> During the MDE deployment, I noticed the SOC team wasn't trained on KQL. My scope was endpoint engineering—training wasn't my responsibility.
+          <br><br>
+          <strong>Action:</strong> But I realized if they couldn't query the data, the whole investment was wasted. So I proactively created KQL training materials, documented common investigation queries, and ran informal training sessions during quiet periods.
+          <br><br>
+          I also created runbooks for common MDE alert types so analysts could respond consistently. These weren't in my scope, but they were necessary for success.
+          <br><br>
+          <strong>Result:</strong> The SOC transitioned smoothly to using MDE data. Those runbooks are still in use today. And I built relationships across teams that made future projects easier.
+        </div>
+
+        <div class="key-points">
+          <strong>Key message:</strong> You care about outcomes, not just your scope
+          <br><strong>Consulting angle:</strong> This is the mindset that makes consultants successful
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: Describe a time you had to learn something quickly <span class="time-indicator">60 sec</span></h4>
+        
+        <div class="answer-text">
+          <strong>Situation:</strong> When I started at Siemens, I had limited Sentinel experience—my background was more on the endpoint side. But I was contributing to a SIEM migration starting in weeks.
+          <br><br>
+          <strong>Action:</strong> I immersed myself. Microsoft Learn paths, community resources, hands-on in a lab environment. I focused on what mattered most for the project: KQL query syntax, data connector configuration, and detection rule development.
+          <br><br>
+          I also learned by doing—I picked up tasks that stretched me, asked questions when stuck, and documented what I learned so I wouldn't forget.
+          <br><br>
+          <strong>Result:</strong> Within a month, I was writing KQL detections and contributing to the migration. Within three months, I was leading the endpoint detection workstream.
+        </div>
+      </div>
+
+      <!-- ==================== SECTION 5: TECHNICAL (DIRECTOR LEVEL) ==================== -->
+      <div class="category-header">
+        <h3>5️⃣ Technical Questions (Director Level)</h3>
+        <p>Directors ask strategic technical questions, not deep syntax</p>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: How would you approach a SOC maturity assessment for a new client? <span class="time-indicator">90 sec</span></h4>
+        
+        <div class="answer-text">
+          I'd structure it around four pillars: People, Process, Technology, and Governance.
+          <br><br>
+          <strong>People:</strong> Team structure, skills gaps, coverage model, turnover. Are they understaffed? Do they have the right expertise?
+          <br><br>
+          <strong>Process:</strong> Playbooks, incident response procedures, escalation paths. Are they documented? Are they followed? Do they improve over time?
+          <br><br>
+          <strong>Technology:</strong> SIEM, EDR, SOAR capabilities. What's deployed vs. what's actually used? Detection coverage against their threat model.
+          <br><br>
+          <strong>Governance:</strong> Metrics, SLAs, executive reporting. Do they know their MTTD and MTTR? Is security integrated into business decisions?
+          <br><br>
+          I'd score each pillar 1-5, identify gaps, and prioritize recommendations. The key insight is that your effective maturity is your lowest pillar—you can have great tools but if process is weak, you're still Level 2.
+          <br><br>
+          The deliverable would include current state, target state, gap analysis, and a prioritized roadmap with quick wins and long-term initiatives.
+        </div>
+
+        <div class="key-points">
+          <strong>Shows:</strong> Structured thinking, consulting methodology, practical application
+          <br><strong>Reference:</strong> Your SOC Maturity page has full details
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: What's your view on SIEM vs. XDR? <span class="time-indicator">60 sec</span></h4>
+        
+        <div class="answer-text">
+          It's not either/or—it's about playing to each platform's strengths.
+          <br><br>
+          XDR excels at what it can see: endpoints, identity, email, cloud apps. It has kernel-level visibility, behavioral ML, and vendor-maintained detection content. For endpoint threats, XDR will always be better than SIEM queries against logs.
+          <br><br>
+          SIEM adds value where XDR stops: cross-domain correlation, business context, third-party data sources, compliance logging. "Terminated employee accessing sensitive data" needs HR context that XDR doesn't have.
+          <br><br>
+          My approach is XDR-first: let XDR handle what it does best, use SIEM to fill gaps. This reduces SIEM cost, alert fatigue, and gives you better detection coverage than trying to do everything in SIEM.
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: How do you measure security program effectiveness? <span class="time-indicator">60 sec</span></h4>
+        
+        <div class="answer-text">
+          I focus on outcomes, not activity metrics.
+          <br><br>
+          <strong>Detection effectiveness:</strong> MTTD—are we finding threats faster over time? Detection coverage—what percentage of relevant ATT&CK techniques can we detect?
+          <br><br>
+          <strong>Response effectiveness:</strong> MTTR—are we containing and resolving faster? SLA compliance—are we meeting our commitments?
+          <br><br>
+          <strong>Operational health:</strong> False positive rate—are we wasting analyst time? Alert-to-incident ratio—are our detections producing actionable results?
+          <br><br>
+          <strong>Business metrics:</strong> Cost per incident, risk reduction, compliance posture.
+          <br><br>
+          The key is trending, not point-in-time. Are we improving? And are we measuring things that matter for the client's specific risk profile?
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: What security trends are you watching? <span class="time-indicator">45 sec</span></h4>
+        
+        <div class="answer-text">
+          A few things I'm paying attention to:
+          <br><br>
+          <strong>Identity as the new perimeter:</strong> With remote work and cloud, identity is where attacks start. MFA bypass techniques, session token theft—these are the attacks that matter now.
+          <br><br>
+          <strong>AI in security:</strong> Both offensive and defensive. Attackers using AI for phishing at scale, defenders using it for anomaly detection and automation. The winners will be those who adopt intelligently.
+          <br><br>
+          <strong>XDR consolidation:</strong> Organizations moving from best-of-breed to integrated platforms. Trade-offs between specialization and operational simplicity.
+          <br><br>
+          <strong>OT/IT convergence:</strong> Manufacturing and critical infrastructure increasingly connected. IT security teams now responsible for OT environments they don't fully understand.
+        </div>
+      </div>
+
+      <!-- ==================== SECTION 6: YOUR QUESTIONS ==================== -->
+      <div class="category-header">
+        <h3>6️⃣ Questions to Ask the Director</h3>
+        <p>Ask thoughtful questions that show you've done research and are thinking seriously about the role</p>
+      </div>
+
+      <div class="two-column">
+        <div class="column-card">
+          <h4>About the Team & Work</h4>
+          <ul>
+            <li>"What does a typical engagement look like for someone in this role?"</li>
+            <li>"What's the mix of assessment vs. implementation work?"</li>
+            <li>"How are consultants matched to engagements?"</li>
+            <li>"What industries or security domains is the team focused on growing?"</li>
+            <li>"What does success look like in the first 6-12 months?"</li>
+          </ul>
+        </div>
+        <div class="column-card">
+          <h4>About Growth & Culture</h4>
+          <ul>
+            <li>"How does the team develop junior consultants?"</li>
+            <li>"What's the path from Consultant to Senior Consultant to Manager?"</li>
+            <li>"How much autonomy do consultants have on engagements?"</li>
+            <li>"What do you enjoy most about leading this practice?"</li>
+            <li>"What's the biggest challenge the team is facing right now?"</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <h4>💡 Question Strategy</h4>
+        <p>Ask 2-3 questions maximum. Pick ones that show genuine interest in the work, not just "what's the salary progression." Listen actively to answers and follow up naturally.</p>
+      </div>
+
+      <!-- ==================== SECTION 7: CLOSING STRONG ==================== -->
+      <div class="category-header">
+        <h3>7️⃣ Closing Strong</h3>
+        <p>The last impression matters as much as the first</p>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: Is there anything else you'd like to share? / Any final thoughts?</h4>
+        
+        <div class="answer-text">
+          I just want to reiterate why I'm excited about this opportunity.
+          <br><br>
+          Over the past 5 years, I've realized that what I enjoy most isn't just the technical work—it's the impact. Taking a client from "we have 1,200 rules and don't know if they're working" to "we have detection coverage mapped to our threat model at half the cost." That transformation.
+          <br><br>
+          I've been doing that internally, and I'm ready to apply it across Accenture's clients. I understand consulting means travel, multiple clients, tight timelines—and I'm genuinely excited about that variety.
+          <br><br>
+          I'm confident I can add value to the team, and I'm also eager to learn from colleagues who've done this longer than I have. I see this as the right next step in my career.
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>Q: Why should we hire you?</h4>
+        
+        <div class="answer-text">
+          Three reasons.
+          <br><br>
+          First, I've done this work. Not in a lab—in a real enterprise with 9,000 endpoints, production systems, and business stakeholders. I've led SIEM migrations, deployed endpoint security at scale, and delivered measurable outcomes.
+          <br><br>
+          Second, I think like a consultant. I translate technical work to business value. I build roadmaps with options. I document so others can replicate. That's what clients need.
+          <br><br>
+          Third, I'm hungry to grow. I'm not looking for a comfortable job—I'm looking for the environment where I can learn the fastest and have the most impact. That's Accenture.
+        </div>
+      </div>
+
+      <!-- ==================== WARNING & TIPS ==================== -->
+      <div class="warning-box">
+        <h4>⚠️ Things to Avoid</h4>
+        <ul>
+          <li><strong>Don't badmouth previous employers:</strong> "They didn't appreciate me" → "I'm ready for new challenges"</li>
+          <li><strong>Don't oversell:</strong> "I led the migration" → "I contributed significantly to the migration"</li>
+          <li><strong>Don't be arrogant:</strong> Show confidence AND humility</li>
+          <li><strong>Don't forget the business:</strong> Every technical answer should connect to business value</li>
+          <li><strong>Don't ramble:</strong> Respect their time. Answer in 60-90 seconds unless asked to elaborate</li>
+          <li><strong>Don't forget to listen:</strong> Consulting is about understanding before solving</li>
+        </ul>
+      </div>
+
+      <div class="tip-box">
+        <h4>💡 Director-Level Tips</h4>
+        <ul>
+          <li><strong>Be yourself:</strong> Directors can spot rehearsed answers. Genuine > Polished</li>
+          <li><strong>Show judgment:</strong> Talk about trade-offs, not just solutions</li>
+          <li><strong>Demonstrate coachability:</strong> Talk about what you learned from failures</li>
+          <li><strong>Ask for the job:</strong> End with genuine enthusiasm for the role</li>
+          <li><strong>Follow up:</strong> Send a thank-you note within 24 hours that references something specific from the conversation</li>
+        </ul>
+      </div>
+
+      <!-- ==================== CHEAT SHEET ==================== -->
+      <div class="interview-card" style="margin-top: 2rem;">
+        <h3>📝 Quick Reference Cheat Sheet</h3>
+        
+        <div class="two-column">
+          <div class="column-card">
+            <h4>Your Story Arc</h4>
+            <ol>
+              <li>Cognizant: SOC foundation, Splunk, IR</li>
+              <li>Infosys: Engineering, EDR POC, stakeholder presentations</li>
+              <li>Siemens: Scale—SIEM migration, MDE 9K endpoints, $38K savings</li>
+              <li>Next: Apply internally-built skills externally in consulting</li>
+            </ol>
+          </div>
+          <div class="column-card">
+            <h4>Consulting Phrases to Use</h4>
+            <ul>
+              <li>"I presented options with trade-offs..."</li>
+              <li>"The business outcome was..."</li>
+              <li>"I documented the approach so it was repeatable..."</li>
+              <li>"I aligned with stakeholders on..."</li>
+              <li>"The client needed to understand..."</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="two-column" style="margin-top: 1rem;">
+          <div class="column-card">
+            <h4>Your Differentiators</h4>
+            <ul>
+              <li>✓ Real enterprise experience (not just certs)</li>
+              <li>✓ Think business outcomes, not just technical</li>
+              <li>✓ Document & systematize (runbooks, SOPs)</li>
+              <li>✓ Collaborative, not competitive</li>
+              <li>✓ Hungry to learn and grow</li>
+            </ul>
+          </div>
+          <div class="column-card">
+            <h4>Energy & Presence</h4>
+            <ul>
+              <li>Confident but not arrogant</li>
+              <li>Enthusiastic about consulting</li>
+              <li>Curious and ask good questions</li>
+              <li>Own your mistakes, share learnings</li>
+              <li>End with clear interest in the role</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout success" style="margin-top: 2rem;">
+        <div class="callout-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          You've Got This
+        </div>
+        <div class="callout-content">
+          <p>You've done the work. You've built real things. You've delivered measurable outcomes. Now you just need to communicate that clearly and show you're ready for consulting.</p>
+          <p style="margin-top: 0.5rem;">The Director is looking for someone they can trust with clients. Show judgment, show humility, show hunger to learn. Be genuine. Good luck! 🎯</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
