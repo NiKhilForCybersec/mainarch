@@ -551,8 +551,9 @@
             <p><strong>Foundations</strong></p>
             <ul>
               <li><a href="#overview">1. SOC Maturity Overview</a></li>
-              <li><a href="#four-pillars">2. The Four Pillars</a></li>
-              <li><a href="#maturity-levels">3. Maturity Level Definitions</a></li>
+              <li><a href="#right-sizing">2. Right-Sizing by Organization</a></li>
+              <li><a href="#four-pillars">3. The Four Pillars</a></li>
+              <li><a href="#maturity-levels">4. Maturity Level Definitions</a></li>
               <li><a href="#level-1">↳ Level 1: Initial</a></li>
               <li><a href="#level-2">↳ Level 2: Developing</a></li>
               <li><a href="#level-3">↳ Level 3: Defined</a></li>
@@ -563,37 +564,37 @@
           <div class="toc-column">
             <p><strong>Assessment & Roadmaps</strong></p>
             <ul>
-              <li><a href="#assessment">4. Assessment Framework</a></li>
-              <li><a href="#transitions">5. Transition Roadmaps</a></li>
+              <li><a href="#assessment">5. Assessment Framework</a></li>
+              <li><a href="#transitions">6. Transition Roadmaps</a></li>
               <li><a href="#1-to-2">↳ Level 1 → 2</a></li>
               <li><a href="#2-to-3">↳ Level 2 → 3</a></li>
               <li><a href="#3-to-4">↳ Level 3 → 4</a></li>
               <li><a href="#4-to-5">↳ Level 4 → 5</a></li>
-              <li><a href="#metrics">6. Metrics & KPIs</a></li>
+              <li><a href="#metrics">7. Metrics & KPIs</a></li>
             </ul>
           </div>
           <div class="toc-column">
             <p><strong>Pillar Deep Dives</strong></p>
             <ul>
-              <li><a href="#people-deep-dive">7. People Pillar</a></li>
-              <li><a href="#process-deep-dive">8. Process Pillar</a></li>
-              <li><a href="#technology-deep-dive">9. Technology Pillar</a></li>
-              <li><a href="#governance-deep-dive">10. Governance Pillar</a></li>
-              <li><a href="#pitfalls">11. Common Pitfalls</a></li>
-              <li><a href="#budget">12. Budget Planning</a></li>
-              <li><a href="#case-study">13. Case Study</a></li>
+              <li><a href="#people-deep-dive">8. People Pillar</a></li>
+              <li><a href="#process-deep-dive">9. Process Pillar</a></li>
+              <li><a href="#technology-deep-dive">10. Technology Pillar</a></li>
+              <li><a href="#governance-deep-dive">11. Governance Pillar</a></li>
+              <li><a href="#pitfalls">12. Common Pitfalls</a></li>
+              <li><a href="#budget">13. Budget Planning</a></li>
+              <li><a href="#case-study">14. Case Study</a></li>
             </ul>
           </div>
           <div class="toc-column">
             <p><strong>Advanced Topics</strong></p>
             <ul>
-              <li><a href="#day-in-life">14. Day in the Life</a></li>
-              <li><a href="#detection-maturity">15. Detection Engineering</a></li>
-              <li><a href="#hunting-maturity">16. Threat Hunting</a></li>
-              <li><a href="#interview-points">17. Interview Talking Points</a></li>
-              <li><a href="#automation-maturity">18. Automation & SOAR</a></li>
-              <li><a href="#checklists">19. Practical Checklists</a></li>
-              <li><a href="#tools">20. Tool Recommendations</a></li>
+              <li><a href="#day-in-life">15. Day in the Life</a></li>
+              <li><a href="#detection-maturity">16. Detection Engineering</a></li>
+              <li><a href="#hunting-maturity">17. Threat Hunting</a></li>
+              <li><a href="#interview-points">18. Interview Talking Points</a></li>
+              <li><a href="#automation-maturity">19. Automation & SOAR</a></li>
+              <li><a href="#checklists">20. Practical Checklists</a></li>
+              <li><a href="#tools">21. Tool Recommendations</a></li>
             </ul>
           </div>
         </div>
@@ -723,9 +724,419 @@
         </table>
       </section>
 
-      <!-- ==================== SECTION 2: FOUR PILLARS ==================== -->
+      <!-- ==================== SECTION 2: RIGHT-SIZING BY ORGANIZATION ==================== -->
+      <section id="right-sizing">
+        <h2>2. Right-Sizing Maturity by Organization</h2>
+
+        <p>One of the biggest mistakes in SOC maturity is applying a one-size-fits-all approach. <strong>A 200-person startup has different needs than a 50,000-employee enterprise.</strong> The right maturity target depends on organization size, industry, risk profile, and budget reality.</p>
+
+        <div class="key-insight">
+          <h4>💡 The Right-Sizing Principle</h4>
+          <p>Your target maturity level should be based on: <strong>(1) What you need to protect</strong> (data sensitivity, regulatory requirements), <strong>(2) Who's trying to attack you</strong> (threat landscape), and <strong>(3) What you can realistically sustain</strong> (budget, talent availability). Overshooting creates unsustainable programs that collapse. Undershooting creates unacceptable risk.</p>
+        </div>
+
+        <h3>2.1 Organization Size Categories</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Size</th>
+              <th>Typical Characteristics</th>
+              <th>Security Reality</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Small Business (SMB)</strong></td>
+              <td>1-250 employees<br>&lt;500 endpoints</td>
+              <td>Limited IT staff (1-5), no dedicated security, tight budgets, cloud-first</td>
+              <td>Outsource to MSSP or use integrated platforms (M365 E5). Focus on basics: MFA, EDR, backup.</td>
+            </tr>
+            <tr>
+              <td><strong>Mid-Market</strong></td>
+              <td>250-2,000 employees<br>500-5,000 endpoints</td>
+              <td>Small IT team (5-20), 1-3 security people, growing compliance needs</td>
+              <td>Hybrid model: internal + MSSP. Unified platform approach. Target Level 2-3.</td>
+            </tr>
+            <tr>
+              <td><strong>Enterprise</strong></td>
+              <td>2,000-10,000 employees<br>5,000-25,000 endpoints</td>
+              <td>Dedicated security team (5-15), formal SOC, multiple compliance frameworks</td>
+              <td>Internal SOC with possible MSSP augmentation. Target Level 3, aspire to Level 4.</td>
+            </tr>
+            <tr>
+              <td><strong>Large Enterprise</strong></td>
+              <td>10,000-50,000 employees<br>25,000-100,000 endpoints</td>
+              <td>Large security org (15-50+), mature processes, complex environment</td>
+              <td>Full internal SOC, 24x7 coverage. Target Level 4, selective Level 5 capabilities.</td>
+            </tr>
+            <tr>
+              <td><strong>Global Enterprise</strong></td>
+              <td>50,000+ employees<br>100,000+ endpoints</td>
+              <td>Security as business unit, regional SOCs, advanced threats</td>
+              <td>Multiple SOCs, specialized teams. Target Level 4-5. May be a security leader.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>2.2 Industry Types & Compliance Requirements</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Industry</th>
+              <th>Key Regulations</th>
+              <th>Threat Profile</th>
+              <th>Typical Target Maturity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Healthcare</strong></td>
+              <td>HIPAA, HITECH, state laws</td>
+              <td>Ransomware (high), data theft, insider threats</td>
+              <td>Level 3 minimum. Hospitals: Level 3-4.</td>
+            </tr>
+            <tr>
+              <td><strong>Financial Services</strong></td>
+              <td>PCI-DSS, SOX, GLBA, NYDFS</td>
+              <td>Nation-state, organized crime, fraud</td>
+              <td>Level 4 minimum. Large banks: Level 5.</td>
+            </tr>
+            <tr>
+              <td><strong>Retail/E-commerce</strong></td>
+              <td>PCI-DSS, CCPA/GDPR</td>
+              <td>Card skimming, credential theft, DDoS</td>
+              <td>Level 2-3. Large retailers: Level 3-4.</td>
+            </tr>
+            <tr>
+              <td><strong>Manufacturing</strong></td>
+              <td>Industry-specific, export controls</td>
+              <td>IP theft, ransomware, OT/ICS attacks</td>
+              <td>Level 2-3. Critical infra: Level 4.</td>
+            </tr>
+            <tr>
+              <td><strong>Technology/SaaS</strong></td>
+              <td>SOC 2, ISO 27001, customer contracts</td>
+              <td>Supply chain, data breach, IP theft</td>
+              <td>Level 3-4. Security vendors: Level 5.</td>
+            </tr>
+            <tr>
+              <td><strong>Government</strong></td>
+              <td>FedRAMP, FISMA, NIST 800-53</td>
+              <td>Nation-state, hacktivism, espionage</td>
+              <td>Level 3-4 minimum. Defense: Level 4-5.</td>
+            </tr>
+            <tr>
+              <td><strong>Energy/Utilities</strong></td>
+              <td>NERC CIP, TSA directives</td>
+              <td>Nation-state, ransomware, OT attacks</td>
+              <td>Level 4 minimum for critical assets.</td>
+            </tr>
+            <tr>
+              <td><strong>Education</strong></td>
+              <td>FERPA, state laws</td>
+              <td>Ransomware, credential theft</td>
+              <td>Level 2-3. Research institutions: Level 3.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>2.3 Target Maturity Matrix</h3>
+
+        <p>Use this matrix to identify your recommended target maturity level based on organization size and industry risk:</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Organization Size</th>
+              <th>Low-Risk Industry<br><small>(Retail, Education)</small></th>
+              <th>Medium-Risk Industry<br><small>(Manufacturing, Healthcare)</small></th>
+              <th>High-Risk Industry<br><small>(Finance, Government, Energy)</small></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>SMB (&lt;250)</strong></td>
+              <td>Level 1-2 + MSSP</td>
+              <td>Level 2 + MSSP</td>
+              <td>Level 2-3 + MSSP</td>
+            </tr>
+            <tr>
+              <td><strong>Mid-Market (250-2K)</strong></td>
+              <td>Level 2</td>
+              <td>Level 2-3</td>
+              <td>Level 3</td>
+            </tr>
+            <tr>
+              <td><strong>Enterprise (2K-10K)</strong></td>
+              <td>Level 2-3</td>
+              <td>Level 3</td>
+              <td>Level 3-4</td>
+            </tr>
+            <tr>
+              <td><strong>Large Enterprise (10K-50K)</strong></td>
+              <td>Level 3</td>
+              <td>Level 3-4</td>
+              <td>Level 4</td>
+            </tr>
+            <tr>
+              <td><strong>Global Enterprise (50K+)</strong></td>
+              <td>Level 3-4</td>
+              <td>Level 4</td>
+              <td>Level 4-5</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>2.4 Team Sizing by Organization</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Organization Size</th>
+              <th>Recommended SOC Team</th>
+              <th>Coverage Model</th>
+              <th>Key Roles</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>SMB (&lt;250)</strong></td>
+              <td>0-1 internal + MSSP</td>
+              <td>MSSP 24x7, internal 8x5 oversight</td>
+              <td>Security Admin (part-time), MSSP analysts</td>
+            </tr>
+            <tr>
+              <td><strong>Mid-Market (250-2K)</strong></td>
+              <td>2-5 internal</td>
+              <td>8x5 or 12x5 internal, MSSP after-hours</td>
+              <td>Security Manager, 1-2 Analysts, part-time Engineer</td>
+            </tr>
+            <tr>
+              <td><strong>Enterprise (2K-10K)</strong></td>
+              <td>5-15 internal</td>
+              <td>12x5 or 24x5, MSSP weekends optional</td>
+              <td>SOC Manager, L1/L2/L3 Analysts, Detection Engineer</td>
+            </tr>
+            <tr>
+              <td><strong>Large Enterprise (10K-50K)</strong></td>
+              <td>15-40 internal</td>
+              <td>24x7 internal</td>
+              <td>SOC Director, Managers, Tiered Analysts, Hunters, Engineers, TI</td>
+            </tr>
+            <tr>
+              <td><strong>Global Enterprise (50K+)</strong></td>
+              <td>40-100+ internal</td>
+              <td>Follow-the-sun, regional SOCs</td>
+              <td>Full specialized teams: Detection, Hunting, IR, TI, Automation</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>2.5 Budget Benchmarks by Size</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Organization Size</th>
+              <th>Typical Security Budget<br><small>(% of IT budget)</small></th>
+              <th>SOC-Specific Budget<br><small>(annual)</small></th>
+              <th>Key Investment Areas</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>SMB (&lt;250)</strong></td>
+              <td>5-10% of IT</td>
+              <td>$50K-200K</td>
+              <td>MSSP, integrated platform (M365 E5), basic tools</td>
+            </tr>
+            <tr>
+              <td><strong>Mid-Market (250-2K)</strong></td>
+              <td>8-12% of IT</td>
+              <td>$200K-750K</td>
+              <td>SIEM (cloud), EDR, 2-4 FTEs, MSSP augmentation</td>
+            </tr>
+            <tr>
+              <td><strong>Enterprise (2K-10K)</strong></td>
+              <td>10-15% of IT</td>
+              <td>$750K-3M</td>
+              <td>Full SIEM/SOAR, XDR, 6-15 FTEs, threat intel</td>
+            </tr>
+            <tr>
+              <td><strong>Large Enterprise (10K-50K)</strong></td>
+              <td>12-18% of IT</td>
+              <td>$3M-15M</td>
+              <td>Enterprise platforms, 20-40 FTEs, advanced tools, red team</td>
+            </tr>
+            <tr>
+              <td><strong>Global Enterprise (50K+)</strong></td>
+              <td>15-25% of IT</td>
+              <td>$15M-50M+</td>
+              <td>Multiple SOCs, 50-100+ FTEs, R&D, custom development</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            Budget Reality Check
+          </div>
+          <div class="callout-content">
+            <p>These are industry benchmarks. Your actual budget depends on risk tolerance, regulatory requirements, and breach history. <strong>Underfunding security is expensive:</strong> the average cost of a data breach is $4.45M (2023 IBM study). A properly funded SOC is an investment, not a cost center.</p>
+          </div>
+        </div>
+
+        <h3>2.6 Coverage Model Selection</h3>
+
+        <div class="pillar-grid">
+          <div class="pillar-card">
+            <h4>🕐 8x5 (Business Hours)</h4>
+            <p><strong>Best for:</strong> SMB, low-risk industries</p>
+            <ul>
+              <li>Staffing: 1-3 analysts</li>
+              <li>After-hours: Alerting only or MSSP</li>
+              <li>Cost: Lowest</li>
+              <li>Risk: Delayed detection after hours</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>🕐 12x5 (Extended Hours)</h4>
+            <p><strong>Best for:</strong> Mid-market, medium-risk</p>
+            <ul>
+              <li>Staffing: 3-6 analysts (2 shifts)</li>
+              <li>After-hours: MSSP or on-call</li>
+              <li>Cost: Moderate</li>
+              <li>Risk: Weekend gaps</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>🕐 24x5 (Weekday Coverage)</h4>
+            <p><strong>Best for:</strong> Enterprise, regulated industries</p>
+            <ul>
+              <li>Staffing: 6-10 analysts (3 shifts)</li>
+              <li>Weekends: MSSP or on-call</li>
+              <li>Cost: Higher</li>
+              <li>Risk: Weekend gaps</li>
+            </ul>
+          </div>
+          <div class="pillar-card">
+            <h4>🕐 24x7 (Full Coverage)</h4>
+            <p><strong>Best for:</strong> Large enterprise, high-risk</p>
+            <ul>
+              <li>Staffing: 10-15+ analysts (4 shifts)</li>
+              <li>No gaps</li>
+              <li>Cost: Highest</li>
+              <li>Risk: Lowest detection delay</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>2.7 MSSP vs. Internal SOC Decision Matrix</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Factor</th>
+              <th>Favor MSSP</th>
+              <th>Favor Internal SOC</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Organization Size</strong></td>
+              <td>SMB, early mid-market</td>
+              <td>Enterprise, large enterprise</td>
+            </tr>
+            <tr>
+              <td><strong>Budget</strong></td>
+              <td>Limited, predictable cost needed</td>
+              <td>Can invest in people and tools</td>
+            </tr>
+            <tr>
+              <td><strong>Talent Availability</strong></td>
+              <td>Hard to hire/retain locally</td>
+              <td>Can attract security talent</td>
+            </tr>
+            <tr>
+              <td><strong>Data Sensitivity</strong></td>
+              <td>Standard business data</td>
+              <td>Highly sensitive, regulated data</td>
+            </tr>
+            <tr>
+              <td><strong>Customization Needs</strong></td>
+              <td>Standard detection is sufficient</td>
+              <td>Need custom detections, deep integration</td>
+            </tr>
+            <tr>
+              <td><strong>Response Authority</strong></td>
+              <td>Detection/alert focus is acceptable</td>
+              <td>Need rapid internal response capability</td>
+            </tr>
+            <tr>
+              <td><strong>Coverage Needs</strong></td>
+              <td>24x7 needed but can't staff</td>
+              <td>Can staff required coverage model</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="key-insight">
+          <h4>💡 The Hybrid Model</h4>
+          <p>Most mid-market and enterprise organizations benefit from a <strong>hybrid approach</strong>: internal team for day-to-day operations, detection engineering, and incident response, with MSSP augmentation for after-hours coverage and surge capacity. This provides the best of both worlds—organizational knowledge and 24x7 coverage.</p>
+        </div>
+
+        <h3>2.8 Platform Selection by Size</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Organization Size</th>
+              <th>Recommended Approach</th>
+              <th>Example Stack</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>SMB</strong></td>
+              <td>Unified platform, minimal tools</td>
+              <td>M365 E5 (MDE + Defender for O365 + Entra ID P2) or Google Workspace + CrowdStrike Falcon Go</td>
+            </tr>
+            <tr>
+              <td><strong>Mid-Market</strong></td>
+              <td>Integrated XDR + cloud SIEM</td>
+              <td>M365 E5 + Sentinel (Basic tier) or CrowdStrike + Splunk Cloud</td>
+            </tr>
+            <tr>
+              <td><strong>Enterprise</strong></td>
+              <td>Full XDR + SIEM + SOAR</td>
+              <td>M365 E5 + Sentinel + Logic Apps or Palo Alto Cortex XDR + XSOAR + Splunk</td>
+            </tr>
+            <tr>
+              <td><strong>Large Enterprise</strong></td>
+              <td>Best-of-breed with integration</td>
+              <td>Multiple specialized tools, custom integrations, data lake</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Key Takeaway
+          </div>
+          <div class="callout-content">
+            <p><strong>Match your maturity target to your reality.</strong> A mid-market manufacturing company doesn't need (and can't sustain) a Level 4 SOC. A financial services enterprise with nation-state threats can't accept Level 2. Assess your risk profile, regulatory requirements, and budget—then set a realistic, achievable target.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 3: FOUR PILLARS ==================== -->
       <section id="four-pillars">
-        <h2>2. The Four Pillars of SOC Maturity</h2>
+        <h2>3. The Four Pillars of SOC Maturity</h2>
 
         <p>SOC maturity is evaluated across four interconnected pillars. <strong>All four must progress together</strong>—advancing technology without improving process creates expensive shelfware.</p>
 
@@ -828,7 +1239,7 @@
 
       <!-- ==================== SECTION 3: MATURITY LEVELS ==================== -->
       <section id="maturity-levels">
-        <h2>3. Maturity Level Definitions</h2>
+        <h2>4. Maturity Level Definitions</h2>
 
         <p>Each level represents a distinct stage of capability. Understanding these levels helps you <strong>accurately assess current state</strong> and <strong>set realistic targets</strong>.</p>
 
@@ -1494,7 +1905,7 @@
 
       <!-- ==================== SECTION 4: ASSESSMENT FRAMEWORK ==================== -->
       <section id="assessment">
-        <h2>4. Assessment Framework</h2>
+        <h2>5. Assessment Framework</h2>
 
         <p>A structured assessment helps you <strong>objectively evaluate current state</strong>, <strong>identify gaps</strong>, and <strong>build a defensible roadmap</strong>. This framework is designed to be completed in 2-4 weeks.</p>
 
@@ -1779,7 +2190,7 @@
 
       <!-- ==================== SECTION 5: TRANSITION ROADMAPS ==================== -->
       <section id="transitions">
-        <h2>5. Transition Roadmaps</h2>
+        <h2>6. Transition Roadmaps</h2>
 
         <p>Moving between maturity levels requires <strong>deliberate planning and sustained effort</strong>. Each transition has specific prerequisites, milestones, and success criteria. Don't try to skip levels—the foundation matters.</p>
 
@@ -2184,7 +2595,7 @@
 
       <!-- ==================== SECTION 6: METRICS & KPIs ==================== -->
       <section id="metrics">
-        <h2>6. Metrics & KPIs by Maturity Level</h2>
+        <h2>7. Metrics & KPIs by Maturity Level</h2>
 
         <p>What you measure changes as you mature. <strong>Level 1 organizations can't measure MTTD because they don't know when detection occurred.</strong> Build measurement capability progressively.</p>
 
@@ -2396,7 +2807,7 @@
 
       <!-- ==================== SECTION 7-10: PILLAR DEEP DIVES ==================== -->
       <section id="people-deep-dive">
-        <h2>7. People Pillar Deep Dive</h2>
+        <h2>8. People Pillar Deep Dive</h2>
 
         <p>People are the most important—and often most neglected—aspect of SOC maturity. <strong>You can buy the best tools, but without skilled, motivated people, they're useless.</strong></p>
 
@@ -2621,7 +3032,7 @@
       </section>
 
       <section id="process-deep-dive">
-        <h2>8. Process Pillar Deep Dive</h2>
+        <h2>9. Process Pillar Deep Dive</h2>
 
         <h3>8.1 Playbook Development</h3>
 
@@ -2768,7 +3179,7 @@
       </section>
 
       <section id="technology-deep-dive">
-        <h2>9. Technology Pillar Deep Dive</h2>
+        <h2>10. Technology Pillar Deep Dive</h2>
 
         <h3>9.1 SOC Technology Stack Evolution</h3>
 
@@ -2894,7 +3305,7 @@
       </section>
 
       <section id="governance-deep-dive">
-        <h2>10. Governance Pillar Deep Dive</h2>
+        <h2>11. Governance Pillar Deep Dive</h2>
 
         <h3>10.1 Security Policy Framework</h3>
 
@@ -2987,7 +3398,7 @@
 
       <!-- ==================== SECTION 11: COMMON PITFALLS ==================== -->
       <section id="pitfalls">
-        <h2>11. Common Pitfalls & Anti-Patterns</h2>
+        <h2>12. Common Pitfalls & Anti-Patterns</h2>
 
         <p>Learn from others' mistakes. These are the most common reasons SOC maturity initiatives fail.</p>
 
@@ -3033,7 +3444,7 @@
 
       <!-- ==================== SECTION 12: BUDGET PLANNING ==================== -->
       <section id="budget">
-        <h2>12. Budget Planning</h2>
+        <h2>13. Budget Planning</h2>
 
         <h3>12.1 Budget by Maturity Level</h3>
 
@@ -3104,7 +3515,7 @@
 
       <!-- ==================== SECTION 13: CASE STUDY ==================== -->
       <section id="case-study">
-        <h2>13. Case Study: Security Modernization</h2>
+        <h2>14. Case Study: Security Modernization</h2>
 
         <div class="callout success">
           <div class="callout-title">
@@ -3253,7 +3664,7 @@
 
       <!-- ==================== SECTION 14: DAY IN THE LIFE ==================== -->
       <section id="day-in-life">
-        <h2>14. Day in the Life: SOC at Each Level</h2>
+        <h2>15. Day in the Life: SOC at Each Level</h2>
 
         <p>Understanding what daily operations look like at each level helps you <strong>visualize the target state</strong> and <strong>identify gaps in your current operations</strong>.</p>
 
@@ -3415,7 +3826,7 @@
 
       <!-- ==================== SECTION 15: DETECTION ENGINEERING MATURITY ==================== -->
       <section id="detection-maturity">
-        <h2>15. Detection Engineering Maturity</h2>
+        <h2>16. Detection Engineering Maturity</h2>
 
         <p>Detection engineering is a specific capability that evolves with SOC maturity. This section provides detailed guidance on <strong>building detection capability</strong> from scratch to world-class.</p>
 
@@ -3744,7 +4155,7 @@ jobs:
 
       <!-- ==================== SECTION 16: THREAT HUNTING MATURITY ==================== -->
       <section id="hunting-maturity">
-        <h2>16. Threat Hunting Maturity</h2>
+        <h2>17. Threat Hunting Maturity</h2>
 
         <p>Threat hunting is the <strong>proactive search for threats</strong> that have evaded existing detections. It's a capability that emerges at Level 3 and becomes central at Level 4-5.</p>
 
@@ -3943,7 +4354,7 @@ DeviceRegistryEvents
 
       <!-- ==================== SECTION 17: INTERVIEW TALKING POINTS ==================== -->
       <section id="interview-points">
-        <h2>17. Interview-Ready Talking Points</h2>
+        <h2>18. Interview-Ready Talking Points</h2>
 
         <p>Use these prepared answers for SOC maturity assessment questions in interviews.</p>
 
@@ -4046,7 +4457,7 @@ The key difference from Level 2: At Level 2, processes exist but aren't always f
 
       <!-- ==================== SECTION 18: AUTOMATION MATURITY ==================== -->
       <section id="automation-maturity">
-        <h2>18. Automation & SOAR Maturity</h2>
+        <h2>19. Automation & SOAR Maturity</h2>
 
         <p>Automation is the key to scaling SOC operations. Without it, you need to hire linearly as threats grow. With it, you can handle exponential growth with incremental staff.</p>
 
@@ -4266,7 +4677,7 @@ Metrics.LogAutomation(playbook="Phishing", risk_score, action_taken)
 
       <!-- ==================== SECTION 19: PRACTICAL CHECKLISTS ==================== -->
       <section id="checklists">
-        <h2>19. Practical Checklists</h2>
+        <h2>20. Practical Checklists</h2>
 
         <p>Use these checklists to track your progress through each maturity level.</p>
 
@@ -4457,7 +4868,7 @@ Metrics.LogAutomation(playbook="Phishing", risk_score, action_taken)
 
       <!-- ==================== SECTION 20: TOOL RECOMMENDATIONS ==================== -->
       <section id="tools">
-        <h2>20. Technology Stack Recommendations</h2>
+        <h2>21. Technology Stack Recommendations</h2>
 
         <p>This section provides guidance on technology selection based on maturity level and budget.</p>
 
