@@ -509,26 +509,33 @@ THEREFORE:
                 <td>DNS tunneling, DGA domains — XDR does NOT cover</td>
               </tr>
               <tr class="ingest-yes">
-                <td rowspan="4"><strong>SaaS Apps<br>(Outside XDR scope)</strong></td>
+                <td rowspan="6"><strong>SaaS Apps<br>(Outside XDR scope)</strong></td>
                 <td>Salesforce</td>
                 <td><code>Salesforce_CL</code></td>
                 <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
-                <td>Data export monitoring — XDR does NOT cover</td>
+                <td>CRM system of record — API access, data export, report generation</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td>Zoom</td>
+                <td><code>Zoom_CL</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Analytics</td>
+                <td>Meeting creation, recording access, admin actions</td>
               </tr>
               <tr class="ingest-yes">
                 <td>Workday</td>
                 <td><code>Workday_CL</code></td>
                 <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
-                <td>Termination events — correlation rule</td>
+                <td>Termination events — correlation with access revocation</td>
               </tr>
               <tr class="ingest-selective">
                 <td>NetSuite</td>
                 <td><code>NetSuite_CL</code></td>
                 <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
                 <td>Analytics</td>
-                <td>Financial system, BEC risk</td>
+                <td>Financial system, BEC risk, payment modifications</td>
               </tr>
               <tr class="ingest-yes">
                 <td>GitHub</td>
@@ -536,6 +543,13 @@ THEREFORE:
                 <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
                 <td>Code access, PAT creation — XDR does NOT cover</td>
+              </tr>
+              <tr class="ingest-selective">
+                <td>Gong/Chorus (Sales Analytics)</td>
+                <td><code>SalesAnalytics_CL</code></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
+                <td>Analytics</td>
+                <td>Admin actions, integration changes — product context</td>
               </tr>
               <tr class="ingest-yes">
                 <td rowspan="2"><strong>Windows<br>(Tier 0 only)</strong></td>

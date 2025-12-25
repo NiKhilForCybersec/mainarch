@@ -205,7 +205,8 @@
               <div class="label">Say This</div>
               <p>"I have about five years in cybersecurity, focused on SIEM, detection engineering, and endpoint security.</p>
               <p style="margin-top: 0.75rem;">I started in a SOC at Cognizant working with Splunk — alert triage, investigations, learning what analysts actually need. Then I moved into security engineering at Infosys, where I worked with FireEye, Symantec DLP, and supported an EDR migration project.</p>
-              <p style="margin-top: 0.75rem;">Most recently, I've been at a Siemens subsidiary working on a security transformation — specifically the SIEM and EDR tracks. I migrated the SIEM from RSA NetWitness to Microsoft Sentinel and handled the Defender for Endpoint rollout across 9,000 devices. I also contributed to the DLP migration from Symantec to Purview. I'm currently in the handover phase, doing knowledge transfer to the internal team.</p>
+              <p style="margin-top: 0.75rem;">Most recently, I've been at a Siemens subsidiary — a B2B revenue intelligence SaaS company that helps sales teams predict deal outcomes. I worked on the security transformation, specifically the SIEM and EDR tracks. I migrated the SIEM from RSA NetWitness to Microsoft Sentinel and handled the Defender for Endpoint rollout across 9,000 devices. I also contributed to the DLP migration from Symantec to Purview. I'm currently in the handover phase, doing knowledge transfer to the internal team.</p>
+              <p style="margin-top: 0.75rem;">Understanding the business was important — as a SaaS company with deep Salesforce, Teams, and Zoom integrations, our security priorities were SaaS visibility and API security rather than traditional perimeter controls.</p>
               <p style="margin-top: 0.75rem;">The thread through all of it is building security platforms that actually work for the people using them — reliable telemetry, tuned detections, and solutions teams can operate after I leave."</p>
             </div>
             
@@ -241,9 +242,12 @@ INFOSYS (Security Engineer):
 • First exposure to platform engineering
 
 SIEMENS SUBSIDIARY (Security Engineer):
+• B2B revenue intelligence SaaS — predicts deal outcomes for sales teams
 • Led SIEM migration: RSA NetWitness → Microsoft Sentinel
 • Led EDR migration: ESET → Microsoft Defender for Endpoint
 • Supporting DLP migration: Symantec → Microsoft Purview
+• SaaS-heavy business: Salesforce, Teams, Zoom integrations
+• Security priorities: SaaS visibility, API security, data protection
 • Full lifecycle: discovery, deployment, stabilization, handover
 
 CURRENT STATE:
@@ -337,7 +341,8 @@ CROSS-CUTTING:
           <div id="q3-short" class="answer-content active">
             <div class="say-this-box">
               <div class="label">Say This</div>
-              <p>"I'll walk you through the RSA NetWitness to Sentinel migration I worked on. B2B SaaS company, about 4,000 employees, 9,000 endpoints.</p>
+              <p>"I'll walk you through the RSA NetWitness to Sentinel migration I worked on. B2B revenue intelligence SaaS — a Siemens subsidiary with about 4,000 employees, 9,000 endpoints. The company helps sales teams predict deal outcomes by correlating CRM data with activity signals.</p>
+              <p style="margin-top: 0.75rem;\">Understanding the business shaped our priorities — SaaS visibility was critical because of deep Salesforce and Zoom integrations.</p>
               <p style="margin-top: 0.75rem;">Our approach was detection-driven rather than log-first or 1-to-1 rule translation. Instead of mechanically porting every RSA rule, we evaluated detection intent and leveraged XDR for domains where built-in detections already provide strong coverage — endpoint, identity, email, cloud apps.</p>
               <p style="margin-top: 0.75rem;">This allowed us to retire redundant detections, reduce ingestion cost, and avoid duplicating logic XDR handles natively. Sentinel was used where it adds the most value: cross-domain correlation, non-Microsoft telemetry, and detections requiring broader context.</p>
               <p style="margin-top: 0.75rem;">We prioritized identity control-plane logs first — Entra ID AuditLogs — because XDR detects identity attacks but not changes like role assignments. Then XDR alerts into Sentinel for correlation. Then sources XDR doesn't cover — network, SaaS, on-prem.</p>

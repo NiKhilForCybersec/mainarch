@@ -597,13 +597,14 @@
             </ul>
           </div>
           <div class="toc-column">
-            <p><strong>Frameworks & Examples</strong></p>
+            <p><strong>Frameworks & Architecture</strong></p>
             <ul>
               <li><a href="#nist-iso">12. NIST/ISO</a></li>
               <li><a href="#regulations">13. Regulations</a></li>
               <li><a href="#putting-together">14. Putting It Together</a></li>
               <li><a href="#industry-examples">15. Industry Examples</a></li>
               <li><a href="#scenario-walkthrough">16. Ransomware Scenario</a></li>
+              <li><a href="#sase-architecture">17. SASE Architecture</a></li>
             </ul>
           </div>
         </div>
@@ -3743,6 +3744,902 @@
         </div>
       </section>
 
+      <!-- ==================== SECTION 17: SASE & MODERN ARCHITECTURE ==================== -->
+      <section id="sase-architecture">
+        <h2>17. SASE & Modern Security Architecture</h2>
+
+        <p>Modern security has shifted from perimeter-based to identity-based and cloud-delivered. <strong>SASE (Secure Access Service Edge)</strong> is the convergence of networking and security into a unified, cloud-delivered service.</p>
+
+        <div class="memorize-box">
+          <h4>🧠 SASE in One Sentence</h4>
+          <p style="font-size: 1.05rem; line-height: 1.8;"><strong>SASE = Network + Security, delivered from the cloud, applied based on identity and context.</strong></p>
+          <p style="margin-top: 0.5rem;">Instead of backhauling traffic to a central datacenter for inspection, security controls are applied at the edge, closest to the user.</p>
+        </div>
+
+        <h3>17.1 The SASE Components</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>What It Does</th>
+              <th>When It Applies</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>SWG (Secure Web Gateway)</strong></td>
+              <td>URL filtering, malware scanning, SSL inspection for web traffic</td>
+              <td>User opens random website → SWG applies filtering</td>
+            </tr>
+            <tr>
+              <td><strong>CASB (Cloud Access Security Broker)</strong></td>
+              <td>DLP, session control, visibility for SaaS applications</td>
+              <td>User opens Microsoft 365 → CASB applies DLP / session control</td>
+            </tr>
+            <tr>
+              <td><strong>ZTNA (Zero Trust Network Access)</strong></td>
+              <td>Identity-based access to internal apps (replaces VPN)</td>
+              <td>User opens internal HR app → ZTNA enforces identity-based access</td>
+            </tr>
+            <tr>
+              <td><strong>SD-WAN (Software-Defined WAN)</strong></td>
+              <td>Intelligent routing, bandwidth optimization, failover</td>
+              <td>Branch office traffic → SD-WAN optimizes routing</td>
+            </tr>
+            <tr>
+              <td><strong>FWaaS (Firewall as a Service)</strong></td>
+              <td>Cloud-delivered firewall for all traffic</td>
+              <td>All traffic → FWaaS applies network security policies</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ==================== DETAILED ARCHITECTURE ==================== -->
+        <h3>17.2 Detailed Architecture: Where Components Sit</h3>
+
+        <div class="example-box" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9)); border: 2px solid rgba(6, 182, 212, 0.5); padding: 1.5rem;">
+          <h5 style="color: #06b6d4; margin-bottom: 1rem;">🏗️ SASE Architecture Overview</h5>
+          <pre style="background: rgba(0,0,0,0.4); padding: 1.5rem; border-radius: 8px; overflow-x: auto; font-size: 0.8rem; line-height: 1.6; color: #e2e8f0;">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                              ☁️  SASE CLOUD (Vendor PoPs)                            │
+│  ┌──────────────────────────────────────────────────────────────────────────────┐   │
+│  │                         SASE Security Stack                                   │   │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │   │
+│  │  │    SWG      │  │    CASB     │  │    ZTNA     │  │   FWaaS     │          │   │
+│  │  │ ─────────── │  │ ─────────── │  │ ─────────── │  │ ─────────── │          │   │
+│  │  │ URL Filter  │  │ DLP Policy  │  │ App Access  │  │ L3/L4 Rules │          │   │
+│  │  │ SSL Inspect │  │ Session Ctl │  │ Identity    │  │ IPS/IDS     │          │   │
+│  │  │ Malware     │  │ Shadow IT   │  │ Device Check│  │ Threat Intel│          │   │
+│  │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘          │   │
+│  └──────────────────────────────────────────────────────────────────────────────┘   │
+│                                        ▲                                            │
+│                    ┌───────────────────┼───────────────────┐                        │
+│                    │                   │                   │                        │
+│              Global PoP 1        Global PoP 2        Global PoP 3                   │
+│              (Americas)          (Europe)            (Asia-Pac)                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                                         ▲
+          ┌──────────────────────────────┼──────────────────────────────┐
+          │                              │                              │
+          ▼                              ▼                              ▼
+┌─────────────────────┐      ┌─────────────────────┐      ┌─────────────────────┐
+│  👤 Remote User      │      │  🏢 Branch Office    │      │  🏠 Home Office      │
+│  ───────────────────│      │  ───────────────────│      │  ───────────────────│
+│  SASE Agent         │      │  SD-WAN Appliance   │      │  SASE Agent         │
+│  (Zscaler Client    │      │  (Viptela, Meraki,  │      │  on Laptop          │
+│   Connector, etc.)  │      │   Prisma SD-WAN)    │      │                     │
+│                     │      │         +           │      │                     │
+│  Traffic → Agent →  │      │  IPsec/GRE Tunnel   │      │  Traffic → Agent →  │
+│  Nearest PoP        │      │  to SASE Cloud      │      │  Nearest PoP        │
+└─────────────────────┘      └─────────────────────┘      └─────────────────────┘
+          │                              │                              │
+          ▼                              ▼                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                              🎯 DESTINATIONS                                         │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  ┌───────────────┐   │
+│  │  🌐 Internet     │  │  ☁️ SaaS Apps    │  │  🏢 Private Apps │  │  🗄️ Datacenter │   │
+│  │  (websites)     │  │  (M365, SF,     │  │  (HR, ERP,      │  │  (legacy      │   │
+│  │                 │  │   Workday)      │  │   internal)     │  │   apps)       │   │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘  └───────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────────┘</pre>
+        </div>
+
+        <h3>17.3 Traffic Routing: How Each Flow Works</h3>
+
+        <!-- FLOW 1: SWG -->
+        <div class="pillar-card" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(249, 115, 22, 0.02)); border: 2px solid rgba(249, 115, 22, 0.4); margin-bottom: 1.5rem;">
+          <h4 style="color: #f97316;">🌐 Flow 1: User Opens Random Website (SWG)</h4>
+          
+          <div class="example-box" style="background: rgba(0,0,0,0.3); margin: 1rem 0;">
+            <pre style="font-size: 0.8rem; line-height: 1.8; color: #e2e8f0; margin: 0;">
+STEP-BY-STEP ROUTING:
+
+1️⃣ USER ACTION
+   User types: https://example-news.com
+   
+2️⃣ AGENT INTERCEPTS
+   SASE Agent on endpoint intercepts HTTP/HTTPS traffic
+   Agent checks: Is this a web request? → YES → Route to SWG
+   
+3️⃣ TUNNEL TO NEAREST PoP
+   Agent → TLS tunnel → Nearest SASE PoP (e.g., Toronto)
+   Latency: ~5-15ms to reach PoP
+   
+4️⃣ SWG PROCESSING (at PoP)
+   ┌─────────────────────────────────────────────────┐
+   │  a) URL Categorization                          │
+   │     example-news.com → Category: "News"         │
+   │     Policy: News = ALLOW                        │
+   │                                                 │
+   │  b) Reputation Check                            │
+   │     Domain age, history, threat intel → CLEAN   │
+   │                                                 │
+   │  c) SSL Inspection (if enabled)                 │
+   │     Decrypt → Inspect content → Re-encrypt      │
+   │     Check for malware, phishing indicators      │
+   │                                                 │
+   │  d) Malware Scan                                │
+   │     Scan response content for threats           │
+   │     Sandbox suspicious files                    │
+   └─────────────────────────────────────────────────┘
+   
+5️⃣ FORWARD TO DESTINATION
+   PoP → Internet → example-news.com
+   
+6️⃣ RESPONSE BACK
+   Website response → PoP (inspection) → Agent → Browser</pre>
+          </div>
+
+          <p style="margin-top: 1rem;"><strong>What Gets Logged:</strong> URL, category, action (allow/block), user identity, bytes transferred, threat verdicts</p>
+        </div>
+
+        <!-- FLOW 2: CASB -->
+        <div class="pillar-card" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.02)); border: 2px solid rgba(139, 92, 246, 0.4); margin-bottom: 1.5rem;">
+          <h4 style="color: #a78bfa;">☁️ Flow 2: User Opens Microsoft 365 (CASB)</h4>
+          
+          <div class="example-box" style="background: rgba(0,0,0,0.3); margin: 1rem 0;">
+            <pre style="font-size: 0.8rem; line-height: 1.8; color: #e2e8f0; margin: 0;">
+STEP-BY-STEP ROUTING:
+
+1️⃣ USER ACTION
+   User navigates to: https://outlook.office365.com
+   
+2️⃣ AGENT RECOGNIZES SAAS
+   Agent checks destination → Matches SaaS catalog → "Microsoft 365"
+   Route decision: SWG + CASB policies apply
+   
+3️⃣ TUNNEL TO PoP
+   Agent → TLS tunnel → Nearest SASE PoP
+   
+4️⃣ CASB PROCESSING (at PoP)
+   ┌─────────────────────────────────────────────────┐
+   │  a) App Instance Check                          │
+   │     Is this corporate M365 or personal?         │
+   │     Tenant ID check → Corporate tenant ✓        │
+   │                                                 │
+   │  b) Session Controls                            │
+   │     User: john@company.com                      │
+   │     Device: Managed (Intune compliant) ✓        │
+   │     Location: Canada ✓                          │
+   │     → Full access granted                       │
+   │                                                 │
+   │  c) Activity Monitoring                         │
+   │     Track: uploads, downloads, shares           │
+   │     API integration with M365 for visibility    │
+   │                                                 │
+   │  d) DLP Inspection                              │
+   │     Scan uploads for: PII, credit cards, etc.   │
+   │     Policy: Block upload of files with SSN      │
+   │                                                 │
+   │  e) Download Restrictions (if unmanaged)        │
+   │     Unmanaged device? → Block downloads         │
+   │     Or: Allow view-only, watermark docs         │
+   └─────────────────────────────────────────────────┘
+   
+5️⃣ FORWARD TO M365
+   PoP → Microsoft 365 (direct peering often available)
+   
+6️⃣ CONTINUOUS MONITORING
+   CASB continues monitoring session activities via:
+   - Inline proxy (real-time)
+   - API integration (near real-time for M365 audit logs)</pre>
+          </div>
+
+          <p style="margin-top: 1rem;"><strong>Two CASB Modes:</strong></p>
+          <ul style="font-size: 0.9rem;">
+            <li><strong>Inline (Proxy):</strong> Traffic flows through CASB → Real-time blocking, SSL inspection</li>
+            <li><strong>API-based:</strong> CASB connects to SaaS APIs → Near real-time, sees activities after the fact</li>
+          </ul>
+        </div>
+
+        <!-- FLOW 3: ZTNA -->
+        <div class="pillar-card" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.02)); border: 2px solid rgba(34, 197, 94, 0.4); margin-bottom: 1.5rem;">
+          <h4 style="color: #22c55e;">🏢 Flow 3: User Opens Internal HR App (ZTNA)</h4>
+          
+          <div class="example-box" style="background: rgba(0,0,0,0.3); margin: 1rem 0;">
+            <pre style="font-size: 0.8rem; line-height: 1.8; color: #e2e8f0; margin: 0;">
+STEP-BY-STEP ROUTING:
+
+1️⃣ USER ACTION
+   User types: https://hr.internal.company.com
+   (Internal app - not on public internet)
+   
+2️⃣ AGENT INTERCEPTS
+   Agent checks: Is this an internal app? → YES
+   Check ZTNA policy: Does user have access to HR app?
+   
+3️⃣ IDENTITY & DEVICE CHECK (Before any connection)
+   ┌─────────────────────────────────────────────────┐
+   │  a) User Authentication                         │
+   │     User already signed in via SSO (Entra ID)   │
+   │     Identity: john@company.com ✓                │
+   │     MFA completed: ✓                            │
+   │                                                 │
+   │  b) Device Posture Check                        │
+   │     Device registered in Intune? ✓              │
+   │     EDR running and healthy? ✓                  │
+   │     OS patched within policy? ✓                 │
+   │     Disk encrypted? ✓                           │
+   │     Not jailbroken/rooted? ✓                    │
+   │                                                 │
+   │  c) Context Check                               │
+   │     Location: Toronto, Canada ✓                 │
+   │     Time: Business hours ✓                      │
+   │     Risk score: Low ✓                           │
+   └─────────────────────────────────────────────────┘
+   
+4️⃣ ZTNA BROKER CREATES CONNECTION
+   ┌─────────────────────────────────────────────────┐
+   │  ZTNA Architecture (Inside-Out Model):          │
+   │                                                 │
+   │  [User Agent] ──────► [SASE Cloud/Broker]       │
+   │                              ▲                  │
+   │  [App Connector] ───────────┘                   │
+   │  (installed near HR app)                        │
+   │                                                 │
+   │  Key: App is NEVER exposed to internet          │
+   │  Connector makes outbound connection to broker  │
+   │  User connects to broker, broker bridges them   │
+   └─────────────────────────────────────────────────┘
+   
+5️⃣ MICRO-TUNNEL ESTABLISHED
+   User Agent ←→ SASE Cloud ←→ App Connector ←→ HR App
+   
+   Access granted ONLY to HR app, nothing else
+   No network-level access (unlike VPN)
+   
+6️⃣ SESSION MONITORING
+   All activity logged: pages accessed, data transferred
+   Session can be terminated if risk changes</pre>
+          </div>
+
+          <p style="margin-top: 1rem;"><strong>ZTNA vs VPN:</strong></p>
+          <table class="metrics-table" style="font-size: 0.85rem;">
+            <tr>
+              <th>VPN</th>
+              <th>ZTNA</th>
+            </tr>
+            <tr>
+              <td>Network-level access (full subnet)</td>
+              <td>Application-level access (specific app only)</td>
+            </tr>
+            <tr>
+              <td>Connect first, authenticate later</td>
+              <td>Authenticate first, connect only if allowed</td>
+            </tr>
+            <tr>
+              <td>App exposed to internet (VPN gateway)</td>
+              <td>App never exposed (inside-out connection)</td>
+            </tr>
+            <tr>
+              <td>Lateral movement possible</td>
+              <td>No lateral movement by design</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- FLOW 4: SD-WAN -->
+        <div class="pillar-card" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(6, 182, 212, 0.02)); border: 2px solid rgba(6, 182, 212, 0.4); margin-bottom: 1.5rem;">
+          <h4 style="color: #06b6d4;">🌐 Flow 4: Branch Office Traffic (SD-WAN)</h4>
+          
+          <div class="example-box" style="background: rgba(0,0,0,0.3); margin: 1rem 0;">
+            <pre style="font-size: 0.8rem; line-height: 1.8; color: #e2e8f0; margin: 0;">
+STEP-BY-STEP ROUTING:
+
+1️⃣ BRANCH OFFICE SETUP
+   ┌─────────────────────────────────────────────────┐
+   │  Branch Office Network                          │
+   │  ┌─────────────────────────────────────────┐    │
+   │  │  [Users] ──► [Switch] ──► [SD-WAN Edge] │    │
+   │  │                              │           │    │
+   │  │              ┌───────────────┼──────┐    │    │
+   │  │              │               │      │    │    │
+   │  │              ▼               ▼      ▼    │    │
+   │  │         [Internet 1]  [Internet 2] [LTE]│    │
+   │  │          (Primary)    (Backup)   (Backup│    │
+   │  └─────────────────────────────────────────┘    │
+   └─────────────────────────────────────────────────┘
+   
+2️⃣ SD-WAN TRAFFIC CLASSIFICATION
+   SD-WAN appliance inspects traffic and classifies:
+   
+   ┌────────────────────┬─────────────────────────────┐
+   │ Traffic Type       │ Routing Decision            │
+   ├────────────────────┼─────────────────────────────┤
+   │ Microsoft 365      │ Direct breakout → Internet  │
+   │                    │ (no backhaul to DC)         │
+   ├────────────────────┼─────────────────────────────┤
+   │ Salesforce, Zoom   │ Direct breakout → Internet  │
+   │                    │ (with SWG/CASB inspection)  │
+   ├────────────────────┼─────────────────────────────┤
+   │ Internal ERP       │ Tunnel → Datacenter         │
+   │                    │ (IPsec/GRE tunnel)          │
+   ├────────────────────┼─────────────────────────────┤
+   │ Voice/Video        │ QoS priority → Best path    │
+   │                    │ (latency-optimized)         │
+   ├────────────────────┼─────────────────────────────┤
+   │ General Web        │ Tunnel → SASE PoP → SWG     │
+   │                    │ (security inspection)       │
+   └────────────────────┴─────────────────────────────┘
+   
+3️⃣ PATH SELECTION (Intelligent Routing)
+   SD-WAN continuously monitors all paths:
+   - Latency, jitter, packet loss per link
+   - Automatic failover if primary degrades
+   
+   Example:
+   Primary Internet (50ms latency) ──► Voice traffic
+   Secondary Internet (80ms latency) ──► Bulk downloads
+   LTE (100ms, metered) ──► Failover only
+   
+4️⃣ INTEGRATION WITH SASE SECURITY
+   ┌─────────────────────────────────────────────────┐
+   │  SD-WAN Edge ══IPsec Tunnel══► SASE PoP        │
+   │                                                 │
+   │  All internet-bound traffic sent to SASE for:  │
+   │  - SWG inspection                               │
+   │  - CASB policies                                │
+   │  - Threat prevention                            │
+   └─────────────────────────────────────────────────┘</pre>
+          </div>
+
+          <p style="margin-top: 1rem;"><strong>Key SD-WAN Benefits:</strong></p>
+          <ul style="font-size: 0.9rem;">
+            <li><strong>Direct Internet Access:</strong> SaaS traffic breaks out locally (no backhaul latency)</li>
+            <li><strong>Link Aggregation:</strong> Use multiple cheap internet links instead of expensive MPLS</li>
+            <li><strong>Application-Aware:</strong> Routes based on app requirements (voice needs low latency)</li>
+            <li><strong>Automated Failover:</strong> Switches paths in milliseconds if link degrades</li>
+          </ul>
+        </div>
+
+        <!-- ==================== CONFIGURATION EXAMPLES ==================== -->
+        <h3>17.4 Configuration Examples (How Policies Are Set)</h3>
+
+        <div class="key-insight" style="margin-bottom: 1.5rem;">
+          <h4>💡 Configuration Model</h4>
+          <p>SASE policies are configured centrally in a cloud console and pushed to all PoPs globally. Changes take effect in minutes across all locations.</p>
+        </div>
+
+        <!-- SWG Config -->
+        <div class="example-box" style="margin-bottom: 1.5rem;">
+          <h5 style="color: #f97316;">🌐 SWG Policy Configuration</h5>
+          <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.8rem;">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SWG POLICY RULES (processed top-to-bottom)                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  RULE 1: Block Malicious Content                                            │
+│  ├── Categories: Malware, Phishing, Botnets, Cryptomining                   │
+│  ├── Action: BLOCK                                                          │
+│  └── Apply to: All Users                                                    │
+│                                                                              │
+│  RULE 2: Block High-Risk Categories                                         │
+│  ├── Categories: Adult, Gambling, Weapons, Drugs                            │
+│  ├── Action: BLOCK                                                          │
+│  └── Apply to: All Users                                                    │
+│                                                                              │
+│  RULE 3: Warn on Streaming (Bandwidth)                                      │
+│  ├── Categories: Streaming Media                                            │
+│  ├── Action: WARN (user can proceed with acknowledgment)                    │
+│  └── Apply to: All Users (except Marketing team)                            │
+│                                                                              │
+│  RULE 4: Allow Sanctioned SaaS                                              │
+│  ├── Apps: Microsoft 365, Salesforce, Workday, Zoom                         │
+│  ├── Action: ALLOW + Apply CASB policies                                    │
+│  └── SSL Inspection: Enabled                                                │
+│                                                                              │
+│  RULE 5: Block Unsanctioned Cloud Storage                                   │
+│  ├── Apps: Personal Dropbox, Personal Google Drive, WeTransfer              │
+│  ├── Action: BLOCK                                                          │
+│  └── Message: "Use company OneDrive instead"                                │
+│                                                                              │
+│  RULE 6: Default Allow (with inspection)                                    │
+│  ├── Categories: All others                                                 │
+│  ├── Action: ALLOW                                                          │
+│  └── SSL Inspection: Enabled, Malware Scan: Enabled                         │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+SSL INSPECTION EXCEPTIONS:
+├── Healthcare sites (HIPAA concerns)
+├── Banking/Financial (certificate pinning)
+└── Specific domains: *.gov, healthcare-app.com</pre>
+        </div>
+
+        <!-- CASB Config -->
+        <div class="example-box" style="margin-bottom: 1.5rem;">
+          <h5 style="color: #a78bfa;">☁️ CASB Policy Configuration</h5>
+          <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.8rem;">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  CASB POLICIES FOR MICROSOFT 365                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  TENANT RESTRICTION:                                                         │
+│  ├── Allow only: company.onmicrosoft.com tenant                             │
+│  └── Block: All personal M365 accounts, other company tenants               │
+│                                                                              │
+│  SESSION CONTROLS (based on conditions):                                     │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │  IF Device = Managed (Intune compliant)                                │ │
+│  │     AND User = Corporate identity                                      │ │
+│  │     AND Location = Allowed countries                                   │ │
+│  │  THEN: Full access                                                     │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │  IF Device = Unmanaged (personal device)                               │ │
+│  │     AND User = Corporate identity                                      │ │
+│  │  THEN: Limited access                                                  │ │
+│  │     ├── Allow: Web access only (no desktop apps)                       │ │
+│  │     ├── Block: Downloads                                               │ │
+│  │     ├── Block: Print                                                   │ │
+│  │     └── Enable: Watermarking on viewed docs                            │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+│                                                                              │
+│  DLP POLICIES (content inspection):                                          │
+│  ├── RULE: Block upload of files containing SSN patterns                    │
+│  │   └── Regex: \d{3}-\d{2}-\d{4}                                           │
+│  ├── RULE: Block upload of files containing credit card numbers             │
+│  │   └── Pattern: Credit Card (built-in)                                    │
+│  ├── RULE: Alert on bulk download (>50 files in 10 min)                     │
+│  │   └── Action: Alert SOC, allow (investigate)                             │
+│  └── RULE: Block external sharing of "Confidential" labeled files           │
+│      └── Integration: Microsoft Purview sensitivity labels                  │
+│                                                                              │
+│  SHADOW IT CONTROLS:                                                         │
+│  ├── Discovered Apps: 847 cloud apps in use                                 │
+│  ├── Sanctioned: 45 apps (allowed, monitored)                               │
+│  ├── Unsanctioned: 802 apps (blocked or monitored)                          │
+│  └── Action on unsanctioned: Block uploads, allow read-only                 │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</pre>
+        </div>
+
+        <!-- ZTNA Config -->
+        <div class="example-box" style="margin-bottom: 1.5rem;">
+          <h5 style="color: #22c55e;">🏢 ZTNA Policy Configuration</h5>
+          <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.8rem;">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ZTNA APPLICATION DEFINITIONS                                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  APP: HR Portal                                                              │
+│  ├── Internal URL: https://hr.internal.company.com                          │
+│  ├── App Connector: connector-datacenter-1                                  │
+│  ├── Port: 443                                                              │
+│  └── Health Check: /health endpoint                                         │
+│                                                                              │
+│  APP: ERP System                                                             │
+│  ├── Internal URL: https://erp.internal.company.com                         │
+│  ├── App Connector: connector-datacenter-1, connector-datacenter-2 (HA)     │
+│  ├── Port: 443, 8443                                                        │
+│  └── Health Check: TCP port check                                           │
+│                                                                              │
+│  APP: DevOps Tools (GitLab, Jenkins)                                         │
+│  ├── Internal URLs: gitlab.internal, jenkins.internal                       │
+│  ├── App Connector: connector-dev-network                                   │
+│  └── Port: 443, 22 (SSH)                                                    │
+│                                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  ZTNA ACCESS POLICIES                                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  POLICY: HR Portal Access                                                    │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │  WHO:                                                                  │ │
+│  │  ├── Groups: HR-Team, HR-Managers, Executives                         │ │
+│  │  └── Users: (specific users if needed)                                │ │
+│  │                                                                        │ │
+│  │  DEVICE REQUIREMENTS:                                                  │ │
+│  │  ├── Device Type: Managed (Intune/Jamf enrolled)                      │ │
+│  │  ├── OS: Windows 10+, macOS 12+                                       │ │
+│  │  ├── EDR: Defender for Endpoint running                               │ │
+│  │  ├── Encryption: BitLocker/FileVault enabled                          │ │
+│  │  └── Patch Level: Within 30 days of latest                            │ │
+│  │                                                                        │ │
+│  │  CONTEXT REQUIREMENTS:                                                 │ │
+│  │  ├── Location: Canada, USA (block high-risk countries)                │ │
+│  │  ├── Time: Any (24/7 access)                                          │ │
+│  │  └── Risk Score: Low or Medium (Entra ID risk)                        │ │
+│  │                                                                        │ │
+│  │  ACTION: ALLOW access to HR Portal                                    │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+│                                                                              │
+│  POLICY: DevOps Tools Access                                                 │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │  WHO: Engineering team only                                           │ │
+│  │  DEVICE: Managed devices only                                         │ │
+│  │  CONTEXT: MFA required every session                                  │ │
+│  │  ADDITIONAL: Time-bound access (request via PIM)                      │ │
+│  │  ACTION: ALLOW GitLab, Jenkins                                        │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+│                                                                              │
+│  DEFAULT POLICY: DENY ALL                                                    │
+│  └── If no policy matches, deny access (zero trust principle)               │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</pre>
+        </div>
+
+        <!-- ==================== DEPLOYMENT ARCHITECTURE ==================== -->
+        <h3>17.5 Deployment Architecture: Agent vs Agentless</h3>
+
+        <div class="comparison-grid">
+          <div class="comparison-column">
+            <div class="comparison-header" style="background: rgba(34, 197, 94, 0.2); color: #22c55e;">Agent-Based (Recommended)</div>
+            <div class="comparison-content">
+              <pre style="font-size: 0.75rem; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px;">
+┌─────────────────────────┐
+│   Managed Endpoint      │
+│  ┌───────────────────┐  │
+│  │  SASE Agent       │  │
+│  │  ─────────────────│  │
+│  │  • Intercepts all │  │
+│  │    traffic        │  │
+│  │  • Device posture │  │
+│  │  • User identity  │  │
+│  │  • Auto-connect   │  │
+│  └────────┬──────────┘  │
+└───────────┼─────────────┘
+            │ TLS Tunnel
+            ▼
+     [SASE Cloud PoP]</pre>
+              <p style="margin-top: 1rem; font-size: 0.85rem;"><strong>Use for:</strong> Corporate laptops, managed devices</p>
+              <p style="font-size: 0.85rem;"><strong>Agents:</strong> Zscaler Client Connector, Netskope Client, Prisma Access GlobalProtect</p>
+            </div>
+          </div>
+
+          <div class="comparison-column">
+            <div class="comparison-header" style="background: rgba(249, 115, 22, 0.2); color: #f97316;">Agentless (Browser-Based)</div>
+            <div class="comparison-content">
+              <pre style="font-size: 0.75rem; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px;">
+┌─────────────────────────┐
+│   Unmanaged Device      │
+│  ┌───────────────────┐  │
+│  │  Browser Only     │  │
+│  │  ─────────────────│  │
+│  │  • Access portal  │  │
+│  │  • Limited apps   │  │
+│  │  • Session-based  │  │
+│  │  • Watermarking   │  │
+│  └────────┬──────────┘  │
+└───────────┼─────────────┘
+            │ HTTPS
+            ▼
+     [SASE Portal/Proxy]</pre>
+              <p style="margin-top: 1rem; font-size: 0.85rem;"><strong>Use for:</strong> Contractors, BYOD, third parties</p>
+              <p style="font-size: 0.85rem;"><strong>Access:</strong> Through web portal, isolated browser, clientless ZTNA</p>
+            </div>
+          </div>
+        </div>
+
+        <h3>17.6 Complete SASE Traffic Flow Diagram</h3>
+
+        <div class="example-box" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 2px solid rgba(6, 182, 212, 0.5); padding: 1.5rem;">
+          <h5 style="color: #06b6d4; margin-bottom: 1rem;">🔄 End-to-End Traffic Flow</h5>
+          <pre style="background: rgba(0,0,0,0.4); padding: 1.5rem; border-radius: 8px; overflow-x: auto; font-size: 0.75rem; line-height: 1.5; color: #e2e8f0;">
+                                    ┌─────────────────────────────────────────────┐
+                                    │           ☁️ SASE CLOUD                      │
+                                    │  ┌─────────────────────────────────────────┐│
+                                    │  │         Security Services               ││
+                                    │  │  ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐       ││
+                                    │  │  │ SWG │ │CASB │ │ZTNA │ │FWaaS│       ││
+                                    │  │  └──┬──┘ └──┬──┘ └──┬──┘ └──┬──┘       ││
+                                    │  │     └───────┴───────┴───────┘           ││
+                                    │  │              Policy Engine              ││
+                                    │  └─────────────────────────────────────────┘│
+                                    │                    ▲                        │
+                                    │    ┌───────────────┼───────────────┐        │
+                                    │    │               │               │        │
+                                    │  PoP 1          PoP 2          PoP 3       │
+                                    │ (Toronto)      (London)      (Singapore)   │
+                                    └─────────────────────────────────────────────┘
+                                                         ▲
+              ┌──────────────────────────────────────────┼──────────────────────────────────────────┐
+              │                                          │                                          │
+              │                                          │                                          │
+   ┌──────────┴──────────┐                 ┌─────────────┴─────────────┐            ┌──────────────┴──────────────┐
+   │  👤 REMOTE USER      │                 │   🏢 BRANCH OFFICE         │            │   🏠 HOME OFFICE            │
+   │                      │                 │                           │            │                             │
+   │  ┌────────────────┐  │                 │  ┌─────────────────────┐  │            │  ┌─────────────────────┐    │
+   │  │ SASE Agent     │  │                 │  │   SD-WAN Edge       │  │            │  │   SASE Agent        │    │
+   │  │ on Laptop      │  │                 │  │   Appliance         │  │            │  │   on Laptop         │    │
+   │  └───────┬────────┘  │                 │  └──────────┬──────────┘  │            │  └──────────┬──────────┘    │
+   │          │           │                 │             │             │            │             │               │
+   │   Coffee Shop WiFi   │                 │      Multiple ISPs        │            │      Home Internet          │
+   │   Hotel WiFi         │                 │   ┌────────┼────────┐     │            │                             │
+   │   Airport            │                 │   │        │        │     │            │                             │
+   └──────────────────────┘                 │  ISP1    ISP2     LTE    │            └─────────────────────────────┘
+                                            └───────────────────────────┘
+              │                                          │                                          │
+              │                                          │                                          │
+              ▼                                          ▼                                          ▼
+   ════════════════════════════════════════════════════════════════════════════════════════════════════════════
+                                              DESTINATIONS
+   ════════════════════════════════════════════════════════════════════════════════════════════════════════════
+              │                                          │                                          │
+              ▼                                          ▼                                          ▼
+   ┌─────────────────────┐                 ┌─────────────────────┐                 ┌─────────────────────────────┐
+   │  🌐 INTERNET        │                 │  ☁️ SAAS APPS        │                 │  🏢 PRIVATE APPS             │
+   │                     │                 │                     │                 │                             │
+   │  websites,          │                 │  Microsoft 365      │                 │  ┌─────────────────────┐    │
+   │  news,              │                 │  Salesforce         │                 │  │  App Connector      │    │
+   │  any URL            │                 │  Workday            │                 │  │  (in datacenter)    │    │
+   │                     │                 │  ServiceNow         │                 │  └──────────┬──────────┘    │
+   │  Route: Via SWG     │                 │                     │                 │             │               │
+   │                     │                 │  Route: Via CASB    │                 │  ┌──────────┴──────────┐    │
+   └─────────────────────┘                 └─────────────────────┘                 │  │ HR App │ ERP │ CRM │    │
+                                                                                   │  └─────────────────────┘    │
+                                                                                   │                             │
+                                                                                   │  Route: Via ZTNA            │
+                                                                                   └─────────────────────────────┘</pre>
+        </div>
+
+        <h3>17.7 SASE vs Traditional Architecture</h3>
+
+        <div class="comparison-grid">
+          <div class="comparison-column">
+            <div class="comparison-header" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">❌ Traditional (Hub & Spoke)</div>
+            <div class="comparison-content">
+              <pre style="font-size: 0.7rem; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px;">
+     [Remote User]
+          │
+          │ VPN Tunnel
+          ▼
+   ┌──────────────────┐
+   │   DATACENTER     │
+   │  ┌────────────┐  │
+   │  │ VPN Gateway│  │
+   │  └─────┬──────┘  │
+   │        │         │
+   │  ┌─────▼──────┐  │
+   │  │ Firewall   │  │
+   │  └─────┬──────┘  │
+   │        │         │
+   │  ┌─────▼──────┐  │
+   │  │ Proxy      │  │
+   │  └─────┬──────┘  │
+   └────────┼─────────┘
+            │ Backhaul
+            ▼
+       [Internet/SaaS]
+
+Problems:
+• All traffic through DC
+• High latency for remote
+• Single point of failure
+• Expensive MPLS links
+• Hardware bottlenecks</pre>
+            </div>
+          </div>
+
+          <div class="comparison-column">
+            <div class="comparison-header" style="background: rgba(34, 197, 94, 0.2); color: #22c55e;">✅ SASE (Cloud-Delivered)</div>
+            <div class="comparison-content">
+              <pre style="font-size: 0.7rem; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px;">
+     [Remote User]
+          │
+          │ Direct to nearest PoP
+          ▼
+   ┌──────────────────┐
+   │  SASE CLOUD PoP  │
+   │  (Closest Edge)  │
+   │                  │
+   │  All security    │
+   │  in one pass:    │
+   │  • SWG           │
+   │  • CASB          │
+   │  • ZTNA          │
+   │  • FWaaS         │
+   └────────┬─────────┘
+            │ Direct path
+            ▼
+       [Internet/SaaS]
+       
+       OR via App Connector
+            │
+            ▼
+       [Private Apps]
+
+Benefits:
+• Low latency (edge)
+• No backhaul needed
+• Global redundancy
+• OpEx model
+• Infinite scale</pre>
+            </div>
+          </div>
+        </div>
+
+        <h3>17.8 Zero Trust Principles in SASE</h3>
+
+        <p>SASE implements <strong>Zero Trust</strong> principles by default:</p>
+
+        <div class="pillar-grid">
+          <div class="pillar-card" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.02)); border: 1px solid rgba(239, 68, 68, 0.3);">
+            <h4 style="color: #ef4444;">1. Never Trust, Always Verify</h4>
+            <ul>
+              <li>Every request is authenticated</li>
+              <li>No implicit trust based on network location</li>
+              <li>Continuous validation throughout session</li>
+            </ul>
+          </div>
+
+          <div class="pillar-card" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(249, 115, 22, 0.02)); border: 1px solid rgba(249, 115, 22, 0.3);">
+            <h4 style="color: #f97316;">2. Least Privilege Access</h4>
+            <ul>
+              <li>Access granted per-app, not network-wide</li>
+              <li>Just-in-time access where possible</li>
+              <li>No lateral movement by default</li>
+            </ul>
+          </div>
+
+          <div class="pillar-card" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.02)); border: 1px solid rgba(34, 197, 94, 0.3);">
+            <h4 style="color: #22c55e;">3. Assume Breach</h4>
+            <ul>
+              <li>Microsegmentation limits blast radius</li>
+              <li>All traffic inspected (even internal)</li>
+              <li>Continuous monitoring for anomalies</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>17.9 SASE Vendor Landscape</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Vendor</th>
+              <th>Strengths</th>
+              <th>Key Products</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Zscaler</strong></td>
+              <td>Pure-play SASE, largest cloud security network, no appliances</td>
+              <td>ZIA (internet), ZPA (private apps), ZDX (experience)</td>
+            </tr>
+            <tr>
+              <td><strong>Palo Alto (Prisma Access)</strong></td>
+              <td>Strong firewall heritage, comprehensive platform</td>
+              <td>Prisma Access, Prisma SD-WAN, CloudGenix</td>
+            </tr>
+            <tr>
+              <td><strong>Cisco (Umbrella + Duo)</strong></td>
+              <td>DNS security, strong identity, networking integration</td>
+              <td>Umbrella, Duo, Meraki SD-WAN, SecureX</td>
+            </tr>
+            <tr>
+              <td><strong>Netskope</strong></td>
+              <td>Best-in-class CASB, strong DLP, data-centric</td>
+              <td>Netskope One, NewEdge network</td>
+            </tr>
+            <tr>
+              <td><strong>Cloudflare One</strong></td>
+              <td>Largest edge network (300+ cities), developer-friendly</td>
+              <td>Cloudflare Access, Gateway, Magic WAN</td>
+            </tr>
+            <tr>
+              <td><strong>Microsoft</strong></td>
+              <td>Native M365 integration, identity-first approach</td>
+              <td>Entra Private Access, Entra Internet Access, Global Secure Access</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>17.10 Implementation Checklist</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Phase</th>
+              <th>Tasks</th>
+              <th>Key Decisions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Assessment</strong></td>
+              <td>
+                <ul style="margin: 0; padding-left: 1rem; font-size: 0.85rem;">
+                  <li>Inventory all applications (SaaS, internal)</li>
+                  <li>Map current traffic flows</li>
+                  <li>Identify user populations</li>
+                  <li>Document current security policies</li>
+                </ul>
+              </td>
+              <td>What are we protecting? Who needs access?</td>
+            </tr>
+            <tr>
+              <td><strong>2. Design</strong></td>
+              <td>
+                <ul style="margin: 0; padding-left: 1rem; font-size: 0.85rem;">
+                  <li>Define ZTNA application segments</li>
+                  <li>Create policy framework (who, what, conditions)</li>
+                  <li>Plan connector placement for private apps</li>
+                  <li>Design SD-WAN topology for branches</li>
+                </ul>
+              </td>
+              <td>Single vendor or best-of-breed?</td>
+            </tr>
+            <tr>
+              <td><strong>3. Pilot</strong></td>
+              <td>
+                <ul style="margin: 0; padding-left: 1rem; font-size: 0.85rem;">
+                  <li>Deploy agents to pilot group (IT team)</li>
+                  <li>Configure policies in monitor-only mode</li>
+                  <li>Test all traffic flows</li>
+                  <li>Validate user experience (latency, compatibility)</li>
+                </ul>
+              </td>
+              <td>Which group first? What success criteria?</td>
+            </tr>
+            <tr>
+              <td><strong>4. Rollout</strong></td>
+              <td>
+                <ul style="margin: 0; padding-left: 1rem; font-size: 0.85rem;">
+                  <li>Phased deployment by location/department</li>
+                  <li>Switch policies from monitor to enforce</li>
+                  <li>Retire legacy VPN concentrators</li>
+                  <li>Migrate branch offices to SD-WAN</li>
+                </ul>
+              </td>
+              <td>Coexistence period? Rollback plan?</td>
+            </tr>
+            <tr>
+              <td><strong>5. Optimize</strong></td>
+              <td>
+                <ul style="margin: 0; padding-left: 1rem; font-size: 0.85rem;">
+                  <li>Tune policies based on telemetry</li>
+                  <li>Add DLP rules incrementally</li>
+                  <li>Implement UEBA/anomaly detection</li>
+                  <li>Integrate with SIEM/SOAR</li>
+                </ul>
+              </td>
+              <td>What metrics to track?</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="key-insight" style="margin-top: 1.5rem;">
+          <h4>💡 The Strategic Shift</h4>
+          <p><strong>SASE represents a fundamental shift:</strong> Security follows the user, not the network perimeter.</p>
+          <p style="margin-top: 0.5rem;">In a world where users work from anywhere, apps are in the cloud, and data flows everywhere, perimeter-based security doesn't scale. SASE applies consistent security policy regardless of where the user is or where the app lives.</p>
+        </div>
+
+        <div class="interview-box" style="margin-top: 2rem;">
+          <h4>🎯 Interview Answer: "What is SASE and how does it work?"</h4>
+          <blockquote style="font-size: 0.95rem; line-height: 1.8;">
+            "SASE — Secure Access Service Edge — is the convergence of networking and security into a unified, cloud-delivered service. Instead of backhauling all traffic to a central datacenter for inspection, security controls are applied at the cloud edge, closest to the user.
+            <br><br>
+            The way I explain it is through the user experience: When a user opens a random website, SWG applies URL filtering and malware scanning. When they open Microsoft 365, CASB enforces DLP and session controls. When they access an internal HR app, ZTNA provides identity-based access — no VPN needed. And branch office traffic gets optimized through SD-WAN. All these components working together is SASE.
+            <br><br>
+            The key architecture difference is that the SASE agent on the endpoint tunnels traffic to the nearest cloud PoP — could be 5-15ms away — where all security processing happens in a single pass. For private apps, there's an inside-out model where app connectors make outbound connections to the SASE cloud, so internal apps are never exposed to the internet.
+            <br><br>
+            From a Zero Trust perspective, SASE implements 'never trust, always verify' by authenticating every request, applying least-privilege access per-app rather than network-wide, and assuming breach through microsegmentation and continuous inspection. The policies are identity and context-aware — same user on a managed device gets full access, but on a personal device might get view-only with watermarking."
+          </blockquote>
+        </div>
+      </section>
       <!-- ==================== FINAL CALLOUT ==================== -->
       <div class="callout success" style="margin-top: 3rem;">
         <div class="callout-title">

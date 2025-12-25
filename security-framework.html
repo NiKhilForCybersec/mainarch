@@ -185,10 +185,11 @@
               <tr><th>Question</th><th>RevFlow Analytics Answer</th></tr>
             </thead>
             <tbody>
-              <tr><td><strong>What does the company sell?</strong></td><td>Revenue intelligence, deal prediction analytics</td></tr>
-              <tr><td><strong>How does it make money?</strong></td><td>B2B SaaS subscriptions from enterprise clients</td></tr>
-              <tr><td><strong>What does it depend on?</strong></td><td>Salesforce integration, meetings data, customer CRM data</td></tr>
-              <tr><td><strong>Biggest fears?</strong></td><td>Data leakage, account takeover, customer trust loss</td></tr>
+              <tr><td><strong>What does the company sell?</strong></td><td>B2B SaaS subscription platform for deal prediction, forecasting, sales intelligence</td></tr>
+              <tr><td><strong>How does it make money?</strong></td><td>Enterprise subscriptions (Cisco, Dell, financial institutions, global SaaS companies)</td></tr>
+              <tr><td><strong>What does it depend on?</strong></td><td>Customer Salesforce integration, OAuth APIs, tenant-isolated data processing, ML models</td></tr>
+              <tr><td><strong>What data does it process?</strong></td><td>Customer CRM data (opportunities, deals), email/calendar metadata, meeting data (if consented)</td></tr>
+              <tr><td><strong>Biggest fears?</strong></td><td>Cross-tenant data leakage, API credential theft, customer trust loss, compliance failure</td></tr>
             </tbody>
           </table>
         </div>
@@ -196,6 +197,21 @@
         <div class="callout info">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Key Insight for B2B SaaS
+          </div>
+          <div class="callout-content">
+            <p><strong>RevFlow is a data processor, not owner.</strong> Customers own their data. This means security must protect:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Tenant isolation</strong> — no cross-customer data leakage</li>
+              <li><strong>API security</strong> — OAuth tokens, rate limiting, abuse detection</li>
+              <li><strong>Platform integrity</strong> — no unauthorized access to customer data</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
             Memory Hook
           </div>
           <div class="callout-content">

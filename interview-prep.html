@@ -205,12 +205,22 @@ onboarding and troubleshooting telemetry, supporting security operations,
 and participating in security tool evaluations and proof-of-concepts, 
 including an EDR migration project.
 
-After relocating to Canada, I joined a Siemens subsidiary, where my focus 
+After relocating to Canada, I joined a Siemens subsidiary — a B2B revenue 
+intelligence SaaS company that helps enterprise sales teams predict deal 
+outcomes by correlating CRM data with activity signals. My focus 
 shifted more toward SIEM and platform engineering. I was involved in a 
 migration from RSA NetWitness to Microsoft Sentinel, contributing from 
 the discovery and foundation phase — log source identification, ingestion 
 strategy, onboarding data using built-in and custom connectors, and 
-validating data quality for detection use cases. In parallel, I worked on the 
+validating data quality for detection use cases.
+
+Understanding the business context was important — as a SaaS company with 
+deep integrations into customer Salesforce instances, our security priorities 
+centered on SaaS visibility, API security, and data protection rather than 
+traditional perimeter controls. We onboarded logs from Salesforce, Zoom, 
+and other SaaS apps alongside the standard identity and endpoint telemetry.
+
+In parallel, I worked on the 
 Microsoft Defender for Endpoint track, handling agent onboarding, policy 
 configuration, exclusions, and stabilization to ensure reliable endpoint 
 telemetry integrated with Sentinel.
@@ -299,8 +309,16 @@ ensuring that knowledge transfers cleanly to the team that will run it."</code><
           <div class="code-block">
             <div class="code-header"><span class="code-lang">Response</span></div>
             <pre><code>"I'll walk you through the RSA NetWitness to Microsoft Sentinel migration 
-I worked on. The company was a B2B SaaS provider with about 4,000 employees, 
-9,000 endpoints, and global offices.
+I worked on. The company was a B2B revenue intelligence SaaS — a Siemens 
+subsidiary with about 4,000 employees, 9,000 endpoints, and global offices 
+in Canada, US, and India.
+
+The platform helps enterprise sales teams predict deal outcomes by correlating 
+CRM data from Salesforce with activity signals from email, calendar, and 
+meetings. Understanding this business context was critical because it shaped 
+our security priorities — SaaS integrations (Salesforce, Zoom, Teams), 
+API security, and data protection were higher priority than traditional 
+perimeter controls.
 
 APPROACH: Our SIEM migration was detection-driven rather than log-first 
 or 1-to-1 rule translation. Instead of mechanically porting every RSA 
@@ -323,7 +341,9 @@ cross-team coordination, data classification.
 DISCOVERY: We started by documenting the existing RSA environment — what 
 log sources were configured, what parsers were in use, what detection rules 
 existed. I met with IT, infrastructure, and application teams to understand 
-their logging capabilities.
+their logging capabilities. Given the SaaS-heavy business model, SaaS app 
+audit logs (Salesforce, Zoom, Workday) were prioritized alongside traditional 
+infrastructure logs.
 
 LOG SOURCE STRATEGY: This is where migrating to Sentinel with XDR is 
 fundamentally different from a traditional SIEM migration. RSA NetWitness 
@@ -341,7 +361,8 @@ SigninLogs) because XDR detects identity ATTACKS but not CHANGES like
 role assignments or CA policy modifications. Then XDR alerts and incidents 
 via the M365 Defender connector — this is how attack detections flow to 
 Sentinel for correlation. Then sources XDR doesn't cover: network logs, 
-SaaS audit logs, on-prem infrastructure.
+SaaS audit logs (Salesforce was critical given the product integration), 
+on-prem infrastructure.
 
 INGESTION: For each source, I configured the appropriate connector — built-in 
 where available, custom DCRs for on-prem sources. We validated data quality: 
