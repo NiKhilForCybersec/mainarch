@@ -1051,11 +1051,31 @@ hr {
   margin-top: 0.1rem;
 }
 
-/* Mobile Responsive */
+/* Mobile Responsive - Tablet (iPad) and smaller screens */
+/* iPad Pro 12.9" landscape is 1366px, so we use 1280px as breakpoint */
+@media (max-width: 1280px) {
+  :root {
+    --sidebar-width: 260px;
+  }
+  
+  .content-wrapper {
+    padding: 2rem;
+    max-width: 100%;
+  }
+}
+
+/* iPad and smaller tablets */
 @media (max-width: 1024px) {
   .sidebar {
     transform: translateX(-100%);
     transition: transform var(--transition-normal);
+    width: 280px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 1000;
+    background-color: var(--bg-secondary);
   }
   
   .sidebar.open {
@@ -1063,15 +1083,61 @@ hr {
   }
   
   .main-content {
-    margin-left: 0;
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
   
   .content-wrapper {
     padding: 1.5rem;
+    padding-top: 4rem; /* Space for hamburger menu */
+    max-width: 100%;
   }
   
   .mobile-menu-toggle {
-    display: flex;
+    display: flex !important;
+  }
+  
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+  
+  .sidebar-overlay.open {
+    display: block;
+  }
+  
+  /* Ensure tables don't overflow */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+  
+  /* Adjust grids for tablet */
+  .pillar-grid,
+  .bucket-grid,
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+  
+  .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .toc-columns {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -1084,11 +1150,22 @@ hr {
     font-size: 1.25rem;
   }
   
-  .card-grid {
+  .content-wrapper {
+    padding: 1rem;
+    padding-top: 4rem;
+  }
+  
+  .card-grid,
+  .pillar-grid,
+  .bucket-grid {
     grid-template-columns: 1fr;
   }
   
   .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .toc-columns {
     grid-template-columns: 1fr;
   }
   
@@ -1100,6 +1177,15 @@ hr {
   .page-nav-link {
     max-width: 100%;
   }
+  
+  /* Table responsive */
+  table {
+    font-size: 0.8rem;
+  }
+  
+  th, td {
+    padding: 0.5rem;
+  }
 }
 
 /* Mobile Menu Toggle */
@@ -1108,9 +1194,9 @@ hr {
   position: fixed;
   top: 1rem;
   left: 1rem;
-  z-index: 101;
-  width: 40px;
-  height: 40px;
+  z-index: 1001;
+  width: 44px;
+  height: 44px;
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-primary);
   border-radius: 8px;
@@ -1118,9 +1204,14 @@ hr {
   justify-content: center;
   cursor: pointer;
   color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Sidebar Overlay */
+.mobile-menu-toggle:hover {
+  background-color: var(--bg-tertiary);
+}
+
+/* Sidebar Overlay - base styles, shown via JS */
 .sidebar-overlay {
   display: none;
   position: fixed;
@@ -1128,8 +1219,8 @@ hr {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 999;
 }
 
 .sidebar-overlay.open {

@@ -391,6 +391,48 @@
     .checklist-item input[type="checkbox"] {
       margin-top: 0.25rem;
     }
+    
+    /* Responsive Styles */
+    @media (max-width: 1024px) {
+      .pillar-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+      
+      .comparison-visual {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .master-model {
+        padding: 1rem;
+      }
+      
+      .score-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .pillar-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .comparison-visual {
+        grid-template-columns: 1fr;
+      }
+      
+      .score-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .pillar-card,
+      .key-insight {
+        padding: 1rem;
+      }
+      
+      .toc-columns {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>

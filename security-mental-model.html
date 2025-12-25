@@ -340,6 +340,54 @@
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 1rem;
     }
+    
+    /* Responsive Styles */
+    @media (max-width: 1024px) {
+      .pillar-grid,
+      .bucket-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+      
+      .two-column {
+        grid-template-columns: 1fr;
+      }
+      
+      .master-model {
+        padding: 1rem;
+      }
+      
+      .master-model p {
+        font-size: 0.9rem;
+        line-height: 1.8;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .pillar-grid,
+      .bucket-grid,
+      .two-column {
+        grid-template-columns: 1fr;
+      }
+      
+      .model-card,
+      .plane-card,
+      .bucket-card,
+      .memorize-box,
+      .key-insight,
+      .example-box,
+      .interview-box {
+        padding: 1rem;
+      }
+      
+      .master-model p {
+        font-size: 0.85rem;
+      }
+      
+      .master-model span {
+        display: inline-block;
+        margin: 0.25rem;
+      }
+    }
   </style>
 </head>
 <body>
