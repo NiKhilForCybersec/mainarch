@@ -517,13 +517,14 @@
             </ul>
           </div>
           <div class="toc-column">
-            <p><strong>Frameworks</strong></p>
+            <p><strong>Frameworks & Examples</strong></p>
             <ul>
               <li><a href="#mitre">10. MITRE ATT&CK</a></li>
               <li><a href="#nist-iso">11. NIST/ISO</a></li>
               <li><a href="#regulations">12. Regulations</a></li>
               <li><a href="#putting-together">13. Putting It Together</a></li>
               <li><a href="#industry-examples">14. Industry Examples</a></li>
+              <li><a href="#scenario-walkthrough">15. Complete Scenario: Ransomware</a></li>
             </ul>
           </div>
         </div>
@@ -1945,6 +1946,926 @@
             <li>Unauthorized PLC programming → OT monitoring + SIEM (Bucket 3)</li>
             <li>After-hours access to design repository → SIEM (Bucket 2)</li>
           </ul>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 15: COMPLETE SCENARIO WALKTHROUGH ==================== -->
+      <section id="scenario-walkthrough">
+        <h2>15. Complete Scenario: Ransomware Defense</h2>
+
+        <p>Let's walk through a <strong>complete, end-to-end example</strong> of how to apply the Security Mental Model to defend against ransomware. This demonstrates why you need 20+ detection rules, how MITRE ATT&CK fits in, how frameworks guide your program, and what metrics prove effectiveness.</p>
+
+        <div class="memorize-box">
+          <h4>🎯 Why This Scenario Matters</h4>
+          <p>Ransomware is not detected by a single rule. It's a <strong>multi-stage attack</strong> with many opportunities for detection. A mature SOC detects ransomware at multiple points in the kill chain—if you only detect the final encryption, you've already lost.</p>
+          <p style="margin-top: 0.5rem;"><strong>Goal:</strong> Detect and stop ransomware BEFORE encryption begins, with defense-in-depth at every stage.</p>
+        </div>
+
+        <!-- ===== STEP 1: BUSINESS CONTEXT ===== -->
+        <h3>Step 1: Business Context — What Are We Protecting?</h3>
+
+        <div class="example-box">
+          <h5>Scenario: Mid-Size Healthcare Organization</h5>
+          <p><strong>Organization:</strong> Regional hospital network, 3,000 employees, 5,000 endpoints</p>
+          <p><strong>Critical Assets:</strong> EHR system (Epic), PACS imaging, patient data (PHI), clinical workstations, medical devices</p>
+          <p><strong>Regulations:</strong> HIPAA, HITECH, state breach notification laws</p>
+          <p><strong>What Harm Looks Like:</strong></p>
+          <ul>
+            <li><strong>Patient Safety:</strong> EHR unavailable = delayed care, potential deaths</li>
+            <li><strong>Financial:</strong> $1M+ ransom demand, $4M+ breach costs, regulatory fines</li>
+            <li><strong>Reputation:</strong> Public breach disclosure, loss of patient trust</li>
+            <li><strong>Operational:</strong> Weeks of recovery, manual processes, diverted ambulances</li>
+          </ul>
+        </div>
+
+        <div class="key-insight">
+          <h4>💡 Business Context Drives Priority</h4>
+          <p>For this healthcare org, ransomware is an <strong>existential threat</strong>. A successful attack doesn't just cost money—it can cost lives. This means ransomware defense gets top investment priority, and we need comprehensive coverage, not just basic detection.</p>
+        </div>
+
+        <!-- ===== STEP 2: ASSET MAPPING ===== -->
+        <h3>Step 2: Asset Mapping Across Three Planes</h3>
+
+        <p>Map all assets that ransomware could target or traverse:</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Plane</th>
+              <th>Assets at Risk</th>
+              <th>Ransomware Impact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color: #22c55e;">Data Plane</strong></td>
+              <td>Clinical workstations, servers, file shares, databases, EHR, PACS, email, backups</td>
+              <td>Encryption of files, databases, backups; data exfiltration for double extortion</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #06b6d4;">Control Plane</strong></td>
+              <td>Active Directory, VPN, Conditional Access, service accounts, admin credentials</td>
+              <td>Credential theft for lateral movement, privilege escalation to Domain Admin</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #ef4444;">Management Plane</strong></td>
+              <td>Group Policy, SCCM, Azure AD, backup systems, security tools</td>
+              <td>Disable security tools, delete backups, push malware via GPO/SCCM</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ===== STEP 3: MITRE ATT&CK MAPPING ===== -->
+        <h3>Step 3: MITRE ATT&CK — The Ransomware Kill Chain</h3>
+
+        <p>Ransomware attacks follow a predictable pattern. MITRE ATT&CK helps us <strong>label each stage</strong> and ensure we have detection coverage across the entire kill chain:</p>
+
+        <div class="model-card" style="overflow-x: auto;">
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Stage</th>
+                <th>MITRE Tactic</th>
+                <th>Common Techniques</th>
+                <th>Time to Detect</th>
+                <th>Detection Opportunity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td><strong>1. Initial Access</strong></td>
+                <td>TA0001</td>
+                <td>T1566 Phishing, T1190 Exploit Public App, T1133 External Remote Services</td>
+                <td>Day 0</td>
+                <td>🟢 BEST — Stop before foothold</td>
+              </tr>
+              <tr style="background: rgba(34, 197, 94, 0.1);">
+                <td><strong>2. Execution</strong></td>
+                <td>TA0002</td>
+                <td>T1059 Command/Script, T1204 User Execution, T1047 WMI</td>
+                <td>Day 0-1</td>
+                <td>🟢 GOOD — Catch initial payload</td>
+              </tr>
+              <tr style="background: rgba(234, 179, 8, 0.1);">
+                <td><strong>3. Persistence</strong></td>
+                <td>TA0003</td>
+                <td>T1547 Boot Autostart, T1053 Scheduled Task, T1136 Create Account</td>
+                <td>Day 1-3</td>
+                <td>🟡 MEDIUM — Attacker establishing foothold</td>
+              </tr>
+              <tr style="background: rgba(234, 179, 8, 0.1);">
+                <td><strong>4. Privilege Escalation</strong></td>
+                <td>TA0004</td>
+                <td>T1068 Exploit for Priv Esc, T1078 Valid Accounts, T1134 Token Manipulation</td>
+                <td>Day 1-5</td>
+                <td>🟡 MEDIUM — Moving toward admin access</td>
+              </tr>
+              <tr style="background: rgba(234, 179, 8, 0.1);">
+                <td><strong>5. Defense Evasion</strong></td>
+                <td>TA0005</td>
+                <td>T1562 Impair Defenses, T1070 Indicator Removal, T1027 Obfuscation</td>
+                <td>Day 1-7</td>
+                <td>🟡 CRITICAL — Attacker hiding tracks</td>
+              </tr>
+              <tr style="background: rgba(249, 115, 22, 0.1);">
+                <td><strong>6. Credential Access</strong></td>
+                <td>TA0006</td>
+                <td>T1003 OS Credential Dumping, T1558 Kerberoasting, T1552 Unsecured Creds</td>
+                <td>Day 2-7</td>
+                <td>🟠 HIGH PRIORITY — Domain compromise imminent</td>
+              </tr>
+              <tr style="background: rgba(249, 115, 22, 0.1);">
+                <td><strong>7. Discovery</strong></td>
+                <td>TA0007</td>
+                <td>T1083 File Discovery, T1082 System Info, T1018 Remote System Discovery</td>
+                <td>Day 3-10</td>
+                <td>🟠 RECON — Attacker mapping environment</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.1);">
+                <td><strong>8. Lateral Movement</strong></td>
+                <td>TA0008</td>
+                <td>T1021 Remote Services (RDP, SMB), T1570 Lateral Tool Transfer</td>
+                <td>Day 5-14</td>
+                <td>🔴 SPREADING — Compromise expanding</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.1);">
+                <td><strong>9. Collection</strong></td>
+                <td>TA0009</td>
+                <td>T1560 Archive Data, T1074 Data Staged</td>
+                <td>Day 7-14</td>
+                <td>🔴 EXFIL PREP — Double extortion setup</td>
+              </tr>
+              <tr style="background: rgba(239, 68, 68, 0.1);">
+                <td><strong>10. Exfiltration</strong></td>
+                <td>TA0010</td>
+                <td>T1041 Exfil Over C2, T1567 Exfil to Cloud Storage</td>
+                <td>Day 10-21</td>
+                <td>🔴 DATA THEFT — Double extortion active</td>
+              </tr>
+              <tr style="background: rgba(139, 92, 246, 0.1);">
+                <td><strong>11. Impact</strong></td>
+                <td>TA0040</td>
+                <td>T1486 Data Encrypted, T1490 Inhibit Recovery, T1489 Service Stop</td>
+                <td>Day 14-30</td>
+                <td>🟣 TOO LATE — Encryption begun</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="memorize-box">
+          <h4>🧠 The Detection Window</h4>
+          <p>Ransomware operators typically spend <strong>5-21 days</strong> in an environment before encrypting. This is your detection window. Every stage is a detection opportunity—if you only detect at Stage 11 (Impact), you've missed 10+ chances to stop the attack.</p>
+          <p style="margin-top: 0.5rem;"><strong>Goal:</strong> Detect at Stage 1-4 (before credential theft) = minimal damage. Detect at Stage 5-8 = containable. Detect at Stage 9-11 = significant damage.</p>
+        </div>
+
+        <!-- ===== STEP 4: THE 25 DETECTION RULES ===== -->
+        <h3>Step 4: The 25+ Detection Rules You Need</h3>
+
+        <p>Here's why you need 20+ rules: each stage has multiple techniques, and each technique needs detection. A comprehensive ransomware detection program looks like this:</p>
+
+        <h4 style="color: #22c55e;">🟢 Stage 1-2: Initial Access & Execution (5 rules)</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Detection Rule</th>
+              <th>MITRE</th>
+              <th>Tool</th>
+              <th>Signal Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><strong>Phishing email with malicious attachment</strong></td>
+              <td>T1566.001</td>
+              <td>Defender for O365</td>
+              <td>Email logs, attachment detonation</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><strong>Phishing email with malicious link</strong></td>
+              <td>T1566.002</td>
+              <td>Defender for O365</td>
+              <td>Email logs, URL reputation</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><strong>Macro execution from Office document</strong></td>
+              <td>T1204.002</td>
+              <td>MDE</td>
+              <td>Process creation (WINWORD.EXE → cmd.exe)</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><strong>Suspicious PowerShell execution</strong></td>
+              <td>T1059.001</td>
+              <td>MDE + SIEM</td>
+              <td>Script block logging, encoded commands</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><strong>External RDP/VPN brute force</strong></td>
+              <td>T1133</td>
+              <td>SIEM</td>
+              <td>Firewall logs, VPN logs, Azure AD</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="color: #eab308;">🟡 Stage 3-5: Persistence, Priv Esc, Defense Evasion (7 rules)</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Detection Rule</th>
+              <th>MITRE</th>
+              <th>Tool</th>
+              <th>Signal Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>6</td>
+              <td><strong>Scheduled task created for persistence</strong></td>
+              <td>T1053.005</td>
+              <td>MDE + SIEM</td>
+              <td>Schtasks.exe, Event ID 4698</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td><strong>Registry run key modification</strong></td>
+              <td>T1547.001</td>
+              <td>MDE</td>
+              <td>Registry write to Run/RunOnce keys</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td><strong>New service created</strong></td>
+              <td>T1543.003</td>
+              <td>MDE + SIEM</td>
+              <td>Event ID 7045, sc.exe</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td><strong>Local admin account created</strong></td>
+              <td>T1136.001</td>
+              <td>SIEM</td>
+              <td>Event ID 4720, net user commands</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td><strong>Security tool disabled/tampered</strong></td>
+              <td>T1562.001</td>
+              <td>MDE + SIEM</td>
+              <td>AV service stopped, tamper protection alerts</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td><strong>Windows event log cleared</strong></td>
+              <td>T1070.001</td>
+              <td>SIEM</td>
+              <td>Event ID 1102, wevtutil.exe</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td><strong>Shadow copy deletion</strong></td>
+              <td>T1490</td>
+              <td>MDE + SIEM</td>
+              <td>vssadmin.exe delete shadows, wmic shadowcopy</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="color: #f97316;">🟠 Stage 6-7: Credential Access & Discovery (6 rules)</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Detection Rule</th>
+              <th>MITRE</th>
+              <th>Tool</th>
+              <th>Signal Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>13</td>
+              <td><strong>LSASS memory access (credential dumping)</strong></td>
+              <td>T1003.001</td>
+              <td>MDE</td>
+              <td>Process access to lsass.exe, Mimikatz signatures</td>
+            </tr>
+            <tr>
+              <td>14</td>
+              <td><strong>SAM database access</strong></td>
+              <td>T1003.002</td>
+              <td>MDE</td>
+              <td>Registry access to SAM, SYSTEM, SECURITY</td>
+            </tr>
+            <tr>
+              <td>15</td>
+              <td><strong>Kerberoasting (SPN enumeration)</strong></td>
+              <td>T1558.003</td>
+              <td>Defender for Identity</td>
+              <td>Abnormal Kerberos ticket requests</td>
+            </tr>
+            <tr>
+              <td>16</td>
+              <td><strong>DCSync attack</strong></td>
+              <td>T1003.006</td>
+              <td>Defender for Identity</td>
+              <td>Replication requests from non-DC</td>
+            </tr>
+            <tr>
+              <td>17</td>
+              <td><strong>Network share enumeration</strong></td>
+              <td>T1135</td>
+              <td>MDE + SIEM</td>
+              <td>net view, net share commands</td>
+            </tr>
+            <tr>
+              <td>18</td>
+              <td><strong>AD reconnaissance (BloodHound, ADFind)</strong></td>
+              <td>T1087.002</td>
+              <td>Defender for Identity</td>
+              <td>LDAP queries, suspicious AD enumeration</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="color: #ef4444;">🔴 Stage 8-10: Lateral Movement, Collection, Exfil (5 rules)</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Detection Rule</th>
+              <th>MITRE</th>
+              <th>Tool</th>
+              <th>Signal Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>19</td>
+              <td><strong>Suspicious RDP connections (internal)</strong></td>
+              <td>T1021.001</td>
+              <td>SIEM</td>
+              <td>Event ID 4624 Type 10, network flow</td>
+            </tr>
+            <tr>
+              <td>20</td>
+              <td><strong>PsExec / SMB lateral movement</strong></td>
+              <td>T1021.002</td>
+              <td>MDE + SIEM</td>
+              <td>PsExec service creation, SMB file writes</td>
+            </tr>
+            <tr>
+              <td>21</td>
+              <td><strong>WMI remote execution</strong></td>
+              <td>T1047</td>
+              <td>MDE</td>
+              <td>WmiPrvSE.exe spawning processes</td>
+            </tr>
+            <tr>
+              <td>22</td>
+              <td><strong>Large data staging/archiving</strong></td>
+              <td>T1074.001</td>
+              <td>MDE + DLP</td>
+              <td>7z.exe, rar.exe, large archive creation</td>
+            </tr>
+            <tr>
+              <td>23</td>
+              <td><strong>Data exfiltration to cloud storage</strong></td>
+              <td>T1567.002</td>
+              <td>CASB + DLP + SIEM</td>
+              <td>Uploads to mega.nz, dropbox, unauthorized cloud</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="color: #8b5cf6;">🟣 Stage 11: Impact — Last Line of Defense (3 rules)</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Detection Rule</th>
+              <th>MITRE</th>
+              <th>Tool</th>
+              <th>Signal Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>24</td>
+              <td><strong>Mass file encryption (entropy change)</strong></td>
+              <td>T1486</td>
+              <td>MDE</td>
+              <td>Rapid file modifications, extension changes</td>
+            </tr>
+            <tr>
+              <td>25</td>
+              <td><strong>Ransomware note creation</strong></td>
+              <td>T1486</td>
+              <td>MDE</td>
+              <td>README.txt, DECRYPT.txt file creation</td>
+            </tr>
+            <tr>
+              <td>26</td>
+              <td><strong>Critical service stopped (backup, security)</strong></td>
+              <td>T1489</td>
+              <td>SIEM</td>
+              <td>Service stop events for Veeam, SQL, AV</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            Why 26 Rules Minimum
+          </div>
+          <div class="callout-content">
+            <p>Each rule catches a different technique. Attackers may skip stages or use alternative techniques. <strong>Defense in depth means coverage at every stage.</strong> If your environment only has rules 24-26, you'll only detect ransomware after encryption starts—when it's too late.</p>
+          </div>
+        </div>
+
+        <!-- ===== STEP 5: CONTROLS BY PLANE ===== -->
+        <h3>Step 5: Complete Controls by Plane</h3>
+
+        <p>Detection isn't enough—you need preventive controls at each plane to reduce attack surface:</p>
+
+        <h4 style="color: #22c55e;">📊 Data Plane Controls</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Control</th>
+              <th>Type</th>
+              <th>What It Prevents</th>
+              <th>Implementation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>EDR/XDR with prevention mode</strong></td>
+              <td>Preventive + Detective</td>
+              <td>Malware execution, ransomware payloads</td>
+              <td>MDE in block mode, real-time protection</td>
+            </tr>
+            <tr>
+              <td><strong>Attack Surface Reduction (ASR) rules</strong></td>
+              <td>Preventive</td>
+              <td>Office macro abuse, credential theft, script abuse</td>
+              <td>Block Office child processes, LSASS access, etc.</td>
+            </tr>
+            <tr>
+              <td><strong>Application whitelisting</strong></td>
+              <td>Preventive</td>
+              <td>Unauthorized executables</td>
+              <td>AppLocker or WDAC on critical servers</td>
+            </tr>
+            <tr>
+              <td><strong>Email filtering</strong></td>
+              <td>Preventive</td>
+              <td>Phishing, malicious attachments</td>
+              <td>Defender for O365, Safe Attachments, Safe Links</td>
+            </tr>
+            <tr>
+              <td><strong>Backup protection</strong></td>
+              <td>Corrective</td>
+              <td>Backup encryption/deletion</td>
+              <td>Immutable backups, air-gapped copies, 3-2-1 rule</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="color: #06b6d4;">🔐 Control Plane Controls</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Control</th>
+              <th>Type</th>
+              <th>What It Prevents</th>
+              <th>Implementation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>MFA everywhere</strong></td>
+              <td>Preventive</td>
+              <td>Credential-only compromise</td>
+              <td>Phishing-resistant MFA (FIDO2) for admins</td>
+            </tr>
+            <tr>
+              <td><strong>Privileged Access Workstations (PAWs)</strong></td>
+              <td>Preventive</td>
+              <td>Admin credential exposure</td>
+              <td>Dedicated hardened workstations for admin tasks</td>
+            </tr>
+            <tr>
+              <td><strong>Tiered admin model</strong></td>
+              <td>Preventive</td>
+              <td>Single-hop to Domain Admin</td>
+              <td>Tier 0/1/2 separation, no Tier 0 creds on workstations</td>
+            </tr>
+            <tr>
+              <td><strong>LAPS for local admin</strong></td>
+              <td>Preventive</td>
+              <td>Lateral movement via shared local admin</td>
+              <td>Unique local admin passwords per machine</td>
+            </tr>
+            <tr>
+              <td><strong>Credential Guard</strong></td>
+              <td>Preventive</td>
+              <td>LSASS credential dumping</td>
+              <td>Enable on all Windows 10/11 endpoints</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="color: #ef4444;">⚙️ Management Plane Controls</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Control</th>
+              <th>Type</th>
+              <th>What It Prevents</th>
+              <th>Implementation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>GPO change monitoring</strong></td>
+              <td>Detective</td>
+              <td>Malware deployment via GPO</td>
+              <td>Alert on GPO modifications, especially scripts</td>
+            </tr>
+            <tr>
+              <td><strong>Limit GPO/SCCM admin access</strong></td>
+              <td>Preventive</td>
+              <td>Mass malware deployment</td>
+              <td>Minimal admins, PIM for access, audit all changes</td>
+            </tr>
+            <tr>
+              <td><strong>Security tool tamper protection</strong></td>
+              <td>Preventive</td>
+              <td>Disabling EDR/AV</td>
+              <td>Enable tamper protection, monitor for attempts</td>
+            </tr>
+            <tr>
+              <td><strong>Backup admin separation</strong></td>
+              <td>Preventive</td>
+              <td>Backup deletion by compromised admin</td>
+              <td>Separate backup admin accounts, not Domain Admins</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ===== STEP 6: FRAMEWORK ALIGNMENT ===== -->
+        <h3>Step 6: Framework Alignment — NIST CSF Mapping</h3>
+
+        <p>Map your ransomware defense program to NIST CSF to demonstrate completeness:</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>NIST Function</th>
+              <th>Ransomware Activities</th>
+              <th>Evidence Artifacts</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>IDENTIFY</strong></td>
+              <td>
+                • Asset inventory (endpoints, servers, backups)<br>
+                • Risk assessment (ransomware = critical risk)<br>
+                • Business impact analysis (RTO, RPO defined)
+              </td>
+              <td>Asset register, risk register, BIA document</td>
+            </tr>
+            <tr>
+              <td><strong>PROTECT</strong></td>
+              <td>
+                • MFA, PAWs, tiered admin model<br>
+                • EDR in prevention mode, ASR rules<br>
+                • Email filtering, application control<br>
+                • Immutable backups, network segmentation<br>
+                • Security awareness training
+              </td>
+              <td>Control inventory, config baselines, training records</td>
+            </tr>
+            <tr>
+              <td><strong>DETECT</strong></td>
+              <td>
+                • 26 detection rules across kill chain<br>
+                • 24/7 SOC monitoring<br>
+                • Threat hunting for ransomware TTPs<br>
+                • Regular detection testing
+              </td>
+              <td>Detection rule catalog, SOC runbooks, hunt reports</td>
+            </tr>
+            <tr>
+              <td><strong>RESPOND</strong></td>
+              <td>
+                • Ransomware-specific IR playbook<br>
+                • Containment procedures (network isolation)<br>
+                • Communication plans (legal, PR, regulators)<br>
+                • Forensic capabilities
+              </td>
+              <td>IR playbook, tabletop exercise records, retainer agreements</td>
+            </tr>
+            <tr>
+              <td><strong>RECOVER</strong></td>
+              <td>
+                • Backup restoration procedures<br>
+                • System rebuild playbooks<br>
+                • Recovery time tested<br>
+                • Post-incident improvements
+              </td>
+              <td>Recovery runbooks, backup test records, lessons learned</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ===== STEP 7: REGULATORY COMPLIANCE ===== -->
+        <h3>Step 7: Regulatory Requirements (HIPAA Example)</h3>
+
+        <p>For our healthcare scenario, HIPAA requires specific ransomware-related controls:</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>HIPAA Requirement</th>
+              <th>Ransomware Relevance</th>
+              <th>Your Implementation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>§164.308(a)(1) - Risk Analysis</strong></td>
+              <td>Ransomware must be in risk assessment</td>
+              <td>Ransomware listed as critical risk with mitigations</td>
+            </tr>
+            <tr>
+              <td><strong>§164.308(a)(5) - Security Awareness</strong></td>
+              <td>Staff must recognize phishing</td>
+              <td>Phishing simulations, security training</td>
+            </tr>
+            <tr>
+              <td><strong>§164.308(a)(6) - Incident Response</strong></td>
+              <td>Must have IR procedures</td>
+              <td>Ransomware IR playbook, tested quarterly</td>
+            </tr>
+            <tr>
+              <td><strong>§164.310(d)(1) - Device/Media Controls</strong></td>
+              <td>Data must be recoverable</td>
+              <td>Immutable backups, tested restoration</td>
+            </tr>
+            <tr>
+              <td><strong>§164.312(a)(1) - Access Control</strong></td>
+              <td>Limit PHI access</td>
+              <td>Least privilege, MFA, tiered admin</td>
+            </tr>
+            <tr>
+              <td><strong>§164.312(b) - Audit Controls</strong></td>
+              <td>Must log access to PHI</td>
+              <td>26 detection rules + audit logging</td>
+            </tr>
+            <tr>
+              <td><strong>Breach Notification (§164.400-414)</strong></td>
+              <td>Ransomware = presumed breach</td>
+              <td>72-hour notification process documented</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="key-insight">
+          <h4>💡 Regulatory Reality</h4>
+          <p>Under HIPAA, <strong>a ransomware attack is a presumed breach</strong> unless you can prove PHI was not accessed or was encrypted. This means you must report to HHS within 60 days (or 72 hours for large breaches). Your detection and response capabilities directly impact your regulatory exposure.</p>
+        </div>
+
+        <!-- ===== STEP 8: METRICS ===== -->
+        <h3>Step 8: Metrics — Proving Ransomware Resilience</h3>
+
+        <p>Metrics prove your program works. Track these at multiple levels:</p>
+
+        <h4>🎯 Detection Effectiveness Metrics</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Target</th>
+              <th>How to Measure</th>
+              <th>Why It Matters</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Kill Chain Coverage %</strong></td>
+              <td>≥80% of stages</td>
+              <td>Map rules to MITRE tactics, count coverage</td>
+              <td>Are you detecting across the whole attack?</td>
+            </tr>
+            <tr>
+              <td><strong>MTTD (Mean Time to Detect)</strong></td>
+              <td>&lt;24 hours</td>
+              <td>Time from first IOC to SOC alert</td>
+              <td>How quickly do you spot threats?</td>
+            </tr>
+            <tr>
+              <td><strong>Detection True Positive Rate</strong></td>
+              <td>≥70%</td>
+              <td>(True positives) / (Total alerts)</td>
+              <td>Are your rules accurate?</td>
+            </tr>
+            <tr>
+              <td><strong>Purple Team Detection Rate</strong></td>
+              <td>≥80%</td>
+              <td>Simulated attacks detected / total simulated</td>
+              <td>Do rules work against real TTPs?</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>🛡️ Prevention Effectiveness Metrics</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Target</th>
+              <th>How to Measure</th>
+              <th>Why It Matters</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>EDR Block Rate</strong></td>
+              <td>≥95%</td>
+              <td>Blocked threats / total threats detected</td>
+              <td>Is EDR stopping attacks?</td>
+            </tr>
+            <tr>
+              <td><strong>Phishing Click Rate</strong></td>
+              <td>&lt;5%</td>
+              <td>Clicks / phishing emails delivered (simulations)</td>
+              <td>Is training working?</td>
+            </tr>
+            <tr>
+              <td><strong>MFA Coverage</strong></td>
+              <td>100% for admins</td>
+              <td>Accounts with MFA / total accounts</td>
+              <td>Credential theft resistance</td>
+            </tr>
+            <tr>
+              <td><strong>ASR Rule Coverage</strong></td>
+              <td>100% endpoints</td>
+              <td>Endpoints with ASR / total endpoints</td>
+              <td>Are rules deployed everywhere?</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>⚡ Response Effectiveness Metrics</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Target</th>
+              <th>How to Measure</th>
+              <th>Why It Matters</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>MTTR (Mean Time to Respond)</strong></td>
+              <td>&lt;4 hours</td>
+              <td>Time from detection to containment</td>
+              <td>Can you contain before spread?</td>
+            </tr>
+            <tr>
+              <td><strong>MTTC (Mean Time to Contain)</strong></td>
+              <td>&lt;1 hour</td>
+              <td>Time to isolate affected systems</td>
+              <td>Blast radius limitation</td>
+            </tr>
+            <tr>
+              <td><strong>Playbook Execution Time</strong></td>
+              <td>&lt;30 min</td>
+              <td>Time to complete IR playbook steps</td>
+              <td>Are playbooks efficient?</td>
+            </tr>
+            <tr>
+              <td><strong>Backup RTO Achievement</strong></td>
+              <td>100%</td>
+              <td>Actual recovery time vs target</td>
+              <td>Can you actually recover?</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>📊 Program Maturity Metrics</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Target</th>
+              <th>How to Measure</th>
+              <th>Why It Matters</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Tabletop Exercise Frequency</strong></td>
+              <td>Quarterly</td>
+              <td>Exercises conducted per year</td>
+              <td>Is the team practiced?</td>
+            </tr>
+            <tr>
+              <td><strong>Detection Rule Testing</strong></td>
+              <td>Monthly</td>
+              <td>Rules validated via simulation</td>
+              <td>Do rules still work?</td>
+            </tr>
+            <tr>
+              <td><strong>Backup Test Success Rate</strong></td>
+              <td>100%</td>
+              <td>Successful restores / attempted restores</td>
+              <td>Will backups actually work?</td>
+            </tr>
+            <tr>
+              <td><strong>Time Since Last Ransomware Incident</strong></td>
+              <td>↑ Increasing</td>
+              <td>Days without incident</td>
+              <td>Trending in right direction?</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ===== STEP 9: THE COMPLETE PICTURE ===== -->
+        <h3>Step 9: The Complete Ransomware Defense Picture</h3>
+
+        <div class="model-card" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.02)); border: 2px solid rgba(34, 197, 94, 0.4);">
+          <h4 style="color: #22c55e; margin-top: 0;">✅ Complete Ransomware Defense Checklist</h4>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div>
+              <p><strong>🔍 Detection (26 Rules)</strong></p>
+              <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem;">
+                <li>Initial Access: 5 rules (phishing, RDP brute force)</li>
+                <li>Persistence/Priv Esc: 7 rules (scheduled tasks, services)</li>
+                <li>Credential Access: 6 rules (LSASS, Kerberoasting)</li>
+                <li>Lateral Movement: 5 rules (RDP, PsExec, WMI)</li>
+                <li>Impact: 3 rules (encryption, backup deletion)</li>
+              </ul>
+            </div>
+            <div>
+              <p><strong>🛡️ Prevention Controls</strong></p>
+              <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem;">
+                <li>EDR in block mode + ASR rules</li>
+                <li>Email filtering + Safe Attachments</li>
+                <li>MFA + Conditional Access</li>
+                <li>Tiered admin + PAWs</li>
+                <li>LAPS + Credential Guard</li>
+                <li>Immutable backups (3-2-1 rule)</li>
+              </ul>
+            </div>
+            <div>
+              <p><strong>📋 Response Capability</strong></p>
+              <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem;">
+                <li>Ransomware IR playbook</li>
+                <li>Network isolation procedures</li>
+                <li>Legal/PR communication plan</li>
+                <li>Forensic retainer in place</li>
+                <li>Quarterly tabletop exercises</li>
+              </ul>
+            </div>
+            <div>
+              <p><strong>🔄 Recovery Capability</strong></p>
+              <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem;">
+                <li>Backup restoration tested monthly</li>
+                <li>RTO/RPO defined and achievable</li>
+                <li>System rebuild playbooks</li>
+                <li>Clean image gold standards</li>
+                <li>Recovery priority list (critical systems first)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== INTERVIEW ANSWER ===== -->
+        <div class="interview-box" style="margin-top: 2rem;">
+          <h4>🎯 Interview Answer: "How do you protect against ransomware?"</h4>
+          <blockquote style="font-size: 0.95rem; line-height: 1.8;">
+            "Ransomware defense requires a kill-chain approach—you can't rely on a single detection rule. I map the attack stages using MITRE ATT&CK, from initial access through impact, and ensure we have detection coverage at each stage. That typically means 20-25+ detection rules covering phishing, suspicious execution, persistence mechanisms, credential dumping, lateral movement, and finally encryption behaviors.
+            <br><br>
+            But detection isn't enough. I layer preventive controls across all three planes: Data plane controls like EDR in block mode and ASR rules to prevent execution; Control plane controls like MFA, tiered admin model, and Credential Guard to prevent credential theft and privilege escalation; and Management plane controls to protect GPO, backup systems, and security tools from tampering.
+            <br><br>
+            I align everything to NIST CSF—Identify, Protect, Detect, Respond, Recover—to ensure completeness. For regulated environments like healthcare, I map controls to HIPAA requirements since ransomware is a presumed breach under the Breach Notification Rule.
+            <br><br>
+            Finally, I track metrics at each level: detection coverage percentage, MTTD under 24 hours, MTTR under 4 hours, and regular testing through purple team exercises and backup restoration tests. The goal is to detect early in the kill chain—ideally before credential theft—and have proven recovery capability if everything else fails."
+          </blockquote>
         </div>
       </section>
 
