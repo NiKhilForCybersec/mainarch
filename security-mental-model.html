@@ -1472,7 +1472,7 @@
           <p>This is why network security is complex—you need visibility into all three aspects.</p>
         </div>
 
-        <h3>2.1 Mapping Any System to Three Planes</h3>
+        <h3>5.3 Mapping Any System to Three Planes</h3>
 
         <p>Use this template to map any technology:</p>
 
@@ -1587,7 +1587,7 @@
           </div>
         </div>
 
-        <h3>5.1 Controls Mapping Template</h3>
+        <h3>6.1 Controls Mapping Template</h3>
 
         <table class="metrics-table">
           <thead>
@@ -1639,7 +1639,7 @@
           <p style="margin-top: 0.5rem;">If you don't have the right controls producing the right signals, you can't build the detection. This is why "turn on more logging" is often the answer to "why can't we detect X?"</p>
         </div>
 
-        <h3>6.1 Signal Sources by Category</h3>
+        <h3>7.1 Signal Sources by Category</h3>
 
         <table class="metrics-table">
           <thead>
@@ -1696,7 +1696,7 @@
           </tbody>
         </table>
 
-        <h3>6.2 Signal Gap Analysis</h3>
+        <h3>7.2 Signal Gap Analysis</h3>
 
         <p>For each risk, verify you have signals to detect it:</p>
 
@@ -1746,7 +1746,7 @@
 
         <p>Modern detection strategy starts with XDR because it has the best visibility into endpoint activity. SIEM fills gaps.</p>
 
-        <h3>7.1 What XDR Sees Well</h3>
+        <h3>8.1 What XDR Sees Well</h3>
 
         <div class="model-card">
           <table class="metrics-table">
@@ -1787,7 +1787,7 @@
           </table>
         </div>
 
-        <h3>7.2 What XDR Misses (SIEM Territory)</h3>
+        <h3>8.2 What XDR Misses (SIEM Territory)</h3>
 
         <div class="model-card">
           <table class="metrics-table">
@@ -1889,7 +1889,7 @@
           </div>
         </div>
 
-        <h3>8.1 Example Bucket Classification</h3>
+        <h3>9.1 Example Bucket Classification</h3>
 
         <table class="metrics-table">
           <thead>
@@ -1961,7 +1961,7 @@
           <p style="margin-top: 0.5rem;">XDR excels at detecting malicious binaries and known attack tools. It struggles with "living off the land" attacks that use legitimate tools and credentials. That's where SIEM correlation shines.</p>
         </div>
 
-        <h3>9.1 Correlation Patterns That Need SIEM</h3>
+        <h3>10.1 Correlation Patterns That Need SIEM</h3>
 
         <table class="metrics-table">
           <thead>
@@ -2018,7 +2018,7 @@
           <p><strong>Right approach:</strong> "Let's label our detections with MITRE and identify coverage gaps"</p>
         </div>
 
-        <h3>10.1 How to Use MITRE Correctly</h3>
+        <h3>11.1 How to Use MITRE Correctly</h3>
 
         <table class="metrics-table">
           <thead>
@@ -2052,7 +2052,7 @@
           </tbody>
         </table>
 
-        <h3>10.2 MITRE Hierarchy (What You Actually Use)</h3>
+        <h3>11.2 MITRE Hierarchy (What You Actually Use)</h3>
 
         <div class="model-card">
           <table class="metrics-table">
@@ -2095,7 +2095,7 @@
         </div>
 
         <!-- ===== 10.3 NO ASSET = NO RISK = NO DETECTION ===== -->
-        <h3 id="no-asset-no-risk">10.3 No Asset = No Risk = No Detection</h3>
+        <h3 id="no-asset-no-risk">11.3 No Asset = No Risk = No Detection</h3>
 
         <div class="callout warning" style="border: 2px solid rgba(234, 179, 8, 0.6); background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(234, 179, 8, 0.02));">
           <div class="callout-title" style="color: #eab308;">
@@ -2300,6 +2300,171 @@
             This way, we're not chasing a checkbox of 200 techniques — we're building detections that actually matter for our specific environment. A cloud-native SaaS company should focus on cloud console abuse, API attacks, and CI/CD pipeline security, not Windows domain attacks."
           </blockquote>
         </div>
+
+        <!-- ===== 11.4 TECHNIQUES VS SUB-TECHNIQUES ===== -->
+        <h3 id="techniques-vs-subtechniques">11.4 Techniques vs Sub-Techniques: When Granularity Matters</h3>
+
+        <p>One of the most misunderstood aspects of MITRE is when to use techniques vs sub-techniques. Most teams either ignore sub-techniques entirely or try to map everything to the most granular level. Both are wrong.</p>
+
+        <div class="pillar-grid">
+          <div class="pillar-card" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.02)); border: 1px solid rgba(139, 92, 246, 0.3);">
+            <h4 style="color: #a78bfa;">📦 Technique (Parent)</h4>
+            <p><strong>Answers:</strong> "What is the attacker trying to do?"</p>
+            <p style="margin-top: 0.75rem;"><strong>Example:</strong></p>
+            <ul>
+              <li><strong>T1078 – Valid Accounts</strong></li>
+              <li>Goal: Use legitimate credentials to gain access</li>
+            </ul>
+          </div>
+
+          <div class="pillar-card" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(6, 182, 212, 0.02)); border: 1px solid rgba(6, 182, 212, 0.3);">
+            <h4 style="color: #06b6d4;">🔧 Sub-Techniques</h4>
+            <p><strong>Answers:</strong> "How exactly is the attacker doing it in this environment?"</p>
+            <p style="margin-top: 0.75rem;"><strong>Examples:</strong></p>
+            <ul>
+              <li>T1078.001 – Local Accounts</li>
+              <li>T1078.002 – Domain Accounts</li>
+              <li>T1078.004 – Cloud Accounts</li>
+            </ul>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">Different execution paths → Different telemetry → Different controls</p>
+          </div>
+        </div>
+
+        <div class="callout warning" style="margin-top: 1.5rem; border: 2px solid rgba(234, 179, 8, 0.6); background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(234, 179, 8, 0.02));">
+          <div class="callout-title" style="color: #eab308;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            🎯 The Critical Question (Where Teams Go Wrong)
+          </div>
+          <div class="callout-content">
+            <p>The question is NOT: "Do sub-techniques represent different approaches?" (They do.)</p>
+            <p style="margin-top: 0.75rem; font-size: 1.1rem; font-weight: 600;">The real question is: "Do those differences change our detection or control strategy?"</p>
+            <ul style="margin-top: 0.75rem;">
+              <li><strong>If YES</strong> → Sub-technique level matters</li>
+              <li><strong>If NO</strong> → Technique-level is sufficient</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="memorize-box" style="margin-top: 1.5rem;">
+          <h4>🧠 Simple Decision Rule (Memorize This)</h4>
+          <p style="font-size: 1.05rem; font-weight: 600;">If two sub-techniques generate different signals, require different controls, or carry different business risk → treat them separately.</p>
+          <p style="margin-top: 0.5rem;">Otherwise → treat them together at technique level.</p>
+        </div>
+
+        <h4 style="margin-top: 2rem;">Example 1: Sub-Techniques MATTER</h4>
+
+        <div class="example-box">
+          <h5>Environment: Cloud-Native SaaS (No On-Prem AD)</h5>
+          <p><strong>Technique:</strong> T1078 – Valid Accounts</p>
+          <table class="metrics-table" style="margin-top: 1rem;">
+            <thead>
+              <tr>
+                <th>Sub-Technique</th>
+                <th>Relevant?</th>
+                <th>Why?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>T1078.001 – Local Accounts</td>
+                <td style="color: #ef4444;">❌ No</td>
+                <td>No local admin accounts in cloud infrastructure</td>
+              </tr>
+              <tr>
+                <td>T1078.002 – Domain Accounts</td>
+                <td style="color: #ef4444;">❌ No</td>
+                <td>No Active Directory exists</td>
+              </tr>
+              <tr>
+                <td>T1078.004 – Cloud Accounts</td>
+                <td style="color: #22c55e;">✅ Yes</td>
+                <td>Entra ID / GCP IAM are primary identity systems</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top: 1rem;"><strong>Result:</strong> Sub-technique granularity adds clarity. Different assets → Different logs → Different risks.</p>
+        </div>
+
+        <h4 style="margin-top: 2rem;">Example 2: Sub-Techniques DO NOT Matter</h4>
+
+        <div class="example-box">
+          <h5>Detection: "Admin account performs sensitive actions outside normal behavior"</h5>
+          <p style="margin-top: 0.75rem;">This detection works for:</p>
+          <ul>
+            <li>Cloud admin accounts</li>
+            <li>Application admin accounts</li>
+            <li>Service accounts</li>
+          </ul>
+          <p style="margin-top: 1rem;"><strong>MITRE Mapping:</strong> T1078 (Valid Accounts) is sufficient.</p>
+          <p style="margin-top: 0.5rem; color: var(--text-secondary);">Breaking into sub-techniques would NOT change the detection logic. Extra granularity adds no operational value.</p>
+        </div>
+
+        <h4 style="margin-top: 2rem;">Example 3: Mixed Case (Most Realistic)</h4>
+
+        <div class="example-box">
+          <h5>Technique: T1059 – Command and Scripting Interpreter</h5>
+          <table class="metrics-table" style="margin-top: 1rem;">
+            <thead>
+              <tr>
+                <th>Sub-Technique</th>
+                <th>When It Matters</th>
+                <th>When It Doesn't</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>T1059.001 – PowerShell</td>
+                <td rowspan="3">You have <strong>separate telemetry and controls</strong> per language (different log sources, different tuning)</td>
+                <td rowspan="3"><strong>XDR normalizes</strong> all script execution into unified events — technique-level is enough</td>
+              </tr>
+              <tr>
+                <td>T1059.004 – Bash</td>
+              </tr>
+              <tr>
+                <td>T1059.006 – Python</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top: 1rem;"><strong>Decision:</strong> If your tooling treats them differently → sub-techniques matter. If your tooling normalizes them → technique-level is sufficient.</p>
+        </div>
+
+        <h4 style="margin-top: 2rem;">How Mature Teams Actually Use Sub-Techniques</h4>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Maturity Level</th>
+              <th>Approach</th>
+              <th>Focus</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Low–Mid Maturity</strong></td>
+              <td>Technique-level mapping only</td>
+              <td>Detection quality, not granularity. "Does this detection work?" matters more than "Is this T1078.001 or T1078.002?"</td>
+            </tr>
+            <tr>
+              <td><strong>Higher Maturity</strong></td>
+              <td>Selective sub-technique usage</td>
+              <td>Used to:
+                <ul style="margin: 0.5rem 0 0 1rem; font-size: 0.9rem;">
+                  <li>Explain what IS covered vs NOT covered</li>
+                  <li>Support purple teaming exercises</li>
+                  <li>Compare tool coverage gaps</li>
+                  <li>Justify detection gaps to stakeholders</li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="key-insight" style="margin-top: 1.5rem;">
+          <h4>💡 The Key Takeaway</h4>
+          <p><strong>Mature teams don't blindly map everything to sub-techniques.</strong></p>
+          <p style="margin-top: 0.5rem;">They use sub-technique granularity when it changes their detection strategy, control design, or risk communication. Otherwise, technique-level is sufficient and more practical.</p>
+          <p style="margin-top: 0.75rem;">Even for MITRE mapping, you won't map ALL techniques and sub-techniques. You map what's <strong>relevant to your assets and threat model</strong>.</p>
+        </div>
       </section>
 
       <!-- ==================== SECTION 12: NIST/ISO ==================== -->
@@ -2308,7 +2473,7 @@
 
         <p>Frameworks answer: <strong>"Do we have the right categories of controls?"</strong></p>
 
-        <h3>11.1 NIST CSF Mapping</h3>
+        <h3>12.1 NIST CSF Mapping</h3>
 
         <table class="metrics-table">
           <thead>
@@ -2360,7 +2525,7 @@
 
         <p>Regulations answer: <strong>"Are you protecting sensitive data appropriately and can you prove it?"</strong></p>
 
-        <h3>12.1 How Regulations Influence Detection</h3>
+        <h3>13.1 How Regulations Influence Detection</h3>
 
         <p>Regulations don't say "write rule X." They specify what must be monitored and evidenced:</p>
 
@@ -2401,7 +2566,7 @@
           </tbody>
         </table>
 
-        <h3>12.2 Regulation Quick Reference</h3>
+        <h3>13.2 Regulation Quick Reference</h3>
 
         <table class="metrics-table">
           <thead>
