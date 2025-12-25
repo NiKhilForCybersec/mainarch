@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Mental Model | The Complete Framework</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .model-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.02));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .master-model {
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(234, 179, 8, 0.02));
+      border: 2px solid rgba(234, 179, 8, 0.5);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: center;
+    }
+    
+    .master-model h3 {
+      color: #eab308;
+      margin-top: 0;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .master-model .flow {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 2;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    
+    .master-model .flow span {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      margin: 0.25rem;
+    }
+    
+    .flow-business { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    .flow-assets { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+    .flow-risks { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+    .flow-controls { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+    .flow-signals { background: rgba(6, 182, 212, 0.2); color: #06b6d4; }
+    .flow-detections { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+    .flow-response { background: rgba(236, 72, 153, 0.2); color: #ec4899; }
+    .flow-evidence { background: rgba(255, 255, 255, 0.2); color: #fff; }
+    
+    .arrow {
+      color: var(--text-muted);
+      margin: 0 0.25rem;
+    }
+    
+    .plane-card {
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 0.75rem 0;
+    }
+    
+    .plane-data {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.02));
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .plane-control {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(6, 182, 212, 0.02));
+      border: 1px solid rgba(6, 182, 212, 0.3);
+    }
+    
+    .plane-management {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.02));
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    .plane-card h4 {
+      margin-top: 0;
+    }
+    
+    .plane-data h4 { color: #22c55e; }
+    .plane-control h4 { color: #06b6d4; }
+    .plane-management h4 { color: #ef4444; }
+    
+    .example-box {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+      border-left: 4px solid var(--accent-primary);
+    }
+    
+    .example-box h5 {
+      color: var(--accent-primary);
+      margin: 0 0 0.75rem 0;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .industry-card {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 0.75rem 0;
+    }
+    
+    .industry-card h4 {
+      color: var(--accent-primary);
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .bucket-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    
+    .bucket-card {
+      border-radius: 8px;
+      padding: 1.25rem;
+    }
+    
+    .bucket-retire {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.02));
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .bucket-rewrite {
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(234, 179, 8, 0.02));
+      border: 1px solid rgba(234, 179, 8, 0.3);
+    }
+    
+    .bucket-build {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.02));
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    .bucket-retire h4 { color: #22c55e; }
+    .bucket-rewrite h4 { color: #eab308; }
+    .bucket-build h4 { color: #ef4444; }
+    
+    .memorize-box {
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(236, 72, 153, 0.02));
+      border: 2px solid rgba(236, 72, 153, 0.4);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .memorize-box h4 {
+      color: #ec4899;
+      margin-top: 0;
+    }
+    
+    .key-insight {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(6, 182, 212, 0.02));
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .key-insight h4 {
+      color: #06b6d4;
+      margin-top: 0;
+    }
+    
+    .decision-tree {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.9rem;
+    }
+    
+    .decision-tree code {
+      color: #22c55e;
+    }
+    
+    .checklist-box {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .checklist-box h5 {
+      color: var(--text-secondary);
+      margin: 0 0 0.75rem 0;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+    
+    .checklist-box ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+    
+    .checklist-box li {
+      margin-bottom: 0.25rem;
+    }
+    
+    .scenario-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.02));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .scenario-card h4 {
+      color: var(--accent-primary);
+      margin-top: 0;
+    }
+    
+    .toc-box {
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin: 2rem 0;
+    }
+    
+    .toc-box h3 {
+      margin: 0 0 1rem 0;
+      color: var(--accent-primary);
+    }
+    
+    .toc-columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    
+    .toc-column ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      font-size: 0.9rem;
+    }
+    
+    .toc-column li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .toc-column a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+    
+    .toc-column a:hover {
+      color: var(--accent-primary);
+    }
+    
+    .risk-table td:first-child {
+      font-weight: 600;
+      color: var(--accent-primary);
+    }
+    
+    .interview-box {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.02));
+      border: 2px solid rgba(34, 197, 94, 0.4);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .interview-box h4 {
+      color: #22c55e;
+      margin-top: 0;
+    }
+    
+    .interview-box blockquote {
+      margin: 1rem 0 0 0;
+      padding: 1rem 1.25rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      font-style: italic;
+      line-height: 1.7;
+    }
+    
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: var(--accent-primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-right: 0.75rem;
+    }
+    
+    .two-column {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="index.html" class="nav-item">Executive Summary</a>
+          <a href="company-profile.html" class="nav-item">Company Profile</a>
+          <a href="security-framework.html" class="nav-item">Security Framework</a>
+          <a href="program-structure.html" class="nav-item">Program Structure</a>
+          <a href="controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="siem/workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
+          <a href="siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="siem/casb-saas-security.html" class="nav-item">CASB &amp; SaaS Security</a>
+          <a href="siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="resources/templates.html" class="nav-item">Templates</a>
+          <a href="resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="resources/alternative-architectures.html" class="nav-item">Alternative Architectures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="resources/incident-response.html" class="nav-item">Incident Response</a>
+          <a href="resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="interview-prep.html" class="nav-item">Interview Prep (Full)</a>
+          <a href="interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
+          <a href="interview-technical-reference.html" class="nav-item">Technical Reference</a>
+          <a href="interview-frameworks.html" class="nav-item">Mental Frameworks</a>
+          <a href="security-mental-model.html" class="nav-item active">Security Mental Model</a>
+          <a href="soc-maturity.html" class="nav-item">SOC Maturity Roadmap</a>
+          <a href="director-interview-prep.html" class="nav-item">Director Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 12h18M3 6h18M3 18h18"></path>
+      </svg>
+    </button>
+    
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-wrapper">
+
+      <!-- ==================== HEADER ==================== -->
+      <header class="page-header">
+        <h1>🧠 The Security Mental Model</h1>
+        <p class="subtitle">A complete framework to understand, categorize, and secure ANY organization</p>
+      </header>
+
+      <!-- ==================== MASTER MODEL ==================== -->
+      <div class="master-model">
+        <h3>🎯 The One-Line Model (Memorize This Forever)</h3>
+        <div class="flow">
+          <span class="flow-business">Business</span>
+          <span class="arrow">→</span>
+          <span class="flow-assets">Assets</span>
+          <span class="arrow">→</span>
+          <span class="flow-risks">Risks</span>
+          <span class="arrow">→</span>
+          <span class="flow-controls">Controls</span>
+          <span class="arrow">→</span>
+          <span class="flow-signals">Signals</span>
+          <span class="arrow">→</span>
+          <span class="flow-detections">Detections</span>
+          <span class="arrow">→</span>
+          <span class="flow-response">Response</span>
+          <span class="arrow">→</span>
+          <span class="flow-evidence">Evidence</span>
+        </div>
+        <p style="margin-top: 1rem; color: var(--text-secondary);">Everything else is just details. This is your anchor.</p>
+      </div>
+
+      <!-- ==================== TABLE OF CONTENTS ==================== -->
+      <div class="toc-box">
+        <h3>📚 Table of Contents</h3>
+        <div class="toc-columns">
+          <div class="toc-column">
+            <p><strong>Foundation</strong></p>
+            <ul>
+              <li><a href="#master-model">0. The Master Model</a></li>
+              <li><a href="#business-context">1. Business Context</a></li>
+              <li><a href="#three-planes">2. The Three Planes</a></li>
+              <li><a href="#asset-checklist">3. Asset Checklist</a></li>
+            </ul>
+          </div>
+          <div class="toc-column">
+            <p><strong>Risk & Controls</strong></p>
+            <ul>
+              <li><a href="#derive-risk">4. Deriving Risk</a></li>
+              <li><a href="#controls">5. Controls Framework</a></li>
+              <li><a href="#signals">6. Signals & Telemetry</a></li>
+            </ul>
+          </div>
+          <div class="toc-column">
+            <p><strong>Detection Strategy</strong></p>
+            <ul>
+              <li><a href="#xdr-first">7. XDR-First Strategy</a></li>
+              <li><a href="#three-buckets">8. The Three Buckets</a></li>
+              <li><a href="#correlation-decision">9. Correlation Decisions</a></li>
+            </ul>
+          </div>
+          <div class="toc-column">
+            <p><strong>Frameworks</strong></p>
+            <ul>
+              <li><a href="#mitre">10. MITRE ATT&CK</a></li>
+              <li><a href="#nist-iso">11. NIST/ISO</a></li>
+              <li><a href="#regulations">12. Regulations</a></li>
+              <li><a href="#putting-together">13. Putting It Together</a></li>
+              <li><a href="#industry-examples">14. Industry Examples</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== SECTION 0: MASTER MODEL ==================== -->
+      <section id="master-model">
+        <h2>0. The Master Model Explained</h2>
+
+        <p>Before diving into details, understand what each step in the chain represents:</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Question It Answers</th>
+              <th>Output</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color: #ef4444;">Business</strong></td>
+              <td>What does this organization do? What outcomes matter?</td>
+              <td>Business model, critical processes, "what harm looks like"</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #f97316;">Assets</strong></td>
+              <td>What do they have that needs protecting?</td>
+              <td>Asset inventory across data/control/management planes</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #eab308;">Risks</strong></td>
+              <td>What could go wrong with each asset?</td>
+              <td>Risk register (derived from assets, not MITRE)</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #22c55e;">Controls</strong></td>
+              <td>What prevents or detects those risks?</td>
+              <td>Preventive, detective, corrective, compensating controls</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #06b6d4;">Signals</strong></td>
+              <td>What telemetry do controls produce?</td>
+              <td>Log sources, events, metrics</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #8b5cf6;">Detections</strong></td>
+              <td>What logic identifies bad things in signals?</td>
+              <td>XDR alerts, SIEM rules, correlations</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #ec4899;">Response</strong></td>
+              <td>What do we do when something is detected?</td>
+              <td>Playbooks, automation, escalation</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #fff;">Evidence</strong></td>
+              <td>How do we prove we did the right thing?</td>
+              <td>Audit trails, incident reports, compliance artifacts</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="memorize-box">
+          <h4>🧠 Why This Order Matters</h4>
+          <p>Most people start with "what rules should we write?" or "what MITRE techniques should we cover?" That's backwards. You can't know what to detect until you know what assets exist, what risks they face, and what signals you have.</p>
+          <p style="margin-top: 0.75rem;"><strong>The chain flows one direction:</strong> Business drives everything downstream. If you don't understand the business, nothing else matters.</p>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 1: BUSINESS CONTEXT ==================== -->
+      <section id="business-context">
+        <h2>1. Start With Business Context</h2>
+
+        <p>Every security program exists to protect a business. Before touching technology, understand what you're protecting and why.</p>
+
+        <h3>1.1 Identify the Business Type</h3>
+
+        <p>The business model determines everything—what data matters, who the adversaries are, and what "harm" looks like.</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Business Type</th>
+              <th>What They Protect</th>
+              <th>Primary Threats</th>
+              <th>Key Priorities</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>B2B SaaS</strong></td>
+              <td>Customer data, platform availability, IP</td>
+              <td>Admin abuse, API attacks, data breach</td>
+              <td>Identity, access control, multi-tenancy</td>
+            </tr>
+            <tr>
+              <td><strong>Healthcare</strong></td>
+              <td>Patient data (PHI), medical systems</td>
+              <td>Ransomware, insider access, breach</td>
+              <td>Privacy, auditability, availability</td>
+            </tr>
+            <tr>
+              <td><strong>Financial Services</strong></td>
+              <td>Customer accounts, transactions, PII</td>
+              <td>Fraud, account takeover, insider trading</td>
+              <td>Integrity, non-repudiation, compliance</td>
+            </tr>
+            <tr>
+              <td><strong>Manufacturing</strong></td>
+              <td>IP, OT systems, supply chain</td>
+              <td>IP theft, ransomware, OT attacks</td>
+              <td>Availability, IP protection, OT/IT boundary</td>
+            </tr>
+            <tr>
+              <td><strong>E-commerce/Retail</strong></td>
+              <td>Payment data, customer PII, inventory</td>
+              <td>Card skimming, credential stuffing, DDoS</td>
+              <td>PCI compliance, availability, fraud</td>
+            </tr>
+            <tr>
+              <td><strong>Government</strong></td>
+              <td>Citizen data, national security</td>
+              <td>Nation-state, hacktivism, espionage</td>
+              <td>Confidentiality, integrity, auditability</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>1.2 Identify What "Harm" Looks Like</h3>
+
+        <p>For each business type, harm manifests differently. You can't build detections without knowing what bad outcomes you're trying to prevent.</p>
+
+        <div class="checklist-box">
+          <h5>Universal Harm Categories</h5>
+          <ul>
+            <li><strong>Data Exposure:</strong> Sensitive data accessed or exfiltrated by unauthorized parties</li>
+            <li><strong>Account Takeover:</strong> Adversary gains control of legitimate user/admin accounts</li>
+            <li><strong>Service Outage:</strong> Business operations disrupted (ransomware, DDoS, misconfiguration)</li>
+            <li><strong>Privilege Abuse:</strong> Legitimate users misuse their access (insider threat)</li>
+            <li><strong>Compliance Breach:</strong> Regulatory requirements violated, leading to fines/reputation damage</li>
+            <li><strong>Financial Loss:</strong> Direct theft, fraud, or business disruption costs</li>
+            <li><strong>Reputation Damage:</strong> Public breach disclosure affecting customer trust</li>
+          </ul>
+        </div>
+
+        <div class="example-box">
+          <h5>Example: Healthcare Organization</h5>
+          <p><strong>Business:</strong> Regional hospital network, 5,000 employees, EHR system, connected medical devices</p>
+          <p><strong>What matters:</strong> Patient data (PHI), clinical systems availability, medical device integrity</p>
+          <p><strong>Harm scenarios:</strong></p>
+          <ul>
+            <li>Ransomware encrypts EHR → patients can't receive care</li>
+            <li>Nurse accesses celebrity patient record → privacy violation, HIPAA fine</li>
+            <li>Medical device compromised → patient safety risk</li>
+            <li>PHI database exfiltrated → breach notification, lawsuits, reputation</li>
+          </ul>
+          <p><strong>This drives priorities:</strong> Access control to PHI, ransomware prevention, medical device segmentation, audit logging</p>
+        </div>
+
+        <div class="key-insight">
+          <h4>💡 The Business Context Test</h4>
+          <p>If you can't answer these questions, you're not ready to build detections:</p>
+          <ol>
+            <li>What does this business do to make money?</li>
+            <li>What data/systems are critical to that?</li>
+            <li>What would a headline-making breach look like?</li>
+            <li>What regulations apply?</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 2: THREE PLANES ==================== -->
+      <section id="three-planes">
+        <h2>2. The Three Planes Model</h2>
+
+        <p>Every IT environment can be divided into three planes. This is the cleanest way to understand what exists and what needs monitoring.</p>
+
+        <div class="plane-card plane-data">
+          <h4>📊 Data Plane (Business Activity)</h4>
+          <p><strong>What it is:</strong> Where actual business work happens—users accessing data, applications processing transactions, APIs exchanging information.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>User reads patient record in EHR</li>
+            <li>API call retrieves customer data</li>
+            <li>Employee downloads file from SharePoint</li>
+            <li>Database query returns financial records</li>
+            <li>Email sent with attachment</li>
+          </ul>
+          <p><strong>Key question:</strong> "Who is accessing what data, and is it appropriate?"</p>
+          <p><strong>Risk pattern:</strong> Unauthorized access, data exfiltration, business logic abuse</p>
+        </div>
+
+        <div class="plane-card plane-control">
+          <h4>🔐 Control Plane (Who Can Do What)</h4>
+          <p><strong>What it is:</strong> The systems that decide who has access to what—authentication, authorization, policy enforcement.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>User authenticates to Azure AD</li>
+            <li>MFA challenge accepted/denied</li>
+            <li>Conditional Access policy evaluated</li>
+            <li>Firewall allows/blocks connection</li>
+            <li>VPN grants network access</li>
+            <li>Role assignment grants permissions</li>
+          </ul>
+          <p><strong>Key question:</strong> "Are the right people getting the right access?"</p>
+          <p><strong>Risk pattern:</strong> Credential theft, MFA bypass, privilege escalation, policy bypass</p>
+        </div>
+
+        <div class="plane-card plane-management">
+          <h4>⚙️ Management Plane (Who Can Change the System)</h4>
+          <p><strong>What it is:</strong> Where administrators configure and change the environment—the most dangerous plane because changes here affect everything.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>Admin creates new user account</li>
+            <li>Security policy modified in Azure portal</li>
+            <li>Firewall rule added/removed</li>
+            <li>Logging disabled on a system</li>
+            <li>CI/CD pipeline deploys code</li>
+            <li>Terraform applies infrastructure changes</li>
+          </ul>
+          <p><strong>Key question:</strong> "Who can change the rules, and did they do it appropriately?"</p>
+          <p><strong>Risk pattern:</strong> Environment takeover, persistence, defense evasion, logging tampering</p>
+        </div>
+
+        <div class="memorize-box">
+          <h4>🧠 Network Spans All Three Planes</h4>
+          <p>Network is special—it exists in all three planes:</p>
+          <ul>
+            <li><strong>Data plane:</strong> Traffic flows (packets moving between systems)</li>
+            <li><strong>Control plane:</strong> Access decisions (firewall allow/deny, VPN authentication)</li>
+            <li><strong>Management plane:</strong> Configuration changes (new firewall rules, route changes)</li>
+          </ul>
+          <p>This is why network security is complex—you need visibility into all three aspects.</p>
+        </div>
+
+        <h3>2.1 Mapping Any System to Three Planes</h3>
+
+        <p>Use this template to map any technology:</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>System</th>
+              <th>Data Plane Activity</th>
+              <th>Control Plane Activity</th>
+              <th>Management Plane Activity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Azure AD / Entra ID</strong></td>
+              <td>App access, token usage</td>
+              <td>Sign-in, MFA, Conditional Access</td>
+              <td>User creation, role assignment, policy changes</td>
+            </tr>
+            <tr>
+              <td><strong>M365 / SharePoint</strong></td>
+              <td>File access, download, share</td>
+              <td>Authentication, sharing permissions</td>
+              <td>Site creation, admin settings, DLP policy</td>
+            </tr>
+            <tr>
+              <td><strong>AWS / Azure Cloud</strong></td>
+              <td>S3 object access, VM data</td>
+              <td>IAM authentication, resource access</td>
+              <td>Console actions, IAM changes, resource creation</td>
+            </tr>
+            <tr>
+              <td><strong>Database</strong></td>
+              <td>Queries, data read/write</td>
+              <td>Login, permission checks</td>
+              <td>User creation, schema changes, config</td>
+            </tr>
+            <tr>
+              <td><strong>Firewall</strong></td>
+              <td>Traffic forwarding</td>
+              <td>Allow/deny decisions</td>
+              <td>Rule changes, policy updates</td>
+            </tr>
+            <tr>
+              <td><strong>Endpoint (MDE)</strong></td>
+              <td>Process execution, file access</td>
+              <td>User session, privilege use</td>
+              <td>Agent config, policy deployment</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="key-insight">
+          <h4>💡 The Plane Priority Rule</h4>
+          <p><strong>Management plane compromises are always the worst.</strong> If an attacker can change the rules (disable logging, create admin accounts, modify policies), they can make data plane and control plane attacks invisible.</p>
+          <p style="margin-top: 0.5rem;">This is why management plane monitoring is critical—it's where attackers establish persistence and cover their tracks.</p>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 3: ASSET CHECKLIST ==================== -->
+      <section id="asset-checklist">
+        <h2>3. Asset Inventory Checklist</h2>
+
+        <p>Instead of guessing what assets exist, use these standard categories. They work for any organization.</p>
+
+        <div class="model-card">
+          <h4>🏢 Universal Asset Categories</h4>
+          
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Asset Category</th>
+                <th>What It Includes</th>
+                <th>Example Questions to Ask</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Identity</strong></td>
+                <td>Users, admins, service accounts, API keys, managed identities</td>
+                <td>How many users? How many admins? Service accounts inventory? External identities?</td>
+              </tr>
+              <tr>
+                <td><strong>Compute/Endpoints</strong></td>
+                <td>Laptops, desktops, servers, VMs, containers, serverless</td>
+                <td>How many endpoints? What OS distribution? Where are servers? Cloud vs on-prem?</td>
+              </tr>
+              <tr>
+                <td><strong>Network/Access Paths</strong></td>
+                <td>VPNs, firewalls, load balancers, proxies, gateways, private endpoints</td>
+                <td>How do users access resources? What are the network boundaries? Internet-facing services?</td>
+              </tr>
+              <tr>
+                <td><strong>Applications & APIs</strong></td>
+                <td>Business applications, SaaS tools, admin portals, APIs, integrations</td>
+                <td>What critical apps? SaaS inventory? Custom applications? API exposure?</td>
+              </tr>
+              <tr>
+                <td><strong>Data</strong></td>
+                <td>Databases, file stores, logs, backups, customer data, sensitive data</td>
+                <td>Where is sensitive data? Data classification? Backup locations? Data flows?</td>
+              </tr>
+              <tr>
+                <td><strong>Management/Control Tooling</strong></td>
+                <td>Cloud consoles, CI/CD, IaC, MDM, security tools, monitoring</td>
+                <td>Who has admin console access? CI/CD pipeline security? IaC state files?</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="example-box">
+          <h5>Example: Mid-Size B2B SaaS Company</h5>
+          <p><strong>Identity:</strong> 500 employees, 50 admins, 200+ service accounts, customer SSO integrations</p>
+          <p><strong>Compute:</strong> 600 laptops (Mac/Windows), 50 cloud servers, Kubernetes cluster, serverless functions</p>
+          <p><strong>Network:</strong> Cloudflare WAF, AWS VPC, VPN for admin access, no on-prem</p>
+          <p><strong>Applications:</strong> Main SaaS product, admin portal, Salesforce, Slack, GitHub, Jira</p>
+          <p><strong>Data:</strong> PostgreSQL (customer data), S3 (files), CloudWatch (logs), customer PII</p>
+          <p><strong>Management:</strong> AWS Console, GitHub Actions, Terraform, Datadog, PagerDuty</p>
+        </div>
+
+        <h3>3.1 The Asset Discovery Questions</h3>
+
+        <p>Use these questions in any assessment to discover assets:</p>
+
+        <div class="two-column">
+          <div class="checklist-box">
+            <h5>Identity Questions</h5>
+            <ul>
+              <li>What identity provider(s) do you use?</li>
+              <li>How many privileged accounts exist?</li>
+              <li>How are service accounts managed?</li>
+              <li>Any external/guest identities?</li>
+              <li>How is MFA deployed?</li>
+            </ul>
+          </div>
+          <div class="checklist-box">
+            <h5>Compute Questions</h5>
+            <ul>
+              <li>How many endpoints? What types?</li>
+              <li>Cloud providers used?</li>
+              <li>Container/Kubernetes usage?</li>
+              <li>Any on-premises servers?</li>
+              <li>What's the OS distribution?</li>
+            </ul>
+          </div>
+          <div class="checklist-box">
+            <h5>Network Questions</h5>
+            <ul>
+              <li>How do users access resources remotely?</li>
+              <li>What's internet-facing?</li>
+              <li>Network segmentation approach?</li>
+              <li>Any OT/IoT networks?</li>
+              <li>Cloud networking architecture?</li>
+            </ul>
+          </div>
+          <div class="checklist-box">
+            <h5>Application Questions</h5>
+            <ul>
+              <li>What are the critical business apps?</li>
+              <li>SaaS tools in use?</li>
+              <li>Custom application inventory?</li>
+              <li>External API exposure?</li>
+              <li>Third-party integrations?</li>
+            </ul>
+          </div>
+          <div class="checklist-box">
+            <h5>Data Questions</h5>
+            <ul>
+              <li>Where is sensitive data stored?</li>
+              <li>Data classification scheme?</li>
+              <li>Database technologies?</li>
+              <li>Backup locations and access?</li>
+              <li>Data retention policies?</li>
+            </ul>
+          </div>
+          <div class="checklist-box">
+            <h5>Management Questions</h5>
+            <ul>
+              <li>Who has admin console access?</li>
+              <li>How is infrastructure deployed?</li>
+              <li>CI/CD pipeline tools?</li>
+              <li>Where are secrets stored?</li>
+              <li>How are security tools managed?</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 4: DERIVE RISK ==================== -->
+      <section id="derive-risk">
+        <h2>4. Derive Risk From Assets (Not From MITRE)</h2>
+
+        <p>This is a critical mindset shift: <strong>risks come from assets, not from MITRE ATT&CK.</strong> Each asset class has predictable risk patterns.</p>
+
+        <div class="key-insight">
+          <h4>💡 The Asset → Risk Pattern</h4>
+          <p>Don't ask "what MITRE techniques should we detect?" Ask "what could go wrong with each asset we have?"</p>
+        </div>
+
+        <table class="metrics-table risk-table">
+          <thead>
+            <tr>
+              <th>Asset Category</th>
+              <th>Default Risk Patterns</th>
+              <th>Example Scenarios</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Identity</td>
+              <td>Account takeover, privilege escalation, credential theft, session hijacking</td>
+              <td>Phished admin creds used to access cloud console; Service account token stolen from repo</td>
+            </tr>
+            <tr>
+              <td>Compute/Endpoints</td>
+              <td>Malware execution, ransomware, lateral movement, data staging</td>
+              <td>User downloads malware; Attacker pivots from compromised server to database</td>
+            </tr>
+            <tr>
+              <td>Network/Access</td>
+              <td>Unauthorized access, lateral movement, exfiltration, C2</td>
+              <td>VPN creds stolen, attacker accesses internal network; Data exfil over DNS</td>
+            </tr>
+            <tr>
+              <td>Applications & APIs</td>
+              <td>Business logic abuse, unauthorized actions, data exposure via API</td>
+              <td>API allows mass data export without rate limiting; Admin function accessible to regular users</td>
+            </tr>
+            <tr>
+              <td>Data</td>
+              <td>Unauthorized access, exfiltration, modification, destruction</td>
+              <td>Database backup downloaded by terminated employee; Ransomware encrypts file shares</td>
+            </tr>
+            <tr>
+              <td>Management/Control</td>
+              <td>Environment takeover, logging disabled, persistence, policy tampering</td>
+              <td>Attacker disables CloudTrail; Malicious CI/CD pipeline deployed; Terraform state file compromised</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>4.1 Building a Risk Register</h3>
+
+        <p>For each asset, derive risks using this template:</p>
+
+        <div class="model-card">
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>Risk</th>
+                <th>Likelihood</th>
+                <th>Impact</th>
+                <th>Current Control</th>
+                <th>Detection Gap?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Admin accounts</td>
+                <td>Account takeover via phishing</td>
+                <td>High</td>
+                <td>Critical</td>
+                <td>MFA, Conditional Access</td>
+                <td>Need impossible travel, MFA fatigue detection</td>
+              </tr>
+              <tr>
+                <td>Customer database</td>
+                <td>Mass data exfiltration</td>
+                <td>Medium</td>
+                <td>Critical</td>
+                <td>Access controls, encryption</td>
+                <td>Need large query detection, off-hours access</td>
+              </tr>
+              <tr>
+                <td>Cloud console</td>
+                <td>Logging disabled by attacker</td>
+                <td>Low</td>
+                <td>Critical</td>
+                <td>RBAC, audit logging</td>
+                <td>Need detection for logging config changes</td>
+              </tr>
+              <tr>
+                <td>CI/CD pipeline</td>
+                <td>Malicious code deployment</td>
+                <td>Medium</td>
+                <td>High</td>
+                <td>Code review, branch protection</td>
+                <td>Need pipeline config change detection</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="memorize-box">
+          <h4>🧠 The Risk Derivation Formula</h4>
+          <p><strong>For each asset, ask:</strong></p>
+          <ol>
+            <li>What could an external attacker do to this asset?</li>
+            <li>What could a malicious insider do to this asset?</li>
+            <li>What could an accident or misconfiguration cause?</li>
+            <li>What would the business impact be?</li>
+          </ol>
+          <p style="margin-top: 0.75rem;">This gives you a complete risk picture without needing to enumerate MITRE techniques.</p>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 5: CONTROLS ==================== -->
+      <section id="controls">
+        <h2>5. Controls Framework</h2>
+
+        <p>Controls are what you put in place to address risks. They fall into four categories:</p>
+
+        <div class="two-column">
+          <div class="model-card">
+            <h4>🛡️ Preventive Controls</h4>
+            <p>Stop bad things from happening in the first place.</p>
+            <ul>
+              <li><strong>MFA:</strong> Prevents credential-only compromise</li>
+              <li><strong>Least privilege:</strong> Limits blast radius</li>
+              <li><strong>WAF:</strong> Blocks known attack patterns</li>
+              <li><strong>Hardening:</strong> Reduces attack surface</li>
+              <li><strong>Encryption:</strong> Protects data at rest/transit</li>
+              <li><strong>Network segmentation:</strong> Contains lateral movement</li>
+            </ul>
+          </div>
+          <div class="model-card">
+            <h4>🔍 Detective Controls</h4>
+            <p>Identify when bad things are happening or have happened.</p>
+            <ul>
+              <li><strong>XDR/EDR:</strong> Endpoint threat detection</li>
+              <li><strong>SIEM:</strong> Log analysis and correlation</li>
+              <li><strong>DLP:</strong> Data exfiltration detection</li>
+              <li><strong>UEBA:</strong> Behavioral anomaly detection</li>
+              <li><strong>Vulnerability scanning:</strong> Weakness identification</li>
+              <li><strong>Audit logging:</strong> Activity recording</li>
+            </ul>
+          </div>
+          <div class="model-card">
+            <h4>🔧 Corrective Controls</h4>
+            <p>Fix things after they go wrong.</p>
+            <ul>
+              <li><strong>IR playbooks:</strong> Structured response</li>
+              <li><strong>Automated remediation:</strong> SOAR actions</li>
+              <li><strong>Backup/restore:</strong> Recovery capability</li>
+              <li><strong>Account disable:</strong> Contain compromise</li>
+              <li><strong>Network isolation:</strong> Contain spread</li>
+              <li><strong>Patch deployment:</strong> Fix vulnerabilities</li>
+            </ul>
+          </div>
+          <div class="model-card">
+            <h4>⚖️ Compensating Controls</h4>
+            <p>Alternative measures when primary controls aren't possible.</p>
+            <ul>
+              <li><strong>Manual review:</strong> When automation isn't possible</li>
+              <li><strong>Enhanced monitoring:</strong> When prevention isn't possible</li>
+              <li><strong>Network isolation:</strong> When patching isn't possible</li>
+              <li><strong>Time-limited access:</strong> When always-on access is risky</li>
+              <li><strong>Break-glass procedures:</strong> Emergency access with logging</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>5.1 Controls Mapping Template</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Risk</th>
+              <th>Preventive</th>
+              <th>Detective</th>
+              <th>Corrective</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Admin account takeover</td>
+              <td>MFA, Conditional Access, phishing-resistant auth</td>
+              <td>Impossible travel, MFA fatigue, sign-in anomalies</td>
+              <td>Account disable, session revocation, password reset</td>
+            </tr>
+            <tr>
+              <td>Ransomware execution</td>
+              <td>EDR prevention, ASR rules, app whitelisting</td>
+              <td>EDR alerts, mass file encryption detection</td>
+              <td>Isolate endpoint, restore from backup</td>
+            </tr>
+            <tr>
+              <td>Data exfiltration</td>
+              <td>DLP policies, egress filtering</td>
+              <td>DLP alerts, unusual data transfer volumes</td>
+              <td>Block transfer, revoke access, investigate</td>
+            </tr>
+            <tr>
+              <td>Cloud config tampering</td>
+              <td>RBAC, change approval, IaC</td>
+              <td>Config change alerts, drift detection</td>
+              <td>Rollback config, review access</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ==================== SECTION 6: SIGNALS ==================== -->
+      <section id="signals">
+        <h2>6. Signals Come From Controls</h2>
+
+        <p>Signals are the telemetry and logs that controls produce. <strong>You can only detect what you can see.</strong></p>
+
+        <div class="key-insight">
+          <h4>💡 The Signal Chain</h4>
+          <p>Control → Produces Signal → Signal enables Detection</p>
+          <p style="margin-top: 0.5rem;">If you don't have the right controls producing the right signals, you can't build the detection. This is why "turn on more logging" is often the answer to "why can't we detect X?"</p>
+        </div>
+
+        <h3>6.1 Signal Sources by Category</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Signal Source</th>
+              <th>What It Tells You</th>
+              <th>Key Events</th>
+              <th>Plane Coverage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Identity Provider Logs</strong><br>(Azure AD, Okta)</td>
+              <td>Who authenticated, how, from where, what accessed</td>
+              <td>Sign-in success/failure, MFA challenge, token issuance, Conditional Access</td>
+              <td>Control plane</td>
+            </tr>
+            <tr>
+              <td><strong>EDR Telemetry</strong><br>(MDE, CrowdStrike)</td>
+              <td>What's executing on endpoints, process behavior, file activity</td>
+              <td>Process creation, file access, network connections, registry changes</td>
+              <td>Data + Control plane</td>
+            </tr>
+            <tr>
+              <td><strong>Cloud Audit Logs</strong><br>(CloudTrail, Azure Activity)</td>
+              <td>What admins are doing in cloud console, API calls</td>
+              <td>Resource creation/deletion, IAM changes, config modifications</td>
+              <td>Management plane</td>
+            </tr>
+            <tr>
+              <td><strong>Application Logs</strong></td>
+              <td>What users are doing in business applications</td>
+              <td>Data access, admin actions, exports, sharing</td>
+              <td>Data plane</td>
+            </tr>
+            <tr>
+              <td><strong>Network Logs</strong><br>(Firewall, VPN, Proxy)</td>
+              <td>What's connecting to what, traffic patterns</td>
+              <td>Connection allow/deny, bytes transferred, destinations</td>
+              <td>All three planes</td>
+            </tr>
+            <tr>
+              <td><strong>Email/Collaboration Logs</strong><br>(M365, Google Workspace)</td>
+              <td>Communication patterns, file sharing, external sharing</td>
+              <td>Email sent/received, file shared, external access</td>
+              <td>Data plane</td>
+            </tr>
+            <tr>
+              <td><strong>CI/CD Logs</strong><br>(GitHub, GitLab, Jenkins)</td>
+              <td>Code changes, deployments, pipeline executions</td>
+              <td>Commit, PR, merge, deployment, config change</td>
+              <td>Management plane</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>6.2 Signal Gap Analysis</h3>
+
+        <p>For each risk, verify you have signals to detect it:</p>
+
+        <div class="model-card">
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Risk</th>
+                <th>Required Signal</th>
+                <th>Do We Have It?</th>
+                <th>Gap Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Admin account takeover</td>
+                <td>Azure AD sign-in logs with location, device, MFA</td>
+                <td>✅ Yes</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Mass data export from app</td>
+                <td>Application audit logs with export actions</td>
+                <td>❌ No</td>
+                <td>Enable application audit logging</td>
+              </tr>
+              <tr>
+                <td>Cloud logging disabled</td>
+                <td>Cloud audit logs for logging config changes</td>
+                <td>✅ Yes</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Lateral movement via RDP</td>
+                <td>Windows Security logs or EDR network telemetry</td>
+                <td>⚠️ Partial</td>
+                <td>Enable Windows event forwarding or EDR network visibility</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 7: XDR-FIRST ==================== -->
+      <section id="xdr-first">
+        <h2>7. XDR-First Strategy</h2>
+
+        <p>Modern detection strategy starts with XDR because it has the best visibility into endpoint activity. SIEM fills gaps.</p>
+
+        <h3>7.1 What XDR Sees Well</h3>
+
+        <div class="model-card">
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Domain</th>
+                <th>XDR Coverage</th>
+                <th>Examples</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Endpoint Execution</strong></td>
+                <td>🟢 Excellent</td>
+                <td>Malware, ransomware, suspicious processes, scripts, LOLBins</td>
+              </tr>
+              <tr>
+                <td><strong>Identity (Basic)</strong></td>
+                <td>🟡 Good</td>
+                <td>Sign-in anomalies, impossible travel, MFA bypass attempts</td>
+              </tr>
+              <tr>
+                <td><strong>Email Threats</strong></td>
+                <td>🟢 Excellent</td>
+                <td>Phishing, malicious attachments, BEC attempts</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud App Access</strong></td>
+                <td>🟡 Good</td>
+                <td>Shadow IT, risky OAuth apps, anomalous access patterns</td>
+              </tr>
+              <tr>
+                <td><strong>Network (Endpoint-based)</strong></td>
+                <td>🟡 Partial</td>
+                <td>C2 connections from endpoints, lateral movement</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>7.2 What XDR Misses (SIEM Territory)</h3>
+
+        <div class="model-card">
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Domain</th>
+                <th>XDR Coverage</th>
+                <th>Why SIEM Needed</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Management Plane</strong></td>
+                <td>🔴 Weak</td>
+                <td>XDR doesn't see cloud console actions, IaC changes, CI/CD pipelines</td>
+              </tr>
+              <tr>
+                <td><strong>Application Layer</strong></td>
+                <td>🔴 Weak</td>
+                <td>XDR doesn't understand business app logic, API abuse, data exports</td>
+              </tr>
+              <tr>
+                <td><strong>Cross-Domain Correlation</strong></td>
+                <td>🔴 Weak</td>
+                <td>Identity + endpoint + network + app requires SIEM correlation</td>
+              </tr>
+              <tr>
+                <td><strong>Network Infrastructure</strong></td>
+                <td>🔴 Weak</td>
+                <td>Firewall, VPN, proxy logs need SIEM for analysis</td>
+              </tr>
+              <tr>
+                <td><strong>OT/IoT</strong></td>
+                <td>🔴 Weak</td>
+                <td>No XDR agent on OT devices, need network-based detection</td>
+              </tr>
+              <tr>
+                <td><strong>Compliance/Audit</strong></td>
+                <td>🔴 Weak</td>
+                <td>Long-term retention, audit queries, compliance reporting</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="key-insight">
+          <h4>💡 The XDR-First Principle</h4>
+          <p><strong>Let XDR handle what it does best.</strong> Don't build SIEM rules for things XDR already detects well. Focus SIEM investment on gaps: management plane, application layer, cross-domain correlation, and third-party integrations.</p>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 8: THREE BUCKETS ==================== -->
+      <section id="three-buckets">
+        <h2>8. The Three Buckets for Detection Migration</h2>
+
+        <p>When migrating or building detections, classify every rule into one of three buckets:</p>
+
+        <div class="bucket-grid">
+          <div class="bucket-card bucket-retire">
+            <h4>🗑️ Bucket 1: RETIRE</h4>
+            <p><strong>XDR already detects this → Don't duplicate in SIEM</strong></p>
+            <ul>
+              <li>Malware execution</li>
+              <li>Common endpoint behaviors</li>
+              <li>Known attack tools (Mimikatz, Cobalt Strike)</li>
+              <li>Email-based phishing</li>
+              <li>Basic identity anomalies</li>
+              <li>Ransomware indicators</li>
+            </ul>
+            <p><strong>Action:</strong> Retire SIEM rule, ensure XDR alert flows to SIEM for correlation if needed.</p>
+          </div>
+
+          <div class="bucket-card bucket-rewrite">
+            <h4>🔄 Bucket 2: KEEP/REWRITE</h4>
+            <p><strong>SIEM adds value via correlation → Optimize for SIEM</strong></p>
+            <ul>
+              <li>Identity + endpoint correlation</li>
+              <li>VPN + sign-in + privilege changes</li>
+              <li>SaaS admin action + data access spike</li>
+              <li>Multi-stage attack sequences</li>
+              <li>Business context enrichment</li>
+              <li>Cross-tenant correlation</li>
+            </ul>
+            <p><strong>Action:</strong> Rewrite with optimal SIEM logic, incorporate XDR signals as inputs.</p>
+          </div>
+
+          <div class="bucket-card bucket-build">
+            <h4>🔨 Bucket 3: BUILD IN SIEM</h4>
+            <p><strong>XDR doesn't cover this → SIEM is the only option</strong></p>
+            <ul>
+              <li>Cloud management plane misuse</li>
+              <li>Application/API abuse</li>
+              <li>Logging/audit tampering</li>
+              <li>CI/CD pipeline attacks</li>
+              <li>Network infrastructure changes</li>
+              <li>OT/IoT threats</li>
+              <li>Compliance-specific monitoring</li>
+            </ul>
+            <p><strong>Action:</strong> Build new detection in SIEM, ensure signals are available.</p>
+          </div>
+        </div>
+
+        <h3>8.1 Example Bucket Classification</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Detection</th>
+              <th>Bucket</th>
+              <th>Rationale</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mimikatz execution</td>
+              <td><span style="color: #22c55e;">Retire</span></td>
+              <td>MDE detects this with high fidelity</td>
+            </tr>
+            <tr>
+              <td>PowerShell encoded command</td>
+              <td><span style="color: #22c55e;">Retire</span></td>
+              <td>MDE has built-in detection + AMSI integration</td>
+            </tr>
+            <tr>
+              <td>Impossible travel + endpoint login</td>
+              <td><span style="color: #eab308;">Rewrite</span></td>
+              <td>Needs correlation of identity + endpoint signals</td>
+            </tr>
+            <tr>
+              <td>Admin creates user + assigns Global Admin</td>
+              <td><span style="color: #eab308;">Rewrite</span></td>
+              <td>Sequence detection across audit events</td>
+            </tr>
+            <tr>
+              <td>CloudTrail logging disabled</td>
+              <td><span style="color: #ef4444;">Build</span></td>
+              <td>XDR has no visibility into AWS management plane</td>
+            </tr>
+            <tr>
+              <td>Mass export from SaaS application</td>
+              <td><span style="color: #ef4444;">Build</span></td>
+              <td>XDR doesn't understand application business logic</td>
+            </tr>
+            <tr>
+              <td>Terraform state file accessed</td>
+              <td><span style="color: #ef4444;">Build</span></td>
+              <td>CI/CD pipeline monitoring not in XDR scope</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ==================== SECTION 9: CORRELATION DECISION ==================== -->
+      <section id="correlation-decision">
+        <h2>9. When to Write SIEM Correlations</h2>
+
+        <p>Not every detection needs SIEM correlation. Use this decision framework:</p>
+
+        <div class="decision-tree">
+          <p><strong>Write SIEM correlation when:</strong></p>
+          <p>├── <code>Multiple asset classes</code> are involved (identity + endpoint + network)</p>
+          <p>├── <code>Sequence/time/context</code> matters (A then B within X minutes)</p>
+          <p>├── <code>Actions look legitimate</code> individually but are risky in combination</p>
+          <p>├── <code>Blast radius is high</code> (admin actions, sensitive data)</p>
+          <p>├── <code>XDR sees only part</code> of the story (endpoint saw it, but not the trigger)</p>
+          <p>└── <code>Business context</code> is required (HR data = different than public data)</p>
+        </div>
+
+        <div class="memorize-box">
+          <h4>🧠 The Golden Rule</h4>
+          <p><strong>If misuse can happen without malware, SIEM correlation is usually required.</strong></p>
+          <p style="margin-top: 0.5rem;">XDR excels at detecting malicious binaries and known attack tools. It struggles with "living off the land" attacks that use legitimate tools and credentials. That's where SIEM correlation shines.</p>
+        </div>
+
+        <h3>9.1 Correlation Patterns That Need SIEM</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Pattern</th>
+              <th>Why SIEM</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Identity + Endpoint</strong></td>
+              <td>Correlate authentication with subsequent activity</td>
+              <td>User signs in from unusual location → immediately accesses sensitive file share</td>
+            </tr>
+            <tr>
+              <td><strong>Sequence Detection</strong></td>
+              <td>Order and timing matter</td>
+              <td>Failed login attempts → successful login → privilege escalation → data access</td>
+            </tr>
+            <tr>
+              <td><strong>Threshold + Context</strong></td>
+              <td>Volume anomalies with business context</td>
+              <td>User exports 10x normal data volume during off-hours</td>
+            </tr>
+            <tr>
+              <td><strong>Cross-System</strong></td>
+              <td>Attack spans multiple systems</td>
+              <td>VPN login from new location → RDP to server → database query</td>
+            </tr>
+            <tr>
+              <td><strong>Management Plane Changes</strong></td>
+              <td>XDR doesn't see admin consoles</td>
+              <td>Admin disables MFA requirement → creates new admin account</td>
+            </tr>
+            <tr>
+              <td><strong>Baseline Deviation</strong></td>
+              <td>Requires historical context</td>
+              <td>Service account used interactively for first time in 6 months</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ==================== SECTION 10: MITRE ==================== -->
+      <section id="mitre">
+        <h2>10. Where MITRE ATT&CK Fits</h2>
+
+        <p>MITRE is a <strong>labeling and communication tool</strong>, not a detection enumeration checklist.</p>
+
+        <div class="key-insight">
+          <h4>💡 The MITRE Mindset Shift</h4>
+          <p><strong>Wrong approach:</strong> "Let's write detections for all 200+ techniques"</p>
+          <p><strong>Right approach:</strong> "Let's label our detections with MITRE and identify coverage gaps"</p>
+        </div>
+
+        <h3>10.1 How to Use MITRE Correctly</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Use Case</th>
+              <th>How MITRE Helps</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Detection Intent Clarity</strong></td>
+              <td>Labels what a detection is trying to catch</td>
+              <td>"This rule detects T1078 Valid Accounts - privilege escalation via compromised credentials"</td>
+            </tr>
+            <tr>
+              <td><strong>Coverage Communication</strong></td>
+              <td>Shows stakeholders what you can detect</td>
+              <td>"We have coverage for 60% of techniques used by FIN7"</td>
+            </tr>
+            <tr>
+              <td><strong>Gap Analysis</strong></td>
+              <td>Identifies high-risk techniques without detection</td>
+              <td>"We have no detection for T1562 Impair Defenses - logging tampering"</td>
+            </tr>
+            <tr>
+              <td><strong>Threat Intel Integration</strong></td>
+              <td>Maps adversary behavior to detection</td>
+              <td>"APT29 uses T1547 Boot Autostart - do we detect this?"</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>10.2 MITRE Hierarchy (What You Actually Use)</h3>
+
+        <div class="model-card">
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Level</th>
+                <th>Count</th>
+                <th>When to Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Tactics</strong></td>
+                <td>14</td>
+                <td><strong>Always</strong> — High-level coverage view (Initial Access, Execution, Persistence, etc.)</td>
+              </tr>
+              <tr>
+                <td><strong>Techniques</strong></td>
+                <td>~200</td>
+                <td><strong>Selective</strong> — Focus on techniques relevant to your threat model</td>
+              </tr>
+              <tr>
+                <td><strong>Sub-techniques</strong></td>
+                <td>~400</td>
+                <td><strong>Only when necessary</strong> — For specific detection tuning</td>
+              </tr>
+              <tr>
+                <td><strong>Threat Groups</strong></td>
+                <td>~140</td>
+                <td><strong>Optional</strong> — For threat intel maturity and hunting</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="memorize-box">
+          <h4>🧠 MITRE Is a Label, Not a Driver</h4>
+          <p>Your detection strategy should be driven by: <strong>Business risk → Assets → Controls → Signals → Detections</strong></p>
+          <p style="margin-top: 0.5rem;">MITRE is applied <em>after</em> you build detections to label and communicate coverage. Don't start with "let's cover T1003" — start with "credential theft is a top risk, what detections do we need?"</p>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 11: NIST/ISO ==================== -->
+      <section id="nist-iso">
+        <h2>11. Where Security Frameworks Fit (NIST/ISO)</h2>
+
+        <p>Frameworks answer: <strong>"Do we have the right categories of controls?"</strong></p>
+
+        <h3>11.1 NIST CSF Mapping</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>NIST Function</th>
+              <th>What It Covers</th>
+              <th>Your Activities</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Identify</strong></td>
+              <td>Know your assets and risks</td>
+              <td>Asset inventory, risk register, business context</td>
+            </tr>
+            <tr>
+              <td><strong>Protect</strong></td>
+              <td>Preventive controls</td>
+              <td>IAM, MFA, hardening, encryption, access control</td>
+            </tr>
+            <tr>
+              <td><strong>Detect</strong></td>
+              <td>Detective controls</td>
+              <td>SIEM, XDR, monitoring, alerting</td>
+            </tr>
+            <tr>
+              <td><strong>Respond</strong></td>
+              <td>Incident response</td>
+              <td>Playbooks, escalation, communication, containment</td>
+            </tr>
+            <tr>
+              <td><strong>Recover</strong></td>
+              <td>Business continuity</td>
+              <td>Backups, restore procedures, post-incident improvements</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="key-insight">
+          <h4>💡 Framework Value</h4>
+          <p>Frameworks help you prove: <strong>"We didn't just write random rules; we built a complete security program."</strong></p>
+          <p style="margin-top: 0.5rem;">When talking to executives or auditors, map your work to NIST/ISO to show completeness and maturity.</p>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 12: REGULATIONS ==================== -->
+      <section id="regulations">
+        <h2>12. Where Regulations Fit</h2>
+
+        <p>Regulations answer: <strong>"Are you protecting sensitive data appropriately and can you prove it?"</strong></p>
+
+        <h3>12.1 How Regulations Influence Detection</h3>
+
+        <p>Regulations don't say "write rule X." They specify what must be monitored and evidenced:</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Requirement Type</th>
+              <th>Detection Implication</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Access Control Evidence</strong></td>
+              <td>Log who accessed sensitive data</td>
+              <td>HIPAA: Track all PHI access; PCI: Log cardholder data access</td>
+            </tr>
+            <tr>
+              <td><strong>Audit Trails</strong></td>
+              <td>Log admin actions and changes</td>
+              <td>SOX: Log financial system changes; SOC 2: Log security config changes</td>
+            </tr>
+            <tr>
+              <td><strong>Data Minimization</strong></td>
+              <td>Don't log sensitive data unnecessarily</td>
+              <td>GDPR: Don't log PII in SIEM; HIPAA: Mask PHI in logs</td>
+            </tr>
+            <tr>
+              <td><strong>Incident Response</strong></td>
+              <td>Prove you can detect and respond</td>
+              <td>All: Demonstrate detection coverage and response playbooks</td>
+            </tr>
+            <tr>
+              <td><strong>Retention</strong></td>
+              <td>Keep logs for required period</td>
+              <td>PCI: 1 year; HIPAA: 6 years; SOX: 7 years</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>12.2 Regulation Quick Reference</h3>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Regulation</th>
+              <th>Applies To</th>
+              <th>Key Detection Requirements</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>HIPAA/HITECH</strong></td>
+              <td>Healthcare (US)</td>
+              <td>PHI access logging, breach detection, audit trails</td>
+            </tr>
+            <tr>
+              <td><strong>PHIPA</strong></td>
+              <td>Healthcare (Ontario)</td>
+              <td>Similar to HIPAA: access control, audit, breach notification</td>
+            </tr>
+            <tr>
+              <td><strong>PCI-DSS</strong></td>
+              <td>Payment card data</td>
+              <td>Cardholder data access logging, daily log review, 1-year retention</td>
+            </tr>
+            <tr>
+              <td><strong>SOX</strong></td>
+              <td>Public companies (US)</td>
+              <td>Financial system access logging, change management</td>
+            </tr>
+            <tr>
+              <td><strong>GDPR</strong></td>
+              <td>EU personal data</td>
+              <td>Data access logging, breach detection (72h notification)</td>
+            </tr>
+            <tr>
+              <td><strong>SOC 2</strong></td>
+              <td>Service providers</td>
+              <td>Security monitoring, access logging, incident response</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ==================== SECTION 13: PUTTING TOGETHER ==================== -->
+      <section id="putting-together">
+        <h2>13. Putting It All Together</h2>
+
+        <p>Here's the complete flow, step by step:</p>
+
+        <div class="model-card">
+          <ol style="line-height: 2;">
+            <li><span class="step-number">1</span> <strong>Identify business model and critical outcomes</strong> — What does this organization do?</li>
+            <li><span class="step-number">2</span> <strong>Break environment into data/control/management planes</strong> — Map all systems</li>
+            <li><span class="step-number">3</span> <strong>List assets using standard categories</strong> — Identity, compute, network, apps, data, management</li>
+            <li><span class="step-number">4</span> <strong>Derive risks from assets</strong> — What could go wrong with each asset?</li>
+            <li><span class="step-number">5</span> <strong>Place controls to mitigate risks</strong> — Preventive, detective, corrective</li>
+            <li><span class="step-number">6</span> <strong>Identify signals emitted by controls</strong> — What logs/telemetry do we have?</li>
+            <li><span class="step-number">7</span> <strong>Decide XDR-first strategy</strong> — What does XDR cover vs. gaps?</li>
+            <li><span class="step-number">8</span> <strong>Bucket detections</strong> — Retire / Rewrite / Build</li>
+            <li><span class="step-number">9</span> <strong>Prioritize correlations</strong> — By blast radius and cross-plane sequences</li>
+            <li><span class="step-number">10</span> <strong>Label with MITRE</strong> — Validate coverage, communicate gaps</li>
+            <li><span class="step-number">11</span> <strong>Map to NIST/ISO</strong> — Show program completeness</li>
+            <li><span class="step-number">12</span> <strong>Ensure regulatory compliance</strong> — Auditability, privacy, evidence</li>
+          </ol>
+        </div>
+
+        <div class="interview-box">
+          <h4>🎯 The 30-45 Second Interview Answer</h4>
+          <blockquote>
+            "In our SIEM migration, we started with business risk and an asset-based approach, organizing the environment into data, control, and management planes. We documented existing log sources and detections, then shifted to an XDR-first strategy—retiring redundant SIEM rules already covered by XDR, keeping and rewriting high-value cross-domain correlations, and building new SIEM detections for areas XDR doesn't cover, like cloud control-plane and application-layer abuse. MITRE ATT&CK was used to validate detection intent and communicate coverage at the tactic and technique level, while frameworks like NIST helped structure controls across identify/protect/detect/respond/recover. For regulated environments like PHIPA, we ensured auditability, access monitoring, and evidence collection were part of the detection strategy."
+          </blockquote>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 14: INDUSTRY EXAMPLES ==================== -->
+      <section id="industry-examples">
+        <h2>14. Apply It: Industry Examples</h2>
+
+        <p>Use these examples to practice applying the model to different organizations:</p>
+
+        <!-- HEALTHCARE EXAMPLE -->
+        <div class="scenario-card">
+          <h4>🏥 Healthcare: Regional Hospital Network</h4>
+          
+          <p><strong>Business Context:</strong></p>
+          <ul>
+            <li>5,000 employees across 3 hospitals</li>
+            <li>EHR system (Epic), PACS imaging, connected medical devices</li>
+            <li>HIPAA/PHIPA regulated</li>
+          </ul>
+
+          <p><strong>What Harm Looks Like:</strong></p>
+          <ul>
+            <li>Ransomware disrupts patient care (availability)</li>
+            <li>PHI breach triggers notification and fines (confidentiality)</li>
+            <li>Insider accesses celebrity records (privacy)</li>
+            <li>Medical device compromise affects patient safety (integrity)</li>
+          </ul>
+
+          <p><strong>Three Planes:</strong></p>
+          <ul>
+            <li><strong>Data:</strong> EHR access, PACS images, lab results, prescriptions</li>
+            <li><strong>Control:</strong> Clinical workstation login, badge access, Epic authentication</li>
+            <li><strong>Management:</strong> EHR admin functions, AD management, medical device config</li>
+          </ul>
+
+          <p><strong>Key Assets:</strong></p>
+          <ul>
+            <li><strong>Identity:</strong> Clinicians, nurses, admins, service accounts, vendor accounts</li>
+            <li><strong>Compute:</strong> Clinical workstations, servers, medical devices</li>
+            <li><strong>Data:</strong> PHI in EHR, imaging data, billing records</li>
+            <li><strong>Apps:</strong> Epic EHR, PACS, pharmacy systems, patient portal</li>
+          </ul>
+
+          <p><strong>Top Risks → Detections:</strong></p>
+          <ul>
+            <li>Ransomware execution → XDR handles (Bucket 1)</li>
+            <li>Mass PHI access by single user → SIEM correlation (Bucket 3)</li>
+            <li>After-hours EHR access by non-clinical staff → SIEM (Bucket 3)</li>
+            <li>Medical device network anomaly → SIEM (Bucket 3)</li>
+            <li>Admin creates new privileged account → SIEM (Bucket 2)</li>
+          </ul>
+        </div>
+
+        <!-- B2B SAAS EXAMPLE -->
+        <div class="scenario-card">
+          <h4>💻 B2B SaaS: Project Management Platform</h4>
+          
+          <p><strong>Business Context:</strong></p>
+          <ul>
+            <li>200 employees, 5,000 customers, multi-tenant SaaS</li>
+            <li>AWS-hosted, Kubernetes, PostgreSQL</li>
+            <li>SOC 2 Type II, processing customer PII</li>
+          </ul>
+
+          <p><strong>What Harm Looks Like:</strong></p>
+          <ul>
+            <li>Customer data breach (confidentiality)</li>
+            <li>Service outage (availability)</li>
+            <li>Admin account takeover → all customers affected (integrity)</li>
+            <li>Customer tenant isolation failure (confidentiality)</li>
+          </ul>
+
+          <p><strong>Three Planes:</strong></p>
+          <ul>
+            <li><strong>Data:</strong> Customer projects, files, user data, API access</li>
+            <li><strong>Control:</strong> Customer SSO, employee SSO, API authentication</li>
+            <li><strong>Management:</strong> AWS console, Kubernetes admin, CI/CD pipelines, database admin</li>
+          </ul>
+
+          <p><strong>Key Assets:</strong></p>
+          <ul>
+            <li><strong>Identity:</strong> Employee accounts, customer admins, service accounts, API keys</li>
+            <li><strong>Compute:</strong> Kubernetes pods, RDS instances, developer laptops</li>
+            <li><strong>Data:</strong> Customer data in PostgreSQL, S3 files, backups</li>
+            <li><strong>Management:</strong> AWS Console, Terraform, GitHub Actions, kubectl</li>
+          </ul>
+
+          <p><strong>Top Risks → Detections:</strong></p>
+          <ul>
+            <li>Developer laptop malware → XDR handles (Bucket 1)</li>
+            <li>AWS IAM role assumption from unusual location → SIEM (Bucket 3)</li>
+            <li>Mass customer data export via API → SIEM (Bucket 3)</li>
+            <li>CI/CD pipeline config change → SIEM (Bucket 3)</li>
+            <li>CloudTrail logging disabled → SIEM (Bucket 3)</li>
+            <li>Employee accesses customer data outside support ticket → SIEM (Bucket 3)</li>
+          </ul>
+        </div>
+
+        <!-- MANUFACTURING EXAMPLE -->
+        <div class="scenario-card">
+          <h4>🏭 Manufacturing: Industrial Equipment Company</h4>
+          
+          <p><strong>Business Context:</strong></p>
+          <ul>
+            <li>2,000 employees, 5 plants, hybrid IT/OT environment</li>
+            <li>IP-heavy (designs, patents), connected machinery</li>
+            <li>ISO 27001, export controls for certain products</li>
+          </ul>
+
+          <p><strong>What Harm Looks Like:</strong></p>
+          <ul>
+            <li>Production line shutdown from ransomware (availability)</li>
+            <li>IP theft by competitor/nation-state (confidentiality)</li>
+            <li>OT system compromise affects safety (integrity)</li>
+            <li>Supply chain partner breach (third-party risk)</li>
+          </ul>
+
+          <p><strong>Three Planes:</strong></p>
+          <ul>
+            <li><strong>Data:</strong> CAD files, production data, ERP transactions</li>
+            <li><strong>Control:</strong> Plant access, engineer workstation auth, OT network access</li>
+            <li><strong>Management:</strong> SCADA/HMI admin, PLC programming, IT infrastructure</li>
+          </ul>
+
+          <p><strong>Key Assets:</strong></p>
+          <ul>
+            <li><strong>Identity:</strong> Engineers, plant operators, contractors, service accounts</li>
+            <li><strong>Compute:</strong> Engineering workstations, servers, OT controllers (PLCs, HMIs)</li>
+            <li><strong>Network:</strong> IT/OT boundary, remote access to plants, vendor connections</li>
+            <li><strong>Data:</strong> Design files, production recipes, customer orders</li>
+          </ul>
+
+          <p><strong>Top Risks → Detections:</strong></p>
+          <ul>
+            <li>Ransomware on engineering workstation → XDR handles (Bucket 1)</li>
+            <li>Large CAD file transfer to external location → SIEM + DLP (Bucket 3)</li>
+            <li>IT/OT boundary breach → SIEM via network logs (Bucket 3)</li>
+            <li>Unauthorized PLC programming → OT monitoring + SIEM (Bucket 3)</li>
+            <li>After-hours access to design repository → SIEM (Bucket 2)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ==================== FINAL CALLOUT ==================== -->
+      <div class="callout success" style="margin-top: 3rem;">
+        <div class="callout-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Master This Model
+        </div>
+        <div class="callout-content">
+          <p><strong>This is your anchor for any security conversation.</strong> Whether you're assessing a new client, building detections, or answering interview questions, start with the chain:</p>
+          <p style="margin-top: 0.5rem; font-family: 'IBM Plex Mono', monospace; font-size: 1.1rem;">
+            Business → Assets → Risks → Controls → Signals → Detections → Response → Evidence
+          </p>
+          <p style="margin-top: 0.75rem;">Everything else is details. If you internalize this model, you can approach <em>any</em> security problem systematically.</p>
+        </div>
+      </div>
+
+      <!-- ==================== CONTINUATION TO SOC MATURITY ==================== -->
+      <div class="callout info" style="margin-top: 2rem; background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.02)); border: 2px solid rgba(139, 92, 246, 0.4);">
+        <div class="callout-title" style="color: #8b5cf6;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+          Continue to SOC Maturity Assessment
+        </div>
+        <div class="callout-content">
+          <p>Now that you understand the Mental Model, learn how to <strong>measure and improve</strong> security operations maturity:</p>
+          <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+            <li><strong>Right-Sizing:</strong> Target maturity by organization size and industry</li>
+            <li><strong>Tool Mapping:</strong> Complete tools matrix for each plane and asset category</li>
+            <li><strong>Four Pillars:</strong> People, Process, Technology, Governance scoring</li>
+            <li><strong>Level Definitions:</strong> Detailed characteristics for Levels 1-5</li>
+            <li><strong>Transition Roadmaps:</strong> Step-by-step guides to advance each level</li>
+            <li><strong>Budget Planning:</strong> Investment benchmarks by organization size</li>
+          </ul>
+          <p style="margin-top: 1rem;">
+            <a href="soc-maturity.html" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--accent-primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+              <span>Go to SOC Maturity Roadmap</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </a>
+          </p>
+        </div>
+      </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

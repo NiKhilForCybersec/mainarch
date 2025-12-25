@@ -517,6 +517,7 @@
           <a href="interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
           <a href="interview-technical-reference.html" class="nav-item">Technical Reference</a>
           <a href="interview-frameworks.html" class="nav-item">Mental Frameworks</a>
+          <a href="security-mental-model.html" class="nav-item">Security Mental Model</a>
           <a href="soc-maturity.html" class="nav-item active">SOC Maturity Roadmap</a>
           <a href="director-interview-prep.html" class="nav-item">Director Interview Prep</a>
         </div>
@@ -543,6 +544,18 @@
         <p class="subtitle">A comprehensive guide to assess, plan, and execute security operations transformation from Level 1 to Level 5</p>
       </header>
 
+      <!-- Cross-reference to Mental Model -->
+      <div class="callout info" style="margin-bottom: 2rem;">
+        <div class="callout-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          📖 Start with the Foundation
+        </div>
+        <div class="callout-content">
+          <p>This page builds on the <a href="security-mental-model.html" style="color: var(--accent-primary); font-weight: 600;">Security Mental Model</a> — a systematic framework for understanding any organization's security posture. The Mental Model teaches you <strong>how to think</strong> about security; this page teaches you <strong>how to measure and improve</strong> it.</p>
+          <p style="margin-top: 0.5rem;"><strong>Assessment Flow:</strong> Business Context → Three Planes → Assets → Risks → Controls → Signals → Detections → Response → Then score maturity pillars.</p>
+        </div>
+      </div>
+
       <!-- ==================== TABLE OF CONTENTS ==================== -->
       <div class="toc-box">
         <h3>📚 Table of Contents</h3>
@@ -565,6 +578,7 @@
             <p><strong>Assessment & Roadmaps</strong></p>
             <ul>
               <li><a href="#assessment">5. Assessment Framework</a></li>
+              <li><a href="#mental-model-integration">5.5 Mental Model Integration</a></li>
               <li><a href="#transitions">6. Transition Roadmaps</a></li>
               <li><a href="#1-to-2">↳ Level 1 → 2</a></li>
               <li><a href="#2-to-3">↳ Level 2 → 3</a></li>
@@ -2186,9 +2200,645 @@
         </div>
       </section>
 
-      <!-- Continued in next section... -->
+      <!-- ==================== SECTION 5.5: MENTAL MODEL INTEGRATION ==================== -->
+      <section id="mental-model-integration">
+        <h2>5.5 Assessment Using the Security Mental Model</h2>
 
-      <!-- ==================== SECTION 5: TRANSITION ROADMAPS ==================== -->
+        <p>The <a href="security-mental-model.html" style="color: var(--accent-primary);">Security Mental Model</a> provides the <strong>foundation for any SOC assessment</strong>. Before evaluating maturity levels, you must understand the organization through a systematic lens. This section bridges the mental model with practical assessment.</p>
+
+        <div class="master-model" style="background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(234, 179, 8, 0.02)); border: 2px solid rgba(234, 179, 8, 0.5); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; text-align: center;">
+          <h4 style="color: #eab308; margin-top: 0; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">🧠 The Assessment Foundation Chain</h4>
+          <p style="font-size: 1.1rem; font-weight: 600; font-family: 'IBM Plex Mono', monospace; line-height: 2.2;">
+            <span style="background: rgba(239, 68, 68, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #ef4444;">Business</span> →
+            <span style="background: rgba(249, 115, 22, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #f97316;">Assets</span> →
+            <span style="background: rgba(234, 179, 8, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #eab308;">Risks</span> →
+            <span style="background: rgba(34, 197, 94, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #22c55e;">Controls</span> →
+            <span style="background: rgba(6, 182, 212, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #06b6d4;">Signals</span> →
+            <span style="background: rgba(139, 92, 246, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #8b5cf6;">Detections</span> →
+            <span style="background: rgba(236, 72, 153, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #ec4899;">Response</span> →
+            <span style="background: rgba(255, 255, 255, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #fff;">Evidence</span>
+          </p>
+          <p style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.9rem;">This chain determines WHAT to assess, HOW to prioritize, and WHERE to improve</p>
+        </div>
+
+        <!-- ===== PRE-ASSESSMENT UNDERSTANDING ===== -->
+        <h3>5.5.1 Pre-Assessment: Organizational Understanding</h3>
+
+        <p>Before scoring maturity levels, complete these four steps to understand the organization:</p>
+
+        <div class="pillar-grid">
+          <div class="pillar-card" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.02)); border: 1px solid rgba(239, 68, 68, 0.3);">
+            <h4 style="color: #ef4444;">📊 Step 1: Business Context</h4>
+            <p><strong>Questions to Answer:</strong></p>
+            <ul>
+              <li>What industry? (Healthcare, Finance, Manufacturing, SaaS, Govt, etc.)</li>
+              <li>What size? (SMB, Mid-market, Enterprise, Global)</li>
+              <li>What regulations apply? (HIPAA, PCI, SOX, SOC 2, GDPR, etc.)</li>
+              <li>What does "harm" look like? (Breach, outage, compliance, reputation)</li>
+              <li>Who are likely adversaries? (Criminals, nation-state, insider, hacktivists)</li>
+            </ul>
+            <p style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; font-size: 0.85rem;"><strong>Output:</strong> Target maturity level and priority areas</p>
+          </div>
+
+          <div class="pillar-card" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(249, 115, 22, 0.02)); border: 1px solid rgba(249, 115, 22, 0.3);">
+            <h4 style="color: #f97316;">🗂️ Step 2: Asset Inventory by Plane</h4>
+            <p><strong>Map ALL assets across three planes:</strong></p>
+            <ul>
+              <li><strong>Data Plane:</strong> Apps, databases, file stores, APIs, email</li>
+              <li><strong>Control Plane:</strong> Identity, authentication, authorization, access</li>
+              <li><strong>Management Plane:</strong> Admin consoles, CI/CD, IaC, security tools</li>
+            </ul>
+            <p style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; font-size: 0.85rem;"><strong>Output:</strong> Complete asset inventory with plane classification</p>
+          </div>
+
+          <div class="pillar-card" style="background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(234, 179, 8, 0.02)); border: 1px solid rgba(234, 179, 8, 0.3);">
+            <h4 style="color: #eab308;">⚠️ Step 3: Risk Derivation</h4>
+            <p><strong>For each asset category, identify risks:</strong></p>
+            <ul>
+              <li><strong>Identity:</strong> Account takeover, privilege escalation, credential theft</li>
+              <li><strong>Compute:</strong> Malware, ransomware, lateral movement</li>
+              <li><strong>Data:</strong> Exfiltration, unauthorized access, destruction</li>
+              <li><strong>Apps/APIs:</strong> Business logic abuse, injection, API attacks</li>
+              <li><strong>Management:</strong> Environment takeover, logging disabled, persistence</li>
+            </ul>
+            <p style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; font-size: 0.85rem;"><strong>Output:</strong> Risk register mapped to assets</p>
+          </div>
+
+          <div class="pillar-card" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.02)); border: 1px solid rgba(34, 197, 94, 0.3);">
+            <h4 style="color: #22c55e;">🔍 Step 4: Controls & Signals Gap</h4>
+            <p><strong>Assess current detection capability:</strong></p>
+            <ul>
+              <li>What preventive controls exist? (MFA, hardening, segmentation)</li>
+              <li>What detective controls exist? (XDR, SIEM, DLP)</li>
+              <li>What signals/logs are collected?</li>
+              <li>What risks have NO detection coverage?</li>
+              <li>What detections exist but don't work well?</li>
+            </ul>
+            <p style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; font-size: 0.85rem;"><strong>Output:</strong> Gap analysis for improvement roadmap</p>
+          </div>
+        </div>
+
+        <!-- ===== THREE PLANES ASSESSMENT ===== -->
+        <h3>5.5.2 SOC Maturity by Three Planes</h3>
+
+        <p>Evaluate SOC capabilities across each plane to identify where coverage is strongest and weakest. Most organizations <strong>over-invest in Data Plane</strong> (endpoints) and <strong>under-invest in Management Plane</strong> (cloud consoles, CI/CD).</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Plane</th>
+              <th>What It Covers</th>
+              <th>Level 1-2</th>
+              <th>Level 3</th>
+              <th>Level 4-5</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color: #22c55e;">Data Plane</strong><br><small>Business activity</small></td>
+              <td>Endpoints, apps, email, databases, file access, API calls</td>
+              <td>Basic AV, some app logs, no correlation, reactive</td>
+              <td>XDR deployed, app logs in SIEM, DLP active, playbooks exist</td>
+              <td>UEBA, ML anomaly detection, automated response, full visibility</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #06b6d4;">Control Plane</strong><br><small>Access decisions</small></td>
+              <td>Identity, authentication, authorization, MFA, Conditional Access</td>
+              <td>Basic auth logs, no MFA monitoring, manual access reviews</td>
+              <td>Identity threat detection, CA logging, privilege monitoring</td>
+              <td>ITDR platform, session analysis, automated revocation, zero trust</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #ef4444;">Management Plane</strong><br><small>Admin changes</small></td>
+              <td>Cloud consoles, CI/CD, IaC, security tool admin, directory changes</td>
+              <td>Minimal audit logs, no change tracking, reactive to breaches</td>
+              <td>Cloud audit logs in SIEM, admin alerts, config change detection</td>
+              <td>Full CSPM, drift detection, automated remediation, predictive</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="key-insight">
+          <h4>💡 The Plane Imbalance Problem</h4>
+          <p>XDR gives excellent Data Plane visibility, but attackers increasingly target the <strong>Management Plane</strong>—cloud consoles, CI/CD pipelines, and admin functions—because they're less monitored. A Level 3 SOC should have <strong>balanced coverage across all three planes</strong>.</p>
+        </div>
+
+        <!-- ===== TOOLS MAPPING BY PLANE ===== -->
+        <h3>5.5.3 Tools Mapping by Plane & Asset Category</h3>
+
+        <p>Use this comprehensive matrix to assess tool coverage and identify gaps. This maps directly to the asset categories from the <a href="security-mental-model.html" style="color: var(--accent-primary);">Security Mental Model</a>.</p>
+
+        <h4 style="color: #22c55e; margin-top: 1.5rem;">📊 Data Plane Tools</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Asset Category</th>
+              <th>Detection Tools</th>
+              <th>Prevention Tools</th>
+              <th>Key Signals</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Endpoints</strong><br>(Laptops, Servers, VMs)</td>
+              <td>
+                <strong>XDR/EDR:</strong> Microsoft Defender for Endpoint, CrowdStrike Falcon, SentinelOne, Carbon Black, Cortex XDR<br>
+                <strong>SIEM:</strong> Sentinel, Splunk, Elastic (for correlation)
+              </td>
+              <td>ASR Rules, Application Control, Host Firewall, AV/AM, Device Encryption, Patch Management</td>
+              <td>Process creation, file access, network connections, registry changes, script execution, driver loads</td>
+            </tr>
+            <tr>
+              <td><strong>Email & Collaboration</strong></td>
+              <td>
+                <strong>Email Security:</strong> Defender for Office 365, Proofpoint, Mimecast, Abnormal Security<br>
+                <strong>CASB:</strong> Defender for Cloud Apps
+              </td>
+              <td>Anti-phishing, Safe Links/Attachments, DMARC/DKIM/SPF, DLP policies</td>
+              <td>Phishing attempts, malicious attachments, BEC indicators, forwarding rules, external sharing</td>
+            </tr>
+            <tr>
+              <td><strong>Applications & SaaS</strong></td>
+              <td>
+                <strong>CASB:</strong> Defender for Cloud Apps, Netskope, Zscaler<br>
+                <strong>SIEM:</strong> Application audit logs (Salesforce, Workday, ServiceNow)
+              </td>
+              <td>Session controls, DLP, access policies, OAuth app governance</td>
+              <td>User actions, data exports, admin functions, OAuth grants, anomalous usage patterns</td>
+            </tr>
+            <tr>
+              <td><strong>APIs</strong></td>
+              <td>
+                <strong>API Security:</strong> Salt Security, Noname, 42Crunch, Traceable<br>
+                <strong>WAF:</strong> Azure WAF, Cloudflare, AWS WAF
+              </td>
+              <td>Rate limiting, input validation, authentication, schema validation</td>
+              <td>API calls, error rates, authentication failures, unusual patterns, data volumes</td>
+            </tr>
+            <tr>
+              <td><strong>Databases</strong></td>
+              <td>
+                <strong>DAM:</strong> Imperva, IBM Guardium<br>
+                <strong>Native:</strong> SQL Audit, Azure SQL Auditing, AWS RDS logs
+              </td>
+              <td>Access controls, encryption at rest/transit, query restrictions, masking</td>
+              <td>Queries, data access patterns, schema changes, privilege use, bulk exports, failed auth</td>
+            </tr>
+            <tr>
+              <td><strong>File Storage</strong></td>
+              <td>
+                <strong>DLP:</strong> Microsoft Purview, Symantec DLP, Digital Guardian<br>
+                <strong>CASB:</strong> File sharing monitoring
+              </td>
+              <td>Classification labels, access controls, sharing restrictions, encryption</td>
+              <td>File access, downloads, external sharing, bulk operations, sensitive data movement</td>
+            </tr>
+            <tr>
+              <td><strong>Network Traffic</strong></td>
+              <td>
+                <strong>NDR:</strong> Darktrace, ExtraHop, Vectra AI, Corelight<br>
+                <strong>IDS/IPS:</strong> Suricata, Snort, Palo Alto<br>
+                <strong>SIEM:</strong> NetFlow, DNS, proxy logs
+              </td>
+              <td>Firewall, Segmentation, Proxy, DDoS protection, DNS filtering</td>
+              <td>Connection patterns, data volumes, DNS queries, lateral movement, C2 traffic, beaconing</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="color: #06b6d4; margin-top: 2rem;">🔐 Control Plane Tools</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Asset Category</th>
+              <th>Detection Tools</th>
+              <th>Prevention Tools</th>
+              <th>Key Signals</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Identity & Authentication</strong></td>
+              <td>
+                <strong>ITDR:</strong> Microsoft Defender for Identity, CrowdStrike Identity Protection, Semperis, Silverfort<br>
+                <strong>XDR:</strong> M365 Defender identity signals<br>
+                <strong>SIEM:</strong> Entra ID logs, Okta logs, AD logs
+              </td>
+              <td>MFA, Conditional Access, Passwordless, Phishing-resistant auth (FIDO2), Risk-based auth</td>
+              <td>Sign-ins, MFA challenges, token issuance, auth failures, impossible travel, password spray, MFA fatigue</td>
+            </tr>
+            <tr>
+              <td><strong>Privileged Access</strong></td>
+              <td>
+                <strong>PAM:</strong> CyberArk, BeyondTrust, Delinea, HashiCorp Boundary<br>
+                <strong>PIM:</strong> Entra ID PIM, AWS IAM Access Analyzer<br>
+                <strong>SIEM:</strong> Privilege use correlation
+              </td>
+              <td>Just-in-time access, session recording, approval workflows, least privilege, standing privilege removal</td>
+              <td>Privilege activation, session recordings, command execution, access patterns, after-hours use</td>
+            </tr>
+            <tr>
+              <td><strong>Network Access</strong></td>
+              <td>
+                <strong>NAC:</strong> Cisco ISE, Aruba ClearPass, Forescout<br>
+                <strong>ZTNA:</strong> Zscaler Private Access, Cloudflare Access<br>
+                <strong>SIEM:</strong> VPN, proxy, firewall auth logs
+              </td>
+              <td>Zero Trust, VPN with MFA, 802.1X, Network segmentation, Device compliance</td>
+              <td>VPN connections, network auth, device compliance state, access decisions, geo-location</td>
+            </tr>
+            <tr>
+              <td><strong>Service Accounts & Workload Identity</strong></td>
+              <td>
+                <strong>SIEM:</strong> Service account activity correlation<br>
+                <strong>Cloud:</strong> Workload identity logs<br>
+                <strong>Secrets:</strong> Vault audit logs
+              </td>
+              <td>Managed identities, credential rotation, least privilege, no interactive use, short-lived tokens</td>
+              <td>Service account usage, API key usage, unusual service behavior, interactive logon attempts</td>
+            </tr>
+            <tr>
+              <td><strong>Conditional Access & Policy</strong></td>
+              <td>
+                <strong>SIEM:</strong> CA policy evaluation logs<br>
+                <strong>XDR:</strong> Policy bypass attempts
+              </td>
+              <td>Device compliance, location policies, app restrictions, session controls</td>
+              <td>Policy evaluations, grant/block decisions, policy changes, bypass attempts</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="color: #ef4444; margin-top: 2rem;">⚙️ Management Plane Tools</h4>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Asset Category</th>
+              <th>Detection Tools</th>
+              <th>Prevention Tools</th>
+              <th>Key Signals</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Cloud Console & APIs</strong><br>(AWS, Azure, GCP)</td>
+              <td>
+                <strong>CSPM:</strong> Defender for Cloud, Prisma Cloud, Wiz, Orca, Lacework<br>
+                <strong>SIEM:</strong> CloudTrail, Azure Activity Log, GCP Audit Logs
+              </td>
+              <td>RBAC, SCPs/Policies, MFA for console, IaC-only changes, break-glass procedures</td>
+              <td>Console logins, API calls, resource CRUD, IAM changes, config modifications, logging changes</td>
+            </tr>
+            <tr>
+              <td><strong>CI/CD Pipelines</strong><br>(GitHub, GitLab, Azure DevOps)</td>
+              <td>
+                <strong>SIEM:</strong> GitHub audit logs, GitLab logs, ADO logs<br>
+                <strong>Supply Chain:</strong> Snyk, Dependabot, Socket
+              </td>
+              <td>Branch protection, required reviews, signed commits, secrets scanning, SBOM</td>
+              <td>Pipeline runs, config changes, secrets access, deployment events, permission changes</td>
+            </tr>
+            <tr>
+              <td><strong>Infrastructure as Code</strong><br>(Terraform, Pulumi, CloudFormation)</td>
+              <td>
+                <strong>IaC Scanning:</strong> Checkov, tfsec, Terrascan, KICS<br>
+                <strong>Drift Detection:</strong> Driftctl, Terraform Cloud, env0
+              </td>
+              <td>Policy as code, state file protection, change approval, plan review</td>
+              <td>IaC changes, drift events, policy violations, state file access, manual console changes</td>
+            </tr>
+            <tr>
+              <td><strong>Container & Kubernetes</strong></td>
+              <td>
+                <strong>CWPP:</strong> Defender for Containers, Sysdig, Aqua, Falco<br>
+                <strong>SIEM:</strong> K8s audit logs, container runtime logs
+              </td>
+              <td>Admission controllers, network policies, pod security, image signing</td>
+              <td>Pod creation, exec into containers, privilege escalation, network anomalies, image pulls</td>
+            </tr>
+            <tr>
+              <td><strong>Security Tool Administration</strong></td>
+              <td>
+                <strong>SIEM:</strong> Security tool audit logs<br>
+                <strong>Audit:</strong> Change tracking for security configs
+              </td>
+              <td>Separation of duties, change approval, audit logging, MFA for admin</td>
+              <td>Policy changes, rule modifications, exclusion additions, suppression rules, admin actions</td>
+            </tr>
+            <tr>
+              <td><strong>Directory & Identity Administration</strong></td>
+              <td>
+                <strong>ITDR:</strong> Defender for Identity<br>
+                <strong>SIEM:</strong> Entra ID audit logs, AD audit logs
+              </td>
+              <td>PIM/PAM, separation of duties, break-glass, tiered admin model</td>
+              <td>User creation, group changes, role assignments, policy modifications, directory sync</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ===== TOOL COVERAGE ASSESSMENT ===== -->
+        <h3>5.5.4 Tool Coverage Assessment Template</h3>
+
+        <p>Use this template during assessment to document current state and identify gaps:</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Plane</th>
+              <th>Asset Category</th>
+              <th>Current Tool(s)</th>
+              <th>Coverage</th>
+              <th>Gap / Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="4" style="vertical-align: top; background: rgba(34, 197, 94, 0.1);"><strong style="color: #22c55e;">Data Plane</strong></td>
+              <td>Endpoints</td>
+              <td><em style="color: var(--text-muted);">(e.g., MDE, CrowdStrike)</em></td>
+              <td>🟢 Good / 🟡 Partial / 🔴 None</td>
+              <td><em style="color: var(--text-muted);">(e.g., Need server coverage)</em></td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td><em style="color: var(--text-muted);">(e.g., Defender for O365)</em></td>
+              <td>🟢 / 🟡 / 🔴</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Applications</td>
+              <td><em style="color: var(--text-muted);">(e.g., MCAS, app logs)</em></td>
+              <td>🟢 / 🟡 / 🔴</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Data/DLP</td>
+              <td><em style="color: var(--text-muted);">(e.g., Purview)</em></td>
+              <td>🟢 / 🟡 / 🔴</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td rowspan="3" style="vertical-align: top; background: rgba(6, 182, 212, 0.1);"><strong style="color: #06b6d4;">Control Plane</strong></td>
+              <td>Identity/Auth</td>
+              <td><em style="color: var(--text-muted);">(e.g., Entra ID P2, Okta)</em></td>
+              <td>🟢 / 🟡 / 🔴</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Privileged Access</td>
+              <td><em style="color: var(--text-muted);">(e.g., PIM, CyberArk)</em></td>
+              <td>🟢 / 🟡 / 🔴</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Network Access</td>
+              <td><em style="color: var(--text-muted);">(e.g., VPN, ZTNA)</em></td>
+              <td>🟢 / 🟡 / 🔴</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td rowspan="4" style="vertical-align: top; background: rgba(239, 68, 68, 0.1);"><strong style="color: #ef4444;">Mgmt Plane</strong></td>
+              <td>Cloud Console</td>
+              <td><em style="color: var(--text-muted);">(e.g., Defender for Cloud)</em></td>
+              <td>🟢 / 🟡 / 🔴</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>CI/CD</td>
+              <td><em style="color: var(--text-muted);">(e.g., GitHub audit logs)</em></td>
+              <td>🟢 / 🟡 / 🔴</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>IaC/Config</td>
+              <td><em style="color: var(--text-muted);">(e.g., Checkov, drift)</em></td>
+              <td>🟢 / 🟡 / 🔴</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Security Admin</td>
+              <td><em style="color: var(--text-muted);">(e.g., audit logs)</em></td>
+              <td>🟢 / 🟡 / 🔴</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ===== TOOL STACK BY ORG SIZE ===== -->
+        <h3>5.5.5 Recommended Tool Stack by Organization Size</h3>
+
+        <p>Align tool investments with organization size and target maturity level. Reference the <a href="#right-sizing">Right-Sizing section</a> for budget and team context.</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Org Size</th>
+              <th>Target</th>
+              <th>Data Plane Stack</th>
+              <th>Control Plane Stack</th>
+              <th>Management Plane Stack</th>
+              <th>SIEM/SOAR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>SMB</strong><br><small>&lt;250 employees</small></td>
+              <td>L2 + MSSP</td>
+              <td>M365 E5 (MDE + Defender for O365) or CrowdStrike Falcon Go</td>
+              <td>Entra ID P2 with Conditional Access</td>
+              <td>Azure/AWS native audit logging</td>
+              <td>MSSP-managed or M365 Defender unified portal</td>
+            </tr>
+            <tr>
+              <td><strong>Mid-Market</strong><br><small>250-2K</small></td>
+              <td>L2-L3</td>
+              <td>MDE + Defender for Cloud Apps + Purview DLP</td>
+              <td>Entra ID P2 + Conditional Access + basic PIM</td>
+              <td>Defender for Cloud (Foundational CSPM)</td>
+              <td>Sentinel (consumption tier) or Splunk Cloud</td>
+            </tr>
+            <tr>
+              <td><strong>Enterprise</strong><br><small>2K-10K</small></td>
+              <td>L3</td>
+              <td>Full M365 Defender XDR + Purview DLP + Email protection</td>
+              <td>Defender for Identity + PIM + Conditional Access</td>
+              <td>Defender for Cloud (full CSPM) + Sentinel rules</td>
+              <td>Sentinel + Logic Apps SOAR or Splunk + SOAR</td>
+            </tr>
+            <tr>
+              <td><strong>Large Enterprise</strong><br><small>10K-50K</small></td>
+              <td>L3-L4</td>
+              <td>XDR + NDR (Darktrace/Vectra) + UEBA + full DLP</td>
+              <td>ITDR + PAM (CyberArk) + ZTNA</td>
+              <td>Full CSPM + IaC scanning + drift detection</td>
+              <td>Enterprise SIEM + SOAR + TIP integration</td>
+            </tr>
+            <tr>
+              <td><strong>Global</strong><br><small>50K+</small></td>
+              <td>L4-L5</td>
+              <td>Best-of-breed + custom ML + advanced UEBA + API security</td>
+              <td>Full identity fabric + continuous authentication + identity governance</td>
+              <td>Multi-cloud CSPM + custom tooling + security data lake</td>
+              <td>Data lake + multiple SIEMs + advanced SOAR + custom automation</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ===== DETECTION PRIORITIES BY INDUSTRY ===== -->
+        <h3>5.5.6 Detection Priorities by Industry</h3>
+
+        <p>Different industries have different threat landscapes and regulatory requirements. Use this to prioritize detection development:</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Industry</th>
+              <th>Data Plane Priorities</th>
+              <th>Control Plane Priorities</th>
+              <th>Management Plane Priorities</th>
+              <th>Key Regulations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Healthcare</strong></td>
+              <td>PHI access anomalies, ransomware, medical device traffic, EHR data exports</td>
+              <td>EHR access patterns, after-hours access, break-glass usage, role violations</td>
+              <td>EHR admin changes, interface configs, audit log integrity</td>
+              <td>HIPAA, HITECH, PHIPA</td>
+            </tr>
+            <tr>
+              <td><strong>Financial Services</strong></td>
+              <td>Transaction anomalies, data exfiltration, trading system access, wire fraud</td>
+              <td>Privileged access abuse, cross-account access, MFA bypass, segregation of duties</td>
+              <td>Policy changes, audit gaps, logging tampering, config drift</td>
+              <td>PCI-DSS, SOX, GLBA, NYDFS</td>
+            </tr>
+            <tr>
+              <td><strong>Manufacturing</strong></td>
+              <td>IP access/transfer, OT network anomalies, ransomware, supply chain</td>
+              <td>VPN to plants, contractor access, IT/OT boundary, remote maintenance</td>
+              <td>PLC programming, SCADA changes, OT config, network changes</td>
+              <td>Export controls, ISO 27001</td>
+            </tr>
+            <tr>
+              <td><strong>SaaS / Technology</strong></td>
+              <td>Customer data access, API abuse, code repo access, secrets in logs</td>
+              <td>Developer access patterns, service account abuse, SSO misuse, OAuth apps</td>
+              <td>CI/CD pipeline changes, IaC drift, secrets rotation, infra changes</td>
+              <td>SOC 2, ISO 27001, GDPR</td>
+            </tr>
+            <tr>
+              <td><strong>Government</strong></td>
+              <td>Classified data access, endpoint compromise, exfiltration, USB usage</td>
+              <td>Clearance-based access, foreign access, insider indicators, anomalous hours</td>
+              <td>Policy changes, logging integrity, admin privilege changes, system hardening</td>
+              <td>FedRAMP, FISMA, NIST 800-53</td>
+            </tr>
+            <tr>
+              <td><strong>Retail / E-commerce</strong></td>
+              <td>Payment data access, card skimming, credential stuffing, inventory fraud</td>
+              <td>POS system access, admin access from stores, seasonal worker access</td>
+              <td>Payment system config, web app changes, CDN config</td>
+              <td>PCI-DSS, CCPA, GDPR</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ===== CONNECTING MODEL TO MATURITY ===== -->
+        <h3>5.5.7 Connecting Mental Model to Maturity Pillars</h3>
+
+        <p>Map your Mental Model assessment findings to SOC maturity pillars:</p>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Mental Model Component</th>
+              <th>Primary Pillar</th>
+              <th>Assessment Questions</th>
+              <th>Maturity Indicators</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Business Context</strong></td>
+              <td>Governance</td>
+              <td>Is security strategy aligned to business risk? Are priorities documented?</td>
+              <td>L1: None | L3: Documented | L5: Dynamic, risk-driven</td>
+            </tr>
+            <tr>
+              <td><strong>Asset Inventory</strong></td>
+              <td>Technology + Governance</td>
+              <td>Complete asset inventory? Assets classified by risk? Discovery automated?</td>
+              <td>L1: Ad-hoc | L3: Complete, maintained | L5: Real-time, automated</td>
+            </tr>
+            <tr>
+              <td><strong>Risk Derivation</strong></td>
+              <td>Governance + Process</td>
+              <td>Risk register exists? Risks mapped to assets? Detections mapped to risks?</td>
+              <td>L1: None | L3: Formal register | L5: Continuous, quantified</td>
+            </tr>
+            <tr>
+              <td><strong>Controls (Preventive)</strong></td>
+              <td>Technology</td>
+              <td>Are preventive controls deployed? Coverage across all asset types?</td>
+              <td>L1: Basic | L3: Comprehensive | L5: Adaptive, automated</td>
+            </tr>
+            <tr>
+              <td><strong>Signals (Logging)</strong></td>
+              <td>Technology</td>
+              <td>Required logs collected? Signal coverage for all risks? Retention adequate?</td>
+              <td>L1: Minimal | L3: Good coverage | L5: Complete, optimized</td>
+            </tr>
+            <tr>
+              <td><strong>Detections</strong></td>
+              <td>Technology + Process</td>
+              <td>Detections documented? Tested regularly? False positive rate acceptable?</td>
+              <td>L1: Vendor defaults | L3: Tuned, documented | L5: ML-enhanced, proactive</td>
+            </tr>
+            <tr>
+              <td><strong>Response</strong></td>
+              <td>Process + People</td>
+              <td>Playbooks documented? Analysts trained? Response time measured?</td>
+              <td>L1: Ad-hoc | L3: Playbook-driven | L5: Automated, optimized</td>
+            </tr>
+            <tr>
+              <td><strong>Evidence</strong></td>
+              <td>Governance</td>
+              <td>Audit trails complete? Compliance reporting automated? Evidence defensible?</td>
+              <td>L1: None | L3: Meets requirements | L5: Exceeds, proactive</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ===== COMPLETE ASSESSMENT FLOW ===== -->
+        <div class="callout success" style="margin-top: 2rem;">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            The Complete Assessment Flow
+          </div>
+          <div class="callout-content">
+            <ol style="margin: 0; padding-left: 1.5rem; line-height: 1.8;">
+              <li><strong>Understand the organization</strong> using the Mental Model (Business → Assets → Risks)</li>
+              <li><strong>Determine target maturity</strong> based on org size and industry (see <a href="#right-sizing">Right-Sizing section</a>)</li>
+              <li><strong>Map assets to three planes</strong> (Data, Control, Management)</li>
+              <li><strong>Assess tool coverage</strong> using the matrices above</li>
+              <li><strong>Identify signal gaps</strong> where risks exist without detection</li>
+              <li><strong>Score each SOC pillar</strong> (People, Process, Technology, Governance)</li>
+              <li><strong>Calculate effective maturity</strong> (lowest pillar score)</li>
+              <li><strong>Build improvement roadmap</strong> using transition guides below</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="key-insight" style="margin-top: 1rem;">
+          <h4>💡 Interview Tip: The Assessment Answer</h4>
+          <p style="font-style: italic; line-height: 1.7;">"When assessing SOC maturity, I start with the Security Mental Model—understanding business context, mapping assets across data, control, and management planes, and deriving risks from those assets. Then I assess tool coverage against each plane, identify signal gaps, and score the four pillars: People, Process, Technology, and Governance. The effective maturity is the lowest pillar score. Finally, I set a realistic target based on organization size and industry, then build a phased roadmap with quick wins and long-term initiatives."</p>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 6: TRANSITION ROADMAPS ==================== -->
       <section id="transitions">
         <h2>6. Transition Roadmaps</h2>
 
