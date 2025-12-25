@@ -2204,84 +2204,105 @@
       <section id="mental-model-integration">
         <h2>5.5 Assessment Using the Security Mental Model</h2>
 
-        <p>The <a href="security-mental-model.html" style="color: var(--accent-primary);">Security Mental Model</a> provides the <strong>foundation for any SOC assessment</strong>. Before evaluating maturity levels, you must understand the organization through a systematic lens. This section bridges the mental model with practical assessment.</p>
+        <p>The <a href="security-mental-model.html" style="color: var(--accent-primary);">Security Mental Model</a> provides the <strong>foundation for any SOC assessment</strong>. Before evaluating maturity levels, you must understand the organization through a systematic lens.</p>
 
         <div class="master-model" style="background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(234, 179, 8, 0.02)); border: 2px solid rgba(234, 179, 8, 0.5); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; text-align: center;">
-          <h4 style="color: #eab308; margin-top: 0; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">🧠 The Assessment Foundation Chain</h4>
-          <p style="font-size: 1.1rem; font-weight: 600; font-family: 'IBM Plex Mono', monospace; line-height: 2.2;">
-            <span style="background: rgba(239, 68, 68, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #ef4444;">Business</span> →
-            <span style="background: rgba(249, 115, 22, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #f97316;">Assets</span> →
-            <span style="background: rgba(234, 179, 8, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #eab308;">Risks</span> →
-            <span style="background: rgba(34, 197, 94, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #22c55e;">Controls</span> →
-            <span style="background: rgba(6, 182, 212, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #06b6d4;">Signals</span> →
-            <span style="background: rgba(139, 92, 246, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #8b5cf6;">Detections</span> →
-            <span style="background: rgba(236, 72, 153, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #ec4899;">Response</span> →
-            <span style="background: rgba(255, 255, 255, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #fff;">Evidence</span>
+          <h4 style="color: #eab308; margin-top: 0; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">🧠 The Corrected Assessment Flow</h4>
+          <p style="font-size: 1rem; font-weight: 600; font-family: 'IBM Plex Mono', monospace; line-height: 2.2;">
+            <span style="background: rgba(239, 68, 68, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #ef4444;">Business Capabilities</span> →
+            <span style="background: rgba(249, 115, 22, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #f97316;">Streams</span> →
+            <span style="background: rgba(234, 179, 8, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #eab308;">Assets</span> →
+            <span style="background: rgba(132, 204, 22, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #84cc16;">Risks</span> →
+            <span style="background: rgba(34, 197, 94, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #22c55e;">Planes (Lens)</span> →
+            <span style="background: rgba(6, 182, 212, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #06b6d4;">Controls</span> →
+            <span style="background: rgba(139, 92, 246, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; color: #8b5cf6;">Detections</span>
           </p>
-          <p style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.9rem;">This chain determines WHAT to assess, HOW to prioritize, and WHERE to improve</p>
+          <p style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.9rem;"><strong>Key insight:</strong> Planes are a LENS applied to each stream, not a primary classification layer</p>
         </div>
 
         <!-- ===== PRE-ASSESSMENT UNDERSTANDING ===== -->
-        <h3>5.5.1 Pre-Assessment: Organizational Understanding</h3>
+        <h3>5.5.1 Pre-Assessment: The 5-Step Organizational Understanding</h3>
 
-        <p>Before scoring maturity levels, complete these four steps to understand the organization:</p>
+        <p>Before scoring maturity levels, complete these steps to understand the organization:</p>
 
         <div class="pillar-grid">
           <div class="pillar-card" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.02)); border: 1px solid rgba(239, 68, 68, 0.3);">
-            <h4 style="color: #ef4444;">📊 Step 1: Business Context</h4>
-            <p><strong>Questions to Answer:</strong></p>
+            <h4 style="color: #ef4444;">📊 Step 1: Business Capabilities</h4>
+            <p><strong>Ask: "What must this company do to operate?"</strong></p>
             <ul>
-              <li>What industry? (Healthcare, Finance, Manufacturing, SaaS, Govt, etc.)</li>
-              <li>What size? (SMB, Mid-market, Enterprise, Global)</li>
-              <li>What regulations apply? (HIPAA, PCI, SOX, SOC 2, GDPR, etc.)</li>
-              <li>What does "harm" look like? (Breach, outage, compliance, reputation)</li>
-              <li>Who are likely adversaries? (Criminals, nation-state, insider, hacktivists)</li>
+              <li>Authenticate users</li>
+              <li>Deliver the application/service</li>
+              <li>Store and process data</li>
+              <li>Manage infrastructure</li>
+              <li>Deploy code</li>
+              <li>Monitor and secure</li>
             </ul>
-            <p style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; font-size: 0.85rem;"><strong>Output:</strong> Target maturity level and priority areas</p>
+            <p style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; font-size: 0.85rem;"><strong>Output:</strong> List of core business functions</p>
           </div>
 
           <div class="pillar-card" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(249, 115, 22, 0.02)); border: 1px solid rgba(249, 115, 22, 0.3);">
-            <h4 style="color: #f97316;">🗂️ Step 2: Asset Inventory by Plane</h4>
-            <p><strong>Map ALL assets across three planes:</strong></p>
+            <h4 style="color: #f97316;">🗂️ Step 2: Technology Streams</h4>
+            <p><strong>Map capabilities to 7 streams:</strong></p>
             <ul>
-              <li><strong>Data Plane:</strong> Apps, databases, file stores, APIs, email</li>
-              <li><strong>Control Plane:</strong> Identity, authentication, authorization, access</li>
-              <li><strong>Management Plane:</strong> Admin consoles, CI/CD, IaC, security tools</li>
+              <li><strong>1. Identity & Access</strong> — Auth, MFA, SSO</li>
+              <li><strong>2. Application</strong> — Apps, APIs, dashboards</li>
+              <li><strong>3. Data & Storage</strong> — Databases, files, backups</li>
+              <li><strong>4. Cloud Infrastructure</strong> — Projects, compute, IAM</li>
+              <li><strong>5. CI/CD & DevOps</strong> — Repos, pipelines, secrets</li>
+              <li><strong>6. Network</strong> — Endpoints, firewalls, gateways</li>
+              <li><strong>7. Security Tooling</strong> — SIEM, XDR, logging</li>
             </ul>
-            <p style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; font-size: 0.85rem;"><strong>Output:</strong> Complete asset inventory with plane classification</p>
+            <p style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; font-size: 0.85rem;"><strong>Output:</strong> Streams that exist in this org</p>
           </div>
 
           <div class="pillar-card" style="background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(234, 179, 8, 0.02)); border: 1px solid rgba(234, 179, 8, 0.3);">
-            <h4 style="color: #eab308;">⚠️ Step 3: Risk Derivation</h4>
-            <p><strong>For each asset category, identify risks:</strong></p>
+            <h4 style="color: #eab308;">📦 Step 3: Assets Within Each Stream</h4>
+            <p><strong>List what actually exists:</strong></p>
             <ul>
-              <li><strong>Identity:</strong> Account takeover, privilege escalation, credential theft</li>
-              <li><strong>Compute:</strong> Malware, ransomware, lateral movement</li>
-              <li><strong>Data:</strong> Exfiltration, unauthorized access, destruction</li>
-              <li><strong>Apps/APIs:</strong> Business logic abuse, injection, API attacks</li>
-              <li><strong>Management:</strong> Environment takeover, logging disabled, persistence</li>
+              <li>Identity: Users, admins, service accounts, tokens</li>
+              <li>Application: Web app, mobile, APIs, admin panel</li>
+              <li>Data: Databases, file stores, backups, logs</li>
+              <li>Cloud: Projects, compute, storage, IAM roles</li>
+              <li>CI/CD: Repos, pipelines, secrets, artifacts</li>
             </ul>
-            <p style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; font-size: 0.85rem;"><strong>Output:</strong> Risk register mapped to assets</p>
+            <p style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; font-size: 0.85rem;"><strong>Output:</strong> Concrete asset inventory per stream</p>
+          </div>
+
+          <div class="pillar-card" style="background: linear-gradient(135deg, rgba(132, 204, 22, 0.1), rgba(132, 204, 22, 0.02)); border: 1px solid rgba(132, 204, 22, 0.3);">
+            <h4 style="color: #84cc16;">⚠️ Step 4: Derive Risks From Assets</h4>
+            <p><strong>For each asset ask: "If misused, what goes wrong?"</strong></p>
+            <ul>
+              <li>Identity → Account takeover, admin abuse</li>
+              <li>Application → Business logic abuse, API attacks</li>
+              <li>Data → Unauthorized access, exfiltration</li>
+              <li>Cloud → Project takeover, logging disabled</li>
+              <li>CI/CD → Malicious code deployment, secrets theft</li>
+            </ul>
+            <p style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; font-size: 0.85rem;"><strong>Output:</strong> Risk register derived from assets</p>
           </div>
 
           <div class="pillar-card" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.02)); border: 1px solid rgba(34, 197, 94, 0.3);">
-            <h4 style="color: #22c55e;">🔍 Step 4: Controls & Signals Gap</h4>
-            <p><strong>Assess current detection capability:</strong></p>
+            <h4 style="color: #22c55e;">🔍 Step 5: Apply the Plane Lens</h4>
+            <p><strong>For each stream, localize risks by plane:</strong></p>
             <ul>
-              <li>What preventive controls exist? (MFA, hardening, segmentation)</li>
-              <li>What detective controls exist? (XDR, SIEM, DLP)</li>
-              <li>What signals/logs are collected?</li>
-              <li>What risks have NO detection coverage?</li>
-              <li>What detections exist but don't work well?</li>
+              <li><strong>Data Plane:</strong> Normal activity (logins, API calls, reads)</li>
+              <li><strong>Control Plane:</strong> Access decisions (roles, policies, MFA)</li>
+              <li><strong>Management Plane:</strong> System changes (create users, disable logs)</li>
             </ul>
-            <p style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; font-size: 0.85rem;"><strong>Output:</strong> Gap analysis for improvement roadmap</p>
+            <p style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(239, 68, 68, 0.2); border-radius: 4px; font-size: 0.85rem;"><strong>⚠️ Management plane = highest risk</strong> — can disable all other controls</p>
           </div>
         </div>
 
-        <!-- ===== THREE PLANES ASSESSMENT ===== -->
-        <h3>5.5.2 SOC Maturity by Three Planes</h3>
+        <div class="key-insight" style="margin-top: 1.5rem;">
+          <h4>💡 The Critical Insight</h4>
+          <p style="font-size: 1.05rem;"><strong>Planes do NOT create risks. Assets create risks.</strong></p>
+          <p style="margin-top: 0.5rem;">Planes tell you <em>where</em> those risks live within each stream. If an asset doesn't exist (like Active Directory in a cloud-native company), the associated MITRE techniques don't matter — regardless of what frameworks say.</p>
+        </div>
 
-        <p>Evaluate SOC capabilities across each plane to identify where coverage is strongest and weakest. Most organizations <strong>over-invest in Data Plane</strong> (endpoints) and <strong>under-invest in Management Plane</strong> (cloud consoles, CI/CD).</p>
+        <!-- ===== PLANES BY STREAM ===== -->
+        <h3>5.5.2 SOC Maturity by Stream & Plane</h3>
+
+        <p>Evaluate SOC capabilities across each stream and plane to identify coverage gaps. Most organizations <strong>over-invest in Data Plane</strong> (endpoints) and <strong>under-invest in Management Plane</strong> (cloud consoles, CI/CD).</p>
 
         <table class="metrics-table">
           <thead>
