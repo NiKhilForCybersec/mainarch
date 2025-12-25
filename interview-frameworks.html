@@ -452,7 +452,7 @@
           <ul>
             <li><strong>POSITION:</strong> "My view is: design for cost from Day 1, not after deployment."</li>
             <li><strong>REASONING:</strong> "Because ingestion decisions are hard to reverse. Once teams expect data in SIEM, removing it is painful."</li>
-            <li><strong>EVIDENCE:</strong> "In my project, we saved $38K/month by not ingesting MDE raw telemetry — XDR already has it."</li>
+            <li><strong>EVIDENCE:</strong> "In my project, we saved $20K/month by not ingesting MDE raw telemetry — XDR already has it."</li>
             <li><strong>CAVEAT:</strong> "That said, if you're a pure Sentinel shop without XDR, you might need that telemetry. Context matters."</li>
           </ul>
         </div>
@@ -1126,7 +1126,7 @@
               <tr>
                 <td><strong>Executive Summary</strong></td>
                 <td>Key findings, business impact, recommendations (1-2 pages)</td>
-                <td>"I wrote executive summaries for leadership showing cost savings of $38K/month with the XDR-first approach"</td>
+                <td>"I wrote executive summaries for leadership showing cost savings of $20K/month with the XDR-first approach"</td>
               </tr>
               <tr>
                 <td><strong>Technical Design Document</strong></td>
@@ -1165,21 +1165,21 @@
             <strong>Gap Analysis:</strong> I mapped existing rules to MITRE ATT&CK and found significant overlap with what Microsoft XDR already detects natively — endpoint, identity, email. The gap was in cross-domain correlation and business-context detections.<br><br>
             <strong>Recommendation:</strong> I recommended a detection-driven migration: retire rules XDR handles to reduce noise, focus Sentinel on what adds value. I presented three options to leadership with cost-benefit analysis.<br><br>
             <strong>Deliverable:</strong> I created a migration roadmap document with 4 phases, risk register, and gate criteria. I provided weekly status updates to the CISO and IT leadership.<br><br>
-            <strong>Business Value:</strong> The result was $38K/month cost savings, 12-month timeline instead of 18, and the SOC moved from reactive to proactive with better detection coverage than the legacy SIEM."
+            <strong>Business Value:</strong> The result was $20K/month cost savings, 12-month timeline instead of 18, and the SOC moved from reactive to proactive with better detection coverage than the legacy SIEM."
           </div>
         </div>
 
         <div class="framework-box">
           <div class="framework-title">❌ Before (Technical Only)</div>
           <div class="template-box" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3);">
-            "I deployed MDE to 9,000 endpoints and configured ASR rules in audit mode first, then block mode."
+            "I deployed MDE to 4,500 endpoints and configured ASR rules in audit mode first, then block mode."
           </div>
         </div>
 
         <div class="framework-box">
           <div class="framework-title">✅ After (Consulting + Technical)</div>
           <div class="template-box" style="background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3);">
-            "I led the EDR modernization initiative, transitioning from ESET to Microsoft Defender for Endpoint across 9,000 endpoints.<br><br>
+            "I led the EDR modernization initiative, transitioning from ESET to Microsoft Defender for Endpoint across 4,500 endpoints.<br><br>
             <strong>Stakeholder Alignment:</strong> First, I aligned with IT Operations, the SOC, and business unit leads on the approach. The key concern was avoiding business disruption, so I proposed a phased rollout with active-active coexistence.<br><br>
             <strong>Assessment:</strong> I assessed the current ESET deployment, documented gaps in coverage, and mapped ASR rules to business applications to identify potential conflicts before enforcement.<br><br>
             <strong>Deliverable:</strong> I created a deployment playbook with rollback procedures, and an ASR impact analysis showing which business apps would need exclusions. I presented this to the change advisory board.<br><br>
