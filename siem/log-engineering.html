@@ -683,7 +683,98 @@ source
 → CommonSecurityLog_Basic (Basic tier)</code></pre>
         </div>
 
-        <h3>6.2 Salesforce Connector</h3>
+        <!-- MDCA FOR SAAS VISIBILITY -->
+        <h3>6.2 MDCA (Defender for Cloud Apps) — Primary SaaS Visibility</h3>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>MDCA vs Direct API — Use Both</div>
+          <div class="callout-content">
+            <p><strong>For B2B SaaS visibility, we use two complementary approaches:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>MDCA (CloudAppEvents):</strong> Unified activity from all connected SaaS apps — FREE via M365 Defender connector</li>
+              <li><strong>Direct SaaS API:</strong> Deeper visibility for specific apps (Salesforce, Workday) when MDCA isn't sufficient</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Start with MDCA for cost-effective coverage, add direct API for apps requiring deep visibility.</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">MDCA Connector Configuration</span></div>
+          <pre><code>MICROSOFT DEFENDER FOR CLOUD APPS → SENTINEL
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 1: CONNECT SAAS APPS IN MDCA
+────────────────────────────────────────────────────────────────────────────────
+Portal: security.microsoft.com → Cloud Apps → Connected apps → App connectors
+
+Connect these apps (OAuth-based):
+├── Salesforce ← CRITICAL for B2B SaaS
+├── Zoom ← Customer meetings, recordings
+├── Slack Enterprise ← Internal communication
+├── GitHub ← Source code, PAT creation
+├── Box/Dropbox ← Shadow IT detection
+└── Google Workspace (if applicable)
+
+For Salesforce specifically:
+1. Create Connected App in Salesforce with OAuth scopes
+2. Add Salesforce connector in MDCA
+3. Authorize via OAuth
+4. Wait 1-24 hours for initial sync
+
+STEP 2: ENABLE SENTINEL DATA CONNECTOR
+────────────────────────────────────────────────────────────────────────────────
+Portal: Sentinel → Data connectors → Microsoft Defender for Cloud Apps
+
+Select data types:
+├── ☑ Alerts (SecurityAlert table)
+├── ☑ Discovery logs (McasShadowItReporting)
+└── ☑ Cloud App events (CloudAppEvents) ← THIS IS KEY
+
+Data flows to:
+├── CloudAppEvents → All SaaS activity (FREE via XDR connector)
+├── SecurityAlert → MDCA anomaly/policy alerts
+└── McasShadowItReporting → Shadow IT discovery data
+
+STEP 3: VERIFY DATA FLOW
+────────────────────────────────────────────────────────────────────────────────
+// Check CloudAppEvents is flowing
+CloudAppEvents
+| where TimeGenerated > ago(1h)
+| summarize count() by Application
+| order by count_ desc
+
+// Expected output:
+// Salesforce    2,500
+// Zoom          1,200
+// Slack           800
+// GitHub          400
+
+DETECTION USE CASES (built into MDCA + custom in Sentinel):
+├── Bulk Salesforce export (MDCA policy + Sentinel correlation)
+├── Unusual SaaS access location (MDCA anomaly detection)
+├── OAuth app with risky permissions (MDCA App Governance)
+├── Mass download from any SaaS (MDCA + custom KQL)
+└── Shadow IT usage (MDCA Cloud Discovery)</code></pre>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Cost Advantage of MDCA Approach</div>
+          <div class="callout-content">
+            <p><strong>CloudAppEvents via M365 Defender connector is FREE</strong> — it doesn't count against Sentinel ingestion costs.</p>
+            <p style="margin-top: 0.5rem;">Direct SaaS API ingestion (Salesforce_CL, Workday_CL) costs ~$2.30/GB at Analytics tier.</p>
+            <p style="margin-top: 0.5rem;"><strong>Our strategy:</strong> Use MDCA for unified SaaS visibility (free), add direct API only for apps requiring deeper visibility than MDCA provides.</p>
+          </div>
+        </div>
+
+        <h3>6.3 Salesforce Direct Connector (When MDCA Isn't Enough)</h3>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>When to Use Direct API vs MDCA</div>
+          <div class="callout-content">
+            <p><strong>Use MDCA (CloudAppEvents) when:</strong> You need unified SaaS visibility, behavioral anomaly detection, OAuth governance</p>
+            <p><strong>Add Direct Salesforce API when:</strong> You need custom object tracking, Apex trigger events, field-level audit trail, or events MDCA doesn't expose</p>
+          </div>
+        </div>
 
         <div class="code-block">
           <div class="code-header"><span class="code-lang">Salesforce Configuration</span></div>

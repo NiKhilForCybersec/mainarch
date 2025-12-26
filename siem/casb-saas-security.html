@@ -393,6 +393,459 @@ NOT COVERED:
 └── Consumer versions of apps (personal Gmail, etc.)</code></pre>
         </div>
 
+        <!-- ==================== SECTION: MDCA PORTAL & CONFIGURATION ==================== -->
+        <h2>2.4 MDCA Portal & Configuration Deep Dive</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Portal Location — Unified Security Portal
+          </div>
+          <div class="callout-content">
+            <p><strong>Microsoft Defender for Cloud Apps is accessed through the unified Microsoft Defender portal:</strong></p>
+            <p style="font-size: 1.1rem; margin-top: 0.5rem;"><code>https://security.microsoft.com</code></p>
+            <p style="margin-top: 0.5rem;">Previously, MDCA had its own standalone portal at <code>portal.cloudappsecurity.com</code>, but this has been integrated into the unified security portal as of 2023.</p>
+          </div>
+        </div>
+
+        <h3>Portal Navigation</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">MDCA Location in Microsoft Defender Portal</span></div>
+          <pre><code>MICROSOFT DEFENDER PORTAL (security.microsoft.com)
+════════════════════════════════════════════════════════════════════════════════
+
+LEFT NAVIGATION:
+├── Home
+├── Incidents & alerts
+│   └── Incidents ←──────────── Cloud Apps incidents appear here
+├── Hunting
+│   └── Advanced hunting ←───── Query CloudAppEvents table
+├── Actions & submissions
+├── Threat intelligence
+├── Assets
+│   ├── Devices
+│   ├── Identities
+│   └── Apps ←───────────────── App catalog, OAuth apps, app hygiene
+├── 📁 Cloud Apps ←──────────── MAIN MDCA SECTION
+│   ├── Cloud discovery ←────── Shadow IT dashboard
+│   ├── App catalog ←────────── 31,000+ app risk ratings
+│   ├── App governance ←─────── OAuth app monitoring
+│   ├── Policies ←───────────── Activity, session, anomaly policies
+│   ├── Files ←──────────────── Scanned files from connected apps
+│   ├── Users ←──────────────── User risk profiles
+│   └── Connected apps ←─────── SALESFORCE, ZOOM, ETC. CONFIGURED HERE
+├── Endpoints
+├── Email & collaboration
+├── Identities
+└── Settings
+    └── Cloud Apps ←─────────── MDCA settings & configuration
+
+PERMISSIONS REQUIRED:
+├── Global Administrator — Full access
+├── Security Administrator — Full access
+├── Security Operator — Read + limited actions
+├── Security Reader — Read-only
+└── Cloud App Security Administrator — Full MDCA access</code></pre>
+        </div>
+
+        <h3>2.5 Salesforce Connector Setup — Step by Step</h3>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Why Salesforce Connector Is Critical for RevFlow
+          </div>
+          <div class="callout-content">
+            <p>As a B2B SaaS platform that integrates with customer Salesforce instances, RevFlow employees have access to Salesforce for:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Sales team:</strong> Managing deals, customer relationships</li>
+              <li><strong>Customer Success:</strong> Account management, renewals</li>
+              <li><strong>Engineering:</strong> Salesforce API integrations (development/testing)</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">MDCA Salesforce connector provides visibility into: admin changes, bulk data exports, unusual access patterns, and permission modifications.</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Salesforce Connector Setup Flow</span></div>
+          <pre><code>STEP 1: PREREQUISITES
+════════════════════════════════════════════════════════════════════════════════
+
+Salesforce Requirements:
+├── Salesforce Enterprise Edition or higher (API access required)
+├── Salesforce admin account with "Manage Users" permission
+├── API enabled in Salesforce org
+└── Event Monitoring license (for real-time events) — OPTIONAL but recommended
+
+Microsoft Requirements:
+├── Microsoft 365 E5 OR Microsoft Defender for Cloud Apps license
+├── Global Admin or Security Admin role in Entra ID
+└── Access to security.microsoft.com
+
+
+STEP 2: ENABLE SALESFORCE API ACCESS
+════════════════════════════════════════════════════════════════════════════════
+
+In Salesforce Setup:
+1. Setup → Administration → Users → Permission Sets
+2. Create or modify permission set with:
+   ├── "API Enabled" = TRUE
+   ├── "View All Data" = TRUE (for full visibility)
+   ├── "View Event Log Files" = TRUE (for monitoring)
+   └── "Manage Users" = TRUE (for governance actions)
+3. Assign permission set to MDCA integration user
+
+
+STEP 3: CREATE CONNECTED APP IN SALESFORCE
+════════════════════════════════════════════════════════════════════════════════
+
+In Salesforce Setup:
+1. Setup → Platform Tools → Apps → App Manager → New Connected App
+
+   App Name: Microsoft Defender for Cloud Apps
+   API Name: Microsoft_Defender_Cloud_Apps
+   Contact Email: security-team@revflow.com
+
+2. Enable OAuth Settings:
+   ├── Callback URL: https://portal.cloudappsecurity.com/api/oauth/saga
+   │   (or https://portal.cloudappsecurity.us/api/oauth/saga for US Gov)
+   ├── Selected OAuth Scopes:
+   │   ├── Access and manage your data (api)
+   │   ├── Access your basic information (id, profile, email, address, phone)
+   │   ├── Perform requests on your behalf at any time (refresh_token, offline_access)
+   │   └── Access Salesforce REST API resources (chatter_api)
+   └── Enable: Require Secret for Web Server Flow
+
+3. Save → Wait 2-10 minutes for propagation
+4. Copy: Consumer Key and Consumer Secret
+
+
+STEP 4: CONNECT SALESFORCE IN MDCA
+════════════════════════════════════════════════════════════════════════════════
+
+In Microsoft Defender Portal (security.microsoft.com):
+
+1. Cloud Apps → Connected apps → App connectors → + Connect an app
+
+2. Select "Salesforce" from the list
+
+3. Instance name: "RevFlow-Production-Salesforce"
+   (Use descriptive name if you have multiple Salesforce orgs)
+
+4. Click "Connect Salesforce"
+   ├── Opens Salesforce OAuth window
+   ├── Login with Salesforce admin account
+   ├── Authorize Microsoft Defender for Cloud Apps
+   └── Redirects back to Defender portal
+
+5. Connection status: "Connected" ✓
+
+6. Wait for initial sync (can take 1-24 hours depending on data volume)
+
+
+STEP 5: VERIFY CONNECTION
+════════════════════════════════════════════════════════════════════════════════
+
+Check in Defender Portal:
+
+Cloud Apps → Connected apps → Salesforce:
+├── Status: Connected ✓
+├── Users discovered: ~500 (RevFlow Salesforce users)
+├── Files scanned: ~10,000 (attachments, documents)
+├── Last sync: [timestamp]
+└── Permissions: Full (API + Events)
+
+Verify data flowing:
+├── Cloud Apps → Activity log → Filter by App = Salesforce
+├── Should see: Logins, record views, report exports, admin changes
+└── If empty after 24h, check Salesforce API permissions</code></pre>
+        </div>
+
+        <h3>2.6 MDCA Policies for Salesforce</h3>
+
+        <p>Once connected, configure policies to monitor Salesforce activity:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Policy Type</th><th>Policy Name</th><th>Detection</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Activity Policy</strong></td>
+                <td>Salesforce bulk data export</td>
+                <td>User exports report with >10,000 records</td>
+                <td>Alert SOC, require justification</td>
+              </tr>
+              <tr>
+                <td><strong>Activity Policy</strong></td>
+                <td>Salesforce admin permission change</td>
+                <td>User granted "Modify All Data" permission</td>
+                <td>Alert Security, confirm with IT</td>
+              </tr>
+              <tr>
+                <td><strong>Anomaly Detection</strong></td>
+                <td>Unusual Salesforce access location</td>
+                <td>Login from new country (impossible travel)</td>
+                <td>Alert, request MFA re-authentication</td>
+              </tr>
+              <tr>
+                <td><strong>Anomaly Detection</strong></td>
+                <td>Mass download from Salesforce</td>
+                <td>User downloads significantly more than baseline</td>
+                <td>Alert SOC, investigate for data exfiltration</td>
+              </tr>
+              <tr>
+                <td><strong>Activity Policy</strong></td>
+                <td>Salesforce API token creation</td>
+                <td>New connected app or API token created</td>
+                <td>Alert Engineering, verify legitimate integration</td>
+              </tr>
+              <tr>
+                <td><strong>Activity Policy</strong></td>
+                <td>Salesforce user role change</td>
+                <td>User role changed to System Administrator</td>
+                <td>Alert Security, requires approval</td>
+              </tr>
+              <tr>
+                <td><strong>File Policy</strong></td>
+                <td>Sensitive data in Salesforce files</td>
+                <td>Attachments containing PII/credit cards</td>
+                <td>Alert, apply sensitivity label</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Creating an Activity Policy — Example</span></div>
+          <pre><code>POLICY: SALESFORCE BULK DATA EXPORT
+════════════════════════════════════════════════════════════════════════════════
+
+Location: Cloud Apps → Policies → Policy management → Create policy → Activity policy
+
+POLICY CONFIGURATION:
+├── Policy name: Salesforce Bulk Data Export Alert
+├── Policy severity: Medium
+├── Category: DLP
+├── Description: Alert when user exports large amounts of Salesforce data
+│
+├── FILTERS:
+│   ├── App equals: Salesforce
+│   ├── Activity type equals: Export report, Download file, Data export
+│   └── Repeated activity: More than 10 activities in 1 hour
+│
+├── ALERTS:
+│   ├── Create an alert for each matching event
+│   ├── Send alert as email to: soc@revflow.com
+│   ├── Daily alert limit: 5 (prevent alert fatigue)
+│   └── Alert name template: "Bulk Salesforce export by {{user}}"
+│
+└── GOVERNANCE ACTIONS:
+    ├── Microsoft Entra ID: Require user to sign in again
+    └── Notify user: "Your Salesforce activity triggered a security review"
+
+
+ADVANCED FILTERS (OPTIONAL):
+├── User: Exclude service accounts (integration users)
+├── IP address: Exclude known office IPs
+├── User groups: Apply only to Sales + Customer Success
+└── Time: Weekdays only (weekend activity more suspicious)</code></pre>
+        </div>
+
+        <h3>2.7 Other Critical SaaS Connectors for RevFlow</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>SaaS App</th><th>Why Connected</th><th>Key Detections</th><th>Setup Complexity</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Salesforce</strong></td>
+                <td>Core business CRM, customer data</td>
+                <td>Bulk exports, admin changes, API abuse</td>
+                <td>Medium (OAuth + API permissions)</td>
+              </tr>
+              <tr>
+                <td><strong>Zoom</strong></td>
+                <td>Customer meetings, recordings</td>
+                <td>Recording downloads, external sharing, admin changes</td>
+                <td>Easy (OAuth)</td>
+              </tr>
+              <tr>
+                <td><strong>Slack Enterprise</strong></td>
+                <td>Internal communication</td>
+                <td>File sharing to external, DLP violations, admin changes</td>
+                <td>Easy (OAuth)</td>
+              </tr>
+              <tr>
+                <td><strong>GitHub</strong></td>
+                <td>Source code repository</td>
+                <td>Public repo creation, secrets in code, external collaborators</td>
+                <td>Easy (OAuth)</td>
+              </tr>
+              <tr>
+                <td><strong>Box/Dropbox</strong></td>
+                <td>Unsanctioned file storage (detect)</td>
+                <td>Shadow IT usage, sensitive file uploads</td>
+                <td>Easy (OAuth)</td>
+              </tr>
+              <tr>
+                <td><strong>Okta</strong></td>
+                <td>If using Okta for SSO</td>
+                <td>Admin changes, suspicious logins, MFA bypass</td>
+                <td>Easy (API token)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2.8 MDCA Integration with Microsoft Sentinel</h3>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Two-Way Integration
+          </div>
+          <div class="callout-content">
+            <p>MDCA and Sentinel have bidirectional integration:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>MDCA → Sentinel:</strong> Alerts and activity logs flow to Sentinel for correlation</li>
+              <li><strong>Sentinel → MDCA:</strong> Sentinel can trigger MDCA governance actions via playbooks</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">MDCA Connector in Sentinel</span></div>
+          <pre><code>SENTINEL DATA CONNECTOR: MICROSOFT DEFENDER FOR CLOUD APPS
+════════════════════════════════════════════════════════════════════════════════
+
+Location: Sentinel → Data connectors → Microsoft Defender for Cloud Apps
+
+WHAT IT INGESTS:
+├── CloudAppEvents ←──────────── Activity logs from connected apps
+├── SecurityAlert ←───────────── MDCA alerts (anomaly, policy violations)
+└── McasShadowItReporting ←──── Shadow IT discovery data
+
+TABLE: CloudAppEvents (in Sentinel)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ TimeGenerated     │ ActionType      │ Application  │ AccountDisplayName    │
+├───────────────────┼─────────────────┼──────────────┼───────────────────────┤
+│ 2024-01-15 09:23  │ FileDownloaded  │ Salesforce   │ john.smith@revflow    │
+│ 2024-01-15 09:25  │ ReportExported  │ Salesforce   │ john.smith@revflow    │
+│ 2024-01-15 09:30  │ AdminRoleGranted│ Salesforce   │ admin@revflow         │
+│ 2024-01-15 09:45  │ MeetingRecorded │ Zoom         │ jane.doe@revflow      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+CONFIGURATION STEPS:
+════════════════════════════════════════════════════════════════════════════════
+
+1. Go to: Sentinel → Data connectors → Microsoft Defender for Cloud Apps
+2. Click "Open connector page"
+3. Select data types to ingest:
+   ├── ☑ Alerts (MDCA alerts appear as SecurityAlert)
+   ├── ☑ Discovery logs (Shadow IT reports)
+   └── ☑ Cloud App events (CloudAppEvents table)
+4. Click "Connect"
+5. Verify: Check CloudAppEvents table has data after ~15 minutes
+
+
+SAMPLE KQL QUERY — SALESFORCE ACTIVITY:
+════════════════════════════════════════════════════════════════════════════════
+
+// Salesforce bulk export detection in Sentinel
+CloudAppEvents
+| where Application == "Salesforce"
+| where ActionType in ("ReportExported", "DataExport", "FileDownloaded")
+| summarize ExportCount = count(), 
+            TotalBytes = sum(tolong(RawEventData.bytes)),
+            by AccountDisplayName, bin(TimeGenerated, 1h)
+| where ExportCount > 10 or TotalBytes > 100000000  // 100MB
+| project TimeGenerated, AccountDisplayName, ExportCount, 
+          TotalBytes_MB = TotalBytes / 1000000
+
+
+// Salesforce admin changes
+CloudAppEvents
+| where Application == "Salesforce"
+| where ActionType has_any ("PermissionSet", "Role", "Profile", "Admin")
+| project TimeGenerated, AccountDisplayName, ActionType, 
+          ObjectName, IPAddress, City, Country</code></pre>
+        </div>
+
+        <h3>2.9 Defender for Cloud (CSPM) vs Defender for Cloud Apps (CASB)</h3>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Common Interview Confusion — Know the Difference!
+          </div>
+          <div class="callout-content">
+            <p>These are two different products with confusingly similar names:</p>
+          </div>
+        </div>
+
+        <div class="comparison-grid">
+          <div class="comparison-card" style="border-left: 3px solid #06b6d4;">
+            <h4>Microsoft Defender for Cloud Apps (MDCA)</h4>
+            <p><strong>Formerly:</strong> Microsoft Cloud App Security (MCAS)</p>
+            <p><strong>Type:</strong> CASB (Cloud Access Security Broker)</p>
+            <p><strong>Purpose:</strong> SaaS application security</p>
+            <p><strong>Protects:</strong></p>
+            <ul>
+              <li>Salesforce, Zoom, Slack, Box, etc.</li>
+              <li>OAuth apps accessing your data</li>
+              <li>Shadow IT discovery</li>
+              <li>SaaS user behavior</li>
+            </ul>
+            <p><strong>Portal:</strong> security.microsoft.com → Cloud Apps</p>
+          </div>
+          
+          <div class="comparison-card" style="border-left: 3px solid #8b5cf6;">
+            <h4>Microsoft Defender for Cloud (MDC)</h4>
+            <p><strong>Formerly:</strong> Azure Security Center + Azure Defender</p>
+            <p><strong>Type:</strong> CSPM + CWPP (Cloud Security Posture Management + Workload Protection)</p>
+            <p><strong>Purpose:</strong> Cloud infrastructure security</p>
+            <p><strong>Protects:</strong></p>
+            <ul>
+              <li>Azure VMs, containers, serverless</li>
+              <li>AWS and GCP resources (multi-cloud)</li>
+              <li>Infrastructure misconfigurations</li>
+              <li>Compliance posture (CIS, SOC 2)</li>
+            </ul>
+            <p><strong>Portal:</strong> portal.azure.com → Defender for Cloud</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Interview Answer — The Two Defenders</span></div>
+          <pre><code>"There are two Microsoft products with 'Defender for Cloud' in the name, and 
+they protect different things:
+
+DEFENDER FOR CLOUD APPS (CASB):
+• Protects SaaS applications — Salesforce, Zoom, Slack, Box
+• Monitors user behavior in cloud apps
+• Discovers shadow IT and OAuth abuse
+• Session controls via Conditional Access
+• Lives in the unified security portal: security.microsoft.com
+
+DEFENDER FOR CLOUD (CSPM/CWPP):
+• Protects cloud INFRASTRUCTURE — Azure VMs, AWS EC2, containers
+• Scans for misconfigurations and vulnerabilities
+• Compliance posture management (CIS benchmarks, SOC 2)
+• Workload protection for servers, databases, storage
+• Lives in the Azure portal: portal.azure.com
+
+For RevFlow as a B2B SaaS company:
+• We use MDCA (Cloud Apps) to monitor Salesforce, Zoom, Slack
+• We use MDC (Defender for Cloud) to secure our Azure infrastructure
+• Both are critical — SaaS visibility AND cloud security"</code></pre>
+        </div>
+
         <!-- ==================== SECTION 3: XDR + CASB ==================== -->
         <h2>3. How XDR Uses CASB Data</h2>
 

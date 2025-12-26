@@ -573,6 +573,24 @@ aws guardduty list-detectors</code></pre>
           </div>
         </div>
 
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Alternative: MDCA for Salesforce Visibility (No Shield Required)
+          </div>
+          <div class="callout-content">
+            <p><strong>Microsoft Defender for Cloud Apps (MDCA) can provide Salesforce visibility without Salesforce Shield:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>MDCA Salesforce connector:</strong> Connects via OAuth, pulls activity logs directly</li>
+              <li><strong>No Salesforce Shield required:</strong> Uses Salesforce's standard API (Enterprise Edition+)</li>
+              <li><strong>CloudAppEvents table:</strong> Flows to Sentinel for free via M365 Defender connector</li>
+              <li><strong>Built-in detections:</strong> Bulk downloads, unusual access, admin changes</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Discovery question:</strong> "Do you have M365 E5 or MDCA standalone license?" — If yes, MDCA can provide Salesforce visibility without Shield.</p>
+            <p style="margin-top: 0.5rem;">👉 <strong><a href="casb-saas-security.html">Full MDCA Salesforce Integration Guide →</a></strong></p>
+          </div>
+        </div>
+
         <h2>Step 6: Document Current RSA Detection Rules</h2>
 
         <p>

@@ -216,7 +216,7 @@
               <tr>
                 <td><strong>MDA (Cloud Apps)</strong></td>
                 <td>Directly to Defender backend</td>
-                <td>❌ No — XDR detects without Sentinel</td>
+                <td>❌ No — XDR detects without Sentinel (but CloudAppEvents can flow to Sentinel FREE via XDR connector)</td>
               </tr>
               <tr>
                 <td><strong>Sentinel</strong></td>
@@ -376,6 +376,34 @@ Cost: Predictable, justified, optimized</code></pre>
 
         <div class="savings-callout">
           <p><strong>Basic Logs save 87%</strong> compared to Analytics tier. Moving 100 GB/day of low-value logs to Basic saves ~$12,500/month.</p>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Cost Hack: MDCA CloudAppEvents = FREE SaaS Visibility</div>
+          <div class="callout-content">
+            <p><strong>For SaaS visibility (Salesforce, Zoom, Slack, GitHub), use MDCA instead of direct API ingestion:</strong></p>
+            <div class="table-wrapper" style="margin: 0.5rem 0;">
+              <table>
+                <thead>
+                  <tr><th>Approach</th><th>Data Volume</th><th>Monthly Cost</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Direct Salesforce API</strong> (Salesforce_CL)</td>
+                    <td>~30 GB/day</td>
+                    <td>~$2,700/month (Analytics tier)</td>
+                  </tr>
+                  <tr style="background: rgba(34, 197, 94, 0.1);">
+                    <td><strong>MDCA CloudAppEvents</strong> via M365 Defender connector</td>
+                    <td>~30 GB/day</td>
+                    <td><strong>$0</strong> (included in XDR connector)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong>How it works:</strong> Connect Salesforce to MDCA (security.microsoft.com → Cloud Apps). Enable M365 Defender connector in Sentinel. CloudAppEvents flows to Sentinel at no additional ingestion cost.</p>
+            <p style="margin-top: 0.5rem;"><strong>Use direct API only when:</strong> You need deeper visibility than MDCA provides (custom objects, Apex triggers, field-level audit).</p>
+          </div>
         </div>
 
         <!-- ==================== SECTION 2: COMMITMENT TIERS ==================== -->

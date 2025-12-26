@@ -632,6 +632,19 @@ discovered — they're coverage for a threat landscape RSA never addressed.</cod
           <div class="category-stats">Network (32) + SaaS (26) + Business Logic (18) + Cloud (9) — Detection engineer developed</div>
         </div>
 
+        <div class="callout info" style="margin: 1rem 0;">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>SaaS Detections: MDCA + Custom KQL</div>
+          <div class="callout-content">
+            <p><strong>For SaaS detections, we use a hybrid approach:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>MDCA built-in policies:</strong> Anomaly detection, OAuth governance, session controls — no KQL needed</li>
+              <li><strong>CloudAppEvents in Sentinel:</strong> Custom KQL for Salesforce/Zoom/Slack correlation with identity and endpoint data</li>
+              <li><strong>Direct SaaS API (Salesforce_CL):</strong> Deep visibility for app-specific detections MDCA doesn't cover</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">The 26 SaaS rules below query both CloudAppEvents (MDCA) and Salesforce_CL (direct API) depending on detection requirements.</p>
+          </div>
+        </div>
+
         <div class="table-wrapper">
           <table class="rule-table">
             <thead>
@@ -670,7 +683,7 @@ discovered — they're coverage for a threat landscape RSA never addressed.</cod
                 <td><a class="mitre-link" href="#">T1530</a></td>
                 <td>SaaS</td>
                 <td><span class="disposition-migrate">MIGRATE</span></td>
-                <td>Salesforce EventLog</td>
+                <td>CloudAppEvents (MDCA) + Salesforce_CL</td>
                 <td><code>SF-BulkDataExport</code></td>
               </tr>
               <tr>

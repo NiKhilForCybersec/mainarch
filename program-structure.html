@@ -306,6 +306,8 @@
             <p><strong>Infrastructure:</strong> Azure landing zone operational. Network architecture stable.</p>
             <p><strong>SIEM + XDR:</strong> Sentinel primary with M365 Defender XDR integration from Day 1. XDR handles endpoint, identity, and email detection natively (780 techniques); Sentinel owns network, cloud, SaaS, and higher-order correlation (485 rules = 255 migrated + 230 new). RSA decommissioned.</p>
             <p><strong>EDR:</strong> MDE fully deployed. ESET removed.</p>
+            <p><strong>CASB/SaaS Security:</strong> Defender for Cloud Apps (MDCA) enabled for SaaS visibility, OAuth app governance, and shadow IT detection.</p>
+            <p><strong>Cloud Security:</strong> Defender for Cloud (MDC) enabled for Azure CSPM and workload protection.</p>
             <p><strong>DLP:</strong> Purview EDLP enforcement complete. Symantec EDLP decommissioned. NDLP continues.</p>
             <p><strong>Current Phase:</strong> Knowledge transfer and final handover to internal security team.</p>
           </div>
@@ -323,9 +325,26 @@
               <tr><td><strong>Infrastructure</strong></td><td>Started first</td><td><span class="status-badge complete">Complete</span></td><td>Azure landing zone, network. Cloud foundation.</td></tr>
               <tr><td><strong>SIEM</strong></td><td>M1</td><td><span class="status-badge complete">Complete</span></td><td>RSA → Sentinel. Started after foundation ready.</td></tr>
               <tr><td><strong>EDR</strong></td><td>M1</td><td><span class="status-badge complete">Complete</span></td><td>ESET → MDE. Started with SIEM.</td></tr>
+              <tr><td><strong>CASB/SaaS</strong></td><td>M2</td><td><span class="status-badge complete">Complete</span></td><td>Defender for Cloud Apps. Critical for B2B SaaS visibility.</td></tr>
+              <tr><td><strong>Cloud Security</strong></td><td>M2</td><td><span class="status-badge complete">Complete</span></td><td>Defender for Cloud (CSPM). Azure workload protection.</td></tr>
               <tr><td><strong>DLP</strong></td><td>M6</td><td><span class="status-badge complete">EDLP Complete</span></td><td>Symantec EDLP → Purview. NDLP continues; decom after Azure transformation.</td></tr>
             </tbody>
           </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Why CASB Was Priority for B2B SaaS
+          </div>
+          <div class="callout-content">
+            <p>For a company with deep Salesforce, Zoom, and Slack integrations serving Fortune 500 customers:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Defender for Cloud Apps (MDCA)</strong> provides visibility into SaaS usage, OAuth apps, and data flows between connected applications</li>
+              <li><strong>Defender for Cloud (MDC)</strong> provides CSPM for Azure infrastructure hosting customer data</li>
+              <li>Both are part of M365 E5 licensing — no additional cost, just enablement and configuration</li>
+            </ul>
+          </div>
         </div>
 
         <h2>Legacy Reference: Original Workstream Model</h2>

@@ -314,8 +314,8 @@
                 <tr style="background: rgba(59, 130, 246, 0.1);">
                   <td><strong>SaaS Data Exfil</strong></td>
                   <td>SaaS Apps</td>
-                  <td><span class="disposition-rewrite">SIEM</span></td>
-                  <td>Salesforce, Workday outside XDR scope</td>
+                  <td><span class="disposition-rewrite">SIEM + MDCA</span></td>
+                  <td>MDCA provides CloudAppEvents; Sentinel for correlation</td>
                 </tr>
                 <tr style="background: rgba(59, 130, 246, 0.1);">
                   <td><strong>Business Logic</strong></td>
@@ -376,8 +376,8 @@
                 </tr>
                 <tr>
                   <td>SaaS Exfiltration</td>
-                  <td>SIEM</td>
-                  <td>✅ Salesforce/Workday audit logs required</td>
+                  <td>SIEM + MDCA</td>
+                  <td>✅ CloudAppEvents via MDCA (free) + direct Salesforce API for deep visibility</td>
                 </tr>
                 <tr>
                   <td>XDR Correlation</td>
@@ -530,9 +530,24 @@ RESULT:
           </div>
         </div>
 
-        <hr style="margin: 3rem 0; border: none; border-top: 2px solid var(--border-primary);">
+        <!-- MDCA FOR SAAS DETECTIONS -->
+        <div class="callout info" style="margin-top: 2rem;">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>MDCA: The Missing Piece for SaaS Detection</div>
+          <div class="callout-content">
+            <p><strong>For B2B SaaS companies like RevFlow, SaaS visibility is critical.</strong> Microsoft Defender for Cloud Apps (MDCA) bridges the gap between XDR (endpoint/identity/email) and SIEM (network/cloud).</p>
+            <p style="margin-top: 0.5rem;"><strong>How MDCA fits the detection strategy:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>MDCA provides CloudAppEvents</strong> — unified activity from Salesforce, Zoom, Slack, GitHub</li>
+              <li><strong>Built-in anomaly detection</strong> — mass downloads, impossible travel, OAuth abuse</li>
+              <li><strong>CloudAppEvents flows to Sentinel</strong> — free via M365 Defender connector</li>
+              <li><strong>Sentinel adds correlation</strong> — SaaS activity + identity + endpoint context</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Access:</strong> <code>security.microsoft.com</code> → Cloud Apps</p>
+            <p>👉 <strong><a href="casb-saas-security.html">Full MDCA Deep Dive →</a></strong></p>
+          </div>
+        </div>
 
-        <!-- ==================== CORE PRINCIPLE ==================== -->
+        <hr style="margin: 3rem 0; border: none; border-top: 2px solid var(--border-primary);">
         <div class="callout critical">
           <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Core Principle</div>
           <div class="callout-content">

@@ -226,6 +226,48 @@ ThreatIntelligenceIndicator
 | project TimeGenerated, ThreatType, Description, ConfidenceScore</code></pre>
         </div>
 
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL - SaaS Activity Investigation (MDCA CloudAppEvents)</span><button class="code-copy-btn">Copy</button></div>
+          <pre><code>// Get all SaaS activity for a user (Salesforce, Zoom, Slack, GitHub)
+let targetUser = "user@revflow.com";
+CloudAppEvents
+| where TimeGenerated > ago(24h)
+| where AccountDisplayName =~ targetUser
+| project TimeGenerated, 
+    Application,
+    ActionType,
+    ObjectName,
+    IPAddress,
+    City,
+    Country
+| order by TimeGenerated desc
+
+// Salesforce bulk export investigation
+CloudAppEvents
+| where TimeGenerated > ago(7d)
+| where Application == "Salesforce"
+| where ActionType in ("ReportExported", "DataExport", "FileDownloaded")
+| summarize ExportCount = count(), 
+            Actions = make_set(ActionType)
+            by AccountDisplayName, bin(TimeGenerated, 1d)
+| where ExportCount > 10
+| order by ExportCount desc</code></pre>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>SaaS Investigation via MDCA Portal</div>
+          <div class="callout-content">
+            <p><strong>For SaaS-related alerts, also use the MDCA portal directly:</strong></p>
+            <p style="margin-top: 0.5rem;"><code>security.microsoft.com</code> → Cloud Apps → Activity log</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Filter by user, app, activity type, time range</li>
+              <li>View OAuth apps with access to user's data</li>
+              <li>Check session controls and policy matches</li>
+              <li>Investigate shadow IT usage patterns</li>
+            </ul>
+          </div>
+        </div>
+
         <h2>Industry Best Practices</h2>
         
         <div class="callout info">

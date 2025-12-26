@@ -439,18 +439,21 @@
         <h4>Q: Tell me about a time you had to explain something technical to a non-technical audience <span class="time-indicator">60-90 sec</span></h4>
         
         <div class="answer-text">
-          During the Sentinel migration, I had to present our detection strategy to the CISO and IT leadership—people who understand security at a strategic level but don't want to hear about KQL queries.
+          During our MDE rollout, I usually work on compliance reports every week to check agents not reporting. Once I noticed the VP of Sales' laptop hadn't checked in for about 5 days, and senior managers were on our priority list.
           <br><br>
-          Instead of explaining the technical approach, I framed it around business outcomes. I showed them: "We have 1,200 rules today. 60% overlap with what XDR already handles natively. If we port everything, we'll spend $50K/month on Sentinel. If we take a detection-driven approach—retire what XDR handles, build Sentinel rules for gaps—we get better coverage at $12K/month."
+          I emailed him with some context asking to schedule 15 minutes. He replied saying he understood it's security-related but wanted a quick call first to know what's actually happening.
           <br><br>
-          I used a simple visual: a pie chart showing what XDR covers vs. what needs Sentinel. They didn't need to understand the technology—they needed to understand the decision.
+          On the call, I just explained — MDE is our endpoint security tool that detects malware and threats. His laptop stopped reporting, probably a Windows update broke something. I need 15 minutes to clean it up and push a fresh agent. Won't affect his work.
           <br><br>
-          The result was immediate approval. They appreciated that I gave them options with clear trade-offs, not just a technical recommendation they had to trust blindly.
+          He said 'Got it, let's do it tomorrow.' I remoted in, fixed the corrupted service, pushed the agent from Intune, confirmed it was reporting. Sent him a quick message — all done.
+          <br><br>
+          He appreciated that I explained what the tool actually does instead of just fixing it silently. That's how I approach these things — fix it, but also make sure they understand what happened.
         </div>
 
         <div class="key-points">
-          <strong>Structure:</strong> Situation → How you translated → Visual/Framework used → Result
-          <br><strong>Key phrase:</strong> "Options with clear trade-offs"
+          <strong>Structure:</strong> Routine task → Issue found → Initial outreach → Adapted communication → Resolution → Outcome
+          <br><strong>Key phrase:</strong> "Fix it, but also make sure they understand what happened"
+          <br><strong>Root cause:</strong> Windows update corrupted Defender sensor service — cleanup and Intune push to fix
         </div>
       </div>
 
@@ -496,11 +499,16 @@
         <h4>Q: How do you handle working with multiple clients at once? <span class="time-indicator">45 sec</span></h4>
         
         <div class="answer-text">
-          I've had experience juggling parallel workstreams—at Siemens, I was simultaneously managing MDE deployment, contributing to the Sentinel migration, and supporting the DLP project. Different stakeholders, different priorities.
+          I haven't worked with multiple clients, but at Siemens I was working on multiple tracks at the same time — MDE deployment, Sentinel migration, and supporting the DLP project. Each track had different teams, different stakeholders, different timelines.
           <br><br>
-          My approach is: clear priorities, proactive communication, and no surprises. I keep a running list of commitments with deadlines, and I communicate early if something is at risk. Stakeholders can handle delays if you tell them in advance—they can't handle surprises.
+          My approach is proactive communication and keeping a priority list. I maintain a running list of what's committed, what's in progress, and what's at risk. If something's slipping, I communicate early — stakeholders can handle delays if you tell them in advance, they can't handle surprises.
           <br><br>
-          I also try to find leverage—things I learn on one project that apply to another. Documentation I create for one client might be a template for the next.
+          Also, working across tracks helped me find connections — documentation I created for MDE became a template for DLP rollout, troubleshooting patterns from one project applied to another. So it's not just managing workload, it's finding leverage across projects.
+        </div>
+
+        <div class="key-points">
+          <strong>Structure:</strong> Acknowledge difference → Relate to your experience → Your approach → Value-add
+          <br><strong>Key phrase:</strong> "Stakeholders can handle delays if you tell them in advance, they can't handle surprises"
         </div>
       </div>
 
@@ -573,17 +581,23 @@
         <h4>Q: Tell me about a time you had to deliver bad news <span class="time-indicator">60 sec</span></h4>
         
         <div class="answer-text">
-          <strong>Situation:</strong> During the detection migration assessment, I found that many of our legacy SIEM rules weren't actually providing value—they were generating alerts nobody acted on. But leadership had invested years building them.
+          At Infosys, one of our subsidiary's HR portal stopped working — JavaScript wasn't loading, only some fields were showing. This was affecting 4 HR systems, so it was critical.
           <br><br>
-          <strong>Approach:</strong> I didn't frame it as "your rules are bad." I framed it as "here's an opportunity to improve coverage and reduce cost." I showed the data: "60% of these rules overlap with XDR capabilities. Retiring them doesn't reduce security—it reduces noise and cost."
+          I started troubleshooting — uninstalled the FireEye HX agent and the portal worked fine. So I reinstalled and started disabling features one by one. Found the issue: URL inspection. When it's enabled, the JS gets blocked.
           <br><br>
-          I gave options: Option A (port everything) costs X and maintains current issues. Option B (detection-driven) costs Y and improves coverage. Here are the trade-offs.
+          I engaged the FireEye vendor, they confirmed it's a known limitation — no fix available at that time.
           <br><br>
-          <strong>Result:</strong> Leadership appreciated the honest assessment and the fact that I presented solutions, not just problems. We went with Option B—$20K/month savings, better detection coverage.
+          So I had to deliver bad news to security leadership: the only solution is to disable URL inspection on those 4 machines. That means we lose that coverage on those endpoints.
+          <br><br>
+          I didn't just bring the problem — I brought options. Option A: keep the portal broken, business can't use HR systems. Option B: accept reduced coverage on 4 machines, document the risk, create a separate policy. I recommended Option B.
+          <br><br>
+          Leadership approved with risk documentation. Later, the vendor released a fix and we re-enabled URL inspection. But the key was being upfront about the trade-off and giving them a decision to make, not just a problem to worry about.
         </div>
 
         <div class="key-points">
-          <strong>Key:</strong> Reframe bad news as opportunity, bring data, present options
+          <strong>Structure:</strong> Problem → Troubleshooting → Root cause → Bad news → Options → Resolution
+          <br><strong>Key phrase:</strong> "I didn't just bring the problem — I brought options"
+          <br><strong>Follow-up ready:</strong> Process of elimination troubleshooting, vendor engagement, risk documentation
         </div>
       </div>
 
@@ -591,18 +605,21 @@
         <h4>Q: Tell me about a time you went above and beyond <span class="time-indicator">60 sec</span></h4>
         
         <div class="answer-text">
-          <strong>Situation:</strong> During the MDE deployment, I noticed the SOC team wasn't trained on KQL. My scope was endpoint engineering—training wasn't my responsibility.
+          At Infosys, we had 14 FireEye HX consoles covering global offices. Every week, I had to run a compliance check — login to all 14 consoles, download the reports, merge them together, then do a vlookup against our asset inventory to find coverage gaps.
           <br><br>
-          <strong>Action:</strong> But I realized if they couldn't query the data, the whole investment was wasted. So I proactively created KQL training materials, documented common investigation queries, and ran informal training sessions during quiet periods.
+          I did this manually for months. It took hours every week. At some point I thought — this can be streamlined. FireEye exposes compliant devices through their API.
           <br><br>
-          I also created runbooks for common MDE alert types so analysts could respond consistently. These weren't in my scope, but they were necessary for success.
+          So I went to my manager, explained the idea, got approval to spend time on it. I built a script that pulls compliance data from all 14 consoles via API, merges it automatically, compares against asset inventory, and generates a gap report.
           <br><br>
-          <strong>Result:</strong> The SOC transitioned smoothly to using MDE data. Those runbooks are still in use today. And I built relationships across teams that made future projects easier.
+          What used to take hours now takes minutes. And it's more accurate — no manual copy-paste errors.
+          <br><br>
+          Nobody asked me to do this. It wasn't in my scope. But I saw an inefficiency, proposed a solution, and delivered it. That's how I approach things — if something can be better, I'll find a way to make it better.
         </div>
 
         <div class="key-points">
-          <strong>Key message:</strong> You care about outcomes, not just your scope
-          <br><strong>Consulting angle:</strong> This is the mindset that makes consultants successful
+          <strong>Structure:</strong> Manual pain → Identified opportunity → Got approval → Built solution → Impact
+          <br><strong>Key phrase:</strong> "If something can be better, I'll find a way to make it better"
+          <br><strong>Follow-up ready:</strong> Python + FireEye API, normalized data from 14 consoles, handed off documentation
         </div>
       </div>
 
@@ -610,13 +627,21 @@
         <h4>Q: Describe a time you had to learn something quickly <span class="time-indicator">60 sec</span></h4>
         
         <div class="answer-text">
-          <strong>Situation:</strong> When I started at Siemens, I had limited Sentinel experience—my background was more on the endpoint side. But I was contributing to a SIEM migration starting in weeks.
+          I've been helping a startup with their security setup — enabling CloudTrail logs, GCP and Firebase security configurations. While working with them, I saw their mobile app UI and honestly, it wasn't good. They were planning to launch with it.
           <br><br>
-          <strong>Action:</strong> I immersed myself. Microsoft Learn paths, community resources, hands-on in a lab environment. I focused on what mattered most for the project: KQL query syntax, data connector configuration, and detection rule development.
+          I told them — your product can have great features, but if the UI isn't engaging, users won't stick around. I had some UI/UX experience from college, but the tools had changed. AI in 2024 wasn't capable enough to design a full UI and integrate it with an existing codebase.
           <br><br>
-          I also learned by doing—I picked up tasks that stretched me, asked questions when stuck, and documented what I learned so I wouldn't forget.
+          So I learned Figma. Watched tutorials, practiced, figured out the workflow. Then I worked for about 40 hours straight with minimal breaks and designed their entire mobile app UI.
           <br><br>
-          <strong>Result:</strong> Within a month, I was writing KQL detections and contributing to the migration. Within three months, I was leading the endpoint detection workstream.
+          That UI is still being used today. They've added many features on top of it, and now we're planning another UI refresh along with some architectural changes.
+          <br><br>
+          The security side is still basic — just defaults enabled for now. But the point is, I saw a gap, learned what I needed to learn quickly, and delivered something that's still in production.
+        </div>
+
+        <div class="key-points">
+          <strong>Structure:</strong> Context → Identified gap → Learned new skill → Delivered under pressure → Still in use
+          <br><strong>Key phrase:</strong> "I saw a gap, learned what I needed, and delivered something that's still in production"
+          <br><strong>Follow-up ready:</strong> Focused learning approach, 40-hour push for deadline, security work still ongoing
         </div>
       </div>
 

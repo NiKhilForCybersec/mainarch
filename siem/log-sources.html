@@ -509,12 +509,19 @@ THEREFORE:
                 <td>DNS tunneling, DGA domains — XDR does NOT cover</td>
               </tr>
               <tr class="ingest-yes">
-                <td rowspan="6"><strong>SaaS Apps<br>(Outside XDR scope)</strong></td>
-                <td>Salesforce</td>
+                <td rowspan="8"><strong>SaaS Apps<br>(MDCA + Direct API)</strong></td>
+                <td><strong>MDCA CloudAppEvents</strong></td>
+                <td><code>CloudAppEvents</code></td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Free*</td>
+                <td><strong>Primary SaaS visibility</strong> — MDCA connector provides unified view of all connected apps (Salesforce, Zoom, Slack, etc.). Free via M365 Defender connector.</td>
+              </tr>
+              <tr class="ingest-yes">
+                <td>Salesforce (Direct API)</td>
                 <td><code>Salesforce_CL</code></td>
                 <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
-                <td>CRM system of record — API access, data export, report generation</td>
+                <td>CRM system of record — deeper visibility than MDCA for custom detections</td>
               </tr>
               <tr class="ingest-yes">
                 <td>Zoom</td>
@@ -543,6 +550,13 @@ THEREFORE:
                 <td><span class="badge-ingest badge-yes">INGEST</span></td>
                 <td>Analytics</td>
                 <td>Code access, PAT creation — XDR does NOT cover</td>
+              </tr>
+              <tr class="ingest-selective">
+                <td>Slack Enterprise</td>
+                <td><code>Slack_CL</code></td>
+                <td><span class="badge-ingest badge-selective">SELECTIVE</span></td>
+                <td>Analytics</td>
+                <td>Admin actions, external sharing — MDCA covers behavioral</td>
               </tr>
               <tr class="ingest-selective">
                 <td>Gong/Chorus (Sales Analytics)</td>
@@ -725,10 +739,10 @@ THEREFORE:
               <tr class="ingest-no">
                 <td><strong>MDA<br>(Cloud Apps)</strong></td>
                 <td><code>CloudAppEvents</code></td>
-                <td><span class="badge-ingest badge-no">DO NOT INGEST</span></td>
-                <td>~1M/day</td>
-                <td>XDR Advanced Hunting</td>
-                <td>MDA detects shadow IT, risky OAuth</td>
+                <td><span class="badge-ingest badge-yes">INGEST</span></td>
+                <td>Free*</td>
+                <td>M365 Defender Connector</td>
+                <td><strong>Critical for B2B SaaS</strong> — MDCA activity from Salesforce, Zoom, Slack. Free via XDR connector. See SaaS section above.</td>
               </tr>
               <tr class="ingest-no">
                 <td><strong>Windows<br>(Workstations)</strong></td>
@@ -749,6 +763,185 @@ THEREFORE:
             <p><strong>By ingesting only alerts/incidents:</strong> ~250 events/day = ~$50/month</p>
             <p><strong>Savings:</strong> ~$15,000/month — query raw data in XDR Advanced Hunting at no extra cost.</p>
           </div>
+        </div>
+
+        <!-- ==================== SECTION: MDCA SaaS VISIBILITY ==================== -->
+        <h2>2.5 MDCA: Unified SaaS Visibility (Critical for B2B SaaS)</h2>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Why MDCA Is Critical for RevFlow</div>
+          <div class="callout-content">
+            <p>As a B2B SaaS company with deep Salesforce, Zoom, and Slack integrations, <strong>SaaS visibility is not optional</strong>. Microsoft Defender for Cloud Apps (MDCA) provides:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Unified activity logs</strong> from all connected SaaS apps via CloudAppEvents table</li>
+              <li><strong>Shadow IT discovery</strong> — detect unsanctioned app usage</li>
+              <li><strong>OAuth app governance</strong> — monitor third-party apps with access to data</li>
+              <li><strong>Behavioral anomaly detection</strong> — mass downloads, unusual locations</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>MDCA Log Flow to Sentinel</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">MDCA → Sentinel Integration Architecture</span></div>
+          <pre><code>MDCA SAAS LOG FLOW
+════════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        SAAS APPLICATIONS                                     │
+│   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐     │
+│   │Salesforce│  │  Zoom    │  │  Slack   │  │  GitHub  │  │  Box     │     │
+│   └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘     │
+└────────┼─────────────┼─────────────┼─────────────┼─────────────┼───────────┘
+         │             │             │             │             │
+         └─────────────┴──────┬──────┴─────────────┴─────────────┘
+                              │
+                              ▼
+         ┌────────────────────────────────────────────────────────┐
+         │    MICROSOFT DEFENDER FOR CLOUD APPS (MDCA)            │
+         │    ────────────────────────────────────────             │
+         │    • API connectors to each SaaS app                   │
+         │    • OAuth-based authentication                        │
+         │    • Pulls activity logs, user events, admin changes   │
+         │    • Applies behavioral analytics + anomaly detection  │
+         │    • Generates alerts for policy violations            │
+         │                                                        │
+         │    Portal: security.microsoft.com → Cloud Apps         │
+         └────────────────────────────────────────────────────────┘
+                              │
+         ┌────────────────────┴────────────────────┐
+         │                                         │
+         ▼                                         ▼
+┌─────────────────────────────┐     ┌─────────────────────────────┐
+│   XDR ADVANCED HUNTING      │     │   MICROSOFT SENTINEL        │
+│   ──────────────────────    │     │   ──────────────────────    │
+│   Table: CloudAppEvents     │     │   Table: CloudAppEvents     │
+│   Cost: FREE (included)     │     │   Cost: FREE* (XDR connector)│
+│   Retention: 30 days        │     │   Retention: 90+ days       │
+│   Use: Interactive hunting  │     │   Use: Correlation, alerts  │
+└─────────────────────────────┘     └─────────────────────────────┘
+
+*CloudAppEvents ingested via M365 Defender connector does NOT count 
+ against Sentinel ingestion costs — it's "free" XDR data.
+
+
+WHAT FLOWS THROUGH CloudAppEvents:
+════════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ TimeGenerated     │ Application  │ ActionType      │ AccountDisplayName    │
+├───────────────────┼──────────────┼─────────────────┼───────────────────────┤
+│ 2024-01-15 09:23  │ Salesforce   │ FileDownloaded  │ john.smith@revflow    │
+│ 2024-01-15 09:25  │ Salesforce   │ ReportExported  │ john.smith@revflow    │
+│ 2024-01-15 09:30  │ Salesforce   │ PermissionSet   │ admin@revflow         │
+│ 2024-01-15 09:45  │ Zoom         │ RecordingShared │ jane.doe@revflow      │
+│ 2024-01-15 10:00  │ Slack        │ FileUploaded    │ dev@revflow           │
+│ 2024-01-15 10:15  │ GitHub       │ RepoCloned      │ engineer@revflow      │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+        </div>
+
+        <h3>MDCA vs Direct SaaS API Ingestion</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Approach</th><th>Pros</th><th>Cons</th><th>When to Use</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>MDCA (CloudAppEvents)</strong></td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>Unified schema across all apps</li>
+                    <li>Free via XDR connector</li>
+                    <li>Built-in anomaly detection</li>
+                    <li>Session controls</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>Limited to MDCA-supported apps</li>
+                    <li>Less granular than direct API</li>
+                    <li>Some fields not exposed</li>
+                  </ul>
+                </td>
+                <td>Primary approach for supported apps (Salesforce, Zoom, Slack, GitHub)</td>
+              </tr>
+              <tr>
+                <td><strong>Direct SaaS API</strong></td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>Full event detail</li>
+                    <li>Custom fields available</li>
+                    <li>Works for any SaaS with API</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>Ingestion cost (Analytics tier)</li>
+                    <li>Custom parsing required</li>
+                    <li>Per-app connector maintenance</li>
+                  </ul>
+                </td>
+                <td>When MDCA doesn't support the app, or need deeper visibility than MDCA provides</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>RevFlow Strategy: MDCA + Selective Direct API</div>
+          <div class="callout-content">
+            <p>We use <strong>both</strong> approaches:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>MDCA (CloudAppEvents):</strong> Primary visibility for Salesforce, Zoom, Slack, GitHub — free via XDR connector</li>
+              <li><strong>Direct Salesforce API:</strong> Additional Salesforce_CL table for deep CRM-specific detections (custom objects, Apex triggers)</li>
+              <li><strong>Direct Workday API:</strong> HR events (terminations) not covered by MDCA</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">This gives us unified visibility (MDCA) plus deep app-specific detection capability (direct API) where needed.</p>
+          </div>
+        </div>
+
+        <h3>Sample Sentinel Queries for MDCA Data</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">KQL</span></div>
+          <pre><code>// Salesforce bulk data export detection
+CloudAppEvents
+| where Application == "Salesforce"
+| where ActionType in ("ReportExported", "DataExport", "FileDownloaded")
+| summarize ExportCount = count(), 
+            Apps = make_set(ActionType)
+            by AccountDisplayName, bin(TimeGenerated, 1h)
+| where ExportCount > 10
+| project TimeGenerated, AccountDisplayName, ExportCount, Apps
+
+// Unusual SaaS access location (cross-app)
+CloudAppEvents
+| where TimeGenerated > ago(24h)
+| summarize Countries = make_set(Country), 
+            Apps = make_set(Application),
+            EventCount = count()
+            by AccountDisplayName
+| where array_length(Countries) > 2
+| project AccountDisplayName, Countries, Apps, EventCount
+
+// OAuth app with suspicious permissions
+CloudAppEvents
+| where ActionType == "OAuthAppAuthorized"
+| extend Permissions = tostring(RawEventData.permissions)
+| where Permissions has_any ("Mail.Read", "Files.ReadWrite", "User.Read.All")
+| project TimeGenerated, AccountDisplayName, Application, Permissions
+
+// Shadow IT: Unsanctioned app usage
+CloudAppEvents
+| where Application !in ("Salesforce", "Microsoft 365", "Zoom", "Slack", "GitHub")
+| summarize Users = dcount(AccountDisplayName), 
+            Events = count() 
+            by Application
+| where Users > 5
+| order by Users desc</code></pre>
         </div>
 
         <!-- ==================== SECTION 3: CLOUD & AWS ==================== -->
