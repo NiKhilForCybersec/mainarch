@@ -175,9 +175,1663 @@
         </nav>
 
         <div class="page-header">
-          <h1>Interactive Timeline</h1>
-          <p class="intro-text">Visual representation of all migration tracks across the 12-month transformation program with XDR-first architecture. Core migration completes in Month 12; optimization and legacy cleanup extends to Month 18.</p>
+          <h1>Security Transformation: The Complete Journey</h1>
+          <p class="intro-text">This is the practical, chronological guide to how we implemented Microsoft's security stack from June 2024 to December 2025. What we configured, when, why, and how — including portal changes, dependencies, and lessons learned.</p>
         </div>
+
+        <!-- ==================== TABLE OF CONTENTS ==================== -->
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Page Contents</div>
+          <div class="callout-content">
+            <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><a href="#starting-point">Where We Started (June 2024)</a></li>
+              <li><a href="#portal-journey">The Portal Journey</a></li>
+              <li><a href="#implementation-order">Implementation Order & Dependencies</a></li>
+              <li><a href="#month-by-month">Month-by-Month Execution</a></li>
+              <li><a href="#product-configs">Product Configuration Details</a></li>
+              <li><a href="#sentinel-strategy">Sentinel & Ingestion Strategy</a></li>
+              <li><a href="#parallel-tracks">Parallel Tracks & Dependencies</a></li>
+              <li><a href="#ms-evolution">Microsoft Platform Evolution</a></li>
+              <li><a href="#visual-timeline">Visual Timeline</a></li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- ==================== SECTION 1: STARTING POINT ==================== -->
+        <h2 id="starting-point">1. Where We Started (June 2024)</h2>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>The Legacy Environment</div>
+          <div class="callout-content">
+            <p>Understanding where we started is critical for understanding why we made certain decisions.</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Starting State — June 2024</span></div>
+          <pre><code>COMPANY PROFILE
+════════════════════════════════════════════════════════════════════════════════
+• RevFlow Analytics — B2B SaaS company
+• ~2,000 employees across US, Canada, UK
+• ~4,500 endpoints (Windows, macOS, some Linux)
+• Hybrid environment: On-prem AD + Azure AD (not yet "Entra ID" in our docs)
+• M365 E5 licensing already in place (key enabler)
+
+
+LEGACY SECURITY STACK (WHAT WE WERE REPLACING)
+════════════════════════════════════════════════════════════════════════════════
+SIEM:           RSA NetWitness (on-prem)
+                └─ 1,247 correlation rules
+                └─ ~50 GB/day ingestion
+                └─ Managed by 3-person team
+                └─ Contract expiring in 12 months
+
+EDR:            ESET Endpoint Security
+                └─ Deployed to all endpoints
+                └─ Basic AV + some EDR features
+                └─ No cloud console, on-prem management
+                └─ Limited threat intelligence
+
+DLP:            Symantec DLP
+                └─ Email DLP only (Exchange on-prem)
+                └─ ~45 policies
+                └─ High false positive rate
+                └─ No endpoint DLP
+
+Identity:       On-prem Active Directory
+                └─ Azure AD Connect for hybrid sync
+                └─ Basic Conditional Access (5 policies)
+                └─ No MFA enforcement (only for admins)
+                └─ No PIM, no identity protection
+
+
+WHAT WE ALREADY HAD (ENABLERS)
+════════════════════════════════════════════════════════════════════════════════
+✅ M365 E5 licenses (includes MDE P2, MDI, MDO P2, MDCA, Purview)
+✅ Azure AD Connect (hybrid identity already working)
+✅ Azure subscription (for Sentinel workspace)
+✅ Intune enrollment (most devices already managed)
+✅ Exchange Online (migrated from on-prem 2 years prior)
+
+
+PORTALS WE USED (JUNE 2024)
+════════════════════════════════════════════════════════════════════════════════
+• RSA NetWitness Console (on-prem)     → Primary SOC tool
+• ESET Management Console (on-prem)    → Endpoint management
+• portal.azure.com                      → Azure AD, basic Azure
+• admin.microsoft.com                   → M365 admin
+• security.microsoft.com                → Existed but barely used
+• compliance.microsoft.com              → Existed but barely used</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 2: PORTAL JOURNEY ==================== -->
+        <h2 id="portal-journey">2. The Portal Journey</h2>
+
+        <p>One of the biggest operational challenges was managing the transition across multiple portals. Here's exactly what we used, when, and how we consolidated.</p>
+
+        <h3>Portal URLs: Then vs Now</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Purpose</th>
+                <th>June 2024 (Start)</th>
+                <th>December 2025 (Current)</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SOC Daily Operations</strong></td>
+                <td>RSA NetWitness (on-prem console)</td>
+                <td>security.microsoft.com</td>
+                <td>Unified Security Portal — single pane for incidents, hunting, all products</td>
+              </tr>
+              <tr>
+                <td><strong>Endpoint Security</strong></td>
+                <td>ESET Console (on-prem) + security.microsoft.com (testing)</td>
+                <td>security.microsoft.com → Endpoints</td>
+                <td>MDE fully managed from unified portal</td>
+              </tr>
+              <tr>
+                <td><strong>SIEM Analytics</strong></td>
+                <td>RSA NetWitness</td>
+                <td>security.microsoft.com → Microsoft Sentinel</td>
+                <td>Sentinel now accessible inside Defender portal (Unified SOC Platform)</td>
+              </tr>
+              <tr>
+                <td><strong>Sentinel Configuration</strong></td>
+                <td>portal.azure.com → Log Analytics → Sentinel</td>
+                <td>portal.azure.com (deep config) OR security.microsoft.com (daily use)</td>
+                <td>Azure portal still needed for workspace settings, DCRs, advanced config</td>
+              </tr>
+              <tr>
+                <td><strong>Identity Protection</strong></td>
+                <td>portal.azure.com → Azure AD</td>
+                <td>entra.microsoft.com OR security.microsoft.com → Identities</td>
+                <td>New Entra portal for identity admin; security portal for MDI alerts</td>
+              </tr>
+              <tr>
+                <td><strong>Email Security</strong></td>
+                <td>security.microsoft.com → Email & collaboration</td>
+                <td>security.microsoft.com → Email & collaboration</td>
+                <td>No change — MDO was already here</td>
+              </tr>
+              <tr>
+                <td><strong>CASB / SaaS Security</strong></td>
+                <td>portal.cloudappsecurity.com</td>
+                <td>security.microsoft.com → Cloud Apps</td>
+                <td>Old MCAS portal now redirects to unified portal</td>
+              </tr>
+              <tr>
+                <td><strong>DLP Policies</strong></td>
+                <td>Symantec DLP Console (on-prem)</td>
+                <td>compliance.microsoft.com → Data loss prevention</td>
+                <td>Purview compliance portal for policy authoring</td>
+              </tr>
+              <tr>
+                <td><strong>Device Management</strong></td>
+                <td>endpoint.microsoft.com (Intune)</td>
+                <td>intune.microsoft.com</td>
+                <td>Rebranded URL, same portal</td>
+              </tr>
+              <tr>
+                <td><strong>Vulnerability Management</strong></td>
+                <td>N/A (no centralized VM)</td>
+                <td>security.microsoft.com → Endpoints → Vulnerability management</td>
+                <td>MDVM integrated into unified portal</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Portal Consolidation Timeline</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">How We Managed Portal Transition</span></div>
+          <pre><code>PHASE 1: PARALLEL OPERATIONS (Month 1-6)
+════════════════════════════════════════════════════════════════════════════════
+SOC analysts used BOTH:
+• RSA NetWitness — Primary for investigations (existing rules, familiarity)
+• security.microsoft.com — Secondary for XDR alerts, MDE investigations
+
+Challenge: Context switching, duplicate alerts, confusion
+Solution: Created "which portal for what" guide, trained analysts on both
+
+
+PHASE 2: PRIMARY SHIFT (Month 6-9)
+════════════════════════════════════════════════════════════════════════════════
+security.microsoft.com became PRIMARY:
+• All new incidents created in Defender/Sentinel
+• RSA used only for historical investigations
+• Analysts spending 70% time in Microsoft portal
+
+Key enabler: Unified SOC Platform preview (Sentinel inside Defender portal)
+• Enabled: Settings → Microsoft Sentinel → Connect workspace
+• Result: Single incident queue for XDR + Sentinel alerts
+
+
+PHASE 3: FULL CONSOLIDATION (Month 9-12)
+════════════════════════════════════════════════════════════════════════════════
+security.microsoft.com is ONLY SOC portal:
+• RSA in read-only mode (historical reference)
+• All hunting in Advanced Hunting (KQL)
+• All incidents in unified queue
+
+Current daily workflow:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ANALYST DAILY PORTAL USAGE                                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  security.microsoft.com (95% of time)                                        │
+│  ├─ Incidents & Alerts — Start here every shift                             │
+│  ├─ Hunting — Advanced Hunting for investigations                           │
+│  ├─ Endpoints — Device details, live response                               │
+│  ├─ Identities — User risk, MDI alerts                                      │
+│  ├─ Cloud Apps — SaaS activity, OAuth apps                                  │
+│  └─ Microsoft Sentinel — Workbooks, custom analytics                        │
+│                                                                              │
+│  portal.azure.com (5% of time)                                              │
+│  ├─ Sentinel workspace configuration                                         │
+│  ├─ Data Collection Rules (DCRs)                                            │
+│  └─ Log Analytics queries for troubleshooting                               │
+│                                                                              │
+│  compliance.microsoft.com (DLP team only)                                   │
+│  └─ DLP policy authoring and tuning                                         │
+│                                                                              │
+│  entra.microsoft.com (Identity team only)                                   │
+│  └─ Conditional Access, PIM, access reviews                                 │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 3: IMPLEMENTATION ORDER ==================== -->
+        <h2 id="implementation-order">3. Implementation Order & Dependencies</h2>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Critical Understanding: Order Matters</div>
+          <div class="callout-content">
+            <p>Microsoft's security products have dependencies. You can't just enable everything at once. Here's the order we followed and why.</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Implementation Order with Dependencies</span></div>
+          <pre><code>DEPENDENCY CHAIN
+════════════════════════════════════════════════════════════════════════════════
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  FOUNDATION (Must exist first)                                                │
+│  ├─ M365 E5 Licensing ✓                                                      │
+│  ├─ Azure AD / Entra ID (hybrid identity) ✓                                  │
+│  ├─ Intune device enrollment ✓                                               │
+│  └─ Azure subscription ✓                                                     │
+└──────────────────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  WEEK 1-2: SENTINEL WORKSPACE                                                │
+│  Create Log Analytics workspace + enable Sentinel                            │
+│  Why first? Everything else sends data here.                                 │
+│  └─ portal.azure.com → Create resource → Microsoft Sentinel                 │
+└──────────────────────────────────────────────────────────────────────────────┘
+                    │
+        ┌───────────┴───────────┐
+        ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐
+│  TRACK 1: EDR    │    │  TRACK 2: SIEM   │
+│  (MDE + XDR)     │    │  (Connectors)    │
+│                  │    │                  │
+│  Parallel but    │◄──►│  Dependent on    │
+│  XDR feeds SIEM  │    │  XDR for data    │
+└────────┬─────────┘    └────────┬─────────┘
+         │                       │
+         ▼                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  WEEK 2-4: ENABLE M365 DEFENDER CONNECTOR IN SENTINEL                        │
+│  This single connector brings:                                               │
+│  • DeviceEvents, DeviceProcessEvents, etc. (MDE) — FREE                     │
+│  • EmailEvents, EmailAttachmentInfo, etc. (MDO) — FREE                      │
+│  • IdentityLogonEvents, IdentityDirectoryEvents (MDI) — FREE                │
+│  • CloudAppEvents (MDCA) — FREE                                              │
+│  • AlertInfo, AlertEvidence — FREE                                           │
+│                                                                              │
+│  Portal: security.microsoft.com → Settings → Microsoft Sentinel              │
+│          → Data connectors → Microsoft Defender XDR                          │
+└─────────────────────────────────────────────────────────────────────────────┘
+                    │
+        ┌───────────┴───────────┬───────────────────┐
+        ▼                       ▼                   ▼
+┌─────────────────┐    ┌─────────────────┐ ┌─────────────────┐
+│  MDE DEPLOYMENT  │    │  MDI DEPLOYMENT  │ │  MDO CONFIG     │
+│  (Month 1-4)     │    │  (Month 2-4)     │ │  (Month 2-3)    │
+│                  │    │                  │ │                 │
+│  Endpoint agents │    │  DC sensors      │ │  Email policies │
+│  ASR rules       │    │  Learning period │ │  Safe Links     │
+│  Device control  │    │  Tuning          │ │  Anti-phishing  │
+└─────────────────┘    └─────────────────┘ └─────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  MONTH 3-4: MDCA CONFIGURATION                                               │
+│  Connect SaaS apps, enable policies                                          │
+│  Depends on: MDE (for endpoint context), MDI (for user risk)                │
+└─────────────────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  MONTH 4+: XDR CORRELATION ACTIVE                                            │
+│  All products feeding unified XDR                                            │
+│  Automatic Attack Disruption enabled                                         │
+│  Cross-domain detection working                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  PARALLEL: SENTINEL DETECTION ENGINEERING (Month 3-12)                       │
+│  Build custom rules for what XDR doesn't cover                               │
+│  Migrate relevant RSA rules                                                  │
+│  Cost optimization (tiers, filtering)                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  MONTH 6-12: DLP MIGRATION (PARALLEL TRACK)                                  │
+│  Symantec → Purview                                                          │
+│  Audit → Warn → Block phases                                                 │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+        </div>
+
+        <h3>Why This Order?</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Step</th>
+                <th>Why This Order</th>
+                <th>What Breaks If Wrong Order</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Sentinel workspace first</strong></td>
+                <td>All connectors need a destination</td>
+                <td>Can't enable connectors without workspace</td>
+              </tr>
+              <tr>
+                <td><strong>2. M365 Defender connector early</strong></td>
+                <td>Gets XDR data flowing to Sentinel immediately (FREE)</td>
+                <td>Missing correlation data, paying for data you get free</td>
+              </tr>
+              <tr>
+                <td><strong>3. MDE before MDI</strong></td>
+                <td>Endpoint context enriches identity alerts</td>
+                <td>MDI alerts lack device context for investigation</td>
+              </tr>
+              <tr>
+                <td><strong>4. MDI before MDCA</strong></td>
+                <td>User risk scores inform MDCA policies</td>
+                <td>MDCA can't leverage identity risk for session controls</td>
+              </tr>
+              <tr>
+                <td><strong>5. All XDR products before detection engineering</strong></td>
+                <td>Need data flowing to build detections</td>
+                <td>Writing rules against empty tables</td>
+              </tr>
+              <tr>
+                <td><strong>6. DLP last (parallel track)</strong></td>
+                <td>Least dependent on other products</td>
+                <td>N/A — can run independently</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== SECTION 4: MONTH BY MONTH ==================== -->
+        <h2 id="month-by-month">4. Month-by-Month Execution</h2>
+
+        <h3>Month 1 (June 2024): Foundation</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Month 1 Activities</span></div>
+          <pre><code>WEEK 1: PLANNING & WORKSPACE SETUP
+════════════════════════════════════════════════════════════════════════════════
+□ Finalize project plan and RACI
+□ Create Log Analytics workspace in Azure
+  └─ portal.azure.com → Create resource → Log Analytics workspace
+  └─ Region: East US 2 (same as primary Azure resources)
+  └─ Pricing tier: Pay-as-you-go (will add commitment tier later)
+  
+□ Enable Microsoft Sentinel on workspace
+  └─ portal.azure.com → Sentinel → Add → Select workspace
+  └─ Initial cost: ~$0 (no data yet)
+
+□ Configure initial workspace settings
+  └─ Retention: 90 days (default)
+  └─ Daily cap: None initially (will optimize later)
+
+
+WEEK 2: M365 DEFENDER CONNECTOR
+════════════════════════════════════════════════════════════════════════════════
+□ Enable Microsoft 365 Defender connector (CRITICAL - DO THIS EARLY)
+  └─ security.microsoft.com → Settings → Microsoft Sentinel → Data connectors
+  └─ Select: Microsoft Defender XDR
+  └─ Connect: Enable all incident and alert sync
+  
+  Tables now flowing (ALL FREE - don't count against ingestion):
+  • DeviceEvents
+  • DeviceProcessEvents
+  • DeviceNetworkEvents
+  • DeviceFileEvents
+  • DeviceRegistryEvents
+  • DeviceLogonEvents
+  • DeviceImageLoadEvents
+  • EmailEvents
+  • EmailAttachmentInfo
+  • EmailUrlInfo
+  • IdentityLogonEvents
+  • IdentityQueryEvents
+  • IdentityDirectoryEvents
+  • CloudAppEvents
+  • AlertInfo
+  • AlertEvidence
+
+□ Verify data flowing
+  └─ Sentinel → Logs → Run: DeviceEvents | take 10
+  └─ Should see data within 24 hours
+
+
+WEEK 3-4: MDE PILOT DEPLOYMENT
+════════════════════════════════════════════════════════════════════════════════
+□ Configure MDE tenant settings
+  └─ security.microsoft.com → Settings → Endpoints
+  └─ Enable: Cloud-delivered protection
+  └─ Enable: Automatic sample submission
+  └─ Enable: Tamper Protection (enforce later)
+
+□ Create device groups
+  └─ Groups: Pilot, Workstations, Servers, VIP, Legacy
+  └─ Used for phased rollout and policy targeting
+
+□ Configure Intune MDE onboarding profile
+  └─ intune.microsoft.com → Endpoint security → Endpoint detection and response
+  └─ Create profile: Windows 10 and later
+  └─ Onboarding package: Auto-generated
+
+□ Deploy to Pilot group (50 devices)
+  └─ IT department devices first
+  └─ Monitor for issues
+
+□ ESET coexistence mode
+  └─ MDE in passive mode while ESET is primary
+  └─ Both agents running, ESET handles real-time protection
+
+
+DELIVERABLES - END OF MONTH 1:
+════════════════════════════════════════════════════════════════════════════════
+✓ Sentinel workspace operational
+✓ XDR data flowing to Sentinel (free)
+✓ 50 devices onboarded to MDE (pilot)
+✓ ESET coexistence working
+✓ Initial portal access configured for team</code></pre>
+        </div>
+
+        <h3>Month 2 (July 2024): MDE Expansion + MDI</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Month 2 Activities</span></div>
+          <pre><code>WEEK 1-2: MDE ROLLOUT WAVE 1
+════════════════════════════════════════════════════════════════════════════════
+□ Expand MDE to all workstations (Phase 1: 1,000 devices)
+  └─ Intune policy targeting "All Workstations" group
+  └─ Monitor onboarding status in portal
+  
+□ Configure ASR rules in AUDIT mode
+  └─ security.microsoft.com → Endpoints → Configuration management → ASR
+  └─ All 16 rules enabled in audit mode
+  └─ Purpose: Collect data on what would be blocked
+  
+□ Enable Network Protection (audit mode)
+  └─ Blocks connections to malicious domains
+  └─ Audit first to identify false positives
+
+□ Validate MDE + ESET coexistence
+  └─ Both agents reporting
+  └─ No performance issues
+  └─ Real-time protection by ESET, EDR telemetry by MDE
+
+
+WEEK 2-3: MDI SENSOR DEPLOYMENT
+════════════════════════════════════════════════════════════════════════════════
+□ Prepare Domain Controllers
+  └─ 8 DCs across 3 sites
+  └─ Verify network connectivity to Azure (port 443)
+  
+□ Create MDI instance
+  └─ security.microsoft.com → Settings → Identities
+  └─ Download sensor installer
+  
+□ Install MDI sensors on all DCs
+  └─ Run installer on each DC
+  └─ Provide Directory Services account (read-only AD access)
+  └─ Sensor connects to cloud service
+  
+□ Configure service accounts
+  └─ Mark known service accounts to reduce noise
+  └─ gMSA accounts, backup accounts, monitoring accounts
+  
+□ MDI enters learning mode
+  └─ 2-3 weeks to learn normal behavior
+  └─ Will generate baseline for anomaly detection
+
+□ Verify MDI data flowing to Sentinel
+  └─ IdentityLogonEvents, IdentityDirectoryEvents populating
+
+
+WEEK 3-4: MDO CONFIGURATION
+════════════════════════════════════════════════════════════════════════════════
+□ MDO already partially enabled (E5 license)
+  └─ Basic protection was on, but not optimized
+  
+□ Configure Anti-phishing policies
+  └─ security.microsoft.com → Email & collaboration → Policies
+  └─ Impersonation protection: Enable for executives
+  └─ Mailbox intelligence: Enable
+  
+□ Configure Safe Links
+  └─ URL rewriting enabled
+  └─ Real-time scanning on click
+  └─ Teams protection enabled
+  
+□ Configure Safe Attachments
+  └─ Dynamic Delivery mode (deliver email, hold attachment for scanning)
+  └─ Applies to: All recipients
+  
+□ Configure Anti-spam policies
+  └─ Tune for organization's tolerance
+  └─ Quarantine high-confidence spam
+  
+□ DO NOT BLOCK YET
+  └─ Monitor mode for 2 weeks
+  └─ Identify false positives
+  └─ Whitelist legitimate senders
+
+
+DELIVERABLES - END OF MONTH 2:
+════════════════════════════════════════════════════════════════════════════════
+✓ 1,050 devices on MDE (pilot + wave 1)
+✓ MDI sensors on all DCs, learning mode active
+✓ MDO configured, monitoring mode
+✓ ASR rules collecting audit data
+✓ All XDR products connected to Sentinel</code></pre>
+        </div>
+
+        <h3>Month 3 (August 2024): MDE Wave 2 + MDCA + First Sentinel Rules</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Month 3 Activities</span></div>
+          <pre><code>WEEK 1-2: MDE FULL DEPLOYMENT
+════════════════════════════════════════════════════════════════════════════════
+□ Complete MDE rollout (remaining 3,450 endpoints)
+  └─ All workstations: 3,500 total
+  └─ All servers: 500 total
+  └─ macOS devices: 50 (separate onboarding)
+  
+□ Analyze ASR audit data
+  └─ security.microsoft.com → Reports → ASR
+  └─ Identify rules with high "would have blocked" counts
+  └─ Investigate each for false positives
+  
+□ Begin ASR exclusion tuning
+  └─ Line-of-business apps triggering rules
+  └─ Create exclusions for legitimate software
+  └─ Document each exclusion with justification
+
+□ MDE becomes primary AV
+  └─ Disable ESET real-time protection
+  └─ MDE takes over real-time scanning
+  └─ ESET remains installed (uninstall later)
+
+
+WEEK 2-3: MDCA CONFIGURATION
+════════════════════════════════════════════════════════════════════════════════
+□ Access MDCA portal (still at portal.cloudappsecurity.com in 2024)
+  └─ Will later move to security.microsoft.com
+  
+□ Connect Microsoft 365 (automatic with E5)
+  └─ Connector already enabled
+  └─ Verify: Office 365 data visible
+  
+□ Connect Salesforce
+  └─ Cloud Apps → App connectors → Connect an app → Salesforce
+  └─ OAuth authentication
+  └─ Grant MDCA read access to Salesforce API
+  
+□ Connect additional SaaS apps
+  └─ Zoom (OAuth)
+  └─ Slack (OAuth)
+  └─ GitHub (OAuth - for dev team repos)
+  
+□ Enable Shadow IT discovery
+  └─ Upload firewall logs (Palo Alto, Zscaler)
+  └─ MDCA analyzes to find unsanctioned apps
+  └─ Review discovered apps weekly
+  
+□ Configure initial policies
+  └─ Anomaly detection: Mass download (auto-enabled)
+  └─ Anomaly detection: Unusual location (auto-enabled)
+  └─ Activity policy: Bulk export from Salesforce
+
+
+WEEK 3-4: FIRST SENTINEL DETECTION RULES
+════════════════════════════════════════════════════════════════════════════════
+□ Start RSA rule migration assessment
+  └─ Export RSA rule definitions
+  └─ Categorize: Migrate, Retire, XDR handles
+  └─ 1,247 rules → 255 to migrate (rest retired or XDR-covered)
+  
+□ Create first custom analytics rules
+  └─ Priority: Rules XDR doesn't cover
+  └─ Network-based detections (firewall logs)
+  └─ Azure activity detections
+  
+□ Enable Microsoft Sentinel analytics rule templates
+  └─ Content Hub → Solutions → Install key solutions
+  └─ Azure Activity
+  └─ Microsoft 365
+  └─ Threat Intelligence
+
+□ Configure basic automation
+  └─ Playbook: Enrich-IP (auto-lookup for IPs in alerts)
+  └─ Playbook: Get-UserInfo (auto-lookup for users)
+
+
+DELIVERABLES - END OF MONTH 3:
+════════════════════════════════════════════════════════════════════════════════
+✓ 100% endpoints on MDE (4,000 devices)
+✓ MDE is primary AV (ESET passive)
+✓ MDCA connected to Salesforce, Zoom, Slack, GitHub
+✓ Shadow IT discovery active
+✓ First 50 Sentinel analytics rules deployed
+✓ MDI learning period complete, alerts tuning started</code></pre>
+        </div>
+
+        <h3>Month 4-6 (September-November 2024): XDR Maturation + Detection Engineering</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Month 4-6 Activities</span></div>
+          <pre><code>MONTH 4: ASR ENFORCEMENT + MDI TUNING
+════════════════════════════════════════════════════════════════════════════════
+□ Move first ASR rules from Audit → Block
+  └─ Start with low-risk rules (minimal false positives)
+  └─ Block Office apps from creating child processes
+  └─ Block JavaScript/VBScript from launching downloads
+  
+□ MDI alert tuning
+  └─ Review all MDI alerts from learning period
+  └─ Suppress known service account behaviors
+  └─ Create exclusions for scanning tools (vulnerability scanners)
+  └─ Tune lateral movement detection thresholds
+  
+□ Enable Automatic Attack Disruption
+  └─ security.microsoft.com → Settings → Endpoints → Automatic attack disruption
+  └─ Enable: Contain user (disable account on high-confidence compromise)
+  └─ Enable: Contain device (isolate on high-confidence compromise)
+
+□ Configure MDI honeytokens
+  └─ Create decoy accounts in AD
+  └─ Any authentication attempt = immediate high-severity alert
+
+
+MONTH 5: DETECTION ENGINEERING SPRINT
+════════════════════════════════════════════════════════════════════════════════
+□ Detection migration sprint (2-week focus)
+  └─ Migrate 100 rules from RSA to Sentinel
+  └─ Focus: Network detections, custom application logs
+  
+□ Create cross-domain correlation rules
+  └─ "User logged in from impossible travel + accessed sensitive SharePoint"
+  └─ "Phishing email delivered + user clicked + suspicious process spawned"
+  └─ These are Sentinel's strength — joins across XDR tables
+  
+□ Deploy threat intelligence indicators
+  └─ Connect TI feed via TAXII
+  └─ Indicators flow to ThreatIntelligenceIndicator table
+  └─ Analytics rules correlate against indicators
+  
+□ SOC parallel operations training
+  └─ Analysts trained on security.microsoft.com
+  └─ Side-by-side with RSA for validation
+
+
+MONTH 6: DLP PILOT + MDCA ENFORCEMENT
+════════════════════════════════════════════════════════════════════════════════
+□ Purview DLP audit mode deployment
+  └─ compliance.microsoft.com → Data loss prevention
+  └─ Create policies matching Symantec policies
+  └─ Audit mode: Log but don't block
+  └─ Deploy to pilot group (500 users)
+  
+□ MDCA policy enforcement
+  └─ Enable blocking for risky OAuth apps
+  └─ Enable session controls for unmanaged devices
+  └─ Configure Conditional Access App Control
+  
+□ Sentinel cost review
+  └─ Analyze ingestion patterns
+  └─ Move verbose logs to Basic Logs tier
+  └─ Enable commitment tier (500 GB/day)
+  └─ Projected savings: ~30%
+
+
+DELIVERABLES - END OF MONTH 6:
+════════════════════════════════════════════════════════════════════════════════
+✓ ASR rules: 10 in block mode, 6 in audit
+✓ MDI fully tuned, honeytokens active
+✓ Automatic Attack Disruption enabled
+✓ 200 Sentinel analytics rules deployed
+✓ DLP pilot running (audit mode)
+✓ MDCA enforcement active
+✓ Sentinel cost optimization implemented</code></pre>
+        </div>
+
+        <h3>Month 7-9 (December 2024 - February 2025): Primary Cutover</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Month 7-9 Activities</span></div>
+          <pre><code>MONTH 7: SENTINEL BECOMES PRIMARY SIEM
+════════════════════════════════════════════════════════════════════════════════
+□ Final detection migration sprint
+  └─ Remaining 55 rules migrated
+  └─ Total: 255 migrated + 180 new = 435 rules
+  
+□ Unified SOC Platform enablement
+  └─ Connect Sentinel workspace to Defender portal
+  └─ security.microsoft.com → Settings → Microsoft Sentinel → Connect
+  └─ Incidents now appear in unified queue
+  
+□ SOC primary cutover
+  └─ security.microsoft.com becomes primary SOC console
+  └─ RSA moved to read-only (historical investigations only)
+  └─ On-call procedures updated
+  
+□ Alert tuning sprint
+  └─ Review all alerts from past 30 days
+  └─ Tune thresholds
+  └─ Reduce false positive rate to <15%
+
+
+MONTH 8: DLP WARN MODE + ESET REMOVAL PREP
+════════════════════════════════════════════════════════════════════════════════
+□ DLP move to Warn mode
+  └─ Users see notification before sending sensitive data
+  └─ Can override with justification
+  └─ Business impact assessment
+  
+□ DLP expansion to all users
+  └─ Pilot success → full deployment
+  └─ All 2,000 users on Purview DLP
+  
+□ ESET removal planning
+  └─ Validate MDE coverage: 100%
+  └─ Validate detection rates: Meeting SLAs
+  └─ Create ESET removal package
+  
+□ MDE feature expansion
+  └─ Device Control policies (USB monitoring)
+  └─ Web Content Filtering
+  └─ Complete ASR to block mode (remaining rules)
+
+
+MONTH 9: ESET REMOVAL + FULL TRANSITION
+════════════════════════════════════════════════════════════════════════════════
+□ ESET removal Wave 1 (Pilot: 500 devices)
+  └─ Deploy removal script via Intune
+  └─ Validate MDE takes over all functions
+  └─ Monitor for gaps
+  
+□ ESET removal Wave 2-4 (Remaining 3,500 devices)
+  └─ 2-week rolling removal
+  └─ Device group by device group
+  
+□ Final RSA NetWitness usage ends
+  └─ All SOC operations in Microsoft portal
+  └─ RSA maintained for audit/compliance queries only
+  
+□ Purview DLP block mode (pilot)
+  └─ 200 users in block mode
+  └─ Monitor business impact
+
+
+DELIVERABLES - END OF MONTH 9:
+════════════════════════════════════════════════════════════════════════════════
+✓ Sentinel is PRIMARY SIEM
+✓ Unified SOC Platform active
+✓ ESET fully removed from all devices
+✓ MDE is ONLY endpoint security
+✓ DLP in Warn mode for all users, Block for pilot
+✓ RSA in read-only mode</code></pre>
+        </div>
+
+        <h3>Month 10-12 (March-May 2025): Completion + Optimization</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Month 10-12 Activities</span></div>
+          <pre><code>MONTH 10: DLP ENFORCEMENT + OPTIMIZATION
+════════════════════════════════════════════════════════════════════════════════
+□ DLP block mode rollout
+  └─ All users on block mode
+  └─ Endpoint DLP active
+  └─ Teams/SharePoint/Exchange protection complete
+  
+□ Symantec DLP decommission
+  └─ All policies migrated
+  └─ Symantec servers powered off
+  └─ Contract not renewed
+  
+□ Sentinel optimization sprint
+  └─ Move more logs to Basic Logs tier
+  └─ Implement data transformation rules (reduce verbosity)
+  └─ Final analytics rules: 485 total
+
+
+MONTH 11: MDVM ENHANCEMENT + DECOMMISSION PREP
+════════════════════════════════════════════════════════════════════════════════
+□ Enable new MDVM features
+  └─ Browser extension scanning
+  └─ Certificate monitoring
+  └─ Firmware vulnerability assessment
+  
+□ RSA NetWitness decommission preparation
+  └─ Export historical data for compliance
+  └─ Archive to cold storage
+  └─ Plan server shutdown
+  
+□ Final security validation
+  └─ Detection coverage assessment vs MITRE ATT&CK
+  └─ Gap analysis and remediation
+  └─ Penetration test to validate controls
+
+
+MONTH 12: PROJECT CLOSURE
+════════════════════════════════════════════════════════════════════════════════
+□ RSA NetWitness decommission
+  └─ Servers powered off
+  └─ Final data export complete
+  └─ Contract terminated
+  
+□ Project metrics finalization
+  └─ MTTD: 45 min → 15 min (67% improvement)
+  └─ MTTR: 6 hours → 2 hours (67% improvement)
+  └─ False positive rate: 25% → 12%
+  └─ Cost: $50K/month → $28K/month (44% savings)
+  
+□ Documentation complete
+  └─ Runbooks updated
+  └─ Training materials finalized
+  └─ Knowledge transfer to operations
+  
+□ Transition to BAU (Business as Usual)
+  └─ Project team hands off to operations
+  └─ Continuous improvement program established
+
+
+FINAL STATE - DECEMBER 2025:
+════════════════════════════════════════════════════════════════════════════════
+SIEM:           Microsoft Sentinel (Unified SOC Platform)
+                └─ 485 analytics rules
+                └─ ~45 GB/day ingestion (+ free XDR data)
+                └─ Commitment tier: 500 GB/day
+
+EDR:            Microsoft Defender for Endpoint (MDE)
+                └─ 4,500 endpoints protected
+                └─ ASR rules: 15 in block mode
+                └─ Device control active
+                └─ MDVM integrated
+
+DLP:            Microsoft Purview DLP
+                └─ 52 policies (block mode)
+                └─ Endpoint + Email + Teams + SharePoint
+                └─ Adaptive Protection enabled
+
+Identity:       Microsoft Entra ID + MDI
+                └─ Conditional Access: 18 policies
+                └─ PIM for all admin roles
+                └─ MDI on all DCs with honeytokens
+
+CASB:           Microsoft Defender for Cloud Apps (MDCA)
+                └─ 8 SaaS apps connected
+                └─ OAuth governance active
+                └─ Session controls enabled
+
+XDR:            Microsoft Defender XDR
+                └─ All products correlated
+                └─ Automatic Attack Disruption active
+                └─ Unified incident queue</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 5: PRODUCT CONFIGS ==================== -->
+        <h2 id="product-configs">5. Product Configuration Details</h2>
+
+        <h3>5.1 MDE Configuration Journey</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">MDE: From Start to Finish</span></div>
+          <pre><code>STEP 1: TENANT SETTINGS (Day 1)
+════════════════════════════════════════════════════════════════════════════════
+Portal: security.microsoft.com → Settings → Endpoints → General
+
+Enabled:
+✓ Cloud-delivered protection → ON
+✓ Automatic sample submission → ON
+✓ Live Response → ON (for incident response)
+✓ Live Response unsigned script execution → ON (for IR flexibility)
+✓ Tamper Protection → ON (enforced later via Intune)
+✓ Device discovery → ON (find unmanaged devices)
+✓ Authenticated scan → ON (for vulnerability scanning)
+
+Configured:
+• Alert notifications → Security team DL
+• Email notifications → High severity and above
+• RBAC → Device groups mapped to teams
+
+
+STEP 2: DEVICE GROUPS (Day 2)
+════════════════════════════════════════════════════════════════════════════════
+Portal: security.microsoft.com → Settings → Endpoints → Device groups
+
+Groups created:
+• Pilot (50 devices) — Tag: "MDE-Pilot"
+• Workstations (3,500 devices) — Automatic: DeviceType contains "Workstation"
+• Servers (500 devices) — Automatic: DeviceType contains "Server"
+• VIP (100 devices) — Tag: "VIP-Device"
+• Legacy (50 devices) — Tag: "Legacy-App" (for exclusions)
+
+
+STEP 3: INTUNE ONBOARDING PROFILE (Day 3)
+════════════════════════════════════════════════════════════════════════════════
+Portal: intune.microsoft.com → Endpoint security → Endpoint detection and response
+
+Profile: Windows 10 and later
+Settings:
+• Microsoft Defender for Endpoint client configuration package type: Auto from connector
+• Sample sharing: All (was "None" initially, changed after review)
+• Expedite telemetry reporting: Enable
+• Target: All Devices (rolled out via group targeting)
+
+
+STEP 4: ASR RULES CONFIGURATION (Month 1-4)
+════════════════════════════════════════════════════════════════════════════════
+Portal: security.microsoft.com → Endpoints → Configuration management → ASR rules
+
+Phase 1 (Audit - Month 1-2): All rules in audit mode
+Phase 2 (Selective Block - Month 3): Low-risk rules to block
+Phase 3 (Full Block - Month 6): Most rules to block
+
+Final State (15 rules in Block, 4 in Audit):
+BLOCK:
+✓ Block executable content from email client and webmail
+✓ Block all Office applications from creating child processes
+✓ Block Office applications from creating executable content
+✓ Block Office applications from injecting code into other processes
+✓ Block JavaScript or VBScript from launching downloaded executable content
+✓ Block execution of potentially obfuscated scripts
+✓ Block Win32 API calls from Office macros
+✓ Block executable files from running unless they meet criteria
+✓ Block credential stealing from Windows LSASS
+✓ Block process creations originating from PSExec and WMI commands
+✓ Block untrusted and unsigned processes that run from USB
+✓ Block Office communication apps from creating child processes
+✓ Block Adobe Reader from creating child processes
+✓ Use advanced protection against ransomware
+✓ Block persistence through WMI event subscription
+
+AUDIT (compatibility issues):
+• Block abuse of exploited vulnerable signed drivers
+• Block rebooting machine in Safe Mode
+• Block Webshell creation for Servers
+• Block use of copied or impersonated system tools
+
+EXCLUSIONS DOCUMENTED:
+• LOB Application X — Exclusion for Office child process rule
+• Backup Agent Y — Exclusion for PSExec rule
+
+
+STEP 5: DEVICE CONTROL (Month 8)
+════════════════════════════════════════════════════════════════════════════════
+Portal: security.microsoft.com → Endpoints → Configuration management → Device control
+
+Policy: Block Unauthorized Removable Storage
+• Default: Deny all removable media
+• Exceptions: Approved encrypted USB devices (by VID/PID)
+• Action: Block + Alert
+
+Policy: Printer Audit
+• Audit all printing activity
+• No blocking (business requirement)
+
+
+STEP 6: NETWORK PROTECTION & WEB FILTERING (Month 8)
+════════════════════════════════════════════════════════════════════════════════
+Network Protection: Block mode
+• Blocks connections to known malicious domains
+• Integrated with SmartScreen
+
+Web Content Filtering:
+• Block: Adult content, Gambling, Malware sites
+• Audit: Social media, Streaming
+• Custom: Block categories added based on business need
+
+Custom Indicators (150 URLs):
+• Blocked domains from threat intelligence
+• Blocked competitor phishing domains
+• Allowed exceptions for false positives</code></pre>
+        </div>
+
+        <h3>5.2 MDI Configuration Journey</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">MDI: From Start to Finish</span></div>
+          <pre><code>STEP 1: MDI INSTANCE CREATION (Month 2)
+════════════════════════════════════════════════════════════════════════════════
+Portal: security.microsoft.com → Settings → Identities
+
+Instance: Auto-created with E5 license
+Workspace: Linked to same Azure AD tenant
+
+
+STEP 2: SENSOR DEPLOYMENT (Month 2)
+════════════════════════════════════════════════════════════════════════════════
+Preparation:
+• Verified DCs: 8 total (4 primary, 4 secondary across 3 sites)
+• Verified AD FS: 2 servers
+• Network: Port 443 outbound to *.atp.azure.com
+
+Installation:
+• Downloaded sensor package from portal
+• Ran setup on each DC
+• Provided gMSA account or standard service account for Directory Services
+
+Post-install verification:
+• security.microsoft.com → Settings → Identities → Sensors
+• All sensors showing "Running" status
+
+
+STEP 3: DIRECTORY SERVICES ACCOUNT (Month 2)
+════════════════════════════════════════════════════════════════════════════════
+Created: svc-MDI-Reader
+Permissions: 
+• Read access to AD (for user/group/computer enumeration)
+• Used for advanced detections (DCSync simulation detection)
+
+
+STEP 4: LEARNING PERIOD (Month 2-3)
+════════════════════════════════════════════════════════════════════════════════
+Duration: 3 weeks for full baseline
+During learning:
+• MDI learns normal behavior patterns
+• Identifies service accounts
+• Maps lateral movement paths
+• Limited alerting (high confidence only)
+
+
+STEP 5: SERVICE ACCOUNT TAGGING (Month 3)
+════════════════════════════════════════════════════════════════════════════════
+Portal: security.microsoft.com → Settings → Identities → Entity tags
+
+Tagged as Service Accounts (reduces noise):
+• svc-Backup-Agent
+• svc-Monitoring
+• svc-Exchange-Health
+• svc-SQL-Agent
+• (37 accounts total)
+
+
+STEP 6: DETECTION TUNING (Month 3-4)
+════════════════════════════════════════════════════════════════════════════════
+Suppressed detections:
+• Reconnaissance via DNS — Suppressed for vulnerability scanner IPs
+• Unusual LDAP queries — Suppressed for HR system service account
+• Sensitive group modification — Alert only for Domain Admins
+
+Enhanced detections:
+• DCSync — High severity, immediate page
+• Golden ticket — High severity, immediate page
+• Skeleton key — High severity, immediate page
+
+
+STEP 7: HONEYTOKENS (Month 4)
+════════════════════════════════════════════════════════════════════════════════
+Created decoy accounts:
+• admin-helpdesk (looks like IT account)
+• svc-backup-master (looks like service account)
+• sql-db-admin (looks like DBA account)
+
+Configuration:
+• Accounts exist in AD but never used legitimately
+• Any authentication attempt = Critical alert
+• Tagged as honeytoken in MDI
+
+
+STEP 8: LATERAL MOVEMENT PATH ANALYSIS (Ongoing)
+════════════════════════════════════════════════════════════════════════════════
+Portal: security.microsoft.com → Identities → Lateral movement paths
+
+Monthly review:
+• Identify accounts with paths to Domain Admin
+• Remediate by:
+  - Removing unnecessary group memberships
+  - Tiering admin accounts
+  - Implementing PAW for sensitive accounts
+
+Initial state: 12 high-risk paths
+Current state: 3 high-risk paths (75% reduction)</code></pre>
+        </div>
+
+        <h3>5.3 MDO Configuration Journey</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">MDO: From Start to Finish</span></div>
+          <pre><code>STEP 1: BASELINE (Already Enabled with E5)
+════════════════════════════════════════════════════════════════════════════════
+Portal: security.microsoft.com → Email & collaboration → Policies & rules
+
+Pre-existing state:
+• Basic anti-spam: ON
+• Basic anti-malware: ON
+• Safe Links: OFF (not configured)
+• Safe Attachments: OFF (not configured)
+• Anti-phishing: Basic only
+
+
+STEP 2: ANTI-PHISHING CONFIGURATION (Month 2)
+════════════════════════════════════════════════════════════════════════════════
+Policy: Anti-phishing (Standard protection)
+
+Impersonation protection:
+• User impersonation: Protect executives (CEO, CFO, CISO, CTO, VP-level)
+• Domain impersonation: Protect company domain + top 10 partners
+• Mailbox intelligence: ON
+• Spoof intelligence: ON
+
+Actions:
+• User impersonation: Move to Junk
+• Domain impersonation: Move to Junk
+• Mailbox intelligence impersonation: Move to Junk
+
+Safety tips:
+• First contact: ON
+• User impersonation: ON
+• Domain impersonation: ON
+• Unusual characters: ON
+
+
+STEP 3: SAFE LINKS CONFIGURATION (Month 2)
+════════════════════════════════════════════════════════════════════════════════
+Policy: Safe Links (Standard protection)
+
+Settings:
+• URL rewriting: ON
+• Real-time scanning: ON
+• Wait for URL scanning before delivering: ON
+• Do not rewrite internal URLs: ON
+• Teams protection: ON
+• Office 365 apps protection: ON
+
+Click tracking:
+• Track user clicks: ON
+• Allow click through to original URL: OFF (force protection)
+
+
+STEP 4: SAFE ATTACHMENTS CONFIGURATION (Month 2)
+════════════════════════════════════════════════════════════════════════════════
+Policy: Safe Attachments (Standard protection)
+
+Mode: Dynamic Delivery
+• Delivers email body immediately
+• Holds attachment for sandbox analysis
+• Replaces attachment once scanned (if clean)
+
+Redirect:
+• Redirect malicious attachments: ON
+• Redirect address: security-quarantine@company.com
+
+SharePoint/OneDrive/Teams:
+• Safe Attachments for SPO/OD/Teams: ON
+
+
+STEP 5: ANTI-SPAM TUNING (Month 3)
+════════════════════════════════════════════════════════════════════════════════
+Policy: Anti-spam inbound
+
+Bulk email threshold: 6 (default)
+• Adjusted to 5 after noise complaints
+
+Spam actions:
+• Spam: Move to Junk
+• High confidence spam: Quarantine (admin release only)
+• Phishing: Quarantine (admin release only)
+• High confidence phishing: Quarantine (admin release only)
+
+Allowed senders:
+• Partner domains (verified legitimate)
+• Marketing automation platforms
+
+
+STEP 6: PRIORITY ACCOUNT PROTECTION (Month 4)
+════════════════════════════════════════════════════════════════════════════════
+Portal: security.microsoft.com → Email & collaboration → Priority account protection
+
+Tagged priority accounts:
+• All executives
+• Finance team
+• Legal team
+• IT security team
+
+Enhanced protection for priority accounts:
+• Stricter filtering thresholds
+• Enhanced impersonation protection
+• Priority investigation in alerts
+
+
+STEP 7: ATTACK SIMULATION (Month 6+)
+════════════════════════════════════════════════════════════════════════════════
+Portal: security.microsoft.com → Email & collaboration → Attack simulation training
+
+Monthly simulations:
+• Phishing campaigns targeting different departments
+• Credential harvesting tests
+• Attachment-based attacks
+
+Initial baseline: 28% click rate
+Current rate: 12% click rate (after 6 months of training)</code></pre>
+        </div>
+
+        <h3>5.4 MDCA Configuration Journey</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">MDCA: From Start to Finish</span></div>
+          <pre><code>STEP 1: INITIAL ACCESS (Month 3)
+════════════════════════════════════════════════════════════════════════════════
+Portal: portal.cloudappsecurity.com (2024)
+        security.microsoft.com → Cloud Apps (2025, after migration)
+
+Initial state:
+• Microsoft 365 connector: Auto-enabled with E5
+• No third-party apps connected
+• No policies configured
+
+
+STEP 2: SAAS APP CONNECTORS (Month 3)
+════════════════════════════════════════════════════════════════════════════════
+Portal: Cloud Apps → App connectors → Connect an app
+
+Connected apps:
+1. Microsoft 365 (auto-connected)
+   • Exchange, SharePoint, OneDrive, Teams visibility
+
+2. Salesforce
+   • OAuth authentication
+   • Admin consent required
+   • API access: Full (read-only sufficient)
+   
+3. Zoom
+   • OAuth authentication
+   • Scopes: Meeting and user data
+   
+4. Slack Enterprise Grid
+   • OAuth authentication
+   • Scopes: Channels, messages, files
+   
+5. GitHub Enterprise
+   • OAuth authentication
+   • Scopes: Repos, audit logs
+   
+6. Box (Month 6)
+   • OAuth authentication
+   
+7. ServiceNow (Month 8)
+   • OAuth authentication
+
+8. Workday (Month 10)
+   • SAML-based connector
+
+
+STEP 3: SHADOW IT DISCOVERY (Month 3)
+════════════════════════════════════════════════════════════════════════════════
+Portal: Cloud Apps → Cloud Discovery
+
+Log sources configured:
+• Palo Alto firewall logs (automatic upload via log collector)
+• Zscaler logs (API integration)
+
+Discovery dashboard:
+• Discovered apps: 847
+• High risk apps: 47
+• Medium risk apps: 156
+• Sanctioned: 32
+• Unsanctioned: 815
+
+Weekly review process:
+• Review new high-risk apps
+• Sanction or block based on business need
+• Communicate to users about alternatives
+
+
+STEP 4: ACTIVITY POLICIES (Month 3-4)
+════════════════════════════════════════════════════════════════════════════════
+Portal: Cloud Apps → Policies → Activity policy
+
+Policies created:
+1. Mass download from SharePoint
+   • Trigger: >50 files in 1 minute
+   • Action: Alert + notify user manager
+   
+2. Bulk export from Salesforce
+   • Trigger: Report export >10,000 records
+   • Action: Alert + notify SOC
+   
+3. Unusual admin activity
+   • Trigger: Admin action from unusual location
+   • Action: Alert + suspend pending review
+   
+4. External file sharing
+   • Trigger: File shared externally
+   • Action: Log (awareness monitoring)
+
+
+STEP 5: ANOMALY DETECTION (Auto-enabled)
+════════════════════════════════════════════════════════════════════════════════
+Built-in detections (tuned):
+• Impossible travel: Enabled, tuned for VPN users
+• Unusual location: Enabled
+• Unusual device: Enabled
+• Mass file download: Enabled
+• Unusual file share activity: Enabled
+• Ransomware activity: Enabled
+
+Suppressed:
+• Impossible travel for users with known VPN patterns
+• Unusual location for travel-heavy executives
+
+
+STEP 6: OAUTH APP GOVERNANCE (Month 5)
+════════════════════════════════════════════════════════════════════════════════
+Portal: Cloud Apps → OAuth apps
+
+App governance policies:
+1. Block high-privilege apps from unknown publishers
+   • Trigger: App requests Mail.ReadWrite + low trust score
+   • Action: Revoke app permissions
+   
+2. Alert on new OAuth apps with sensitive permissions
+   • Trigger: New app with Files.ReadWrite.All
+   • Action: Alert for review
+
+OAuth app inventory:
+• Total apps: 234
+• High risk: 12 (reviewed, 8 revoked)
+• Medium risk: 45 (monitored)
+
+
+STEP 7: SESSION CONTROLS (Month 6)
+════════════════════════════════════════════════════════════════════════════════
+Portal: Cloud Apps → Conditional Access App Control
+
+Prerequisites:
+• Conditional Access policy in Entra ID routing traffic through MDCA
+• CA policy: Require app protection for unmanaged devices
+
+Session policies:
+1. Block download on unmanaged devices
+   • Apps: SharePoint, OneDrive
+   • Condition: Unmanaged device
+   • Action: Block download
+   
+2. Block paste/copy for sensitive files
+   • Apps: All monitored apps
+   • Condition: Sensitivity label = Confidential
+   • Action: Block copy/paste
+
+
+STEP 8: INTEGRATION WITH SENTINEL (Month 3+)
+════════════════════════════════════════════════════════════════════════════════
+Two data paths:
+
+1. CloudAppEvents (via M365 Defender connector) — FREE
+   • Activities from all connected apps
+   • Flows automatically via XDR connector
+   • No additional config needed
+   
+2. McasShadowItReporting (via dedicated MDCA connector)
+   • Shadow IT discovery data
+   • Requires separate connector enablement
+   • Sentinel → Data connectors → Microsoft Defender for Cloud Apps</code></pre>
+        </div>
+
+        <!-- ==================== SECTION 6: SENTINEL STRATEGY ==================== -->
+        <h2 id="sentinel-strategy">6. Sentinel & Ingestion Strategy</h2>
+
+        <h3>6.1 The Cost-Conscious Approach</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Sentinel Ingestion Strategy</span></div>
+          <pre><code>PRINCIPLE: INGEST WHAT YOU NEED, NOT EVERYTHING
+════════════════════════════════════════════════════════════════════════════════
+
+The biggest mistake in SIEM migrations is "ingest everything and figure it out later."
+This leads to massive costs and alert fatigue.
+
+Our approach:
+1. Start with XDR data (FREE via M365 Defender connector)
+2. Add security-critical logs only
+3. Use tiers strategically (Analytics vs Basic vs Auxiliary)
+4. Filter at source when possible
+
+
+DATA SOURCES: WHAT WE INGEST
+════════════════════════════════════════════════════════════════════════════════
+
+TIER 1: FREE (Via M365 Defender connector)
+────────────────────────────────────────────────────────────────────────────────
+These tables flow automatically and DON'T count against ingestion:
+
+From MDE:
+• DeviceEvents, DeviceProcessEvents, DeviceNetworkEvents
+• DeviceFileEvents, DeviceRegistryEvents, DeviceLogonEvents
+• DeviceImageLoadEvents, DeviceTvmSoftwareInventory
+
+From MDO:
+• EmailEvents, EmailAttachmentInfo, EmailUrlInfo
+• EmailPostDeliveryEvents
+
+From MDI:
+• IdentityLogonEvents, IdentityQueryEvents, IdentityDirectoryEvents
+
+From MDCA:
+• CloudAppEvents
+
+XDR Alerts:
+• AlertInfo, AlertEvidence
+
+Volume: ~80 GB/day (would cost ~$6,000/month if billed)
+Actual cost: $0
+
+
+TIER 2: ANALYTICS LOGS (~$2.30/GB) — Security Critical
+────────────────────────────────────────────────────────────────────────────────
+These we pay for but need full query capability:
+
+From Entra ID:
+• SigninLogs (~5 GB/day)
+• AuditLogs (~2 GB/day)
+• AADNonInteractiveUserSignInLogs (~8 GB/day)
+
+From Azure:
+• AzureActivity (~1 GB/day)
+• AzureDiagnostics for Key Vault (~0.5 GB/day)
+
+From Firewalls (CEF):
+• CommonSecurityLog (~10 GB/day) — Filtered, see below
+
+From Windows Servers:
+• SecurityEvent (~8 GB/day) — Filtered, see below
+
+Custom Applications:
+• Custom_CL tables (~3 GB/day)
+
+Volume: ~38 GB/day
+Cost: ~$2,700/month
+
+
+TIER 3: BASIC LOGS (~$0.50/GB) — Compliance/Troubleshooting
+────────────────────────────────────────────────────────────────────────────────
+Logs we need for compliance but rarely query:
+
+• ContainerLog — Kubernetes audit logs
+• AppTraces — Application telemetry
+• Verbose firewall logs (allow rules)
+
+Volume: ~15 GB/day
+Cost: ~$225/month
+
+
+TIER 4: AUXILIARY LOGS (~$0.15/GB) — Archive Only
+────────────────────────────────────────────────────────────────────────────────
+Ultra-cheap tier for long-term retention:
+
+• Firewall verbose traffic logs (non-security)
+• DNS query logs (high volume)
+
+Volume: ~40 GB/day
+Cost: ~$180/month
+
+
+TOTAL INGESTION COSTS:
+────────────────────────────────────────────────────────────────────────────────
+Free (XDR):        ~80 GB/day    $0
+Analytics:         ~38 GB/day    ~$2,700/month
+Basic:             ~15 GB/day    ~$225/month
+Auxiliary:         ~40 GB/day    ~$180/month
+Commitment Tier:   500 GB/day    ~30% discount
+────────────────────────────────────────────────────────────────────────────────
+TOTAL:             ~173 GB/day   ~$2,500/month (after discounts)
+
+Compare to RSA NetWitness: ~$8,000/month (infrastructure + licensing)
+SAVINGS: ~$5,500/month (~68%)</code></pre>
+        </div>
+
+        <h3>6.2 Filtering Strategy (Don't Ingest Everything)</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Log Filtering Examples</span></div>
+          <pre><code>WINDOWS SECURITY EVENTS (DCR Filtering)
+════════════════════════════════════════════════════════════════════════════════
+Instead of ingesting ALL Windows Security Events, we use XPath queries in DCR:
+
+Data Collection Rule: Windows-Security-Events-Filtered
+
+XPath queries (include only):
+• Security!*[System[(EventID=4624)]]    -- Successful logon
+• Security!*[System[(EventID=4625)]]    -- Failed logon
+• Security!*[System[(EventID=4648)]]    -- Explicit credentials
+• Security!*[System[(EventID=4672)]]    -- Special privileges
+• Security!*[System[(EventID=4688)]]    -- Process creation
+• Security!*[System[(EventID=4698)]]    -- Scheduled task created
+• Security!*[System[(EventID=4720)]]    -- User created
+• Security!*[System[(EventID=4732)]]    -- Member added to local group
+• Security!*[System[(EventID=5156)]]    -- Firewall allow (sampled)
+
+NOT ingesting:
+• EventID 4634 (Logoff) — Low security value
+• EventID 5157 (Firewall block) — Too verbose
+• EventID 4663 (Object access) — Only for specific paths
+
+Result: 8 GB/day instead of 50 GB/day (84% reduction)
+
+
+FIREWALL LOGS (CEF Filtering)
+════════════════════════════════════════════════════════════════════════════════
+Palo Alto logs via CEF to Sentinel
+
+Filtered at forwarder level (rsyslog):
+• INCLUDE: severity >= warning
+• INCLUDE: action = deny
+• INCLUDE: action = drop
+• INCLUDE: threat-* logs
+• EXCLUDE: action = allow (unless threat detected)
+• EXCLUDE: traffic logs (unless high volume outlier)
+
+Result: 10 GB/day instead of 80 GB/day (87% reduction)
+
+
+AZURE DIAGNOSTICS (Resource-Specific Tables)
+════════════════════════════════════════════════════════════════════════════════
+Instead of dumping everything to AzureDiagnostics:
+
+Using resource-specific tables:
+• AZFWNetworkRule — Firewall network rules
+• AZFWApplicationRule — Firewall app rules
+• AKSAuditLogs — Kubernetes audit
+• AKVAuditLogs — Key Vault audit
+
+Benefits:
+• Better query performance
+• Cleaner schemas
+• Independent retention policies</code></pre>
+        </div>
+
+        <h3>6.3 Sentinel Connectors Enabled</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Connector</th>
+                <th>Tables</th>
+                <th>Tier</th>
+                <th>~Volume/Day</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Microsoft Defender XDR</strong></td>
+                <td>Device*, Email*, Identity*, CloudAppEvents, Alert*</td>
+                <td>FREE</td>
+                <td>~80 GB</td>
+              </tr>
+              <tr>
+                <td><strong>Microsoft Entra ID</strong></td>
+                <td>SigninLogs, AuditLogs, AADNonInteractiveUserSignInLogs</td>
+                <td>Analytics</td>
+                <td>~15 GB</td>
+              </tr>
+              <tr>
+                <td><strong>Azure Activity</strong></td>
+                <td>AzureActivity</td>
+                <td>Analytics</td>
+                <td>~1 GB</td>
+              </tr>
+              <tr>
+                <td><strong>Microsoft Defender for Cloud</strong></td>
+                <td>SecurityAlert (MDC)</td>
+                <td>FREE</td>
+                <td>~0.1 GB</td>
+              </tr>
+              <tr>
+                <td><strong>Windows Security Events (AMA)</strong></td>
+                <td>SecurityEvent (filtered)</td>
+                <td>Analytics</td>
+                <td>~8 GB</td>
+              </tr>
+              <tr>
+                <td><strong>CEF via AMA</strong></td>
+                <td>CommonSecurityLog (filtered)</td>
+                <td>Analytics</td>
+                <td>~10 GB</td>
+              </tr>
+              <tr>
+                <td><strong>Syslog via AMA</strong></td>
+                <td>Syslog (Linux servers)</td>
+                <td>Analytics</td>
+                <td>~2 GB</td>
+              </tr>
+              <tr>
+                <td><strong>MDCA</strong></td>
+                <td>McasShadowItReporting</td>
+                <td>Analytics</td>
+                <td>~0.5 GB</td>
+              </tr>
+              <tr>
+                <td><strong>Threat Intelligence</strong></td>
+                <td>ThreatIntelligenceIndicator</td>
+                <td>Analytics</td>
+                <td>~0.1 GB</td>
+              </tr>
+              <tr>
+                <td><strong>Office 365</strong></td>
+                <td>OfficeActivity</td>
+                <td>FREE</td>
+                <td>~3 GB</td>
+              </tr>
+              <tr>
+                <td><strong>Azure Key Vault</strong></td>
+                <td>AZKVAuditLogs</td>
+                <td>Analytics</td>
+                <td>~0.5 GB</td>
+              </tr>
+              <tr>
+                <td><strong>Salesforce (Custom)</strong></td>
+                <td>Salesforce_CL</td>
+                <td>Analytics</td>
+                <td>~1 GB</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================== EXISTING GANTT CHART SECTION ==================== -->
+        <h2 id="visual-timeline">9. Visual Timeline</h2>
 
         <div class="callout success" style="margin-bottom: 1.5rem;">
           <div class="callout-title">
@@ -261,6 +1915,1316 @@
           <div class="legend-item"><div class="legend-color" style="background: var(--accent-purple);"></div> DLP: Symantec → Purview</div>
           <div class="legend-item"><div class="legend-color" style="background: var(--accent-orange);"></div> Identity: AD → Entra ID</div>
           <div class="legend-item"><div class="legend-color" style="background: var(--accent-cyan);"></div> Infrastructure: Azure</div>
+        </div>
+
+        <!-- ==================== MICROSOFT SECURITY EVOLUTION ==================== -->
+        <h2 id="ms-evolution">Microsoft Security Evolution (June 2024 – December 2025)</h2>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Why This Matters for Interviews
+          </div>
+          <div class="callout-content">
+            <p>Microsoft's security stack evolved significantly during this migration. Understanding what changed — product names, portal locations, licensing models — shows you're current and can adapt. Interviewers may ask: <em>"How did you handle the Microsoft portal changes?"</em> or <em>"What's the difference between TVM and MDVM?"</em></p>
+          </div>
+        </div>
+
+        <h3>Product Naming Evolution</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>What We Called It (June 2024)</th>
+                <th>Current Name (Dec 2025)</th>
+                <th>What Changed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Identity</strong></td>
+                <td>Azure AD / Azure Active Directory</td>
+                <td>Microsoft Entra ID</td>
+                <td>Rebranding (July 2023). All documentation, portals, and APIs updated. Same functionality, new name.</td>
+              </tr>
+              <tr>
+                <td><strong>Endpoint Security</strong></td>
+                <td>Microsoft Defender for Endpoint (MDE)</td>
+                <td>Microsoft Defender for Endpoint (MDE)</td>
+                <td>Name unchanged. Features expanded (device control, ASR improvements).</td>
+              </tr>
+              <tr>
+                <td><strong>Vulnerability Mgmt</strong></td>
+                <td>MDE TVM (Threat & Vulnerability Management)</td>
+                <td>Microsoft Defender Vulnerability Management (MDVM)</td>
+                <td>Became standalone product. Can now license separately without full MDE. Added browser extension scanning, certificate assessment.</td>
+              </tr>
+              <tr>
+                <td><strong>XDR Platform</strong></td>
+                <td>Microsoft 365 Defender</td>
+                <td>Microsoft Defender XDR</td>
+                <td>Rebranding (late 2023). Reflects broader scope beyond M365. Same platform, clearer positioning.</td>
+              </tr>
+              <tr>
+                <td><strong>SIEM</strong></td>
+                <td>Microsoft Sentinel (was Azure Sentinel)</td>
+                <td>Microsoft Sentinel</td>
+                <td>Name stable. Major change: now accessible inside Defender portal (Unified SOC Platform).</td>
+              </tr>
+              <tr>
+                <td><strong>CASB</strong></td>
+                <td>Microsoft Defender for Cloud Apps (MDCA)</td>
+                <td>Microsoft Defender for Cloud Apps (MDCA)</td>
+                <td>Name unchanged. Portal moved from portal.cloudappsecurity.com to security.microsoft.com → Cloud Apps.</td>
+              </tr>
+              <tr>
+                <td><strong>Email Security</strong></td>
+                <td>Microsoft Defender for Office 365 (MDO)</td>
+                <td>Microsoft Defender for Office 365 (MDO)</td>
+                <td>Name unchanged. Enhanced impersonation protection, priority account protection.</td>
+              </tr>
+              <tr>
+                <td><strong>Identity Protection</strong></td>
+                <td>Microsoft Defender for Identity (MDI)</td>
+                <td>Microsoft Defender for Identity (MDI)</td>
+                <td>Name unchanged. Improved integration with Entra ID, deception capabilities added.</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud Security</strong></td>
+                <td>Microsoft Defender for Cloud (MDC)</td>
+                <td>Microsoft Defender for Cloud (MDC)</td>
+                <td>Name unchanged. CSPM and CWP capabilities expanded. Not same as MDCA (common confusion).</td>
+              </tr>
+              <tr>
+                <td><strong>DLP</strong></td>
+                <td>Microsoft Purview DLP</td>
+                <td>Microsoft Purview DLP</td>
+                <td>Name stable. Unified under Purview compliance portal. Endpoint DLP matured significantly.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Portal Consolidation Timeline</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Portal Evolution: June 2024 → December 2025</span></div>
+          <pre><code>JUNE 2024 — WHEN WE STARTED
+════════════════════════════════════════════════════════════════════════════════
+We had to manage MULTIPLE portals:
+
+• security.microsoft.com          → Defender XDR (MDE, MDO, MDI)
+• portal.azure.com/sentinel       → Microsoft Sentinel (separate workspace)
+• portal.cloudappsecurity.com     → MDCA (Cloud App Security)
+• portal.azure.com                → Azure AD / Entra ID
+• compliance.microsoft.com        → Purview Compliance (DLP, retention)
+• endpoint.microsoft.com          → Intune / Endpoint Manager
+
+ISSUE: SOC had to switch between 4-5 portals for a single investigation
+ISSUE: Incident correlation was manual — alert in MDO, context in Sentinel
+
+
+LATE 2024 — UNIFIED SOC PLATFORM ANNOUNCED
+════════════════════════════════════════════════════════════════════════════════
+Microsoft launched "Unified SOC Platform" — Sentinel inside Defender portal.
+
+• security.microsoft.com          → Now includes Sentinel workspace
+• portal.cloudappsecurity.com     → Redirects to security.microsoft.com
+• Incidents from XDR + Sentinel   → Single unified queue
+
+HOW WE CONFIGURED:
+- Connected Sentinel workspace to Defender portal
+- Enabled bi-directional sync for incidents
+- SOC started using unified portal as primary
+
+
+DECEMBER 2025 — CURRENT STATE
+════════════════════════════════════════════════════════════════════════════════
+PRIMARY PORTAL: security.microsoft.com (Unified Security Portal)
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  security.microsoft.com                                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  • Home / Dashboard                                                          │
+│  • Incidents & Alerts     ← Unified queue (XDR + Sentinel)                  │
+│  • Hunting                ← Advanced Hunting (KQL across all tables)        │
+│  • Assets                 ← Devices, Users, Apps                            │
+│  │                                                                          │
+│  ├─ Endpoints             ← MDE (Device inventory, TVM/MDVM)                │
+│  ├─ Email & Collaboration ← MDO (Threat explorer, campaigns)                │
+│  ├─ Identities            ← MDI (Identity timeline, alerts)                 │
+│  ├─ Cloud Apps            ← MDCA (SaaS visibility, policies)                │
+│  │                                                                          │
+│  ├─ Microsoft Sentinel    ← Full Sentinel experience embedded              │
+│  │   ├─ Workbooks                                                           │
+│  │   ├─ Analytics Rules                                                     │
+│  │   ├─ Data Connectors                                                     │
+│  │   └─ Automation (Playbooks)                                              │
+│  │                                                                          │
+│  └─ Settings              ← Unified settings for all products               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+SECONDARY PORTALS (still used for specific tasks):
+• portal.azure.com         → Azure resource management, Sentinel workspace config
+• compliance.microsoft.com → Purview DLP policy authoring, data classification
+• intune.microsoft.com     → Device management, app deployment
+• entra.microsoft.com      → Entra ID (identity governance, conditional access)</code></pre>
+        </div>
+
+        <h3>TVM → MDVM: What Actually Changed</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Aspect</th>
+                <th>TVM (2024)</th>
+                <th>MDVM (2025)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Licensing</strong></td>
+                <td>Included with MDE P2. No standalone option.</td>
+                <td>Can license MDVM separately without full MDE. Also included with MDE P2.</td>
+              </tr>
+              <tr>
+                <td><strong>Scope</strong></td>
+                <td>Endpoint vulnerabilities only (OS, apps)</td>
+                <td>Expanded: Browser extensions, certificates, firmware, network devices</td>
+              </tr>
+              <tr>
+                <td><strong>Portal Location</strong></td>
+                <td>security.microsoft.com → Endpoints → Vulnerability Management</td>
+                <td>Same location, but also standalone dashboard available</td>
+              </tr>
+              <tr>
+                <td><strong>Features Added</strong></td>
+                <td>Basic vulnerability scanning, security recommendations</td>
+                <td>+ Browser extension inventory<br>+ Certificate assessment<br>+ Hardware/firmware vulnerabilities<br>+ Network device scanning<br>+ Vulnerability assessment for containers</td>
+              </tr>
+              <tr>
+                <td><strong>Integration</strong></td>
+                <td>MDE alerts, Secure Score</td>
+                <td>+ Intune remediation tasks<br>+ ServiceNow/Jira integration<br>+ Exposure management (new)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>How We Configured MDVM</div>
+          <div class="callout-content">
+            <p><strong>June 2024:</strong> TVM was automatically included with MDE P2. We configured:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Enabled vulnerability scanning on all onboarded devices</li>
+              <li>Set up security baselines and tracked compliance</li>
+              <li>Created remediation workflows via ServiceNow integration</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>December 2025:</strong> When MDVM became standalone, we:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Enabled browser extension scanning (found 47 risky extensions)</li>
+              <li>Added certificate monitoring for expiration alerts</li>
+              <li>Configured Intune remediation for automated patching</li>
+              <li>Kept existing TVM → MDVM transition was seamless (same backend)</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Major Feature Releases During Migration</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Timeframe</th>
+                <th>Feature</th>
+                <th>Product</th>
+                <th>Impact on Our Migration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Q3 2024</td>
+                <td>Automatic Attack Disruption (GA)</td>
+                <td>Defender XDR</td>
+                <td>Enabled automatic containment of compromised users/devices. Reduced MTTR significantly.</td>
+              </tr>
+              <tr>
+                <td>Q3 2024</td>
+                <td>Copilot for Security Integration</td>
+                <td>Defender XDR</td>
+                <td>AI-assisted incident investigation. Helped analysts summarize complex incidents faster.</td>
+              </tr>
+              <tr>
+                <td>Q4 2024</td>
+                <td>Unified SOC Platform (Preview)</td>
+                <td>Sentinel + XDR</td>
+                <td>Started testing Sentinel inside Defender portal. Reduced portal switching.</td>
+              </tr>
+              <tr>
+                <td>Q4 2024</td>
+                <td>Basic Logs Tier Expansion</td>
+                <td>Sentinel</td>
+                <td>More log types eligible for Basic tier. Reduced ingestion costs ~20%.</td>
+              </tr>
+              <tr>
+                <td>Q1 2025</td>
+                <td>Unified SOC Platform (GA)</td>
+                <td>Sentinel + XDR</td>
+                <td>Moved production SOC to unified portal. Single pane for all investigations.</td>
+              </tr>
+              <tr>
+                <td>Q1 2025</td>
+                <td>MDVM Standalone Licensing</td>
+                <td>MDVM</td>
+                <td>Considered for devices not needing full MDE. Didn't change our licensing (already had E5).</td>
+              </tr>
+              <tr>
+                <td>Q2 2025</td>
+                <td>Auxiliary Logs (Preview)</td>
+                <td>Sentinel</td>
+                <td>Even cheaper tier for compliance/archival logs. Moved firewall verbose logs here.</td>
+              </tr>
+              <tr>
+                <td>Q2 2025</td>
+                <td>Custom Detections in XDR</td>
+                <td>Defender XDR</td>
+                <td>Allowed us to create some detections directly in XDR instead of Sentinel.</td>
+              </tr>
+              <tr>
+                <td>Q3 2025</td>
+                <td>MDCA App Governance (GA)</td>
+                <td>MDCA</td>
+                <td>Better OAuth app risk visibility. Helped with SaaS security posture.</td>
+              </tr>
+              <tr>
+                <td>Q4 2025</td>
+                <td>Exposure Management (Preview)</td>
+                <td>Defender XDR</td>
+                <td>Attack path analysis across identity + endpoint + cloud. New capability for risk prioritization.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>How We Configured: Then vs Now</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Configuration Evolution</span></div>
+          <pre><code>MDE (DEFENDER FOR ENDPOINT)
+════════════════════════════════════════════════════════════════════════════════
+JUNE 2024 (Start):
+- Deployed via Intune with basic onboarding package
+- ASR rules in audit mode
+- TVM scanning enabled by default
+- Separate portal for device inventory
+
+DECEMBER 2025 (Current):
+- Tamper Protection enforced
+- ASR rules in block mode (after 3 months tuning)
+- MDVM with browser extension + certificate scanning
+- Device control policies for USB
+- Automated Investigation & Response (AIR) enabled
+- Network Protection enabled
+- Web Content Filtering configured
+
+
+MDI (DEFENDER FOR IDENTITY)
+════════════════════════════════════════════════════════════════════════════════
+JUNE 2024 (Start):
+- Sensors deployed on DCs
+- Learning mode for 2-3 weeks
+- Service accounts marked manually
+
+DECEMBER 2025 (Current):
+- All DCs + AD FS covered
+- Deception capabilities enabled (honeytokens)
+- Integration with Entra ID for cloud identity correlation
+- Custom alerts for sensitive group changes
+- Lateral movement path analysis tuned
+
+
+MDCA (DEFENDER FOR CLOUD APPS)
+════════════════════════════════════════════════════════════════════════════════
+JUNE 2024 (Start):
+- Connected via portal.cloudappsecurity.com
+- M365 connector enabled
+- Shadow IT discovery via firewall logs
+- Basic anomaly policies
+
+DECEMBER 2025 (Current):
+- Access via security.microsoft.com → Cloud Apps
+- Salesforce, Zoom, Slack, GitHub connected
+- OAuth App Governance enabled
+- Session controls for risky scenarios
+- Conditional Access App Control for real-time monitoring
+- CloudAppEvents flowing to Sentinel (FREE via XDR connector)
+
+
+SENTINEL
+════════════════════════════════════════════════════════════════════════════════
+JUNE 2024 (Start):
+- Separate workspace at portal.azure.com
+- M365 Defender connector enabled
+- Basic Azure connectors
+- ~100 analytics rules from RSA migration
+
+DECEMBER 2025 (Current):
+- Accessible from security.microsoft.com (Unified SOC Platform)
+- Bi-directional incident sync with XDR
+- 485 analytics rules (255 migrated + 230 new)
+- Cost optimization: Basic Logs + Commitment Tier
+- SOAR playbooks for auto-enrichment
+- Workbooks for SOC metrics
+
+
+PURVIEW DLP
+════════════════════════════════════════════════════════════════════════════════
+JUNE 2024 (Start):
+- Symantec DLP still primary
+- Purview in audit/monitor mode
+- Testing endpoint DLP agent
+
+DECEMBER 2025 (Current):
+- Purview is primary DLP
+- Endpoint DLP in block mode
+- Exchange + SharePoint + Teams policies active
+- Sensitive Info Types tuned (custom regex for internal data)
+- User notifications and policy tips enabled
+- Integration with Insider Risk Management</code></pre>
+        </div>
+
+        <!-- ==================== DETAILED CHANGES ==================== -->
+        <h3>Sentinel Data Connector Changes</h3>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Data Connector Names Changed</div>
+          <div class="callout-content">
+            <p>Microsoft renamed and restructured several data connectors during this period. If you configured something in 2024, the name in the portal might be different now.</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Old Name (2024)</th>
+                <th>New Name (2025)</th>
+                <th>What Changed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Microsoft 365 Defender</td>
+                <td>Microsoft Defender XDR</td>
+                <td>Renamed to reflect XDR branding. Same connector, same tables. Just search "Defender XDR" in Content Hub now.</td>
+              </tr>
+              <tr>
+                <td>Azure Active Directory</td>
+                <td>Microsoft Entra ID</td>
+                <td>Rebranded. Connector brings in SigninLogs, AuditLogs, AADNonInteractiveUserSignInLogs → now shows as "Entra ID" in portal.</td>
+              </tr>
+              <tr>
+                <td>Azure Active Directory Identity Protection</td>
+                <td>Microsoft Entra ID Protection</td>
+                <td>Same data (SecurityAlert from IDP), just renamed.</td>
+              </tr>
+              <tr>
+                <td>Microsoft Cloud App Security</td>
+                <td>Microsoft Defender for Cloud Apps</td>
+                <td>Old MCAS connector deprecated. Use "Microsoft Defender XDR" connector for CloudAppEvents or direct MDCA connector for McasShadowItReporting.</td>
+              </tr>
+              <tr>
+                <td>Office 365</td>
+                <td>Microsoft 365</td>
+                <td>Minor rename. Still brings OfficeActivity table.</td>
+              </tr>
+              <tr>
+                <td>Azure Security Center</td>
+                <td>Microsoft Defender for Cloud</td>
+                <td>Renamed when ASC became MDC. SecurityAlert table still same.</td>
+              </tr>
+              <tr>
+                <td>Windows Security Events via AMA</td>
+                <td>Windows Security Events</td>
+                <td>AMA is now default. Legacy MMA connector deprecated. Same SecurityEvent table.</td>
+              </tr>
+              <tr>
+                <td>Syslog via Legacy Agent</td>
+                <td>Syslog via AMA</td>
+                <td>MMA deprecated. Must use Azure Monitor Agent (AMA) now. Same Syslog table.</td>
+              </tr>
+              <tr>
+                <td>CEF via Legacy Agent</td>
+                <td>Common Event Format (CEF) via AMA</td>
+                <td>MMA deprecated. Use AMA with DCR (Data Collection Rule). Same CommonSecurityLog table.</td>
+              </tr>
+              <tr>
+                <td>Azure Activity</td>
+                <td>Azure Activity</td>
+                <td>No change, but now recommends Diagnostic Settings over connector.</td>
+              </tr>
+              <tr>
+                <td>Threat Intelligence Platforms</td>
+                <td>Threat Intelligence (Preview) / Upload API</td>
+                <td>Old TI connector deprecated. New TI upload API (Graph Security tiIndicators) or TAXII connector.</td>
+              </tr>
+              <tr>
+                <td>Microsoft Defender for Endpoint</td>
+                <td>(Merged into Defender XDR connector)</td>
+                <td>Standalone MDE connector deprecated. Use "Microsoft Defender XDR" connector — brings DeviceEvents, DeviceProcessEvents, etc.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Sentinel Table Name Changes</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Table</th>
+                <th>Status</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>DeviceEvents</strong></td>
+                <td>✅ No change</td>
+                <td>MDE device events. Via Defender XDR connector.</td>
+              </tr>
+              <tr>
+                <td><strong>DeviceProcessEvents</strong></td>
+                <td>✅ No change</td>
+                <td>Process creation events from MDE.</td>
+              </tr>
+              <tr>
+                <td><strong>DeviceNetworkEvents</strong></td>
+                <td>✅ No change</td>
+                <td>Network connections from MDE.</td>
+              </tr>
+              <tr>
+                <td><strong>DeviceFileEvents</strong></td>
+                <td>✅ No change</td>
+                <td>File operations from MDE.</td>
+              </tr>
+              <tr>
+                <td><strong>DeviceRegistryEvents</strong></td>
+                <td>✅ No change</td>
+                <td>Registry changes from MDE.</td>
+              </tr>
+              <tr>
+                <td><strong>DeviceLogonEvents</strong></td>
+                <td>✅ No change</td>
+                <td>Logon events from MDE.</td>
+              </tr>
+              <tr>
+                <td><strong>DeviceImageLoadEvents</strong></td>
+                <td>✅ No change</td>
+                <td>DLL loads from MDE.</td>
+              </tr>
+              <tr>
+                <td><strong>EmailEvents</strong></td>
+                <td>✅ No change</td>
+                <td>MDO email events.</td>
+              </tr>
+              <tr>
+                <td><strong>EmailAttachmentInfo</strong></td>
+                <td>✅ No change</td>
+                <td>MDO attachment metadata.</td>
+              </tr>
+              <tr>
+                <td><strong>EmailUrlInfo</strong></td>
+                <td>✅ No change</td>
+                <td>MDO URL clicks.</td>
+              </tr>
+              <tr>
+                <td><strong>IdentityLogonEvents</strong></td>
+                <td>✅ No change</td>
+                <td>MDI logon events.</td>
+              </tr>
+              <tr>
+                <td><strong>IdentityQueryEvents</strong></td>
+                <td>✅ No change</td>
+                <td>MDI LDAP/DNS queries.</td>
+              </tr>
+              <tr>
+                <td><strong>IdentityDirectoryEvents</strong></td>
+                <td>✅ No change</td>
+                <td>MDI directory changes.</td>
+              </tr>
+              <tr>
+                <td><strong>CloudAppEvents</strong></td>
+                <td>✅ No change</td>
+                <td>MDCA SaaS activity. <strong>KEY:</strong> Flows FREE via Defender XDR connector!</td>
+              </tr>
+              <tr>
+                <td><strong>AlertEvidence</strong></td>
+                <td>✅ No change</td>
+                <td>XDR alert evidence entities.</td>
+              </tr>
+              <tr>
+                <td><strong>AlertInfo</strong></td>
+                <td>⚠️ Use SecurityAlert</td>
+                <td>AlertInfo is XDR-specific. SecurityAlert is Sentinel-native. Both exist.</td>
+              </tr>
+              <tr>
+                <td><strong>AADSignInEventsBeta</strong></td>
+                <td>⚠️ Deprecated</td>
+                <td>Use SigninLogs (Entra ID connector) instead. Beta table being phased out.</td>
+              </tr>
+              <tr>
+                <td><strong>McasShadowItReporting</strong></td>
+                <td>✅ No change</td>
+                <td>MDCA shadow IT discovery. Requires separate MDCA connector (not via XDR).</td>
+              </tr>
+              <tr>
+                <td><strong>SecurityEvent</strong></td>
+                <td>✅ No change</td>
+                <td>Windows Security Events. Now via AMA (MMA deprecated).</td>
+              </tr>
+              <tr>
+                <td><strong>Syslog</strong></td>
+                <td>✅ No change</td>
+                <td>Linux syslog. Now via AMA.</td>
+              </tr>
+              <tr>
+                <td><strong>CommonSecurityLog</strong></td>
+                <td>✅ No change</td>
+                <td>CEF events. Now via AMA.</td>
+              </tr>
+              <tr>
+                <td><strong>AzureActivity</strong></td>
+                <td>✅ No change</td>
+                <td>Azure control plane logs.</td>
+              </tr>
+              <tr>
+                <td><strong>AzureDiagnostics</strong></td>
+                <td>⚠️ Being replaced</td>
+                <td>Resource-specific tables preferred. E.g., AZFWNetworkRule instead of AzureDiagnostics for firewall.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Log Ingestion Tier Changes (Cost Impact)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Tier</th>
+                <th>June 2024</th>
+                <th>December 2025</th>
+                <th>Impact</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Analytics Logs</strong></td>
+                <td>~$2.30/GB (Pay-as-you-go)</td>
+                <td>~$2.30/GB (unchanged)</td>
+                <td>Full query, 90-day retention. Use for security data you query often.</td>
+              </tr>
+              <tr>
+                <td><strong>Basic Logs</strong></td>
+                <td>~$0.50/GB (limited tables)</td>
+                <td>~$0.50/GB (more tables eligible)</td>
+                <td>8-day query, 30-day retention. More log types now eligible (ContainerLog, AppTraces, etc.)</td>
+              </tr>
+              <tr>
+                <td><strong>Auxiliary Logs</strong></td>
+                <td>❌ Didn't exist</td>
+                <td>~$0.15/GB (Preview)</td>
+                <td>NEW! Ultra-cheap tier for compliance/archival. Limited query. We moved firewall verbose logs here.</td>
+              </tr>
+              <tr>
+                <td><strong>Archive Tier</strong></td>
+                <td>~$0.02/GB/month storage</td>
+                <td>~$0.02/GB/month (unchanged)</td>
+                <td>Long-term retention (up to 12 years). Restore to query (takes time).</td>
+              </tr>
+              <tr>
+                <td><strong>Commitment Tiers</strong></td>
+                <td>100GB/day minimum</td>
+                <td>100GB/day minimum (unchanged)</td>
+                <td>~30-50% discount vs PAYG. We use 500GB/day tier.</td>
+              </tr>
+              <tr>
+                <td><strong>Free Data via XDR</strong></td>
+                <td>Most XDR tables free</td>
+                <td>Most XDR tables free (expanded)</td>
+                <td>Device*, Email*, Identity*, CloudAppEvents, Alert* — all free via Defender XDR connector!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>MMA to AMA Migration (Critical)</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Agent Migration: MMA → AMA</span></div>
+          <pre><code>WHAT CHANGED
+════════════════════════════════════════════════════════════════════════════════
+Microsoft deprecated the Log Analytics Agent (MMA/OMS) in favor of Azure Monitor 
+Agent (AMA). This affected how we collect:
+- Windows Security Events
+- Syslog from Linux
+- CEF from firewalls/appliances
+- Custom logs
+
+TIMELINE:
+• August 2024: MMA officially deprecated
+• August 2025: MMA end of support
+• December 2025: MMA no longer receives updates
+
+WHAT WE DID:
+════════════════════════════════════════════════════════════════════════════════
+1. INVENTORY
+   - Identified all servers with MMA installed
+   - ~150 Windows servers, ~80 Linux servers
+
+2. DEPLOY AMA
+   - Created Data Collection Rules (DCRs) in Azure
+   - DCRs define: which logs to collect, where to send them
+   - Deployed AMA via Azure Policy (auto-install on new VMs)
+   - Manual install on on-prem servers via Arc
+
+3. CONFIGURE DCRs
+   - Windows Security Events DCR:
+     └─ XPath queries to filter specific Event IDs
+     └─ Destination: Log Analytics workspace
+   
+   - Syslog DCR:
+     └─ Facilities: auth, authpriv, syslog, daemon, kern
+     └─ Min severity: Warning
+   
+   - CEF DCR:
+     └─ Forwarder VM with rsyslog → AMA → CommonSecurityLog
+
+4. VALIDATE
+   - Confirmed data flowing to same tables
+   - Updated any KQL queries referencing agent fields
+
+5. REMOVE MMA
+   - Uninstalled MMA after parallel run
+   - Removed legacy solutions from workspace
+
+KEY DIFFERENCES:
+════════════════════════════════════════════════════════════════════════════════
+Feature              MMA                          AMA
+─────────────────────────────────────────────────────────────────────────────────
+Configuration        Workspace-level              DCR-based (granular)
+Multi-homing         Yes                          Yes (improved)
+Filtering            Limited                      XPath queries, transforms
+Linux support        rsyslog dependency           Native syslog-ng support
+Arc integration      Limited                      Full support
+Performance          Higher overhead              Lower overhead
+Cost control         Collect everything           Filter at source</code></pre>
+        </div>
+
+        <h3>XDR Portal Feature Changes</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>June 2024 State</th>
+                <th>December 2025 State</th>
+                <th>How We Use It</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Unified Incidents</strong></td>
+                <td>XDR incidents only. Sentinel separate.</td>
+                <td>XDR + Sentinel incidents in single queue</td>
+                <td>SOC uses unified queue. No more switching portals.</td>
+              </tr>
+              <tr>
+                <td><strong>Advanced Hunting</strong></td>
+                <td>XDR tables only (Device*, Email*, Identity*)</td>
+                <td>XDR + Sentinel tables in single query interface</td>
+                <td>Can join SecurityEvent with DeviceProcessEvents in one query.</td>
+              </tr>
+              <tr>
+                <td><strong>Custom Detections</strong></td>
+                <td>Basic (XDR only)</td>
+                <td>Enhanced: custom detections can span XDR + Sentinel data</td>
+                <td>Created some rules directly in XDR instead of Sentinel.</td>
+              </tr>
+              <tr>
+                <td><strong>Automatic Attack Disruption</strong></td>
+                <td>Preview</td>
+                <td>GA — auto-contains users and devices</td>
+                <td>Enabled. Auto-disables compromised accounts, isolates devices.</td>
+              </tr>
+              <tr>
+                <td><strong>Deception</strong></td>
+                <td>Preview (limited)</td>
+                <td>GA — honeytokens, decoy accounts</td>
+                <td>Deployed honeytokens for lateral movement detection.</td>
+              </tr>
+              <tr>
+                <td><strong>Exposure Management</strong></td>
+                <td>Didn't exist</td>
+                <td>Preview — attack path analysis</td>
+                <td>Testing. Shows paths from internet to critical assets.</td>
+              </tr>
+              <tr>
+                <td><strong>Copilot for Security</strong></td>
+                <td>Preview (limited)</td>
+                <td>GA — AI-assisted investigation</td>
+                <td>Using for incident summarization and KQL generation.</td>
+              </tr>
+              <tr>
+                <td><strong>Device Inventory</strong></td>
+                <td>Basic device list</td>
+                <td>Enhanced: criticality scoring, tagging, groups</td>
+                <td>Tagged VIP devices, set criticality for prioritization.</td>
+              </tr>
+              <tr>
+                <td><strong>Vulnerability Management</strong></td>
+                <td>TVM (MDE-only)</td>
+                <td>MDVM (standalone option, enhanced features)</td>
+                <td>Enabled browser extension scanning, certificate monitoring.</td>
+              </tr>
+              <tr>
+                <td><strong>Secure Score</strong></td>
+                <td>Basic recommendations</td>
+                <td>Enhanced: improvement actions, comparisons</td>
+                <td>Track weekly. Currently at 78%.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>MDCA (Cloud App Security) Changes</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Aspect</th>
+                <th>June 2024</th>
+                <th>December 2025</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Portal URL</strong></td>
+                <td>portal.cloudappsecurity.com</td>
+                <td>security.microsoft.com → Cloud Apps<br>(old URL redirects)</td>
+              </tr>
+              <tr>
+                <td><strong>App Connectors</strong></td>
+                <td>~30 supported apps</td>
+                <td>~50+ supported apps (Zoom, Slack, Asana, Monday, etc. added)</td>
+              </tr>
+              <tr>
+                <td><strong>OAuth App Governance</strong></td>
+                <td>Preview</td>
+                <td>GA — full OAuth app inventory, risk scoring, revocation</td>
+              </tr>
+              <tr>
+                <td><strong>Session Controls</strong></td>
+                <td>Basic (block download)</td>
+                <td>Enhanced: watermarking, redaction, custom actions</td>
+              </tr>
+              <tr>
+                <td><strong>Shadow IT Discovery</strong></td>
+                <td>Log collector + basic reports</td>
+                <td>Enhanced: risk scores, usage trends, user attribution</td>
+              </tr>
+              <tr>
+                <td><strong>Sentinel Integration</strong></td>
+                <td>Via separate MDCA connector</td>
+                <td>CloudAppEvents via XDR connector (FREE) + MDCA connector for McasShadowItReporting</td>
+              </tr>
+              <tr>
+                <td><strong>Policy Templates</strong></td>
+                <td>~50 templates</td>
+                <td>~80+ templates (AI app detection, SaaS posture, etc.)</td>
+              </tr>
+              <tr>
+                <td><strong>SaaS Posture Management</strong></td>
+                <td>Didn't exist</td>
+                <td>Preview — SaaS security configuration recommendations</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>MDE Feature Changes</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>June 2024</th>
+                <th>December 2025</th>
+                <th>Our Configuration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>ASR Rules</strong></td>
+                <td>16 rules available</td>
+                <td>19 rules (new rules for Office macros, script obfuscation)</td>
+                <td>15 rules in block mode, 4 in audit (compatibility issues)</td>
+              </tr>
+              <tr>
+                <td><strong>Device Control</strong></td>
+                <td>Basic USB blocking</td>
+                <td>Enhanced: printer control, Bluetooth, granular policies</td>
+                <td>USB audit mode, block unauthorized removable storage</td>
+              </tr>
+              <tr>
+                <td><strong>Network Protection</strong></td>
+                <td>Block mode available</td>
+                <td>Enhanced: custom indicators, SmartScreen integration</td>
+                <td>Block mode enabled, 150 custom URL indicators</td>
+              </tr>
+              <tr>
+                <td><strong>Web Content Filtering</strong></td>
+                <td>Basic categories</td>
+                <td>Enhanced: custom categories, user bypass requests</td>
+                <td>Blocking adult, gambling, malware. Audit for social media.</td>
+              </tr>
+              <tr>
+                <td><strong>Tamper Protection</strong></td>
+                <td>Available</td>
+                <td>Enhanced: Intune enforcement, tenant-wide lock</td>
+                <td>Enforced tenant-wide</td>
+              </tr>
+              <tr>
+                <td><strong>Live Response</strong></td>
+                <td>Basic commands</td>
+                <td>Enhanced: script library, unsigned scripts option</td>
+                <td>Using for IR. Library of common investigation scripts.</td>
+              </tr>
+              <tr>
+                <td><strong>AIR (Automated Investigation)</strong></td>
+                <td>Semi-auto (approval required)</td>
+                <td>Full auto option, customizable playbooks</td>
+                <td>Full auto for low/medium. Manual approval for high severity.</td>
+              </tr>
+              <tr>
+                <td><strong>Device Groups</strong></td>
+                <td>Tag-based</td>
+                <td>Enhanced: dynamic groups, Entra group sync</td>
+                <td>Groups: Servers, Workstations, VIP, Pilot, Legacy</td>
+              </tr>
+              <tr>
+                <td><strong>macOS/Linux Support</strong></td>
+                <td>Basic EDR</td>
+                <td>Near-parity with Windows (ASR equivalent, network protection)</td>
+                <td>Full deployment on macOS fleet (50 devices)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>MDI (Defender for Identity) Changes</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>June 2024</th>
+                <th>December 2025</th>
+                <th>Our Configuration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Sensor Deployment</strong></td>
+                <td>Manual install on DCs</td>
+                <td>Same (some automation via DSC/Ansible)</td>
+                <td>All 8 DCs + 2 AD FS servers covered</td>
+              </tr>
+              <tr>
+                <td><strong>Deception (Honeytokens)</strong></td>
+                <td>Preview</td>
+                <td>GA — honeytoken accounts, decoy objects</td>
+                <td>5 honeytoken accounts deployed. Alert on any usage.</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud Identity Correlation</strong></td>
+                <td>Basic</td>
+                <td>Enhanced: Entra ID + on-prem AD unified view</td>
+                <td>Linked identities for hybrid user visibility</td>
+              </tr>
+              <tr>
+                <td><strong>Lateral Movement Paths</strong></td>
+                <td>Basic graph</td>
+                <td>Enhanced: attack path analysis, what-if scenarios</td>
+                <td>Review monthly. Reduced high-risk paths from 12 to 3.</td>
+              </tr>
+              <tr>
+                <td><strong>ITDR (Identity Threat Detection)</strong></td>
+                <td>Term not used</td>
+                <td>MDI positioned as ITDR solution</td>
+                <td>Marketing change — same functionality</td>
+              </tr>
+              <tr>
+                <td><strong>Detection Rules</strong></td>
+                <td>~40 built-in detections</td>
+                <td>~60 built-in detections (new: certificate abuse, Kerberoasting variants)</td>
+                <td>Tuned 15 rules to reduce false positives from service accounts</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>MDO (Defender for Office 365) Changes</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>June 2024</th>
+                <th>December 2025</th>
+                <th>Our Configuration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Priority Account Protection</strong></td>
+                <td>Available</td>
+                <td>Enhanced: stricter filtering for VIPs</td>
+                <td>Executives and finance team tagged as priority</td>
+              </tr>
+              <tr>
+                <td><strong>Impersonation Protection</strong></td>
+                <td>Basic</td>
+                <td>Enhanced: lookalike domain detection, partner protection</td>
+                <td>Protecting CEO, CFO, and top 20 partners</td>
+              </tr>
+              <tr>
+                <td><strong>Safe Links</strong></td>
+                <td>URL rewriting + detonation</td>
+                <td>Same + Teams support enhanced</td>
+                <td>Enabled for email + Teams + Office docs</td>
+              </tr>
+              <tr>
+                <td><strong>Safe Attachments</strong></td>
+                <td>Sandbox detonation</td>
+                <td>Same + dynamic delivery improvements</td>
+                <td>Dynamic delivery mode (delivers body, holds attachment)</td>
+              </tr>
+              <tr>
+                <td><strong>Attack Simulation</strong></td>
+                <td>Basic templates</td>
+                <td>Enhanced: AI-generated phishing, landing pages</td>
+                <td>Monthly phishing simulations. 12% click rate (down from 28%)</td>
+              </tr>
+              <tr>
+                <td><strong>Threat Explorer</strong></td>
+                <td>30-day lookback</td>
+                <td>30-day lookback (unchanged)</td>
+                <td>Used daily for email investigations</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Purview DLP Changes</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>June 2024</th>
+                <th>December 2025</th>
+                <th>Our Configuration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Endpoint DLP</strong></td>
+                <td>Available (Windows only)</td>
+                <td>Enhanced: macOS support, better browser coverage</td>
+                <td>Deployed on Windows. macOS in pilot.</td>
+              </tr>
+              <tr>
+                <td><strong>Policy Sync</strong></td>
+                <td>~24 hour sync</td>
+                <td>Near real-time sync (~15 minutes)</td>
+                <td>Policy changes take effect faster now</td>
+              </tr>
+              <tr>
+                <td><strong>Trainable Classifiers</strong></td>
+                <td>~20 classifiers</td>
+                <td>~50+ classifiers (financial, legal, code, etc.)</td>
+                <td>Using: PII, financial, source code, contracts</td>
+              </tr>
+              <tr>
+                <td><strong>Exact Data Match (EDM)</strong></td>
+                <td>Complex setup</td>
+                <td>Simplified: UI-based schema, auto-refresh</td>
+                <td>EDM for customer ID patterns, employee IDs</td>
+              </tr>
+              <tr>
+                <td><strong>Adaptive Protection</strong></td>
+                <td>Preview</td>
+                <td>GA — DLP severity based on Insider Risk score</td>
+                <td>Enabled. High-risk users get stricter DLP.</td>
+              </tr>
+              <tr>
+                <td><strong>Policy Tips</strong></td>
+                <td>Basic notifications</td>
+                <td>Enhanced: customizable, educational links</td>
+                <td>Custom tips explaining why data is sensitive</td>
+              </tr>
+              <tr>
+                <td><strong>Teams DLP</strong></td>
+                <td>Chat and channel messages</td>
+                <td>Enhanced: private channels, shared channels</td>
+                <td>Monitoring chat + channels for sensitive data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Entra ID (Identity) Changes</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>June 2024</th>
+                <th>December 2025</th>
+                <th>Our Configuration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Portal</strong></td>
+                <td>portal.azure.com → Azure AD</td>
+                <td>entra.microsoft.com (standalone)</td>
+                <td>Using new portal for identity management</td>
+              </tr>
+              <tr>
+                <td><strong>Conditional Access</strong></td>
+                <td>~25 conditions</td>
+                <td>~35 conditions (device compliance, insider risk, auth context)</td>
+                <td>12 CA policies. Using risk-based conditions.</td>
+              </tr>
+              <tr>
+                <td><strong>PIM (Privileged Identity Mgmt)</strong></td>
+                <td>Available</td>
+                <td>Enhanced: approval workflows, access reviews</td>
+                <td>Just-in-time access for all admin roles</td>
+              </tr>
+              <tr>
+                <td><strong>Passkeys</strong></td>
+                <td>Preview</td>
+                <td>GA — FIDO2 passkeys, device-bound keys</td>
+                <td>Piloting with IT team. Rollout planned.</td>
+              </tr>
+              <tr>
+                <td><strong>Workload Identities</strong></td>
+                <td>Service principals only</td>
+                <td>Enhanced: managed identities, workload identity federation</td>
+                <td>Using managed identities for all Azure automation</td>
+              </tr>
+              <tr>
+                <td><strong>Identity Governance</strong></td>
+                <td>Basic</td>
+                <td>Enhanced: lifecycle workflows, access packages</td>
+                <td>Access reviews quarterly. Lifecycle workflows for joiners/leavers.</td>
+              </tr>
+              <tr>
+                <td><strong>Cross-tenant Access</strong></td>
+                <td>Available</td>
+                <td>Enhanced: granular B2B settings, trust settings</td>
+                <td>Configured for 3 partner organizations</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>API and Automation Changes</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">API Evolution</span></div>
+          <pre><code>GRAPH SECURITY API
+════════════════════════════════════════════════════════════════════════════════
+June 2024:
+- /security/alerts (v1.0)
+- /security/alerts_v2 (beta)
+- Separate APIs for each product
+
+December 2025:
+- /security/incidents (unified)
+- /security/alerts_v2 (GA)
+- Unified API across XDR products
+
+IMPACT: Our automation scripts needed updates to use new endpoints
+
+
+SENTINEL API
+════════════════════════════════════════════════════════════════════════════════
+June 2024:
+- ARM templates for analytics rules
+- Limited automation options
+
+December 2025:
+- Analytics Rules API (GA)
+- Repositories (Git sync for rules)
+- Content Hub API
+
+IMPACT: We now sync rules from Git repository (CI/CD pipeline)
+
+
+DEFENDER XDR API
+════════════════════════════════════════════════════════════════════════════════
+June 2024:
+- /security/incidents
+- /security/runHuntingQuery (limited)
+
+December 2025:
+- Enhanced hunting API
+- Custom detection API
+- Automated investigation API
+
+IMPACT: Built automation for recurring hunting queries
+
+
+KQL CHANGES
+════════════════════════════════════════════════════════════════════════════════
+New Functions (2024-2025):
+- bag_zip() — combine arrays into bags
+- series_cosine_similarity() — ML-style comparisons
+- scan operator — stateful pattern matching
+- graph-match — graph pattern queries (preview)
+
+Deprecated:
+- makelist() → make_list() (still works, but warned)
+- makeset() → make_set()
+
+IMPACT: Updated ~30 queries to use new functions</code></pre>
+        </div>
+
+        <h3>Licensing Changes</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>June 2024 Licensing</th>
+                <th>December 2025 Licensing</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>MDE</strong></td>
+                <td>Plan 1 (basic) / Plan 2 (full)</td>
+                <td>Same. Plan 2 required for full EDR. Plan 1 for prevention only.</td>
+              </tr>
+              <tr>
+                <td><strong>MDVM</strong></td>
+                <td>Included with MDE P2 only</td>
+                <td>Standalone option OR included with MDE P2. Add-on for MDE P1.</td>
+              </tr>
+              <tr>
+                <td><strong>MDI</strong></td>
+                <td>Per-user license</td>
+                <td>Same. Included in M365 E5 or standalone.</td>
+              </tr>
+              <tr>
+                <td><strong>MDO</strong></td>
+                <td>Plan 1 / Plan 2</td>
+                <td>Same. Plan 2 for full features (simulation, investigation).</td>
+              </tr>
+              <tr>
+                <td><strong>MDCA</strong></td>
+                <td>Per-user license</td>
+                <td>Same. Included in M365 E5 or EMS E5.</td>
+              </tr>
+              <tr>
+                <td><strong>Sentinel</strong></td>
+                <td>Pay-as-you-go or Commitment Tier</td>
+                <td>Same + new Auxiliary Logs tier. Free XDR data expanded.</td>
+              </tr>
+              <tr>
+                <td><strong>M365 E5 Security</strong></td>
+                <td>MDE P2 + MDI + MDO P2 + MDCA</td>
+                <td>Same bundle. Best value for full stack.</td>
+              </tr>
+              <tr>
+                <td><strong>Copilot for Security</strong></td>
+                <td>Preview (free)</td>
+                <td>GA — consumption-based ($4/SCU/hour)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Interview Answer: Microsoft Evolution</div>
+          <div class="callout-content">
+            <p><em>"Microsoft's security stack evolved significantly during our migration. Some key changes:</em></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><em>Portal consolidation — we started with 4-5 separate portals, now everything's in security.microsoft.com with the Unified SOC Platform</em></li>
+              <li><em>TVM became MDVM — standalone product now with browser extension and certificate scanning</em></li>
+              <li><em>Automatic Attack Disruption went GA — we enabled it for user and device containment</em></li>
+              <li><em>Sentinel moved inside Defender portal — single pane for XDR + SIEM investigations</em></li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><em>We had to adapt our SOC workflows as these changes rolled out. The unified portal was the biggest improvement — reduced context switching and made cross-domain investigations much faster."</em></p>
+          </div>
+        </div>
+
+        <h3>Common Confusions to Clarify</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Confusion</th>
+                <th>Clarification</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>MDC vs MDCA</strong></td>
+                <td><strong>MDC</strong> = Microsoft Defender for Cloud (CSPM/CWP for Azure, AWS, GCP infrastructure)<br><strong>MDCA</strong> = Microsoft Defender for Cloud Apps (CASB for SaaS apps)<br>Different products, similar names.</td>
+              </tr>
+              <tr>
+                <td><strong>TVM vs MDVM</strong></td>
+                <td>Same core technology, rebranded. MDVM added features (browser extensions, certificates) and can now be licensed without MDE.</td>
+              </tr>
+              <tr>
+                <td><strong>Azure AD vs Entra ID</strong></td>
+                <td>Same product, renamed. "Azure AD" in old docs = "Microsoft Entra ID" now. Portal is entra.microsoft.com.</td>
+              </tr>
+              <tr>
+                <td><strong>M365 Defender vs Defender XDR</strong></td>
+                <td>Same platform, renamed. "Microsoft Defender XDR" is current name. Reflects that it covers more than just M365.</td>
+              </tr>
+              <tr>
+                <td><strong>Where is Sentinel?</strong></td>
+                <td>Two ways to access: (1) portal.azure.com → Sentinel workspace (full Azure experience), (2) security.microsoft.com → Microsoft Sentinel (Unified SOC Platform). Same workspace, different entry points.</td>
+              </tr>
+              <tr>
+                <td><strong>Where is MDCA?</strong></td>
+                <td>portal.cloudappsecurity.com redirects to security.microsoft.com → Cloud Apps. No separate portal anymore.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <h2>Key Milestones</h2>

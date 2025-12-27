@@ -150,6 +150,25 @@
           <p class="intro-text">Zero Trust access policies that enforce MFA, device compliance, and risk-based access controls. These policies are the gatekeepers that evaluate every authentication and decide: allow, block, or require additional verification.</p>
         </div>
 
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Our CA State (December 2025)</div>
+          <div class="callout-content">
+            <p><strong>18 Conditional Access policies</strong> covering MFA, device compliance, risk-based access, location restrictions</p>
+            <p><strong>Key Policies:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Require MFA for all users (all cloud apps)</li>
+              <li>Block legacy authentication (IMAP/POP3/SMTP AUTH)</li>
+              <li>Require compliant device for sensitive apps</li>
+              <li>Block high-risk sign-ins (Entra ID Protection)</li>
+              <li>Require MFA for Azure management</li>
+              <li>Session controls for unmanaged devices (via MDCA)</li>
+            </ul>
+            <p><strong>Portal:</strong> <code>entra.microsoft.com → Protection → Conditional Access</code></p>
+            <p><strong>Evolution:</strong> Conditional Access now supports ~35 conditions (up from ~25 in 2024), including Insider Risk integration</p>
+            <p>👉 <strong><a href="../resources/timeline.html#ms-evolution">Full Entra ID Evolution →</a></strong></p>
+          </div>
+        </div>
+
         <h2>How Conditional Access Works</h2>
         <p>Every time a user signs in, Entra ID evaluates all applicable Conditional Access policies. The policies check conditions (who, where, what device, what app) and enforce controls (MFA, block, require compliant device).</p>
 

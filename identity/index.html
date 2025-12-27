@@ -167,8 +167,37 @@
           </div>
           <div class="callout-content">
             <p><strong>Why Identity Started First:</strong> Identity and Infrastructure migrations began before the security tracks (SIEM, EDR, DLP). Cloud-native security tools require cloud identity foundation — Sentinel, MDE, and Purview all integrate with Entra ID.</p>
-            <p><strong>Current State:</strong> Hybrid identity with on-prem AD synced to Entra ID. Conditional Access policies active. PIM configured for privileged access.</p>
+            <p><strong>Current State:</strong> Hybrid identity with on-prem AD synced to Entra ID. Conditional Access policies active (18 policies). PIM configured for all admin roles. MDI sensors on all 8 DCs.</p>
             <p><strong>Future Plans:</strong> Decommission on-premises Active Directory after complete cloud migration is achieved.</p>
+            <p>👉 <strong><a href="../resources/timeline.html">Complete Implementation Journey (Month-by-Month) →</a></strong></p>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Identity Portal Quick Reference (December 2025)</div>
+          <div class="callout-content">
+            <p><strong>Primary Portal:</strong> <code>entra.microsoft.com</code> (Microsoft Entra admin center)</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Identity → Conditional Access:</strong> CA policy management (18 policies)</li>
+              <li><strong>Identity governance → PIM:</strong> Just-in-time access configuration</li>
+              <li><strong>Protection → Identity Protection:</strong> Risk policies, risky users</li>
+              <li><strong>Users / Groups:</strong> User and group management</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Security Portal (MDI):</strong> <code>security.microsoft.com → Identities</code></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Identity alerts:</strong> Pass-the-hash, lateral movement, DCSync</li>
+              <li><strong>Lateral movement paths:</strong> Attack path analysis</li>
+              <li><strong>Sensors:</strong> MDI sensor health on DCs</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Key Evolution (June 2024 → December 2025):</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Azure AD → Microsoft Entra ID (rebranding)</li>
+              <li>New portal: entra.microsoft.com (standalone)</li>
+              <li>Conditional Access: ~25 → ~35 conditions</li>
+              <li>MDI: Deception capabilities (honeytokens) went GA</li>
+              <li>Passkeys/FIDO2: Now GA</li>
+            </ul>
+            <p>👉 <strong><a href="../resources/timeline.html#ms-evolution">Full Identity Platform Changes →</a></strong></p>
           </div>
         </div>
 

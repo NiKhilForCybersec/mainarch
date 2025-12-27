@@ -176,6 +176,23 @@
           <p class="intro-text">Attack Surface Reduction rules are preventive controls that block common attack techniques before they execute. Microsoft provides <strong>19 standard ASR rules</strong> covering Office exploits, script abuse, credential theft, and lateral movement. This page documents all rules, their configuration, and RevFlow's deployment strategy.</p>
         </div>
 
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Our ASR Final State (December 2025)</div>
+          <div class="callout-content">
+            <p><strong>15 rules in Block mode</strong> | <strong>4 rules in Audit mode</strong> (compatibility issues)</p>
+            <p><strong>Rollout Timeline:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Month 1-2:</strong> All 16 rules in Audit mode (collect data)</li>
+              <li><strong>Month 3:</strong> Low-risk rules moved to Block (Office child processes, scripts)</li>
+              <li><strong>Month 4-6:</strong> Progressive enforcement after exclusion tuning</li>
+              <li><strong>Month 8:</strong> Final state — 15 Block, 4 Audit</li>
+            </ul>
+            <p><strong>Portal:</strong> <code>security.microsoft.com → Endpoints → Configuration management → ASR rules</code></p>
+            <p><strong>Key Exclusions Documented:</strong> LOB Application X (Office child process), Backup Agent Y (PSExec rule)</p>
+            <p>👉 <strong><a href="../resources/timeline.html#product-configs">Full MDE Configuration Journey →</a></strong></p>
+          </div>
+        </div>
+
         <!-- ==================== SECTION 1: OVERVIEW ==================== -->
         <h2>1. ASR Rules Overview</h2>
 

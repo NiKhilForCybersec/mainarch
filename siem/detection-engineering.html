@@ -180,6 +180,8 @@
             <p><strong>Our SIEM migration was detection-driven rather than log-first or 1-to-1 rule translation.</strong></p>
             <p style="margin-top: 0.5rem;">Instead of mechanically porting every RSA NetWitness rule, we evaluated detection intent and leveraged Microsoft's XDR platform for domains where built-in detections already provide strong coverage — endpoint, identity, email, and cloud app activity.</p>
             <p style="margin-top: 0.5rem;">This allowed us to retire redundant detections, reduce ingestion cost, and avoid duplicating logic that XDR already handles natively. Sentinel was then used where it adds the most value: cross-domain correlation, non-Microsoft telemetry, and detections that require broader context beyond XDR.</p>
+            <p style="margin-top: 0.5rem;"><strong>Final Result:</strong> 485 Sentinel rules (255 migrated + 230 new) | 780 techniques retired to XDR | 12-month timeline</p>
+            <p>👉 <strong><a href="../resources/timeline.html#month-by-month">Detection Engineering Sprint Timeline (Month 5) →</a></strong></p>
           </div>
         </div>
 

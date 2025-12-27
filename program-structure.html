@@ -177,6 +177,23 @@
             <p><strong>SIEM & EDR (M1):</strong> Once identity and infrastructure foundation was ready, RSA → Sentinel and ESET → MDE migrations began. MDE rollout started early to establish telemetry before detection implementations.</p>
             <p><strong>DLP Later (M6):</strong> DLP migration started at Month 6. DLP needs more groundwork — legal alignment, cross-team collaboration, and data classification. Current scope: Symantec Endpoint DLP → Purview. Symantec Network DLP continues; plan to discontinue after complete Azure transformation.</p>
             <p><strong>Current State:</strong> All tracks complete. Now in final handover phase with knowledge transfer to internal security team.</p>
+            <p>👉 <strong><a href="resources/timeline.html">Complete Month-by-Month Implementation Journey →</a></strong></p>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Implementation Order & Dependencies</div>
+          <div class="callout-content">
+            <p><strong>Critical Understanding:</strong> Microsoft's security products have dependencies. The order matters:</p>
+            <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Sentinel workspace first</strong> — All connectors need a destination</li>
+              <li><strong>M365 Defender connector early</strong> — Gets XDR data flowing to Sentinel (FREE)</li>
+              <li><strong>MDE before MDI</strong> — Endpoint context enriches identity alerts</li>
+              <li><strong>MDI before MDCA</strong> — User risk scores inform MDCA policies</li>
+              <li><strong>All XDR products before detection engineering</strong> — Need data flowing to build detections</li>
+              <li><strong>DLP parallel track</strong> — Least dependent on other products</li>
+            </ol>
+            <p>👉 <strong><a href="resources/timeline.html#implementation-order">Full Dependency Chain Diagram →</a></strong></p>
           </div>
         </div>
 

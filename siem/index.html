@@ -236,6 +236,27 @@
             <p><strong>SIEM & EDR Started at M1:</strong> Once foundation was ready, RSA → Sentinel and ESET → MDE migrations began. MDE rollout started early to establish telemetry before detection implementations.</p>
             <p><strong>DLP Started Later (M6):</strong> DLP migration began later due to legal constraints and cross-team coordination requirements.</p>
             <p><strong>Parallel Operations:</strong> SOC continued on legacy stack (RSA, ESET) while new platform matured. Sentinel became primary only after gate criteria were met.</p>
+            <p>👉 <strong><a href="../resources/timeline.html">Complete Implementation Journey (Month-by-Month) →</a></strong></p>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Portal Quick Reference (December 2025)</div>
+          <div class="callout-content">
+            <p><strong>Primary SOC Portal:</strong> <code>security.microsoft.com</code> (Unified Security Portal)</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Incidents & Alerts:</strong> Unified queue (XDR + Sentinel)</li>
+              <li><strong>Advanced Hunting:</strong> KQL across all tables (Device*, Email*, Identity*, SecurityEvent, etc.)</li>
+              <li><strong>Microsoft Sentinel:</strong> Workbooks, Analytics Rules, Automation (embedded in Defender portal)</li>
+              <li><strong>Cloud Apps:</strong> MDCA (moved from portal.cloudappsecurity.com)</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Secondary Portals:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>portal.azure.com:</strong> Sentinel workspace config, DCRs, Log Analytics deep queries</li>
+              <li><strong>compliance.microsoft.com:</strong> Purview DLP policy authoring</li>
+              <li><strong>entra.microsoft.com:</strong> Identity governance, Conditional Access</li>
+            </ul>
+            <p>👉 <strong><a href="../resources/timeline.html#portal-journey">Full Portal Evolution & Journey →</a></strong></p>
           </div>
         </div>
 

@@ -162,6 +162,20 @@
           <p class="intro-text">Configuring ESET and MDE to run simultaneously without conflicts. Mutual exclusions prevent scanning loops and performance degradation.</p>
         </div>
 
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Our Coexistence Timeline</div>
+          <div class="callout-content">
+            <p><strong>Coexistence Period:</strong> Month 1-8 (ESET + MDE running together)</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Month 1-2:</strong> MDE in passive mode (EDR telemetry only), ESET handles real-time protection</li>
+              <li><strong>Month 3:</strong> MDE becomes primary AV, ESET passive</li>
+              <li><strong>Month 8-9:</strong> ESET fully removed from all 4,500 endpoints</li>
+            </ul>
+            <p><strong>Key Insight:</strong> Mutual exclusions are critical — without them, scanning loops cause 40%+ CPU on endpoints</p>
+            <p>👉 <strong><a href="../resources/timeline.html#month-by-month">Full EDR Transition Timeline →</a></strong></p>
+          </div>
+        </div>
+
         <h2>Exclusion Architecture</h2>
         <p>Both products must exclude the other's processes and folders. This is a bidirectional configuration:</p>
 
