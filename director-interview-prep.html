@@ -724,6 +724,144 @@
         </div>
       </div>
 
+      <div class="question-block">
+        <h4>Q: When would you recommend RSA NetWitness vs Splunk vs Sentinel? <span class="time-indicator">90 sec</span></h4>
+        
+        <div class="answer-text">
+          It depends on the client's environment, maturity, and priorities. Here's how I think about it:
+          <br><br>
+          <strong>RSA NetWitness</strong> — I'd recommend this for highly regulated environments that need deep forensic visibility. Financial services, government, critical infrastructure. The strength is full packet capture and session reconstruction — you can see exactly what happened at the network level. But it's heavy infrastructure, expensive, and not cloud-native. Best for organizations with mature SOCs and on-prem requirements.
+          <br><br>
+          <strong>Splunk</strong> — When the client needs maximum flexibility. Splunk works with almost any data source, has a powerful query language, and strong ecosystem. Good for large enterprises with complex, hybrid environments and diverse log sources. The trade-off is cost at scale and operational overhead — you need skilled engineers to get value from it.
+          <br><br>
+          <strong>Microsoft Sentinel</strong> — For cloud-first, Microsoft-heavy environments. Native integration with MDE, MDI, MDO, Entra ID — you get faster time-to-value and lower operational overhead. Built-in UEBA, auto-scaling, consumption-based pricing. The trade-off is less raw packet visibility and you're committing to the Microsoft ecosystem.
+          <br><br>
+          The real answer is: understand the client's environment first. What's their infrastructure? Cloud or on-prem? What's their team's skill level? What are their compliance requirements? Then recommend based on fit, not personal preference.
+        </div>
+
+        <div class="key-points">
+          <strong>Structure:</strong> Framework (it depends) → Each option with strengths/trade-offs → Real answer is "understand the client first"
+          <br><strong>Shows:</strong> Platform-agnostic thinking, consulting mindset, client-first approach
+        </div>
+      </div>
+
+      <div class="question-block">
+        <h4>SIEM Comparison Reference (For Deep Follow-ups)</h4>
+        
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>RSA NetWitness</th>
+                <th>Splunk</th>
+                <th>Sentinel</th>
+                <th>Workarounds / Alternatives</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Packet Capture</strong></td>
+                <td>✅ Best (native PCAP)</td>
+                <td>⚠️ Limited (Stream add-on)</td>
+                <td>❌ No native</td>
+                <td><strong>Sentinel:</strong> Integrate Zeek/Suricata via CEF, or use Azure Network Watcher for cloud. Cloud-native environments often don't need traditional PCAP — API logs and endpoint telemetry provide equivalent visibility.</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud-native</strong></td>
+                <td>❌ On-prem focused</td>
+                <td>⚠️ Splunk Cloud exists</td>
+                <td>✅ Fully cloud-native</td>
+                <td><strong>RSA:</strong> Can deploy in cloud VMs but loses performance benefits. <strong>Splunk:</strong> Splunk Cloud available but still requires indexer management.</td>
+              </tr>
+              <tr>
+                <td><strong>Identity Integration</strong></td>
+                <td>⚠️ Requires custom parsing</td>
+                <td>⚠️ Splunk UBA add-on</td>
+                <td>✅ Native (Entra ID, MDI)</td>
+                <td><strong>RSA/Splunk:</strong> Ingest AD logs, build custom identity analytics. More effort but achievable. <strong>Sentinel:</strong> MDI correlation is automatic.</td>
+              </tr>
+              <tr>
+                <td><strong>SaaS Visibility</strong></td>
+                <td>❌ Limited</td>
+                <td>⚠️ Via API connectors</td>
+                <td>✅ Native (MDCA, CloudAppEvents)</td>
+                <td><strong>RSA/Splunk:</strong> Use CASB like Netskope or integrate SaaS APIs directly. More setup but works. <strong>Sentinel:</strong> MDCA CloudAppEvents flows free via XDR connector.</td>
+              </tr>
+              <tr>
+                <td><strong>SOAR / Automation</strong></td>
+                <td>⚠️ Separate product (Archer)</td>
+                <td>⚠️ Splunk SOAR (extra cost)</td>
+                <td>✅ Built-in (Logic Apps, Playbooks)</td>
+                <td><strong>RSA/Splunk:</strong> Purchase separate SOAR platform or use open-source (Shuffle, TheHive). <strong>Sentinel:</strong> Native playbooks included in license.</td>
+              </tr>
+              <tr>
+                <td><strong>Multi-vendor EDR</strong></td>
+                <td>✅ Vendor-agnostic</td>
+                <td>✅ Vendor-agnostic</td>
+                <td>⚠️ Best with MDE</td>
+                <td><strong>Sentinel:</strong> Can ingest CrowdStrike, SentinelOne via CEF/Syslog. Works but loses native XDR correlation. For non-MDE shops, Splunk may be better fit.</td>
+              </tr>
+              <tr>
+                <td><strong>Cost Model</strong></td>
+                <td>CapEx + maintenance</td>
+                <td>Ingestion-based (expensive)</td>
+                <td>Ingestion-based (cheaper)</td>
+                <td><strong>Splunk:</strong> Use summary indexing, data tiering. <strong>Sentinel:</strong> Basic Logs tier, commitment tiers, free XDR data. Both need cost optimization strategy.</td>
+              </tr>
+              <tr>
+                <td><strong>On-prem / Air-gapped</strong></td>
+                <td>✅ Designed for this</td>
+                <td>✅ On-prem option</td>
+                <td>❌ Cloud-only</td>
+                <td><strong>Sentinel:</strong> No true air-gap option. For regulated/defense, RSA or Splunk on-prem is required. Azure Arc can extend to hybrid but still needs cloud connectivity.</td>
+              </tr>
+              <tr>
+                <td><strong>Query Language</strong></td>
+                <td>NwQL (complex)</td>
+                <td>SPL (powerful, steep curve)</td>
+                <td>KQL (easier, SQL-like)</td>
+                <td><strong>All:</strong> Learning curve varies. KQL is easiest for new analysts. SPL most flexible for complex use cases. Training investment required regardless.</td>
+              </tr>
+              <tr>
+                <td><strong>Detection Content</strong></td>
+                <td>Manual / vendor rules</td>
+                <td>ES Content Library</td>
+                <td>Content Hub + XDR rules</td>
+                <td><strong>All:</strong> Can import Sigma rules. <strong>Sentinel:</strong> Advantage is XDR rules are maintained by Microsoft and update automatically.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Key Insight: Workarounds Exist, But Add Complexity</div>
+          <div class="callout-content">
+            <p>Most "gaps" in any SIEM can be addressed with integrations or add-ons. The question is: <strong>is the workaround worth the complexity?</strong></p>
+            <p style="margin-top: 0.5rem;">Example: You <em>can</em> get SaaS visibility in Splunk via API connectors, but MDCA in Sentinel gives you that natively with less effort. Conversely, you <em>can</em> ingest CrowdStrike into Sentinel, but you lose the tight XDR correlation you'd get with MDE.</p>
+            <p style="margin-top: 0.5rem;"><strong>Consulting approach:</strong> Understand the client's existing investments, team skills, and willingness to manage complexity. Recommend the platform that minimizes workarounds for their specific environment.</p>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>When to Recommend Each</div>
+          <div class="callout-content">
+            <p><strong>RSA NetWitness:</strong> Packet-level forensics required, compliance demands deep evidence, air-gapped/restricted environments, mature SOC with experienced analysts</p>
+            <p style="margin-top: 0.5rem;"><strong>Splunk:</strong> Full control over data/detections needed, many non-Microsoft systems, skilled detection engineers available, flexibility over native integrations</p>
+            <p style="margin-top: 0.5rem;"><strong>Sentinel:</strong> Microsoft 365/Azure environment, fast time-to-value priority, prefer detection engineering over infrastructure management, want built-in SOAR</p>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Typical Industries by SIEM</div>
+          <div class="callout-content">
+            <p><strong>RSA NetWitness:</strong> Financial services, government/defense, critical infrastructure</p>
+            <p style="margin-top: 0.5rem;"><strong>Splunk:</strong> Large enterprises, telecom, finance, retail</p>
+            <p style="margin-top: 0.5rem;"><strong>Sentinel:</strong> Cloud-first orgs, Microsoft shops, mid-market to enterprise</p>
+          </div>
+        </div>
+      </div>
+
       <!-- ==================== SECTION 6: YOUR QUESTIONS ==================== -->
       <div class="category-header">
         <h3>6️⃣ Questions to Ask the Director</h3>
