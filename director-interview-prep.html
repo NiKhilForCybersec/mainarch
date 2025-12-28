@@ -764,15 +764,15 @@
         <div class="answer-text">
           I've realized that what I enjoy most isn't just the technical work—it's the problem-solving at the start of projects. Assessing the current state, identifying gaps, designing the approach, building the roadmap.
           <br><br>
-          Actually, I'm already doing this on the side. I'm helping a startup called DietTip with their security—they're going through major architectural changes, moving from consumer-focused to B2B, running on GCP and Firebase. Right now it's mostly foundational work—security-integrated CI/CD, Cloud Audit Logs, IAM policies, establishing baselines. But I'm essentially their entire security function, and I'm enjoying that variety.
+          Actually, I'm already doing this on the side. I'm co-founding DietIQ, a health-tech startup. It's an AI-powered nutrition and wellness platform — on the consumer side, it's meal planning, grocery delivery, fitness tracking with wearable integrations. But the bigger play is B2B healthcare — we're building integrations with hospitals for patient tracking, collaborating with doctors, pediatricians, nutritionists, and wellness professionals. The security architecture is interesting because we're dealing with PHI and HIPAA from day one.
           <br><br>
           At my current role, once we got things running smoothly, I found myself looking for the next problem to solve. Consulting gives me that variety—new clients, new challenges, new environments. Instead of solving the same organization's problems repeatedly, I get to apply what I've learned across different industries and cloud platforms. And honestly, I think I'll learn faster by seeing 10 different security programs than by staying in one.
         </div>
 
         <div class="key-points">
           <strong>Key message:</strong> You're choosing consulting for the right reasons—variety, learning, impact
-          <br><strong>Proof point:</strong> Already doing consulting-like work with DietTip startup (GCP/Firebase)
-          <br><strong>Shows:</strong> You can handle different cloud platforms (Azure at work, GCP on the side)
+          <br><strong>Proof point:</strong> Already doing consulting-like work with DietIQ startup (healthcare, HIPAA, multi-provider platform)
+          <br><strong>Shows:</strong> You can handle different domains (enterprise security + healthcare startup)
           <br><strong>Avoid:</strong> "I want to travel" or "Higher pay" — focus on professional growth
         </div>
 
@@ -785,7 +785,7 @@
               <ul>
                 <li>In-house: Same environment, same stakeholders, same challenges</li>
                 <li>Consulting: New client every few months, different industries, different maturity levels</li>
-                <li>Your evidence: Already seeking variety (DietTip on the side, multiple platforms)</li>
+                <li>Your evidence: Already seeking variety (DietIQ on the side, healthcare + enterprise security)</li>
               </ul>
             </div>
             <div class="example-box">
@@ -843,78 +843,88 @@
         <h4>Q: Tell me more about that startup you're helping. What are you doing there? <span class="time-indicator">60 sec</span></h4>
         
         <div class="answer-text">
-          DietTip is a health-tech startup—they started as a consumer app and are now pivoting to B2B, offering their platform to enterprises for employee wellness programs. They're going through major architectural changes.
+          DietIQ is a health-tech platform I'm co-founding. On the consumer side, it's an AI-powered nutrition and fitness app — personalized meal planning, grocery delivery, workout tracking, syncing with wearables like Fitbit and Apple Health.
           <br><br>
-          They're running on GCP and Firebase. Firebase is primarily a developer environment, so from a security perspective, my focus right now is foundational:
+          But the bigger vision is B2B healthcare. We're building integrations with hospitals for patient tracking. The idea is to be a central platform where a patient's doctor, pediatrician, nutritionist, and wellness coach can all coordinate — with the patient having visibility into their own health journey.
           <br><br>
-          <strong>CI/CD Security:</strong> Making sure their deployment pipeline has security gates—dependency scanning, secrets detection, container scanning before pushing to production.
+          We're also planning physical touchpoints — consultation kiosks in gyms and wellness centers where people can get quick health assessments and connect with professionals in the network.
           <br><br>
-          <strong>Logging & Visibility:</strong> Cloud Audit Logs enabled, exported to a central location. IAM policy changes, resource modifications, authentication events—building the baseline so we can detect anomalies later.
+          From a security perspective, it's interesting because we're dealing with PHI from day one. HIPAA compliance, HL7 FHIR for EHR interoperability, consent management, multi-provider access controls. We're building security into the architecture from the start — not bolting it on later.
           <br><br>
-          <strong>IAM & Access:</strong> Principle of least privilege, service account hygiene, separating dev from prod environments properly.
-          <br><br>
-          It's mostly defaults and foundational controls right now because they're still building the B2B architecture. But I'm essentially their entire security function—advising on architecture decisions, setting up the security baseline, and planning for what comes next as they scale.
+          I'm essentially wearing multiple hats — security architecture, some product decisions, even designed the mobile UI. It's a different experience from enterprise security, but the principles transfer.
         </div>
 
         <div class="key-points">
-          <strong>Shows:</strong> You can own security end-to-end for a small org
-          <br><strong>Shows:</strong> You understand startup constraints (limited resources, moving fast)
-          <br><strong>Shows:</strong> GCP experience (not just Azure)
-          <br><strong>Key insight:</strong> "Foundational controls first, then mature as they scale"
+          <strong>Shows:</strong> You can own security end-to-end for a startup
+          <br><strong>Shows:</strong> Healthcare security knowledge (HIPAA, HL7 FHIR, PHI)
+          <br><strong>Shows:</strong> Entrepreneurial initiative beyond just technical work
+          <br><strong>Key insight:</strong> "Building security in from the start, not bolting it on later"
         </div>
 
         <details class="deep-dive">
-          <summary>Deep Dive — DietTip Technical Details</summary>
+          <summary>Deep Dive — DietIQ Technical Details</summary>
           <div class="deep-dive-content">
             <h5>Company Context</h5>
             <ul>
-              <li><strong>What they do:</strong> Health-tech app for nutrition tracking and meal planning</li>
-              <li><strong>Current state:</strong> Consumer app pivoting to B2B (enterprise wellness programs)</li>
-              <li><strong>Why B2B matters for security:</strong> Enterprise customers will require SOC 2, security questionnaires, data protection commitments</li>
+              <li><strong>What they do:</strong> AI-powered health and wellness platform — nutrition, fitness, holistic health management</li>
+              <li><strong>Consumer side:</strong> Meal planning, grocery delivery, fitness tracking, wearable integrations (Fitbit, Apple Health, Whoop)</li>
+              <li><strong>B2B side:</strong> Hospital integrations for patient tracking, multi-provider collaboration (doctors, nutritionists, wellness coaches)</li>
+              <li><strong>Future plans:</strong> Physical consultation kiosks in gyms and wellness centers</li>
             </ul>
 
-            <h5>Technical Stack</h5>
+            <h5>Healthcare Provider Network</h5>
             <ul>
-              <li><strong>Cloud:</strong> Google Cloud Platform (GCP)</li>
-              <li><strong>Backend:</strong> Firebase (Firestore database, Cloud Functions, Authentication)</li>
-              <li><strong>Why Firebase:</strong> Rapid development, serverless, scales automatically. But it's a developer-first platform—security is your responsibility.</li>
+              <li><strong>Hospitals:</strong> Patient discharge nutrition, chronic disease management</li>
+              <li><strong>Primary Care:</strong> Pediatricians, family doctors, geriatrics</li>
+              <li><strong>Specialists:</strong> Nutritionists, dietitians, wellness coaches, physical therapists</li>
+              <li><strong>Value prop:</strong> Coordinated care — all providers see the same patient health journey</li>
             </ul>
 
-            <h5>What You're Implementing</h5>
+            <h5>Security Architecture for Healthcare</h5>
             <div class="example-box">
-              <strong>CI/CD Security:</strong>
+              <strong>HIPAA Compliance:</strong>
               <ul>
-                <li>Dependency scanning in build pipeline (npm audit, Snyk)</li>
-                <li>Secrets detection (prevent API keys in code)</li>
-                <li>Container scanning if using Cloud Run</li>
-                <li>Branch protection rules—PR reviews before merge to main</li>
+                <li>PHI encryption at rest and in transit</li>
+                <li>Access logging for all PHI access</li>
+                <li>BAAs with cloud providers</li>
+                <li>Minimum necessary access controls</li>
               </ul>
             </div>
             <div class="example-box">
-              <strong>Logging & Visibility:</strong>
+              <strong>EHR/EMR Integration:</strong>
               <ul>
-                <li>Cloud Audit Logs enabled (Admin Activity, Data Access)</li>
-                <li>Logs exported to Cloud Storage or BigQuery for retention</li>
-                <li>Firebase Authentication events tracked</li>
-                <li>Building baseline—what's normal traffic, normal access patterns</li>
+                <li>HL7 FHIR APIs for interoperability</li>
+                <li>SMART on FHIR for authorization</li>
+                <li>Secure webhook handlers for real-time updates</li>
               </ul>
             </div>
             <div class="example-box">
-              <strong>IAM & Access:</strong>
+              <strong>Multi-Provider Access:</strong>
               <ul>
-                <li>Least privilege for service accounts</li>
-                <li>Separate projects for dev/staging/prod</li>
-                <li>No shared credentials—individual accounts with MFA</li>
-                <li>Firestore security rules reviewed (default rules are too permissive)</li>
+                <li>Role-based access (physician vs dietitian vs patient)</li>
+                <li>Consent management — patient controls who sees what</li>
+                <li>Audit trails for all PHI access</li>
+                <li>NPI verification for provider identity</li>
               </ul>
             </div>
 
-            <h5>Why "Mostly Defaults" Is Okay Right Now</h5>
-            <p>They're still building the B2B architecture. Security investment should match business stage. Right now: foundational hygiene. As they onboard enterprise customers: formal policies, SOC 2 prep, more advanced monitoring. You don't build a SOC for a 10-person startup.</p>
+            <h5>Why This Matters for Consulting</h5>
+            <p>Healthcare security is a growing consulting area. This experience gives you:</p>
+            <ul>
+              <li>HIPAA compliance knowledge</li>
+              <li>Understanding of healthcare interoperability standards (HL7 FHIR)</li>
+              <li>Experience designing security for regulated environments from scratch</li>
+              <li>Startup velocity with security built-in (not retrofitted)</li>
+            </ul>
 
             <div class="follow-up">
-              <strong>Potential Follow-up:</strong> "What's next for their security?"
-              <br><strong>Answer:</strong> "Once B2B architecture stabilizes—proper SIEM (probably Google Chronicle or export to a third-party), formal incident response process, SOC 2 Type 1 prep, security policies documentation. Right now it's about not having obvious gaps while they build."
+              <strong>Potential Follow-up:</strong> "What's the biggest security challenge with healthcare?"
+              <br><strong>Answer:</strong> "Balancing usability with security. Healthcare providers are busy — if security controls slow them down, they'll find workarounds. The challenge is making secure access seamless. We're using SSO with hospital identity providers, contextual authentication, and role-based dashboards so providers only see what's relevant to them."
+            </div>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "How do you handle HIPAA for a startup?"
+              <br><strong>Answer:</strong> "Start with the right cloud providers — AWS and GCP both offer HIPAA-eligible services with BAAs. Use their managed services with encryption enabled by default. Implement access logging from day one. The key is building compliance into architecture decisions, not treating it as a checkbox later. For a startup, it's actually easier than retrofitting — you don't have legacy decisions fighting you."
             </div>
           </div>
         </details>
@@ -1458,33 +1468,34 @@ generate_report(gaps)
         <h4>Q: Describe a time you had to learn something quickly <span class="time-indicator">60 sec</span></h4>
         
         <div class="answer-text">
-          I've been helping a startup with their security setup — enabling CloudTrail logs, GCP and Firebase security configurations. While working with them, I saw their mobile app UI and honestly, it wasn't good. They were planning to launch with it.
+          I'm co-founding DietIQ, a health-tech startup. When I joined, they were planning to release the app with a UI that honestly wasn't impressive. I told them — your product can have great features, but if the UI/UX isn't engaging, users won't stick around. First impressions matter, especially in a crowded health app market.
           <br><br>
-          I told them — your product can have great features, but if the UI isn't engaging, users won't stick around. I had some UI/UX experience from college, but the tools had changed. AI in 2024 wasn't capable enough to design a full UI and integrate it with an existing codebase.
+          I had UI/UX experience from college, but the tools had changed tremendously. Figma had evolved significantly, and AI tools in 2024 still weren't capable of designing a full UI and integrating it with an existing codebase.
           <br><br>
-          So I learned Figma. Watched tutorials, practiced, figured out the workflow. Then I worked for about 40 hours straight with minimal breaks and designed their entire mobile app UI.
+          So I took the initiative. I learned Figma's new features — auto-layout, components, prototyping, design systems. Then I worked for about 40 hours straight with minimal breaks, just stopping for food, and designed the entire mobile app UI/UX from scratch.
           <br><br>
-          That UI is still being used today. They've added many features on top of it, and now we're planning another UI refresh along with some architectural changes.
+          That UI is still being used in production today. The app has grown, they've added features on top of it, and now we're planning a UI/UX refresh after some major architectural changes we have planned for the B2B healthcare features.
           <br><br>
-          The security side is still basic — just defaults enabled for now. But the point is, I saw a gap, learned what I needed to learn quickly, and delivered something that's still in production.
+          It's not a security story, but it shows how I operate — I saw a gap, took initiative, learned what I needed quickly, and delivered something that's still in production.
         </div>
 
         <div class="key-points">
-          <strong>Structure:</strong> Context → Identified gap → Learned new skill → Delivered under pressure → Still in use
-          <br><strong>Key phrase:</strong> "I saw a gap, learned what I needed, and delivered something that's still in production"
-          <br><strong>Follow-up ready:</strong> Focused learning approach, 40-hour push for deadline, security work still ongoing
+          <strong>Structure:</strong> Context → Identified gap → Took initiative → Learned rapidly → Delivered under pressure → Lasting impact
+          <br><strong>Key phrase:</strong> "I saw a gap, took initiative, learned what I needed, and delivered something still in production"
+          <br><strong>Why it works:</strong> Shows adaptability, initiative beyond job scope, delivery under pressure, lasting quality
         </div>
 
         <details class="deep-dive">
-          <summary>Deep Dive — Rapid Skill Acquisition & Delivery</summary>
+          <summary>Deep Dive — Rapid Skill Acquisition & Initiative</summary>
           <div class="deep-dive-content">
             <h5>Why This Story Works for Consulting</h5>
             <div class="example-box">
               <ul>
+                <li><strong>Initiative:</strong> Nobody asked you to do this — you saw a problem and stepped up</li>
                 <li><strong>Adaptability:</strong> Consulting often requires learning client-specific tools quickly</li>
-                <li><strong>Initiative:</strong> Saw a problem outside your scope, offered to help</li>
-                <li><strong>Delivery under pressure:</strong> 40 hours straight = you can push when needed</li>
-                <li><strong>Lasting impact:</strong> Still in production = quality work, not just quick work</li>
+                <li><strong>Delivery under pressure:</strong> 40 hours straight = you can push when deadlines matter</li>
+                <li><strong>Quality work:</strong> Still in production = not just fast, but good</li>
+                <li><strong>Business thinking:</strong> Understood that UI/UX impacts user retention and business success</li>
               </ul>
             </div>
 
@@ -1493,29 +1504,44 @@ generate_report(gaps)
               <strong>How you learned Figma quickly:</strong>
               <ul>
                 <li>Started with YouTube tutorials (2-3 hours of basics)</li>
+                <li>Focused on what changed since college — auto-layout, component variants, design tokens</li>
                 <li>Practiced by recreating existing designs</li>
-                <li>Learned component libraries, auto-layout, prototyping</li>
-                <li>Applied immediately to real project (learn by doing)</li>
+                <li>Applied immediately to real project (learn by doing, not theory)</li>
+              </ul>
+            </div>
+
+            <h5>The Business Impact</h5>
+            <div class="example-box">
+              <ul>
+                <li>App launched with professional, engaging UI</li>
+                <li>Design still in production — foundation for all new features</li>
+                <li>Established design system that the team still uses</li>
+                <li>Planning refresh for B2B healthcare features (provider dashboards, patient portals)</li>
               </ul>
             </div>
 
             <h5>Connection to Security Work</h5>
-            <p>This same approach applies to security tools. When you joined the Siemens subsidiary:</p>
+            <p>This same rapid learning approach applies to security tools. When you joined the Siemens subsidiary:</p>
             <ul>
               <li>Had to learn KQL quickly (came from Splunk SPL)</li>
               <li>Had to learn Intune for MDE deployment (new tool)</li>
               <li>Had to learn Purview DLP (different from Symantec)</li>
             </ul>
-            <p>Same pattern: tutorials → practice → apply immediately → iterate</p>
+            <p>Same pattern: identify what you need → focused learning → apply immediately → iterate</p>
 
             <div class="follow-up">
               <strong>Potential Follow-up:</strong> "How do you learn new security tools?"
-              <br><strong>Answer:</strong> "I start with official docs and Microsoft Learn modules for Microsoft tools. Then I build a lab or use the client's dev environment to practice. I learn fastest when I have a real use case — 'I need to detect X' is better motivation than 'I should learn Y.' I also document as I learn, which reinforces understanding and creates references for later."
+              <br><strong>Answer:</strong> "Same approach. I start with official docs and Microsoft Learn modules. Then I build a lab or use the client's dev environment to practice. I learn fastest when I have a real use case — 'I need to detect X' is better motivation than 'I should learn Y.' I also document as I learn, which reinforces understanding and creates references for later."
+            </div>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "Why did you take that on? It wasn't your job."
+              <br><strong>Answer:</strong> "Because I cared about the product succeeding. In a startup, you can't say 'that's not my job.' If I see something that's going to hurt the business and I can fix it, I fix it. Same mindset I bring to security — I don't just do what's in my job description, I do what the organization needs."
             </div>
 
             <div class="follow-up">
               <strong>Potential Follow-up:</strong> "What if you joined an engagement with tools you've never used?"
-              <br><strong>Answer:</strong> "It's happened. First, I'm honest about my experience level. Then I ask — who's the SME? What documentation exists? I ramp up quickly, but I also leverage the team. Consulting is collaborative; you don't need to know everything, you need to know how to find answers."
+              <br><strong>Answer:</strong> "It's happened. First, I'm honest about my experience level. Then I ask — who's the SME? What documentation exists? I ramp up quickly, but I also leverage the team. Consulting is collaborative; you don't need to know everything, you need to know how to find answers fast."
             </div>
           </div>
         </details>
@@ -2654,20 +2680,20 @@ generate_report(gaps)
             <h4>Your Differentiators</h4>
             <ul>
               <li>✓ Real enterprise transformation (not just certs)</li>
-              <li>✓ Multi-cloud experience (Azure + GCP)</li>
-              <li>✓ Already doing consulting-like work (DietTip startup)</li>
+              <li>✓ Healthcare security experience (HIPAA, HL7 FHIR)</li>
+              <li>✓ Already doing consulting-like work (DietIQ startup)</li>
               <li>✓ XDR-first architecture expertise</li>
               <li>✓ Document & systematize (runbooks, SOPs)</li>
             </ul>
           </div>
           <div class="column-card">
-            <h4>DietTip Startup (Side Project)</h4>
+            <h4>DietIQ Startup (Co-Founder)</h4>
             <ul>
-              <li><strong>What:</strong> Startup moving consumer → B2B</li>
-              <li><strong>Platform:</strong> GCP + Firebase</li>
-              <li><strong>Your role:</strong> Entire security function</li>
-              <li><strong>Current state:</strong> Foundational — CI/CD security, Cloud Audit Logs, IAM policies</li>
-              <li><strong>Why mention:</strong> Shows you're already doing consulting-like work</li>
+              <li><strong>What:</strong> Health-tech platform — consumer app + B2B healthcare</li>
+              <li><strong>B2B Focus:</strong> Hospital integrations, multi-provider collaboration</li>
+              <li><strong>Your role:</strong> Security architecture, product, UI design</li>
+              <li><strong>Security:</strong> HIPAA compliance, HL7 FHIR, PHI protection</li>
+              <li><strong>Why mention:</strong> Shows greenfield security design + healthcare domain</li>
             </ul>
           </div>
         </div>
@@ -2684,12 +2710,12 @@ generate_report(gaps)
             </ul>
           </div>
           <div class="column-card">
-            <h4>Cloud Platform Experience</h4>
+            <h4>Domain Experience</h4>
             <ul>
-              <li><strong>Azure/M365:</strong> Primary (Sentinel, MDE, Purview, Entra ID)</li>
-              <li><strong>GCP:</strong> DietTip (Cloud Audit Logs, IAM, Firebase)</li>
-              <li><strong>Key point:</strong> Security principles transfer across clouds</li>
-              <li><strong>Say:</strong> "I've worked with Azure primarily, but I'm also working with GCP for a startup"</li>
+              <li><strong>Enterprise:</strong> Azure/M365 (Sentinel, MDE, Purview, Entra ID)</li>
+              <li><strong>Healthcare:</strong> DietIQ (HIPAA, HL7 FHIR, PHI, provider networks)</li>
+              <li><strong>Key point:</strong> Security principles transfer across domains</li>
+              <li><strong>Say:</strong> "Enterprise transformation + healthcare startup gives me range"</li>
             </ul>
           </div>
         </div>
