@@ -209,6 +209,22 @@
           </div>
         </div>
 
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Why Symantec DLP Existed</div>
+          <div class="callout-content">
+            <p><strong>Context:</strong> Symantec DLP was deployed to protect RevFlow's on-premises infrastructure and customer data. With an on-prem data center and Exchange initially on-premises, Symantec provided:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Endpoint DLP:</strong> USB blocking, clipboard control, file upload monitoring on 4,500 endpoints</li>
+              <li><strong>Network DLP:</strong> Email gateway inspection, web proxy integration, network egress monitoring</li>
+              <li><strong>On-prem Enforce Server:</strong> Centralized policy management aligned with data center architecture</li>
+              <li><strong>Enterprise standard:</strong> Market leader for enterprise DLP, required for SOC 2/ISO 27001</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Why migration:</strong> M365 E5 includes Purview DLP at no additional cost. Purview provides native integration with Microsoft 365 (Teams, SharePoint, Exchange Online), Entra ID for user context, and MDE for endpoint enforcement. As the company moves to Azure, Symantec's on-prem architecture becomes redundant.</p>
+            <p style="margin-top: 0.5rem;"><strong>Note:</strong> Symantec Network DLP remains active until Azure network architecture is complete. Endpoint DLP migration is the focus of this project.</p>
+            <p>👉 <strong><a href="../company-profile.html#company-evolution">Full Company Evolution & Infrastructure History →</a></strong></p>
+          </div>
+        </div>
+
         <div class="callout info" style="margin-bottom: 1.5rem;">
           <div class="callout-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>

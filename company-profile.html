@@ -176,6 +176,312 @@
           </div>
         </div>
 
+        <!-- ==================== COMPANY EVOLUTION SECTION ==================== -->
+        <h2>Company Evolution & Why This Migration</h2>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Understanding the Context</div>
+          <div class="callout-content">
+            <p><strong>This section explains why an on-premises security stack existed and why cloud migration is happening now.</strong> Interviewers often ask: "Why legacy tools at a SaaS company?" The answer is that the <em>product</em> is SaaS, but the <em>infrastructure</em> was traditionally on-premises.</p>
+          </div>
+        </div>
+
+        <h3>The Origin Story (2015-2022)</h3>
+        
+        <p>RevFlow was founded in 2015 as an enterprise analytics startup. Like many B2B SaaS companies of that era, they chose <strong>on-premises hosted infrastructure</strong> rather than public cloud:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Decision</th><th>Reasoning (2015 Context)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Co-located Data Center</strong></td>
+                <td>Predictable costs, enterprise customers trusted "dedicated infrastructure," cloud was still maturing for enterprise workloads</td>
+              </tr>
+              <tr>
+                <td><strong>VMware Virtualization</strong></td>
+                <td>Industry standard, team had expertise, straightforward capacity planning</td>
+              </tr>
+              <tr>
+                <td><strong>On-Prem Active Directory</strong></td>
+                <td>Required for Windows servers, GPO management, established enterprise pattern</td>
+              </tr>
+              <tr>
+                <td><strong>Traditional Security Stack</strong></td>
+                <td>RSA NetWitness for SIEM (enterprise customers expected it), ESET for endpoints, Symantec DLP for data protection</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Key Point for Interviews</div>
+          <div class="callout-content">
+            <p><strong>"The product is SaaS, but the infrastructure was on-prem."</strong></p>
+            <p>RevFlow delivered a SaaS product to customers, but internally hosted it on their own VMware infrastructure in a co-located data center. This is common for enterprise SaaS companies started pre-2018. The security stack (RSA, ESET, Symantec) made perfect sense for this architecture—they were monitoring and protecting on-premises servers, endpoints, and network perimeter.</p>
+          </div>
+        </div>
+
+        <h3>Pre-Migration Architecture (Before 2024)</h3>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Legacy Infrastructure Layout</span></div>
+          <pre><code>REVFLOW LEGACY ARCHITECTURE (2015-2024)
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  CO-LOCATED DATA CENTER (Toronto)                                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐             │
+│  │  VMware vSphere │  │  SAN Storage    │  │  Network        │             │
+│  │  ~200 VMs       │  │  NetApp         │  │  Palo Alto FW   │             │
+│  │  Windows/Linux  │  │  ~500TB         │  │  F5 Load Bal    │             │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘             │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  PRODUCTION WORKLOADS                                                │   │
+│  │  • Application servers (Java/.NET)                                   │   │
+│  │  • PostgreSQL databases (customer data)                              │   │
+│  │  • Redis/Elasticsearch clusters                                      │   │
+│  │  • ML training infrastructure (GPU servers)                          │   │
+│  │  • API gateway servers                                               │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  SECURITY INFRASTRUCTURE                                             │   │
+│  │  • RSA NetWitness (Log Decoder, Concentrator, Broker, SA Server)     │   │
+│  │  • ESET Protect Server (endpoint management)                         │   │
+│  │  • Symantec DLP (Enforce Server, Detection Servers)                  │   │
+│  │  • On-premises Active Directory (Domain Controllers)                 │   │
+│  │  • Qualys Scanner Appliances                                         │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  CORPORATE OFFICES (Toronto HQ, US, India)                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  • ~4,500 endpoints (Windows laptops, some macOS)                          │
+│  • Domain-joined to on-prem AD                                             │
+│  • VPN for remote access (Cisco AnyConnect)                                │
+│  • ESET Endpoint Security on all workstations                              │
+│  • Symantec DLP agents for endpoint data protection                        │
+│  • M365 for email/productivity (adopted ~2019)                             │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+        </div>
+
+        <h3>Why the Legacy Security Stack Made Sense</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Tool</th><th>What It Protected</th><th>Why It Made Sense</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>RSA NetWitness</strong></td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1rem;">
+                    <li>Data center server logs</li>
+                    <li>Palo Alto firewall logs</li>
+                    <li>Windows Security events</li>
+                    <li>VPN authentication logs</li>
+                  </ul>
+                </td>
+                <td>On-prem SIEM for on-prem infrastructure. Enterprise customers required SIEM for SOC 2/ISO 27001. RSA had strong network packet capture for data center visibility.</td>
+              </tr>
+              <tr>
+                <td><strong>ESET Protect + Inspect</strong></td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1rem;">
+                    <li>4,500 employee endpoints</li>
+                    <li>~200 Windows/Linux servers</li>
+                    <li>Basic EDR capabilities</li>
+                  </ul>
+                </td>
+                <td>On-prem management console, lightweight agent, good server support. Manageable by small security team without cloud dependency.</td>
+              </tr>
+              <tr>
+                <td><strong>Symantec DLP</strong></td>
+                <td>
+                  <ul style="margin: 0; padding-left: 1rem;">
+                    <li>Email DLP (Exchange on-prem initially)</li>
+                    <li>Endpoint DLP (USB, clipboard, uploads)</li>
+                    <li>Network DLP (egress monitoring)</li>
+                  </ul>
+                </td>
+                <td>Customer data protection was critical. Symantec was market leader for enterprise DLP. On-prem Enforce Server aligned with data center architecture.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>The Siemens Acquisition (2022)</h3>
+
+        <p>In 2022, Siemens acquired RevFlow to add revenue intelligence capabilities to their enterprise software portfolio. This triggered several changes:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Siemens Mandate</th><th>Impact</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Azure-First Cloud Strategy</strong></td>
+                <td>Siemens subsidiaries required to migrate to Azure. Reduces operational complexity, leverages enterprise agreements, aligns security monitoring.</td>
+              </tr>
+              <tr>
+                <td><strong>Microsoft 365 E5 Standardization</strong></td>
+                <td>All subsidiaries on M365 E5 licensing. This includes MDE, MDI, MDO, Sentinel, Purview, MDCA—security tools RevFlow wasn't using yet.</td>
+              </tr>
+              <tr>
+                <td><strong>Unified Security Operations</strong></td>
+                <td>Siemens SOC integration requirements. Microsoft Sentinel preferred for cross-subsidiary visibility.</td>
+              </tr>
+              <tr>
+                <td><strong>Data Center Exit Timeline</strong></td>
+                <td>Co-location lease renewal coming in 2025. Business case to migrate to Azure rather than renew 5-year commitment.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Why Migration Now (2024-2025)</h3>
+
+        <div class="callout critical">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v2zm0-4h-2V7h2v6z"/></svg>The Convergence of Factors</div>
+          <div class="callout-content">
+            <p>Multiple factors aligned in 2024 to make migration the clear choice:</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Driver</th><th>Details</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Data Center Lease Expiration</strong></td>
+                <td>Co-location contract ending Q4 2025. Renew for 5 years at increased rates, or migrate to Azure. Business case favored migration.</td>
+              </tr>
+              <tr>
+                <td><strong>2. M365 E5 Already Licensed</strong></td>
+                <td>Paying for MDE, MDI, MDO, Sentinel, Purview, MDCA through E5 licensing but not using them. Meanwhile paying separately for RSA, ESET, Symantec.</td>
+              </tr>
+              <tr>
+                <td><strong>3. Tool Maintenance Burden</strong></td>
+                <td>3-person security team spending 40%+ time on tool maintenance: RSA upgrades, ESET server patching, Symantec policy server issues. Cloud-native tools reduce operational overhead.</td>
+              </tr>
+              <tr>
+                <td><strong>4. Integration Gaps</strong></td>
+                <td>RSA, ESET, Symantec don't talk to each other. Manual correlation required. Microsoft stack provides native XDR correlation across endpoint, identity, email, cloud apps.</td>
+              </tr>
+              <tr>
+                <td><strong>5. Siemens Corporate Alignment</strong></td>
+                <td>Other Siemens subsidiaries already on Microsoft security stack. Enables cross-subsidiary threat intelligence sharing and unified SOC visibility.</td>
+              </tr>
+              <tr>
+                <td><strong>6. Remote Work Reality</strong></td>
+                <td>Post-COVID, 60% of workforce remote. VPN + on-prem AD + perimeter security model showing strain. Cloud-native identity and security better suited.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>The Transformation Program</h3>
+
+        <p>The security migration is <strong>part of a larger Azure transformation</strong>, not a standalone project:</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">Transformation Program Structure</span></div>
+          <pre><code>REVFLOW AZURE TRANSFORMATION PROGRAM
+═══════════════════════════════════════════════════════════════════════════════
+
+PHASE 1: FOUNDATION (Started Before Security Tracks)
+├── Identity Track
+│   ├── Azure AD Connect deployment (hybrid identity)
+│   ├── Conditional Access policies
+│   ├── PIM for privileged access
+│   └── Future: Full cloud identity (AD decommission)
+│
+├── Infrastructure Track
+│   ├── Azure Landing Zone deployment
+│   ├── Network architecture (Hub-spoke, ExpressRoute)
+│   ├── Governance (Policy, Blueprints, Management Groups)
+│   └── VM migration planning
+│
+└── Productivity Track (Already Complete)
+    ├── M365 E5 deployment
+    ├── Exchange Online migration (done 2020)
+    ├── Teams rollout (done 2020)
+    └── SharePoint Online migration (done 2021)
+
+PHASE 2: SECURITY TRACKS (This Documentation)
+├── SIEM Track (M1-M12)
+│   └── RSA NetWitness → Microsoft Sentinel
+│
+├── EDR Track (M1-M12)
+│   └── ESET Protect/Inspect → Microsoft Defender for Endpoint
+│
+└── DLP Track (M6-M12)
+    └── Symantec Endpoint DLP → Microsoft Purview
+    └── Symantec Network DLP → Future (post-Azure migration)
+
+PHASE 3: WORKLOAD MIGRATION (Parallel/Following)
+├── Application servers → Azure VMs / App Services
+├── Databases → Azure PostgreSQL / Cosmos DB
+├── ML infrastructure → Azure ML
+└── Data center decommission (Target: Q4 2025)</code></pre>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Interview Answer: "Why legacy tools at a SaaS company?"</div>
+          <div class="callout-content">
+            <p><em>"The product is SaaS, but the infrastructure was on-premises. RevFlow was founded in 2015 and built on traditional data center infrastructure—VMware, on-prem Active Directory, co-located servers. The security stack—RSA, ESET, Symantec—made sense for that architecture. They were monitoring servers, protecting endpoints, and controlling data egress from an on-prem environment.</em></p>
+            <p style="margin-top: 0.5rem;"><em>After the Siemens acquisition in 2022, there was a mandate to migrate to Azure. The data center lease is expiring, we already have M365 E5 with security tools included, and maintaining three separate on-prem security platforms was consuming too much of the team's time. The security migration is part of the larger Azure transformation—we're not just switching security vendors, we're moving the entire infrastructure to cloud."</em></p>
+          </div>
+        </div>
+
+        <h3>What's Staying On-Prem (For Now)</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Component</th><th>Status</th><th>Migration Plan</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Active Directory</strong></td>
+                <td>Hybrid (synced to Entra ID)</td>
+                <td>Full cloud identity after workload migration complete</td>
+              </tr>
+              <tr>
+                <td><strong>Production Workloads</strong></td>
+                <td>Still in data center</td>
+                <td>Azure migration in parallel (Phase 3)</td>
+              </tr>
+              <tr>
+                <td><strong>Symantec Network DLP</strong></td>
+                <td>Still active</td>
+                <td>Decommission after Azure network architecture complete</td>
+              </tr>
+              <tr>
+                <td><strong>Palo Alto Firewalls</strong></td>
+                <td>Still active</td>
+                <td>Azure Firewall / third-party NVA after migration</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>👉 <strong><a href="resources/timeline.html">Complete Implementation Timeline →</a></strong></p>
+
+        <!-- ==================== END COMPANY EVOLUTION SECTION ==================== -->
+
         <h2>Business Overview</h2>
         
         <p>

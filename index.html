@@ -206,25 +206,36 @@
         <p>
           RevFlow Analytics, a Siemens subsidiary, is a <strong>B2B revenue intelligence SaaS platform</strong> that helps enterprise sales teams predict deal outcomes by correlating CRM data from Salesforce with activity signals from email, calendar, and meetings. The platform serves sales leaders who need to answer questions like: Which deals are at risk? Are reps following best practices? Are customers engaging or disengaging?
         </p>
+
+        <div class="callout info">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Why Legacy Tools at a SaaS Company?</div>
+          <div class="callout-content">
+            <p><strong>The product is SaaS, but the infrastructure was on-premises.</strong> RevFlow was founded in 2015 and built on traditional data center infrastructure—VMware, on-prem Active Directory, co-located servers in Toronto. The security stack (RSA, ESET, Symantec) made sense for monitoring and protecting that on-premises environment.</p>
+            <p style="margin-top: 0.5rem;">After the Siemens acquisition (2022), there's a mandate to migrate to Azure. The data center lease is expiring in 2025, M365 E5 is already licensed with security tools included, and maintaining three separate on-prem security platforms was consuming too much of the team's time.</p>
+            <p style="margin-top: 0.5rem;"><strong>The security migration is part of the larger Azure transformation</strong>—identity, infrastructure, and workloads are all moving to cloud. This isn't just a security vendor switch; it's a fundamental infrastructure modernization.</p>
+            <p>👉 <strong><a href="company-profile.html#company-evolution">Full Company Evolution & Migration Context →</a></strong></p>
+          </div>
+        </div>
+
         <p>
-          With <strong>2,000 employees across Canada (HQ), United States, and India</strong> and <strong>deep integrations into customer Salesforce, Teams, and Zoom environments</strong>, the company's security priorities centered on SaaS visibility, API security, and data protection. The existing legacy security stack was increasingly misaligned with this cloud-first, SaaS-heavy business model:
+          With <strong>2,000 employees across Canada (HQ), United States, and India</strong> and <strong>4,500 endpoints</strong>, the security migration needed to address both the current on-premises infrastructure and the target Azure-based architecture:
         </p>
         
         <div class="comparison-grid">
           <div class="comparison-column">
-            <div class="comparison-header before">Legacy Stack (Before)</div>
+            <div class="comparison-header before">Legacy Stack (On-Prem Infrastructure)</div>
             <div class="comparison-content">
               <div class="comparison-item">
                 <span class="comparison-item-icon">📊</span>
-                <span>RSA NetWitness for SIEM</span>
+                <span>RSA NetWitness for SIEM (on-prem servers)</span>
               </div>
               <div class="comparison-item">
                 <span class="comparison-item-icon">🛡️</span>
-                <span>ESET Protect + Inspect for EPP/EDR</span>
+                <span>ESET Protect + Inspect for EPP/EDR (on-prem console)</span>
               </div>
               <div class="comparison-item">
                 <span class="comparison-item-icon">🔒</span>
-                <span>Symantec DLP for data protection</span>
+                <span>Symantec DLP (on-prem Enforce Server)</span>
               </div>
               <div class="comparison-item">
                 <span class="comparison-item-icon">👤</span>
@@ -232,38 +243,51 @@
               </div>
               <div class="comparison-item">
                 <span class="comparison-item-icon">🏢</span>
-                <span>On-premises data center</span>
+                <span>Co-located data center (Toronto)</span>
               </div>
             </div>
           </div>
           <div class="comparison-column">
-            <div class="comparison-header after">Modern Stack (After)</div>
+            <div class="comparison-header after">Modern Stack (Azure + M365)</div>
             <div class="comparison-content">
               <div class="comparison-item">
                 <span class="comparison-item-icon">📊</span>
-                <span>Microsoft Sentinel (single workspace, Canada)</span>
+                <span>Microsoft Sentinel (cloud-native SIEM)</span>
               </div>
               <div class="comparison-item">
                 <span class="comparison-item-icon">🛡️</span>
-                <span>Microsoft Defender for Endpoint (4,500 endpoints)</span>
+                <span>Microsoft Defender for Endpoint (cloud-managed)</span>
               </div>
               <div class="comparison-item">
                 <span class="comparison-item-icon">☁️</span>
-                <span>Defender for Cloud Apps (CASB for SaaS security)</span>
+                <span>Defender for Cloud Apps (CASB for SaaS)</span>
               </div>
               <div class="comparison-item">
                 <span class="comparison-item-icon">🔐</span>
-                <span>Defender for Cloud (CSPM for Azure workloads)</span>
+                <span>Defender for Cloud (CSPM for Azure)</span>
               </div>
               <div class="comparison-item">
                 <span class="comparison-item-icon">🔒</span>
-                <span>Microsoft Purview DLP</span>
+                <span>Microsoft Purview DLP (cloud-native)</span>
               </div>
               <div class="comparison-item">
                 <span class="comparison-item-icon">👤</span>
-                <span>Microsoft Entra ID (hybrid)</span>
+                <span>Microsoft Entra ID (hybrid → cloud-only)</span>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>Migration Drivers</div>
+          <div class="callout-content">
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Data center lease expiring Q4 2025</strong> — migrate to Azure or renew 5-year commitment</li>
+              <li><strong>M365 E5 already licensed</strong> — paying for MDE, MDI, MDO, Sentinel, Purview but not using them</li>
+              <li><strong>Tool maintenance burden</strong> — 3-person team spending 40% time on platform maintenance</li>
+              <li><strong>Integration gaps</strong> — RSA, ESET, Symantec don't integrate; Microsoft stack provides native XDR</li>
+              <li><strong>Siemens corporate alignment</strong> — Azure-first mandate for subsidiaries</li>
+            </ul>
           </div>
         </div>
 

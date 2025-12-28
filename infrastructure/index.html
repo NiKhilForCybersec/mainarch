@@ -156,40 +156,58 @@
           <h1>Infrastructure: Azure Migration</h1>
           <div class="page-header-meta">
             <span class="page-badge infra">Foundation Track</span>
-            <span class="page-reading-time">Status: Complete</span>
+            <span class="page-reading-time">Status: In Progress</span>
           </div>
-          <p class="intro-text">Infrastructure migration started first alongside Identity as the cloud foundation — you can't migrate security tools until cloud infrastructure is in place. Azure landing zone, network architecture, and connectivity are established. This documentation covers the architecture for reference.</p>
+          <p class="intro-text">Infrastructure migration started first alongside Identity as the cloud foundation — you can't migrate security tools until cloud infrastructure is in place. Azure landing zone, network architecture, and connectivity are established. Workload migration is ongoing with data center decommission targeted for Q4 2025.</p>
         </div>
 
         <div class="callout info">
-          <div class="callout-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            Foundation First
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Why Azure Migration Is Happening</div>
+          <div class="callout-content">
+            <p><strong>Context:</strong> RevFlow was founded in 2015 with traditional on-premises infrastructure—a co-located data center in Toronto with VMware virtualization, ~200 VMs, on-prem Active Directory. This made sense at the time for a B2B SaaS startup.</p>
+            <p style="margin-top: 0.5rem;"><strong>Migration Drivers:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Siemens acquisition (2022):</strong> Azure-first mandate for all subsidiaries</li>
+              <li><strong>Data center lease expiring Q4 2025:</strong> Migrate to Azure or renew 5-year commitment</li>
+              <li><strong>Scalability needs:</strong> On-prem infrastructure hitting capacity limits</li>
+              <li><strong>Remote work reality:</strong> VPN + on-prem AD model showing strain post-COVID</li>
+              <li><strong>Operational overhead:</strong> Hardware maintenance, rack space, cooling, power</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">The security migration (RSA → Sentinel, ESET → MDE, Symantec → Purview) is part of this larger Azure transformation. Security tools are moving to cloud-native platforms as the underlying infrastructure moves to Azure.</p>
+            <p>👉 <strong><a href="../company-profile.html#company-evolution">Full Company Evolution & Migration Context →</a></strong></p>
           </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Foundation First</div>
           <div class="callout-content">
             <p><strong>Why Infrastructure Started First:</strong> Identity and Infrastructure migrations began before the security tracks (SIEM, EDR, DLP). Cloud-native security tools require cloud infrastructure — Sentinel runs in Azure, MDE integrates with Intune, Purview is M365-native.</p>
-            <p><strong>Current State:</strong> Azure landing zone operational. Hub-spoke network architecture. ExpressRoute connectivity. Azure Firewall and NSGs configured.</p>
+            <p><strong>Current State:</strong> Azure landing zone operational. Hub-spoke network architecture. ExpressRoute connectivity. Azure Firewall and NSGs configured. Security tracks (SIEM, EDR, DLP) complete. Workload migration ongoing.</p>
           </div>
         </div>
 
         <h2>Current Architecture</h2>
         <div class="comparison-grid">
           <div class="comparison-column">
-            <div class="comparison-header before">On-Premises (Legacy)</div>
+            <div class="comparison-header before">On-Premises Data Center (Toronto)</div>
             <div class="comparison-content">
-              <div class="comparison-item"><span class="comparison-item-icon">🖥️</span><span>30 physical servers</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">💾</span><span>SAN storage (50TB)</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">🔌</span><span>Network switches, firewalls</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">🏢</span><span>Colocation facility</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">🖥️</span><span>VMware vSphere (~200 VMs)</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">💾</span><span>NetApp SAN (~500TB)</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">🔌</span><span>Palo Alto firewalls</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">🏢</span><span>Co-located facility (lease ends Q4 2025)</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">📊</span><span>RSA NetWitness (SIEM) ✗ Decommissioned</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">🛡️</span><span>ESET Protect (EPP) ✗ Removed</span></div>
             </div>
           </div>
           <div class="comparison-column">
-            <div class="comparison-header after">Azure (Current)</div>
+            <div class="comparison-header after">Azure (Canada Central)</div>
             <div class="comparison-content">
-              <div class="comparison-item"><span class="comparison-item-icon">☁️</span><span>Azure App Services, VMs</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">💾</span><span>Azure SQL, Storage Accounts</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">☁️</span><span>Azure VMs, App Services, AKS</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">💾</span><span>Azure SQL, Cosmos DB, Storage</span></div>
               <div class="comparison-item"><span class="comparison-item-icon">🔐</span><span>Azure Firewall, NSGs</span></div>
-              <div class="comparison-item"><span class="comparison-item-icon">🌐</span><span>Hub-spoke network</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">🌐</span><span>Hub-spoke network, ExpressRoute</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">📊</span><span>Microsoft Sentinel (SIEM) ✓ Active</span></div>
+              <div class="comparison-item"><span class="comparison-item-icon">🛡️</span><span>MDE + XDR (EPP/EDR) ✓ Active</span></div>
             </div>
           </div>
         </div>
@@ -204,10 +222,27 @@
               <tr><td><strong>Landing Zone</strong></td><td><span class="status-badge complete">Active</span></td><td>Hub network, governance, connectivity</td></tr>
               <tr><td><strong>Azure Firewall</strong></td><td><span class="status-badge complete">Active</span></td><td>Network rules, application rules</td></tr>
               <tr><td><strong>ExpressRoute</strong></td><td><span class="status-badge complete">Active</span></td><td>Private connectivity to Azure</td></tr>
-              <tr><td><strong>VMs & App Services</strong></td><td><span class="status-badge complete">Active</span></td><td>Workloads migrated</td></tr>
-              <tr><td><strong>Azure SQL</strong></td><td><span class="status-badge complete">Active</span></td><td>Databases migrated</td></tr>
+              <tr><td><strong>Security Stack</strong></td><td><span class="status-badge complete">Active</span></td><td>Sentinel, MDE, Purview operational</td></tr>
+              <tr><td><strong>Production Workloads</strong></td><td><span class="status-badge in-progress">In Progress</span></td><td>VM/App migration ongoing</td></tr>
+              <tr><td><strong>Databases</strong></td><td><span class="status-badge in-progress">In Progress</span></td><td>PostgreSQL → Azure PostgreSQL</td></tr>
+              <tr><td><strong>Data Center</strong></td><td><span class="status-badge in-progress">Active (Decom Q4 2025)</span></td><td>Lease ends Q4 2025</td></tr>
             </tbody>
           </table>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>What's Still On-Premises</div>
+          <div class="callout-content">
+            <p>The security migration is complete, but workload migration is still in progress:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Active Directory:</strong> Hybrid (synced to Entra ID, will decommission after full migration)</li>
+              <li><strong>Production application servers:</strong> Some still in data center, being migrated</li>
+              <li><strong>PostgreSQL databases:</strong> Customer data still in data center, migrating to Azure PostgreSQL</li>
+              <li><strong>Palo Alto firewalls:</strong> Still active for data center egress</li>
+              <li><strong>Symantec Network DLP:</strong> Active until Azure network architecture complete</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Target:</strong> Full data center decommission by Q4 2025 (lease expiration)</p>
+          </div>
         </div>
 
         <h2>Section Guide</h2>
