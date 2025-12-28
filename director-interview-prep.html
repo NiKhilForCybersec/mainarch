@@ -151,6 +151,90 @@
       font-size: 0.8rem;
       margin-left: 0.5rem;
     }
+    
+    /* Deep Dive Collapsible Sections */
+    .deep-dive {
+      margin-top: 1rem;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .deep-dive summary {
+      background: rgba(59, 130, 246, 0.1);
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: #3b82f6;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .deep-dive summary:hover {
+      background: rgba(59, 130, 246, 0.15);
+    }
+    
+    .deep-dive summary::before {
+      content: "📚";
+    }
+    
+    .deep-dive[open] summary {
+      border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    
+    .deep-dive-content {
+      padding: 1rem 1.25rem;
+      background: rgba(59, 130, 246, 0.05);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    
+    .deep-dive-content h5 {
+      color: #3b82f6;
+      margin: 1rem 0 0.5rem 0;
+      font-size: 1rem;
+    }
+    
+    .deep-dive-content h5:first-child {
+      margin-top: 0;
+    }
+    
+    .deep-dive-content ul {
+      margin: 0.5rem 0;
+      padding-left: 1.5rem;
+    }
+    
+    .deep-dive-content li {
+      margin: 0.25rem 0;
+    }
+    
+    .deep-dive-content code {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    
+    .deep-dive-content .example-box {
+      background: rgba(0, 0, 0, 0.2);
+      border-left: 3px solid #3b82f6;
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    
+    .deep-dive-content .follow-up {
+      background: rgba(234, 179, 8, 0.1);
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0;
+    }
+    
+    .deep-dive-content .follow-up strong {
+      color: #eab308;
+    }
   </style>
 </head>
 <body>
@@ -472,6 +556,57 @@
           <br><strong>Numbers to hit:</strong> 5 years total, 3 years engineering, 4,500 endpoints
           <br><strong>Consulting hook:</strong> "Ready to apply across diverse clients"
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — Background & Follow-up Prep</summary>
+          <div class="deep-dive-content">
+            <h5>Your Career Timeline (Know This Cold)</h5>
+            <ul>
+              <li><strong>Cognizant (~2 years):</strong> L1 SOC Analyst. Splunk-based environment. Alert triage, incident investigation, escalation to L2/L3. Learned how SOC operations actually work—what generates noise, what's actionable.</li>
+              <li><strong>Infosys (~1.5 years):</strong> Security Engineer. Worked with Trellix (formerly FireEye), Symantec DLP. Key project: EDR evaluation comparing Trellix vs Cortex XDR. Presented recommendations to stakeholders.</li>
+              <li><strong>Siemens subsidiary (~1.5 years, current):</strong> Security Engineer. Azure transformation project. MDE deployment (owned), Sentinel migration (contributed), Purview DLP (contributed).</li>
+            </ul>
+
+            <h5>What You OWNED vs CONTRIBUTED</h5>
+            <div class="example-box">
+              <strong>OWNED — MDE Deployment:</strong>
+              <ul>
+                <li>Agent onboarding across 4,500 endpoints via Intune</li>
+                <li>Policy configuration, ASR rules, exclusion management</li>
+                <li>Coexistence with ESET during transition</li>
+                <li>Compliance reporting, troubleshooting stale agents</li>
+                <li>Device control policies (USB restrictions)</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>WORKED ON — Sentinel Migration:</strong>
+              <ul>
+                <li>Log source onboarding (M365, Entra ID, Palo Alto, custom apps)</li>
+                <li>Detection translation from RSA to KQL</li>
+                <li>Workbook development for SOC visibility</li>
+                <li>Operational readiness and parallel operation</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>CONTRIBUTED — DLP Transition:</strong>
+              <ul>
+                <li>Policy translation from Symantec to Purview</li>
+                <li>Endpoint DLP testing</li>
+                <li>User communication support</li>
+              </ul>
+            </div>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "What was the hardest part of the MDE deployment?"
+              <br><strong>Answer:</strong> "Coexistence with ESET. We ran both for 90 days. The tricky part was ASR rules conflicting with ESET's behavior monitoring. Had to carefully tune exclusions on both sides. Also, the golden image issue—IT Ops had pre-installed MDE in the image, causing duplicate device IDs. Fixed with offboard/reonboard script."
+            </div>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "What would you do differently?"
+              <br><strong>Answer:</strong> "Start detection translation earlier. We waited until log sources were onboarded to start translating rules. Should have parallelized—had someone working on KQL translations while others handled ingestion. Would have shortened the timeline by 2-3 weeks."
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="warning-box">
@@ -500,6 +635,61 @@
           <strong>Key message:</strong> You understand the business, not just the technology
           <br><strong>Show:</strong> Security priorities tied to business model
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — Company & Business Context</summary>
+          <div class="deep-dive-content">
+            <h5>What the Company Does (Know This Cold)</h5>
+            <ul>
+              <li><strong>Product:</strong> Revenue intelligence platform — predicts which sales deals will close</li>
+              <li><strong>How it works:</strong> Connects to customer's Salesforce CRM, analyzes historical deal patterns (emails, meetings, engagement), scores current pipeline</li>
+              <li><strong>Value prop:</strong> Sales leaders see which deals are at risk before it's too late</li>
+              <li><strong>Think of it as:</strong> "Moneyball for enterprise sales"</li>
+            </ul>
+
+            <h5>Customer Profile</h5>
+            <div class="example-box">
+              <ul>
+                <li><strong>Size:</strong> Fortune 500, enterprise accounts</li>
+                <li><strong>Examples:</strong> Cisco, Dell, major financial institutions</li>
+                <li><strong>Users per customer:</strong> Hundreds to thousands of sales reps</li>
+                <li><strong>Data sensitivity:</strong> CRM data — deal values, customer contacts, sales forecasts (competitive intelligence if leaked)</li>
+              </ul>
+            </div>
+
+            <h5>Why Security Matters for This Business</h5>
+            <div class="example-box">
+              <strong>Data processor, not owner:</strong>
+              <ul>
+                <li>We hold customer CRM data — their crown jewels</li>
+                <li>Breach = customer's competitive data exposed</li>
+                <li>Trust is the product — lose security, lose customers</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Compliance requirements:</strong>
+              <ul>
+                <li>SOC 2 Type II — required for enterprise sales</li>
+                <li>ISO 27001 — international customers expect it</li>
+                <li>Customer security questionnaires — 50+ page assessments from prospects</li>
+                <li>DPAs (Data Processing Agreements) — contractual security commitments</li>
+              </ul>
+            </div>
+
+            <h5>Security Priorities (Shaped by Business)</h5>
+            <ul>
+              <li><strong>Tenant isolation:</strong> Customer A can't see Customer B's data</li>
+              <li><strong>API security:</strong> Salesforce integration is via API — must be secure</li>
+              <li><strong>Data protection:</strong> Encryption at rest/transit, access controls, DLP</li>
+              <li><strong>Availability:</strong> Sales teams rely on this daily — downtime = lost deals</li>
+            </ul>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "How did security support sales?"
+              <br><strong>Answer:</strong> "Directly. Every enterprise deal required security review. I contributed to security questionnaire responses, supported customer audits, maintained SOC 2 evidence. Security wasn't overhead — it was a sales enabler. We couldn't close Fortune 500 deals without it."
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="question-block">
@@ -522,6 +712,44 @@
           <br><strong>Consulting insight:</strong> "Tools should match the architecture" — shows strategic thinking
           <br><strong>Business driver:</strong> Siemens acquisition + data center lease + M365 licensing
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — Company Architecture & Migration Drivers</summary>
+          <div class="deep-dive-content">
+            <h5>Pre-Migration Architecture (2015-2024)</h5>
+            <ul>
+              <li><strong>Data Center:</strong> Co-located facility in Toronto. ~200 VMs on VMware vSphere.</li>
+              <li><strong>Identity:</strong> On-premises Active Directory. Users authenticated against on-prem DCs.</li>
+              <li><strong>Network:</strong> Traditional perimeter—Palo Alto firewalls, DMZ, internal segmentation.</li>
+              <li><strong>Endpoints:</strong> Corporate laptops + data center servers. Mix of Windows 10/11 and Windows Server.</li>
+            </ul>
+
+            <h5>Why Legacy Tools Made Sense</h5>
+            <div class="example-box">
+              <strong>RSA NetWitness:</strong> On-prem SIEM designed for network packet capture + log correlation. Perfect for monitoring data center traffic, firewall logs, Windows Security events. Required dedicated hardware appliances.
+            </div>
+            <div class="example-box">
+              <strong>ESET:</strong> Lightweight agent, on-prem management console. Good server support. Small team could manage it. Basic EDR capabilities with ESET Inspect.
+            </div>
+            <div class="example-box">
+              <strong>Symantec DLP:</strong> Enterprise standard for endpoint + network DLP. Enforce Server on-prem. Protected customer data in CRM exports, email, USB.
+            </div>
+
+            <h5>Why Migration NOW (Convergence of Factors)</h5>
+            <ul>
+              <li><strong>Siemens acquisition (2022):</strong> Cloud-first strategy. Subsidiaries aligning on Azure + M365.</li>
+              <li><strong>Data center lease:</strong> Expiring Q4 2025. Renew for 5 years or migrate?</li>
+              <li><strong>M365 E5 licensing:</strong> Already paying for Sentinel, MDE, Purview—not using them.</li>
+              <li><strong>Maintenance burden:</strong> 3-person security team spending 40% time on platform upkeep.</li>
+              <li><strong>Integration gaps:</strong> RSA/ESET/Symantec don't talk to each other. No unified incident view.</li>
+            </ul>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "What's still on-premises?"
+              <br><strong>Answer:</strong> "AD is hybrid—on-prem DCs syncing to Entra ID via Connect. Production workloads are still migrating. Palo Alto firewalls remain until Azure network architecture is complete. Symantec Network DLP stays until we have equivalent egress monitoring in Azure."
+            </div>
+          </div>
+        </details>
       </div>
 
       <!-- ==================== SECTION 2: WHY CONSULTING ==================== -->
@@ -547,6 +775,68 @@
           <br><strong>Shows:</strong> You can handle different cloud platforms (Azure at work, GCP on the side)
           <br><strong>Avoid:</strong> "I want to travel" or "Higher pay" — focus on professional growth
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — Why Consulting (Know Your Motivations)</summary>
+          <div class="deep-dive-content">
+            <h5>Genuine Reasons (Be Authentic)</h5>
+            <div class="example-box">
+              <strong>Variety of problems:</strong>
+              <ul>
+                <li>In-house: Same environment, same stakeholders, same challenges</li>
+                <li>Consulting: New client every few months, different industries, different maturity levels</li>
+                <li>Your evidence: Already seeking variety (DietTip on the side, multiple platforms)</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Accelerated learning:</strong>
+              <ul>
+                <li>See 10 different security programs vs staying in one for 10 years</li>
+                <li>Learn what works across contexts, not just one environment</li>
+                <li>Exposure to different tools, architectures, team structures</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Impact at scale:</strong>
+              <ul>
+                <li>In-house: Improve one company's security</li>
+                <li>Consulting: Improve dozens of companies' security over career</li>
+                <li>Build repeatable methodologies that help many clients</li>
+              </ul>
+            </div>
+
+            <h5>What You Enjoy (Connect to Consulting Work)</h5>
+            <ul>
+              <li><strong>Assessment phase:</strong> "What's the current state? What are the gaps?"</li>
+              <li><strong>Roadmap design:</strong> "How do we get from here to there?"</li>
+              <li><strong>Stakeholder alignment:</strong> "Getting buy-in across teams"</li>
+              <li><strong>Measurable outcomes:</strong> "We reduced MTTR by X, cost by Y"</li>
+            </ul>
+            <p>These are literally consulting deliverables. You've been doing consulting work internally.</p>
+
+            <h5>Consulting Realities (Show You Understand)</h5>
+            <div class="example-box">
+              <strong>What you're signing up for:</strong>
+              <ul>
+                <li>Travel (potentially significant)</li>
+                <li>Client deadlines trump your preferences</li>
+                <li>Utilization targets — billable hours matter</li>
+                <li>Building relationships quickly, then moving on</li>
+                <li>Sometimes recommending things you won't implement</li>
+              </ul>
+            </div>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "What concerns you about consulting?"
+              <br><strong>Answer:</strong> "Honestly, the thing I'll miss is seeing things through. In-house, you implement and live with your decisions. In consulting, you might design a roadmap but not be there for execution. I'll need to find satisfaction in setting clients up for success, even if I'm not there for the finish line."
+            </div>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "How will you handle travel?"
+              <br><strong>Answer:</strong> "I'm prepared for it. I relocated from India to Canada for this career — I'm not afraid of change or being away from comfort zones. I see travel as part of the job, not a burden."
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="question-block">
@@ -572,6 +862,62 @@
           <br><strong>Shows:</strong> GCP experience (not just Azure)
           <br><strong>Key insight:</strong> "Foundational controls first, then mature as they scale"
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — DietTip Technical Details</summary>
+          <div class="deep-dive-content">
+            <h5>Company Context</h5>
+            <ul>
+              <li><strong>What they do:</strong> Health-tech app for nutrition tracking and meal planning</li>
+              <li><strong>Current state:</strong> Consumer app pivoting to B2B (enterprise wellness programs)</li>
+              <li><strong>Why B2B matters for security:</strong> Enterprise customers will require SOC 2, security questionnaires, data protection commitments</li>
+            </ul>
+
+            <h5>Technical Stack</h5>
+            <ul>
+              <li><strong>Cloud:</strong> Google Cloud Platform (GCP)</li>
+              <li><strong>Backend:</strong> Firebase (Firestore database, Cloud Functions, Authentication)</li>
+              <li><strong>Why Firebase:</strong> Rapid development, serverless, scales automatically. But it's a developer-first platform—security is your responsibility.</li>
+            </ul>
+
+            <h5>What You're Implementing</h5>
+            <div class="example-box">
+              <strong>CI/CD Security:</strong>
+              <ul>
+                <li>Dependency scanning in build pipeline (npm audit, Snyk)</li>
+                <li>Secrets detection (prevent API keys in code)</li>
+                <li>Container scanning if using Cloud Run</li>
+                <li>Branch protection rules—PR reviews before merge to main</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Logging & Visibility:</strong>
+              <ul>
+                <li>Cloud Audit Logs enabled (Admin Activity, Data Access)</li>
+                <li>Logs exported to Cloud Storage or BigQuery for retention</li>
+                <li>Firebase Authentication events tracked</li>
+                <li>Building baseline—what's normal traffic, normal access patterns</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>IAM & Access:</strong>
+              <ul>
+                <li>Least privilege for service accounts</li>
+                <li>Separate projects for dev/staging/prod</li>
+                <li>No shared credentials—individual accounts with MFA</li>
+                <li>Firestore security rules reviewed (default rules are too permissive)</li>
+              </ul>
+            </div>
+
+            <h5>Why "Mostly Defaults" Is Okay Right Now</h5>
+            <p>They're still building the B2B architecture. Security investment should match business stage. Right now: foundational hygiene. As they onboard enterprise customers: formal policies, SOC 2 prep, more advanced monitoring. You don't build a SOC for a 10-person startup.</p>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "What's next for their security?"
+              <br><strong>Answer:</strong> "Once B2B architecture stabilizes—proper SIEM (probably Google Chronicle or export to a third-party), formal incident response process, SOC 2 Type 1 prep, security policies documentation. Right now it's about not having obvious gaps while they build."
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="question-block">
@@ -617,6 +963,54 @@
           <br><strong>Key phrase:</strong> "Fix it, but also make sure they understand what happened"
           <br><strong>Root cause:</strong> Windows update corrupted Defender sensor service — cleanup and Intune push to fix
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — Technical Communication & Troubleshooting</summary>
+          <div class="deep-dive-content">
+            <h5>Why This Story Works</h5>
+            <ul>
+              <li><strong>Shows proactive monitoring:</strong> You caught the issue, not the user</li>
+              <li><strong>Respects executive time:</strong> Quick context, clear ask, minimal disruption</li>
+              <li><strong>Translates jargon:</strong> "MDE is our endpoint security tool that detects malware"</li>
+              <li><strong>Builds trust:</strong> Explained what happened, not just fixed silently</li>
+            </ul>
+
+            <h5>Technical Details (If They Probe)</h5>
+            <div class="example-box">
+              <strong>What actually happened:</strong>
+              <ul>
+                <li>Windows Update corrupted the Defender Sense service</li>
+                <li>Service was in "Stopped" state, wouldn't restart</li>
+                <li>Device stopped sending telemetry to cloud console</li>
+                <li>Showed as "inactive" in MDE portal after 7 days</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>How you fixed it:</strong>
+              <ul>
+                <li>Remote session via Quick Assist (or your remote tool)</li>
+                <li>Ran MDE Client Analyzer to diagnose</li>
+                <li>Cleaned up corrupted files: <code>sc stop sense</code>, clear temp files</li>
+                <li>Triggered Intune sync to re-push config: <code>intunemanagementextension</code></li>
+                <li>Verified in portal: device now "Active" with fresh check-in</li>
+              </ul>
+            </div>
+
+            <h5>Communication Framework for Executives</h5>
+            <ul>
+              <li><strong>Lead with impact:</strong> "Your laptop isn't protected right now"</li>
+              <li><strong>Keep it simple:</strong> No acronyms, no technical depth unless asked</li>
+              <li><strong>Give clear ask:</strong> "I need 15 minutes of your time"</li>
+              <li><strong>Respect their time:</strong> Offer to work around their schedule</li>
+              <li><strong>Close the loop:</strong> "All done, you're protected again"</li>
+            </ul>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "How do you prioritize which devices to fix first?"
+              <br><strong>Answer:</strong> "We had a priority list — executives, privileged users, users with access to sensitive data. They get fixed first because they're higher-value targets. Regular employees are next, then shared devices. It's risk-based prioritization."
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="question-block">
@@ -716,6 +1110,70 @@
           <strong>Key elements:</strong> Proved with evidence, didn't argue, made their life easier, built relationship
           <br><strong>Consulting angle:</strong> This is exactly how you influence clients
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — Golden Image Issue & Stakeholder Management</summary>
+          <div class="deep-dive-content">
+            <h5>What Actually Happened (Technical)</h5>
+            <div class="example-box">
+              <strong>The problem:</strong>
+              <ul>
+                <li>IT Ops created a golden image (master template for new machines)</li>
+                <li>They installed and ONBOARDED MDE in the image before capturing it</li>
+                <li>Every machine deployed from that image had the SAME device ID</li>
+                <li>MDE portal showed 50+ devices as one device — couldn't distinguish them</li>
+                <li>Alerts, investigations, response actions — all broken</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Why IT Ops wanted to re-image:</strong>
+              <ul>
+                <li>That's what they know — "start fresh"</li>
+                <li>Didn't trust that offboard/reonboard would work</li>
+                <li>Concerned about "breaking things" with scripts</li>
+              </ul>
+            </div>
+
+            <h5>Your Approach (Why It Worked)</h5>
+            <div class="example-box">
+              <strong>Step 1: Don't argue — prove it</strong>
+              <ul>
+                <li>Asked for 5 pilot machines to test</li>
+                <li>Ran offboard script → waited 7 days (required) → ran onboard script</li>
+                <li>Each device got unique ID — showed them in portal</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Step 2: Make their life easier</strong>
+              <ul>
+                <li>Wrote the remediation script for remaining 50 devices</li>
+                <li>They didn't have to figure it out — just run the script</li>
+                <li>Documented the process for future reference</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Step 3: Prevent recurrence</strong>
+              <ul>
+                <li>Updated golden image SOP: "Do NOT onboard MDE in image"</li>
+                <li>MDE should onboard via Intune AFTER device is deployed</li>
+                <li>IT Ops now has correct process documented</li>
+              </ul>
+            </div>
+
+            <h5>The Offboard/Onboard Script (Know This)</h5>
+            <ul>
+              <li><strong>Offboard script:</strong> Downloaded from MDE portal → Settings → Offboarding</li>
+              <li><strong>Wait period:</strong> 7 days for device to be fully removed from backend</li>
+              <li><strong>Onboard:</strong> Intune pushes fresh onboarding package</li>
+              <li><strong>Result:</strong> New unique device ID, fresh registration</li>
+            </ul>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "What if IT Ops had refused your approach?"
+              <br><strong>Answer:</strong> "I'd escalate with data. 'Re-imaging 50 devices = 2 weeks downtime + user disruption. My approach = 5 minutes per device, no user impact.' At some point you let the business case speak. But honestly, proving it with a pilot usually wins people over."
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="question-block">
@@ -737,6 +1195,71 @@
           <strong>Structure:</strong> What happened → Why it happened → What you learned → Process improvement
           <br><strong>Key:</strong> Show you own failures and create systems to prevent recurrence
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — ASR Rule Failure & Process Improvement</summary>
+          <div class="deep-dive-content">
+            <h5>What Are ASR Rules? (Context)</h5>
+            <div class="example-box">
+              <strong>Attack Surface Reduction (ASR):</strong>
+              <ul>
+                <li>MDE feature that blocks risky behaviors at the OS level</li>
+                <li>Examples: Block Office macros, block unsigned scripts, block credential stealing</li>
+                <li>Runs BEFORE attack succeeds — prevention, not detection</li>
+                <li>Can break legitimate business processes if not tuned properly</li>
+              </ul>
+            </div>
+
+            <h5>The Specific Rule</h5>
+            <div class="example-box">
+              <strong>Rule:</strong> "Block execution of potentially obfuscated scripts"
+              <ul>
+                <li>Blocks PowerShell scripts that look suspicious (encoded, obfuscated)</li>
+                <li>Great for stopping malware, but also blocks some legitimate scripts</li>
+                <li>Finance had a weekly reporting script that was unsigned and somewhat obfuscated</li>
+              </ul>
+            </div>
+
+            <h5>What Went Wrong (Root Cause Analysis)</h5>
+            <ul>
+              <li><strong>Audit period too short:</strong> 1 week didn't cover weekly processes</li>
+              <li><strong>Audit started on wrong day:</strong> Monday start → missed Friday-only script</li>
+              <li><strong>No stakeholder validation:</strong> Didn't ask Finance about scheduled tasks</li>
+              <li><strong>Assumed silence = safe:</strong> No audit alerts ≠ no impact</li>
+            </ul>
+
+            <h5>The Fix (Immediate)</h5>
+            <div class="example-box">
+              <ul>
+                <li>Created emergency exclusion for Finance script path</li>
+                <li>Worked with Finance to sign the script properly (long-term fix)</li>
+                <li>Re-enabled rule with exclusion in place</li>
+              </ul>
+            </div>
+
+            <h5>Process Improvement (Prevent Recurrence)</h5>
+            <div class="example-box">
+              <strong>Pre-Enforcement Checklist:</strong>
+              <ul>
+                <li>☐ Audit mode for minimum 2-3 weeks (covers monthly cycles)</li>
+                <li>☐ Start audit on different day than enforcement will happen</li>
+                <li>☐ Email department heads: "Any scheduled tasks or scripts we should know about?"</li>
+                <li>☐ Review audit logs for ANY activity, not just blocks</li>
+                <li>☐ Test enforcement on pilot group first</li>
+              </ul>
+            </div>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "How did Finance react?"
+              <br><strong>Answer:</strong> "They were frustrated, understandably. But I owned it immediately — 'This is my mistake, here's the fix, here's how I'm preventing it from happening again.' They appreciated the transparency. Now they actually loop me in proactively when they're building new scripts."
+            </div>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "What other ASR rules have you enabled?"
+              <br><strong>Answer:</strong> "Block Office apps from creating child processes, block credential stealing from LSASS, block unsigned executables from USB. Each one went through the same audit → stakeholder check → pilot → enforce cycle. No more surprises."
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="question-block">
@@ -761,6 +1284,81 @@
           <br><strong>Key phrase:</strong> "I didn't just bring the problem — I brought options"
           <br><strong>Follow-up ready:</strong> Process of elimination troubleshooting, vendor engagement, risk documentation
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — FireEye Troubleshooting & Risk Decisions</summary>
+          <div class="deep-dive-content">
+            <h5>Context: FireEye HX (Now Trellix)</h5>
+            <div class="example-box">
+              <ul>
+                <li><strong>What it is:</strong> Endpoint Detection & Response (EDR) platform</li>
+                <li><strong>URL Inspection:</strong> Feature that analyzes URLs accessed by browsers</li>
+                <li><strong>Why it matters:</strong> Detects malicious links, C2 communication, phishing</li>
+                <li><strong>The trade-off:</strong> Inspecting URLs can interfere with web applications</li>
+              </ul>
+            </div>
+
+            <h5>Troubleshooting Methodology (Process of Elimination)</h5>
+            <div class="example-box">
+              <strong>Step 1: Isolate the variable</strong>
+              <ul>
+                <li>Uninstalled FireEye HX completely → portal worked</li>
+                <li>Confirmed: FireEye is the cause, not the app itself</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Step 2: Narrow down the feature</strong>
+              <ul>
+                <li>Reinstalled HX agent</li>
+                <li>Disabled features one by one via policy</li>
+                <li>Found: URL Inspection specifically caused the issue</li>
+                <li>Other features (file scanning, process monitoring) = no impact</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Step 3: Vendor engagement</strong>
+              <ul>
+                <li>Opened support case with FireEye</li>
+                <li>Provided logs, screenshots, repro steps</li>
+                <li>Vendor confirmed: Known limitation, JavaScript inspection conflicts with certain frameworks</li>
+                <li>No fix available at that time</li>
+              </ul>
+            </div>
+
+            <h5>Presenting Options (Not Just Problems)</h5>
+            <div class="example-box">
+              <strong>Option A: Keep portal broken</strong>
+              <ul>
+                <li>Pro: Full security coverage maintained</li>
+                <li>Con: Business can't use HR systems (unacceptable)</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Option B: Disable URL inspection on 4 machines</strong>
+              <ul>
+                <li>Pro: Portal works, business continues</li>
+                <li>Con: Reduced security coverage on those endpoints</li>
+                <li>Mitigation: Document risk, monitor those 4 devices more closely, create separate policy</li>
+              </ul>
+            </div>
+            <p><strong>Recommendation:</strong> Option B with risk documentation</p>
+
+            <h5>Risk Documentation (What You Wrote)</h5>
+            <ul>
+              <li><strong>Affected assets:</strong> 4 endpoints (list hostnames)</li>
+              <li><strong>Disabled control:</strong> URL Inspection feature</li>
+              <li><strong>Residual risk:</strong> Malicious URL detection reduced on these endpoints</li>
+              <li><strong>Compensating controls:</strong> Enhanced monitoring, web proxy still inspects, user awareness</li>
+              <li><strong>Review date:</strong> Check for vendor fix quarterly</li>
+              <li><strong>Approved by:</strong> Security leadership signature</li>
+            </ul>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "What happened when the vendor released a fix?"
+              <br><strong>Answer:</strong> "Vendor released a patch about 6 months later. I re-enabled URL inspection on those 4 machines, tested the portal, confirmed it worked. Closed out the risk exception and updated the documentation. Full coverage restored."
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="question-block">
@@ -783,6 +1381,77 @@
           <br><strong>Key phrase:</strong> "If something can be better, I'll find a way to make it better"
           <br><strong>Follow-up ready:</strong> Python + FireEye API, normalized data from 14 consoles, handed off documentation
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — FireEye API Automation Project</summary>
+          <div class="deep-dive-content">
+            <h5>The Manual Process (Before)</h5>
+            <div class="example-box">
+              <ul>
+                <li>14 FireEye HX consoles across global offices</li>
+                <li>Weekly task: Check which endpoints are compliant (agent installed, healthy)</li>
+                <li>Manual steps: Login to each console → Export report → Open Excel → Merge 14 files → VLOOKUP against asset inventory → Identify gaps</li>
+                <li>Time: 3-4 hours every week</li>
+                <li>Error-prone: Copy-paste mistakes, missed consoles, stale data</li>
+              </ul>
+            </div>
+
+            <h5>The Solution (What You Built)</h5>
+            <div class="example-box">
+              <strong>Technical approach:</strong>
+              <ul>
+                <li><strong>Language:</strong> Python</li>
+                <li><strong>API:</strong> FireEye HX REST API (authentication, device query endpoints)</li>
+                <li><strong>Logic:</strong>
+                  <ul>
+                    <li>Loop through 14 console URLs</li>
+                    <li>Authenticate to each via API key</li>
+                    <li>Pull list of registered devices with health status</li>
+                    <li>Normalize data (different consoles, same format)</li>
+                    <li>Compare against asset inventory (CSV or API to CMDB)</li>
+                    <li>Output: Gap report showing unprotected assets</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <h5>Code Concepts (If They Ask)</h5>
+            <div class="example-box">
+              <code style="display: block; padding: 0.5rem; background: rgba(0,0,0,0.3); border-radius: 4px; margin: 0.5rem 0;">
+# Pseudo-code structure<br>
+consoles = ["console1.company.com", "console2.company.com", ...]<br>
+all_devices = []<br>
+<br>
+for console in consoles:<br>
+&nbsp;&nbsp;token = authenticate(console, api_key)<br>
+&nbsp;&nbsp;devices = get_devices(console, token)<br>
+&nbsp;&nbsp;all_devices.extend(normalize(devices))<br>
+<br>
+inventory = load_asset_inventory()<br>
+gaps = find_missing(inventory, all_devices)<br>
+generate_report(gaps)
+              </code>
+            </div>
+
+            <h5>Impact & Handoff</h5>
+            <ul>
+              <li><strong>Time saved:</strong> 3-4 hours → 5 minutes per week</li>
+              <li><strong>Accuracy:</strong> No more manual errors</li>
+              <li><strong>Real-time:</strong> Can run anytime, not just weekly</li>
+              <li><strong>Documentation:</strong> Wrote README, handed off to team before leaving</li>
+            </ul>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "What challenges did you face?"
+              <br><strong>Answer:</strong> "API rate limiting was the first one — had to add delays between calls. Also, each console had slightly different data formats, so I had to normalize everything. And authentication tokens expired, so I built in token refresh logic. Standard API integration challenges."
+            </div>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "Is this something you could do in Sentinel?"
+              <br><strong>Answer:</strong> "Absolutely. In Sentinel, I'd use a Logic App or Function App on a schedule, call the MDE API for device health, compare against a watchlist of expected devices, and generate an alert or workbook for gaps. Same concept, different tools."
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="question-block">
@@ -805,6 +1474,51 @@
           <br><strong>Key phrase:</strong> "I saw a gap, learned what I needed, and delivered something that's still in production"
           <br><strong>Follow-up ready:</strong> Focused learning approach, 40-hour push for deadline, security work still ongoing
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — Rapid Skill Acquisition & Delivery</summary>
+          <div class="deep-dive-content">
+            <h5>Why This Story Works for Consulting</h5>
+            <div class="example-box">
+              <ul>
+                <li><strong>Adaptability:</strong> Consulting often requires learning client-specific tools quickly</li>
+                <li><strong>Initiative:</strong> Saw a problem outside your scope, offered to help</li>
+                <li><strong>Delivery under pressure:</strong> 40 hours straight = you can push when needed</li>
+                <li><strong>Lasting impact:</strong> Still in production = quality work, not just quick work</li>
+              </ul>
+            </div>
+
+            <h5>Your Learning Approach</h5>
+            <div class="example-box">
+              <strong>How you learned Figma quickly:</strong>
+              <ul>
+                <li>Started with YouTube tutorials (2-3 hours of basics)</li>
+                <li>Practiced by recreating existing designs</li>
+                <li>Learned component libraries, auto-layout, prototyping</li>
+                <li>Applied immediately to real project (learn by doing)</li>
+              </ul>
+            </div>
+
+            <h5>Connection to Security Work</h5>
+            <p>This same approach applies to security tools. When you joined the Siemens subsidiary:</p>
+            <ul>
+              <li>Had to learn KQL quickly (came from Splunk SPL)</li>
+              <li>Had to learn Intune for MDE deployment (new tool)</li>
+              <li>Had to learn Purview DLP (different from Symantec)</li>
+            </ul>
+            <p>Same pattern: tutorials → practice → apply immediately → iterate</p>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "How do you learn new security tools?"
+              <br><strong>Answer:</strong> "I start with official docs and Microsoft Learn modules for Microsoft tools. Then I build a lab or use the client's dev environment to practice. I learn fastest when I have a real use case — 'I need to detect X' is better motivation than 'I should learn Y.' I also document as I learn, which reinforces understanding and creates references for later."
+            </div>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "What if you joined an engagement with tools you've never used?"
+              <br><strong>Answer:</strong> "It's happened. First, I'm honest about my experience level. Then I ask — who's the SME? What documentation exists? I ramp up quickly, but I also leverage the team. Consulting is collaborative; you don't need to know everything, you need to know how to find answers."
+            </div>
+          </div>
+        </details>
       </div>
 
       <!-- ==================== SECTION 5: TECHNICAL (DIRECTOR LEVEL) ==================== -->
@@ -1116,6 +1830,77 @@
           <br><strong>Anti-pattern:</strong> Duplicating XDR detections in SIEM
           <br><strong>Shows:</strong> You understand modern XDR-first architecture
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — SIEM vs XDR Detection Ownership</summary>
+          <div class="deep-dive-content">
+            <h5>What XDR Sees That SIEM Can't</h5>
+            <div class="example-box">
+              <strong>Endpoint (MDE):</strong>
+              <ul>
+                <li><strong>Kernel-level telemetry:</strong> Process creation, DLL loading, registry changes at OS level</li>
+                <li><strong>AMSI integration:</strong> Script content AFTER deobfuscation (PowerShell, VBScript)</li>
+                <li><strong>Behavioral ML:</strong> Anomaly detection trained on billions of signals</li>
+                <li><strong>Memory scanning:</strong> Fileless malware detection</li>
+              </ul>
+              <p><strong>Example:</strong> PowerShell downloads encoded payload → AMSI decodes → MDE sees actual malicious content. SIEM only sees "powershell.exe executed" in logs.</p>
+            </div>
+            <div class="example-box">
+              <strong>Identity (MDI):</strong>
+              <ul>
+                <li><strong>DC traffic analysis:</strong> Kerberos/NTLM protocol anomalies</li>
+                <li><strong>Lateral movement:</strong> Pass-the-hash, pass-the-ticket detection</li>
+                <li><strong>Reconnaissance:</strong> LDAP enumeration, SPN scanning</li>
+              </ul>
+              <p><strong>Example:</strong> MDI detects Kerberoasting by analyzing AS-REQ patterns. SIEM would need event 4769 + complex correlation.</p>
+            </div>
+            <div class="example-box">
+              <strong>Email (MDO):</strong>
+              <ul>
+                <li><strong>URL detonation:</strong> Clicks link in sandbox before delivery</li>
+                <li><strong>Attachment analysis:</strong> Opens files in isolated environment</li>
+                <li><strong>Impersonation detection:</strong> Display name spoofing, domain lookalikes</li>
+              </ul>
+            </div>
+
+            <h5>What SIEM Does Better</h5>
+            <div class="example-box">
+              <strong>Cross-domain correlation:</strong>
+              <ul>
+                <li>User logs in from VPN (network) → accesses sensitive SharePoint (SaaS) → downloads to USB (endpoint)</li>
+                <li>Requires joining data across identity, network, cloud, endpoint</li>
+                <li>XDR sees pieces; SIEM sees the story</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Non-Microsoft sources:</strong>
+              <ul>
+                <li>Palo Alto firewall logs</li>
+                <li>AWS CloudTrail</li>
+                <li>Custom applications</li>
+                <li>OT/ICS systems</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Business logic detections:</strong>
+              <ul>
+                <li>"Finance user accessing HR data" — requires business context</li>
+                <li>"After-hours access from unexpected location" — needs baseline</li>
+                <li>Compliance-driven detections specific to your environment</li>
+              </ul>
+            </div>
+
+            <h5>Our Architecture (RevFlow)</h5>
+            <p><strong>XDR handles:</strong> Endpoint malware, identity attacks (MDI), email threats, cloud app anomalies (MDCA)</p>
+            <p><strong>Sentinel handles:</strong> Palo Alto firewall correlation, custom app logs, cross-domain detections, compliance alerting</p>
+            <p><strong>Unified queue:</strong> XDR incidents sync to Sentinel. SOC works from one console. No duplicate alerts.</p>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "What about clients who don't use Microsoft?"
+              <br><strong>Answer:</strong> "The principle still applies—let your EDR handle endpoint detections, SIEM handles correlation. CrowdStrike, SentinelOne have similar XDR capabilities. The risk with non-Microsoft stack is you lose native integration, so you need to build correlation rules manually. More work, but achievable."
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="question-block">
@@ -1136,6 +1921,61 @@
           <br><strong>Tiered strategy:</strong> Analytics / Basic / Archive / Stay in place
           <br><strong>Business value:</strong> "50-70% cost reduction with better coverage"
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — Log Tiering & Cost Optimization</summary>
+          <div class="deep-dive-content">
+            <h5>Sentinel Log Tiers (Know This)</h5>
+            <div class="example-box">
+              <strong>Analytics Tier (Full Price):</strong>
+              <ul>
+                <li>Full KQL query capability</li>
+                <li>Real-time alerting</li>
+                <li>90 days hot retention (default)</li>
+                <li>Use for: Security events, identity logs, high-value sources</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Basic Logs Tier (~60% cheaper):</strong>
+              <ul>
+                <li>Limited query (8 days, simple queries only)</li>
+                <li>No alerting on this tier</li>
+                <li>Good for: High-volume, low-signal logs (verbose firewall, debug logs)</li>
+                <li>Can still search for forensics/investigations</li>
+              </ul>
+            </div>
+            <div class="example-box">
+              <strong>Archive Tier (~90% cheaper):</strong>
+              <ul>
+                <li>Long-term retention (up to 12 years)</li>
+                <li>Must restore to query (takes time)</li>
+                <li>Use for: Compliance retention requirements</li>
+              </ul>
+            </div>
+
+            <h5>Detection-Driven Ingestion Framework</h5>
+            <ol>
+              <li><strong>Start with threat model:</strong> What attacks matter for this client? (Ransomware? Insider threat? Nation-state?)</li>
+              <li><strong>Map to MITRE ATT&CK:</strong> Which techniques are relevant?</li>
+              <li><strong>Identify required telemetry:</strong> What data sources detect those techniques?</li>
+              <li><strong>Tier the rest:</strong> Everything else goes to Basic/Archive or stays in source system</li>
+            </ol>
+
+            <h5>Real Numbers from Our Migration</h5>
+            <ul>
+              <li><strong>RSA ingestion:</strong> ~800 GB/day (everything centralized)</li>
+              <li><strong>Sentinel Analytics tier:</strong> ~250 GB/day (detection-relevant only)</li>
+              <li><strong>Sentinel Basic tier:</strong> ~300 GB/day (verbose logs for forensics)</li>
+              <li><strong>Left in source:</strong> ~250 GB/day (queryable via Azure Data Explorer when needed)</li>
+              <li><strong>Result:</strong> 68% cost reduction vs RSA, better detection coverage</li>
+            </ul>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "What if they have compliance requirements for full retention?"
+              <br><strong>Answer:</strong> "Retention ≠ Analytics. You can retain everything in Archive tier for 7 years at minimal cost. You just don't need to pay Analytics pricing for logs you'll only query during investigations. Compliance usually cares about 'can you produce this log if asked'—not 'can you alert on it in real-time.'"
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="question-block">
@@ -1160,6 +2000,68 @@
           <br><strong>Framework:</strong> MITRE ATT&CK for coverage mapping
           <br><strong>Quality bar:</strong> "If SOC doesn't know what to do, it's noise"
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — Detection Engineering Methodology</summary>
+          <div class="deep-dive-content">
+            <h5>Step 1: Threat Modeling</h5>
+            <div class="example-box">
+              <strong>Questions to ask:</strong>
+              <ul>
+                <li>What's the business? (SaaS, financial, healthcare → different threat actors)</li>
+                <li>What are crown jewels? (Customer data, IP, financial systems)</li>
+                <li>What's the attack surface? (Cloud-heavy, remote workforce, legacy systems)</li>
+                <li>What's happened before? (Previous incidents, near-misses)</li>
+              </ul>
+              <strong>Output:</strong> Prioritized list of MITRE ATT&CK techniques to detect
+            </div>
+
+            <h5>Step 2: Data Source Mapping</h5>
+            <div class="example-box">
+              <strong>Example — Detecting T1078 (Valid Accounts):</strong>
+              <ul>
+                <li><strong>Required data:</strong> Entra ID Sign-in logs, Conditional Access logs</li>
+                <li><strong>Detection approach:</strong> Impossible travel, new device + sensitive app, failed MFA followed by success</li>
+                <li><strong>If data missing:</strong> Either ingest it or accept detection gap</li>
+              </ul>
+            </div>
+
+            <h5>Step 3: Detection Design Principles</h5>
+            <ul>
+              <li><strong>Behavior over IOC:</strong> Hash-based detections are easily evaded. Behavioral patterns are harder to change.</li>
+              <li><strong>Sequence over single event:</strong> "PowerShell executed" is noise. "PowerShell → downloads file → executes from temp" is signal.</li>
+              <li><strong>Context enrichment:</strong> Is this user an admin? Is this their normal device? Is this a sensitive system?</li>
+              <li><strong>Baseline awareness:</strong> What's normal for this environment? Anomaly from baseline, not arbitrary threshold.</li>
+            </ul>
+
+            <h5>Step 4: Testing & Tuning</h5>
+            <div class="example-box">
+              <strong>Our process:</strong>
+              <ol>
+                <li><strong>Deploy in audit mode:</strong> Rule fires, creates log, doesn't alert SOC</li>
+                <li><strong>Analyze baseline:</strong> How often does it fire? On what? False positives?</li>
+                <li><strong>Tune thresholds:</strong> Add exclusions for known-good, tighten criteria</li>
+                <li><strong>Validate with red team:</strong> Does it catch the attack? (Atomic Red Team, manual testing)</li>
+                <li><strong>Move to alerting:</strong> Now SOC sees it. Include playbook link in alert.</li>
+                <li><strong>Continuous improvement:</strong> SOC feedback → tuning → better fidelity over time</li>
+              </ol>
+            </div>
+
+            <h5>Detection Quality Checklist</h5>
+            <ul>
+              <li>☐ Does it have a playbook? (If no, analyst won't know what to do)</li>
+              <li>☐ Is severity appropriate? (High severity = immediate action required)</li>
+              <li>☐ Does it include context? (User, device, related events)</li>
+              <li>☐ Is false positive rate acceptable? (&lt;10% for production)</li>
+              <li>☐ Is it mapped to MITRE? (For coverage tracking)</li>
+            </ul>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "How do you measure detection coverage?"
+              <br><strong>Answer:</strong> "We map detections to MITRE ATT&CK. Visual heatmap showing which techniques we detect, which we don't. Prioritize based on threat model—don't need 100% coverage, need coverage where it matters. Also track detection efficacy—how often does each detection catch real attacks vs false positives."
+            </div>
+          </div>
+        </details>
       </div>
 
       <!-- ==================== SOC MATURITY ASSESSMENT ==================== -->
@@ -1172,51 +2074,188 @@
         <h4>Q: How would you conduct a SOC maturity assessment? <span class="time-indicator">90 sec</span></h4>
         
         <div class="answer-text">
-          I'd use a structured framework—like SOC-CMM or NIST CSF—and assess across multiple dimensions.
+          So the way I'd approach it—I'd look at four pillars: People, Process, Technology, and Governance. But honestly, what I've learned is these aren't independent. They're deeply connected.
           <br><br>
-          <strong>People:</strong> Team structure, skill levels, training, shift coverage, analyst burnout indicators. Do they have enough people? Right skills? Career paths?
+          Let me give you an example. <strong>Technology:</strong> Say a client has MDE deployed. Great. But when I check agent compliance, 15% of endpoints aren't reporting. That's a technology gap, right? But it directly impacts <strong>Process</strong>—if your auto-containment playbook fires but the agent's containment sensor isn't working on that endpoint, your MTTR just went from 2 minutes to however long it takes an analyst to manually isolate. So one technology gap breaks your process automation.
           <br><br>
-          <strong>Process:</strong> Incident response procedures, playbooks, escalation paths, handoffs. Are they documented? Actually followed? Continuously improved?
+          Same with SIEM. Built-in connectors for M365, Entra ID—they just work. But if you're ingesting from a legacy app with custom parsing, that's where delays happen. That connector reliability directly affects your MTTD.
           <br><br>
-          <strong>Technology:</strong> Tool coverage, integration, automation. Is SIEM generating signal or noise? Do they have SOAR? Are tools integrated or siloed?
+          <strong>People:</strong> Do they have the skills to tune these tools? In our environment, MDE has multiple modules—ASR for prevention, AIR for automated investigation and response. We use AIR heavily for automated evidence collection and initial triage. But for cross-platform actions—like enriching alerts with threat intel or triggering ServiceNow tickets—we use Logic Apps. Knowing when to use which requires experience.
           <br><br>
-          <strong>Metrics:</strong> MTTD, MTTR, false positive rate, analyst caseload. Are they measuring the right things? Improving over time?
+          <strong>Governance:</strong> Are they actually measuring MTTD and MTTR? Do they know which playbooks are improving response time and which are just generating noise?
           <br><br>
-          <strong>Governance:</strong> Reporting to leadership, risk alignment, regulatory compliance.
-          <br><br>
-          I'd combine document review, tool analysis, interviews with analysts and leadership, and observation of actual operations. The goal is a baseline score, gap analysis, and prioritized roadmap with quick wins and longer-term improvements.
+          So the deliverable would be: score each pillar, but more importantly, show how they connect. Identify the weakest link because that's your effective maturity. Then prioritize—quick wins first, strategic improvements over time.
         </div>
 
         <div class="key-points">
-          <strong>Framework:</strong> SOC-CMM or NIST CSF
-          <br><strong>Dimensions:</strong> People, Process, Technology, Metrics, Governance
-          <br><strong>Output:</strong> Baseline score + gap analysis + prioritized roadmap
+          <strong>Natural flow:</strong> Pillars → Show interconnection with real examples → Deliverable
+          <br><strong>Real examples used:</strong> MDE agent compliance → MTTR impact, AIR vs Logic Apps, connector reliability → MTTD
+          <br><strong>Key insight:</strong> "Your effective maturity is your weakest pillar"
+          <br><strong>Shows:</strong> You've actually lived this, not just read about it
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — SOC Maturity Assessment Framework</summary>
+          <div class="deep-dive-content">
+            <h5>The Four Pillars in Detail</h5>
+            
+            <div class="example-box">
+              <strong>1. PEOPLE</strong>
+              <ul>
+                <li><strong>Team structure:</strong> How many analysts? L1/L2/L3 split? 24x7 or business hours?</li>
+                <li><strong>Skills assessment:</strong> Do they have cloud security skills? Detection engineering? Automation?</li>
+                <li><strong>Turnover:</strong> High SOC turnover (industry average ~30%) indicates burnout, poor tooling, or lack of growth</li>
+                <li><strong>Training:</strong> Budget for certs? Time for learning? Or just firefighting?</li>
+              </ul>
+              <p><strong>Red flag:</strong> "We have 3 analysts covering 24x7" = they're burned out</p>
+            </div>
+
+            <div class="example-box">
+              <strong>2. PROCESS</strong>
+              <ul>
+                <li><strong>Playbooks:</strong> Documented? Actually followed? When were they last updated?</li>
+                <li><strong>Incident classification:</strong> Clear severity definitions? Escalation paths?</li>
+                <li><strong>Post-incident review:</strong> Do they learn from incidents or just close tickets?</li>
+                <li><strong>Change management:</strong> How do new detections get deployed? Tested?</li>
+              </ul>
+              <p><strong>Red flag:</strong> "We have playbooks but nobody uses them" = process maturity is actually Level 1</p>
+            </div>
+
+            <div class="example-box">
+              <strong>3. TECHNOLOGY</strong>
+              <ul>
+                <li><strong>Coverage:</strong> What's actually monitored? Gaps in identity? Cloud? OT?</li>
+                <li><strong>Integration:</strong> Do tools talk to each other? Or siloed consoles?</li>
+                <li><strong>Automation:</strong> SOAR deployed? What's automated vs manual?</li>
+                <li><strong>Health:</strong> Agent compliance? Connector reliability? Ingestion gaps?</li>
+              </ul>
+              <p><strong>Our example:</strong> MDE agent compliance at 85% means 15% of endpoints have no automated response capability</p>
+            </div>
+
+            <div class="example-box">
+              <strong>4. GOVERNANCE</strong>
+              <ul>
+                <li><strong>Metrics:</strong> Do they measure MTTD, MTTR? Or just "tickets closed"?</li>
+                <li><strong>Reporting:</strong> Does security report to leadership? How often?</li>
+                <li><strong>Risk alignment:</strong> Are detection priorities tied to business risk?</li>
+                <li><strong>Compliance:</strong> Regulatory requirements driving security, or security driving compliance?</li>
+              </ul>
+            </div>
+
+            <h5>MDE Modules You Should Know</h5>
+            <ul>
+              <li><strong>ASR (Attack Surface Reduction):</strong> Prevention—blocks Office macros, script execution, credential stealing. Runs BEFORE attack succeeds.</li>
+              <li><strong>AIR (Automated Investigation and Response):</strong> Post-alert automation. Collects evidence, determines scope, can auto-remediate. We use this for automated evidence collection on high-severity alerts.</li>
+              <li><strong>Live Response:</strong> Manual remote shell to endpoint for investigation. Used when automation isn't enough.</li>
+              <li><strong>Device Containment:</strong> Network isolation. Requires healthy agent with containment sensor working.</li>
+            </ul>
+
+            <h5>When to Use AIR vs Logic Apps</h5>
+            <div class="example-box">
+              <strong>Use AIR when:</strong>
+              <ul>
+                <li>Investigation is endpoint-focused</li>
+                <li>You want automated evidence collection (files, processes, network connections)</li>
+                <li>Auto-remediation within MDE (quarantine file, isolate device)</li>
+              </ul>
+              <strong>Our example:</strong> High-severity malware alert → AIR automatically collects process tree, file hash, network connections, determines if other endpoints affected.
+            </div>
+            <div class="example-box">
+              <strong>Use Logic Apps when:</strong>
+              <ul>
+                <li>Cross-platform orchestration needed</li>
+                <li>Integration with external systems (ServiceNow, Slack, threat intel APIs)</li>
+                <li>Custom workflow logic beyond MDE's built-in actions</li>
+              </ul>
+              <strong>Our example:</strong> Sentinel alert → Logic App enriches with VirusTotal, checks user risk in Entra ID, creates ServiceNow ticket with context, posts to Slack.
+            </div>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "How do you score maturity?"
+              <br><strong>Answer:</strong> "I use a 1-5 scale per pillar. Level 1 is ad-hoc—no documentation, reactive only. Level 3 is defined—documented processes, metrics tracked, some automation. Level 5 is optimizing—continuous improvement, predictive capabilities, security driving business decisions. Most organizations are Level 2-3. The goal isn't always Level 5—it's the right level for their risk profile and resources."
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="question-block">
         <h4>Q: What are common gaps you see in SOC operations? <span class="time-indicator">60 sec</span></h4>
         
         <div class="answer-text">
-          Based on my experience, the most common gaps I see:
+          The biggest one I see? <strong>Automation that's half-implemented.</strong> They'll have a playbook that triggers on high-severity alerts, but it fails silently because the MDE agent on that endpoint has a broken sensor. Or they have auto-enrichment but it times out because the threat intel API isn't reliable. So analysts end up doing manual work anyway, but now they're also troubleshooting why automation didn't fire.
           <br><br>
-          <strong>Alert fatigue:</strong> Too many low-fidelity alerts, analysts desensitized. Usually because detections were never tuned or inherited from default rule sets.
+          <strong>Agent compliance drift</strong> is another one. Day one, everything's reporting. Six months later, 10-15% of endpoints are stale—reimaged machines, corrupted services, whatever. Nobody's watching the compliance dashboard, so your coverage is quietly degrading.
           <br><br>
-          <strong>Lack of playbooks:</strong> Analysts making it up as they go. Inconsistent response, longer resolution times, knowledge trapped in individuals' heads.
+          <strong>Tool sprawl without integration.</strong> They have SIEM, EDR, SOAR, threat intel platform—but they're not talking to each other. Analyst has to pivot between 4-5 consoles to investigate one alert. That kills MTTR.
           <br><br>
-          <strong>Tool sprawl:</strong> Multiple consoles, no integration. Analysts context-switching between 5-6 tools to investigate one alert.
+          <strong>Detections that were never tuned.</strong> Default rules from day one, generating noise. Analysts get desensitized, start ignoring certain alert types. That's how real attacks get missed.
           <br><br>
-          <strong>Identity blind spot:</strong> Heavy investment in network and endpoint, but limited visibility into identity-based attacks. This is critical as attackers increasingly target credentials.
-          <br><br>
-          <strong>Metrics theater:</strong> Measuring things that look good on slides—closed tickets—instead of things that matter—detection coverage, MTTD, attack outcomes.
-          <br><br>
-          The fix is usually prioritization: you can't solve everything at once, so identify the highest-impact gaps and build a phased improvement plan.
+          The fix is usually boring: clean up agent health, consolidate tools where possible, tune the high-volume detections. Not glamorous, but it's what actually improves outcomes.
         </div>
 
         <div class="key-points">
-          <strong>Common gaps:</strong> Alert fatigue, no playbooks, tool sprawl, identity blind spot, wrong metrics
-          <br><strong>Consulting approach:</strong> Prioritize highest-impact gaps first
+          <strong>Real examples:</strong> Broken automation, agent compliance drift, tool sprawl, untuned detections
+          <br><strong>Shows:</strong> You've seen these problems firsthand
+          <br><strong>Practical mindset:</strong> "The fix is usually boring" — you're not chasing shiny things
         </div>
+
+        <details class="deep-dive">
+          <summary>Deep Dive — SOC Gaps & How to Fix Them</summary>
+          <div class="deep-dive-content">
+            <h5>Gap 1: Automation That's Half-Implemented</h5>
+            <div class="example-box">
+              <strong>What it looks like:</strong>
+              <ul>
+                <li>SOAR playbook exists but fails 30% of the time</li>
+                <li>Auto-containment configured but MDE agent unhealthy on target</li>
+                <li>Enrichment playbook times out because threat intel API is slow</li>
+              </ul>
+              <strong>Why it's bad:</strong> Analysts don't trust automation, so they do everything manually anyway. Worst of both worlds.
+              <br><strong>Fix:</strong> Audit playbook success rates. Fix reliability before adding new automation. Start with simple, high-success playbooks.
+            </div>
+
+            <h5>Gap 2: Agent Compliance Drift</h5>
+            <div class="example-box">
+              <strong>What it looks like:</strong>
+              <ul>
+                <li>Day 1: 100% MDE coverage</li>
+                <li>Month 6: 85% coverage (nobody noticed)</li>
+                <li>Causes: Reimaged machines, corrupted services, new devices not onboarded</li>
+              </ul>
+              <strong>Why it's bad:</strong> You think you have visibility, but 15% of endpoints are blind spots.
+              <br><strong>Fix:</strong> Weekly compliance reports. Alert on devices inactive >7 days. Automate remediation where possible.
+            </div>
+
+            <h5>Gap 3: Tool Sprawl Without Integration</h5>
+            <div class="example-box">
+              <strong>What it looks like:</strong>
+              <ul>
+                <li>SIEM (Splunk), EDR (CrowdStrike), SOAR (Phantom), TIP (MISP), Ticketing (ServiceNow)</li>
+                <li>None of them talk to each other</li>
+                <li>Analyst has 5 browser tabs open to investigate one alert</li>
+              </ul>
+              <strong>Why it's bad:</strong> Context-switching kills productivity. MTTR suffers.
+              <br><strong>Fix:</strong> Prioritize integration. Even basic webhook integrations help. Long-term: consolidate where possible (XDR approach).
+            </div>
+
+            <h5>Gap 4: Untuned Detections</h5>
+            <div class="example-box">
+              <strong>What it looks like:</strong>
+              <ul>
+                <li>500 alerts/day, 490 are false positives</li>
+                <li>Analysts auto-close certain alert types without investigating</li>
+                <li>"We've always had that rule, nobody knows who created it"</li>
+              </ul>
+              <strong>Why it's bad:</strong> Real attacks get lost in noise. Analyst burnout.
+              <br><strong>Fix:</strong> Detection hygiene sprint. Review top 10 noisy rules. Tune or disable. Require playbooks for all production detections.
+            </div>
+
+            <div class="follow-up">
+              <strong>Potential Follow-up:</strong> "How do you prioritize which gaps to fix first?"
+              <br><strong>Answer:</strong> "Impact vs effort matrix. High-impact, low-effort wins go first — usually tuning noisy detections and fixing agent compliance. These show quick results and build credibility for bigger initiatives. Then tackle the structural issues — tool integration, process documentation."
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="question-block">
