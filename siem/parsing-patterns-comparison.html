@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parsing Patterns | Side-by-Side Sentinel vs Splunk</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .concept-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.02));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    
+    @media (max-width: 900px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .sentinel-box {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    
+    .sentinel-box h4 {
+      color: #3b82f6;
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .sentinel-box h4::before {
+      content: "🔵";
+    }
+    
+    .splunk-box {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    
+    .splunk-box h4 {
+      color: #22c55e;
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .splunk-box h4::before {
+      content: "🟢";
+    }
+    
+    .code-block {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    
+    .code-block .comment {
+      color: #6b7280;
+    }
+    
+    .code-block .keyword {
+      color: #8b5cf6;
+    }
+    
+    .code-block .function {
+      color: #22c55e;
+    }
+    
+    .code-block .string {
+      color: #f59e0b;
+    }
+    
+    .code-block .field {
+      color: #06b6d4;
+    }
+    
+    .raw-log {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      color: #e5e7eb;
+    }
+    
+    .raw-log::before {
+      content: "📄 Raw Log:";
+      display: block;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    
+    .pattern-header {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(139, 92, 246, 0.1));
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0 1rem 0;
+      border-left: 4px solid #8b5cf6;
+    }
+    
+    .pattern-header h2 {
+      margin: 0;
+      color: #8b5cf6;
+    }
+    
+    .pattern-header p {
+      margin: 0.5rem 0 0 0;
+      color: var(--text-secondary);
+    }
+    
+    .flow-diagram {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.4;
+    }
+    
+    .tip-box {
+      background: rgba(234, 179, 8, 0.1);
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .tip-box h4 {
+      color: #eab308;
+      margin-top: 0;
+    }
+    
+    .warning-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .warning-box h4 {
+      color: #ef4444;
+      margin-top: 0;
+    }
+    
+    .info-box {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .info-box h4 {
+      color: #3b82f6;
+      margin-top: 0;
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    
+    .comparison-table th {
+      background: rgba(139, 92, 246, 0.2);
+      padding: 0.75rem;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .comparison-table td {
+      padding: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      vertical-align: top;
+    }
+    
+    .comparison-table tr:nth-child(even) {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    
+    details {
+      margin: 1rem 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    details summary {
+      background: rgba(139, 92, 246, 0.1);
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    
+    details summary:hover {
+      background: rgba(139, 92, 246, 0.15);
+    }
+    
+    details[open] summary {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    details .details-content {
+      padding: 1rem;
+    }
+    
+    .enrichment-flow {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    
+    .enrichment-flow .step {
+      background: rgba(139, 92, 246, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+    }
+    
+    .enrichment-flow .arrow {
+      color: #22c55e;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/parsing-normalization-overview.html" class="nav-item">Parsing Overview</a>
+          <a href="../siem/sentinel-parsing-deep-dive.html" class="nav-item">Sentinel Parsing</a>
+          <a href="../siem/splunk-parsing-deep-dive.html" class="nav-item">Splunk Parsing</a>
+          <a href="../siem/parsing-patterns-comparison.html" class="nav-item active">Parsing Comparison</a>
+          <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="../siem/threat-intel-integration.html" class="nav-item">TI Integration</a>
+          <a href="../siem/vuln-management-workflow.html" class="nav-item">Vuln Management</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../director-interview-prep.html" class="nav-item">Director Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">SIEM Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Parsing Comparison</span>
+        </nav>
+        <h1>Parsing Patterns: Sentinel vs Splunk</h1>
+        <p class="section-description">Side-by-side comparison for common log source types</p>
+      </div>
+
+      <!-- ==================== DECISION FRAMEWORK ==================== -->
+      <div class="concept-card">
+        <h2>🎯 Quick Decision Framework</h2>
+        
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Log Format</th>
+              <th>Sentinel Approach</th>
+              <th>Splunk Approach</th>
+              <th>When to Parse</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>JSON</strong></td>
+              <td>parse_json() or DCR transformation</td>
+              <td>spath or INDEXED_EXTRACTIONS=json</td>
+              <td>Query-time (flexible) or Ingest (high volume)</td>
+            </tr>
+            <tr>
+              <td><strong>Key-Value</strong></td>
+              <td>parse operator or extract()</td>
+              <td>kvform or rex</td>
+              <td>Usually query-time</td>
+            </tr>
+            <tr>
+              <td><strong>Syslog</strong></td>
+              <td>Built-in Syslog table + parse</td>
+              <td>TA with props.conf extractions</td>
+              <td>Index-time for header, query-time for message</td>
+            </tr>
+            <tr>
+              <td><strong>CEF</strong></td>
+              <td>CommonSecurityLog (pre-parsed)</td>
+              <td>Splunk Add-on for CEF</td>
+              <td>Connector/TA handles parsing</td>
+            </tr>
+            <tr>
+              <td><strong>Windows Events</strong></td>
+              <td>SecurityEvent (pre-parsed)</td>
+              <td>Windows TA (pre-parsed)</td>
+              <td>Connector/TA handles parsing</td>
+            </tr>
+            <tr>
+              <td><strong>Custom/Unstructured</strong></td>
+              <td>DCR transform or KQL parsing</td>
+              <td>props.conf + transforms.conf</td>
+              <td>Index-time for stable; query-time for evolving</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ==================== PATTERN 1: JSON LOGS ==================== -->
+      <section id="json-logs">
+        <div class="pattern-header">
+          <h2>📋 Pattern 1: JSON Logs</h2>
+          <p>Modern APIs, cloud services, structured application logs</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Example: Cloud API Audit Log</h3>
+          
+          <div class="raw-log">{
+  "timestamp": "2024-01-15T10:30:45Z",
+  "event": {
+    "type": "api_call",
+    "action": "CreateUser"
+  },
+  "actor": {
+    "id": "user123",
+    "email": "admin@company.com",
+    "type": "user"
+  },
+  "target": {
+    "id": "user456",
+    "email": "newuser@company.com"
+  },
+  "source": {
+    "ip": "192.168.1.100",
+    "userAgent": "Mozilla/5.0..."
+  },
+  "result": {
+    "status": "success",
+    "code": 200
+  }
+}</div>
+
+          <div class="comparison-grid">
+            <div class="sentinel-box">
+              <h4>Sentinel (KQL)</h4>
+              
+              <p><strong>Option 1: Query-Time Parsing</strong></p>
+              <div class="code-block">
+CustomApp_CL
+| <span class="keyword">extend</span> <span class="field">Parsed</span> = <span class="function">parse_json</span>(<span class="field">RawData</span>)
+| <span class="keyword">extend</span>
+    <span class="field">EventType</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.event.type),
+    <span class="field">Action</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.event.action),
+    <span class="field">ActorEmail</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.actor.email),
+    <span class="field">TargetEmail</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.target.email),
+    <span class="field">SourceIP</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.source.ip),
+    <span class="field">ResultStatus</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.result.status)
+| <span class="keyword">project-away</span> <span class="field">Parsed</span>, <span class="field">RawData</span>
+              </div>
+              
+              <p><strong>Option 2: DCR Transformation (Ingest-Time)</strong></p>
+              <div class="code-block">
+<span class="comment">// In DCR transformation KQL</span>
+source
+| <span class="keyword">extend</span> <span class="field">p</span> = <span class="function">parse_json</span>(<span class="field">RawData</span>)
+| <span class="keyword">extend</span>
+    <span class="field">EventType</span> = <span class="function">tostring</span>(<span class="field">p</span>.event.type),
+    <span class="field">Action</span> = <span class="function">tostring</span>(<span class="field">p</span>.event.action),
+    <span class="field">ActorEmail</span> = <span class="function">tostring</span>(<span class="field">p</span>.actor.email),
+    <span class="field">SourceIP</span> = <span class="function">tostring</span>(<span class="field">p</span>.source.ip),
+    <span class="field">ResultStatus</span> = <span class="function">tostring</span>(<span class="field">p</span>.result.status)
+| <span class="keyword">project-away</span> <span class="field">RawData</span>, <span class="field">p</span>
+              </div>
+            </div>
+            
+            <div class="splunk-box">
+              <h4>Splunk (SPL)</h4>
+              
+              <p><strong>Option 1: Query-Time with spath</strong></p>
+              <div class="code-block">
+index=custom_apps sourcetype=cloud_api
+| <span class="keyword">spath</span>
+| <span class="keyword">rename</span> 
+    event.type AS event_type,
+    event.action AS action,
+    actor.email AS actor_email,
+    target.email AS target_email,
+    source.ip AS src_ip,
+    result.status AS result_status
+
+<span class="comment">// Or explicitly:</span>
+| <span class="keyword">spath</span> path=actor.email output=actor_email
+| <span class="keyword">spath</span> path=source.ip output=src_ip
+              </div>
+              
+              <p><strong>Option 2: props.conf (Index-Time)</strong></p>
+              <div class="code-block">
+<span class="comment"># props.conf</span>
+[cloud_api]
+KV_MODE = json
+INDEXED_EXTRACTIONS = json
+              </div>
+              
+              <p><strong>Option 3: Search-Time Extraction</strong></p>
+              <div class="code-block">
+<span class="comment"># props.conf</span>
+[cloud_api]
+EXTRACT-actor = "actor":\s*\{"id":\s*"(?P&lt;actor_id&gt;[^"]+)",\s*"email":\s*"(?P&lt;actor_email&gt;[^"]+)"
+              </div>
+            </div>
+          </div>
+          
+          <div class="tip-box">
+            <h4>💡 Best Practice</h4>
+            <ul>
+              <li><strong>High volume + stable format:</strong> Parse at ingest (DCR/props.conf) to reduce query cost</li>
+              <li><strong>Evolving format:</strong> Parse at query-time for flexibility</li>
+              <li><strong>Deeply nested JSON:</strong> Consider flattening at ingest to simplify queries</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== PATTERN 2: KEY-VALUE LOGS ==================== -->
+      <section id="kv-logs">
+        <div class="pattern-header">
+          <h2>📋 Pattern 2: Key-Value Logs</h2>
+          <p>Firewall logs, web server logs, application logs with key=value format</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Example: Firewall Traffic Log</h3>
+          
+          <div class="raw-log">Jan 15 10:30:45 fw-01 action=allow src=192.168.1.100 dst=10.0.0.50 sport=54321 dport=443 proto=tcp bytes_sent=1024 bytes_recv=4096 user=john.doe app=ssl duration=30</div>
+
+          <div class="comparison-grid">
+            <div class="sentinel-box">
+              <h4>Sentinel (KQL)</h4>
+              
+              <p><strong>Using parse operator</strong></p>
+              <div class="code-block">
+Syslog
+| <span class="keyword">where</span> <span class="field">ProcessName</span> == <span class="string">"fw-01"</span>
+| <span class="keyword">parse</span> <span class="field">SyslogMessage</span> <span class="keyword">with</span>
+    * <span class="string">"action="</span> <span class="field">Action</span>:<span class="keyword">string</span> <span class="string">" "</span>
+    * <span class="string">"src="</span> <span class="field">SrcIP</span>:<span class="keyword">string</span> <span class="string">" "</span>
+    * <span class="string">"dst="</span> <span class="field">DstIP</span>:<span class="keyword">string</span> <span class="string">" "</span>
+    * <span class="string">"sport="</span> <span class="field">SrcPort</span>:<span class="keyword">int</span> <span class="string">" "</span>
+    * <span class="string">"dport="</span> <span class="field">DstPort</span>:<span class="keyword">int</span> <span class="string">" "</span>
+    * <span class="string">"proto="</span> <span class="field">Protocol</span>:<span class="keyword">string</span> <span class="string">" "</span>
+    * <span class="string">"bytes_sent="</span> <span class="field">BytesSent</span>:<span class="keyword">long</span> <span class="string">" "</span>
+    * <span class="string">"bytes_recv="</span> <span class="field">BytesRecv</span>:<span class="keyword">long</span> <span class="string">" "</span>
+    * <span class="string">"user="</span> <span class="field">User</span>:<span class="keyword">string</span> <span class="string">" "</span>
+    * <span class="string">"app="</span> <span class="field">App</span>:<span class="keyword">string</span> <span class="string">" "</span>
+    * <span class="string">"duration="</span> <span class="field">Duration</span>:<span class="keyword">int</span> *
+              </div>
+              
+              <p><strong>Using extract() with regex</strong></p>
+              <div class="code-block">
+Syslog
+| <span class="keyword">extend</span>
+    <span class="field">Action</span> = <span class="function">extract</span>(<span class="string">@"action=(\w+)"</span>, 1, <span class="field">SyslogMessage</span>),
+    <span class="field">SrcIP</span> = <span class="function">extract</span>(<span class="string">@"src=([0-9\.]+)"</span>, 1, <span class="field">SyslogMessage</span>),
+    <span class="field">DstIP</span> = <span class="function">extract</span>(<span class="string">@"dst=([0-9\.]+)"</span>, 1, <span class="field">SyslogMessage</span>),
+    <span class="field">DstPort</span> = <span class="function">toint</span>(<span class="function">extract</span>(<span class="string">@"dport=(\d+)"</span>, 1, <span class="field">SyslogMessage</span>)),
+    <span class="field">User</span> = <span class="function">extract</span>(<span class="string">@"user=([^\s]+)"</span>, 1, <span class="field">SyslogMessage</span>)
+              </div>
+            </div>
+            
+            <div class="splunk-box">
+              <h4>Splunk (SPL)</h4>
+              
+              <p><strong>Using automatic KV extraction</strong></p>
+              <div class="code-block">
+index=network sourcetype=firewall
+| <span class="keyword">table</span> action, src, dst, sport, dport, proto, user
+
+<span class="comment">// Splunk auto-extracts key=value pairs</span>
+<span class="comment">// Just ensure KV_MODE=auto in props.conf</span>
+              </div>
+              
+              <p><strong>props.conf configuration</strong></p>
+              <div class="code-block">
+<span class="comment"># props.conf</span>
+[firewall]
+KV_MODE = auto
+<span class="comment"># Or for specific format:</span>
+EXTRACT-fields = action=(?P&lt;action&gt;\w+)\s+src=(?P&lt;src&gt;[^\s]+)\s+dst=(?P&lt;dst&gt;[^\s]+)
+              </div>
+              
+              <p><strong>Using rex for specific fields</strong></p>
+              <div class="code-block">
+index=network sourcetype=firewall
+| <span class="keyword">rex</span> field=_raw <span class="string">"action=(?P&lt;action&gt;\w+)"</span>
+| <span class="keyword">rex</span> field=_raw <span class="string">"src=(?P&lt;src_ip&gt;[0-9\.]+)"</span>
+| <span class="keyword">rex</span> field=_raw <span class="string">"dst=(?P&lt;dst_ip&gt;[0-9\.]+)"</span>
+| <span class="keyword">rex</span> field=_raw <span class="string">"dport=(?P&lt;dst_port&gt;\d+)"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== PATTERN 3: SYSLOG ==================== -->
+      <section id="syslog">
+        <div class="pattern-header">
+          <h2>📋 Pattern 3: Syslog (Linux/Network Devices)</h2>
+          <p>Standard syslog format with varying message payloads</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Example: SSH Authentication Log</h3>
+          
+          <div class="raw-log">&lt;38&gt;Jan 15 10:30:45 server01 sshd[12345]: Accepted publickey for john from 192.168.1.100 port 54321 ssh2: RSA SHA256:abc123...</div>
+
+          <div class="comparison-grid">
+            <div class="sentinel-box">
+              <h4>Sentinel (KQL)</h4>
+              
+              <div class="code-block">
+Syslog
+| <span class="keyword">where</span> <span class="field">Facility</span> == <span class="string">"auth"</span>
+| <span class="keyword">where</span> <span class="field">ProcessName</span> == <span class="string">"sshd"</span>
+<span class="comment">// Classify event type</span>
+| <span class="keyword">extend</span> <span class="field">EventType</span> = <span class="keyword">case</span>(
+    <span class="field">SyslogMessage</span> <span class="keyword">has</span> <span class="string">"Accepted"</span>, <span class="string">"Success"</span>,
+    <span class="field">SyslogMessage</span> <span class="keyword">has</span> <span class="string">"Failed"</span>, <span class="string">"Failure"</span>,
+    <span class="field">SyslogMessage</span> <span class="keyword">has</span> <span class="string">"Invalid user"</span>, <span class="string">"Failure"</span>,
+    <span class="field">SyslogMessage</span> <span class="keyword">has</span> <span class="string">"Disconnected"</span>, <span class="string">"Disconnect"</span>,
+    <span class="string">"Other"</span>
+  )
+<span class="comment">// Parse success messages</span>
+| <span class="keyword">parse</span> <span class="field">SyslogMessage</span> <span class="keyword">with</span>
+    <span class="string">"Accepted "</span> <span class="field">AuthMethod</span>:<span class="keyword">string</span> <span class="string">" for "</span>
+    <span class="field">User</span>:<span class="keyword">string</span> <span class="string">" from "</span>
+    <span class="field">SourceIP</span>:<span class="keyword">string</span> <span class="string">" port "</span>
+    <span class="field">SourcePort</span>:<span class="keyword">int</span> <span class="string">" "</span> *
+<span class="comment">// Parse failure messages (different format)</span>
+| <span class="keyword">extend</span> <span class="field">User</span> = <span class="function">coalesce</span>(
+    <span class="field">User</span>,
+    <span class="function">extract</span>(<span class="string">@"user\s+(\S+)"</span>, 1, <span class="field">SyslogMessage</span>)
+  )
+| <span class="keyword">extend</span> <span class="field">SourceIP</span> = <span class="function">coalesce</span>(
+    <span class="field">SourceIP</span>,
+    <span class="function">extract</span>(<span class="string">@"from\s+(\d+\.\d+\.\d+\.\d+)"</span>, 1, <span class="field">SyslogMessage</span>)
+  )
+              </div>
+            </div>
+            
+            <div class="splunk-box">
+              <h4>Splunk (SPL)</h4>
+              
+              <div class="code-block">
+index=linux sourcetype=linux:auth process=sshd
+<span class="comment">| Classify event type</span>
+| <span class="keyword">eval</span> event_type = <span class="function">case</span>(
+    <span class="function">match</span>(_raw, "Accepted"), "success",
+    <span class="function">match</span>(_raw, "Failed"), "failure",
+    <span class="function">match</span>(_raw, "Invalid user"), "failure",
+    1=1, "other"
+  )
+<span class="comment">| Extract fields based on pattern</span>
+| <span class="keyword">rex</span> field=_raw <span class="string">"Accepted (?P&lt;auth_method&gt;\w+) for (?P&lt;user&gt;[^\s]+) from (?P&lt;src_ip&gt;[0-9\.]+) port (?P&lt;src_port&gt;\d+)"</span>
+<span class="comment">| Fallback for failure messages</span>
+| <span class="keyword">rex</span> field=_raw <span class="string">"Failed \w+ for (?:invalid user )?(?P&lt;user&gt;[^\s]+) from (?P&lt;src_ip&gt;[0-9\.]+)"</span>
+              </div>
+              
+              <p><strong>props.conf (TA approach)</strong></p>
+              <div class="code-block">
+<span class="comment"># props.conf in Splunk Add-on for Unix</span>
+[linux:auth]
+EXTRACT-ssh_accept = Accepted\s+(?P&lt;auth_method&gt;\S+)\s+for\s+(?P&lt;user&gt;\S+)\s+from\s+(?P&lt;src_ip&gt;[\d\.]+)\s+port\s+(?P&lt;src_port&gt;\d+)
+EXTRACT-ssh_fail = Failed\s+\S+\s+for\s+(?:invalid user\s+)?(?P&lt;user&gt;\S+)\s+from\s+(?P&lt;src_ip&gt;[\d\.]+)
+FIELDALIAS-src = src_ip AS src
+EVAL-action = if(match(_raw,"Accepted"),"success","failure")
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== PATTERN 4: CEF ==================== -->
+      <section id="cef">
+        <div class="pattern-header">
+          <h2>📋 Pattern 4: CEF (Common Event Format)</h2>
+          <p>Standard format used by many security products</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Example: Security Product Alert</h3>
+          
+          <div class="raw-log">CEF:0|Palo Alto Networks|PAN-OS|10.0|THREAT|threat|5|src=192.168.1.100 dst=10.0.0.50 spt=54321 dpt=443 act=block cat=malware filePath=/tmp/evil.exe fileHash=abc123 suser=john.doe</div>
+
+          <div class="comparison-grid">
+            <div class="sentinel-box">
+              <h4>Sentinel (KQL)</h4>
+              
+              <p><strong>CommonSecurityLog table (pre-parsed)</strong></p>
+              <div class="code-block">
+CommonSecurityLog
+| <span class="keyword">where</span> <span class="field">DeviceVendor</span> == <span class="string">"Palo Alto Networks"</span>
+| <span class="keyword">where</span> <span class="field">Activity</span> == <span class="string">"THREAT"</span>
+<span class="comment">// CEF fields are already extracted:</span>
+| <span class="keyword">project</span>
+    <span class="field">TimeGenerated</span>,
+    <span class="field">SourceIP</span>,           <span class="comment">// from src=</span>
+    <span class="field">DestinationIP</span>,      <span class="comment">// from dst=</span>
+    <span class="field">SourcePort</span>,         <span class="comment">// from spt=</span>
+    <span class="field">DestinationPort</span>,    <span class="comment">// from dpt=</span>
+    <span class="field">DeviceAction</span>,       <span class="comment">// from act=</span>
+    <span class="field">DeviceEventCategory</span>,<span class="comment">// from cat=</span>
+    <span class="field">SourceUserName</span>,     <span class="comment">// from suser=</span>
+    <span class="field">FilePath</span>,           <span class="comment">// from filePath=</span>
+    <span class="field">FileHash</span>            <span class="comment">// from fileHash=</span>
+              </div>
+              
+              <p><strong>Additional extension parsing (if needed)</strong></p>
+              <div class="code-block">
+CommonSecurityLog
+<span class="comment">// AdditionalExtensions contains extra fields</span>
+| <span class="keyword">extend</span> <span class="field">CustomField</span> = <span class="function">extract</span>(
+    <span class="string">@"customField=([^\s]+)"</span>, 
+    1, 
+    <span class="field">AdditionalExtensions</span>
+  )
+              </div>
+            </div>
+            
+            <div class="splunk-box">
+              <h4>Splunk (SPL)</h4>
+              
+              <p><strong>With Splunk Add-on for CEF (pre-parsed)</strong></p>
+              <div class="code-block">
+index=security sourcetype="cef"
+| <span class="keyword">search</span> vendor="Palo Alto Networks" activity="THREAT"
+<span class="comment">// CEF fields are already extracted by TA:</span>
+| <span class="keyword">table</span> 
+    _time,
+    src,              <span class="comment">// mapped from src=</span>
+    dest,             <span class="comment">// mapped from dst=</span>
+    src_port,         <span class="comment">// mapped from spt=</span>
+    dest_port,        <span class="comment">// mapped from dpt=</span>
+    action,           <span class="comment">// mapped from act=</span>
+    category,         <span class="comment">// mapped from cat=</span>
+    user,             <span class="comment">// mapped from suser=</span>
+    file_path,        <span class="comment">// mapped from filePath=</span>
+    file_hash         <span class="comment">// mapped from fileHash=</span>
+              </div>
+              
+              <p><strong>Manual CEF parsing (if no TA)</strong></p>
+              <div class="code-block">
+index=security sourcetype=raw_cef
+<span class="comment">| Parse CEF header</span>
+| <span class="keyword">rex</span> field=_raw <span class="string">"CEF:\d+\|(?P&lt;vendor&gt;[^|]+)\|(?P&lt;product&gt;[^|]+)\|(?P&lt;version&gt;[^|]+)\|(?P&lt;signature&gt;[^|]+)\|(?P&lt;name&gt;[^|]+)\|(?P&lt;severity&gt;[^|]+)\|(?P&lt;extension&gt;.*)"</span>
+<span class="comment">| Parse extension fields</span>
+| <span class="keyword">rex</span> field=extension <span class="string">"src=(?P&lt;src&gt;[^\s]+)"</span>
+| <span class="keyword">rex</span> field=extension <span class="string">"dst=(?P&lt;dst&gt;[^\s]+)"</span>
+| <span class="keyword">rex</span> field=extension <span class="string">"act=(?P&lt;action&gt;[^\s]+)"</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="info-box">
+            <h4>📝 CEF Standard Fields</h4>
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>CEF Key</th>
+                  <th>Sentinel Field</th>
+                  <th>Splunk CIM Field</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>src</td><td>SourceIP</td><td>src</td><td>Source IP address</td></tr>
+                <tr><td>dst</td><td>DestinationIP</td><td>dest</td><td>Destination IP address</td></tr>
+                <tr><td>spt</td><td>SourcePort</td><td>src_port</td><td>Source port</td></tr>
+                <tr><td>dpt</td><td>DestinationPort</td><td>dest_port</td><td>Destination port</td></tr>
+                <tr><td>act</td><td>DeviceAction</td><td>action</td><td>Action taken</td></tr>
+                <tr><td>suser</td><td>SourceUserName</td><td>src_user</td><td>Source username</td></tr>
+                <tr><td>duser</td><td>DestinationUserName</td><td>dest_user</td><td>Destination username</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== PATTERN 5: WINDOWS EVENTS ==================== -->
+      <section id="windows">
+        <div class="pattern-header">
+          <h2>📋 Pattern 5: Windows Security Events</h2>
+          <p>Windows Event Log with XML EventData structure</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Example: Logon Event (4624)</h3>
+          
+          <div class="comparison-grid">
+            <div class="sentinel-box">
+              <h4>Sentinel (KQL)</h4>
+              
+              <p><strong>SecurityEvent table (pre-parsed)</strong></p>
+              <div class="code-block">
+SecurityEvent
+| <span class="keyword">where</span> <span class="field">EventID</span> == 4624
+<span class="comment">// Common fields already extracted:</span>
+| <span class="keyword">project</span>
+    <span class="field">TimeGenerated</span>,
+    <span class="field">Computer</span>,
+    <span class="field">Account</span>,           <span class="comment">// TargetUserName</span>
+    <span class="field">TargetUserName</span>,
+    <span class="field">TargetDomainName</span>,
+    <span class="field">IpAddress</span>,
+    <span class="field">LogonType</span>,
+    <span class="field">LogonTypeName</span>,     <span class="comment">// Human-readable</span>
+    <span class="field">WorkstationName</span>,
+    <span class="field">LogonProcessName</span>,
+    <span class="field">AuthenticationPackageName</span>
+              </div>
+              
+              <p><strong>Classify logon types</strong></p>
+              <div class="code-block">
+SecurityEvent
+| <span class="keyword">where</span> <span class="field">EventID</span> == 4624
+| <span class="keyword">extend</span> <span class="field">LogonTypeDesc</span> = <span class="keyword">case</span>(
+    <span class="field">LogonType</span> == 2, <span class="string">"Interactive"</span>,
+    <span class="field">LogonType</span> == 3, <span class="string">"Network"</span>,
+    <span class="field">LogonType</span> == 4, <span class="string">"Batch"</span>,
+    <span class="field">LogonType</span> == 5, <span class="string">"Service"</span>,
+    <span class="field">LogonType</span> == 7, <span class="string">"Unlock"</span>,
+    <span class="field">LogonType</span> == 8, <span class="string">"NetworkCleartext"</span>,
+    <span class="field">LogonType</span> == 9, <span class="string">"NewCredentials"</span>,
+    <span class="field">LogonType</span> == 10, <span class="string">"RemoteInteractive"</span>,
+    <span class="field">LogonType</span> == 11, <span class="string">"CachedInteractive"</span>,
+    <span class="string">"Unknown"</span>
+  )
+              </div>
+            </div>
+            
+            <div class="splunk-box">
+              <h4>Splunk (SPL)</h4>
+              
+              <p><strong>With Windows TA (pre-parsed)</strong></p>
+              <div class="code-block">
+index=wineventlog sourcetype="WinEventLog:Security" EventCode=4624
+<span class="comment">// Fields extracted by Splunk Add-on for Windows:</span>
+| <span class="keyword">table</span>
+    _time,
+    host,
+    Account_Name,     <span class="comment">// TargetUserName</span>
+    Account_Domain,   <span class="comment">// TargetDomainName</span>
+    Logon_Type,
+    Source_Network_Address,
+    Workstation_Name,
+    Logon_Process,
+    Authentication_Package
+              </div>
+              
+              <p><strong>CIM-compliant query</strong></p>
+              <div class="code-block">
+<span class="comment">| Using Authentication data model</span>
+| <span class="keyword">tstats</span> <span class="function">count</span> 
+    <span class="keyword">from</span> datamodel=Authentication.Successful_Authentication
+    <span class="keyword">where</span> Authentication.app=win:local
+    <span class="keyword">by</span> Authentication.user, Authentication.src, Authentication.dest
+| <span class="keyword">rename</span> Authentication.* AS *
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== ENRICHMENT PATTERNS ==================== -->
+      <section id="enrichment">
+        <div class="pattern-header">
+          <h2>🔗 Enrichment Patterns</h2>
+          <p>Adding context from external data sources</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Complete Enrichment Pipeline</h3>
+          
+          <div class="enrichment-flow">
+            <span class="step">Raw Event</span>
+            <span class="arrow">→</span>
+            <span class="step">Parse Fields</span>
+            <span class="arrow">→</span>
+            <span class="step">Geo-IP Lookup</span>
+            <span class="arrow">→</span>
+            <span class="step">Asset Classification</span>
+            <span class="arrow">→</span>
+            <span class="step">Threat Intel</span>
+            <span class="arrow">→</span>
+            <span class="step">User Context</span>
+            <span class="arrow">→</span>
+            <span class="step">Risk Score</span>
+          </div>
+
+          <div class="comparison-grid">
+            <div class="sentinel-box">
+              <h4>Sentinel Complete Enrichment</h4>
+              
+              <div class="code-block">
+<span class="comment">// Load watchlists</span>
+<span class="keyword">let</span> <span class="field">VIPUsers</span> = <span class="function">_GetWatchlist</span>(<span class="string">'VIPUsers'</span>) 
+    | <span class="keyword">project</span> <span class="field">UPN</span>, <span class="field">VIPLevel</span>, <span class="field">Department</span>;
+<span class="keyword">let</span> <span class="field">HighValueAssets</span> = <span class="function">_GetWatchlist</span>(<span class="string">'CriticalAssets'</span>) 
+    | <span class="keyword">project</span> <span class="field">Hostname</span>, <span class="field">AssetClass</span>, <span class="field">Owner</span>;
+<span class="keyword">let</span> <span class="field">AllowedIPs</span> = <span class="function">_GetWatchlist</span>(<span class="string">'CorporateIPs'</span>) 
+    | <span class="keyword">project</span> <span class="field">IPRange</span>;
+
+<span class="comment">// Threat Intel</span>
+<span class="keyword">let</span> <span class="field">ThreatIPs</span> = ThreatIntelligenceIndicator 
+    | <span class="keyword">where</span> <span class="field">Active</span> == true 
+    | <span class="keyword">where</span> <span class="field">NetworkIP</span> != <span class="string">""</span>
+    | <span class="keyword">project</span> <span class="field">NetworkIP</span>, <span class="field">ThreatType</span>, <span class="field">ConfidenceScore</span>;
+
+<span class="comment">// Main query</span>
+SigninLogs
+| <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(1h)
+
+<span class="comment">// Geo-IP enrichment (built-in)</span>
+| <span class="keyword">extend</span> <span class="field">GeoInfo</span> = <span class="function">geo_info_from_ip_address</span>(<span class="field">IPAddress</span>)
+| <span class="keyword">extend</span> 
+    <span class="field">Country</span> = <span class="function">tostring</span>(<span class="field">GeoInfo</span>.country),
+    <span class="field">City</span> = <span class="function">tostring</span>(<span class="field">GeoInfo</span>.city),
+    <span class="field">Latitude</span> = <span class="function">todouble</span>(<span class="field">GeoInfo</span>.latitude),
+    <span class="field">Longitude</span> = <span class="function">todouble</span>(<span class="field">GeoInfo</span>.longitude)
+
+<span class="comment">// VIP user enrichment</span>
+| <span class="keyword">join</span> <span class="keyword">kind</span>=leftouter <span class="field">VIPUsers</span> 
+    <span class="keyword">on</span> $left.<span class="field">UserPrincipalName</span> == $right.<span class="field">UPN</span>
+
+<span class="comment">// Threat Intel match</span>
+| <span class="keyword">join</span> <span class="keyword">kind</span>=leftouter <span class="field">ThreatIPs</span> 
+    <span class="keyword">on</span> $left.<span class="field">IPAddress</span> == $right.<span class="field">NetworkIP</span>
+
+<span class="comment">// Risk scoring</span>
+| <span class="keyword">extend</span> <span class="field">RiskScore</span> = 
+    <span class="function">iif</span>(<span class="function">isnotempty</span>(<span class="field">ThreatType</span>), 50, 0) +
+    <span class="function">iif</span>(<span class="field">VIPLevel</span> == <span class="string">"Executive"</span>, 25, 0) +
+    <span class="function">iif</span>(<span class="field">ResultType</span> != <span class="string">"0"</span>, 20, 0) +
+    <span class="function">iif</span>(<span class="field">Country</span> <span class="keyword">!in</span> (<span class="string">"United States"</span>, <span class="string">"Canada"</span>), 15, 0)
+
+| <span class="keyword">where</span> <span class="field">RiskScore</span> > 30
+              </div>
+            </div>
+            
+            <div class="splunk-box">
+              <h4>Splunk Complete Enrichment</h4>
+              
+              <div class="code-block">
+index=azure sourcetype="azure:aad:signin"
+| <span class="keyword">table</span> _time, userPrincipalName, ipAddress, status, location
+
+<span class="comment">| Geo-IP enrichment</span>
+| <span class="keyword">iplocation</span> ipAddress
+<span class="comment">| Adds: Country, City, Region, lat, lon</span>
+
+<span class="comment">| VIP user enrichment</span>
+| <span class="keyword">lookup</span> vip_users.csv userPrincipalName 
+    OUTPUT vip_level, department
+
+<span class="comment">| Asset classification</span>
+| <span class="keyword">lookup</span> asset_inventory.csv ip AS ipAddress 
+    OUTPUT asset_class, owner, criticality
+
+<span class="comment">| Threat Intel enrichment</span>
+| <span class="keyword">lookup</span> threat_intel_ip.csv ip AS ipAddress 
+    OUTPUT threat_type, confidence_score, source
+
+<span class="comment">| Corporate IP check</span>
+| <span class="keyword">lookup</span> corporate_ips.csv ip AS ipAddress 
+    OUTPUT is_corporate_ip
+
+<span class="comment">| Risk scoring</span>
+| <span class="keyword">eval</span> risk_score = 
+    <span class="function">if</span>(<span class="function">isnotnull</span>(threat_type), 50, 0) +
+    <span class="function">if</span>(vip_level=="Executive", 25, 0) +
+    <span class="function">if</span>(status!="0", 20, 0) +
+    <span class="function">if</span>(Country!="United States" AND Country!="Canada", 15, 0) +
+    <span class="function">if</span>(is_corporate_ip!="true", 10, 0)
+
+| <span class="keyword">where</span> risk_score > 30
+
+<span class="comment">| Format output</span>
+| <span class="keyword">eval</span> severity = <span class="function">case</span>(
+    risk_score >= 80, "critical",
+    risk_score >= 50, "high",
+    risk_score >= 30, "medium",
+    1=1, "low"
+  )
+| <span class="keyword">sort</span> - risk_score
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <h3>Enrichment Method Comparison</h3>
+          
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Enrichment Type</th>
+                <th>Sentinel Method</th>
+                <th>Splunk Method</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Geo-IP</strong></td>
+                <td><code>geo_info_from_ip_address()</code> — built-in</td>
+                <td><code>iplocation</code> command — built-in</td>
+              </tr>
+              <tr>
+                <td><strong>Static Lists</strong></td>
+                <td>Watchlists + <code>_GetWatchlist()</code></td>
+                <td>CSV lookups + <code>lookup</code> command</td>
+              </tr>
+              <tr>
+                <td><strong>Dynamic Data</strong></td>
+                <td><code>externaldata()</code> from blob/URL</td>
+                <td>KVStore lookups or external lookups</td>
+              </tr>
+              <tr>
+                <td><strong>Threat Intel</strong></td>
+                <td>ThreatIntelligenceIndicator table (connectors)</td>
+                <td>TI framework + threat intel apps</td>
+              </tr>
+              <tr>
+                <td><strong>User Context</strong></td>
+                <td>IdentityInfo table (UEBA)</td>
+                <td>Identity lookups or UEBA app</td>
+              </tr>
+              <tr>
+                <td><strong>Cross-table Join</strong></td>
+                <td><code>join</code> operator</td>
+                <td><code>join</code> or <code>append</code> + <code>stats</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== BEST PRACTICES ==================== -->
+      <div class="concept-card">
+        <h2>✅ Best Practices Summary</h2>
+        
+        <div class="comparison-grid">
+          <div class="sentinel-box">
+            <h4>Sentinel Best Practices</h4>
+            <ul>
+              <li><strong>Use DCR transformations</strong> to filter noise and reduce cost</li>
+              <li><strong>Create parser functions</strong> for complex/reused parsing logic</li>
+              <li><strong>Use ASIM</strong> for cross-source detections</li>
+              <li><strong>Watchlists</strong> for VIP users, critical assets, allowed IPs</li>
+              <li><strong>geo_info_from_ip_address()</strong> for location enrichment</li>
+              <li><strong>Avoid heavy parsing</strong> in analytics rules — use functions</li>
+            </ul>
+          </div>
+          
+          <div class="splunk-box">
+            <h4>Splunk Best Practices</h4>
+            <ul>
+              <li><strong>Use TAs</strong> for pre-built parsing and CIM compliance</li>
+              <li><strong>Configure props.conf</strong> for index-time efficiency</li>
+              <li><strong>Enable data model acceleration</strong> for fast tstats queries</li>
+              <li><strong>Use automatic lookups</strong> for always-on enrichment</li>
+              <li><strong>iplocation</strong> for geo enrichment</li>
+              <li><strong>Summary indexing</strong> for pre-aggregated reporting</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>

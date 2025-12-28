@@ -39,7 +39,13 @@
           <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
           <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
           <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/parsing-normalization-overview.html" class="nav-item">Parsing Overview</a>
+          <a href="../siem/sentinel-parsing-deep-dive.html" class="nav-item">Sentinel Parsing</a>
+          <a href="../siem/splunk-parsing-deep-dive.html" class="nav-item">Splunk Parsing</a>
+          <a href="../siem/parsing-patterns-comparison.html" class="nav-item">Parsing Comparison</a>
           <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="../siem/threat-intel-integration.html" class="nav-item">TI Integration</a>
+          <a href="../siem/vuln-management-workflow.html" class="nav-item">Vuln Management</a>
           <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
           <a href="../siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
           <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
@@ -560,6 +566,67 @@
             <div class="card-icon blue">👥</div>
             <div class="card-title">SOC Transition</div>
             <div class="card-description">Analyst training plan, playbook migration to Logic Apps, parallel operations procedures.</div>
+            <span class="card-link">View section →</span>
+          </a>
+        </div>
+
+        <h2>Parsing, Normalization & Enrichment</h2>
+        
+        <p>Complete reference for log processing patterns across Sentinel and Splunk — essential for migrations and cross-platform understanding:</p>
+
+        <div class="card-grid">
+          <a href="parsing-normalization-overview.html" class="card" style="text-decoration: none;">
+            <div class="card-icon purple">🎯</div>
+            <div class="card-title">Core Concepts</div>
+            <div class="card-description">Mental models for parsing, normalization, and enrichment. When to process at ingest-time vs query-time.</div>
+            <span class="card-link">View section →</span>
+          </a>
+          
+          <a href="sentinel-parsing-deep-dive.html" class="card" style="text-decoration: none;">
+            <div class="card-icon blue">🔵</div>
+            <div class="card-title">Sentinel Parsing Deep Dive</div>
+            <div class="card-description">DCR transformations, KQL parsing functions, ASIM normalization, watchlists, and enrichment patterns.</div>
+            <span class="card-link">View section →</span>
+          </a>
+          
+          <a href="splunk-parsing-deep-dive.html" class="card" style="text-decoration: none;">
+            <div class="card-icon green">🟢</div>
+            <div class="card-title">Splunk Parsing Deep Dive</div>
+            <div class="card-description">props.conf, transforms.conf, CIM normalization, lookups, data model acceleration.</div>
+            <span class="card-link">View section →</span>
+          </a>
+          
+          <a href="parsing-patterns-comparison.html" class="card" style="text-decoration: none;">
+            <div class="card-icon purple">⚖️</div>
+            <div class="card-title">Patterns Comparison</div>
+            <div class="card-description">Side-by-side Sentinel vs Splunk examples for JSON, KV, syslog, CEF, Windows events, and enrichment.</div>
+            <span class="card-link">View section →</span>
+          </a>
+        </div>
+
+        <h2>Threat Intelligence Integration</h2>
+        
+        <p>Complete workflows for integrating external threat intelligence sources with custom scoring and risk-based alerting:</p>
+
+        <div class="card-grid">
+          <a href="threat-intelligence.html" class="card" style="text-decoration: none;">
+            <div class="card-icon red">🔴</div>
+            <div class="card-title">Threat Intel Overview</div>
+            <div class="card-description">TI concepts, indicator types, STIX/TAXII, built-in Sentinel TI connectors.</div>
+            <span class="card-link">View section →</span>
+          </a>
+          
+          <a href="threat-intel-integration.html" class="card" style="text-decoration: none;">
+            <div class="card-icon red">🎯</div>
+            <div class="card-title">TI Integration Deep Dive</div>
+            <div class="card-description">EPSS, CISA KEV, Qualys, IP reputation — complete Azure Functions + DCR + custom scoring model workflow.</div>
+            <span class="card-link">View section →</span>
+          </a>
+          
+          <a href="vuln-management-workflow.html" class="card" style="text-decoration: none;">
+            <div class="card-icon red">📋</div>
+            <div class="card-title">Vuln Management Workflow</div>
+            <div class="card-description">Production-grade lifecycle management, SLA tracking, backlog handling, EPSS velocity alerts, risk acceptance, ServiceNow integration.</div>
             <span class="card-link">View section →</span>
           </a>
         </div>

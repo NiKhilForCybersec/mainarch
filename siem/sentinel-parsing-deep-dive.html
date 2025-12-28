@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentinel Parsing Deep Dive | DCR, KQL, ASIM</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .concept-card {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.02));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .flow-diagram {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.4;
+    }
+    
+    .code-block {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+    }
+    
+    .code-block .comment {
+      color: #6b7280;
+    }
+    
+    .code-block .keyword {
+      color: #8b5cf6;
+    }
+    
+    .code-block .function {
+      color: #22c55e;
+    }
+    
+    .code-block .string {
+      color: #f59e0b;
+    }
+    
+    .code-block .field {
+      color: #06b6d4;
+    }
+    
+    .pattern-box {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .pattern-box h4 {
+      color: #22c55e;
+      margin-top: 0;
+    }
+    
+    .warning-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .warning-box h4 {
+      color: #ef4444;
+      margin-top: 0;
+    }
+    
+    .info-box {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .info-box h4 {
+      color: #3b82f6;
+      margin-top: 0;
+    }
+    
+    .tip-box {
+      background: rgba(234, 179, 8, 0.1);
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .tip-box h4 {
+      color: #eab308;
+      margin-top: 0;
+    }
+    
+    .two-column {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    
+    .comparison-table th {
+      background: rgba(59, 130, 246, 0.2);
+      padding: 0.75rem;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .comparison-table td {
+      padding: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      vertical-align: top;
+    }
+    
+    .comparison-table tr:nth-child(even) {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    
+    .stage-header {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.1));
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0 1rem 0;
+      border-left: 4px solid #3b82f6;
+    }
+    
+    .stage-header h2 {
+      margin: 0;
+      color: #3b82f6;
+    }
+    
+    .stage-header p {
+      margin: 0.5rem 0 0 0;
+      color: var(--text-secondary);
+    }
+    
+    details {
+      margin: 1rem 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    details summary {
+      background: rgba(59, 130, 246, 0.1);
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    
+    details summary:hover {
+      background: rgba(59, 130, 246, 0.15);
+    }
+    
+    details[open] summary {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    details .details-content {
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/parsing-normalization-overview.html" class="nav-item">Parsing Overview</a>
+          <a href="../siem/sentinel-parsing-deep-dive.html" class="nav-item active">Sentinel Parsing</a>
+          <a href="../siem/splunk-parsing-deep-dive.html" class="nav-item">Splunk Parsing</a>
+          <a href="../siem/parsing-patterns-comparison.html" class="nav-item">Parsing Comparison</a>
+          <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="../siem/threat-intel-integration.html" class="nav-item">TI Integration</a>
+          <a href="../siem/vuln-management-workflow.html" class="nav-item">Vuln Management</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../director-interview-prep.html" class="nav-item">Director Interview Prep</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">SIEM Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Sentinel Parsing</span>
+        </nav>
+        <h1>Microsoft Sentinel: Parsing Deep Dive</h1>
+        <p class="section-description">Complete guide to parsing, normalization, and enrichment</p>
+      </div>
+
+      <!-- ==================== ARCHITECTURE OVERVIEW ==================== -->
+      <section id="overview">
+        <div class="concept-card">
+          <h2>🏗️ Sentinel Data Processing Architecture</h2>
+          
+          <div class="flow-diagram">
+<span style="color: #8b5cf6; font-weight: bold;">SENTINEL DATA FLOW — COMPLETE PIPELINE</span>
+
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    <span style="color: #22c55e;">DATA SOURCES</span>                                          │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐       │
+│  │ Windows  │  │  Linux   │  │  Azure   │  │ Firewall │  │  Custom  │  │   CEF/   │       │
+│  │  Events  │  │  Syslog  │  │  Logs    │  │  Logs    │  │   Apps   │  │  Syslog  │       │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘       │
+└───────┼─────────────┼─────────────┼─────────────┼─────────────┼─────────────┼─────────────┘
+        │             │             │             │             │             │
+        ▼             ▼             ▼             ▼             ▼             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                              <span style="color: #f59e0b;">COLLECTION LAYER</span>                                            │
+│                                                                                             │
+│  ┌─────────────────────┐    ┌─────────────────────┐    ┌─────────────────────┐             │
+│  │  Azure Monitor Agent│    │    Data Connectors  │    │   Log Ingestion API │             │
+│  │       (AMA)         │    │  (Built-in, Custom) │    │   (REST, Logstash)  │             │
+│  └──────────┬──────────┘    └──────────┬──────────┘    └──────────┬──────────┘             │
+│             │                          │                          │                         │
+│             └──────────────────────────┼──────────────────────────┘                         │
+│                                        ▼                                                    │
+│                          ┌─────────────────────────┐                                        │
+│                          │  Data Collection        │                                        │
+│                          │  Endpoint (DCE)         │                                        │
+│                          └────────────┬────────────┘                                        │
+└───────────────────────────────────────┼─────────────────────────────────────────────────────┘
+                                        │
+                                        ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                          <span style="color: #ef4444;">INGEST-TIME PROCESSING (DCR)</span>                                   │
+│                                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────────────────────┐   │
+│  │                      Data Collection Rule (DCR)                                     │   │
+│  │  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐          │   │
+│  │  │   FILTER    │───▶│   PARSE     │───▶│  TRANSFORM  │───▶│    ROUTE    │          │   │
+│  │  │ where       │    │ parse-json  │    │ extend      │    │ outputStream│          │   │
+│  │  │ TimeGenerated│    │ split       │    │ project     │    │ Destination │          │   │
+│  │  └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘          │   │
+│  └─────────────────────────────────────────────────────────────────────────────────────┘   │
+│                                        │                                                    │
+└────────────────────────────────────────┼────────────────────────────────────────────────────┘
+                                         │
+                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                              <span style="color: #06b6d4;">LOG ANALYTICS WORKSPACE</span>                                     │
+│                                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────────────────────┐   │
+│  │                                 TABLES                                              │   │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │   │
+│  │  │ SecurityEvent│  │    Syslog    │  │ CommonSec..  │  │ CustomApp_CL │            │   │
+│  │  │  (Windows)   │  │   (Linux)    │  │  (CEF/LEEF)  │  │   (Custom)   │            │   │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘            │   │
+│  │                                                                                     │   │
+│  │  Log Tiers:  [Analytics] ← full query  |  [Basic] ← limited  |  [Archive] ← cold   │   │
+│  └─────────────────────────────────────────────────────────────────────────────────────┘   │
+│                                        │                                                    │
+└────────────────────────────────────────┼────────────────────────────────────────────────────┘
+                                         │
+                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                          <span style="color: #22c55e;">QUERY-TIME PROCESSING (KQL)</span>                                    │
+│                                                                                             │
+│  ┌──────────────────────────────────────────────────────────────────────────────────────┐  │
+│  │                              Analytics Rules / Queries                               │  │
+│  │                                                                                      │  │
+│  │  ┌───────────┐   ┌───────────┐   ┌───────────┐   ┌───────────┐   ┌───────────┐     │  │
+│  │  │  PARSE    │──▶│ NORMALIZE │──▶│  ENRICH   │──▶│ CORRELATE │──▶│  DETECT   │     │  │
+│  │  │           │   │           │   │           │   │           │   │           │     │  │
+│  │  │parse_json │   │ ASIM      │   │ Watchlist │   │ join      │   │ summarize │     │  │
+│  │  │extract    │   │ Parsers   │   │ lookup    │   │ union     │   │ where     │     │  │
+│  │  │parse      │   │ extend    │   │ externaldata│  │ mv-expand │   │ threshold │     │  │
+│  │  └───────────┘   └───────────┘   └───────────┘   └───────────┘   └───────────┘     │  │
+│  │                                                                                      │  │
+│  └──────────────────────────────────────────────────────────────────────────────────────┘  │
+│                                                                                             │
+└─────────────────────────────────────────────────────────────────────────────────────────────┘
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== INGEST-TIME PROCESSING ==================== -->
+      <section id="ingest-time">
+        <div class="stage-header">
+          <h2>📥 Stage 1: Ingest-Time Processing (DCR Transformations)</h2>
+          <p>Processing that happens BEFORE data is stored — affects cost and data quality</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>What Are Data Collection Rules (DCRs)?</h3>
+          <p>DCRs define HOW data is collected, transformed, and where it's sent. They contain KQL-based transformations that run on every incoming record.</p>
+          
+          <div class="two-column">
+            <div class="pattern-box">
+              <h4>✅ Use DCR Transformations For:</h4>
+              <ul>
+                <li><strong>Filtering:</strong> Drop noisy/unwanted events before storage</li>
+                <li><strong>Parsing:</strong> Extract fields from payloads (JSON, KV)</li>
+                <li><strong>Projection:</strong> Remove unnecessary columns</li>
+                <li><strong>Basic enrichment:</strong> Add calculated fields</li>
+                <li><strong>Routing:</strong> Send to different tables based on content</li>
+              </ul>
+            </div>
+            
+            <div class="warning-box">
+              <h4>⚠️ DCR Limitations:</h4>
+              <ul>
+                <li>No joins or lookups (can't enrich from external data)</li>
+                <li>No summarize/aggregation</li>
+                <li>Limited KQL operators (no mv-expand, arg_max, etc.)</li>
+                <li>Mistakes require re-ingesting data to fix</li>
+                <li>Transformation adds latency (~seconds)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <h3>DCR Transformation Patterns</h3>
+
+          <details>
+            <summary>Pattern 1: Filter Out Noise (Cost Reduction)</summary>
+            <div class="details-content">
+              <p><strong>Use case:</strong> Drop verbose debug logs, health checks, or low-value events</p>
+              <div class="code-block">
+<span class="comment">// DCR Transformation KQL</span>
+<span class="comment">// Goal: Keep only security-relevant Windows events</span>
+
+source
+| <span class="keyword">where</span> <span class="field">EventID</span> <span class="keyword">in</span> (
+    <span class="comment">// Authentication events</span>
+    4624, 4625, 4648, 4672, 4768, 4769, 4771,
+    <span class="comment">// Process creation</span>
+    4688,
+    <span class="comment">// Privilege use</span>
+    4673, 4674,
+    <span class="comment">// Object access</span>
+    4663, 4656
+  )
+              </div>
+              <p><strong>Cost impact:</strong> Can reduce SecurityEvent ingestion by 60-80%</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>Pattern 2: Parse JSON Payload</summary>
+            <div class="details-content">
+              <p><strong>Use case:</strong> Extract fields from JSON message body</p>
+              <div class="code-block">
+<span class="comment">// DCR Transformation KQL</span>
+<span class="comment">// Input: RawData contains JSON string</span>
+
+source
+| <span class="keyword">extend</span> <span class="field">ParsedData</span> = <span class="function">parse_json</span>(<span class="field">RawData</span>)
+| <span class="keyword">extend</span> 
+    <span class="field">UserName</span> = <span class="function">tostring</span>(<span class="field">ParsedData</span>.user.name),
+    <span class="field">Action</span> = <span class="function">tostring</span>(<span class="field">ParsedData</span>.action),
+    <span class="field">SourceIP</span> = <span class="function">tostring</span>(<span class="field">ParsedData</span>.source.ip),
+    <span class="field">Timestamp</span> = <span class="function">todatetime</span>(<span class="field">ParsedData</span>.timestamp)
+| <span class="keyword">project-away</span> <span class="field">RawData</span>, <span class="field">ParsedData</span>
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary>Pattern 3: Parse Key-Value Pairs</summary>
+            <div class="details-content">
+              <p><strong>Use case:</strong> Firewall logs with key=value format</p>
+              <div class="code-block">
+<span class="comment">// Input: "action=allow src=192.168.1.1 dst=10.0.0.1 port=443"</span>
+
+source
+| <span class="keyword">parse</span> <span class="field">RawData</span> <span class="keyword">with</span> 
+    * <span class="string">"action="</span> <span class="field">Action</span>:<span class="keyword">string</span> <span class="string">" "</span>
+    * <span class="string">"src="</span> <span class="field">SourceIP</span>:<span class="keyword">string</span> <span class="string">" "</span>
+    * <span class="string">"dst="</span> <span class="field">DestIP</span>:<span class="keyword">string</span> <span class="string">" "</span>
+    * <span class="string">"port="</span> <span class="field">Port</span>:<span class="keyword">int</span> *
+              </div>
+              
+              <p><strong>Alternative: Using extract with regex</strong></p>
+              <div class="code-block">
+source
+| <span class="keyword">extend</span> 
+    <span class="field">Action</span> = <span class="function">extract</span>(<span class="string">@"action=(\w+)"</span>, 1, <span class="field">RawData</span>),
+    <span class="field">SourceIP</span> = <span class="function">extract</span>(<span class="string">@"src=([0-9\.]+)"</span>, 1, <span class="field">RawData</span>),
+    <span class="field">DestIP</span> = <span class="function">extract</span>(<span class="string">@"dst=([0-9\.]+)"</span>, 1, <span class="field">RawData</span>),
+    <span class="field">Port</span> = <span class="function">toint</span>(<span class="function">extract</span>(<span class="string">@"port=(\d+)"</span>, 1, <span class="field">RawData</span>))
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary>Pattern 4: Add Calculated/Classification Fields</summary>
+            <div class="details-content">
+              <p><strong>Use case:</strong> Classify events for easier querying</p>
+              <div class="code-block">
+source
+| <span class="keyword">extend</span> <span class="field">EventCategory</span> = <span class="keyword">case</span>(
+    <span class="field">EventID</span> <span class="keyword">in</span> (4624, 4625, 4648), <span class="string">"Authentication"</span>,
+    <span class="field">EventID</span> <span class="keyword">in</span> (4688, 4689), <span class="string">"ProcessExecution"</span>,
+    <span class="field">EventID</span> <span class="keyword">in</span> (4663, 4656), <span class="string">"ObjectAccess"</span>,
+    <span class="field">EventID</span> <span class="keyword">in</span> (4720, 4722, 4723), <span class="string">"AccountManagement"</span>,
+    <span class="string">"Other"</span>
+  )
+| <span class="keyword">extend</span> <span class="field">Severity</span> = <span class="keyword">case</span>(
+    <span class="field">EventID</span> == 4625, <span class="string">"High"</span>,
+    <span class="field">EventID</span> == 4672, <span class="string">"Medium"</span>,
+    <span class="string">"Low"</span>
+  )
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary>Pattern 5: Route to Different Tables</summary>
+            <div class="details-content">
+              <p><strong>Use case:</strong> Send high-value logs to Analytics tier, verbose logs to Basic tier</p>
+              <div class="code-block">
+<span class="comment">// In DCR, you define multiple output streams</span>
+<span class="comment">// Stream 1: SecurityEvents_Analytics (full analytics tier)</span>
+<span class="comment">// Stream 2: SecurityEvents_Basic (basic logs tier)</span>
+
+<span class="comment">// This requires separate DCR configurations for each stream</span>
+<span class="comment">// with different "where" filters</span>
+
+<span class="comment">// Stream 1 DCR (Analytics - high value)</span>
+source
+| <span class="keyword">where</span> <span class="field">EventID</span> <span class="keyword">in</span> (4624, 4625, 4688, 4672)
+
+<span class="comment">// Stream 2 DCR (Basic - verbose)</span>
+source
+| <span class="keyword">where</span> <span class="field">EventID</span> <span class="keyword">not in</span> (4624, 4625, 4688, 4672)
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary>Pattern 6: Remove Sensitive Data (Masking)</summary>
+            <div class="details-content">
+              <p><strong>Use case:</strong> Redact PII, mask credit card numbers</p>
+              <div class="code-block">
+source
+| <span class="keyword">extend</span> <span class="field">Email</span> = <span class="function">replace_regex</span>(
+    <span class="field">Email</span>, 
+    <span class="string">@"[a-zA-Z0-9._%+-]+@"</span>, 
+    <span class="string">"[REDACTED]@"</span>
+  )
+| <span class="keyword">extend</span> <span class="field">CreditCard</span> = <span class="function">replace_regex</span>(
+    <span class="field">CreditCard</span>, 
+    <span class="string">@"\d{12}(\d{4})"</span>, 
+    <span class="string">"************\1"</span>
+  )
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="tip-box">
+          <h4>💡 DCR Best Practices</h4>
+          <ul>
+            <li><strong>Test in dev first:</strong> Use a test workspace before production</li>
+            <li><strong>Keep transformations simple:</strong> Complex logic is better at query-time</li>
+            <li><strong>Monitor ingestion lag:</strong> Heavy transformations add latency</li>
+            <li><strong>Version control:</strong> Store DCR JSON in Git for change tracking</li>
+            <li><strong>Filter aggressively:</strong> Every dropped event saves money</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ==================== QUERY-TIME PROCESSING ==================== -->
+      <section id="query-time">
+        <div class="stage-header">
+          <h2>🔍 Stage 2: Query-Time Processing (KQL)</h2>
+          <p>Processing that happens during search/detection execution — flexible but compute-intensive</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>KQL Parsing Functions</h3>
+          
+          <div class="three-column">
+            <div class="info-box">
+              <h4>parse_json()</h4>
+              <p>Parse JSON string into dynamic object</p>
+              <div class="code-block" style="font-size: 0.8rem;">
+<span class="field">RawData</span>
+| <span class="keyword">extend</span> <span class="field">Parsed</span> = <span class="function">parse_json</span>(<span class="field">JsonColumn</span>)
+| <span class="keyword">extend</span> <span class="field">User</span> = <span class="field">Parsed</span>.user.name
+              </div>
+            </div>
+            
+            <div class="info-box">
+              <h4>extract()</h4>
+              <p>Extract using regex pattern</p>
+              <div class="code-block" style="font-size: 0.8rem;">
+<span class="field">Syslog</span>
+| <span class="keyword">extend</span> <span class="field">IP</span> = <span class="function">extract</span>(
+    <span class="string">@"(\d+\.\d+\.\d+\.\d+)"</span>, 
+    1, <span class="field">SyslogMessage</span>
+  )
+              </div>
+            </div>
+            
+            <div class="info-box">
+              <h4>parse operator</h4>
+              <p>Pattern-based extraction</p>
+              <div class="code-block" style="font-size: 0.8rem;">
+<span class="field">Logs</span>
+| <span class="keyword">parse</span> <span class="field">Message</span> <span class="keyword">with</span>
+    * <span class="string">"user="</span> <span class="field">User</span>:<span class="keyword">string</span> <span class="string">" "</span>
+    * <span class="string">"ip="</span> <span class="field">IP</span>:<span class="keyword">string</span>
+              </div>
+            </div>
+            
+            <div class="info-box">
+              <h4>split()</h4>
+              <p>Split string into array</p>
+              <div class="code-block" style="font-size: 0.8rem;">
+<span class="field">Logs</span>
+| <span class="keyword">extend</span> <span class="field">Parts</span> = <span class="function">split</span>(<span class="field">Path</span>, <span class="string">"/"</span>)
+| <span class="keyword">extend</span> <span class="field">FileName</span> = <span class="field">Parts</span>[-1]
+              </div>
+            </div>
+            
+            <div class="info-box">
+              <h4>parse_csv()</h4>
+              <p>Parse CSV-formatted string</p>
+              <div class="code-block" style="font-size: 0.8rem;">
+<span class="field">Logs</span>
+| <span class="keyword">extend</span> <span class="field">Cols</span> = <span class="function">parse_csv</span>(<span class="field">CsvLine</span>)
+| <span class="keyword">extend</span> <span class="field">Col1</span> = <span class="field">Cols</span>[0]
+              </div>
+            </div>
+            
+            <div class="info-box">
+              <h4>parse_xml()</h4>
+              <p>Parse XML into dynamic</p>
+              <div class="code-block" style="font-size: 0.8rem;">
+<span class="field">Events</span>
+| <span class="keyword">extend</span> <span class="field">XmlData</span> = <span class="function">parse_xml</span>(<span class="field">EventData</span>)
+| <span class="keyword">extend</span> <span class="field">TargetUser</span> = <span class="field">XmlData</span>.Event.EventData.Data[0]
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <h3>Creating Reusable Parser Functions</h3>
+          <p>Package parsing logic into functions to avoid repeating code across detections.</p>
+          
+          <div class="code-block">
+<span class="comment">// Create a function to parse custom application logs</span>
+<span class="comment">// Save this as a function in Log Analytics workspace</span>
+
+<span class="keyword">let</span> ParseCustomAppLogs = (<span class="field">startTime</span>:datetime, <span class="field">endTime</span>:datetime) {
+    CustomApp_CL
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> <span class="keyword">between</span> (<span class="field">startTime</span> .. <span class="field">endTime</span>)
+    | <span class="keyword">extend</span> <span class="field">ParsedMessage</span> = <span class="function">parse_json</span>(<span class="field">RawData</span>)
+    | <span class="keyword">extend</span>
+        <span class="field">EventType</span> = <span class="function">tostring</span>(<span class="field">ParsedMessage</span>.eventType),
+        <span class="field">UserName</span> = <span class="function">tostring</span>(<span class="field">ParsedMessage</span>.user.name),
+        <span class="field">UserEmail</span> = <span class="function">tostring</span>(<span class="field">ParsedMessage</span>.user.email),
+        <span class="field">SourceIP</span> = <span class="function">tostring</span>(<span class="field">ParsedMessage</span>.source.ip),
+        <span class="field">Action</span> = <span class="function">tostring</span>(<span class="field">ParsedMessage</span>.action),
+        <span class="field">Resource</span> = <span class="function">tostring</span>(<span class="field">ParsedMessage</span>.resource.name),
+        <span class="field">Result</span> = <span class="function">tostring</span>(<span class="field">ParsedMessage</span>.result)
+    | <span class="keyword">project</span>
+        <span class="field">TimeGenerated</span>,
+        <span class="field">EventType</span>,
+        <span class="field">UserName</span>,
+        <span class="field">UserEmail</span>,
+        <span class="field">SourceIP</span>,
+        <span class="field">Action</span>,
+        <span class="field">Resource</span>,
+        <span class="field">Result</span>
+};
+
+<span class="comment">// Usage in detection rule:</span>
+ParseCustomAppLogs(ago(1h), now())
+| <span class="keyword">where</span> <span class="field">EventType</span> == <span class="string">"login"</span> <span class="keyword">and</span> <span class="field">Result</span> == <span class="string">"failed"</span>
+| <span class="keyword">summarize</span> <span class="field">FailedAttempts</span> = <span class="function">count</span>() <span class="keyword">by</span> <span class="field">UserName</span>, <span class="field">SourceIP</span>
+| <span class="keyword">where</span> <span class="field">FailedAttempts</span> > 5
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== ASIM NORMALIZATION ==================== -->
+      <section id="asim">
+        <div class="stage-header">
+          <h2>📐 Stage 3: ASIM Normalization</h2>
+          <p>Microsoft's schema for writing cross-source detections</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>How ASIM Works</h3>
+          
+          <div class="flow-diagram">
+<span style="color: #8b5cf6; font-weight: bold;">ASIM PARSER ARCHITECTURE</span>
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              RAW TABLES (Native Format)                         │
+│  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐│
+│  │ SecurityEvent  │  │   SigninLogs   │  │ AADNonInteract │  │  Syslog (PAM)  ││
+│  │  (Windows)     │  │   (Entra ID)   │  │  iveUserSignIn │  │   (Linux)      ││
+│  │                │  │                │  │                │  │                ││
+│  │ TargetUserName │  │ UserPrincipal  │  │ UserPrincipal  │  │ user=xxx       ││
+│  │ IpAddress      │  │ IPAddress      │  │ IPAddress      │  │ rhost=xxx      ││
+│  └───────┬────────┘  └───────┬────────┘  └───────┬────────┘  └───────┬────────┘│
+└──────────┼───────────────────┼───────────────────┼───────────────────┼─────────┘
+           │                   │                   │                   │
+           ▼                   ▼                   ▼                   ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              <span style="color: #f59e0b;">ASIM PARSERS (Functions)</span>                          │
+│  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐│
+│  │ vimAuthentica  │  │ vimAuthentica  │  │ vimAuthentica  │  │ vimAuthentica  ││
+│  │ tionEventMicro │  │ tionSigninLogs │  │ tionAADNonInt  │  │ tionLinuxSyslog││
+│  │ softWindows    │  │                │  │ eractive       │  │ PAM            ││
+│  │ SecurityEvent  │  │                │  │                │  │                ││
+│  └───────┬────────┘  └───────┬────────┘  └───────┬────────┘  └───────┬────────┘│
+└──────────┼───────────────────┼───────────────────┼───────────────────┼─────────┘
+           │                   │                   │                   │
+           └───────────────────┴───────────────────┴───────────────────┘
+                                         │
+                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                    <span style="color: #22c55e;">UNION PARSER (imAuthentication)</span>                            │
+│                                                                                 │
+│  imAuthentication = <span style="color: #8b5cf6;">union</span>                                                     │
+│      vimAuthenticationEventMicrosoftWindowsSecurityEvent,                       │
+│      vimAuthenticationSigninLogs,                                               │
+│      vimAuthenticationAADNonInteractive,                                        │
+│      vimAuthenticationLinuxSyslogPAM                                            │
+│                                                                                 │
+└───────────────────────────────────────┬─────────────────────────────────────────┘
+                                        │
+                                        ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                     <span style="color: #06b6d4;">NORMALIZED OUTPUT (ASIM Schema)</span>                          │
+│                                                                                 │
+│  All sources now have:                                                          │
+│  ┌──────────────────────────────────────────────────────────────────────────┐  │
+│  │ <span style="color: #22c55e;">TargetUsername</span>     │ <span style="color: #22c55e;">SrcIpAddr</span>      │ <span style="color: #22c55e;">EventType</span>      │ <span style="color: #22c55e;">EventResult</span>   │  │
+│  │ <span style="color: #22c55e;">TargetUserId</span>       │ <span style="color: #22c55e;">SrcHostname</span>    │ <span style="color: #22c55e;">EventProduct</span>   │ <span style="color: #22c55e;">EventVendor</span>   │  │
+│  │ <span style="color: #22c55e;">TargetUserType</span>     │ <span style="color: #22c55e;">SrcDvcId</span>       │ <span style="color: #22c55e;">EventSchema</span>    │ <span style="color: #22c55e;">EventCount</span>    │  │
+│  └──────────────────────────────────────────────────────────────────────────┘  │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+          </div>
+          
+          <div class="info-box">
+            <h4>ASIM Key Concepts</h4>
+            <ul>
+              <li><strong>Source-specific parsers (vim*):</strong> Transform one source into ASIM schema</li>
+              <li><strong>Union parsers (im*):</strong> Combine all source parsers into one queryable view</li>
+              <li><strong>Query-time only:</strong> Raw data stays unchanged; normalization happens during query</li>
+              <li><strong>Built-in analytics:</strong> Many Sentinel rules use ASIM parsers for cross-source detection</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <h3>ASIM Schema Examples</h3>
+          
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Schema</th>
+                <th>Parser</th>
+                <th>Key Normalized Fields</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Authentication</strong></td>
+                <td>imAuthentication</td>
+                <td>TargetUsername, SrcIpAddr, EventType (Logon/Logoff), EventResult (Success/Failure)</td>
+              </tr>
+              <tr>
+                <td><strong>Network Session</strong></td>
+                <td>imNetworkSession</td>
+                <td>SrcIpAddr, DstIpAddr, DstPortNumber, NetworkProtocol, NetworkDirection</td>
+              </tr>
+              <tr>
+                <td><strong>Process Event</strong></td>
+                <td>imProcessCreate / imProcessTerminate</td>
+                <td>ActingProcessName, TargetProcessName, TargetProcessCommandLine, User</td>
+              </tr>
+              <tr>
+                <td><strong>DNS</strong></td>
+                <td>imDns</td>
+                <td>DnsQuery, DnsQueryType, DnsResponseCode, SrcIpAddr</td>
+              </tr>
+              <tr>
+                <td><strong>File Event</strong></td>
+                <td>imFileEvent</td>
+                <td>TargetFileName, TargetFilePath, ActorUsername, EventType (Create/Modify/Delete)</td>
+              </tr>
+              <tr>
+                <td><strong>Web Session</strong></td>
+                <td>imWebSession</td>
+                <td>Url, HttpRequestMethod, HttpStatusCode, SrcIpAddr, DstIpAddr</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="concept-card">
+          <h3>Writing Detections with ASIM</h3>
+          
+          <div class="code-block">
+<span class="comment">// Detection: Brute force across ALL authentication sources</span>
+<span class="comment">// Works for Windows, Entra ID, Linux, Okta, etc.</span>
+
+<span class="function">imAuthentication</span>
+| <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(1h)
+| <span class="keyword">where</span> <span class="field">EventResult</span> == <span class="string">"Failure"</span>
+| <span class="keyword">summarize</span> 
+    <span class="field">FailedAttempts</span> = <span class="function">count</span>(),
+    <span class="field">DistinctUsers</span> = <span class="function">dcount</span>(<span class="field">TargetUsername</span>),
+    <span class="field">Sources</span> = <span class="function">make_set</span>(<span class="field">EventProduct</span>)
+  <span class="keyword">by</span> <span class="field">SrcIpAddr</span>, <span class="function">bin</span>(<span class="field">TimeGenerated</span>, 5m)
+| <span class="keyword">where</span> <span class="field">FailedAttempts</span> > 10 <span class="keyword">and</span> <span class="field">DistinctUsers</span> > 3
+| <span class="keyword">extend</span> <span class="field">AlertSeverity</span> = <span class="keyword">case</span>(
+    <span class="field">FailedAttempts</span> > 50, <span class="string">"High"</span>,
+    <span class="field">FailedAttempts</span> > 20, <span class="string">"Medium"</span>,
+    <span class="string">"Low"</span>
+  )
+          </div>
+          
+          <div class="pattern-box">
+            <h4>Benefits of ASIM-based Detections</h4>
+            <ul>
+              <li><strong>Write once:</strong> Single detection covers Windows + Entra ID + Linux + Okta</li>
+              <li><strong>Automatic coverage:</strong> When new parsers are added, existing detections work</li>
+              <li><strong>Consistent fields:</strong> No need to remember vendor-specific field names</li>
+              <li><strong>Microsoft-maintained:</strong> Built-in parsers updated by Microsoft</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== ENRICHMENT ==================== -->
+      <section id="enrichment">
+        <div class="stage-header">
+          <h2>🔗 Stage 4: Enrichment</h2>
+          <p>Adding context from external data sources</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Enrichment Methods in Sentinel</h3>
+          
+          <div class="two-column">
+            <div class="info-box">
+              <h4>1. Watchlists</h4>
+              <p>CSV data uploaded to Sentinel for lookup operations.</p>
+              <div class="code-block" style="font-size: 0.8rem;">
+<span class="comment">// Enrich with asset classification</span>
+<span class="keyword">let</span> <span class="field">HighValueAssets</span> = 
+  <span class="function">_GetWatchlist</span>(<span class="string">'HighValueAssets'</span>)
+  | <span class="keyword">project</span> <span class="field">Hostname</span>, <span class="field">AssetClass</span>, <span class="field">Owner</span>;
+
+SecurityEvent
+| <span class="keyword">join</span> <span class="keyword">kind</span>=leftouter <span class="field">HighValueAssets</span> 
+    <span class="keyword">on</span> $left.<span class="field">Computer</span> == $right.<span class="field">Hostname</span>
+| <span class="keyword">where</span> <span class="field">AssetClass</span> == <span class="string">"Critical"</span>
+              </div>
+              <p><strong>Use cases:</strong> VIP users, critical assets, allowed IPs, known-good hashes</p>
+            </div>
+            
+            <div class="info-box">
+              <h4>2. externaldata()</h4>
+              <p>Query external data sources (Azure Blob, HTTP endpoints).</p>
+              <div class="code-block" style="font-size: 0.8rem;">
+<span class="comment">// Load threat intel from blob storage</span>
+<span class="keyword">let</span> <span class="field">ThreatIPs</span> = <span class="function">externaldata</span>(
+    <span class="field">IP</span>:<span class="keyword">string</span>, 
+    <span class="field">ThreatType</span>:<span class="keyword">string</span>,
+    <span class="field">Confidence</span>:<span class="keyword">int</span>
+  )
+  [<span class="string">@"https://storage.blob/threatfeed.csv"</span>]
+  <span class="keyword">with</span> (format=<span class="string">"csv"</span>, ignoreFirstRecord=true);
+
+SigninLogs
+| <span class="keyword">join</span> <span class="keyword">kind</span>=inner <span class="field">ThreatIPs</span> 
+    <span class="keyword">on</span> $left.<span class="field">IPAddress</span> == $right.<span class="field">IP</span>
+              </div>
+            </div>
+            
+            <div class="info-box">
+              <h4>3. Threat Intelligence Connectors</h4>
+              <p>Built-in TI indicators that auto-match against logs.</p>
+              <div class="code-block" style="font-size: 0.8rem;">
+<span class="comment">// Check if IP matches TI indicators</span>
+ThreatIntelligenceIndicator
+| <span class="keyword">where</span> <span class="field">Active</span> == true
+| <span class="keyword">where</span> <span class="field">NetworkIP</span> != <span class="string">""</span>
+| <span class="keyword">join</span> <span class="keyword">kind</span>=inner (
+    SigninLogs
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(1d)
+  ) <span class="keyword">on</span> $left.<span class="field">NetworkIP</span> == $right.<span class="field">IPAddress</span>
+              </div>
+            </div>
+            
+            <div class="info-box">
+              <h4>4. Geo-IP Functions</h4>
+              <p>Built-in functions for IP geolocation.</p>
+              <div class="code-block" style="font-size: 0.8rem;">
+<span class="comment">// Add geo-location to IPs</span>
+SigninLogs
+| <span class="keyword">extend</span> <span class="field">GeoInfo</span> = <span class="function">geo_info_from_ip_address</span>(<span class="field">IPAddress</span>)
+| <span class="keyword">extend</span> 
+    <span class="field">Country</span> = <span class="field">GeoInfo</span>.country,
+    <span class="field">City</span> = <span class="field">GeoInfo</span>.city,
+    <span class="field">Latitude</span> = <span class="field">GeoInfo</span>.latitude,
+    <span class="field">Longitude</span> = <span class="field">GeoInfo</span>.longitude
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <h3>Complete Enrichment Example</h3>
+          
+          <div class="code-block">
+<span class="comment">// Complete enriched authentication query</span>
+<span class="comment">// Combines: ASIM normalization + Geo-IP + Watchlist + Threat Intel</span>
+
+<span class="comment">// Load watchlists</span>
+<span class="keyword">let</span> <span class="field">VIPUsers</span> = <span class="function">_GetWatchlist</span>(<span class="string">'VIPUsers'</span>) | <span class="keyword">project</span> <span class="field">UserPrincipalName</span>, <span class="field">Department</span>, <span class="field">VIPLevel</span>;
+<span class="keyword">let</span> <span class="field">AllowedIPs</span> = <span class="function">_GetWatchlist</span>(<span class="string">'CorporateIPs'</span>) | <span class="keyword">project</span> <span class="field">IPRange</span>;
+<span class="keyword">let</span> <span class="field">ThreatIPs</span> = ThreatIntelligenceIndicator | <span class="keyword">where</span> <span class="field">Active</span> == true | <span class="keyword">project</span> <span class="field">NetworkIP</span>, <span class="field">ThreatType</span>;
+
+<span class="comment">// Main query with enrichment</span>
+<span class="function">imAuthentication</span>
+| <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(1h)
+| <span class="keyword">where</span> <span class="field">EventResult</span> == <span class="string">"Success"</span>
+<span class="comment">// Geo-IP enrichment</span>
+| <span class="keyword">extend</span> <span class="field">GeoInfo</span> = <span class="function">geo_info_from_ip_address</span>(<span class="field">SrcIpAddr</span>)
+| <span class="keyword">extend</span> 
+    <span class="field">Country</span> = <span class="function">tostring</span>(<span class="field">GeoInfo</span>.country),
+    <span class="field">City</span> = <span class="function">tostring</span>(<span class="field">GeoInfo</span>.city)
+<span class="comment">// VIP user enrichment</span>
+| <span class="keyword">join</span> <span class="keyword">kind</span>=leftouter <span class="field">VIPUsers</span> 
+    <span class="keyword">on</span> $left.<span class="field">TargetUsername</span> == $right.<span class="field">UserPrincipalName</span>
+<span class="comment">// Threat Intel enrichment</span>
+| <span class="keyword">join</span> <span class="keyword">kind</span>=leftouter <span class="field">ThreatIPs</span> 
+    <span class="keyword">on</span> $left.<span class="field">SrcIpAddr</span> == $right.<span class="field">NetworkIP</span>
+<span class="comment">// Check if from allowed IP range</span>
+| <span class="keyword">extend</span> <span class="field">IsFromAllowedIP</span> = <span class="field">SrcIpAddr</span> <span class="keyword">has_any</span> (<span class="field">AllowedIPs</span>)
+<span class="comment">// Flag suspicious activity</span>
+| <span class="keyword">extend</span> <span class="field">RiskScore</span> = 
+    <span class="function">iif</span>(<span class="function">isnotempty</span>(<span class="field">ThreatType</span>), 100, 0) +
+    <span class="function">iif</span>(<span class="field">VIPLevel</span> == <span class="string">"Executive"</span>, 20, 0) +
+    <span class="function">iif</span>(<span class="field">Country</span> <span class="keyword">!in</span> (<span class="string">"United States"</span>, <span class="string">"Canada"</span>), 30, 0) +
+    <span class="function">iif</span>(<span class="field">IsFromAllowedIP</span> == false, 15, 0)
+| <span class="keyword">where</span> <span class="field">RiskScore</span> > 30
+| <span class="keyword">project</span> 
+    <span class="field">TimeGenerated</span>,
+    <span class="field">TargetUsername</span>,
+    <span class="field">VIPLevel</span>,
+    <span class="field">SrcIpAddr</span>,
+    <span class="field">Country</span>,
+    <span class="field">City</span>,
+    <span class="field">ThreatType</span>,
+    <span class="field">RiskScore</span>,
+    <span class="field">EventProduct</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== LOG SOURCE PATTERNS ==================== -->
+      <section id="patterns">
+        <div class="stage-header">
+          <h2>📋 Log Source Patterns</h2>
+          <p>Complete parsing patterns for common log types</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Pattern Reference Table</h3>
+          
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Log Source</th>
+                <th>Native Table</th>
+                <th>Parsing Approach</th>
+                <th>ASIM Parser</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Windows Security Events</td>
+                <td>SecurityEvent</td>
+                <td>Pre-parsed by connector</td>
+                <td>vimAuthenticationMicrosoftWindowsEvent</td>
+              </tr>
+              <tr>
+                <td>Entra ID Sign-ins</td>
+                <td>SigninLogs</td>
+                <td>Pre-parsed (JSON nested)</td>
+                <td>vimAuthenticationSigninLogs</td>
+              </tr>
+              <tr>
+                <td>Linux Syslog</td>
+                <td>Syslog</td>
+                <td>Query-time parsing (parse, extract)</td>
+                <td>vimAuthenticationLinuxSyslog</td>
+              </tr>
+              <tr>
+                <td>CEF Logs</td>
+                <td>CommonSecurityLog</td>
+                <td>Pre-parsed by CEF connector</td>
+                <td>Various (vendor-specific)</td>
+              </tr>
+              <tr>
+                <td>Custom JSON Logs</td>
+                <td>Custom_CL</td>
+                <td>DCR or query-time parse_json</td>
+                <td>Custom parser needed</td>
+              </tr>
+              <tr>
+                <td>AWS CloudTrail</td>
+                <td>AWSCloudTrail</td>
+                <td>Pre-parsed by connector</td>
+                <td>vimAuthenticationAWSCloudTrail</td>
+              </tr>
+              <tr>
+                <td>Palo Alto Firewall</td>
+                <td>CommonSecurityLog</td>
+                <td>CEF format, pre-parsed</td>
+                <td>vimNetworkSessionPaloAlto</td>
+              </tr>
+              <tr>
+                <td>Microsoft Defender XDR</td>
+                <td>DeviceEvents, etc.</td>
+                <td>Pre-parsed, XDR tables</td>
+                <td>vimProcessEventMDE</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <details>
+          <summary><strong>Pattern: Linux Syslog Parsing</strong></summary>
+          <div class="details-content">
+            <div class="code-block">
+<span class="comment">// Parse SSH authentication from syslog</span>
+Syslog
+| <span class="keyword">where</span> <span class="field">Facility</span> == <span class="string">"auth"</span> <span class="keyword">or</span> <span class="field">Facility</span> == <span class="string">"authpriv"</span>
+| <span class="keyword">where</span> <span class="field">ProcessName</span> == <span class="string">"sshd"</span>
+| <span class="keyword">extend</span> <span class="field">EventType</span> = <span class="keyword">case</span>(
+    <span class="field">SyslogMessage</span> <span class="keyword">has</span> <span class="string">"Accepted"</span>, <span class="string">"Success"</span>,
+    <span class="field">SyslogMessage</span> <span class="keyword">has</span> <span class="string">"Failed"</span>, <span class="string">"Failure"</span>,
+    <span class="field">SyslogMessage</span> <span class="keyword">has</span> <span class="string">"Invalid user"</span>, <span class="string">"Failure"</span>,
+    <span class="string">"Other"</span>
+  )
+| <span class="keyword">parse</span> <span class="field">SyslogMessage</span> <span class="keyword">with</span>
+    * <span class="string">"Accepted "</span> <span class="field">AuthMethod</span>:<span class="keyword">string</span> <span class="string">" for "</span> 
+    <span class="field">User</span>:<span class="keyword">string</span> <span class="string">" from "</span> 
+    <span class="field">SourceIP</span>:<span class="keyword">string</span> <span class="string">" port "</span> 
+    <span class="field">Port</span>:<span class="keyword">int</span> *
+| <span class="keyword">extend</span> <span class="field">SourceIP</span> = <span class="function">coalesce</span>(
+    <span class="field">SourceIP</span>,
+    <span class="function">extract</span>(<span class="string">@"from\s+(\d+\.\d+\.\d+\.\d+)"</span>, 1, <span class="field">SyslogMessage</span>)
+  )
+| <span class="keyword">extend</span> <span class="field">User</span> = <span class="function">coalesce</span>(
+    <span class="field">User</span>,
+    <span class="function">extract</span>(<span class="string">@"for\s+(\S+)"</span>, 1, <span class="field">SyslogMessage</span>),
+    <span class="function">extract</span>(<span class="string">@"user\s+(\S+)"</span>, 1, <span class="field">SyslogMessage</span>)
+  )
+            </div>
+          </div>
+        </details>
+
+        <details>
+          <summary><strong>Pattern: Custom JSON Application Logs</strong></summary>
+          <div class="details-content">
+            <div class="code-block">
+<span class="comment">// Custom app logs ingested as JSON in RawData column</span>
+CustomApp_CL
+| <span class="keyword">extend</span> <span class="field">Parsed</span> = <span class="function">parse_json</span>(<span class="field">RawData</span>)
+| <span class="keyword">extend</span>
+    <span class="field">EventTime</span> = <span class="function">todatetime</span>(<span class="field">Parsed</span>.timestamp),
+    <span class="field">EventType</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.event.type),
+    <span class="field">UserEmail</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.user.email),
+    <span class="field">UserId</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.user.id),
+    <span class="field">Action</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.action),
+    <span class="field">Resource</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.resource.name),
+    <span class="field">ResourceType</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.resource.type),
+    <span class="field">SourceIP</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.source.ip),
+    <span class="field">UserAgent</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.source.userAgent),
+    <span class="field">Result</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.result.status),
+    <span class="field">ErrorCode</span> = <span class="function">tostring</span>(<span class="field">Parsed</span>.result.errorCode)
+<span class="comment">// Handle nested arrays</span>
+| <span class="keyword">mv-expand</span> <span class="field">Permission</span> = <span class="field">Parsed</span>.permissions
+| <span class="keyword">extend</span> <span class="field">PermissionName</span> = <span class="function">tostring</span>(<span class="field">Permission</span>)
+            </div>
+          </div>
+        </details>
+
+        <details>
+          <summary><strong>Pattern: Windows Event XML Parsing</strong></summary>
+          <div class="details-content">
+            <div class="code-block">
+<span class="comment">// Parse EventData from Windows events</span>
+SecurityEvent
+| <span class="keyword">where</span> <span class="field">EventID</span> == 4688 <span class="comment">// Process Creation</span>
+| <span class="keyword">extend</span> <span class="field">EventXml</span> = <span class="function">parse_xml</span>(<span class="field">EventData</span>)
+| <span class="keyword">extend</span> <span class="field">DataItems</span> = <span class="field">EventXml</span>.DataItem.EventData.Data
+| <span class="keyword">mv-expand</span> <span class="field">DataItem</span> = <span class="field">DataItems</span>
+| <span class="keyword">extend</span> 
+    <span class="field">FieldName</span> = <span class="function">tostring</span>(<span class="field">DataItem</span>['@Name']),
+    <span class="field">FieldValue</span> = <span class="function">tostring</span>(<span class="field">DataItem</span>['#text'])
+| <span class="keyword">summarize</span> <span class="field">Fields</span> = <span class="function">make_bag</span>(<span class="function">pack</span>(<span class="field">FieldName</span>, <span class="field">FieldValue</span>)) <span class="keyword">by</span> <span class="field">TimeGenerated</span>, <span class="field">Computer</span>, <span class="field">EventID</span>
+| <span class="keyword">extend</span>
+    <span class="field">NewProcessName</span> = <span class="function">tostring</span>(<span class="field">Fields</span>.NewProcessName),
+    <span class="field">CommandLine</span> = <span class="function">tostring</span>(<span class="field">Fields</span>.CommandLine),
+    <span class="field">ParentProcessName</span> = <span class="function">tostring</span>(<span class="field">Fields</span>.ParentProcessName),
+    <span class="field">SubjectUserName</span> = <span class="function">tostring</span>(<span class="field">Fields</span>.SubjectUserName)
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==================== SUMMARY ==================== -->
+      <div class="concept-card">
+        <h2>📝 Quick Reference Summary</h2>
+        
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Goal</th>
+              <th>Method</th>
+              <th>When to Use</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Drop noisy logs</td>
+              <td>DCR Transformation (where)</td>
+              <td>Ingest-time — save cost</td>
+            </tr>
+            <tr>
+              <td>Parse JSON</td>
+              <td>DCR or parse_json()</td>
+              <td>DCR for stable formats; query for flexibility</td>
+            </tr>
+            <tr>
+              <td>Extract fields</td>
+              <td>parse, extract(), split()</td>
+              <td>Query-time for custom logs</td>
+            </tr>
+            <tr>
+              <td>Cross-source detection</td>
+              <td>ASIM parsers</td>
+              <td>Always for multi-source rules</td>
+            </tr>
+            <tr>
+              <td>Add asset context</td>
+              <td>Watchlists + join</td>
+              <td>Query-time enrichment</td>
+            </tr>
+            <tr>
+              <td>Threat intel matching</td>
+              <td>TI connectors or externaldata</td>
+              <td>Query-time enrichment</td>
+            </tr>
+            <tr>
+              <td>Geo-IP lookup</td>
+              <td>geo_info_from_ip_address()</td>
+              <td>Query-time (built-in function)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>

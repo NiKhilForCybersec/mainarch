@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIEM Parsing & Normalization | Core Concepts</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .concept-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.02));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .flow-diagram {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.4;
+    }
+    
+    .flow-diagram .stage {
+      color: #8b5cf6;
+      font-weight: bold;
+    }
+    
+    .flow-diagram .arrow {
+      color: #22c55e;
+    }
+    
+    .flow-diagram .component {
+      color: #06b6d4;
+    }
+    
+    .flow-diagram .action {
+      color: #f59e0b;
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    
+    .comparison-table th {
+      background: rgba(139, 92, 246, 0.2);
+      padding: 0.75rem;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .comparison-table td {
+      padding: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      vertical-align: top;
+    }
+    
+    .comparison-table tr:nth-child(even) {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    
+    .pattern-box {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .pattern-box h4 {
+      color: #22c55e;
+      margin-top: 0;
+    }
+    
+    .warning-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .warning-box h4 {
+      color: #ef4444;
+      margin-top: 0;
+    }
+    
+    .info-box {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    
+    .info-box h4 {
+      color: #3b82f6;
+      margin-top: 0;
+    }
+    
+    .two-column {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .term-definition {
+      background: rgba(0, 0, 0, 0.2);
+      border-left: 3px solid #8b5cf6;
+      padding: 0.75rem 1rem;
+      margin: 0.5rem 0;
+    }
+    
+    .term-definition strong {
+      color: #8b5cf6;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    
+    .nav-links a {
+      background: rgba(139, 92, 246, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--accent-primary);
+    }
+    
+    .nav-links a:hover {
+      background: rgba(139, 92, 246, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/parsing-normalization-overview.html" class="nav-item active">Parsing Overview</a>
+          <a href="../siem/sentinel-parsing-deep-dive.html" class="nav-item">Sentinel Parsing</a>
+          <a href="../siem/splunk-parsing-deep-dive.html" class="nav-item">Splunk Parsing</a>
+          <a href="../siem/parsing-patterns-comparison.html" class="nav-item">Parsing Comparison</a>
+          <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="../siem/threat-intel-integration.html" class="nav-item">TI Integration</a>
+          <a href="../siem/vuln-management-workflow.html" class="nav-item">Vuln Management</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="../siem/workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
+          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="../siem/casb-saas-security.html" class="nav-item">CASB &amp; SaaS Security</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../director-interview-prep.html" class="nav-item">Director Interview Prep</a>
+          <a href="../soc-maturity.html" class="nav-item">SOC Maturity Roadmap</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">SIEM Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Parsing & Normalization</span>
+        </nav>
+        <h1>SIEM Parsing, Normalization & Enrichment</h1>
+        <p class="section-description">Core concepts and mental models for log processing</p>
+      </div>
+
+      <div class="nav-links">
+        <a href="sentinel-parsing-deep-dive.html">→ Sentinel Deep Dive</a>
+        <a href="splunk-parsing-deep-dive.html">→ Splunk Deep Dive</a>
+        <a href="parsing-deep-dive.html">→ Parsing Examples</a>
+      </div>
+
+      <!-- ==================== CORE CONCEPTS ==================== -->
+      <div class="concept-card">
+        <h2>🎯 The Three Pillars of Log Processing</h2>
+        
+        <div class="two-column">
+          <div class="term-definition">
+            <strong>PARSING</strong>
+            <p>Breaking raw log data into structured fields. Taking a string like <code>"user=john action=login ip=1.2.3.4"</code> and extracting key-value pairs into queryable columns.</p>
+          </div>
+          
+          <div class="term-definition">
+            <strong>NORMALIZATION</strong>
+            <p>Making different log formats look consistent. Vendor A says <code>src_ip</code>, Vendor B says <code>sourceAddress</code>, Vendor C says <code>client.ip</code> — normalization maps all to a standard field like <code>SrcIpAddr</code>.</p>
+          </div>
+          
+          <div class="term-definition">
+            <strong>ENRICHMENT</strong>
+            <p>Adding context that wasn't in the original log. Geo-IP lookup, threat intel matching, asset classification, user department from HR system, risk scores.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== WHEN PROCESSING HAPPENS ==================== -->
+      <div class="concept-card">
+        <h2>⏱️ When Processing Happens: The Time Dimension</h2>
+        
+        <div class="flow-diagram">
+<span class="stage">LOG SOURCE</span>                    <span class="stage">INGESTION</span>                    <span class="stage">STORAGE</span>                    <span class="stage">QUERY</span>
+     │                              │                            │                          │
+     ▼                              ▼                            ▼                          ▼
+┌─────────────┐              ┌─────────────┐              ┌─────────────┐            ┌─────────────┐
+│ Raw Events  │ ───────────▶ │ Ingestion   │ ───────────▶ │   Tables/   │ ─────────▶ │  Detection  │
+│  (logs)     │              │  Pipeline   │              │   Indexes   │            │   Queries   │
+└─────────────┘              └─────────────┘              └─────────────┘            └─────────────┘
+                                    │                                                       │
+                             <span class="action">INGEST-TIME</span>                                          <span class="action">QUERY-TIME</span>
+                             <span class="action">PROCESSING</span>                                           <span class="action">PROCESSING</span>
+                                    │                                                       │
+                                    ▼                                                       ▼
+                             ┌─────────────────────────────────────────────────────────────────┐
+                             │ • Parsing                  │ • Parsing (if not done earlier)   │
+                             │ • Field extraction         │ • Normalization (schema mapping)  │
+                             │ • Filtering/dropping       │ • Enrichment (lookups, joins)     │
+                             │ • Routing                  │ • Aggregation                     │
+                             │ • Basic normalization      │ • Correlation                     │
+                             └─────────────────────────────────────────────────────────────────┘
+        </div>
+        
+        <div class="two-column">
+          <div class="pattern-box">
+            <h4>Ingest-Time Processing</h4>
+            <p><strong>When:</strong> As logs flow into the SIEM, before storage</p>
+            <p><strong>Pros:</strong></p>
+            <ul>
+              <li>✓ Faster queries (data already structured)</li>
+              <li>✓ Cost savings (drop noise before storage)</li>
+              <li>✓ Consistent data quality</li>
+            </ul>
+            <p><strong>Cons:</strong></p>
+            <ul>
+              <li>✗ Mistakes are expensive (re-ingest to fix)</li>
+              <li>✗ Less flexibility to change later</li>
+              <li>✗ Can increase license/storage costs if adding fields</li>
+            </ul>
+          </div>
+          
+          <div class="pattern-box">
+            <h4>Query-Time Processing</h4>
+            <p><strong>When:</strong> During search/detection execution</p>
+            <p><strong>Pros:</strong></p>
+            <ul>
+              <li>✓ Flexible (change parsing without re-ingesting)</li>
+              <li>✓ Preserves raw data</li>
+              <li>✓ Easier to iterate and fix</li>
+            </ul>
+            <p><strong>Cons:</strong></p>
+            <ul>
+              <li>✗ Slower queries (parsing happens every time)</li>
+              <li>✗ Higher compute cost at scale</li>
+              <li>✗ Inconsistency if parsing logic changes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== SPLUNK VS SENTINEL COMPARISON ==================== -->
+      <div class="concept-card">
+        <h2>🔄 Splunk vs Sentinel: Processing Philosophies</h2>
+        
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Aspect</th>
+              <th>Splunk</th>
+              <th>Microsoft Sentinel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Default Philosophy</strong></td>
+              <td>Store raw, parse at search-time</td>
+              <td>Schema-on-write with query-time flexibility</td>
+            </tr>
+            <tr>
+              <td><strong>Ingest-Time Parsing</strong></td>
+              <td>props.conf / transforms.conf on Indexers or Heavy Forwarders</td>
+              <td>DCR Transformations (KQL-based)</td>
+            </tr>
+            <tr>
+              <td><strong>Query-Time Parsing</strong></td>
+              <td>Field extractions, rex, spath, eval</td>
+              <td>parse_json(), extract(), extend, parse operator</td>
+            </tr>
+            <tr>
+              <td><strong>Normalization Schema</strong></td>
+              <td>CIM (Common Information Model)</td>
+              <td>ASIM (Advanced Security Information Model)</td>
+            </tr>
+            <tr>
+              <td><strong>How Normalization Works</strong></td>
+              <td>Field aliases + calculated fields in TAs</td>
+              <td>ASIM parsers (KQL functions)</td>
+            </tr>
+            <tr>
+              <td><strong>Enrichment</strong></td>
+              <td>Lookups (CSV, KVStore), external lookups</td>
+              <td>Watchlists, externaldata(), join, TI connectors</td>
+            </tr>
+            <tr>
+              <td><strong>Acceleration</strong></td>
+              <td>Data Model Acceleration, Summary Indexing</td>
+              <td>Materialized Views, pre-aggregated tables</td>
+            </tr>
+            <tr>
+              <td><strong>Cost Model</strong></td>
+              <td>License based on indexed volume</td>
+              <td>Pay per GB ingested (tiers available)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ==================== LOG SOURCE PATTERNS ==================== -->
+      <div class="concept-card">
+        <h2>📋 Log Source Patterns</h2>
+        <p>Different log sources require different parsing strategies:</p>
+        
+        <div class="two-column">
+          <div class="info-box">
+            <h4>1. Structured Logs (JSON, XML)</h4>
+            <p><strong>Examples:</strong> Cloud APIs, modern applications, Azure Activity Logs</p>
+            <p><strong>Strategy:</strong> Minimal parsing needed — extract nested objects</p>
+            <pre style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+{
+  "timestamp": "2024-01-15T10:30:00Z",
+  "user": {"name": "john", "id": "12345"},
+  "action": "login",
+  "source_ip": "192.168.1.100"
+}</pre>
+          </div>
+          
+          <div class="info-box">
+            <h4>2. Semi-Structured (Key-Value Pairs)</h4>
+            <p><strong>Examples:</strong> Firewall logs, web server access logs</p>
+            <p><strong>Strategy:</strong> KV extraction with known delimiters</p>
+            <pre style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+Jan 15 10:30:00 fw01 action=allow src=192.168.1.100 
+dst=10.0.0.50 port=443 user=john bytes=1024</pre>
+          </div>
+          
+          <div class="info-box">
+            <h4>3. CEF/LEEF Format</h4>
+            <p><strong>Examples:</strong> Many security products (McAfee, Symantec, etc.)</p>
+            <p><strong>Strategy:</strong> Standard format — use built-in parsers</p>
+            <pre style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+CEF:0|Vendor|Product|1.0|100|Login Success|5|
+src=192.168.1.100 dst=10.0.0.50 suser=john</pre>
+          </div>
+          
+          <div class="info-box">
+            <h4>4. Unstructured (Free Text)</h4>
+            <p><strong>Examples:</strong> Legacy apps, custom applications</p>
+            <p><strong>Strategy:</strong> Regex extraction, pattern matching</p>
+            <pre style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+[2024-01-15 10:30:00] INFO UserService - User john 
+logged in from 192.168.1.100 after 2 failed attempts</pre>
+          </div>
+          
+          <div class="info-box">
+            <h4>5. Windows Event Logs</h4>
+            <p><strong>Examples:</strong> Security events, Application logs</p>
+            <p><strong>Strategy:</strong> XML structure with EventID-specific parsing</p>
+            <pre style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+&lt;Event&gt;
+  &lt;System&gt;&lt;EventID&gt;4624&lt;/EventID&gt;...&lt;/System&gt;
+  &lt;EventData&gt;
+    &lt;Data Name="TargetUserName"&gt;john&lt;/Data&gt;
+    &lt;Data Name="IpAddress"&gt;192.168.1.100&lt;/Data&gt;
+  &lt;/EventData&gt;
+&lt;/Event&gt;</pre>
+          </div>
+          
+          <div class="info-box">
+            <h4>6. Syslog (RFC 3164/5424)</h4>
+            <p><strong>Examples:</strong> Linux systems, network devices</p>
+            <p><strong>Strategy:</strong> Header parsing + payload parsing (varies)</p>
+            <pre style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+&lt;134&gt;Jan 15 10:30:00 server01 sshd[1234]: 
+Accepted publickey for john from 192.168.1.100 port 22</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== THE MENTAL MODEL ==================== -->
+      <div class="concept-card">
+        <h2>🧠 The Mental Model: Processing Pipeline</h2>
+        
+        <div class="flow-diagram">
+<span class="stage">PHASE 1: COLLECTION</span>
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                 │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐          │
+│  │ Firewall │  │  Server  │  │  Cloud   │  │   EDR    │  │  Custom  │          │
+│  │   Logs   │  │   Logs   │  │   APIs   │  │  Alerts  │  │   Apps   │          │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘          │
+│       │             │             │             │             │                 │
+│       └─────────────┴─────────────┴─────────────┴─────────────┘                 │
+│                                   │                                             │
+│                                   ▼                                             │
+│                         ┌─────────────────┐                                     │
+│                         │   Collection    │  Syslog, API, Agent, File Upload   │
+│                         │   Transport     │                                     │
+│                         └────────┬────────┘                                     │
+└──────────────────────────────────┼──────────────────────────────────────────────┘
+                                   │
+                                   ▼
+<span class="stage">PHASE 2: INGESTION PIPELINE</span>
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                 │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐             │
+│  │  <span class="action">PARSE</span>           │───▶│  <span class="action">FILTER</span>         │───▶│  <span class="action">ROUTE</span>          │             │
+│  │ Break into      │    │ Drop unwanted   │    │ Send to correct │             │
+│  │ fields          │    │ events          │    │ table/index     │             │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘             │
+│           │                                                                     │
+│           ▼                                                                     │
+│  ┌─────────────────┐    ┌─────────────────┐                                     │
+│  │  <span class="action">TRANSFORM</span>       │───▶│  <span class="action">NORMALIZE</span>       │  (Optional at ingest-time)         │
+│  │ Rename fields   │    │ Map to schema   │                                     │
+│  │ Add fields      │    │ (basic)         │                                     │
+│  └─────────────────┘    └─────────────────┘                                     │
+│                                   │                                             │
+└───────────────────────────────────┼─────────────────────────────────────────────┘
+                                    │
+                                    ▼
+<span class="stage">PHASE 3: STORAGE</span>
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                 │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │                          <span class="component">TABLES / INDEXES</span>                             │   │
+│  │                                                                         │   │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    │   │
+│  │  │ SecurityLog │  │ Syslog      │  │ Custom_CL   │  │ CommonSec   │    │   │
+│  │  │ (Windows)   │  │ (Network)   │  │ (Custom)    │  │ (Firewall)  │    │   │
+│  │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘    │   │
+│  │                                                                         │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                 │
+└──────────────────────────────────┬──────────────────────────────────────────────┘
+                                   │
+                                   ▼
+<span class="stage">PHASE 4: QUERY-TIME PROCESSING</span>
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                 │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐             │
+│  │  <span class="action">PARSE</span>           │───▶│  <span class="action">NORMALIZE</span>       │───▶│  <span class="action">ENRICH</span>         │             │
+│  │ Extract from    │    │ Map to schema   │    │ Add context     │             │
+│  │ raw/nested      │    │ (CIM/ASIM)      │    │ (lookups, TI)   │             │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘             │
+│                                                       │                         │
+│                                                       ▼                         │
+│                                            ┌─────────────────┐                  │
+│                                            │  <span class="action">CORRELATE</span>      │                  │
+│                                            │ Join multiple   │                  │
+│                                            │ sources/events  │                  │
+│                                            └────────┬────────┘                  │
+│                                                     │                           │
+│                                                     ▼                           │
+│                                            ┌─────────────────┐                  │
+│                                            │  <span class="component">DETECTION /</span>    │                  │
+│                                            │  <span class="component">ALERT / REPORT</span> │                  │
+│                                            └─────────────────┘                  │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+        </div>
+      </div>
+
+      <!-- ==================== NORMALIZATION SCHEMAS ==================== -->
+      <div class="concept-card">
+        <h2>📐 Normalization Schemas: CIM vs ASIM</h2>
+        
+        <div class="two-column">
+          <div class="info-box">
+            <h4>Splunk CIM (Common Information Model)</h4>
+            <p>Splunk's standardization framework with data models for different event types.</p>
+            <p><strong>Key Data Models:</strong></p>
+            <ul>
+              <li><strong>Authentication:</strong> user, action, src, dest, app</li>
+              <li><strong>Network Traffic:</strong> src_ip, dest_ip, src_port, dest_port, bytes</li>
+              <li><strong>Endpoint:</strong> process_name, parent_process, user, action</li>
+              <li><strong>Malware:</strong> file_name, file_hash, signature, action</li>
+              <li><strong>Web:</strong> url, http_method, status, user_agent</li>
+            </ul>
+            <p><strong>Implementation:</strong> Field aliases in Technology Add-ons (TAs)</p>
+          </div>
+          
+          <div class="info-box">
+            <h4>Sentinel ASIM (Advanced Security Information Model)</h4>
+            <p>Microsoft's normalization schema for cross-source detections.</p>
+            <p><strong>Key Schemas:</strong></p>
+            <ul>
+              <li><strong>Authentication:</strong> TargetUsername, SrcIpAddr, EventType</li>
+              <li><strong>Network Session:</strong> SrcIpAddr, DstIpAddr, DstPortNumber</li>
+              <li><strong>Process Event:</strong> ActingProcessName, TargetProcessName, User</li>
+              <li><strong>File Event:</strong> TargetFileName, TargetFilePath, ActorUsername</li>
+              <li><strong>DNS:</strong> DnsQuery, DnsResponseCode, SrcIpAddr</li>
+            </ul>
+            <p><strong>Implementation:</strong> KQL parser functions that output normalized fields</p>
+          </div>
+        </div>
+        
+        <h3>Field Mapping Example: Authentication Event</h3>
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Raw Field</th>
+              <th>CIM Field</th>
+              <th>ASIM Field</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Windows Security</td>
+              <td>TargetUserName</td>
+              <td rowspan="4">user</td>
+              <td rowspan="4">TargetUsername</td>
+            </tr>
+            <tr>
+              <td>Okta</td>
+              <td>actor.displayName</td>
+            </tr>
+            <tr>
+              <td>Linux PAM</td>
+              <td>user</td>
+            </tr>
+            <tr>
+              <td>Entra ID</td>
+              <td>userPrincipalName</td>
+            </tr>
+            <tr>
+              <td>Windows Security</td>
+              <td>IpAddress</td>
+              <td rowspan="4">src</td>
+              <td rowspan="4">SrcIpAddr</td>
+            </tr>
+            <tr>
+              <td>Okta</td>
+              <td>client.ipAddress</td>
+            </tr>
+            <tr>
+              <td>Linux PAM</td>
+              <td>rhost</td>
+            </tr>
+            <tr>
+              <td>Entra ID</td>
+              <td>ipAddress</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ==================== THE CLEAN MENTAL MODEL ==================== -->
+      <div class="concept-card">
+        <h2>🧠 The Clean Mental Model: Splunk vs Sentinel</h2>
+        
+        <div class="flow-diagram">
+<span class="stage">SPLUNK PHILOSOPHY</span>                              <span class="stage">SENTINEL PHILOSOPHY</span>
+
+┌─────────────────────────────────────┐          ┌─────────────────────────────────────┐
+│     <span class="action">RAW DATA INDEXED AS-IS</span>          │          │    <span class="action">DATA LANDS INTO TABLES</span>           │
+│                                     │          │                                     │
+│  • Store everything, parse later    │          │  • Tables have schema               │
+│  • Preserve original for forensics  │          │  • Can transform at ingestion       │
+│  • Index-time = minimal processing  │          │  • Or parse at query-time           │
+└─────────────────────────────────────┘          └─────────────────────────────────────┘
+               │                                                │
+               ▼                                                ▼
+┌─────────────────────────────────────┐          ┌─────────────────────────────────────┐
+│   <span class="component">NORMALIZATION = SEARCH-TIME</span>       │          │   <span class="component">NORMALIZATION = FLEXIBLE</span>          │
+│                                     │          │                                     │
+│  Driven by:                         │          │  Options:                           │
+│  • CIM + Technology Add-ons (TAs)   │          │  • DCR transformations (ingestion)  │
+│  • props.conf / transforms.conf     │          │  • KQL functions (query-time)       │
+│  • Field aliases + calculated fields│          │  • ASIM parsers (query-time)        │
+│  • Data Model acceleration          │          │                                     │
+└─────────────────────────────────────┘          └─────────────────────────────────────┘
+               │                                                │
+               ▼                                                ▼
+┌─────────────────────────────────────┐          ┌─────────────────────────────────────┐
+│      <span class="action">CIM = TARGET SCHEMA</span>            │          │      <span class="action">ASIM = TARGET SCHEMA</span>           │
+│                                     │          │                                     │
+│  • Common Information Model         │          │  • Advanced Security Info Model     │
+│  • TAs map vendor → CIM fields      │          │  • Parsers map vendor → ASIM fields │
+│  • Data models for acceleration     │          │  • Query-time, not storage format   │
+│  • tstats for fast queries          │          │  • Built-in analytics use ASIM      │
+└─────────────────────────────────────┘          └─────────────────────────────────────┘
+        </div>
+        
+        <div class="two-column">
+          <div class="pattern-box">
+            <h4>Splunk Key Insight</h4>
+            <p><strong>Raw data is indexed → Normalization is search-time → CIM is the target</strong></p>
+            <p>Technology Add-ons (TAs) do the heavy lifting. They contain props.conf and transforms.conf that map vendor-specific fields to CIM. You install TAs, and normalization "just works" at search time.</p>
+          </div>
+          
+          <div class="pattern-box">
+            <h4>Sentinel Key Insight</h4>
+            <p><strong>Data lands in tables → Normalize at ingestion OR query-time → ASIM is the target</strong></p>
+            <p>You have a choice: use DCR transformations to normalize before storage (cost savings), or use ASIM parsers at query-time (flexibility). ASIM parsers are KQL functions that output normalized fields.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== PRACTICAL GOALS ==================== -->
+      <div class="concept-card">
+        <h2>🎯 Practical Goals: Where to Do What</h2>
+        
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Your Goal</th>
+              <th>Splunk Approach</th>
+              <th>Sentinel Approach</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Detection Portability</strong><br><em>(Write once, run across sources)</em></td>
+              <td>Normalize to CIM via TAs (search-time). Write detections using CIM fields. Use <code>tstats</code> against accelerated data models.</td>
+              <td>Normalize to ASIM via parsers (query-time). Write detections using ASIM union parsers like <code>imAuthentication</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>Cost Control</strong><br><em>(Reduce noisy logs)</em></td>
+              <td>Filter/route at index-time using props.conf + transforms.conf routing. Use Heavy Forwarder for pre-processing. nullQueue to drop events.</td>
+              <td>DCR transformations to drop/filter before ingestion. Route high-volume logs to Basic tier. Use <code>where</code> in DCR KQL.</td>
+            </tr>
+            <tr>
+              <td><strong>High-Performance Correlation</strong><br><em>(Fast queries at scale)</em></td>
+              <td>Data Model Acceleration with CIM compliance. Use <code>tstats</code> exclusively. Summary indexing for aggregates.</td>
+              <td>Optimize table design. Pre-compute with DCR transformations. Use KQL functions consistently. Materialized views for frequent queries.</td>
+            </tr>
+            <tr>
+              <td><strong>Data Quality</strong><br><em>(Consistent, clean data)</em></td>
+              <td>Proper sourcetype assignment. TAs for field extraction. Index-time line breaking and timestamp recognition.</td>
+              <td>DCR transformations for field standardization. Schema enforcement at table level. KQL functions for consistent parsing.</td>
+            </tr>
+            <tr>
+              <td><strong>Enrichment</strong><br><em>(Add context to events)</em></td>
+              <td>Lookups (CSV, KVStore, external). Automatic lookups in props.conf. Search-time enrichment.</td>
+              <td>Watchlists + join. externaldata() for external sources. Threat Intelligence connectors. Query-time enrichment.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ==================== BEST PRACTICES ==================== -->
+      <div class="concept-card">
+        <h2>✅ Best Practices</h2>
+        
+        <div class="two-column">
+          <div class="pattern-box">
+            <h4>DO: Strategic Processing Placement</h4>
+            <ul>
+              <li><strong>Filter at ingest</strong> — drop noise before storage (cost savings)</li>
+              <li><strong>Parse at ingest</strong> — for high-volume, stable formats</li>
+              <li><strong>Normalize at query</strong> — for flexibility and iteration</li>
+              <li><strong>Enrich at query</strong> — context data changes (TI, asset info)</li>
+            </ul>
+          </div>
+          
+          <div class="warning-box">
+            <h4>DON'T: Common Anti-Patterns</h4>
+            <ul>
+              <li><strong>Parse everything at query</strong> — kills performance at scale</li>
+              <li><strong>Normalize at ingest</strong> — too rigid, hard to change</li>
+              <li><strong>Skip normalization</strong> — detections become source-specific</li>
+              <li><strong>Duplicate enrichment</strong> — enrich once, use everywhere</li>
+            </ul>
+          </div>
+        </div>
+        
+        <h3>Decision Matrix: Where to Process</h3>
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Goal</th>
+              <th>Ingest-Time</th>
+              <th>Query-Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Cost reduction (drop noise)</td>
+              <td>✅ Yes — filter before storage</td>
+              <td>❌ No — already paid for storage</td>
+            </tr>
+            <tr>
+              <td>Parsing stable, high-volume logs</td>
+              <td>✅ Yes — parse once, query fast</td>
+              <td>⚠️ Expensive at scale</td>
+            </tr>
+            <tr>
+              <td>Parsing custom/changing formats</td>
+              <td>⚠️ Risky — re-ingest on change</td>
+              <td>✅ Yes — flexible iteration</td>
+            </tr>
+            <tr>
+              <td>Cross-source normalization (CIM/ASIM)</td>
+              <td>⚠️ Partial — basic fields only</td>
+              <td>✅ Yes — full schema mapping</td>
+            </tr>
+            <tr>
+              <td>Enrichment (Geo-IP, Threat Intel)</td>
+              <td>⚠️ Stale data risk</td>
+              <td>✅ Yes — fresh lookups each time</td>
+            </tr>
+            <tr>
+              <td>Performance-critical detections</td>
+              <td>✅ Yes — pre-compute fields</td>
+              <td>⚠️ Use acceleration/caching</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ==================== NEXT STEPS ==================== -->
+      <div class="concept-card">
+        <h2>📚 Deep Dive Pages</h2>
+        
+        <div class="two-column">
+          <div class="info-box">
+            <h4><a href="sentinel-parsing-deep-dive.html" style="color: #3b82f6;">→ Sentinel Parsing Deep Dive</a></h4>
+            <p>Complete coverage of:</p>
+            <ul>
+              <li>DCR transformations (ingest-time)</li>
+              <li>KQL parsing functions (query-time)</li>
+              <li>ASIM parsers and normalization</li>
+              <li>Watchlists and enrichment</li>
+              <li>Pattern examples for each log type</li>
+            </ul>
+          </div>
+          
+          <div class="info-box">
+            <h4><a href="splunk-parsing-deep-dive.html" style="color: #3b82f6;">→ Splunk Parsing Deep Dive</a></h4>
+            <p>Complete coverage of:</p>
+            <ul>
+              <li>props.conf / transforms.conf</li>
+              <li>Search-time extractions and CIM</li>
+              <li>Field aliases and calculated fields</li>
+              <li>Lookups and enrichment</li>
+              <li>Data model acceleration</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>

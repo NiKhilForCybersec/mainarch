@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vulnerability Management Workflow | Risk-Based Prioritization & Backlog Management</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .concept-card {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.02));
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .flow-diagram {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.4;
+    }
+    
+    .code-block {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      overflow-x: auto;
+    }
+    
+    .code-block .comment { color: #6b7280; }
+    .code-block .keyword { color: #8b5cf6; }
+    .code-block .function { color: #22c55e; }
+    .code-block .string { color: #f59e0b; }
+    .code-block .field { color: #06b6d4; }
+    .code-block .number { color: #ec4899; }
+    
+    .pattern-box {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .pattern-box h4 { color: #22c55e; margin-top: 0; }
+    
+    .warning-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .warning-box h4 { color: #ef4444; margin-top: 0; }
+    
+    .info-box {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .info-box h4 { color: #3b82f6; margin-top: 0; }
+    
+    .tip-box {
+      background: rgba(234, 179, 8, 0.1);
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .tip-box h4 { color: #eab308; margin-top: 0; }
+    
+    .two-column {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    .comparison-table th {
+      background: rgba(239, 68, 68, 0.2);
+      padding: 0.75rem;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .comparison-table td {
+      padding: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      vertical-align: top;
+    }
+    .comparison-table tr:nth-child(even) {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    
+    .stage-header {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.1));
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0 1rem 0;
+      border-left: 4px solid #ef4444;
+    }
+    .stage-header h2 { margin: 0; color: #ef4444; }
+    .stage-header p { margin: 0.5rem 0 0 0; color: var(--text-secondary); }
+    
+    details {
+      margin: 1rem 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    details summary {
+      background: rgba(239, 68, 68, 0.1);
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    details summary:hover { background: rgba(239, 68, 68, 0.15); }
+    details[open] summary { border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+    details .details-content { padding: 1rem; }
+    
+    .scoring-formula {
+      background: rgba(139, 92, 246, 0.1);
+      border: 2px solid rgba(139, 92, 246, 0.3);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      text-align: center;
+    }
+    .scoring-formula h4 { color: #8b5cf6; margin-top: 0; }
+    .scoring-formula .formula {
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      color: #22c55e;
+      margin: 1rem 0;
+      text-align: left;
+    }
+    
+    .lifecycle-stage {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin: 0.25rem;
+    }
+    .stage-new { background: rgba(239, 68, 68, 0.3); color: #fca5a5; }
+    .stage-assigned { background: rgba(234, 179, 8, 0.3); color: #fde047; }
+    .stage-inprogress { background: rgba(59, 130, 246, 0.3); color: #93c5fd; }
+    .stage-remediated { background: rgba(34, 197, 94, 0.3); color: #86efac; }
+    .stage-accepted { background: rgba(139, 92, 246, 0.3); color: #c4b5fd; }
+    .stage-deferred { background: rgba(107, 114, 128, 0.3); color: #d1d5db; }
+    
+    .sla-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    .sla-ontrack { background: #22c55e; color: white; }
+    .sla-atrisk { background: #eab308; color: black; }
+    .sla-breached { background: #ef4444; color: white; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Security Transformation</span>
+            <span class="sidebar-logo-subtitle">RevFlow Analytics</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="../index.html" class="nav-item">Executive Summary</a>
+          <a href="../company-profile.html" class="nav-item">Company Profile</a>
+          <a href="../security-framework.html" class="nav-item">Security Framework</a>
+          <a href="../program-structure.html" class="nav-item">Program Structure</a>
+          <a href="../controls-mapping.html" class="nav-item">Controls Mapping</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">SIEM Migration</div>
+          <a href="../siem/index.html" class="nav-item">SIEM Overview</a>
+          <a href="../siem/discovery.html" class="nav-item">Discovery & Assessment</a>
+          <a href="../siem/log-sources.html" class="nav-item">Log Source Strategy</a>
+          <a href="../siem/log-engineering.html" class="nav-item">Log Engineering</a>
+          <a href="../siem/parsing-deep-dive.html" class="nav-item">Parsing Deep Dive</a>
+          <a href="../siem/parsing-normalization-overview.html" class="nav-item">Parsing Overview</a>
+          <a href="../siem/sentinel-parsing-deep-dive.html" class="nav-item">Sentinel Parsing</a>
+          <a href="../siem/splunk-parsing-deep-dive.html" class="nav-item">Splunk Parsing</a>
+          <a href="../siem/parsing-patterns-comparison.html" class="nav-item">Parsing Comparison</a>
+          <a href="../siem/threat-intelligence.html" class="nav-item">Threat Intelligence</a>
+          <a href="../siem/threat-intel-integration.html" class="nav-item">TI Integration</a>
+          <a href="../siem/vuln-management-workflow.html" class="nav-item active">Vuln Management</a>
+          <a href="../siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+          <a href="../siem/detection-anatomy.html" class="nav-item">Detection Anatomy</a>
+          <a href="../siem/detection-catalog.html" class="nav-item">Detection Catalog</a>
+          <a href="../siem/soar-automation.html" class="nav-item">SOAR &amp; Automation</a>
+          <a href="../siem/workbooks.html" class="nav-item">Workbooks &amp; Dashboards</a>
+          <a href="../siem/cost-optimization.html" class="nav-item">Cost Optimization</a>
+          <a href="../siem/casb-saas-security.html" class="nav-item">CASB &amp; SaaS Security</a>
+          <a href="../siem/soc-transition.html" class="nav-item">SOC Transition</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">EDR Migration</div>
+          <a href="../edr/index.html" class="nav-item">EDR Overview</a>
+          <a href="../edr/xdr-detection-model.html" class="nav-item">XDR Detection Model</a>
+          <a href="../edr/advanced-hunting.html" class="nav-item">Advanced Hunting</a>
+          <a href="../edr/live-response.html" class="nav-item">Live Response</a>
+          <a href="../edr/tvm.html" class="nav-item">Vulnerability Management</a>
+          <a href="../edr/deployment.html" class="nav-item">MDE Deployment</a>
+          <a href="../edr/asr-rules.html" class="nav-item">ASR Rules</a>
+          <a href="../edr/device-control.html" class="nav-item">Device Control</a>
+          <a href="../edr/compensating-controls.html" class="nav-item">Compensating Controls</a>
+          <a href="../edr/coexistence.html" class="nav-item">Coexistence Strategy</a>
+          <a href="../edr/eset-removal.html" class="nav-item">ESET Removal</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">DLP Migration</div>
+          <a href="../dlp/index.html" class="nav-item">DLP Overview</a>
+          <a href="../dlp/dlp-catalog.html" class="nav-item">DLP Catalog</a>
+          <a href="../dlp/policy-translation.html" class="nav-item">Policy Translation</a>
+          <a href="../dlp/rollout-phases.html" class="nav-item">Rollout Phases</a>
+          <a href="../dlp/user-communication.html" class="nav-item">User Communication</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Identity & Access</div>
+          <a href="../identity/index.html" class="nav-item">Identity Overview</a>
+          <a href="../identity/hybrid-setup.html" class="nav-item">Hybrid Identity</a>
+          <a href="../identity/conditional-access.html" class="nav-item">Conditional Access</a>
+          <a href="../identity/pim.html" class="nav-item">PIM Configuration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="../infrastructure/index.html" class="nav-item">Infrastructure Overview</a>
+          <a href="../infrastructure/landing-zone.html" class="nav-item">Landing Zone</a>
+          <a href="../infrastructure/network-architecture.html" class="nav-item">Network Architecture</a>
+          <a href="../infrastructure/workload-migration.html" class="nav-item">Workload Migration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="../operations/parallel-ops.html" class="nav-item">Parallel Operations</a>
+          <a href="../operations/soc-workflows.html" class="nav-item">SOC Workflows</a>
+          <a href="../operations/integration.html" class="nav-item">Platform Integration</a>
+          <a href="../operations/xdr-integration.html" class="nav-item">XDR Integration</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Resources</div>
+          <a href="../resources/timeline.html" class="nav-item">Project Timeline</a>
+          <a href="../resources/raci.html" class="nav-item">RACI Matrix</a>
+          <a href="../resources/infrastructure-reference.html" class="nav-item">Infrastructure Reference</a>
+          <a href="../resources/scripts.html" class="nav-item">Scripts & Queries</a>
+          <a href="../resources/data-dictionary.html" class="nav-item">Data Dictionary</a>
+          <a href="../resources/templates.html" class="nav-item">Templates</a>
+          <a href="../resources/splunk-reference.html" class="nav-item">Splunk Reference</a>
+          <a href="../resources/alternative-architectures.html" class="nav-item">Alternative Architectures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Runbooks</div>
+          <a href="../resources/mde-onboarding.html" class="nav-item">MDE Onboarding</a>
+          <a href="../resources/mde-offboarding.html" class="nav-item">MDE Offboarding</a>
+          <a href="../resources/incident-response.html" class="nav-item">Incident Response</a>
+          <a href="../resources/operational-procedures.html" class="nav-item">Operational Procedures</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Troubleshooting</div>
+          <a href="../troubleshooting/index.html" class="nav-item">Common Issues</a>
+          <a href="../troubleshooting/siem-issues.html" class="nav-item">SIEM Issues</a>
+          <a href="../troubleshooting/mde-issues.html" class="nav-item">MDE Issues</a>
+          <a href="../troubleshooting/dlp-issues.html" class="nav-item">DLP Issues</a>
+          <a href="../troubleshooting/agent-conflicts.html" class="nav-item">Agent Conflicts</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Career</div>
+          <a href="../career-narrative.html" class="nav-item">Career Narrative</a>
+          <a href="../interview-prep.html" class="nav-item">Interview Prep (Full)</a>
+          <a href="../interview-prep-v2.html" class="nav-item">Interview Prep v2</a>
+          <a href="../interview-technical-reference.html" class="nav-item">Technical Reference</a>
+          <a href="../interview-frameworks.html" class="nav-item">Mental Frameworks</a>
+          <a href="../director-interview-prep.html" class="nav-item">Director Interview Prep</a>
+          <a href="../soc-maturity.html" class="nav-item">SOC Maturity Roadmap</a>
+          <a href="../security-mental-model.html" class="nav-item">Security Mental Model</a>
+          <a href="../ai-security-risk.html" class="nav-item">AI Security & Risk</a>
+        </div>
+      </nav>
+    </aside>
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+    </button>
+    <div class="sidebar-overlay"></div>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <nav class="breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="index.html">SIEM Migration</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">Vulnerability Management Workflow</span>
+        </nav>
+        <h1>Vulnerability Management Workflow</h1>
+        <p class="section-description">Production-grade risk-based prioritization with backlog management, SLA tracking, and exception handling</p>
+      </div>
+
+      <!-- ==================== REALITY CHECK ==================== -->
+      <section id="reality-check">
+        <div class="concept-card">
+          <h2>🎯 Reality Check: Why Simple Alerting Fails</h2>
+          
+          <div class="warning-box">
+            <h4>The Problem with "Alert on Critical"</h4>
+            <p>In reality, you can't just alert on critical vulnerabilities and expect immediate remediation:</p>
+            <ul>
+              <li><strong>Volume:</strong> Enterprises have 10,000+ critical/high vulnerabilities at any time</li>
+              <li><strong>Patching windows:</strong> Production systems have change windows (weekly/monthly)</li>
+              <li><strong>Dependencies:</strong> Patches require testing, approvals, rollback plans</li>
+              <li><strong>False priorities:</strong> Not all "criticals" are equal — context matters</li>
+              <li><strong>Score changes:</strong> EPSS updates daily; yesterday's medium is today's critical</li>
+            </ul>
+          </div>
+
+          <div class="pattern-box">
+            <h4>What We Actually Need</h4>
+            <ul>
+              <li>✅ <strong>Unified scoring</strong> that leverages existing scanner intelligence (not duplicates it)</li>
+              <li>✅ <strong>Lifecycle management</strong> — track from discovery to remediation/acceptance</li>
+              <li>✅ <strong>Backlog management</strong> — age tracking, SLA compliance, escalation</li>
+              <li>✅ <strong>Dynamic re-prioritization</strong> — when EPSS spikes, re-evaluate</li>
+              <li>✅ <strong>Exception workflow</strong> — risk acceptance with expiration</li>
+              <li>✅ <strong>Ticket integration</strong> — ServiceNow/Jira for remediation tracking</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SCANNER INTELLIGENCE ==================== -->
+      <section id="scanner-intelligence">
+        <div class="stage-header">
+          <h2>🔍 Understanding Scanner Intelligence</h2>
+          <p>TVM and Qualys already incorporate threat intelligence — leverage, don't duplicate</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>What Scanners Already Know</h3>
+          
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Scanner</th>
+                <th>Native Score</th>
+                <th>What It Includes</th>
+                <th>API/Field</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Microsoft TVM (MDVM)</strong></td>
+                <td>Exposure Score (0-100)</td>
+                <td>
+                  • CVSS base score<br>
+                  • Exploit availability<br>
+                  • EPSS percentile<br>
+                  • Active threats in the wild<br>
+                  • Breach insights<br>
+                  • Age of vulnerability
+                </td>
+                <td><code>DeviceTvmSoftwareVulnerabilities</code><br><code>ExposureLevel</code>, <code>VulnerabilitySeverityLevel</code></td>
+              </tr>
+              <tr>
+                <td><strong>Qualys VMDR</strong></td>
+                <td>TruRisk Score (0-1000)</td>
+                <td>
+                  • CVSS base + temporal<br>
+                  • EPSS score<br>
+                  • Real-time threat indicators<br>
+                  • Exploit maturity<br>
+                  • Malware/ransomware association<br>
+                  • Asset criticality (if configured)
+                </td>
+                <td><code>TRURISK_SCORE</code> in detection XML</td>
+              </tr>
+              <tr>
+                <td><strong>EPSS (FIRST.org)</strong></td>
+                <td>Probability (0-1)</td>
+                <td>
+                  • ML-based exploitation probability<br>
+                  • Updated daily<br>
+                  • 30-day exploitation likelihood
+                </td>
+                <td><code>epss</code>, <code>percentile</code></td>
+              </tr>
+              <tr>
+                <td><strong>CISA KEV</strong></td>
+                <td>Boolean (in list or not)</td>
+                <td>
+                  • Confirmed active exploitation<br>
+                  • Ransomware association<br>
+                  • Federal remediation deadline
+                </td>
+                <td><code>knownRansomwareCampaignUse</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box">
+          <h4>💡 Key Insight: Don't Double-Count</h4>
+          <p>If you use EPSS directly AND TVM Exposure Score (which already includes EPSS), you're double-counting exploit probability. Instead:</p>
+          <ul>
+            <li><strong>Use scanner's composite score</strong> as the technical risk baseline</li>
+            <li><strong>Add organizational context</strong> that scanners don't know (asset criticality, compensating controls, business impact)</li>
+            <li><strong>Use raw EPSS/KEV</strong> only for delta tracking and alerts on changes</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ==================== UNIFIED SCORING MODEL ==================== -->
+      <section id="scoring-model">
+        <div class="stage-header">
+          <h2>🧮 Unified Risk Scoring Model</h2>
+          <p>Combines scanner intelligence with organizational context — no double-counting</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Scoring Philosophy</h3>
+          
+          <div class="flow-diagram">
+<span style="color: #ef4444; font-weight: bold;">SCORING MODEL: SCANNER BASE + ORGANIZATIONAL CONTEXT + THREAT INTEL BOOST</span>
+
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    <span style="color: #f59e0b;">TIER 1: SCANNER COMPOSITE (60%)</span>                               │
+│                                                                                                     │
+│  These scores ALREADY include EPSS, exploit availability, CVSS, threat intel                       │
+│                                                                                                     │
+│  ┌─────────────────────────────────┐     ┌─────────────────────────────────┐                       │
+│  │ TVM Exposure Score (0-100)      │     │ Qualys TruRisk (0-1000)         │                       │
+│  │ • Normalized to 0-100           │     │ • Normalized to 0-100           │                       │
+│  │ • Weight: 60% of final score    │     │ • Weight: 60% of final score    │                       │
+│  └─────────────────────────────────┘     └─────────────────────────────────┘                       │
+│                                                                                                     │
+│  If BOTH scanners report: Use MAX(TVM_Normalized, Qualys_Normalized)                               │
+│  If ONE scanner reports: Use that score                                                            │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                │
+                                                ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    <span style="color: #22c55e;">TIER 2: ORGANIZATIONAL CONTEXT (25%)</span>                           │
+│                                                                                                     │
+│  Context that scanners DON'T know — this is where we add value                                     │
+│                                                                                                     │
+│  ┌─────────────────────────────────┐     ┌─────────────────────────────────┐                       │
+│  │ Asset Criticality               │     │ Environment                     │                       │
+│  │ • Critical: 100 pts             │     │ • Production: 100 pts           │                       │
+│  │ • High: 75 pts                  │     │ • Staging: 50 pts               │                       │
+│  │ • Medium: 50 pts                │     │ • Dev: 25 pts                   │                       │
+│  │ • Low: 25 pts                   │     │ • Lab: 10 pts                   │                       │
+│  └─────────────────────────────────┘     └─────────────────────────────────┘                       │
+│                                                                                                     │
+│  ┌─────────────────────────────────┐     ┌─────────────────────────────────┐                       │
+│  │ Data Classification             │     │ Compensating Controls           │                       │
+│  │ • PII/PHI: 100 pts              │     │ • None: 0 pts                   │                       │
+│  │ • Confidential: 75 pts          │     │ • Partial: -10 pts              │                       │
+│  │ • Internal: 50 pts              │     │ • Strong: -20 pts               │                       │
+│  │ • Public: 25 pts                │     │ (Reduces risk)                  │                       │
+│  └─────────────────────────────────┘     └─────────────────────────────────┘                       │
+│                                                                                                     │
+│  OrgContext = (AssetCriticality + Environment + DataClass + CompensatingControls) / 4             │
+│  Normalized to 0-100, then × 0.25 = 25% of final score                                             │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                │
+                                                ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    <span style="color: #ef4444;">TIER 3: THREAT INTEL BOOST (0-15 pts)</span>                           │
+│                                                                                                     │
+│  Binary boosts for confirmed threats — these are ADDITIVE, not weighted                            │
+│                                                                                                     │
+│  ┌─────────────────────────────────┐     ┌─────────────────────────────────┐                       │
+│  │ CISA KEV                        │     │ Ransomware Association          │                       │
+│  │ • In KEV list: +10 pts          │     │ • Known ransomware: +5 pts      │                       │
+│  │ • Not in KEV: +0 pts            │     │ • Not associated: +0 pts        │                       │
+│  └─────────────────────────────────┘     └─────────────────────────────────┘                       │
+│                                                                                                     │
+│  Note: We DON'T add EPSS here because scanner scores already include it                            │
+│  We DO track EPSS separately for CHANGE DETECTION (see Tier 4)                                     │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                │
+                                                ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    <span style="color: #8b5cf6;">TIER 4: TEMPORAL FACTORS (Modifiers)</span>                           │
+│                                                                                                     │
+│  Time-based adjustments for urgency                                                                │
+│                                                                                                     │
+│  ┌─────────────────────────────────┐     ┌─────────────────────────────────┐                       │
+│  │ Vulnerability Age               │     │ EPSS Velocity                   │                       │
+│  │ • < 7 days: +5 pts (new)        │     │ • EPSS increased >0.2 in 7d:    │                       │
+│  │ • 7-30 days: +0 pts             │     │   +5 pts (trending threat)      │                       │
+│  │ • 30-90 days: +3 pts (aging)    │     │ • EPSS stable: +0 pts           │                       │
+│  │ • > 90 days: +5 pts (stale)     │     │ • EPSS decreased: +0 pts        │                       │
+│  └─────────────────────────────────┘     └─────────────────────────────────┘                       │
+│                                                                                                     │
+│  ┌─────────────────────────────────┐                                                               │
+│  │ SLA Status                      │                                                               │
+│  │ • On track: +0 pts              │                                                               │
+│  │ • At risk (<24h to breach): +5  │                                                               │
+│  │ • Breached: +10 pts             │                                                               │
+│  └─────────────────────────────────┘                                                               │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────┘
+          </div>
+
+          <div class="scoring-formula">
+            <h4>Final Risk Score Formula</h4>
+            <div class="formula">
+<span class="comment">// Base calculation (scanner composite is 60%)</span>
+ScannerBase = MAX(TVM_Exposure_Normalized, Qualys_TruRisk_Normalized)
+ScannerComponent = ScannerBase × 0.60
+
+<span class="comment">// Organizational context (25%)</span>
+OrgContext = (AssetCriticality + Environment + DataClassification - CompensatingControls) / 3
+OrgComponent = MIN(OrgContext, 100) × 0.25
+
+<span class="comment">// Threat intel boosts (additive)</span>
+TIBoost = (IsInKEV × 10) + (IsRansomware × 5)
+
+<span class="comment">// Temporal modifiers (additive)</span>
+TemporalBoost = AgeModifier + EPSSVelocityModifier + SLAModifier
+
+<span class="comment">// Final score (capped at 100)</span>
+<span style="color: #22c55e; font-weight: bold;">FinalRiskScore = MIN(ScannerComponent + OrgComponent + TIBoost + TemporalBoost, 100)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <h3>Priority Classification with SLA</h3>
+          
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Risk Score</th>
+                <th>Priority</th>
+                <th>SLA</th>
+                <th>Escalation</th>
+                <th>Typical Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="color: #ef4444; font-weight: bold;">90-100</td>
+                <td><span class="lifecycle-stage stage-new">P1 - Critical</span></td>
+                <td><strong>24-48 hours</strong></td>
+                <td>CISO at 24h breach</td>
+                <td>Emergency patch, isolate if needed</td>
+              </tr>
+              <tr>
+                <td style="color: #f59e0b; font-weight: bold;">75-89</td>
+                <td><span class="lifecycle-stage stage-assigned">P2 - High</span></td>
+                <td><strong>7 days</strong></td>
+                <td>Security Manager at 5d</td>
+                <td>Next change window, expedite if possible</td>
+              </tr>
+              <tr>
+                <td style="color: #3b82f6; font-weight: bold;">50-74</td>
+                <td><span class="lifecycle-stage stage-inprogress">P3 - Medium</span></td>
+                <td><strong>30 days</strong></td>
+                <td>Team Lead at 25d</td>
+                <td>Normal patching cycle</td>
+              </tr>
+              <tr>
+                <td style="color: #6b7280;">0-49</td>
+                <td><span class="lifecycle-stage stage-deferred">P4 - Low</span></td>
+                <td><strong>90 days</strong></td>
+                <td>Monthly review</td>
+                <td>Quarterly patching or accept risk</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== COMPLETE KQL IMPLEMENTATION ==================== -->
+      <section id="kql-implementation">
+        <div class="stage-header">
+          <h2>📊 Complete KQL Implementation</h2>
+          <p>Production-ready queries for the entire workflow</p>
+        </div>
+
+        <details open>
+          <summary><strong>Master Query: Unified Vulnerability View with Full Scoring</strong></summary>
+          <div class="details-content">
+            <div class="code-block">
+<span class="comment">// ═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="comment">// UNIFIED VULNERABILITY MANAGEMENT VIEW</span>
+<span class="comment">// Merges TVM + Qualys + EPSS + KEV + Asset Inventory + Remediation Status</span>
+<span class="comment">// Run: Daily scheduled rule + Workbook visualization</span>
+<span class="comment">// ═══════════════════════════════════════════════════════════════════════════════</span>
+
+<span class="comment">// ─────────────────────────────────────────────────────────────────────────────────</span>
+<span class="comment">// STEP 1: Load Reference Data</span>
+<span class="comment">// ─────────────────────────────────────────────────────────────────────────────────</span>
+
+<span class="comment">// EPSS scores (for velocity tracking, not primary scoring)</span>
+<span class="keyword">let</span> <span class="field">EPSS_Current</span> = EPSS_Scores_CL
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(2d)
+    | <span class="keyword">summarize</span> <span class="function">arg_max</span>(<span class="field">TimeGenerated</span>, *) <span class="keyword">by</span> <span class="field">CVE_ID</span>
+    | <span class="keyword">project</span> <span class="field">CVE_ID</span>, <span class="field">EPSS_Current</span> = <span class="field">EPSS_Score</span>, <span class="field">EPSS_Percentile</span>;
+
+<span class="comment">// EPSS from 7 days ago (for velocity calculation)</span>
+<span class="keyword">let</span> <span class="field">EPSS_7DaysAgo</span> = EPSS_Scores_CL
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> <span class="keyword">between</span> (ago(9d) .. ago(7d))
+    | <span class="keyword">summarize</span> <span class="function">arg_max</span>(<span class="field">TimeGenerated</span>, *) <span class="keyword">by</span> <span class="field">CVE_ID</span>
+    | <span class="keyword">project</span> <span class="field">CVE_ID</span>, <span class="field">EPSS_7DaysAgo</span> = <span class="field">EPSS_Score</span>;
+
+<span class="comment">// CISA KEV (actively exploited vulnerabilities)</span>
+<span class="keyword">let</span> <span class="field">KEV</span> = CISA_KEV_CL
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(2d)
+    | <span class="keyword">summarize</span> <span class="function">arg_max</span>(<span class="field">TimeGenerated</span>, *) <span class="keyword">by</span> <span class="field">CVE_ID</span>
+    | <span class="keyword">project</span> <span class="field">CVE_ID</span>, 
+              <span class="field">IsInKEV</span> = true, 
+              <span class="field">KEV_DateAdded</span> = <span class="field">DateAdded</span>,
+              <span class="field">IsRansomware</span> = (<span class="field">KnownRansomwareCampaignUse</span> == <span class="string">"Known"</span>);
+
+<span class="comment">// Asset Inventory (organizational context)</span>
+<span class="keyword">let</span> <span class="field">Assets</span> = <span class="function">_GetWatchlist</span>(<span class="string">'AssetInventory'</span>)
+    | <span class="keyword">extend</span> 
+        <span class="field">AssetCriticalityScore</span> = <span class="keyword">case</span>(
+            <span class="field">AssetCriticality</span> == <span class="string">"Critical"</span>, <span class="number">100</span>,
+            <span class="field">AssetCriticality</span> == <span class="string">"High"</span>, <span class="number">75</span>,
+            <span class="field">AssetCriticality</span> == <span class="string">"Medium"</span>, <span class="number">50</span>,
+            <span class="number">25</span>
+        ),
+        <span class="field">EnvironmentScore</span> = <span class="keyword">case</span>(
+            <span class="field">Environment</span> == <span class="string">"Production"</span>, <span class="number">100</span>,
+            <span class="field">Environment</span> == <span class="string">"Staging"</span>, <span class="number">50</span>,
+            <span class="field">Environment</span> == <span class="string">"Development"</span>, <span class="number">25</span>,
+            <span class="number">10</span>
+        ),
+        <span class="field">DataClassScore</span> = <span class="keyword">case</span>(
+            <span class="field">DataClassification</span> == <span class="string">"PII"</span> <span class="keyword">or</span> <span class="field">DataClassification</span> == <span class="string">"PHI"</span>, <span class="number">100</span>,
+            <span class="field">DataClassification</span> == <span class="string">"Confidential"</span>, <span class="number">75</span>,
+            <span class="field">DataClassification</span> == <span class="string">"Internal"</span>, <span class="number">50</span>,
+            <span class="number">25</span>
+        ),
+        <span class="field">CompensatingControlsReduction</span> = <span class="keyword">case</span>(
+            <span class="field">CompensatingControls</span> == <span class="string">"Strong"</span>, <span class="number">20</span>,
+            <span class="field">CompensatingControls</span> == <span class="string">"Partial"</span>, <span class="number">10</span>,
+            <span class="number">0</span>
+        )
+    | <span class="keyword">project</span> <span class="field">Hostname</span>, <span class="field">IPAddress</span>, <span class="field">DeviceId</span>, <span class="field">AssetCriticality</span>, <span class="field">Environment</span>,
+              <span class="field">DataClassification</span>, <span class="field">BusinessUnit</span>, <span class="field">Owner</span>, <span class="field">AssetCriticalityScore</span>,
+              <span class="field">EnvironmentScore</span>, <span class="field">DataClassScore</span>, <span class="field">CompensatingControlsReduction</span>;
+
+<span class="comment">// Remediation Status (from ServiceNow or tracking table)</span>
+<span class="keyword">let</span> <span class="field">RemediationStatus</span> = VulnRemediation_CL
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(30d)
+    | <span class="keyword">summarize</span> <span class="function">arg_max</span>(<span class="field">TimeGenerated</span>, *) <span class="keyword">by</span> <span class="field">CVE_ID</span>, <span class="field">Hostname</span>
+    | <span class="keyword">project</span> <span class="field">CVE_ID</span>, <span class="field">Hostname</span>, <span class="field">RemediationState</span>, <span class="field">TicketNumber</span>, <span class="field">AssignedTo</span>,
+              <span class="field">DueDate</span>, <span class="field">ExceptionExpiry</span>, <span class="field">ExceptionReason</span>;
+
+<span class="comment">// ─────────────────────────────────────────────────────────────────────────────────</span>
+<span class="comment">// STEP 2: Get Vulnerabilities from Scanners</span>
+<span class="comment">// ─────────────────────────────────────────────────────────────────────────────────</span>
+
+<span class="comment">// Microsoft TVM vulnerabilities</span>
+<span class="keyword">let</span> <span class="field">TVM_Vulns</span> = DeviceTvmSoftwareVulnerabilities
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(1d)
+    | <span class="keyword">extend</span> <span class="field">CVE_ID</span> = <span class="field">CveId</span>
+    | <span class="keyword">extend</span> <span class="field">TVM_ExposureNormalized</span> = <span class="keyword">case</span>(
+        <span class="field">VulnerabilitySeverityLevel</span> == <span class="string">"Critical"</span>, <span class="number">95</span>,
+        <span class="field">VulnerabilitySeverityLevel</span> == <span class="string">"High"</span>, <span class="number">75</span>,
+        <span class="field">VulnerabilitySeverityLevel</span> == <span class="string">"Medium"</span>, <span class="number">50</span>,
+        <span class="field">VulnerabilitySeverityLevel</span> == <span class="string">"Low"</span>, <span class="number">25</span>,
+        <span class="number">10</span>
+    )
+    <span class="comment">// If CvssScore is available, use it for more granularity</span>
+    | <span class="keyword">extend</span> <span class="field">TVM_ExposureNormalized</span> = <span class="function">coalesce</span>(
+        <span class="function">todouble</span>(<span class="field">CvssScore</span>) * <span class="number">10</span>,  <span class="comment">// CVSS 0-10 → 0-100</span>
+        <span class="field">TVM_ExposureNormalized</span>
+    )
+    | <span class="keyword">project</span> 
+        <span class="field">DeviceId</span>,
+        <span class="field">DeviceName</span>,
+        <span class="field">CVE_ID</span>,
+        <span class="field">TVM_ExposureNormalized</span>,
+        <span class="field">VulnerabilitySeverityLevel</span>,
+        <span class="field">SoftwareName</span>,
+        <span class="field">SoftwareVersion</span>,
+        <span class="field">RecommendedSecurityUpdate</span>,
+        <span class="field">FirstSeenTimestamp</span> = <span class="field">TimeGenerated</span>,
+        <span class="field">Source</span> = <span class="string">"Microsoft TVM"</span>;
+
+<span class="comment">// Qualys vulnerabilities</span>
+<span class="keyword">let</span> <span class="field">Qualys_Vulns</span> = Qualys_Vulns_CL
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(1d)
+    | <span class="keyword">where</span> <span class="field">Status</span> <span class="keyword">in</span> (<span class="string">"New"</span>, <span class="string">"Active"</span>, <span class="string">"Re-Opened"</span>)
+    | <span class="keyword">mv-expand</span> <span class="field">CVE_ID</span> = <span class="function">split</span>(<span class="field">CVE_IDs</span>, <span class="string">","</span>)
+    | <span class="keyword">extend</span> <span class="field">CVE_ID</span> = <span class="function">tostring</span>(<span class="field">CVE_ID</span>)
+    | <span class="keyword">where</span> <span class="field">CVE_ID</span> != <span class="string">""</span>
+    <span class="comment">// Normalize TruRisk (0-1000) to 0-100</span>
+    | <span class="keyword">extend</span> <span class="field">Qualys_TruRiskNormalized</span> = <span class="function">todouble</span>(<span class="field">TruRiskScore</span>) / <span class="number">10.0</span>
+    | <span class="keyword">project</span>
+        <span class="field">Hostname</span>,
+        <span class="field">HostIP</span>,
+        <span class="field">CVE_ID</span>,
+        <span class="field">Qualys_TruRiskNormalized</span>,
+        <span class="field">TruRiskScore</span>,
+        <span class="field">QID</span>,
+        <span class="field">Title</span>,
+        <span class="field">Severity</span> = <span class="field">Severity</span>,
+        <span class="field">FirstSeenTimestamp</span> = <span class="function">todatetime</span>(<span class="field">FirstFound</span>),
+        <span class="field">Source</span> = <span class="string">"Qualys"</span>;
+
+<span class="comment">// ─────────────────────────────────────────────────────────────────────────────────</span>
+<span class="comment">// STEP 3: Merge and Deduplicate</span>
+<span class="comment">// ─────────────────────────────────────────────────────────────────────────────────</span>
+
+<span class="keyword">let</span> <span class="field">MergedVulns</span> = 
+    <span class="comment">// Start with TVM</span>
+    TVM_Vulns
+    | <span class="keyword">join</span> <span class="keyword">kind</span>=leftouter (Assets | <span class="keyword">project</span> <span class="field">DeviceId</span>, <span class="field">Hostname</span>) <span class="keyword">on</span> <span class="field">DeviceId</span>
+    | <span class="keyword">extend</span> <span class="field">Hostname</span> = <span class="function">coalesce</span>(<span class="field">Hostname</span>, <span class="field">DeviceName</span>)
+    | <span class="keyword">project-away</span> <span class="field">DeviceId1</span>, <span class="field">Hostname1</span>
+    | <span class="keyword">extend</span> <span class="field">Qualys_TruRiskNormalized</span> = <span class="number">0.0</span>, <span class="field">TruRiskScore</span> = <span class="number">0</span>, <span class="field">QID</span> = <span class="string">""</span>, <span class="field">Title</span> = <span class="string">""</span>, <span class="field">HostIP</span> = <span class="string">""</span>
+    | <span class="keyword">union</span> (
+        <span class="comment">// Add Qualys</span>
+        Qualys_Vulns
+        | <span class="keyword">extend</span> <span class="field">DeviceId</span> = <span class="string">""</span>, <span class="field">DeviceName</span> = <span class="field">Hostname</span>, <span class="field">TVM_ExposureNormalized</span> = <span class="number">0.0</span>,
+                <span class="field">VulnerabilitySeverityLevel</span> = <span class="string">""</span>, <span class="field">SoftwareName</span> = <span class="string">""</span>, <span class="field">SoftwareVersion</span> = <span class="string">""</span>,
+                <span class="field">RecommendedSecurityUpdate</span> = <span class="string">""</span>
+    )
+    <span class="comment">// Deduplicate: keep highest scores</span>
+    | <span class="keyword">summarize</span>
+        <span class="field">TVM_Score</span> = <span class="function">max</span>(<span class="field">TVM_ExposureNormalized</span>),
+        <span class="field">Qualys_Score</span> = <span class="function">max</span>(<span class="field">Qualys_TruRiskNormalized</span>),
+        <span class="field">TruRiskRaw</span> = <span class="function">max</span>(<span class="field">TruRiskScore</span>),
+        <span class="field">Sources</span> = <span class="function">make_set</span>(<span class="field">Source</span>),
+        <span class="field">FirstSeen</span> = <span class="function">min</span>(<span class="field">FirstSeenTimestamp</span>),
+        <span class="field">SoftwareName</span> = <span class="function">take_any</span>(<span class="field">SoftwareName</span>),
+        <span class="field">Title</span> = <span class="function">take_any</span>(<span class="field">Title</span>),
+        <span class="field">DeviceId</span> = <span class="function">take_any</span>(<span class="field">DeviceId</span>)
+      <span class="keyword">by</span> <span class="field">CVE_ID</span>, <span class="field">Hostname</span>
+    <span class="comment">// Calculate scanner composite (max of both)</span>
+    | <span class="keyword">extend</span> <span class="field">ScannerComposite</span> = <span class="function">max_of</span>(<span class="field">TVM_Score</span>, <span class="field">Qualys_Score</span>);
+
+<span class="comment">// ─────────────────────────────────────────────────────────────────────────────────</span>
+<span class="comment">// STEP 4: Enrich with All Context</span>
+<span class="comment">// ─────────────────────────────────────────────────────────────────────────────────</span>
+
+MergedVulns
+<span class="comment">// Join EPSS (current and 7 days ago)</span>
+| <span class="keyword">join</span> <span class="keyword">kind</span>=leftouter EPSS_Current <span class="keyword">on</span> <span class="field">CVE_ID</span>
+| <span class="keyword">join</span> <span class="keyword">kind</span>=leftouter EPSS_7DaysAgo <span class="keyword">on</span> <span class="field">CVE_ID</span>
+<span class="comment">// Join KEV</span>
+| <span class="keyword">join</span> <span class="keyword">kind</span>=leftouter KEV <span class="keyword">on</span> <span class="field">CVE_ID</span>
+<span class="comment">// Join Asset Inventory</span>
+| <span class="keyword">join</span> <span class="keyword">kind</span>=leftouter Assets <span class="keyword">on</span> <span class="field">Hostname</span>
+<span class="comment">// Join Remediation Status</span>
+| <span class="keyword">join</span> <span class="keyword">kind</span>=leftouter RemediationStatus <span class="keyword">on</span> <span class="field">CVE_ID</span>, <span class="field">Hostname</span>
+
+<span class="comment">// ─────────────────────────────────────────────────────────────────────────────────</span>
+<span class="comment">// STEP 5: Calculate Risk Score</span>
+<span class="comment">// ─────────────────────────────────────────────────────────────────────────────────</span>
+
+<span class="comment">// Fill nulls with defaults</span>
+| <span class="keyword">extend</span>
+    <span class="field">EPSS_Current</span> = <span class="function">coalesce</span>(<span class="field">EPSS_Current</span>, <span class="number">0.0</span>),
+    <span class="field">EPSS_7DaysAgo</span> = <span class="function">coalesce</span>(<span class="field">EPSS_7DaysAgo</span>, <span class="number">0.0</span>),
+    <span class="field">IsInKEV</span> = <span class="function">coalesce</span>(<span class="field">IsInKEV</span>, false),
+    <span class="field">IsRansomware</span> = <span class="function">coalesce</span>(<span class="field">IsRansomware</span>, false),
+    <span class="field">AssetCriticalityScore</span> = <span class="function">coalesce</span>(<span class="field">AssetCriticalityScore</span>, <span class="number">50</span>),
+    <span class="field">EnvironmentScore</span> = <span class="function">coalesce</span>(<span class="field">EnvironmentScore</span>, <span class="number">50</span>),
+    <span class="field">DataClassScore</span> = <span class="function">coalesce</span>(<span class="field">DataClassScore</span>, <span class="number">50</span>),
+    <span class="field">CompensatingControlsReduction</span> = <span class="function">coalesce</span>(<span class="field">CompensatingControlsReduction</span>, <span class="number">0</span>),
+    <span class="field">RemediationState</span> = <span class="function">coalesce</span>(<span class="field">RemediationState</span>, <span class="string">"New"</span>)
+
+<span class="comment">// Calculate EPSS velocity</span>
+| <span class="keyword">extend</span> <span class="field">EPSS_Velocity</span> = <span class="field">EPSS_Current</span> - <span class="field">EPSS_7DaysAgo</span>
+| <span class="keyword">extend</span> <span class="field">EPSS_VelocityBoost</span> = <span class="function">iif</span>(<span class="field">EPSS_Velocity</span> > <span class="number">0.2</span>, <span class="number">5</span>, <span class="number">0</span>)
+
+<span class="comment">// Calculate vulnerability age</span>
+| <span class="keyword">extend</span> <span class="field">VulnAgeDays</span> = <span class="function">datetime_diff</span>(<span class="string">'day'</span>, now(), <span class="field">FirstSeen</span>)
+| <span class="keyword">extend</span> <span class="field">AgeModifier</span> = <span class="keyword">case</span>(
+    <span class="field">VulnAgeDays</span> < <span class="number">7</span>, <span class="number">5</span>,    <span class="comment">// New - extra urgency</span>
+    <span class="field">VulnAgeDays</span> < <span class="number">30</span>, <span class="number">0</span>,
+    <span class="field">VulnAgeDays</span> < <span class="number">90</span>, <span class="number">3</span>,   <span class="comment">// Aging - needs attention</span>
+    <span class="number">5</span>                        <span class="comment">// Stale - why isn't this fixed?</span>
+)
+
+<span class="comment">// Calculate SLA status and modifier</span>
+| <span class="keyword">extend</span> <span class="field">DaysUntilDue</span> = <span class="function">datetime_diff</span>(<span class="string">'day'</span>, <span class="function">todatetime</span>(<span class="field">DueDate</span>), now())
+| <span class="keyword">extend</span> <span class="field">SLAStatus</span> = <span class="keyword">case</span>(
+    <span class="function">isempty</span>(<span class="field">DueDate</span>), <span class="string">"Not Set"</span>,
+    <span class="field">DaysUntilDue</span> < <span class="number">0</span>, <span class="string">"Breached"</span>,
+    <span class="field">DaysUntilDue</span> < <span class="number">1</span>, <span class="string">"At Risk"</span>,
+    <span class="string">"On Track"</span>
+)
+| <span class="keyword">extend</span> <span class="field">SLAModifier</span> = <span class="keyword">case</span>(
+    <span class="field">SLAStatus</span> == <span class="string">"Breached"</span>, <span class="number">10</span>,
+    <span class="field">SLAStatus</span> == <span class="string">"At Risk"</span>, <span class="number">5</span>,
+    <span class="number">0</span>
+)
+
+<span class="comment">// TIER 1: Scanner Composite (60%)</span>
+| <span class="keyword">extend</span> <span class="field">Tier1_ScannerComponent</span> = <span class="field">ScannerComposite</span> * <span class="number">0.60</span>
+
+<span class="comment">// TIER 2: Organizational Context (25%)</span>
+| <span class="keyword">extend</span> <span class="field">OrgContextRaw</span> = (<span class="field">AssetCriticalityScore</span> + <span class="field">EnvironmentScore</span> + <span class="field">DataClassScore</span> - <span class="field">CompensatingControlsReduction</span>) / <span class="number">3.0</span>
+| <span class="keyword">extend</span> <span class="field">Tier2_OrgComponent</span> = <span class="function">min_of</span>(<span class="field">OrgContextRaw</span>, <span class="number">100.0</span>) * <span class="number">0.25</span>
+
+<span class="comment">// TIER 3: Threat Intel Boost (additive)</span>
+| <span class="keyword">extend</span> <span class="field">Tier3_TIBoost</span> = (<span class="function">toint</span>(<span class="field">IsInKEV</span>) * <span class="number">10</span>) + (<span class="function">toint</span>(<span class="field">IsRansomware</span>) * <span class="number">5</span>)
+
+<span class="comment">// TIER 4: Temporal Modifiers (additive)</span>
+| <span class="keyword">extend</span> <span class="field">Tier4_TemporalBoost</span> = <span class="field">AgeModifier</span> + <span class="field">EPSS_VelocityBoost</span> + <span class="field">SLAModifier</span>
+
+<span class="comment">// FINAL RISK SCORE</span>
+| <span class="keyword">extend</span> <span class="field">RiskScore</span> = <span class="function">min_of</span>(
+    <span class="function">round</span>(<span class="field">Tier1_ScannerComponent</span> + <span class="field">Tier2_OrgComponent</span> + <span class="field">Tier3_TIBoost</span> + <span class="field">Tier4_TemporalBoost</span>, <span class="number">1</span>),
+    <span class="number">100.0</span>
+)
+
+<span class="comment">// Priority classification</span>
+| <span class="keyword">extend</span> <span class="field">Priority</span> = <span class="keyword">case</span>(
+    <span class="field">RiskScore</span> >= <span class="number">90</span>, <span class="string">"P1-Critical"</span>,
+    <span class="field">RiskScore</span> >= <span class="number">75</span>, <span class="string">"P2-High"</span>,
+    <span class="field">RiskScore</span> >= <span class="number">50</span>, <span class="string">"P3-Medium"</span>,
+    <span class="string">"P4-Low"</span>
+)
+
+<span class="comment">// SLA assignment based on priority</span>
+| <span class="keyword">extend</span> <span class="field">SLA_Days</span> = <span class="keyword">case</span>(
+    <span class="field">Priority</span> == <span class="string">"P1-Critical"</span>, <span class="number">2</span>,
+    <span class="field">Priority</span> == <span class="string">"P2-High"</span>, <span class="number">7</span>,
+    <span class="field">Priority</span> == <span class="string">"P3-Medium"</span>, <span class="number">30</span>,
+    <span class="number">90</span>
+)
+
+<span class="comment">// ─────────────────────────────────────────────────────────────────────────────────</span>
+<span class="comment">// STEP 6: Final Output</span>
+<span class="comment">// ─────────────────────────────────────────────────────────────────────────────────</span>
+
+| <span class="keyword">project</span>
+    <span class="comment">// Identity</span>
+    <span class="field">CVE_ID</span>,
+    <span class="field">Hostname</span>,
+    <span class="field">DeviceId</span>,
+    
+    <span class="comment">// Risk Scoring</span>
+    <span class="field">RiskScore</span>,
+    <span class="field">Priority</span>,
+    <span class="field">Tier1_ScannerComponent</span>,
+    <span class="field">Tier2_OrgComponent</span>,
+    <span class="field">Tier3_TIBoost</span>,
+    <span class="field">Tier4_TemporalBoost</span>,
+    
+    <span class="comment">// Scanner Details</span>
+    <span class="field">TVM_Score</span>,
+    <span class="field">Qualys_Score</span>,
+    <span class="field">TruRiskRaw</span>,
+    <span class="field">Sources</span>,
+    
+    <span class="comment">// Threat Intel</span>
+    <span class="field">EPSS_Current</span>,
+    <span class="field">EPSS_Percentile</span>,
+    <span class="field">EPSS_Velocity</span>,
+    <span class="field">IsInKEV</span>,
+    <span class="field">IsRansomware</span>,
+    <span class="field">KEV_DateAdded</span>,
+    
+    <span class="comment">// Asset Context</span>
+    <span class="field">AssetCriticality</span>,
+    <span class="field">Environment</span>,
+    <span class="field">DataClassification</span>,
+    <span class="field">BusinessUnit</span>,
+    <span class="field">Owner</span>,
+    
+    <span class="comment">// Lifecycle</span>
+    <span class="field">RemediationState</span>,
+    <span class="field">TicketNumber</span>,
+    <span class="field">AssignedTo</span>,
+    <span class="field">VulnAgeDays</span>,
+    <span class="field">FirstSeen</span>,
+    
+    <span class="comment">// SLA</span>
+    <span class="field">SLA_Days</span>,
+    <span class="field">DueDate</span>,
+    <span class="field">SLAStatus</span>,
+    <span class="field">DaysUntilDue</span>,
+    
+    <span class="comment">// Details</span>
+    <span class="field">SoftwareName</span>,
+    <span class="field">Title</span>,
+    <span class="field">ExceptionExpiry</span>,
+    <span class="field">ExceptionReason</span>
+
+| <span class="keyword">order by</span> <span class="field">RiskScore</span> <span class="keyword">desc</span>, <span class="field">VulnAgeDays</span> <span class="keyword">desc</span>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==================== VULNERABILITY LIFECYCLE ==================== -->
+      <section id="lifecycle">
+        <div class="stage-header">
+          <h2>🔄 Vulnerability Lifecycle Management</h2>
+          <p>Track vulnerabilities from discovery to resolution</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Lifecycle States</h3>
+          
+          <div class="flow-diagram">
+<span style="color: #ef4444; font-weight: bold;">VULNERABILITY LIFECYCLE STATE MACHINE</span>
+
+                                    ┌─────────────────────────────────────────────────────────────┐
+                                    │                      <span style="color: #ef4444;">DISCOVERY</span>                              │
+                                    │                                                             │
+                                    │   Scanner detects CVE on host                              │
+                                    │   → Auto-create record in VulnRemediation_CL              │
+                                    │   → Set State = "New"                                      │
+                                    │   → Calculate initial RiskScore                            │
+                                    │   → Assign SLA based on Priority                           │
+                                    └─────────────────────────────────────────────────────────────┘
+                                                              │
+                                                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ <span style="color: #ef4444;">NEW</span>                                                                                                    │
+│                                                                                                         │
+│ • No action taken yet                               Triggers:                                          │
+│ • Awaiting triage/assignment                        • P1/P2: Immediate notification to Owner           │
+│ • SLA clock starts                                  • P3/P4: Batched daily report                      │
+│                                                                                                         │
+│ Transitions:                                                                                            │
+│ ├─▶ [Assigned] → Ticket created, owner accepts                                                         │
+│ ├─▶ [Risk Accepted] → Exception approved (see exception workflow)                                      │
+│ └─▶ [False Positive] → Marked as not applicable (requires justification)                               │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                              │
+                             ┌────────────────────────────────┼────────────────────────────────┐
+                             │                                │                                │
+                             ▼                                ▼                                ▼
+┌───────────────────────────────────────┐ ┌───────────────────────────────────┐ ┌───────────────────────────────────┐
+│ <span style="color: #f59e0b;">ASSIGNED</span>                              │ │ <span style="color: #8b5cf6;">RISK ACCEPTED</span>                     │ │ <span style="color: #6b7280;">FALSE POSITIVE</span>                   │
+│                                       │ │                                   │ │                                   │
+│ • Ticket created in ServiceNow       │ │ • Compensating control in place   │ │ • Not vulnerable (config, etc.)  │
+│ • Owner acknowledged                 │ │ • Business justification approved │ │ • Scanner false positive         │
+│ • Remediation being planned          │ │ • Expiration date set (max 90d)   │ │ • Closed - no further action     │
+│                                       │ │ • Review reminder scheduled       │ │                                   │
+│ Transitions:                         │ │                                   │ │                                   │
+│ ├─▶ [In Progress] → Work started     │ │ Transitions:                      │ │                                   │
+│ ├─▶ [Deferred] → Scheduled for later │ │ ├─▶ [New] → Exception expired     │ │                                   │
+│ └─▶ [Risk Accepted] → Exception      │ │ └─▶ [Remediated] → Finally fixed  │ │                                   │
+└───────────────────────────────────────┘ └───────────────────────────────────┘ └───────────────────────────────────┘
+                             │
+                             ▼
+┌───────────────────────────────────────┐
+│ <span style="color: #3b82f6;">IN PROGRESS</span>                           │
+│                                       │
+│ • Actively being remediated          │
+│ • Patch scheduled or in testing      │
+│ • Change request submitted           │
+│                                       │
+│ Transitions:                         │
+│ ├─▶ [Remediated] → Patch applied     │
+│ ├─▶ [Deferred] → Blocked, reschedule │
+│ └─▶ [Risk Accepted] → Can't fix      │
+└───────────────────────────────────────┘
+                             │
+                             ▼
+┌───────────────────────────────────────┐ ┌───────────────────────────────────┐
+│ <span style="color: #22c55e;">REMEDIATED</span>                            │ │ <span style="color: #6b7280;">DEFERRED</span>                          │
+│                                       │ │                                   │
+│ • Vulnerability no longer detected   │ │ • Planned for future window       │
+│ • Verified by next scan              │ │ • New due date assigned           │
+│ • Ticket closed                      │ │ • Requires justification          │
+│ • Metrics: Time to Remediate         │ │ • Max 2 deferrals allowed         │
+│                                       │ │                                   │
+│ Final state (success)                │ │ Transitions:                      │
+│                                       │ │ ├─▶ [In Progress] → Work resumed │
+│                                       │ │ └─▶ [Risk Accepted] → Give up    │
+└───────────────────────────────────────┘ └───────────────────────────────────┘
+          </div>
+        </div>
+
+        <details>
+          <summary><strong>VulnRemediation_CL Table Schema</strong></summary>
+          <div class="details-content">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Column</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>TimeGenerated</td><td>datetime</td><td>Record update timestamp</td></tr>
+                <tr><td>CVE_ID</td><td>string</td><td>CVE identifier</td></tr>
+                <tr><td>Hostname</td><td>string</td><td>Affected host</td></tr>
+                <tr><td>RemediationState</td><td>string</td><td>New/Assigned/InProgress/Deferred/Remediated/RiskAccepted/FalsePositive</td></tr>
+                <tr><td>TicketNumber</td><td>string</td><td>ServiceNow/Jira ticket reference</td></tr>
+                <tr><td>AssignedTo</td><td>string</td><td>Owner email</td></tr>
+                <tr><td>DueDate</td><td>datetime</td><td>SLA deadline</td></tr>
+                <tr><td>OriginalDueDate</td><td>datetime</td><td>Initial SLA (before any deferrals)</td></tr>
+                <tr><td>DeferralCount</td><td>int</td><td>Number of times deferred (max 2)</td></tr>
+                <tr><td>DeferralReason</td><td>string</td><td>Why deferred</td></tr>
+                <tr><td>ExceptionExpiry</td><td>datetime</td><td>When risk acceptance expires</td></tr>
+                <tr><td>ExceptionReason</td><td>string</td><td>Business justification for acceptance</td></tr>
+                <tr><td>ExceptionApprover</td><td>string</td><td>Who approved the exception</td></tr>
+                <tr><td>CompensatingControl</td><td>string</td><td>What mitigates the risk</td></tr>
+                <tr><td>RemediatedDate</td><td>datetime</td><td>When vulnerability was fixed</td></tr>
+                <tr><td>Notes</td><td>string</td><td>Free-form comments</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==================== BACKLOG MANAGEMENT ==================== -->
+      <section id="backlog">
+        <div class="stage-header">
+          <h2>📋 Backlog Management</h2>
+          <p>Handle the reality that vulnerabilities accumulate over time</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Backlog KPIs</h3>
+          
+          <div class="three-column">
+            <div class="info-box">
+              <h4>📊 Volume Metrics</h4>
+              <ul>
+                <li>Total open vulnerabilities</li>
+                <li>Open by Priority (P1/P2/P3/P4)</li>
+                <li>New this week vs. closed</li>
+                <li>Aging distribution</li>
+              </ul>
+            </div>
+            
+            <div class="pattern-box">
+              <h4>⏱️ Time Metrics</h4>
+              <ul>
+                <li>Mean Time to Remediate (MTTR)</li>
+                <li>MTTR by Priority</li>
+                <li>Average age of open vulns</li>
+                <li>Oldest unresolved P1</li>
+              </ul>
+            </div>
+            
+            <div class="warning-box">
+              <h4>🚨 Risk Metrics</h4>
+              <ul>
+                <li>SLA compliance rate</li>
+                <li>Breached SLAs count</li>
+                <li>Active exceptions</li>
+                <li>Expiring exceptions (7d)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <details>
+          <summary><strong>KQL: Backlog Summary Query</strong></summary>
+          <div class="details-content">
+            <div class="code-block">
+<span class="comment">// ═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="comment">// VULNERABILITY BACKLOG DASHBOARD</span>
+<span class="comment">// ═══════════════════════════════════════════════════════════════════════════════</span>
+
+<span class="keyword">let</span> <span class="field">OpenVulns</span> = VulnRemediation_CL
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(30d)
+    | <span class="keyword">summarize</span> <span class="function">arg_max</span>(<span class="field">TimeGenerated</span>, *) <span class="keyword">by</span> <span class="field">CVE_ID</span>, <span class="field">Hostname</span>
+    | <span class="keyword">where</span> <span class="field">RemediationState</span> <span class="keyword">in</span> (<span class="string">"New"</span>, <span class="string">"Assigned"</span>, <span class="string">"InProgress"</span>, <span class="string">"Deferred"</span>);
+
+<span class="comment">// Get risk scores from unified view</span>
+<span class="keyword">let</span> <span class="field">WithScores</span> = OpenVulns
+    | <span class="keyword">join</span> <span class="keyword">kind</span>=leftouter (
+        <span class="comment">// Simplified - in production, use the full unified query</span>
+        DeviceTvmSoftwareVulnerabilities
+        | <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(1d)
+        | <span class="keyword">summarize</span> <span class="function">arg_max</span>(<span class="field">TimeGenerated</span>, *) <span class="keyword">by</span> <span class="field">CveId</span>, <span class="field">DeviceName</span>
+        | <span class="keyword">extend</span> <span class="field">Priority</span> = <span class="keyword">case</span>(
+            <span class="field">VulnerabilitySeverityLevel</span> == <span class="string">"Critical"</span>, <span class="string">"P1-Critical"</span>,
+            <span class="field">VulnerabilitySeverityLevel</span> == <span class="string">"High"</span>, <span class="string">"P2-High"</span>,
+            <span class="field">VulnerabilitySeverityLevel</span> == <span class="string">"Medium"</span>, <span class="string">"P3-Medium"</span>,
+            <span class="string">"P4-Low"</span>
+        )
+        | <span class="keyword">project</span> <span class="field">CVE_ID</span> = <span class="field">CveId</span>, <span class="field">Hostname</span> = <span class="field">DeviceName</span>, <span class="field">Priority</span>
+    ) <span class="keyword">on</span> <span class="field">CVE_ID</span>, <span class="field">Hostname</span>;
+
+<span class="comment">// Summary statistics</span>
+WithScores
+| <span class="keyword">extend</span> <span class="field">AgeDays</span> = <span class="function">datetime_diff</span>(<span class="string">'day'</span>, now(), <span class="field">TimeGenerated</span>)
+| <span class="keyword">extend</span> <span class="field">AgeBucket</span> = <span class="keyword">case</span>(
+    <span class="field">AgeDays</span> < <span class="number">7</span>, <span class="string">"0-7 days"</span>,
+    <span class="field">AgeDays</span> < <span class="number">30</span>, <span class="string">"7-30 days"</span>,
+    <span class="field">AgeDays</span> < <span class="number">90</span>, <span class="string">"30-90 days"</span>,
+    <span class="string">">90 days"</span>
+)
+| <span class="keyword">extend</span> <span class="field">IsSLABreached</span> = <span class="function">todatetime</span>(<span class="field">DueDate</span>) < now()
+| <span class="keyword">summarize</span>
+    <span class="field">TotalOpen</span> = <span class="function">count</span>(),
+    <span class="field">P1_Count</span> = <span class="function">countif</span>(<span class="field">Priority</span> == <span class="string">"P1-Critical"</span>),
+    <span class="field">P2_Count</span> = <span class="function">countif</span>(<span class="field">Priority</span> == <span class="string">"P2-High"</span>),
+    <span class="field">P3_Count</span> = <span class="function">countif</span>(<span class="field">Priority</span> == <span class="string">"P3-Medium"</span>),
+    <span class="field">P4_Count</span> = <span class="function">countif</span>(<span class="field">Priority</span> == <span class="string">"P4-Low"</span>),
+    <span class="field">SLA_Breached</span> = <span class="function">countif</span>(<span class="field">IsSLABreached</span>),
+    <span class="field">SLA_Compliance</span> = <span class="function">round</span>(<span class="number">100.0</span> * <span class="function">countif</span>(<span class="keyword">not</span> <span class="field">IsSLABreached</span>) / <span class="function">count</span>(), <span class="number">1</span>),
+    <span class="field">AvgAgeDays</span> = <span class="function">round</span>(<span class="function">avg</span>(<span class="field">AgeDays</span>), <span class="number">1</span>),
+    <span class="field">OldestP1_Days</span> = <span class="function">max</span>(<span class="function">iif</span>(<span class="field">Priority</span> == <span class="string">"P1-Critical"</span>, <span class="field">AgeDays</span>, <span class="number">0</span>))
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==================== SLA & ESCALATION ==================== -->
+      <section id="sla">
+        <div class="stage-header">
+          <h2>⏰ SLA Management & Escalation</h2>
+          <p>Automated escalation when SLAs are at risk or breached</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Escalation Matrix</h3>
+          
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Priority</th>
+                <th>SLA</th>
+                <th>At Risk (50% elapsed)</th>
+                <th>Warning (75% elapsed)</th>
+                <th>Breached</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="lifecycle-stage stage-new">P1-Critical</span></td>
+                <td>48 hours</td>
+                <td>Notify Owner (24h)</td>
+                <td>Notify Manager (36h)</td>
+                <td>Escalate to CISO</td>
+              </tr>
+              <tr>
+                <td><span class="lifecycle-stage stage-assigned">P2-High</span></td>
+                <td>7 days</td>
+                <td>Notify Owner (3.5d)</td>
+                <td>Notify Manager (5d)</td>
+                <td>Escalate to Security Director</td>
+              </tr>
+              <tr>
+                <td><span class="lifecycle-stage stage-inprogress">P3-Medium</span></td>
+                <td>30 days</td>
+                <td>Notify Owner (15d)</td>
+                <td>Notify Team Lead (22d)</td>
+                <td>Escalate to Security Manager</td>
+              </tr>
+              <tr>
+                <td><span class="lifecycle-stage stage-deferred">P4-Low</span></td>
+                <td>90 days</td>
+                <td>Weekly report (45d)</td>
+                <td>Monthly review (67d)</td>
+                <td>Include in quarterly review</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <details>
+          <summary><strong>Logic App: SLA Escalation Workflow</strong></summary>
+          <div class="details-content">
+            <div class="code-block">
+<span class="comment">// Logic App: vuln-sla-escalation</span>
+<span class="comment">// Trigger: Recurrence - Every 4 hours</span>
+
+{
+  "<span class="field">definition</span>": {
+    "<span class="field">triggers</span>": {
+      "<span class="field">Recurrence</span>": {
+        "<span class="field">type</span>": "<span class="string">Recurrence</span>",
+        "<span class="field">recurrence</span>": {
+          "<span class="field">frequency</span>": "<span class="string">Hour</span>",
+          "<span class="field">interval</span>": <span class="number">4</span>
+        }
+      }
+    },
+    "<span class="field">actions</span>": {
+      "<span class="field">Query_AtRisk_Vulns</span>": {
+        "<span class="field">type</span>": "<span class="string">ApiConnection</span>",
+        "<span class="field">inputs</span>": {
+          "<span class="field">host</span>": { "<span class="field">connection</span>": { "<span class="field">name</span>": "<span class="string">azuremonitorlogs</span>" } },
+          "<span class="field">method</span>": "<span class="string">post</span>",
+          "<span class="field">path</span>": "<span class="string">/queryData</span>",
+          "<span class="field">body</span>": {
+            "<span class="field">query</span>": "<span class="string">
+              VulnRemediation_CL
+              | where RemediationState in ('New', 'Assigned', 'InProgress')
+              | extend DaysUntilDue = datetime_diff('day', todatetime(DueDate), now())
+              | extend SLAStatus = case(
+                  DaysUntilDue < 0, 'Breached',
+                  DaysUntilDue < 1, 'Warning',
+                  DaysUntilDue < 2 and Priority == 'P1-Critical', 'AtRisk',
+                  DaysUntilDue < 3 and Priority == 'P2-High', 'AtRisk',
+                  'OnTrack'
+                )
+              | where SLAStatus in ('Breached', 'Warning', 'AtRisk')
+              | project CVE_ID, Hostname, Priority, SLAStatus, DueDate, AssignedTo, Owner
+            </span>"
+          }
+        }
+      },
+      "<span class="field">For_Each_Vuln</span>": {
+        "<span class="field">type</span>": "<span class="string">Foreach</span>",
+        "<span class="field">foreach</span>": "<span class="string">@body('Query_AtRisk_Vulns')?['value']</span>",
+        "<span class="field">actions</span>": {
+          "<span class="field">Determine_Escalation_Target</span>": {
+            "<span class="field">type</span>": "<span class="string">Switch</span>",
+            "<span class="field">expression</span>": "<span class="string">@concat(items('For_Each_Vuln')?['Priority'], '-', items('For_Each_Vuln')?['SLAStatus'])</span>",
+            "<span class="field">cases</span>": {
+              "<span class="field">P1-Critical-Breached</span>": {
+                "<span class="field">actions</span>": {
+                  "<span class="field">Send_Email_CISO</span>": { <span class="comment">/* Email to CISO */</span> },
+                  "<span class="field">Create_PagerDuty_Incident</span>": { <span class="comment">/* P1 page */</span> }
+                }
+              },
+              "<span class="field">P1-Critical-Warning</span>": {
+                "<span class="field">actions</span>": {
+                  "<span class="field">Send_Email_Manager</span>": { <span class="comment">/* Email to Security Manager */</span> }
+                }
+              }
+              <span class="comment">// ... additional cases</span>
+            }
+          },
+          "<span class="field">Update_Escalation_Log</span>": {
+            "<span class="field">type</span>": "<span class="string">ApiConnection</span>",
+            "<span class="field">inputs</span>": {
+              <span class="comment">// Log escalation to VulnEscalation_CL table</span>
+            }
+          }
+        }
+      }
+    }
+  }
+}
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==================== EPSS CHANGE TRACKING ==================== -->
+      <section id="epss-tracking">
+        <div class="stage-header">
+          <h2>📈 EPSS Change Tracking</h2>
+          <p>Alert when EPSS score increases significantly — indicates emerging threat</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Why Track EPSS Velocity?</h3>
+          
+          <div class="info-box">
+            <h4>💡 EPSS Updates Daily</h4>
+            <p>EPSS is a machine learning model that updates daily based on:</p>
+            <ul>
+              <li>New exploit code published</li>
+              <li>Increased scanning activity for the CVE</li>
+              <li>Weaponization in exploit kits</li>
+              <li>Real-world exploitation observed</li>
+            </ul>
+            <p><strong>A sudden EPSS increase often precedes CISA KEV addition by days/weeks!</strong></p>
+          </div>
+        </div>
+
+        <details>
+          <summary><strong>Analytics Rule: EPSS Spike Alert</strong></summary>
+          <div class="details-content">
+            <div class="code-block">
+<span class="comment">// ═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="comment">// ALERT: Significant EPSS Increase on Open Vulnerability</span>
+<span class="comment">// Triggers when EPSS increases by >0.2 (20%) in 7 days for unpatched CVEs</span>
+<span class="comment">// Schedule: Daily</span>
+<span class="comment">// ═══════════════════════════════════════════════════════════════════════════════</span>
+
+<span class="comment">// Current EPSS scores</span>
+<span class="keyword">let</span> <span class="field">EPSS_Today</span> = EPSS_Scores_CL
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(2d)
+    | <span class="keyword">summarize</span> <span class="function">arg_max</span>(<span class="field">TimeGenerated</span>, *) <span class="keyword">by</span> <span class="field">CVE_ID</span>
+    | <span class="keyword">project</span> <span class="field">CVE_ID</span>, <span class="field">EPSS_Today</span> = <span class="field">EPSS_Score</span>, <span class="field">Percentile_Today</span> = <span class="field">EPSS_Percentile</span>;
+
+<span class="comment">// EPSS scores from 7 days ago</span>
+<span class="keyword">let</span> <span class="field">EPSS_7DaysAgo</span> = EPSS_Scores_CL
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> <span class="keyword">between</span> (ago(9d) .. ago(7d))
+    | <span class="keyword">summarize</span> <span class="function">arg_max</span>(<span class="field">TimeGenerated</span>, *) <span class="keyword">by</span> <span class="field">CVE_ID</span>
+    | <span class="keyword">project</span> <span class="field">CVE_ID</span>, <span class="field">EPSS_7DaysAgo</span> = <span class="field">EPSS_Score</span>;
+
+<span class="comment">// Open vulnerabilities in our environment</span>
+<span class="keyword">let</span> <span class="field">OpenVulns</span> = DeviceTvmSoftwareVulnerabilities
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(1d)
+    | <span class="keyword">summarize</span> <span class="field">AffectedHosts</span> = <span class="function">make_set</span>(<span class="field">DeviceName</span>), <span class="field">HostCount</span> = <span class="function">dcount</span>(<span class="field">DeviceName</span>) <span class="keyword">by</span> <span class="field">CveId</span>
+    | <span class="keyword">project</span> <span class="field">CVE_ID</span> = <span class="field">CveId</span>, <span class="field">AffectedHosts</span>, <span class="field">HostCount</span>;
+
+<span class="comment">// Find spikes</span>
+EPSS_Today
+| <span class="keyword">join</span> <span class="keyword">kind</span>=inner EPSS_7DaysAgo <span class="keyword">on</span> <span class="field">CVE_ID</span>
+| <span class="keyword">join</span> <span class="keyword">kind</span>=inner OpenVulns <span class="keyword">on</span> <span class="field">CVE_ID</span>
+| <span class="keyword">extend</span> <span class="field">EPSS_Delta</span> = <span class="field">EPSS_Today</span> - <span class="field">EPSS_7DaysAgo</span>
+| <span class="keyword">extend</span> <span class="field">EPSS_PercentIncrease</span> = <span class="function">round</span>(<span class="field">EPSS_Delta</span> / <span class="field">EPSS_7DaysAgo</span> * <span class="number">100</span>, <span class="number">1</span>)
+<span class="comment">// Alert conditions</span>
+| <span class="keyword">where</span> <span class="field">EPSS_Delta</span> > <span class="number">0.2</span>  <span class="comment">// Absolute increase of 20%+</span>
+   <span class="keyword">or</span> (<span class="field">EPSS_Today</span> > <span class="number">0.5</span> <span class="keyword">and</span> <span class="field">EPSS_Delta</span> > <span class="number">0.1</span>)  <span class="comment">// High score with 10%+ increase</span>
+| <span class="keyword">extend</span> <span class="field">AlertSeverity</span> = <span class="keyword">case</span>(
+    <span class="field">EPSS_Today</span> > <span class="number">0.8</span>, <span class="string">"High"</span>,
+    <span class="field">EPSS_Today</span> > <span class="number">0.5</span>, <span class="string">"Medium"</span>,
+    <span class="string">"Low"</span>
+)
+| <span class="keyword">project</span>
+    <span class="field">CVE_ID</span>,
+    <span class="field">EPSS_Today</span>,
+    <span class="field">EPSS_7DaysAgo</span>,
+    <span class="field">EPSS_Delta</span>,
+    <span class="field">EPSS_PercentIncrease</span>,
+    <span class="field">Percentile_Today</span>,
+    <span class="field">HostCount</span>,
+    <span class="field">AffectedHosts</span>,
+    <span class="field">AlertSeverity</span>
+| <span class="keyword">order by</span> <span class="field">EPSS_Delta</span> <span class="keyword">desc</span>
+            </div>
+          </div>
+        </details>
+
+        <details>
+          <summary><strong>Analytics Rule: New KEV Addition Alert</strong></summary>
+          <div class="details-content">
+            <div class="code-block">
+<span class="comment">// ═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="comment">// ALERT: CVE Added to CISA KEV That We Have Open</span>
+<span class="comment">// Highest priority — this is confirmed active exploitation</span>
+<span class="comment">// Schedule: Daily (or more frequent)</span>
+<span class="comment">// ═══════════════════════════════════════════════════════════════════════════════</span>
+
+<span class="comment">// KEV entries added in last 7 days</span>
+<span class="keyword">let</span> <span class="field">NewKEV</span> = CISA_KEV_CL
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(2d)
+    | <span class="keyword">summarize</span> <span class="function">arg_max</span>(<span class="field">TimeGenerated</span>, *) <span class="keyword">by</span> <span class="field">CVE_ID</span>
+    | <span class="keyword">where</span> <span class="function">todatetime</span>(<span class="field">DateAdded</span>) > ago(7d)
+    | <span class="keyword">project</span> <span class="field">CVE_ID</span>, <span class="field">KEV_DateAdded</span> = <span class="field">DateAdded</span>, <span class="field">VendorProject</span>, <span class="field">Product</span>,
+              <span class="field">VulnerabilityName</span>, <span class="field">KnownRansomwareCampaignUse</span>, <span class="field">DueDate</span>;
+
+<span class="comment">// Open vulnerabilities</span>
+<span class="keyword">let</span> <span class="field">OpenVulns</span> = DeviceTvmSoftwareVulnerabilities
+    | <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(1d)
+    | <span class="keyword">summarize</span> 
+        <span class="field">AffectedHosts</span> = <span class="function">make_set</span>(<span class="field">DeviceName</span>),
+        <span class="field">HostCount</span> = <span class="function">dcount</span>(<span class="field">DeviceName</span>)
+      <span class="keyword">by</span> <span class="field">CveId</span>
+    | <span class="keyword">project</span> <span class="field">CVE_ID</span> = <span class="field">CveId</span>, <span class="field">AffectedHosts</span>, <span class="field">HostCount</span>;
+
+<span class="comment">// Asset info</span>
+<span class="keyword">let</span> <span class="field">Assets</span> = <span class="function">_GetWatchlist</span>(<span class="string">'AssetInventory'</span>)
+    | <span class="keyword">project</span> <span class="field">Hostname</span>, <span class="field">AssetCriticality</span>, <span class="field">Environment</span>, <span class="field">Owner</span>;
+
+<span class="comment">// Match</span>
+NewKEV
+| <span class="keyword">join</span> <span class="keyword">kind</span>=inner OpenVulns <span class="keyword">on</span> <span class="field">CVE_ID</span>
+| <span class="keyword">mv-expand</span> <span class="field">Host</span> = <span class="field">AffectedHosts</span>
+| <span class="keyword">extend</span> <span class="field">Hostname</span> = <span class="function">tostring</span>(<span class="field">Host</span>)
+| <span class="keyword">join</span> <span class="keyword">kind</span>=leftouter Assets <span class="keyword">on</span> <span class="field">Hostname</span>
+| <span class="keyword">summarize</span>
+    <span class="field">CriticalAssets</span> = <span class="function">countif</span>(<span class="field">AssetCriticality</span> == <span class="string">"Critical"</span>),
+    <span class="field">ProductionAssets</span> = <span class="function">countif</span>(<span class="field">Environment</span> == <span class="string">"Production"</span>),
+    <span class="field">AllHosts</span> = <span class="function">make_set</span>(<span class="field">Hostname</span>),
+    <span class="field">Owners</span> = <span class="function">make_set</span>(<span class="field">Owner</span>)
+  <span class="keyword">by</span> <span class="field">CVE_ID</span>, <span class="field">VendorProject</span>, <span class="field">Product</span>, <span class="field">VulnerabilityName</span>, <span class="field">KnownRansomwareCampaignUse</span>, 
+     <span class="field">KEV_DateAdded</span>, <span class="field">DueDate</span>, <span class="field">HostCount</span>
+| <span class="keyword">extend</span> <span class="field">AlertSeverity</span> = <span class="keyword">case</span>(
+    <span class="field">CriticalAssets</span> > <span class="number">0</span> <span class="keyword">or</span> <span class="field">KnownRansomwareCampaignUse</span> == <span class="string">"Known"</span>, <span class="string">"High"</span>,
+    <span class="field">ProductionAssets</span> > <span class="number">0</span>, <span class="string">"High"</span>,
+    <span class="string">"Medium"</span>
+)
+| <span class="keyword">project</span>
+    <span class="field">CVE_ID</span>,
+    <span class="field">VulnerabilityName</span>,
+    <span class="field">VendorProject</span>,
+    <span class="field">Product</span>,
+    <span class="field">KEV_DateAdded</span>,
+    <span class="field">KnownRansomwareCampaignUse</span>,
+    <span class="field">HostCount</span>,
+    <span class="field">CriticalAssets</span>,
+    <span class="field">ProductionAssets</span>,
+    <span class="field">AllHosts</span>,
+    <span class="field">Owners</span>,
+    <span class="field">AlertSeverity</span>,
+    <span class="field">CISA_DueDate</span> = <span class="field">DueDate</span>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==================== RISK ACCEPTANCE / EXCEPTIONS ==================== -->
+      <section id="exceptions">
+        <div class="stage-header">
+          <h2>📝 Risk Acceptance & Exception Workflow</h2>
+          <p>Formal process for accepting residual risk with expiration</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Exception Policy</h3>
+          
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Aspect</th>
+                <th>Policy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Maximum Duration</strong></td>
+                <td>P1: 30 days | P2: 60 days | P3/P4: 90 days</td>
+              </tr>
+              <tr>
+                <td><strong>Approval Required</strong></td>
+                <td>P1: CISO | P2: Security Director | P3/P4: Security Manager</td>
+              </tr>
+              <tr>
+                <td><strong>Required Fields</strong></td>
+                <td>Business justification, compensating controls, risk owner, expiration date</td>
+              </tr>
+              <tr>
+                <td><strong>Renewal</strong></td>
+                <td>Must be re-evaluated; max 2 renewals before forced remediation/architecture review</td>
+              </tr>
+              <tr>
+                <td><strong>Monitoring</strong></td>
+                <td>Weekly review of expiring exceptions (7 days), monthly exception report</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <details>
+          <summary><strong>Alert: Expiring Risk Exceptions</strong></summary>
+          <div class="details-content">
+            <div class="code-block">
+<span class="comment">// Alert: Risk Exceptions Expiring in 7 Days</span>
+<span class="comment">// Schedule: Daily</span>
+
+VulnRemediation_CL
+| <span class="keyword">where</span> <span class="field">TimeGenerated</span> > ago(30d)
+| <span class="keyword">summarize</span> <span class="function">arg_max</span>(<span class="field">TimeGenerated</span>, *) <span class="keyword">by</span> <span class="field">CVE_ID</span>, <span class="field">Hostname</span>
+| <span class="keyword">where</span> <span class="field">RemediationState</span> == <span class="string">"RiskAccepted"</span>
+| <span class="keyword">extend</span> <span class="field">DaysUntilExpiry</span> = <span class="function">datetime_diff</span>(<span class="string">'day'</span>, <span class="function">todatetime</span>(<span class="field">ExceptionExpiry</span>), now())
+| <span class="keyword">where</span> <span class="field">DaysUntilExpiry</span> <span class="keyword">between</span> (<span class="number">0</span> .. <span class="number">7</span>)
+| <span class="keyword">project</span>
+    <span class="field">CVE_ID</span>,
+    <span class="field">Hostname</span>,
+    <span class="field">ExceptionExpiry</span>,
+    <span class="field">DaysUntilExpiry</span>,
+    <span class="field">ExceptionReason</span>,
+    <span class="field">ExceptionApprover</span>,
+    <span class="field">CompensatingControl</span>,
+    <span class="field">Owner</span>
+| <span class="keyword">order by</span> <span class="field">DaysUntilExpiry</span> <span class="keyword">asc</span>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==================== SERVICENOW INTEGRATION ==================== -->
+      <section id="servicenow">
+        <div class="stage-header">
+          <h2>🎫 ServiceNow Integration</h2>
+          <p>Bi-directional sync for ticket management</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Integration Architecture</h3>
+          
+          <div class="flow-diagram">
+<span style="color: #ef4444; font-weight: bold;">SERVICENOW BI-DIRECTIONAL SYNC</span>
+
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    <span style="color: #f59e0b;">SENTINEL → SERVICENOW</span>                                         │
+│                                                                                                     │
+│  ┌───────────────────────┐         ┌───────────────────────┐         ┌───────────────────────┐    │
+│  │ New P1/P2 Vuln Found  │ ──────▶ │ Logic App Trigger     │ ──────▶ │ Create RITM/INC       │    │
+│  │ (Analytics Rule)      │         │ (Sentinel Incident)   │         │ in ServiceNow         │    │
+│  └───────────────────────┘         └───────────────────────┘         └───────────────────────┘    │
+│                                                                                                     │
+│  Payload:                                                                                          │
+│  • CVE_ID, Hostname, RiskScore, Priority                                                           │
+│  • Owner (auto-assigned based on asset inventory)                                                  │
+│  • SLA due date                                                                                    │
+│  • Affected software, remediation guidance                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    <span style="color: #22c55e;">SERVICENOW → SENTINEL</span>                                         │
+│                                                                                                     │
+│  ┌───────────────────────┐         ┌───────────────────────┐         ┌───────────────────────┐    │
+│  │ Ticket Status Changed │ ──────▶ │ ServiceNow Webhook    │ ──────▶ │ Update                │    │
+│  │ (Business Rule)       │         │ to Azure Function     │         │ VulnRemediation_CL    │    │
+│  └───────────────────────┘         └───────────────────────┘         └───────────────────────┘    │
+│                                                                                                     │
+│  Status Mapping:                                                                                   │
+│  • SNOW "Open" → Sentinel "New"                                                                    │
+│  • SNOW "Work In Progress" → Sentinel "InProgress"                                                 │
+│  • SNOW "Pending" → Sentinel "Deferred"                                                            │
+│  • SNOW "Resolved/Closed" → Sentinel "Remediated"                                                  │
+│  • SNOW "Cancelled" (with reason) → Sentinel "RiskAccepted" or "FalsePositive"                    │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────┘
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== DASHBOARDS ==================== -->
+      <section id="dashboards">
+        <div class="stage-header">
+          <h2>📊 Dashboards & Reporting</h2>
+          <p>Visibility for different stakeholders</p>
+        </div>
+
+        <div class="concept-card">
+          <h3>Dashboard Views by Audience</h3>
+          
+          <div class="three-column">
+            <div class="info-box">
+              <h4>👤 SOC / Vulnerability Team</h4>
+              <ul>
+                <li>Open vulns by priority queue</li>
+                <li>New vulns today/week</li>
+                <li>My assigned tickets</li>
+                <li>SLA at-risk/breached</li>
+                <li>EPSS spike alerts</li>
+                <li>Quick actions (assign, defer, accept)</li>
+              </ul>
+            </div>
+            
+            <div class="pattern-box">
+              <h4>👥 Security Leadership</h4>
+              <ul>
+                <li>Executive summary metrics</li>
+                <li>SLA compliance trend (30/60/90d)</li>
+                <li>MTTR by priority</li>
+                <li>Top 10 riskiest assets</li>
+                <li>Exception count & aging</li>
+                <li>Comparison to industry benchmarks</li>
+              </ul>
+            </div>
+            
+            <div class="warning-box">
+              <h4>🏢 Business Unit Owners</h4>
+              <ul>
+                <li>My team's open vulns</li>
+                <li>My overdue items</li>
+                <li>Expiring exceptions I own</li>
+                <li>Remediation progress</li>
+                <li>Risk exposure by system</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SUMMARY ==================== -->
+      <div class="concept-card">
+        <h2>📝 Complete System Summary</h2>
+        
+        <div class="flow-diagram">
+<span style="color: #ef4444; font-weight: bold;">PRODUCTION VULNERABILITY MANAGEMENT SYSTEM</span>
+
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                            <span style="color: #f59e0b;">DATA COLLECTION (Daily)</span>                                          │
+│                                                                                                                 │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐              │
+│  │ Microsoft   │ │   Qualys    │ │    EPSS     │ │  CISA KEV   │ │   Asset     │ │ ServiceNow  │              │
+│  │    TVM      │ │    VMDR     │ │  (Daily)    │ │  (Daily)    │ │  Inventory  │ │  (Webhook)  │              │
+│  │ (Native)    │ │ (Function)  │ │ (Function)  │ │ (Function)  │ │ (Weekly)    │ │             │              │
+│  └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ └──────┬──────┘              │
+│         │               │               │               │               │               │                      │
+│         └───────────────┴───────────────┴───────────────┴───────────────┴───────────────┘                      │
+│                                                         │                                                       │
+│                                                         ▼                                                       │
+│                                            ┌───────────────────────┐                                           │
+│                                            │    Log Analytics      │                                           │
+│                                            │  (Custom Tables _CL)  │                                           │
+│                                            └───────────────────────┘                                           │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                         │
+                                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                            <span style="color: #22c55e;">UNIFIED RISK SCORING</span>                                              │
+│                                                                                                                 │
+│    ┌──────────────────────────────────────────────────────────────────────────────────────────────────────┐   │
+│    │  RiskScore = ScannerComposite(60%) + OrgContext(25%) + TI_Boost(0-15) + Temporal(0-20)              │   │
+│    │                                                                                                      │   │
+│    │  • Scanner: MAX(TVM_Exposure, Qualys_TruRisk) — already includes EPSS, exploit info                 │   │
+│    │  • OrgContext: Asset criticality, environment, data class, compensating controls                    │   │
+│    │  • TI Boost: +10 if in KEV, +5 if ransomware associated                                             │   │
+│    │  • Temporal: Age modifier, EPSS velocity, SLA status                                                 │   │
+│    └──────────────────────────────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                                                 │
+│    Priority:  P1 (90-100) → 48h SLA  |  P2 (75-89) → 7d SLA  |  P3 (50-74) → 30d SLA  |  P4 (<50) → 90d SLA  │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                         │
+                                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                            <span style="color: #8b5cf6;">LIFECYCLE MANAGEMENT</span>                                             │
+│                                                                                                                 │
+│    States: New → Assigned → InProgress → Remediated                                                            │
+│                    ↓            ↓                                                                               │
+│                Deferred    RiskAccepted (with expiration)                                                      │
+│                    ↓            ↓                                                                               │
+│            (max 2 deferrals)  (requires compensating control + approval)                                       │
+│                                                                                                                 │
+│    Tracking: VulnRemediation_CL table with ticket number, owner, due date, exception details                  │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                         │
+                                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                            <span style="color: #06b6d4;">ALERTING & ESCALATION</span>                                            │
+│                                                                                                                 │
+│    ┌──────────────────────────────┐  ┌──────────────────────────────┐  ┌──────────────────────────────┐       │
+│    │ New P1/P2 Vulnerability      │  │ EPSS Spike (>0.2 in 7d)      │  │ CVE Added to CISA KEV        │       │
+│    │ → Create ServiceNow ticket   │  │ → Re-prioritize, notify      │  │ → URGENT: Patch immediately  │       │
+│    └──────────────────────────────┘  └──────────────────────────────┘  └──────────────────────────────┘       │
+│                                                                                                                 │
+│    ┌──────────────────────────────┐  ┌──────────────────────────────┐  ┌──────────────────────────────┐       │
+│    │ SLA At Risk / Breached       │  │ Exception Expiring (7d)      │  │ Weekly Backlog Report        │       │
+│    │ → Escalate per matrix        │  │ → Notify owner & approver    │  │ → Leadership summary         │       │
+│    └──────────────────────────────┘  └──────────────────────────────┘  └──────────────────────────────┘       │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+        </div>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>
