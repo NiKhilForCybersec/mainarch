@@ -455,23 +455,34 @@
         <h4>Q: Tell me about yourself / Walk me through your background <span class="time-indicator">90-120 sec</span></h4>
         
         <div class="answer-text">
-          I have about 5 years in cybersecurity, with a focus on SIEM engineering and endpoint security—but what I enjoy most is the intersection of technical work and business outcomes.
+          I have about 5 years in cybersecurity, with around 3 years focused on security engineering—SIEM and endpoint security specifically.
           <br><br>
           I started as a SOC analyst at Cognizant, working with Splunk on alert triage and incident investigations. That gave me a strong foundation in understanding how security operations actually function day-to-day—what works, what creates friction.
           <br><br>
           I then moved into security engineering at Infosys, working with enterprise platforms like Trellix and Symantec DLP. I was involved in a major EDR evaluation project where I helped compare Trellix against Cortex XDR and presented recommendations to stakeholders. That experience taught me how to frame technical decisions in business terms.
           <br><br>
-          After relocating to Canada, I joined a Siemens subsidiary—a B2B SaaS analytics platform serving Fortune 500 clients. The company was going through an Azure transformation—their infrastructure was traditionally on-premises with a co-located data center, but post-acquisition, Siemens mandated cloud migration. I led the security tracks of that transformation: migrating from RSA NetWitness to Microsoft Sentinel, replacing ESET with MDE across 4,500 endpoints, and supporting the DLP transition from Symantec to Purview.
+          After relocating to Canada, I joined a Siemens subsidiary—a B2B SaaS analytics platform serving Fortune 500 clients. The company was going through an Azure transformation—their infrastructure was traditionally on-premises with a co-located data center, but post-acquisition, leadership adopted a cloud-first strategy. I handled the MDE deployment across 4,500 endpoints and worked on multiple initiatives in the RSA NetWitness to Microsoft Sentinel migration—log source onboarding, detection translation, and operational readiness. I also contributed to the DLP transition from Symantec to Purview.
           <br><br>
           What excites me about this role is applying what I've done internally in a consulting capacity—assessing client environments, designing SOC modernization roadmaps, and delivering measurable outcomes. That's essentially what I've been doing, and I'm ready to do it across diverse clients.
         </div>
 
         <div class="key-points">
           <strong>Key elements:</strong> Foundation → Growth → Impact → Why Consulting
-          <br><strong>Numbers to hit:</strong> 5 years, 4,500 endpoints, Azure transformation
-          <br><strong>Consulting hook:</strong> "Technical work AND business outcomes" + "Ready to apply across diverse clients"
-          <br><strong>Company story hook:</strong> "On-prem infrastructure → Azure transformation" (realistic, not invented)
+          <br><strong>Accurate framing:</strong> "Handled MDE deployment" + "worked on multiple initiatives" (not "led the transformation")
+          <br><strong>Numbers to hit:</strong> 5 years total, 3 years engineering, 4,500 endpoints
+          <br><strong>Consulting hook:</strong> "Ready to apply across diverse clients"
         </div>
+      </div>
+
+      <div class="warning-box">
+        <h4>⚠️ Accuracy Check — Don't Overclaim</h4>
+        <ul>
+          <li><strong>Say:</strong> "I handled the MDE deployment" — you owned this</li>
+          <li><strong>Say:</strong> "I worked on multiple initiatives in the SIEM migration" — accurate contribution</li>
+          <li><strong>Say:</strong> "I contributed to the DLP transition" — supporting role</li>
+          <li><strong>Don't say:</strong> "I led the entire security transformation" — that overstates your role</li>
+          <li><strong>Don't say:</strong> "I was responsible for all three tracks" — be specific about what you owned vs contributed</li>
+        </ul>
       </div>
 
       <div class="question-block">
@@ -501,7 +512,7 @@
           <br><br>
           RSA, ESET, and Symantec made perfect sense for monitoring and protecting that on-premises environment. They were doing their job—protecting servers, endpoints, and network perimeter.
           <br><br>
-          After the Siemens acquisition in 2022, everything changed. Azure-first mandate for subsidiaries, data center lease expiring in 2025, and M365 E5 already licensed with security tools we weren't using. The security migration was part of the larger Azure transformation—not just switching vendors, but moving the entire infrastructure to cloud.
+          After the Siemens acquisition in 2022, everything changed. Leadership adopted a cloud-first approach, data center lease was expiring in 2025, and M365 E5 was already licensed with security tools we weren't using. The security migration was part of the larger Azure transformation—not just switching vendors, but moving the entire infrastructure to cloud.
           <br><br>
           So really, the migration wasn't because the tools were wrong—it was because the architecture was changing and we needed security tools that matched the new target state.
         </div>
@@ -1201,6 +1212,258 @@
         </div>
       </div>
 
+      <!-- ==================== INTERVIEWER EXPERTISE AREAS ==================== -->
+      <div class="category-header">
+        <h3>6.7 Interviewer's Expertise Areas — Foundational Knowledge</h3>
+        <p>Based on their background, they may ask about: SAP Security, Oracle Security, AI Security, API Security, Application Security, Board-level Cyber. You don't need to be an expert—just demonstrate foundational understanding.</p>
+      </div>
+
+      <div class="tip-box">
+        <h4>💡 How to Handle Questions Outside Your Core Expertise</h4>
+        <p>If asked about areas you haven't worked in directly:</p>
+        <ul>
+          <li><strong>Be honest:</strong> "I haven't worked with SAP Security directly, but here's my understanding..."</li>
+          <li><strong>Connect to what you know:</strong> "The principles are similar to what I've done with..."</li>
+          <li><strong>Show curiosity:</strong> "That's an area I'd be excited to learn more about"</li>
+          <li><strong>Don't fake it:</strong> Better to say "I'd need to research that" than give wrong information</li>
+        </ul>
+      </div>
+
+      <!-- SAP SECURITY -->
+      <div class="interview-card">
+        <h4>🔷 SAP Security — Foundational Knowledge</h4>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">SAP is enterprise resource planning (ERP) software used by large organizations for finance, HR, supply chain, etc. SAP Security focuses on protecting this critical business system.</p>
+        
+        <div class="question-block">
+          <h4>Q: What do you know about SAP Security? <span class="time-indicator">60 sec</span></h4>
+          
+          <div class="answer-text">
+            I haven't worked with SAP directly, but I understand the fundamentals.
+            <br><br>
+            SAP is the backbone of many enterprises—finance, HR, supply chain, manufacturing. From a security perspective, the key concerns are:
+            <br><br>
+            <strong>Access Control:</strong> Role-based access, segregation of duties—making sure someone who can create a vendor can't also approve payments. This is critical for SOX compliance.
+            <br><br>
+            <strong>Privileged Access:</strong> SAP Basis administrators have powerful access. Monitoring and controlling SAP_ALL and SAP_NEW authorizations.
+            <br><br>
+            <strong>Custom Code Security:</strong> Organizations customize SAP with ABAP code. That custom code can introduce vulnerabilities—SQL injection, authorization bypasses.
+            <br><br>
+            <strong>Integration Security:</strong> SAP connects to many systems via RFC, APIs, IDocs. Each integration point is a potential attack vector.
+            <br><br>
+            From a SOC perspective, SAP logs are valuable but often underutilized. Security Audit Log, Change Documents, and RFC logs can detect insider threats and unauthorized changes.
+          </div>
+
+          <div class="key-points">
+            <strong>Key terms:</strong> SAP_ALL, ABAP, RFC, Segregation of Duties (SoD), Security Audit Log
+            <br><strong>Connect to your experience:</strong> "Similar to how we monitor privileged access in AD/Entra ID"
+          </div>
+        </div>
+      </div>
+
+      <!-- ORACLE SECURITY -->
+      <div class="interview-card">
+        <h4>🔷 Oracle Security — Foundational Knowledge</h4>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">Oracle includes databases (Oracle DB), cloud (OCI), and applications (E-Business Suite, Fusion). Security spans database security, cloud security, and application security.</p>
+        
+        <div class="question-block">
+          <h4>Q: What do you know about Oracle Security? <span class="time-indicator">60 sec</span></h4>
+          
+          <div class="answer-text">
+            My direct experience is limited, but I understand the key areas:
+            <br><br>
+            <strong>Database Security:</strong> Oracle Database has robust security features—Transparent Data Encryption (TDE), Database Vault for privileged user control, Data Masking for non-production environments, and Audit Vault for centralized audit collection.
+            <br><br>
+            <strong>Oracle Cloud (OCI):</strong> Similar to Azure—identity management, compartments for isolation, security zones, Cloud Guard for posture management. Organizations migrating to OCI need the same cloud security principles as any cloud migration.
+            <br><br>
+            <strong>Oracle Applications:</strong> E-Business Suite and Fusion have their own security models—responsibility-based access, approval workflows, segregation of duties.
+            <br><br>
+            From a SIEM perspective, Oracle databases generate valuable audit logs—failed logins, privilege escalation, schema changes. These should be ingested for threat detection, especially for databases holding sensitive data.
+          </div>
+
+          <div class="key-points">
+            <strong>Key terms:</strong> TDE, Database Vault, Audit Vault, OCI Cloud Guard, E-Business Suite
+            <br><strong>Connect to your experience:</strong> "Similar cloud security principles to Azure—identity, posture management, audit logging"
+          </div>
+        </div>
+      </div>
+
+      <!-- AI SECURITY -->
+      <div class="interview-card">
+        <h4>🔷 AI Security & AI Security Posture Management — Foundational Knowledge</h4>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">AI Security is an emerging field covering: securing AI/ML systems, using AI for security, and managing risks from AI adoption.</p>
+        
+        <div class="question-block">
+          <h4>Q: What are your thoughts on AI Security? <span class="time-indicator">75 sec</span></h4>
+          
+          <div class="answer-text">
+            AI Security is evolving rapidly, and I see it in three dimensions:
+            <br><br>
+            <strong>1. Securing AI Systems:</strong> Protecting the AI/ML pipeline itself. Training data poisoning, model theft, adversarial inputs that trick models. This is especially critical for organizations building their own models.
+            <br><br>
+            <strong>2. AI for Security:</strong> Using AI to improve security operations—behavioral analytics, anomaly detection, automated triage. Microsoft Copilot for Security is a good example—using LLMs to help analysts investigate faster.
+            <br><br>
+            <strong>3. AI Governance & Risk:</strong> Managing how the organization uses AI—shadow AI, data leakage to public LLMs, compliance with emerging regulations. This is where AI Security Posture Management comes in.
+            <br><br>
+            <strong>AI Security Posture Management (AI-SPM)</strong> is about visibility and control: What AI services are being used? What data is flowing to them? Are they configured securely? Microsoft Defender for Cloud now has AI-SPM capabilities for Azure OpenAI and other AI workloads.
+            <br><br>
+            The challenge for security teams is that AI adoption is outpacing security controls. Users are connecting enterprise data to AI services before security has visibility.
+          </div>
+
+          <div class="key-points">
+            <strong>Key terms:</strong> AI-SPM, Shadow AI, Data Poisoning, Adversarial ML, Copilot for Security
+            <br><strong>Microsoft context:</strong> Defender for Cloud AI-SPM, Copilot for Security, Purview for AI data governance
+          </div>
+        </div>
+
+        <div class="question-block">
+          <h4>Q: How would you approach AI security for an organization adopting AI? <span class="time-indicator">60 sec</span></h4>
+          
+          <div class="answer-text">
+            I'd start with visibility and governance before jumping to technical controls.
+            <br><br>
+            <strong>Discovery:</strong> What AI services are already being used? Often there's shadow AI—employees using ChatGPT, Copilot, other tools without IT awareness. CASB tools can help discover this.
+            <br><br>
+            <strong>Data Classification:</strong> What data is sensitive and shouldn't flow to AI services? This connects to DLP—you need policies preventing sensitive data from being pasted into public AI tools.
+            <br><br>
+            <strong>Approved AI Strategy:</strong> Rather than just blocking, provide sanctioned alternatives. If you give people secure, approved AI tools, they're less likely to use shadow AI.
+            <br><br>
+            <strong>Security for AI Workloads:</strong> If they're building AI/ML, apply cloud security principles—identity, network isolation, encryption, logging. AI workloads aren't fundamentally different from other cloud workloads.
+            <br><br>
+            The key is treating AI as another technology risk to manage, not something magical that requires entirely new approaches.
+          </div>
+
+          <div class="key-points">
+            <strong>Framework:</strong> Discovery → Classification → Sanctioned alternatives → Technical controls
+            <br><strong>Connect to your experience:</strong> "Similar to how we approached SaaS security with CASB and DLP"
+          </div>
+        </div>
+      </div>
+
+      <!-- API SECURITY -->
+      <div class="interview-card">
+        <h4>🔷 API Security — Foundational Knowledge</h4>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">APIs are how modern applications communicate. API Security focuses on authentication, authorization, rate limiting, and protecting against API-specific attacks.</p>
+        
+        <div class="question-block">
+          <h4>Q: What do you know about API Security? <span class="time-indicator">60 sec</span></h4>
+          
+          <div class="answer-text">
+            APIs are the attack surface of modern applications, and I've seen this in the context of SaaS security.
+            <br><br>
+            <strong>OWASP API Top 10</strong> is the framework I'd reference—the most common API vulnerabilities:
+            <br><br>
+            <strong>Broken Object Level Authorization (BOLA):</strong> APIs returning data the user shouldn't access by manipulating IDs. This is the #1 API vulnerability.
+            <br><br>
+            <strong>Broken Authentication:</strong> Weak API key management, no token expiration, credentials in URLs.
+            <br><br>
+            <strong>Excessive Data Exposure:</strong> APIs returning more data than needed, relying on the client to filter.
+            <br><br>
+            <strong>Rate Limiting:</strong> APIs without rate limits are vulnerable to brute force, credential stuffing, and denial of service.
+            <br><br>
+            From a security operations perspective, API logs are critical—authentication failures, unusual access patterns, data volume anomalies. The challenge is that API traffic volume is massive, so you need behavioral analytics to find the signal.
+            <br><br>
+            At RevFlow, APIs were central to the business—customer data flowed through APIs. Protecting those APIs was a top priority.
+          </div>
+
+          <div class="key-points">
+            <strong>Key terms:</strong> OWASP API Top 10, BOLA, OAuth, JWT, API Gateway, Rate Limiting
+            <br><strong>Connect to your experience:</strong> "RevFlow's business ran on APIs—customer Salesforce data integration"
+          </div>
+        </div>
+      </div>
+
+      <!-- APPLICATION SECURITY -->
+      <div class="interview-card">
+        <h4>🔷 Application Security (AppSec) — Foundational Knowledge</h4>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">AppSec is about building security into applications through secure coding, testing, and DevSecOps practices.</p>
+        
+        <div class="question-block">
+          <h4>Q: What's your understanding of Application Security? <span class="time-indicator">60 sec</span></h4>
+          
+          <div class="answer-text">
+            Application Security is about shifting security left—finding and fixing vulnerabilities before they reach production.
+            <br><br>
+            <strong>SAST (Static Application Security Testing):</strong> Analyzing source code for vulnerabilities during development. Tools like Checkmarx, SonarQube, Fortify.
+            <br><br>
+            <strong>DAST (Dynamic Application Security Testing):</strong> Testing running applications for vulnerabilities. Tools like Burp Suite, OWASP ZAP.
+            <br><br>
+            <strong>SCA (Software Composition Analysis):</strong> Identifying vulnerabilities in third-party libraries and dependencies. This is huge—most code comes from open source packages.
+            <br><br>
+            <strong>DevSecOps:</strong> Integrating security into CI/CD pipelines so vulnerabilities are caught automatically before deployment.
+            <br><br>
+            From a SOC perspective, AppSec connects to vulnerability management—findings from SAST/DAST need to be tracked, prioritized, and remediated. And when vulnerabilities are exploited, that's where my detection engineering experience comes in.
+          </div>
+
+          <div class="key-points">
+            <strong>Key terms:</strong> SAST, DAST, SCA, SBOM, DevSecOps, OWASP Top 10, Shift Left
+            <br><strong>Connect to your experience:</strong> "Detection engineering is the flip side—detecting when AppSec controls fail"
+          </div>
+        </div>
+      </div>
+
+      <!-- BOARD-LEVEL CYBER -->
+      <div class="interview-card">
+        <h4>🔷 Board-Level Cyber Resilience — Foundational Knowledge</h4>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">Communicating cyber risk to executives and boards requires translating technical concepts into business language.</p>
+        
+        <div class="question-block">
+          <h4>Q: How would you communicate security posture to a board? <span class="time-indicator">60 sec</span></h4>
+          
+          <div class="answer-text">
+            Boards don't want technical details—they want to understand risk in business terms.
+            <br><br>
+            <strong>Framework:</strong> I'd structure it around: What are our top risks? How are we managing them? What's our trend? What decisions do we need from you?
+            <br><br>
+            <strong>Metrics that matter to boards:</strong>
+            <ul>
+              <li>Time to detect and respond (are we getting faster or slower?)</li>
+              <li>Coverage gaps (what percentage of critical assets are protected?)</li>
+              <li>Risk reduction over time (are investments paying off?)</li>
+              <li>Comparison to industry benchmarks</li>
+              <li>Regulatory compliance status</li>
+            </ul>
+            <br>
+            <strong>Avoid:</strong> Jargon, vanity metrics (we blocked 10 million attacks!), fear-mongering without context.
+            <br><br>
+            <strong>Key message:</strong> Boards want to know "are we appropriately managing cyber risk given our business?" Not "are we 100% secure"—that's not realistic.
+          </div>
+
+          <div class="key-points">
+            <strong>Framework:</strong> Risk → Controls → Trend → Decisions needed
+            <br><strong>Board metrics:</strong> MTTD/MTTR, coverage %, risk trend, benchmarks, compliance
+            <br><strong>Connect to consulting:</strong> "This is exactly what clients need help with—translating security to business"
+          </div>
+        </div>
+
+        <div class="question-block">
+          <h4>Q: What makes an organization cyber resilient? <span class="time-indicator">60 sec</span></h4>
+          
+          <div class="answer-text">
+            Cyber resilience is about assuming breach and being able to continue operations.
+            <br><br>
+            <strong>It's not just prevention—it's the full lifecycle:</strong>
+            <br><br>
+            <strong>Identify:</strong> Know your critical assets, data, and dependencies. You can't protect what you don't know about.
+            <br><br>
+            <strong>Protect:</strong> Preventive controls—but accept they won't stop everything.
+            <br><br>
+            <strong>Detect:</strong> This is where SOC modernization comes in. Fast detection limits blast radius.
+            <br><br>
+            <strong>Respond:</strong> Playbooks, automation, practiced incident response. When something happens, you execute, not figure it out.
+            <br><br>
+            <strong>Recover:</strong> Backups, business continuity, ability to restore operations. Tested, not just documented.
+            <br><br>
+            The organizations that do this well treat cyber as a business risk managed by leadership, not a technical problem delegated to IT. That's why board engagement matters.
+          </div>
+
+          <div class="key-points">
+            <strong>Framework:</strong> NIST CSF — Identify, Protect, Detect, Respond, Recover
+            <br><strong>Key insight:</strong> "Assume breach, optimize for resilience"
+            <br><strong>Connect to your work:</strong> "SOC modernization improves Detect and Respond capabilities"
+          </div>
+        </div>
+      </div>
+
       <!-- ==================== SECTION 7: CLOSING STRONG ==================== -->
       <div class="category-header">
         <h3>7️⃣ Closing Strong</h3>
@@ -1227,7 +1490,7 @@
         <div class="answer-text">
           Three reasons.
           <br><br>
-          First, I've done this work. Not in a lab—in a real enterprise with 4,500 endpoints, production systems, and business stakeholders. I've led SIEM migrations, deployed endpoint security at scale, and delivered measurable outcomes.
+          First, I've done this work. Not in a lab—in a real enterprise with 4,500 endpoints, production systems, and business stakeholders. I've worked on SIEM migrations, deployed endpoint security at scale, and delivered measurable outcomes.
           <br><br>
           Second, I think like a consultant. I translate technical work to business value. I build roadmaps with options. I document so others can replicate. That's what clients need.
           <br><br>
@@ -1267,12 +1530,24 @@
           <div class="column-card">
             <h4>Your Story Arc</h4>
             <ol>
-              <li>Cognizant: SOC foundation, Splunk, IR</li>
+              <li>Cognizant: SOC foundation, Splunk, IR (~2 years)</li>
               <li>Infosys: Engineering, EDR POC, stakeholder presentations</li>
-              <li>Siemens subsidiary: Azure transformation — SIEM (RSA→Sentinel), EDR (ESET→MDE), DLP (Symantec→Purview)</li>
-              <li>Next: Apply transformation experience across consulting clients</li>
+              <li>Siemens subsidiary: Handled MDE deployment (4,500 endpoints), worked on SIEM migration initiatives, contributed to DLP</li>
+              <li>Next: Apply experience across consulting clients</li>
             </ol>
           </div>
+          <div class="column-card">
+            <h4>What You OWNED vs CONTRIBUTED</h4>
+            <ul>
+              <li><strong>OWNED:</strong> MDE deployment across 4,500 endpoints</li>
+              <li><strong>WORKED ON:</strong> Multiple SIEM migration initiatives (log sources, detection translation, operational readiness)</li>
+              <li><strong>CONTRIBUTED:</strong> DLP transition from Symantec to Purview</li>
+              <li><strong>DON'T SAY:</strong> "Led the entire transformation"</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="two-column" style="margin-top: 1rem;">
           <div class="column-card">
             <h4>Company Story (If Asked)</h4>
             <ul>
@@ -1283,10 +1558,6 @@
               <li><strong>Key line:</strong> "Product is SaaS, infrastructure was on-prem"</li>
             </ul>
           </div>
-        </div>
-
-        <div class="two-column" style="margin-top: 1rem;">
-          <div class="column-card">
             <h4>Consulting Phrases to Use</h4>
             <ul>
               <li>"I presented options with trade-offs..."</li>
