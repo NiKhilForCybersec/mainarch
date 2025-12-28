@@ -2154,6 +2154,195 @@ requirements evolved."</code></pre>
           </blockquote>
         </div>
 
+        <!-- ==================== DIETIQ STARTUP SECTION ==================== -->
+        <h2 id="startup">Startup Venture: DietIQ</h2>
+
+        <div class="callout info">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Entrepreneurial Experience
+          </div>
+          <div class="callout-content">
+            <p><strong>Beyond corporate security work, I'm co-founding DietIQ</strong> — a health-tech platform demonstrating end-to-end product development, B2B healthcare integrations, and security architecture for regulated environments.</p>
+          </div>
+        </div>
+
+        <h3>What is DietIQ?</h3>
+        
+        <p>
+          <strong><a href="https://dietiq.io" target="_blank">DietIQ</a></strong> is an AI-powered health and wellness platform designed to be the <strong>central hub for nutrition, fitness, and holistic health management</strong>. While the consumer app provides meal planning, grocery delivery, and fitness tracking, the B2B side focuses on <strong>healthcare provider integrations</strong>.
+        </p>
+
+        <div class="key-insight">
+          <h4>🏥 B2B Healthcare Focus</h4>
+          <p><strong>DietIQ is partnering with hospitals and healthcare networks for patient tracking and wellness management.</strong></p>
+          <p style="margin-top: 0.5rem;">The platform connects doctors, pediatricians, nutritionists, and wellness professionals to provide coordinated care — with plans for physical consultation kiosks in gyms and wellness centers.</p>
+        </div>
+
+        <h3>Platform Capabilities</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Feature</th><th>Consumer (B2C)</th><th>Healthcare Provider (B2B)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>AI Meal Planning</strong></td>
+                <td>Personalized diet plans, calorie/macro tracking, budget optimization</td>
+                <td>Clinician-prescribed therapeutic diets, compliance monitoring</td>
+              </tr>
+              <tr>
+                <td><strong>Grocery & Meal Delivery</strong></td>
+                <td>Weekly kits, chef-prepared meals, smart pantry tracking</td>
+                <td>Medical nutrition therapy meal programs, hospital discharge nutrition</td>
+              </tr>
+              <tr>
+                <td><strong>Fitness Integration</strong></td>
+                <td>Yoga, HIIT, strength training; Fitbit/Apple Health/Whoop sync</td>
+                <td>Rehabilitation exercise programs, physical therapy tracking</td>
+              </tr>
+              <tr>
+                <td><strong>Health Tracking</strong></td>
+                <td>Weight, BMI, progress visualization, goal setting</td>
+                <td>Patient vitals, lab result integration, longitudinal health records</td>
+              </tr>
+              <tr>
+                <td><strong>Professional Network</strong></td>
+                <td>Access to nutrition guides, expert content</td>
+                <td>Multi-provider collaboration: doctors, dietitians, trainers, therapists</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Healthcare Provider Network</h3>
+
+        <p>DietIQ is building a <strong>collaborative care ecosystem</strong>:</p>
+
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">DietIQ B2B Healthcare Architecture</span></div>
+          <pre><code>DIETIQ HEALTHCARE ECOSYSTEM
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  HEALTHCARE PROVIDERS (B2B Partners)                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐             │
+│  │  HOSPITALS      │  │  PRIMARY CARE   │  │  SPECIALISTS    │             │
+│  │  • Patient      │  │  • Pediatricians│  │  • Nutritionists│             │
+│  │    discharge    │  │  • Family docs  │  │  • Dietitians   │             │
+│  │  • Chronic      │  │  • Internists   │  │  • Wellness     │             │
+│  │    disease mgmt │  │  • Geriatrics   │  │    coaches      │             │
+│  └────────┬────────┘  └────────┬────────┘  └────────┬────────┘             │
+│           │                    │                    │                       │
+│           └────────────────────┼────────────────────┘                       │
+│                                │                                            │
+│                                ▼                                            │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  DIETIQ PLATFORM                                                     │   │
+│  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐    │   │
+│  │  │ Patient     │ │ Care Plan   │ │ Progress    │ │ Provider    │    │   │
+│  │  │ Portal      │ │ Management  │ │ Analytics   │ │ Dashboard   │    │   │
+│  │  └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘    │   │
+│  │                                                                      │   │
+│  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐    │   │
+│  │  │ EHR/EMR     │ │ HIPAA       │ │ Wearable    │ │ HL7/FHIR    │    │   │
+│  │  │ Integration │ │ Compliance  │ │ Data Sync   │ │ Interop     │    │   │
+│  │  └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘    │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                │                                            │
+└────────────────────────────────┼────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  PHYSICAL TOUCHPOINTS (Planned)                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐             │
+│  │  GYM KIOSKS     │  │  WELLNESS       │  │  PHARMACY       │             │
+│  │  • In-person    │  │  CENTERS        │  │  PARTNERS       │             │
+│  │    consults     │  │  • Spa/wellness │  │  • Supplement   │             │
+│  │  • Quick scans  │  │  • Corporate    │  │    recommendations│           │
+│  │  • Goal setting │  │    wellness     │  │  • Prescription │             │
+│  │                 │  │                 │  │    diet support │             │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘             │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+        </div>
+
+        <h3>Security Architecture for Healthcare</h3>
+
+        <p>Building DietIQ requires understanding <strong>healthcare-specific security requirements</strong>:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Requirement</th><th>Implementation Approach</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>HIPAA Compliance</strong></td>
+                <td>PHI encryption at rest/transit, access logging, BAA with cloud providers, minimum necessary access controls</td>
+              </tr>
+              <tr>
+                <td><strong>EHR/EMR Integration</strong></td>
+                <td>HL7 FHIR APIs for interoperability, OAuth 2.0/SMART on FHIR for authorization, secure webhook handlers</td>
+              </tr>
+              <tr>
+                <td><strong>Multi-Provider Access</strong></td>
+                <td>Role-based access (physician vs dietitian vs patient), consent management, audit trails for all PHI access</td>
+              </tr>
+              <tr>
+                <td><strong>Patient Data Sovereignty</strong></td>
+                <td>Data residency controls, patient consent workflows, right to deletion/portability</td>
+              </tr>
+              <tr>
+                <td><strong>Wearable Device Security</strong></td>
+                <td>Secure API integrations with Fitbit/Apple Health/Whoop, data minimization, user consent for each data type</td>
+              </tr>
+              <tr>
+                <td><strong>Provider Identity</strong></td>
+                <td>NPI verification, credential validation, SSO with hospital identity providers (SAML/OIDC)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Why This Matters for Interviews
+          </div>
+          <div class="callout-content">
+            <p><strong>DietIQ demonstrates security architecture thinking from the ground up</strong> — not just migrating existing tools, but designing security controls for a new product in a highly regulated industry (healthcare).</p>
+            <p style="margin-top: 0.5rem;">This shows: HIPAA compliance knowledge, API security design, multi-tenant architecture, startup velocity with security built-in, and understanding of healthcare interoperability standards.</p>
+          </div>
+        </div>
+
+        <div class="interview-box">
+          <h4>🎯 "Tell me about a side project or startup experience"</h4>
+          <blockquote style="font-size: 0.95rem; line-height: 1.8;">
+            "I'm co-founding DietIQ, a health-tech platform. On the consumer side, it's an AI-powered nutrition and fitness app — meal planning, grocery delivery, workout tracking, syncing with wearables like Fitbit and Apple Health.
+            <br><br>
+            But the bigger vision is B2B healthcare. We're building integrations with hospitals and clinics for patient tracking and collaborative care. Think of it as a central platform where a patient's doctor, nutritionist, and wellness coach can all coordinate — with the patient having visibility into their own health journey.
+            <br><br>
+            The security architecture is interesting because we're dealing with PHI from day one. HIPAA compliance, HL7 FHIR for EHR interoperability, consent management — we're building these controls into the product from the start, not bolting them on later.
+            <br><br>
+            We're also planning physical touchpoints — consultation kiosks in gyms and wellness centers where people can get quick health assessments and connect with professionals in the network. It's about meeting people where they already are, not just being another app on their phone."
+          </blockquote>
+        </div>
+
+        <div class="interview-box" style="margin-top: 1.5rem;">
+          <h4>🎯 "How do you approach security for a startup vs enterprise?"</h4>
+          <blockquote style="font-size: 0.95rem; line-height: 1.8;">
+            "The principles are the same, but the constraints are different. In a startup, you don't have dedicated security headcount or budget for enterprise tools. But you also have an advantage — you're building from scratch, so you can design security in rather than retrofitting.
+            <br><br>
+            For DietIQ, we made early architectural decisions that pay security dividends: tenant isolation in the data model from day one, OAuth 2.0 for all third-party integrations, infrastructure as code so we can audit and reproduce everything.
+            <br><br>
+            HIPAA compliance sounds daunting, but if you choose the right cloud providers with BAAs already in place, use their managed services, and implement proper access controls early — it's achievable. The key is treating security as a feature, not a tax. For B2B healthcare sales, being able to demonstrate HIPAA readiness is a sales enabler, just like SOC 2 was at my Siemens subsidiary role."
+          </blockquote>
+        </div>
+
         <!-- Page Navigation -->
         <nav class="page-nav">
           <a href="index.html" class="page-nav-link prev">
