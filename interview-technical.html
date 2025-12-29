@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical Interview Prep | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .tech-card {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(6, 182, 212, 0.02));
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .tech-card h4 { color: #06b6d4; margin-top: 0; }
+    .time-badge {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .answer-block {
+      background: rgba(0, 0, 0, 0.3);
+      border-left: 3px solid #06b6d4;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      border-radius: 0 8px 8px 0;
+      line-height: 1.8;
+    }
+    .code-snippet {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+    .deep-dive-ref {
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    .section-divider {
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.5), transparent);
+      margin: 3rem 0;
+    }
+    .quick-ref-box {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .comparison-box {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .comparison-box h5 { color: var(--accent-primary); margin-top: 0; }
+    .skill-tag {
+      display: inline-block;
+      background: rgba(6, 182, 212, 0.2);
+      color: #06b6d4;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-right: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+    .architecture-diagram {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      white-space: pre;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Interview Prep</span>
+            <span class="sidebar-logo-subtitle">Focused Pages</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Interview Prep</div>
+          <a href="interview-behavioral.html" class="nav-item">Behavioral Questions</a>
+          <a href="interview-technical.html" class="nav-item active">Technical Questions</a>
+          <a href="interview-team-fit.html" class="nav-item">Team Fit & Director</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Deep Dive References</div>
+          <a href="director-interview-prep.html" class="nav-item">Full Director Prep</a>
+          <a href="siem/index.html" class="nav-item">SIEM Migration</a>
+          <a href="edr/index.html" class="nav-item">EDR Migration</a>
+          <a href="soc-maturity.html" class="nav-item">SOC Maturity</a>
+          <a href="siem/detection-engineering.html" class="nav-item">Detection Engineering</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Portfolio</div>
+          <a href="index.html" class="nav-item">Main Site</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+
+        <div class="page-header">
+          <h1>🔧 Technical Interview Prep</h1>
+          <p class="intro-text">SIEM architecture, detection engineering, MITRE ATT&CK, SOC maturity, and all technical deep-dive questions. Ready for whiteboard and scenario questions.</p>
+        </div>
+
+        <!-- SKILL TAGS -->
+        <div class="quick-ref-box">
+          <h3>🏷️ Your Technical Skills — Quick Reference</h3>
+          <p>
+            <span class="skill-tag">Microsoft Sentinel</span>
+            <span class="skill-tag">Splunk</span>
+            <span class="skill-tag">RSA NetWitness</span>
+            <span class="skill-tag">KQL</span>
+            <span class="skill-tag">SPL</span>
+            <span class="skill-tag">Microsoft Defender XDR</span>
+            <span class="skill-tag">Cortex XDR</span>
+            <span class="skill-tag">MITRE ATT&CK</span>
+            <span class="skill-tag">Detection Engineering</span>
+            <span class="skill-tag">SOAR / Logic Apps</span>
+            <span class="skill-tag">Purview DLP</span>
+            <span class="skill-tag">Entra ID / Conditional Access</span>
+            <span class="skill-tag">PowerShell</span>
+            <span class="skill-tag">Azure Security</span>
+            <span class="skill-tag">HIPAA</span>
+            <span class="skill-tag">SOC 2</span>
+          </p>
+          <p style="margin-top: 1rem; font-size: 0.9rem;">
+            <strong>Numbers to drop naturally:</strong> 5 years experience • 1,200+ legacy rules evaluated • 485 Sentinel rules built • 4,500 endpoints • $20K/month savings • 90+ days parallel operation
+          </p>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ==================== SECTION 1: SIEM ARCHITECTURE ==================== -->
+        <h2>1️⃣ SIEM & Detection Architecture</h2>
+
+        <div class="tech-card">
+          <h4>Q: What's your view on SIEM vs. XDR? <span class="time-badge">60 sec</span></h4>
+          
+          <div class="answer-block">
+            They're complementary, not competing. XDR is depth — deep visibility and correlation within its ecosystem. Microsoft Defender XDR correlates endpoint, identity, email, and cloud app signals better than any SIEM rule could.
+            <br><br>
+            SIEM is breadth — it aggregates across ecosystems. Your Palo Alto firewall logs, your custom app logs, your third-party SaaS audit logs — XDR doesn't see those.
+            <br><br>
+            In our transformation, we explicitly designed for this. XDR handles what it's good at — endpoint threats, identity attacks, email compromise chains. SIEM handles cross-platform correlation, long-term hunting, compliance retention, and anything XDR can't see.
+            <br><br>
+            The mistake is trying to recreate XDR detections in SIEM. We retired 780 rules that were doing exactly that — poorly duplicating what Defender already does natively with better context.
+          </div>
+
+          <div class="deep-dive-ref">
+            📚 <strong>Deep dive:</strong> <a href="siem/detection-engineering.html">Detection Engineering Strategy</a> | <a href="edr/xdr-detection-model.html">XDR Detection Model</a>
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <h4>Q: Walk me through your SIEM migration approach <span class="time-badge">90 sec</span></h4>
+          
+          <div class="answer-block">
+            Four phases over 12 months:
+            <br><br>
+            <strong>Phase 1 - Discovery (Months 1-2):</strong> Inventory everything. 47 log sources in RSA, 1,200+ detection rules, current alert volumes, SOC workflows. Also assessed what we were missing — cloud-native sources RSA couldn't handle well.
+            <br><br>
+            <strong>Phase 2 - Architecture (Months 2-4):</strong> Designed the Sentinel workspace structure, data collection strategy, cost model. Key decision: single workspace vs. multiple. We went single with RBAC for multi-tenant visibility while controlling access.
+            <br><br>
+            <strong>Phase 3 - Parallel Operation (Months 4-10):</strong> Both SIEMs running simultaneously. Migrated log sources in waves — started with cloud-native (Entra ID, M365) where Sentinel has native connectors, then moved to on-prem sources. Built detection rules in parallel, validated coverage.
+            <br><br>
+            <strong>Phase 4 - Cutover (Months 10-12):</strong> SOC fully on Sentinel. RSA in read-only for historical queries. Final decommission after 90-day confidence period.
+            <br><br>
+            Critical success factor: we didn't just migrate rules — we rationalized. 1,200 rules became 485 because we leveraged XDR and eliminated redundancy.
+          </div>
+
+          <div class="deep-dive-ref">
+            📚 <strong>Deep dive:</strong> <a href="siem/index.html">SIEM Migration Overview</a> | <a href="resources/timeline.html">Full Timeline</a>
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <h4>Q: How do you approach detection engineering? <span class="time-badge">60-90 sec</span></h4>
+          
+          <div class="answer-block">
+            I use a threat-informed approach, not a log-driven approach.
+            <br><br>
+            <strong>Start with threats, not data:</strong> What attacks matter to this organization? For us, it was data exfiltration (we process customer CRM data), identity compromise (privileged access to customer tenants), and supply chain (API integrations with Salesforce).
+            <br><br>
+            <strong>Map to MITRE ATT&CK:</strong> For each priority threat, identify the techniques. Data exfiltration? That's T1041 (Exfiltration Over C2), T1567 (Exfiltration to Cloud Storage), T1048 (Exfiltration Over Alternative Protocol).
+            <br><br>
+            <strong>Assess data availability:</strong> Do we have visibility into these techniques? What log sources? What fields? Sometimes the answer is "we can't detect this" — that's a control gap to address.
+            <br><br>
+            <strong>Build layered detections:</strong> Not one rule per technique — multiple detection points. Behavioral baselines, threshold alerts, correlation rules. Defense in depth.
+            <br><br>
+            <strong>Validate and tune:</strong> Every rule gets tested with realistic scenarios. False positive rate tracked. Detection logic refined based on real alerts.
+          </div>
+
+          <div class="deep-dive-ref">
+            📚 <strong>Deep dive:</strong> <a href="siem/detection-anatomy.html">Detection Anatomy</a> | <a href="siem/detection-catalog.html">Detection Catalog</a>
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ==================== SECTION 2: SOC MATURITY ==================== -->
+        <h2>2️⃣ SOC Maturity Assessments</h2>
+
+        <div class="tech-card">
+          <h4>Q: How would you approach a SOC maturity assessment for a new client? <span class="time-badge">90 sec</span></h4>
+          
+          <div class="answer-block">
+            I'd use a structured framework — SOC-CMM is my go-to — but customize it to the client's context.
+            <br><br>
+            <strong>Step 1 - Stakeholder interviews:</strong> Not just the SOC manager. Talk to analysts, IT ops, incident responders, and business stakeholders. Understand pain points from multiple perspectives.
+            <br><br>
+            <strong>Step 2 - Documentation review:</strong> Runbooks, escalation procedures, SLAs, metrics they're tracking. The gap between documented process and actual practice tells you a lot.
+            <br><br>
+            <strong>Step 3 - Technical assessment:</strong> Tool coverage, log source inventory, detection rule quality, automation level. I'd sample some alerts and trace them through the full lifecycle.
+            <br><br>
+            <strong>Step 4 - Metrics analysis:</strong> MTTD, MTTR, false positive rates, alert-to-incident ratios. But also qualitative — how stressed is the team? What's the turnover rate?
+            <br><br>
+            <strong>Step 5 - Gap analysis and roadmap:</strong> Map current state to desired state. Prioritize recommendations by impact and feasibility. Quick wins vs. strategic investments.
+            <br><br>
+            Key principle: maturity targets should match organizational context. A 200-person startup doesn't need the same SOC as a Fortune 500.
+          </div>
+
+          <div class="deep-dive-ref">
+            📚 <strong>Deep dive:</strong> <a href="soc-maturity.html">SOC Maturity Assessment Guide (5,759 lines)</a>
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <h4>Q: How do you measure security program effectiveness? <span class="time-badge">60 sec</span></h4>
+          
+          <div class="answer-block">
+            Three categories of metrics:
+            <br><br>
+            <strong>Operational metrics</strong> — the basics. MTTD, MTTR, alert volume, false positive rate, SLA compliance. These tell you if the machine is running.
+            <br><br>
+            <strong>Coverage metrics</strong> — are we actually protected? MITRE ATT&CK coverage percentage, log source coverage, endpoint protection coverage. We built a heat map showing which techniques we can detect vs. blind spots.
+            <br><br>
+            <strong>Business-aligned metrics</strong> — the ones leadership cares about. Cost per alert, cost avoidance from prevented incidents, compliance audit findings, time to onboard new log sources. These connect security to business value.
+            <br><br>
+            The trap is measuring what's easy instead of what matters. Alert count is easy. "Did we detect the threats that matter to our business?" is harder but more valuable.
+          </div>
+
+          <div class="deep-dive-ref">
+            📚 <strong>Deep dive:</strong> <a href="soc-maturity.html#metrics">SOC Metrics Framework</a>
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ==================== SECTION 3: MITRE ATT&CK ==================== -->
+        <h2>3️⃣ MITRE ATT&CK & Threat Frameworks</h2>
+
+        <div class="tech-card">
+          <h4>Q: How do you use MITRE ATT&CK in practice? <span class="time-badge">60 sec</span></h4>
+          
+          <div class="answer-block">
+            Three primary use cases:
+            <br><br>
+            <strong>1. Detection coverage mapping:</strong> Every detection rule we build maps to ATT&CK techniques. We maintain a coverage heat map — green where we have strong detection, red for gaps. This drives prioritization.
+            <br><br>
+            <strong>2. Threat intelligence integration:</strong> When we get intel on threat actors targeting our industry, we map their TTPs to ATT&CK. "APT29 uses T1566 for initial access, T1053 for persistence." Then we verify our detection coverage for those specific techniques.
+            <br><br>
+            <strong>3. Incident analysis:</strong> After any incident, we map the attack chain to ATT&CK. This identifies where detection failed, where we got lucky, and where to improve.
+            <br><br>
+            The framework isn't just for reporting — it's an operational tool for prioritizing security investments.
+          </div>
+
+          <div class="deep-dive-ref">
+            📚 <strong>Deep dive:</strong> <a href="siem/threat-intelligence.html">Threat Intelligence</a> | <a href="siem/detection-catalog.html">Detection Catalog with MITRE Mapping</a>
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <h4>Q: Walk me through your detection coverage for a specific technique <span class="time-badge">90 sec</span></h4>
+          
+          <p><strong>Example: T1078 - Valid Accounts (Identity-based attacks)</strong></p>
+          
+          <div class="answer-block">
+            This is a high-priority technique for us because we're a SaaS company with privileged access to customer data.
+            <br><br>
+            <strong>Layer 1 - Entra ID native detections:</strong> Impossible travel, unfamiliar sign-in properties, password spray detection. These are Microsoft's ML-based detections — we ingest the alerts into Sentinel.
+            <br><br>
+            <strong>Layer 2 - Behavioral baselines:</strong> Custom KQL rules that baseline normal login patterns per user. Alert on deviations — new device, new location, unusual time.
+            <br><br>
+            <strong>Layer 3 - Correlation rules:</strong> Combine identity signals with other data. "User logged in from new IP AND accessed sensitive SharePoint site AND downloaded unusual volume of files" — that's a correlation Entra ID alone can't do.
+            <br><br>
+            <strong>Layer 4 - Privileged account monitoring:</strong> Stricter rules for admin accounts. Any interactive login outside of break-glass scenarios generates an alert.
+            <br><br>
+            <strong>Data sources:</strong> Entra ID sign-in logs, audit logs, Conditional Access logs, Defender for Cloud Apps activity.
+          </div>
+
+          <div class="code-snippet">
+// Example: Behavioral baseline deviation detection
+let baseline = SigninLogs
+| where TimeGenerated between (ago(30d) .. ago(1d))
+| summarize 
+    TypicalLocations = make_set(Location),
+    TypicalDevices = make_set(DeviceDetail.deviceId)
+  by UserPrincipalName;
+
+SigninLogs
+| where TimeGenerated > ago(1h)
+| join kind=inner baseline on UserPrincipalName
+| where Location !in (TypicalLocations) 
+    and DeviceDetail.deviceId !in (TypicalDevices)
+| project TimeGenerated, UserPrincipalName, Location, 
+    IPAddress, AppDisplayName, ResultType
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ==================== SECTION 4: TOOLS COMPARISON ==================== -->
+        <h2>4️⃣ Tools & Platforms</h2>
+
+        <div class="tech-card">
+          <h4>Q: Compare Splunk vs. Microsoft Sentinel <span class="time-badge">60 sec</span></h4>
+          
+          <div class="comparison-grid">
+            <div class="comparison-box">
+              <h5>Splunk Strengths</h5>
+              <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem;">
+                <li>Mature, battle-tested</li>
+                <li>SPL is powerful and flexible</li>
+                <li>Huge ecosystem of apps</li>
+                <li>On-prem deployment option</li>
+                <li>Better for non-Microsoft environments</li>
+              </ul>
+            </div>
+            <div class="comparison-box">
+              <h5>Sentinel Strengths</h5>
+              <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem;">
+                <li>Native M365/Azure integration</li>
+                <li>Pay for what you ingest</li>
+                <li>Built-in SOAR (Logic Apps)</li>
+                <li>Defender XDR correlation</li>
+                <li>Unified security portal</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="answer-block">
+            <strong>When to choose Splunk:</strong> Multi-cloud or on-prem heavy environments, organizations with mature Splunk expertise, need for advanced analytics beyond security.
+            <br><br>
+            <strong>When to choose Sentinel:</strong> Microsoft-centric environments, organizations on E5 licensing, want unified XDR + SIEM, cost-sensitive (consumption model vs. license).
+            <br><br>
+            In our case, Sentinel was the right choice because we're already on M365 E5, moving infrastructure to Azure, and the native XDR integration was a major advantage.
+          </div>
+
+          <div class="deep-dive-ref">
+            📚 <strong>Deep dive:</strong> <a href="resources/splunk-reference.html">Splunk Reference</a> | <a href="siem/index.html">Sentinel Architecture</a>
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <h4>Q: What experience do you have with KQL? Show me an example. <span class="time-badge">60 sec</span></h4>
+          
+          <div class="answer-block">
+            I write KQL daily for detection rules, hunting queries, and incident investigation. Here's a real example — detecting potential data exfiltration via SharePoint:
+          </div>
+
+          <div class="code-snippet">
+// Detect unusual SharePoint download volume
+let threshold = 100; // files
+let timeWindow = 1h;
+let userBaseline = OfficeActivity
+| where TimeGenerated between (ago(30d) .. ago(1d))
+| where Operation == "FileDownloaded"
+| summarize AvgDailyDownloads = count() / 30 by UserId;
+
+OfficeActivity
+| where TimeGenerated > ago(timeWindow)
+| where Operation == "FileDownloaded"
+| summarize 
+    DownloadCount = count(),
+    Files = make_set(OfficeObjectId, 10),
+    SourceIPs = make_set(ClientIP)
+  by UserId
+| join kind=leftouter userBaseline on UserId
+| where DownloadCount > threshold 
+    or DownloadCount > (AvgDailyDownloads * 5)
+| extend 
+    Anomaly = iff(DownloadCount > (AvgDailyDownloads * 5), 
+              "Baseline Deviation", "Threshold Exceeded")
+| project UserId, DownloadCount, AvgDailyDownloads, 
+    Anomaly, Files, SourceIPs
+          </div>
+
+          <div class="answer-block">
+            This combines threshold-based detection with behavioral baselining. Pure threshold misses low-and-slow exfiltration. Pure baseline misses new users. Combining both gives better coverage.
+          </div>
+
+          <div class="deep-dive-ref">
+            📚 <strong>Deep dive:</strong> <a href="siem/detection-anatomy.html">Detection Anatomy with KQL Examples</a>
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ==================== SECTION 5: ARCHITECTURE SCENARIOS ==================== -->
+        <h2>5️⃣ Architecture Scenarios</h2>
+
+        <div class="tech-card">
+          <h4>Q: Design a security monitoring architecture for a hybrid environment <span class="time-badge">Whiteboard</span></h4>
+          
+          <div class="architecture-diagram">
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         SECURITY MONITORING ARCHITECTURE                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐     │
+│  │  CLOUD (AZURE)  │    │   ON-PREMISES   │    │   ENDPOINTS     │     │
+│  │                 │    │                 │    │                 │     │
+│  │ • Entra ID      │    │ • AD Domain     │    │ • Windows       │     │
+│  │ • Azure VMs     │    │ • Firewalls     │    │ • macOS         │     │
+│  │ • App Services  │    │ • On-prem apps  │    │ • Servers       │     │
+│  │ • Storage       │    │ • Network gear  │    │                 │     │
+│  └────────┬────────┘    └────────┬────────┘    └────────┬────────┘     │
+│           │                      │                      │               │
+│           │ Native               │ Azure Arc /          │ MDE           │
+│           │ Connectors           │ Syslog / CEF         │ Agent         │
+│           │                      │                      │               │
+│           └──────────────────────┼──────────────────────┘               │
+│                                  │                                      │
+│                                  ▼                                      │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                    MICROSOFT SENTINEL                            │   │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │   │
+│  │  │ Analytics   │  │ Workbooks   │  │ Automation  │              │   │
+│  │  │ Rules       │  │ Dashboards  │  │ Logic Apps  │              │   │
+│  │  └─────────────┘  └─────────────┘  └─────────────┘              │   │
+│  │                         │                                        │   │
+│  │                         ▼                                        │   │
+│  │  ┌─────────────────────────────────────────────────────────┐    │   │
+│  │  │              XDR INTEGRATION LAYER                       │    │   │
+│  │  │  Microsoft Defender XDR ──► Correlated Incidents        │    │   │
+│  │  └─────────────────────────────────────────────────────────┘    │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+│                                  │                                      │
+│                                  ▼                                      │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                         SOC TEAM                                 │   │
+│  │  Unified Portal ──► Tiered Response ──► Incident Management     │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────┘
+          </div>
+
+          <div class="answer-block">
+            <strong>Key design decisions:</strong>
+            <br><br>
+            <strong>1. Collection strategy:</strong> Native connectors for cloud workloads, Azure Arc for on-prem servers, syslog/CEF for network devices, MDE for endpoints. Minimize agents, maximize native integration.
+            <br><br>
+            <strong>2. XDR-first detection:</strong> Let Defender XDR handle endpoint, identity, and email threats. Sentinel focuses on cross-platform correlation and non-Microsoft sources.
+            <br><br>
+            <strong>3. Tiered storage:</strong> Hot tier for active hunting (90 days), archive tier for compliance (7 years). Data Collection Rules to filter noise at ingestion.
+            <br><br>
+            <strong>4. Automation:</strong> Logic Apps for enrichment, auto-ticketing, and response actions. Playbooks for common scenarios.
+          </div>
+
+          <div class="deep-dive-ref">
+            📚 <strong>Deep dive:</strong> <a href="infrastructure/network-architecture.html">Network Architecture</a> | <a href="siem/log-sources.html">Log Source Strategy</a>
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ==================== SECTION 6: SECURITY TRENDS ==================== -->
+        <h2>6️⃣ Security Trends & Opinions</h2>
+
+        <div class="tech-card">
+          <h4>Q: What security trends are you watching? <span class="time-badge">45 sec</span></h4>
+          
+          <div class="answer-block">
+            <strong>1. AI in security operations:</strong> Not just "AI-powered" marketing — actual use cases like Copilot for Security for incident investigation, automated alert triage, and natural language hunting queries. The question is what analysts can offload vs. what still needs human judgment.
+            <br><br>
+            <strong>2. Identity as the new perimeter:</strong> With hybrid work, identity compromise is the top attack vector. Conditional Access, continuous access evaluation, passwordless — these aren't future state, they're now.
+            <br><br>
+            <strong>3. XDR consolidation:</strong> Organizations are tired of tool sprawl. The trend toward unified platforms — whether Microsoft, CrowdStrike, or Palo Alto — is real. The question is whether best-of-breed still beats integrated suites.
+            <br><br>
+            <strong>4. Cloud security posture:</strong> As infrastructure moves to cloud, misconfigurations become the top risk. CSPM and infrastructure-as-code security scanning are becoming standard.
+          </div>
+
+          <div class="deep-dive-ref">
+            📚 <strong>Deep dive:</strong> <a href="ai-security-risk.html">AI Security & Risk</a>
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ==================== SECTION 7: COMMON TECHNICAL QUESTIONS ==================== -->
+        <h2>7️⃣ Common Technical Questions</h2>
+
+        <div class="tech-card">
+          <h4>Q: Walk me through how you'd investigate a potential breach <span class="time-badge">90 sec</span></h4>
+          
+          <div class="answer-block">
+            <strong>Step 1 - Triage and scope:</strong> What triggered this? Alert, user report, external notification? What's the initial indicator — suspicious login, malware detection, data exfiltration alert? Determine if it's a true positive before full mobilization.
+            <br><br>
+            <strong>Step 2 - Containment assessment:</strong> Is this ongoing? Do we need to isolate systems immediately? Balance between stopping the attack and preserving evidence. For active threats, containment comes first.
+            <br><br>
+            <strong>Step 3 - Evidence collection:</strong> Preserve logs, memory dumps if needed, timeline of events. In Sentinel, I'd pull all related alerts, hunt for the user/device across all log sources, build a timeline.
+            <br><br>
+            <strong>Step 4 - Scope determination:</strong> Is this one device or lateral movement? Check for related IOCs across the environment. In MDE, I'd use the device timeline and advanced hunting to trace the attack chain.
+            <br><br>
+            <strong>Step 5 - Root cause:</strong> How did they get in? Phishing, credential compromise, vulnerability? This determines remediation.
+            <br><br>
+            <strong>Step 6 - Remediation and recovery:</strong> Remove the threat, patch the vulnerability, reset credentials, restore from clean backups if needed.
+            <br><br>
+            <strong>Step 7 - Post-incident:</strong> Document everything, lessons learned, detection improvements. Did our alerts fire? If not, why not?
+          </div>
+
+          <div class="deep-dive-ref">
+            📚 <strong>Deep dive:</strong> <a href="resources/incident-response.html">Incident Response Procedures</a>
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <h4>Q: What certifications do you have? Are you planning more? <span class="time-badge">30 sec</span></h4>
+          
+          <div class="answer-block">
+            Currently, I'm focused on practical experience over certification collection. That said, I'm planning to pursue:
+            <br><br>
+            <strong>SC-200 (Microsoft Security Operations Analyst)</strong> — validates the Sentinel and Defender XDR work I do daily.
+            <br><br>
+            <strong>AZ-500 (Azure Security Engineer)</strong> — rounds out cloud security credentials.
+            <br><br>
+            Long-term, <strong>CISSP</strong> makes sense for consulting credibility, though I'd want a few more years of breadth first.
+            <br><br>
+            My philosophy: certifications validate knowledge, but projects demonstrate capability. I'd rather show you the security transformation I led than a list of acronyms.
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <h4>Q: Explain the difference between EDR and XDR <span class="time-badge">45 sec</span></h4>
+          
+          <div class="answer-block">
+            <strong>EDR (Endpoint Detection and Response)</strong> is focused on endpoints — workstations, servers. It collects telemetry from the endpoint, detects threats, and enables response actions like isolation or remediation. MDE, CrowdStrike, SentinelOne — these are EDR tools.
+            <br><br>
+            <strong>XDR (Extended Detection and Response)</strong> extends that correlation across multiple security domains — endpoint, identity, email, cloud apps, network. Instead of investigating in silos, you get a unified view.
+            <br><br>
+            The practical difference: with EDR alone, if an attacker phishes a user and then moves laterally, you might see the endpoint alerts but miss the email context. With XDR, Defender correlates the phishing email, the credential compromise in Entra ID, and the lateral movement on endpoints into one incident.
+            <br><br>
+            That's why we retired 780 SIEM rules — XDR does that correlation natively, better than we could with log-based rules.
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <h4>Q: How do you handle false positives? <span class="time-badge">45 sec</span></h4>
+          
+          <div class="answer-block">
+            False positives are inevitable, but how you manage them determines SOC effectiveness.
+            <br><br>
+            <strong>Track metrics:</strong> We measure false positive rate per detection rule. If a rule has >50% FP rate over 30 days, it goes into review.
+            <br><br>
+            <strong>Tune, don't disable:</strong> First option is tuning — add exclusions for known good behavior, tighten the detection logic, add correlation conditions. Disabling is last resort.
+            <br><br>
+            <strong>Root cause analysis:</strong> Why is this firing falsely? Is the detection logic too broad? Is there a legitimate business process we didn't account for? Sometimes FPs reveal gaps in our understanding of the environment.
+            <br><br>
+            <strong>Feedback loop:</strong> Analysts flag FPs during triage. That feedback drives tuning. We review top FP generators weekly.
+            <br><br>
+            The goal isn't zero false positives — that usually means you're missing things. The goal is a manageable rate where analysts trust the alerts.
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <h4>Q: How would you secure a cloud environment from scratch? <span class="time-badge">90 sec</span></h4>
+          
+          <div class="answer-block">
+            I'd approach it in layers:
+            <br><br>
+            <strong>Identity foundation:</strong> This is the new perimeter. Strong authentication — MFA everywhere, passwordless where possible. Conditional Access policies based on risk. Privileged Identity Management for admin roles. No standing admin access.
+            <br><br>
+            <strong>Network segmentation:</strong> Even in cloud, network controls matter. Hub-spoke topology, NSGs limiting traffic flows, private endpoints for PaaS services. Zero trust networking — assume breach, verify everything.
+            <br><br>
+            <strong>Workload protection:</strong> Defender for Cloud or equivalent CSPM for posture management. Vulnerability scanning. Container security if using Kubernetes. Infrastructure as code scanning to catch misconfigurations before deployment.
+            <br><br>
+            <strong>Data protection:</strong> Classify sensitive data. Encryption at rest and in transit (usually default now). DLP policies to prevent exfiltration. Key management with customer-managed keys for sensitive workloads.
+            <br><br>
+            <strong>Detection and response:</strong> Centralized logging to SIEM. Threat detection rules. Automated response playbooks. Regular threat hunting.
+            <br><br>
+            <strong>Governance:</strong> Azure Policy or AWS SCPs to enforce guardrails. Compliance monitoring. Regular access reviews.
+            <br><br>
+            The key is defense in depth — no single control is the answer.
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <h4>Q: What's the hardest security problem you've solved? <span class="time-badge">60 sec</span></h4>
+          
+          <div class="answer-block">
+            The SIEM rationalization was the most complex because it wasn't just technical — it was organizational.
+            <br><br>
+            <strong>The technical challenge:</strong> 1,200+ detection rules accumulated over years, across different analysts, with no documentation. Some rules duplicated each other. Some never fired. Some fired constantly with no value.
+            <br><br>
+            <strong>The organizational challenge:</strong> People built those rules. Telling the SOC manager that 40% of his rules never fired could feel like criticism. Getting buy-in to retire rules felt risky — "what if we need that?"
+            <br><br>
+            <strong>How I solved it:</strong> Data-driven approach. I built a coverage analysis showing exactly which rules fired, which overlapped with XDR, which had no matching log sources. Made it collaborative — "which of these should we keep?" rather than "I'm deleting these."
+            <br><br>
+            <strong>Result:</strong> 485 high-value rules. Better coverage than before. $20K/month savings. And the SOC team felt ownership of the outcome.
+            <br><br>
+            The hardest problems are usually part technical, part people.
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <h4>Q: How do you approach a client with no security program? <span class="time-badge">60 sec</span></h4>
+          
+          <div class="answer-block">
+            Start with risk, not tools.
+            <br><br>
+            <strong>Understand the business:</strong> What do they do? What data do they have? What would hurt them most — ransomware, data breach, compliance fine, reputation damage? This determines priorities.
+            <br><br>
+            <strong>Quick risk assessment:</strong> Where are the obvious gaps? No MFA? No endpoint protection? No backups? Identify the "house is on fire" issues that need immediate attention.
+            <br><br>
+            <strong>Foundational controls first:</strong> Identity (MFA, SSO), endpoint protection (EDR), backup and recovery, basic network segmentation. These address the majority of common attacks.
+            <br><br>
+            <strong>Phased roadmap:</strong> Nobody can do everything at once. Phase 1: foundational controls (30-60 days). Phase 2: visibility and detection (60-90 days). Phase 3: mature operations (ongoing).
+            <br><br>
+            <strong>Quick wins matter:</strong> Show value early. Enable MFA in week 1. Deploy EDR in week 2. Build confidence that the program is working.
+            <br><br>
+            I've done this with DietIQ — building HIPAA-compliant security from scratch. Same principles apply at any scale.
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <h4>Q: SPL vs KQL — what's different? <span class="time-badge">45 sec</span></h4>
+          
+          <div class="answer-block">
+            Both are powerful query languages, but different philosophies.
+            <br><br>
+            <strong>SPL (Splunk):</strong> Pipe-based, left to right. Very flexible, almost like a scripting language. Great for complex transformations. Can be harder to read when queries get long.
+            <br><br>
+            <strong>KQL (Kusto):</strong> Also pipe-based, but more structured. Strong typing. Better for columnar data. Some operations like joins are more explicit.
+            <br><br>
+            <strong>Practical differences:</strong>
+            <ul style="margin: 0.5rem 0; padding-left: 1.25rem;">
+              <li>SPL uses <code>stats</code>, KQL uses <code>summarize</code></li>
+              <li>SPL uses <code>eval</code> for calculations, KQL uses <code>extend</code></li>
+              <li>KQL <code>let</code> statements are cleaner than SPL subsearches</li>
+              <li>SPL's <code>tstats</code> is faster for large-scale searches</li>
+            </ul>
+            <br>
+            I'm fluent in both. The concepts transfer — aggregations, joins, time-based analysis. Learning the second language after the first is mostly syntax.
+          </div>
+
+          <div class="deep-dive-ref">
+            📚 <strong>Deep dive:</strong> <a href="siem/parsing-patterns-comparison.html">Parsing Patterns Comparison (SPL vs KQL)</a>
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <h4>Q: What would you do in the first 30 days on an engagement? <span class="time-badge">60 sec</span></h4>
+          
+          <div class="answer-block">
+            <strong>Week 1 - Learn the context:</strong> Understand the client's business, their environment, and the engagement scope. Read any existing documentation. Meet key stakeholders. Don't make recommendations yet — listen first.
+            <br><br>
+            <strong>Week 2 - Discovery and assessment:</strong> Hands-on technical discovery. What tools do they have? What's the current state? Start identifying gaps between where they are and where they need to be.
+            <br><br>
+            <strong>Week 3 - Initial findings:</strong> Share preliminary observations with the engagement lead. Validate my understanding. Identify any scope questions or risks that need escalation.
+            <br><br>
+            <strong>Week 4 - Roadmap development:</strong> Start building recommendations. Prioritize by impact and feasibility. Prepare for first client presentation.
+            <br><br>
+            Throughout: communicate constantly with the engagement team. No surprises. Ask for feedback on my approach. Consulting is collaborative — I'm not working in isolation.
+            <br><br>
+            The first 30 days set the foundation. Move fast but don't skip the discovery.
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ==================== QUICK REFERENCE - UPDATED ==================== -->
+        <h2>📋 Technical Quick Reference</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Topic</th>
+                <th>Your Experience</th>
+                <th>Key Talking Point</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SIEM Migration</strong></td>
+                <td>RSA NetWitness → Sentinel</td>
+                <td>"12-month migration, 90+ days parallel ops, zero gaps"</td>
+              </tr>
+              <tr>
+                <td><strong>Detection Engineering</strong></td>
+                <td>1,200 rules → 485 optimized</td>
+                <td>"Threat-informed approach, MITRE mapping, XDR-first"</td>
+              </tr>
+              <tr>
+                <td><strong>EDR Deployment</strong></td>
+                <td>ESET → MDE on 4,500 endpoints</td>
+                <td>"Phased rollout, coexistence strategy, XDR integration"</td>
+              </tr>
+              <tr>
+                <td><strong>DLP Migration</strong></td>
+                <td>Symantec → Purview</td>
+                <td>"Shadow mode first, stakeholder buy-in, production now"</td>
+              </tr>
+              <tr>
+                <td><strong>Query Languages</strong></td>
+                <td>KQL, SPL, PowerShell</td>
+                <td>"Write detection rules, hunting queries, automation scripts"</td>
+              </tr>
+              <tr>
+                <td><strong>Cloud Platforms</strong></td>
+                <td>Azure/M365 primary, healthcare startup experience</td>
+                <td>"Deep Microsoft stack, security principles transfer"</td>
+              </tr>
+              <tr>
+                <td><strong>Frameworks</strong></td>
+                <td>MITRE ATT&CK, NIST CSF, SOC-CMM</td>
+                <td>"Practical application, not just checkbox compliance"</td>
+              </tr>
+              <tr>
+                <td><strong>Healthcare Security</strong></td>
+                <td>DietIQ startup (HIPAA, HL7 FHIR)</td>
+                <td>"Building compliance in from day one"</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success" style="margin-top: 2rem;">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Technical Interview Strategy
+          </div>
+          <div class="callout-content">
+            <p><strong>Don't just answer — connect to business impact.</strong> "We built 485 detection rules" is technical. "We built 485 rules that actually fire on real threats, eliminated 780 that were noise, and saved $20K/month" connects to value.</p>
+          </div>
+        </div>
+
+        <nav class="page-nav">
+          <a href="interview-behavioral.html" class="page-nav-link prev">
+            <span class="page-nav-label">Previous</span>
+            <span class="page-nav-title">← Behavioral Questions</span>
+          </a>
+          <a href="interview-team-fit.html" class="page-nav-link next">
+            <span class="page-nav-label">Next</span>
+            <span class="page-nav-title">Team Fit & Director →</span>
+          </a>
+        </nav>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

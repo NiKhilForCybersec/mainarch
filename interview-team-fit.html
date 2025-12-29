@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Fit & Director Prep | Security Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .director-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.02));
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .director-card h4 { color: #8b5cf6; margin-top: 0; }
+    .fit-card {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.02));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .fit-card h4 { color: #10b981; margin-top: 0; }
+    .value-card {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(6, 182, 212, 0.02));
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .value-card h4 { color: #06b6d4; margin-top: 0; }
+    .trait-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .trait-box {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .trait-box h5 { color: var(--accent-primary); margin: 0 0 0.5rem 0; font-size: 0.95rem; }
+    .trait-box p { margin: 0; font-size: 0.85rem; color: var(--text-secondary); }
+    .your-proof {
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 3px solid #10b981;
+      padding: 0.75rem 1rem;
+      margin-top: 0.5rem;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.85rem;
+    }
+    .warning-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .warning-box h5 { color: #ef4444; margin-top: 0; }
+    .section-divider {
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), transparent);
+      margin: 3rem 0;
+    }
+    .quick-ref-box {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+    .persona-header {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.1));
+      border: 2px solid rgba(139, 92, 246, 0.4);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: center;
+    }
+    .persona-header h2 { color: #8b5cf6; margin: 0; font-size: 1.75rem; }
+    .persona-header p { color: var(--text-secondary); margin: 0.5rem 0 0 0; }
+    .match-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    .match-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+    .match-item .check { color: #10b981; }
+    .interview-tip {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 3px solid #f59e0b;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .cheat-sheet {
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(139, 92, 246, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+    .cheat-sheet h3 { color: #8b5cf6; margin-top: 0; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">RF</div>
+          <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Interview Prep</span>
+            <span class="sidebar-logo-subtitle">Focused Pages</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Interview Prep</div>
+          <a href="interview-behavioral.html" class="nav-item">Behavioral Questions</a>
+          <a href="interview-technical.html" class="nav-item">Technical Questions</a>
+          <a href="interview-team-fit.html" class="nav-item active">Team Fit & Director</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Deep Dive References</div>
+          <a href="director-interview-prep.html" class="nav-item">Full Director Prep</a>
+          <a href="company-profile.html" class="nav-item">Company Profile</a>
+          <a href="career-narrative.html" class="nav-item">Career Narrative</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-section">
+          <div class="nav-section-title">Portfolio</div>
+          <a href="index.html" class="nav-item">Main Site</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+
+        <div class="page-header">
+          <h1>🎯 Team Fit & Director Prep</h1>
+          <p class="intro-text">Everything you need to know about the interviewer, consulting firm values, and how your experience maps to what they're looking for.</p>
+        </div>
+
+        <!-- ==================== DIRECTOR PROFILE ==================== -->
+        <div class="persona-header">
+          <h2>👔 The Director Interview</h2>
+          <p>Senior-level evaluation — Technical depth + Strategic thinking + Client-facing potential</p>
+        </div>
+
+        <div class="director-card">
+          <h4>🧠 What the Director is Evaluating</h4>
+          <p>This is NOT just a technical interview. The Director is assessing:</p>
+          
+          <div class="trait-grid">
+            <div class="trait-box">
+              <h5>Client-Facing Potential</h5>
+              <p>Can you represent the firm to clients? Professional presence, clear communication, executive-ready?</p>
+              <div class="your-proof"><strong>Your proof:</strong> VP Sales laptop fix — communicated clearly without jargon</div>
+            </div>
+            <div class="trait-box">
+              <h5>Technical Credibility</h5>
+              <p>Do you know your stuff? Can you go deep when challenged? Will clients trust your expertise?</p>
+              <div class="your-proof"><strong>Your proof:</strong> Full stack migration, KQL/SPL fluency, MITRE mapping</div>
+            </div>
+            <div class="trait-box">
+              <h5>Strategic Thinking</h5>
+              <p>Do you see the big picture? Can you connect security to business value?</p>
+              <div class="your-proof"><strong>Your proof:</strong> XDR rationalization saved $20K/month — wasn't asked, found it</div>
+            </div>
+            <div class="trait-box">
+              <h5>Consulting Aptitude</h5>
+              <p>Can you handle ambiguity? Multiple clients? Deliver under pressure?</p>
+              <div class="your-proof"><strong>Your proof:</strong> DietIQ startup + day job, 40-hour UI push, parallel ops</div>
+            </div>
+            <div class="trait-box">
+              <h5>Growth Potential</h5>
+              <p>Will you develop into a senior consultant? Are you coachable? Hungry to learn?</p>
+              <div class="your-proof"><strong>Your proof:</strong> Self-taught Figma, documentation portfolio, seeking variety</div>
+            </div>
+            <div class="trait-box">
+              <h5>Cultural Fit</h5>
+              <p>Will you represent firm values? Work well with teams? Handle client pressure?</p>
+              <div class="your-proof"><strong>Your proof:</strong> Cross-team collaboration, stakeholder management, DLP buy-in</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="director-card">
+          <h4>📋 Director Expectations — What They Value</h4>
+          
+          <div class="trait-grid">
+            <div class="trait-box">
+              <h5>✅ Delivery Focus</h5>
+              <p>"Keeps his promises" — values people who commit and follow through</p>
+              <div class="your-proof"><strong>Show:</strong> Specific outcomes, timelines met, projects completed</div>
+            </div>
+            <div class="trait-box">
+              <h5>✅ Calm Under Pressure</h5>
+              <p>Models composed, professional behavior</p>
+              <div class="your-proof"><strong>Show:</strong> Stay calm in interview, handle tough questions gracefully</div>
+            </div>
+            <div class="trait-box">
+              <h5>✅ Technical Depth</h5>
+              <p>Expects you to know your domain deeply</p>
+              <div class="your-proof"><strong>Show:</strong> Be ready to go deep on SIEM, XDR, detection engineering</div>
+            </div>
+            <div class="trait-box">
+              <h5>✅ Strategic Connection</h5>
+              <p>Wants to see business thinking, not just technical execution</p>
+              <div class="your-proof"><strong>Show:</strong> Connect every technical answer to business impact</div>
+            </div>
+          </div>
+
+          <div class="interview-tip">
+            <strong>💡 Key Insight:</strong> Directors are "demanding but supportive" — they push hard but invest in people who show potential. Show you're coachable and hungry to learn, not defensive or arrogant.
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ==================== CONSULTING VALUES ==================== -->
+        <h2>🏢 Consulting Firm Core Values</h2>
+        <p>Top consulting firms have specific values. Have an example ready for each:</p>
+
+        <div class="trait-grid">
+          <div class="value-card">
+            <h4>Client Value Creation</h4>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Enabling clients to become high-performance businesses</p>
+            <div class="your-proof">
+              <strong>Your example:</strong> RevFlow transformation — $20K/month savings + better detection coverage. "Better security at lower cost."
+            </div>
+          </div>
+
+          <div class="value-card">
+            <h4>One Global Network</h4>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Leveraging global insight and collaboration</p>
+            <div class="your-proof">
+              <strong>Your example:</strong> Cross-team collaboration — worked with IT Ops, Legal, SOC, Infrastructure teams across Canada/US/India.
+            </div>
+          </div>
+
+          <div class="value-card">
+            <h4>Respect for the Individual</h4>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Valuing diversity and unique contributions</p>
+            <div class="your-proof">
+              <strong>Your example:</strong> VP of Sales laptop fix — treated executive time with respect, explained clearly, didn't condescend.
+            </div>
+          </div>
+
+          <div class="value-card">
+            <h4>Best People</h4>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Attracting, developing, and retaining the best talent</p>
+            <div class="your-proof">
+              <strong>Your example:</strong> Created documentation so junior team members could replicate my work. Invested in knowledge transfer.
+            </div>
+          </div>
+
+          <div class="value-card">
+            <h4>Integrity</h4>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Being ethically unyielding and honest</p>
+            <div class="your-proof">
+              <strong>Your example:</strong> Golden image duplicate ID issue — didn't blame IT Ops, took ownership of solution, updated SOP to prevent recurrence.
+            </div>
+          </div>
+
+          <div class="value-card">
+            <h4>Stewardship</h4>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Building a better, stronger company for future generations</p>
+            <div class="your-proof">
+              <strong>Your example:</strong> Built comprehensive documentation for knowledge transfer — thinking beyond my tenure. This entire portfolio.
+            </div>
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ==================== YOUR FIT ==================== -->
+        <h2>✅ Why You're a Fit</h2>
+
+        <div class="fit-card">
+          <h4>Your Differentiators</h4>
+          
+          <div class="match-grid">
+            <div class="match-item"><span class="check">✓</span> Real enterprise transformation (not just certs)</div>
+            <div class="match-item"><span class="check">✓</span> Healthcare security experience (HIPAA, HL7 FHIR)</div>
+            <div class="match-item"><span class="check">✓</span> Already doing consulting-like work (DietIQ)</div>
+            <div class="match-item"><span class="check">✓</span> XDR-first architecture expertise</div>
+            <div class="match-item"><span class="check">✓</span> Document & systematize (runbooks, SOPs)</div>
+            <div class="match-item"><span class="check">✓</span> Multi-platform experience (Microsoft + Splunk + Cortex)</div>
+            <div class="match-item"><span class="check">✓</span> Stakeholder management across teams</div>
+            <div class="match-item"><span class="check">✓</span> Measurable outcomes ($20K/month, 1,200 rules)</div>
+          </div>
+        </div>
+
+        <div class="fit-card">
+          <h4>Accenture Job Requirements → Your Experience</h4>
+          
+          <div class="table-wrapper">
+            <table style="font-size: 0.9rem;">
+              <thead>
+                <tr>
+                  <th>Requirement</th>
+                  <th>Your Experience</th>
+                  <th>Proof Point</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>3+ years SIEM (Splunk/Sentinel)</td>
+                  <td>✅ 5 years total, RSA + Sentinel migration</td>
+                  <td>1,200 rules evaluated, 485 built</td>
+                </tr>
+                <tr>
+                  <td>Log source onboarding</td>
+                  <td>✅ 47 log sources migrated</td>
+                  <td>Native connectors, syslog, CEF, custom</td>
+                </tr>
+                <tr>
+                  <td>Use case → detection rules</td>
+                  <td>✅ Detection engineering lead</td>
+                  <td>Threat-informed approach, MITRE mapping</td>
+                </tr>
+                <tr>
+                  <td>MITRE ATT&CK / Kill Chain</td>
+                  <td>✅ Coverage mapping, detection catalog</td>
+                  <td>Heat maps, gap analysis, prioritization</td>
+                </tr>
+                <tr>
+                  <td>SOC maturity assessments</td>
+                  <td>✅ Conducted internal assessment</td>
+                  <td>SOC-CMM framework, roadmap delivery</td>
+                </tr>
+                <tr>
+                  <td>Windows / CLI / Network</td>
+                  <td>✅ PowerShell, KQL, network architecture</td>
+                  <td>Scripts, hunting queries, infrastructure</td>
+                </tr>
+                <tr>
+                  <td>Scripting / Programming</td>
+                  <td>✅ KQL, SPL, PowerShell, Python</td>
+                  <td>Detection rules, automation, analysis</td>
+                </tr>
+                <tr>
+                  <td>Incident response</td>
+                  <td>✅ SOC workflows, runbooks</td>
+                  <td>Built IR procedures, playbooks</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ==================== WHY CONSULTING ==================== -->
+        <h2>💼 "Why Consulting?" — Your Genuine Answer</h2>
+
+        <div class="fit-card">
+          <h4>The Honest Reality</h4>
+          
+          <div class="trait-grid">
+            <div class="trait-box">
+              <h5>What In-House Becomes</h5>
+              <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem;">
+                <li>Same tickets every day</li>
+                <li>Exclusion requests</li>
+                <li>Agent not reporting</li>
+                <li>Data ingestion issues</li>
+                <li>Policy exceptions</li>
+                <li>Same patterns, different users</li>
+              </ul>
+            </div>
+            <div class="trait-box">
+              <h5>What Energizes You</h5>
+              <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem;">
+                <li>Assessing current state</li>
+                <li>Identifying gaps</li>
+                <li>Designing the approach</li>
+                <li>Building the roadmap</li>
+                <li>Solving new problems</li>
+                <li>Continuous learning</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="interview-tip">
+            <strong>Key message:</strong> "I enjoyed building it. The transformation work was challenging. But once the machine is running, you're maintaining it, not building anymore. I'm energized by the 'figure it out' phase — that's the core of consulting."
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ==================== QUESTIONS TO ASK ==================== -->
+        <h2>❓ Questions to Ask the Director</h2>
+
+        <div class="director-card">
+          <h4>Smart Questions That Show Thinking</h4>
+          
+          <div class="trait-grid">
+            <div class="trait-box">
+              <h5>About the Work</h5>
+              <p>"What does a typical security consulting engagement look like here — from scoping to delivery?"</p>
+            </div>
+            <div class="trait-box">
+              <h5>About Growth</h5>
+              <p>"What does the path from consultant to senior consultant look like? What differentiates people who progress quickly?"</p>
+            </div>
+            <div class="trait-box">
+              <h5>About Trends</h5>
+              <p>"What security challenges are you seeing most frequently with clients right now?"</p>
+            </div>
+            <div class="trait-box">
+              <h5>About Team</h5>
+              <p>"How does the security practice collaborate with other parts of the firm — cloud, data, strategy?"</p>
+            </div>
+          </div>
+
+          <div class="warning-box">
+            <h5>❌ Don't Ask</h5>
+            <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem;">
+              <li>"What's the salary?" — save for HR</li>
+              <li>"How much travel?" — you already know, don't seem concerned</li>
+              <li>"When will I hear back?" — sounds anxious</li>
+              <li>Anything you could Google</li>
+            </ul>
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ==================== CHEAT SHEET ==================== -->
+        <h2>📋 Interview Day Cheat Sheet</h2>
+
+        <div class="cheat-sheet">
+          <h3>🔢 Numbers to Drop Naturally</h3>
+          <p style="font-size: 1.1rem;">
+            <strong>5 years</strong> experience • 
+            <strong>1,200+</strong> legacy rules evaluated • 
+            <strong>4,500</strong> endpoints • 
+            <strong>$20K/month</strong> cost savings • 
+            <strong>780</strong> rules retired to XDR • 
+            <strong>485</strong> Sentinel rules built • 
+            <strong>90+ days</strong> parallel operation •
+            <strong>47</strong> log sources migrated
+          </p>
+        </div>
+
+        <div class="cheat-sheet">
+          <h3>🎯 Your Story Bank — One-Liner Reminders</h3>
+          <table style="width: 100%; font-size: 0.9rem;">
+            <tr>
+              <td><strong>Influence</strong></td>
+              <td>DLP Sales team — shadow mode pilot turned opponents to advocates</td>
+            </tr>
+            <tr>
+              <td><strong>Failure</strong></td>
+              <td>Golden image duplicate IDs — 347 devices, 5-day fix, built prevention</td>
+            </tr>
+            <tr>
+              <td><strong>Communication</strong></td>
+              <td>VP Sales laptop — "Security tool stopped, I'll fix it, 15 minutes"</td>
+            </tr>
+            <tr>
+              <td><strong>Conflict</strong></td>
+              <td>Security vs Legal retention — tiered storage solved both needs</td>
+            </tr>
+            <tr>
+              <td><strong>Learning</strong></td>
+              <td>DietIQ UI — 40 hours straight, learned Figma, still in production</td>
+            </tr>
+            <tr>
+              <td><strong>Above & Beyond</strong></td>
+              <td>XDR coverage analysis — found 73% redundancy, saved $20K/month</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="cheat-sheet">
+          <h3>🚫 Things to Avoid</h3>
+          <div class="trait-grid">
+            <div class="warning-box" style="margin: 0;">
+              <h5>Don't Say</h5>
+              <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem;">
+                <li>"I'm bored at my current job"</li>
+                <li>"The money is better in consulting"</li>
+                <li>"I want to travel"</li>
+                <li>"My manager doesn't appreciate me"</li>
+                <li>"I already know everything about SIEM"</li>
+              </ul>
+            </div>
+            <div class="fit-card" style="margin: 0;">
+              <h5 style="color: #10b981;">Do Say</h5>
+              <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem;">
+                <li>"I enjoyed building, ready for new challenges"</li>
+                <li>"Variety and continuous learning"</li>
+                <li>"Apply what I've learned across industries"</li>
+                <li>"Energized by the 'figure it out' phase"</li>
+                <li>"Always more to learn — that's what I want"</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="cheat-sheet">
+          <h3>✨ Closing Strong</h3>
+          <p style="font-size: 0.95rem; line-height: 1.8;">
+            "I've done the work — I've built real things, delivered a complete security transformation, and documented everything so others can learn from it. I'm looking for a place where I can apply that experience across multiple clients while continuing to grow. I'm ready for consulting, and I'm excited about the opportunity to contribute here."
+          </p>
+        </div>
+
+        <div class="callout success" style="margin-top: 2rem;">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Final Reminder
+          </div>
+          <div class="callout-content">
+            <p><strong>You've got this.</strong> You've done the work. You've built real things. You've delivered a complete security transformation. Now you just need to communicate that clearly and show you're ready for consulting.</p>
+            <p style="margin-top: 0.5rem;">The Director is looking for someone who <strong>delivers, stays calm under pressure, and thinks strategically</strong>. Show judgment, show humility, show hunger to learn. Be genuine. Good luck! 🎯</p>
+          </div>
+        </div>
+
+        <nav class="page-nav">
+          <a href="interview-technical.html" class="page-nav-link prev">
+            <span class="page-nav-label">Previous</span>
+            <span class="page-nav-title">← Technical Questions</span>
+          </a>
+          <a href="director-interview-prep.html" class="page-nav-link next">
+            <span class="page-nav-label">Full Reference</span>
+            <span class="page-nav-title">Complete Director Prep →</span>
+          </a>
+        </nav>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
