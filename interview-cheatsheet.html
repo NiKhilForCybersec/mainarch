@@ -1178,6 +1178,191 @@
         </div>
       </div>
 
+      <!-- ==================== DIRECTOR-LEVEL QUESTIONS ==================== -->
+      <h2>👔 Director-Level Questions</h2>
+
+      <!-- Full width sections for detailed answers -->
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>Explain a security incident you responded to. What went well? What could be better?</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+          <div>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">The Incident:</p>
+            <ul style="margin-top: 0;">
+              <li>Received 500+ impossible travel alerts over a short period</li>
+              <li>Initial triage suggested widespread credential compromise</li>
+              <li>Investigation revealed: Zscaler proxy IP rotation was the cause</li>
+              <li>Users appeared to "travel" because egress IPs were rotating globally</li>
+              <li>False positive storm — not an actual attack</li>
+            </ul>
+            <p style="color: #6bcf6b; font-weight: bold; margin-bottom: 0.5rem;">What Went Well:</p>
+            <ul style="margin-top: 0;">
+              <li>Detection was working — we caught the anomaly</li>
+              <li>Team responded quickly to the alert volume</li>
+              <li>Root cause identified within reasonable time</li>
+              <li>No actual security incident occurred</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ff6b6b; font-weight: bold; margin-bottom: 0.5rem;">What Could Be Better:</p>
+            <ul style="margin-top: 0;">
+              <li><strong>Change management:</strong> Zscaler IP ranges weren't communicated to security team</li>
+              <li><strong>Whitelisting gap:</strong> Proxy IPs not added to SIEM/EDR exclusions</li>
+              <li><strong>Process issue:</strong> Changes communicated through emails, not a formal process</li>
+              <li><strong>No single source of truth:</strong> Network team, security team, and vendor not aligned</li>
+            </ul>
+            <p style="color: #ffd93d; font-weight: bold; margin-bottom: 0.5rem;">Lessons & Improvements:</p>
+            <ul style="margin-top: 0;">
+              <li>Established formal change notification process for network changes</li>
+              <li>Created shared documentation for IP ranges and exclusions</li>
+              <li>Added Zscaler IP feeds to detection exclusions</li>
+              <li>Built validation step: "Does this affect security tooling?"</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Key insight:</span> "The technical detection worked fine — the gap was organizational. Change management and cross-team communication are just as important as the tools themselves."
+        </p>
+      </div>
+
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>Tell me about an achievement you're proud of</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+          <div>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">What I Built: Email & SMS Threat Analysis Platform</p>
+            <ul style="margin-top: 0;">
+              <li>Personal project — built my own phishing/threat analysis platform</li>
+              <li>Analyzes suspicious emails and SMS messages</li>
+              <li>Integrates multiple threat intelligence sources</li>
+              <li>Custom detection engine with my own rules and logic</li>
+            </ul>
+            <p style="color: #6bcf6b; font-weight: bold; margin-bottom: 0.5rem;">Technical Architecture:</p>
+            <ul style="margin-top: 0;">
+              <li><strong>Input:</strong> Forward suspicious email/SMS to the platform</li>
+              <li><strong>Threat Intel Integration:</strong> Multiple feeds — VirusTotal, URLScan, AbuseIPDB, etc.</li>
+              <li><strong>Custom Detection Engine:</strong> My own rules for patterns, indicators, red flags</li>
+              <li><strong>2-Way AI Analysis:</strong></li>
+              <ul style="margin-left: 1rem;">
+                <li>Pass 1: Intent analysis — what is this message trying to do?</li>
+                <li>Pass 2: Overall assessment — combining all signals for verdict</li>
+              </ul>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ffd93d; font-weight: bold; margin-bottom: 0.5rem;">Why It's Meaningful:</p>
+            <ul style="margin-top: 0;">
+              <li>Solves a real problem — phishing is #1 attack vector</li>
+              <li>Shows end-to-end security engineering skills</li>
+              <li>Demonstrates I can build, not just configure</li>
+              <li>Practical tool I actually use</li>
+            </ul>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">What It Demonstrates:</p>
+            <ul style="margin-top: 0;">
+              <li>✅ Threat intelligence integration</li>
+              <li>✅ Detection engineering mindset</li>
+              <li>✅ AI/ML application to security</li>
+              <li>✅ Initiative — built this on my own time</li>
+              <li>✅ Full-stack capability — not just security config</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">How to say it:</span> "I built my own email and SMS threat analysis platform. It integrates multiple threat intel feeds, runs through my custom detection engine, and uses a 2-pass AI analysis — first for intent, then for overall verdict. It's something I use myself and it shows I can build security tools, not just operate them."
+        </p>
+      </div>
+
+      <div class="topic-grid">
+        <div class="cheat-section">
+          <h3>What are your favorite security tools?</h3>
+          <ul>
+            <li><strong>MDE + Sentinel:</strong> Unified XDR + SIEM, KQL hunting, native integration</li>
+            <li><strong>Cortex XDR:</strong> Strong behavioral detection, XSOAR automation</li>
+            <li><strong>Splunk:</strong> Most flexible, SPL can do anything</li>
+            <li><span class="key-phrase">Key point:</span> "Right tool depends on environment — I wouldn't recommend Sentinel to a non-Microsoft shop"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>How do you calculate risk?</h3>
+          <ul>
+            <li><strong>Formula:</strong> Risk = Likelihood × Impact</li>
+            <li><strong>Likelihood:</strong> Threat capability, vulnerability exposure, existing controls</li>
+            <li><strong>Impact:</strong> Financial, operational, reputational, regulatory</li>
+            <li><strong>Business terms:</strong> "X days downtime" or "$Y regulatory fine"</li>
+            <li><span class="key-phrase">Key point:</span> "Translate risk scores to business impact for executives"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>What framework for cloud risk?</h3>
+          <ul>
+            <li><strong>First:</strong> Shared Responsibility Model — what's on us vs. provider</li>
+            <li><strong>Then:</strong> CIS Benchmarks for specific cloud (Azure/AWS/GCP)</li>
+            <li><strong>Broader:</strong> NIST CSF, CSA Cloud Controls Matrix</li>
+            <li><strong>Focus areas:</strong> Identity, Data, Network, Logging</li>
+            <li><span class="key-phrase">Key point:</span> "Those four cover most cloud risk"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>How do you stay up to date?</h3>
+          <ul>
+            <li><strong>Threat intel:</strong> CISA alerts, Microsoft TI, vendor blogs</li>
+            <li><strong>Podcasts:</strong> Risky Business, Darknet Diaries</li>
+            <li><strong>Communities:</strong> Reddit, LinkedIn, local meetups</li>
+            <li><strong>Hands-on:</strong> Home lab, DietIQ startup, personal projects</li>
+            <li><span class="key-phrase">Key point:</span> "Mix of passive consumption and active building"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Describe the IR process. Most important phase?</h3>
+          <ul>
+            <li><strong>NIST phases:</strong> Preparation → Detection → Containment → Eradication → Recovery → Post-Incident</li>
+            <li><strong>Most important — Preparation:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>"You can't buy preparation during an incident"</li>
+              <li>Playbooks, tools, training must be ready beforehand</li>
+            </ul>
+            <li><strong>Or — Post-Incident:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>"Where organizations actually improve"</li>
+              <li>Most teams skip it — same mistakes repeat</li>
+            </ul>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Describe the NIST Cybersecurity Framework</h3>
+          <ul>
+            <li><strong>5 Functions:</strong> Identify → Protect → Detect → Respond → Recover</li>
+            <li><strong>Tiers:</strong> 1 (Partial) → 4 (Adaptive) maturity</li>
+            <li><strong>Profiles:</strong> Current state vs. target state</li>
+            <li><strong>Value:</strong> Business-focused, works across industries</li>
+            <li><span class="key-phrase">Key point:</span> "Framework to organize and identify gaps, not prescriptive checklist"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Security vs. Compliance — which is more important?</h3>
+          <ul>
+            <li><strong>Security is the goal</strong> — compliance is a baseline</li>
+            <li><strong>Compliant ≠ Secure:</strong> Checkbox mentality gets breached</li>
+            <li><strong>But compliance enables business:</strong> Contracts, regulations require it</li>
+            <li><span class="key-phrase">Answer:</span> "Security is more important, but compliance enables business. They're complementary — compliance sets the floor, security raises the bar."</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Greatest threat to consulting firms?</h3>
+          <ul>
+            <li><strong>Supply chain (in reverse):</strong> You ARE the supply chain to clients</li>
+            <li>If Accenture compromised → attackers reach Fortune 500 clients</li>
+            <li><strong>Also:</strong> AI-powered social engineering, insider threat at scale</li>
+            <li><span class="key-phrase">Answer:</span> "Consultants have access to client environments — you're a high-value target to reach others"</li>
+          </ul>
+        </div>
+      </div>
+
       <!-- ==================== EXPANDED BEHAVIORAL CONTEXT ==================== -->
       <h2>🗣️ Behavioral Questions — Quick Context</h2>
 
