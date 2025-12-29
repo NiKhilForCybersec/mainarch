@@ -335,6 +335,17 @@
             <li><span class="good-text">Frame:</span> "Enable safe adoption, don't block"</li>
           </ul>
         </div>
+
+        <div class="cheat-section">
+          <h3>AI Discovery Resource</h3>
+          <ul>
+            <li><strong>thereisanaiforthat.com</strong> — Database of AI tools by use case</li>
+            <li>Find the right AI for your specific problem</li>
+            <li>Useful for: shadow AI discovery, approved tool selection</li>
+            <li>Shows the explosion of AI tools available</li>
+            <li><span class="key-phrase">Tip:</span> "Know what's out there before your users find it first"</li>
+          </ul>
+        </div>
       </div>
 
       <!-- ==================== SIEM RECOMMENDATIONS ==================== -->
@@ -980,6 +991,191 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- ==================== DIETIQ STARTUP SECURITY ==================== -->
+      <h2>🚀 Side Project: DietIQ Startup Security</h2>
+
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>Overview — What I'm Doing</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+          <div>
+            <ul>
+              <li><strong>Role:</strong> Security advisor for DietIQ — a health/nutrition startup</li>
+              <li><strong>Stack:</strong> GCP infrastructure, Firebase (backend), GitHub (code)</li>
+              <li><strong>Approach:</strong> Security defaults first — foundational controls while business evolves</li>
+              <li><strong>Why defaults:</strong> Startup = frequent changes to infra/business model, so focus on baseline security that won't break agility</li>
+              <li><strong>Time investment:</strong> Weekend monitoring and periodic reviews</li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li><strong>Why this matters for consulting:</strong></li>
+              <ul style="margin-left: 1rem;">
+                <li>Shows initiative beyond day job</li>
+                <li>GCP experience (not just Azure)</li>
+                <li>Startup mindset — security that enables, not blocks</li>
+                <li>End-to-end ownership of security program</li>
+                <li>Practical cloud security implementation</li>
+              </ul>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-grid">
+        <div class="cheat-section">
+          <h3>GCP Security Defaults — Step by Step</h3>
+          <ul>
+            <li><strong>1. Organization & IAM:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Organization policy constraints enabled</li>
+              <li>Least privilege IAM — no primitive roles (Owner/Editor)</li>
+              <li>Service accounts with minimal permissions</li>
+              <li>MFA enforced for all users</li>
+            </ul>
+            <li><strong>2. Network Security:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>VPC with private subnets where possible</li>
+              <li>Firewall rules — deny by default, allow specific</li>
+              <li>Cloud NAT for outbound (no public IPs on instances)</li>
+            </ul>
+            <li><strong>3. Logging & Monitoring:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Cloud Audit Logs enabled (Admin Activity, Data Access)</li>
+              <li>Log sinks to Cloud Storage for retention</li>
+              <li>Basic alerting on IAM changes, firewall modifications</li>
+            </ul>
+            <li><strong>4. Security Command Center:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Enabled for vulnerability findings</li>
+              <li>Asset inventory visibility</li>
+              <li>Misconfiguration detection</li>
+            </ul>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Firebase Security — Step by Step</h3>
+          <ul>
+            <li><strong>1. Authentication:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Firebase Auth with email verification required</li>
+              <li>Rate limiting on auth endpoints</li>
+              <li>Password strength requirements</li>
+            </ul>
+            <li><strong>2. Firestore Security Rules:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Default deny — no open read/write</li>
+              <li>User can only access own data (request.auth.uid == userId)</li>
+              <li>Validate data types and required fields</li>
+              <li>Rate limiting via rules where applicable</li>
+            </ul>
+            <li><strong>3. Storage Rules:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Authenticated users only</li>
+              <li>File type validation (no executable uploads)</li>
+              <li>Size limits on uploads</li>
+            </ul>
+            <li><strong>4. App Check:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Enabled to verify legitimate app requests</li>
+              <li>Prevents API abuse from unauthorized clients</li>
+            </ul>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>GitHub Security — Step by Step</h3>
+          <ul>
+            <li><strong>1. Repository Settings:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Branch protection on main — require PR reviews</li>
+              <li>No direct pushes to main</li>
+              <li>Signed commits encouraged</li>
+            </ul>
+            <li><strong>2. Secret Scanning:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>GitHub secret scanning enabled</li>
+              <li>Push protection — block commits with secrets</li>
+              <li>Alerts on exposed credentials</li>
+            </ul>
+            <li><strong>3. Dependabot:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Dependency vulnerability alerts enabled</li>
+              <li>Auto PRs for security updates</li>
+              <li>Weekly dependency review</li>
+            </ul>
+            <li><strong>4. GitHub Actions Security:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>SAST scanning in CI pipeline (CodeQL)</li>
+              <li>Container scanning if using Docker</li>
+              <li>Secrets in GitHub Secrets, not code</li>
+              <li>Least privilege for workflow permissions</li>
+            </ul>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Weekend Monitoring Routine</h3>
+          <ul>
+            <li><strong>Quick checks (30 min/week):</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Security Command Center — new findings?</li>
+              <li>Firebase console — unusual auth patterns?</li>
+              <li>GitHub — Dependabot alerts, secret scanning</li>
+              <li>GCP Audit Logs — any IAM changes?</li>
+            </ul>
+            <li><strong>Monthly deeper review:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>IAM permissions audit — any drift?</li>
+              <li>Firestore/Storage rules review</li>
+              <li>Cost anomalies (could indicate compromise)</li>
+            </ul>
+            <li><span class="key-phrase">Philosophy:</span> "Security defaults now, mature controls as the business stabilizes"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Why "Defaults First" Approach</h3>
+          <ul>
+            <li><strong>Startup reality:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Business model still evolving</li>
+              <li>Infrastructure changes frequently</li>
+              <li>Small team, limited security budget</li>
+              <li>Speed to market matters</li>
+            </ul>
+            <li><strong>Security defaults provide:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Baseline protection without blocking development</li>
+              <li>Low maintenance overhead</li>
+              <li>Foundation to build on later</li>
+              <li>Compliance readiness when needed</li>
+            </ul>
+            <li><strong>What I'm NOT doing (yet):</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>❌ Full SIEM deployment — overkill for current stage</li>
+              <li>❌ Complex DLP — no sensitive data at scale yet</li>
+              <li>❌ Penetration testing — premature, app still changing</li>
+              <li>✅ Will add as business matures and stabilizes</li>
+            </ul>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>How to Talk About It in Interview</h3>
+          <ul>
+            <li><strong>If asked about side projects:</strong></li>
+            <p style="background: rgba(74, 158, 255, 0.1); padding: 0.75rem; border-radius: 8px; margin: 0.5rem 0;">
+              "I'm helping a friend's startup, DietIQ, with their security posture. They're on GCP with Firebase backend and code on GitHub. Since they're early stage with frequent changes, I focused on security defaults — things like proper IAM, Firestore security rules, GitHub secret scanning, and basic monitoring. I do weekend check-ins to review any alerts. The philosophy is enable secure development without blocking agility — we'll mature the controls as the business stabilizes."
+            </p>
+            <li><strong>If asked about GCP experience:</strong></li>
+            <p style="background: rgba(74, 158, 255, 0.1); padding: 0.75rem; border-radius: 8px; margin: 0.5rem 0;">
+              "My day job is Azure/Microsoft focused, but I have hands-on GCP experience through a startup I advise. I've set up Security Command Center, Cloud Audit Logs, IAM best practices, and Firebase security rules. It's given me good perspective on multi-cloud security."
+            </p>
+          </ul>
+        </div>
       </div>
 
       <!-- ==================== EXPANDED BEHAVIORAL CONTEXT ==================== -->
