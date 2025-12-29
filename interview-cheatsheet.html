@@ -115,13 +115,22 @@
         </div>
 
         <div class="cheat-section">
-          <h3>Why This Firm? (Customize!)</h3>
+          <h3>Why This Firm? — Accenture Security</h3>
           <ul>
-            <li><strong>Scale:</strong> Work with largest, most complex organizations</li>
-            <li><strong>End-to-end:</strong> Not just assessments — implementation and transformation</li>
-            <li><strong>Growth:</strong> Culture of developing people, path to senior roles</li>
-            <li><span class="key-phrase">Do your homework:</span> Know their recent acquisitions, offerings, thought leadership</li>
-            <li>Accenture: Largest security practice, $60B+ company, strategic + hands-on delivery</li>
+            <li><strong>Scale:</strong> 25,000+ cybersecurity professionals, 40+ Cyber Fusion Centers globally</li>
+            <li><strong>MSSP Leader:</strong> #1 in Gartner Market Share for Managed Security Services</li>
+            <li><strong>Key Acquisitions (22+ since 2015):</strong></li>
+            <ul style="margin-left: 1rem; margin-top: 0.5rem;">
+              <li><strong>Symantec Cyber Security Services (2020):</strong> 6 global SOCs (US, UK, India, Australia, Singapore, Japan), 300+ employees, MSSP platform, threat intelligence</li>
+              <li><strong>CyberCX (2024-25):</strong> Largest cyber acquisition — 1,400 professionals in APAC, offensive security, managed detection & response</li>
+              <li><strong>IAMConcepts (2025):</strong> Canadian IAM specialist — identity & access management services</li>
+              <li><strong>Innotec Security (2023):</strong> 500 professionals in Spain, cybersecurity-as-a-service</li>
+              <li><strong>6point6 (2024):</strong> UK consultancy — cloud, data, cybersecurity for government/defense</li>
+              <li><strong>Others:</strong> iDefense (threat intel), FusionX (red team), Context, Revolutionary Security, Sentor (Sweden)</li>
+            </ul>
+            <li><strong>Services:</strong> Strategy → Protection → Resilience → Industry-specific cyber</li>
+            <li><strong>New Focus (2024):</strong> Gen AI security, deepfake protection, quantum-safe solutions</li>
+            <li><span class="key-phrase">Key stat:</span> "223% surge in deepfake tools on dark web Q1 2024" (Accenture research)</li>
           </ul>
         </div>
 
@@ -401,6 +410,360 @@
         </div>
       </div>
 
+      <!-- ==================== MICROSOFT SECURITY STACK ==================== -->
+      <h2>🛡️ Microsoft Security Stack (Quick Reference)</h2>
+
+      <div class="topic-grid">
+        <div class="cheat-section">
+          <h3>MDE — Microsoft Defender for Endpoint</h3>
+          <ul>
+            <li><strong>What:</strong> EDR/XDR for endpoints (Windows, macOS, Linux, mobile)</li>
+            <li><strong>Key features:</strong> Behavioral detection, ASR rules, live response, TVM (Threat & Vulnerability Management)</li>
+            <li><strong>ASR Rules:</strong> Block Office macros, credential stealing, unsigned scripts, ransomware behaviors</li>
+            <li><strong>Advanced Hunting:</strong> KQL-based threat hunting across endpoint telemetry</li>
+            <li><strong>Device Control:</strong> USB restrictions, removable media policies</li>
+            <li><span class="key-phrase">Key point:</span> "1-5% CPU in steady state, minimal user impact"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>MDI — Microsoft Defender for Identity</h3>
+          <ul>
+            <li><strong>What:</strong> Identity threat detection (monitors AD domain controllers)</li>
+            <li><strong>Detects:</strong> Pass-the-hash, golden ticket, DCSync, lateral movement, recon</li>
+            <li><strong>How:</strong> Sensor on DCs captures authentication traffic</li>
+            <li><strong>Key detections:</strong> Suspicious auth patterns, honey tokens, LDAP queries</li>
+            <li><strong>Integration:</strong> Feeds alerts to Sentinel/XDR portal</li>
+            <li><span class="key-phrase">Use case:</span> "Catch identity-based attacks before they escalate"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>MDO — Microsoft Defender for Office 365</h3>
+          <ul>
+            <li><strong>What:</strong> Email & collaboration security (Exchange, Teams, SharePoint)</li>
+            <li><strong>Safe Attachments:</strong> Sandbox detonation for malicious files</li>
+            <li><strong>Safe Links:</strong> URL rewriting and time-of-click protection</li>
+            <li><strong>Anti-phishing:</strong> Impersonation detection, mailbox intelligence</li>
+            <li><strong>Attack Simulation:</strong> Phishing simulation for user training</li>
+            <li><span class="key-phrase">Key point:</span> "First line of defense — email is #1 attack vector"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>MDCA — Microsoft Defender for Cloud Apps</h3>
+          <ul>
+            <li><strong>What:</strong> CASB (Cloud Access Security Broker)</li>
+            <li><strong>Shadow IT:</strong> Discover unsanctioned cloud apps via proxy/firewall logs</li>
+            <li><strong>App Governance:</strong> Control OAuth app permissions</li>
+            <li><strong>Session Controls:</strong> Conditional Access App Control for real-time monitoring</li>
+            <li><strong>DLP:</strong> Content inspection in cloud apps (Box, Salesforce, etc.)</li>
+            <li><span class="key-phrase">Use case:</span> "What SaaS apps are employees using without IT knowing?"</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ==================== XDR-FIRST APPROACH ==================== -->
+      <h2>🎯 XDR-First Detection Approach</h2>
+
+      <div class="cheat-section">
+        <ul>
+          <li><strong>Philosophy:</strong> Let XDR handle what it does best — endpoint, identity, email, cloud apps</li>
+          <li><strong>SIEM role:</strong> Correlation across non-XDR sources, compliance, long-term retention, custom detections</li>
+          <li><strong>Don't duplicate:</strong> If MDE detects ransomware behavior, don't recreate same rule in Sentinel</li>
+          <li><strong>XDR advantages:</strong> Richer context (process tree, user behavior), automated response, unified incident</li>
+          <li><strong>When SIEM adds value:</strong></li>
+          <ul style="margin-left: 1rem;">
+            <li>Network devices (firewalls, proxies) not covered by XDR</li>
+            <li>Custom/legacy applications</li>
+            <li>Cross-platform correlation (network + endpoint + identity)</li>
+            <li>Compliance/audit log retention requirements</li>
+          </ul>
+          <li><span class="key-phrase">My approach:</span> "During migration, we found 70%+ of legacy rules duplicated XDR detections"</li>
+        </ul>
+      </div>
+
+      <!-- ==================== SIEM MIGRATION STEPS ==================== -->
+      <h2>🔄 SIEM Migration — End-to-End Steps</h2>
+
+      <div class="cheat-section">
+        <ol style="padding-left: 1.2rem;">
+          <li><strong>Discovery & Assessment</strong>
+            <ul><li>Inventory current log sources, rules, dashboards, integrations</li>
+            <li>Identify rule owners, understand detection intent</li></ul>
+          </li>
+          <li><strong>Architecture Design</strong>
+            <ul><li>Design target state (Sentinel workspaces, data connectors, retention tiers)</li>
+            <li>Plan XDR integration — what stays in SIEM vs. XDR native</li></ul>
+          </li>
+          <li><strong>Log Source Onboarding</strong>
+            <ul><li>Prioritize by coverage: identity → endpoint → network → cloud → apps</li>
+            <li>Validate parsing, normalization (ASIM in Sentinel)</li></ul>
+          </li>
+          <li><strong>Detection Translation</strong>
+            <ul><li>Map legacy rules to target (SPL → KQL)</li>
+            <li>Rationalize: retire duplicates, remove never-fired rules</li>
+            <li>Add MITRE ATT&CK mapping</li></ul>
+          </li>
+          <li><strong>Parallel Operations</strong>
+            <ul><li>Run both SIEMs simultaneously (we did ~90 days)</li>
+            <li>Compare alert fidelity, tune thresholds</li></ul>
+          </li>
+          <li><strong>Cutover & Decommission</strong>
+            <ul><li>SOC training, runbook updates, war room support</li>
+            <li>Retire legacy after validation period</li></ul>
+          </li>
+        </ol>
+        <p style="margin-top: 1rem;"><span class="key-phrase">Key insight:</span> "Migration is an opportunity to optimize, not just lift-and-shift"</p>
+      </div>
+
+      <!-- ==================== SECURITY FRAMEWORKS & MITRE ==================== -->
+      <h2>📋 Security Frameworks & MITRE Mapping</h2>
+
+      <div class="topic-grid">
+        <div class="cheat-section">
+          <h3>MITRE ATT&CK — How to Use It</h3>
+          <ul>
+            <li><strong>What:</strong> Knowledge base of adversary tactics, techniques, procedures (TTPs)</li>
+            <li><strong>Structure:</strong> Tactics (why) → Techniques (how) → Sub-techniques (specific methods)</li>
+            <li><strong>When to map:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Building/reviewing detection rules</li>
+              <li>Coverage gap analysis</li>
+              <li>Incident investigation (what technique was used?)</li>
+              <li>Threat intel (what TTPs does this threat actor use?)</li>
+            </ul>
+            <li><strong>Example:</strong> Credential dumping = T1003 (Technique) → T1003.001 (LSASS Memory)</li>
+            <li><span class="key-phrase">Practical use:</span> "We mapped all Sentinel rules to ATT&CK to find coverage gaps"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Framework to Detection Mapping</h3>
+          <ul>
+            <li><strong>NIST CSF → Detection:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Identify → Asset discovery, vulnerability scans</li>
+              <li>Protect → Preventive controls (ASR, firewall rules)</li>
+              <li>Detect → SIEM rules, XDR alerts, anomaly detection</li>
+              <li>Respond → SOAR playbooks, incident response</li>
+              <li>Recover → Backup monitoring, DR validation</li>
+            </ul>
+            <li><strong>CIS Controls → Use Cases:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Control 1 (Asset Inventory) → New device detection alerts</li>
+              <li>Control 4 (Secure Config) → Baseline deviation alerts</li>
+              <li>Control 8 (Audit Logs) → Log source health monitoring</li>
+            </ul>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Mental Framework — Assess Security Posture</h3>
+          <ul>
+            <li><strong>Step 1: Understand the business</strong> — What are crown jewels? Regulatory requirements?</li>
+            <li><strong>Step 2: Identify attack surface</strong> — Users, endpoints, cloud, network, third parties</li>
+            <li><strong>Step 3: Review controls by layer</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Identity (MFA? PAM? SSO?)</li>
+              <li>Endpoint (EDR? Patching? Hardening?)</li>
+              <li>Network (Segmentation? Firewall? NDR?)</li>
+              <li>Data (Classification? DLP? Encryption?)</li>
+              <li>Detection (SIEM? SOC? Threat hunting?)</li>
+            </ul>
+            <li><strong>Step 4: Assess maturity</strong> — Reactive → Proactive → Predictive</li>
+            <li><strong>Step 5: Prioritize gaps</strong> — Risk-based, quick wins vs. strategic</li>
+            <li><span class="key-phrase">Remember:</span> "Start with risk, not tools"</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ==================== DLP & SENSITIVE LABELS ==================== -->
+      <h2>🏷️ DLP & Sensitive Information Types</h2>
+
+      <div class="topic-grid">
+        <div class="cheat-section">
+          <h3>Sensitivity Labels (Purview)</h3>
+          <ul>
+            <li><strong>What:</strong> Classification labels applied to documents/emails</li>
+            <li><strong>Examples:</strong> Public, Internal, Confidential, Highly Confidential</li>
+            <li><strong>Actions:</strong> Encryption, watermarks, headers/footers, access restrictions</li>
+            <li><strong>Auto-labeling:</strong> Automatically apply based on content (SITs)</li>
+            <li><strong>Container labels:</strong> Apply to Teams, SharePoint sites, M365 Groups</li>
+            <li><span class="key-phrase">Key point:</span> "Labels follow the document — protection travels with data"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Sensitive Information Types (SITs)</h3>
+          <ul>
+            <li><strong>Built-in:</strong> Credit card, SSN, passport, health records (500+ types)</li>
+            <li><strong>Custom SITs:</strong> Regex patterns for company-specific data (employee IDs, project codes)</li>
+            <li><strong>Keyword dictionaries:</strong> Lists of terms (product names, code words)</li>
+            <li><strong>Confidence levels:</strong> High/Medium/Low based on pattern + context</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>EDM — Exact Data Match</h3>
+          <ul>
+            <li><strong>What:</strong> Match against actual sensitive data (not just patterns)</li>
+            <li><strong>Use case:</strong> "Detect if someone shares a real customer record, not just any SSN format"</li>
+            <li><strong>How:</strong> Hash your sensitive data table, upload to Purview, match against outbound content</li>
+            <li><strong>Example:</strong> Upload customer database → detect exact matches in emails/files</li>
+            <li><strong>Advantage:</strong> Lower false positives than regex patterns</li>
+            <li><span class="key-phrase">Trade-off:</span> "More accurate but requires maintaining data refresh"</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ==================== COMMON LOG SOURCES ==================== -->
+      <h2>📊 Common Log Sources (Sound Technical)</h2>
+
+      <div class="topic-grid">
+        <div class="cheat-section">
+          <h3>Identity & Access</h3>
+          <ul>
+            <li><strong>Azure AD / Entra ID:</strong> Sign-in logs, audit logs, risky users, Conditional Access</li>
+            <li><strong>On-prem AD:</strong> Security events (4624 logon, 4625 failed, 4768 Kerberos TGT)</li>
+            <li><strong>Okta/Ping:</strong> Authentication events, MFA challenges, app access</li>
+            <li><strong>PAM (CyberArk):</strong> Privileged session recordings, credential checkouts</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Endpoint</h3>
+          <ul>
+            <li><strong>MDE:</strong> DeviceProcessEvents, DeviceNetworkEvents, DeviceFileEvents, DeviceLogonEvents</li>
+            <li><strong>Sysmon:</strong> Process creation (1), network (3), file create (11), registry (12/13)</li>
+            <li><strong>Windows Security:</strong> 4688 (process), 4663 (file access), 4657 (registry)</li>
+            <li><strong>CrowdStrike/Carbon Black:</strong> Similar telemetry — process, network, file, registry</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Network</h3>
+          <ul>
+            <li><strong>Firewall (Palo Alto, Fortinet):</strong> Traffic logs, threat logs, URL filtering</li>
+            <li><strong>Proxy (Zscaler, Netskope):</strong> Web traffic, blocked categories, CASB events</li>
+            <li><strong>DNS:</strong> Query logs — detect C2 beaconing, DGA domains</li>
+            <li><strong>VPN:</strong> Connection logs, geo-location anomalies</li>
+            <li><strong>NDR (Darktrace, Vectra):</strong> Network anomalies, lateral movement</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Cloud & SaaS</h3>
+          <ul>
+            <li><strong>Azure Activity:</strong> Resource changes, role assignments, policy modifications</li>
+            <li><strong>AWS CloudTrail:</strong> API calls, console logins, IAM changes</li>
+            <li><strong>O365 Unified Audit:</strong> SharePoint, Teams, Exchange admin actions</li>
+            <li><strong>Salesforce:</strong> Login history, setup audit trail, data exports</li>
+            <li><strong>GitHub:</strong> Push events, branch protection changes, secrets scanning</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ==================== JOB DESCRIPTION ALIGNMENT ==================== -->
+      <h2>📝 Job Description — Key Alignments</h2>
+
+      <div class="cheat-section">
+        <h4 style="color: #4a9eff;">Security Consultant Role Expectations</h4>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+          <thead>
+            <tr style="border-bottom: 2px solid #4a9eff;">
+              <th style="text-align: left; padding: 0.5rem;">They Want</th>
+              <th style="text-align: left; padding: 0.5rem;">Your Experience</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;">Security assessments</td>
+              <td style="padding: 0.5rem;">Evaluated legacy stack, identified gaps, built roadmap</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;">SIEM/SOAR experience</td>
+              <td style="padding: 0.5rem;">Splunk → Sentinel migration, rule translation, SOAR playbooks</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;">Cloud security</td>
+              <td style="padding: 0.5rem;">Azure-first transformation, Entra ID, Defender suite</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;">Endpoint protection</td>
+              <td style="padding: 0.5rem;">MDE deployment, ASR rules, coexistence planning</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;">Data protection/DLP</td>
+              <td style="padding: 0.5rem;">Symantec → Purview migration, sensitivity labels, policies</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;">Stakeholder management</td>
+              <td style="padding: 0.5rem;">Worked with IT, Legal, SOC, executives during transformation</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;">Documentation</td>
+              <td style="padding: 0.5rem;">Runbooks, SOPs, training materials for SOC transition</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.5rem;">Client-facing</td>
+              <td style="padding: 0.5rem;">Fortune 500 customers, compliance requirements, audits</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ==================== EXPANDED BEHAVIORAL CONTEXT ==================== -->
+      <h2>🗣️ Behavioral Questions — Quick Context</h2>
+
+      <div class="topic-grid">
+        <div class="cheat-section">
+          <h3>Failure Stories — What They're Looking For</h3>
+          <ul>
+            <li>✅ <strong>Ownership:</strong> "This was my failure, not someone else's"</li>
+            <li>✅ <strong>Impact awareness:</strong> Show you understood the consequences</li>
+            <li>✅ <strong>Quick action:</strong> What you did immediately to fix it</li>
+            <li>✅ <strong>Systemic fix:</strong> Process/checklist created to prevent recurrence</li>
+            <li>❌ <strong>Don't:</strong> Blame others, minimize impact, or pick a fake failure</li>
+            <li><span class="key-phrase">Your story:</span> ASR rules blocked Finance monthly scripts — 2 week audit wasn't enough</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Conflict Stories — What They're Looking For</h3>
+          <ul>
+            <li>✅ <strong>Empathy first:</strong> "I tried to understand their perspective"</li>
+            <li>✅ <strong>Data-driven:</strong> Brought evidence, not just opinions</li>
+            <li>✅ <strong>Collaborative:</strong> Found a solution that worked for everyone</li>
+            <li>✅ <strong>Relationship preserved:</strong> Ended on good terms</li>
+            <li>❌ <strong>Don't:</strong> Make yourself the hero who "won" the argument</li>
+            <li><span class="key-phrase">Your story:</span> Golden Image / IT Ops — proved offboard/reonboard works</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Influence Stories — What They're Looking For</h3>
+          <ul>
+            <li>✅ <strong>No authority:</strong> Couldn't force anyone to do anything</li>
+            <li>✅ <strong>Persuasion:</strong> Used logic, data, demonstration</li>
+            <li>✅ <strong>Made their life easier:</strong> Framed it as helping them</li>
+            <li>✅ <strong>Built relationship:</strong> They came to you for advice later</li>
+            <li><span class="key-phrase">Your story:</span> Azure Storage Blob — proposed KQL + workbook instead of script</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Above & Beyond — What They're Looking For</h3>
+          <ul>
+            <li>✅ <strong>Initiative:</strong> Nobody asked you to do this</li>
+            <li>✅ <strong>Saw opportunity:</strong> Identified inefficiency or problem</li>
+            <li>✅ <strong>Delivered value:</strong> Measurable improvement</li>
+            <li>✅ <strong>Replicable:</strong> Others can use what you built</li>
+            <li><span class="key-phrase">Your story:</span> FireEye HX automation — 4-5 hours weekly → automated</li>
+          </ul>
+        </div>
+      </div>
+
       <!-- ==================== ONE-LINERS ==================== -->
       <h2>💬 One-Liners to Remember</h2>
 
@@ -414,6 +777,8 @@
           <li><strong>On AI security:</strong> "AI is the new shadow IT problem — enable safe adoption, don't just block."</li>
           <li><strong>On weakness:</strong> "Nobody judges you for asking questions — they appreciate faster problem resolution."</li>
           <li><strong>On XDR vs SIEM:</strong> "Don't duplicate — let each tool do what it's best at."</li>
+          <li><strong>On migration:</strong> "Migration is an opportunity to optimize, not just lift-and-shift."</li>
+          <li><strong>On security posture:</strong> "Start with risk, not tools."</li>
         </ul>
       </div>
 
