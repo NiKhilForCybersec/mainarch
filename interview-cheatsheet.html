@@ -181,6 +181,58 @@
         </div>
 
         <div class="cheat-section">
+          <h3>AI Limitations — Current Reality Check</h3>
+          <ul>
+            <li><strong>Processing power bottleneck:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Single ChatGPT query uses ~10x more energy than a Google search</li>
+              <li>Training GPT-4 estimated at $100M+ and months of compute</li>
+              <li>GPU shortage — Nvidia H100s are the bottleneck for AI scaling</li>
+            </ul>
+            <li><strong>Electricity & sustainability:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>AI data centers projected to consume 3-4% of global electricity by 2030</li>
+              <li>Single large model training can emit 300+ tons of CO2</li>
+              <li>Cooling infrastructure is a major cost factor</li>
+            </ul>
+            <li><strong>AI Agent overhead:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>One agentic task can trigger 10-100+ API calls (back and forth)</li>
+              <li>Each "thinking step" consumes tokens and compute</li>
+              <li>Compound costs: agent loops can spiral quickly</li>
+            </ul>
+            <li><span class="key-phrase">Reality:</span> "Scaling AI isn't just about smarter models — it's limited by physics and economics"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>DeepSeek — The Efficiency Breakthrough</h3>
+          <ul>
+            <li><strong>What happened:</strong> Chinese AI lab achieved GPT-4 level performance at fraction of cost</li>
+            <li><strong>The numbers:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>DeepSeek-V3 trained for ~$5-6 million (vs GPT-4's estimated $100M+)</li>
+              <li>Comparable benchmark scores on reasoning, coding, math</li>
+              <li>Open-sourced the model weights</li>
+            </ul>
+            <li><strong>How they did it:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li><strong>Mixture of Experts (MoE):</strong> 671B total parameters, but only ~37B active per query</li>
+              <li><strong>Multi-head Latent Attention:</strong> Reduces memory requirements significantly</li>
+              <li><strong>FP8 precision training:</strong> Lower precision = faster training, less memory</li>
+              <li><strong>Efficient architecture:</strong> Smart design over brute force compute</li>
+            </ul>
+            <li><strong>Security implications:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Powerful AI becomes accessible to more actors (good and bad)</li>
+              <li>Open-source = anyone can run uncensored versions locally</li>
+              <li>Lowers barrier for AI-powered attacks</li>
+            </ul>
+            <li><span class="key-phrase">Key takeaway:</span> "Efficiency gains democratize AI — that's both opportunity and risk"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
           <h3>AI Risk Landscape (Overview)</h3>
           <ul>
             <li><strong>Shadow AI:</strong> Employees using ChatGPT, Claude without approval — data leakage risk</li>
