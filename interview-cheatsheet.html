@@ -183,13 +183,41 @@
         <div class="cheat-section">
           <h3>AI Limitations — Current Reality Check</h3>
           <ul>
-            <li><strong>Processing power bottleneck:</strong></li>
+            <li><strong>Economics is NOT the bottleneck:</strong></li>
             <ul style="margin-left: 1rem;">
-              <li>Single ChatGPT query uses ~10x more energy than a Google search</li>
-              <li>Training GPT-4 estimated at $100M+ and months of compute</li>
-              <li>GPU shortage — Nvidia H100s are the bottleneck for AI scaling</li>
+              <li>Microsoft: $13B+ into OpenAI, Google: $30B+ annual AI spend</li>
+              <li>Meta, Amazon, Oracle building massive GPU clusters</li>
+              <li>Nations (US, China, UAE) treating AI as national priority</li>
+              <li>Money is pouring in — willingness to spend isn't the problem</li>
             </ul>
-            <li><strong>Electricity & sustainability:</strong></li>
+            <li><strong>Physics IS the real limiter:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li><strong>Speed of light:</strong> Data can only move so fast — can't buy faster physics</li>
+              <li><strong>Heat dissipation:</strong> More compute = more heat. Chips melt if pushed too hard</li>
+              <li><strong>Atomic scale:</strong> Transistors approaching atomic limits — quantum effects kick in</li>
+              <li><strong>Thermodynamics:</strong> Can't stack chips infinitely — heat has to go somewhere</li>
+            </ul>
+            <li><strong>Time-to-build constraints (even with unlimited money):</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Chip fabs: 3-5 years to build (only TSMC/Samsung can do advanced nodes)</li>
+              <li>Power grid upgrades: 5-10 years for new infrastructure</li>
+              <li>GPU shortage: Nvidia can only manufacture so fast</li>
+              <li>Data centers: Construction, cooling, permitting takes years</li>
+            </ul>
+            <li><strong>The memory wall problem:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Processors are fast, but memory sits far away — data moves slow</li>
+              <li>GPU waits for data more than it computes ("memory-bound")</li>
+              <li>Traditional design: CPU/GPU on one chip, RAM separate — long distance = latency</li>
+            </ul>
+            <li><strong>Nvidia's solution — 3D stacking (Blackwell/GB200):</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Stack memory directly ON TOP of the processor (HBM3e)</li>
+              <li>Vertical connections instead of horizontal — shorter path, faster data</li>
+              <li>Monolithic design: compute + memory in one package</li>
+              <li>Result: 30x performance gain for AI inference over previous gen</li>
+            </ul>
+            <li><strong>Electricity reality:</strong></li>
             <ul style="margin-left: 1rem;">
               <li>AI data centers projected to consume 3-4% of global electricity by 2030</li>
               <li>Single large model training can emit 300+ tons of CO2</li>
@@ -201,7 +229,7 @@
               <li>Each "thinking step" consumes tokens and compute</li>
               <li>Compound costs: agent loops can spiral quickly</li>
             </ul>
-            <li><span class="key-phrase">Reality:</span> "Scaling AI isn't just about smarter models — it's limited by physics and economics"</li>
+            <li><span class="key-phrase">Key insight:</span> "Scaling AI is limited by physics and time-to-build — not willingness to spend. That's why efficiency breakthroughs like DeepSeek matter — they work within physics constraints rather than just throwing more compute at it."</li>
           </ul>
         </div>
 
