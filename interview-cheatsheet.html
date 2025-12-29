@@ -280,6 +280,116 @@
         </div>
 
         <div class="cheat-section">
+          <h3>RSA NetWitness — Legacy Context (Migrated From)</h3>
+          <ul>
+            <li><strong>What it is:</strong> Network + endpoint detection, packet capture, UEBA</li>
+            <li><strong>Where it excels:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Deep packet inspection — full packet capture for forensics</li>
+              <li>Network visibility — sees traffic SIEM typically misses</li>
+              <li>Metadata extraction — enriches logs with network context</li>
+              <li>UEBA — behavioral analytics for insider threats</li>
+            </ul>
+            <li><strong>Challenges we faced:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>Complex architecture — Decoder, Concentrator, Broker, ESA components</li>
+              <li>High maintenance overhead — hardware-dependent, scaling issues</li>
+              <li>Expensive — licensing + infrastructure costs</li>
+              <li>Limited cloud visibility — built for on-prem network-centric model</li>
+              <li>Rule syntax learning curve — not as intuitive as SPL or KQL</li>
+            </ul>
+            <li><span class="key-phrase">Why we migrated:</span> "Cloud-first strategy made network-centric SIEM less relevant — needed XDR integration"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>My SIEM Recommendations (Based on Experience)</h3>
+          <ul>
+            <li><strong>Microsoft Sentinel — Recommend when:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>✅ Already invested in M365/Azure ecosystem</li>
+              <li>✅ Want unified XDR + SIEM experience</li>
+              <li>✅ Cloud-first or hybrid moving to cloud</li>
+              <li>✅ Need fast deployment with minimal infrastructure</li>
+              <li>⚠️ Watch for: Log ingestion costs — optimize with Basic Logs tier</li>
+            </ul>
+            <li><strong>Splunk — Recommend when:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>✅ Multi-cloud environment (AWS + Azure + GCP)</li>
+              <li>✅ Mature SOC with custom detection needs</li>
+              <li>✅ Team already proficient in SPL</li>
+              <li>✅ Need maximum flexibility and app ecosystem</li>
+              <li>⚠️ Watch for: TCO creep — licensing, infrastructure, admin overhead</li>
+            </ul>
+            <li><strong>RSA NetWitness — Recommend when:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>✅ Heavy on-prem network environment</li>
+              <li>✅ Need full packet capture for forensics/compliance</li>
+              <li>✅ Insider threat detection is priority (UEBA)</li>
+              <li>⚠️ Watch for: Cloud strategy — may not be future-proof</li>
+            </ul>
+            <li><strong>General guidance:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>"Don't migrate 1:1 — rationalize rules during migration"</li>
+              <li>"XDR handles 70%+ of what legacy SIEM rules did — focus SIEM on gaps"</li>
+              <li>"Match SIEM to ecosystem, not the other way around"</li>
+            </ul>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>SIEM Comparison — Quick Reference</h3>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+              <tr style="border-bottom: 2px solid #4a9eff;">
+                <th style="text-align: left; padding: 0.5rem;">Aspect</th>
+                <th style="text-align: left; padding: 0.5rem;">Sentinel</th>
+                <th style="text-align: left; padding: 0.5rem;">Splunk</th>
+                <th style="text-align: left; padding: 0.5rem;">RSA NetWitness</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid #333;">
+                <td style="padding: 0.5rem;"><strong>Best for</strong></td>
+                <td style="padding: 0.5rem;">Microsoft shops</td>
+                <td style="padding: 0.5rem;">Multi-cloud mature SOC</td>
+                <td style="padding: 0.5rem;">Network forensics</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #333;">
+                <td style="padding: 0.5rem;"><strong>Query language</strong></td>
+                <td style="padding: 0.5rem;">KQL</td>
+                <td style="padding: 0.5rem;">SPL</td>
+                <td style="padding: 0.5rem;">RSA syntax</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #333;">
+                <td style="padding: 0.5rem;"><strong>Deployment</strong></td>
+                <td style="padding: 0.5rem;">Cloud-native (SaaS)</td>
+                <td style="padding: 0.5rem;">Cloud or on-prem</td>
+                <td style="padding: 0.5rem;">Mostly on-prem</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #333;">
+                <td style="padding: 0.5rem;"><strong>XDR integration</strong></td>
+                <td style="padding: 0.5rem;">Native (Defender)</td>
+                <td style="padding: 0.5rem;">Via add-ons</td>
+                <td style="padding: 0.5rem;">Limited</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #333;">
+                <td style="padding: 0.5rem;"><strong>Strength</strong></td>
+                <td style="padding: 0.5rem;">M365 integration</td>
+                <td style="padding: 0.5rem;">Flexibility</td>
+                <td style="padding: 0.5rem;">Packet capture</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.5rem;"><strong>Weakness</strong></td>
+                <td style="padding: 0.5rem;">Cost at scale</td>
+                <td style="padding: 0.5rem;">Complexity</td>
+                <td style="padding: 0.5rem;">Cloud gaps</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cheat-section">
           <h3>SIEM vs XDR — The Modern Question</h3>
           <ul>
             <li><strong>XDR-first:</strong> Let XDR handle endpoint/identity/email detections natively</li>
