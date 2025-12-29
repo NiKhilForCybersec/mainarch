@@ -1152,52 +1152,53 @@
         <h4>Q: Tell me about a time you had to influence without authority <span class="time-indicator">90 sec</span></h4>
         
         <div class="answer-text">
-          <strong>Situation:</strong> During the MDE deployment, IT Ops had created a golden image with the MDE agent pre-installed. When they deployed it, 50+ devices ended up with duplicate device IDs—they couldn't be uniquely identified in the console.
+          <strong>Situation:</strong> We discovered that multiple teams were creating Azure Storage blobs for static websites without HTTPS — data exposed to the public, unencrypted. My manager asked me to figure out a process to find and track these.
           <br><br>
-          <strong>Task:</strong> IT Ops wanted to re-image all affected machines. That would take weeks and disrupt users. I needed to convince them there was a better way—but I had no authority over their team.
+          <strong>Task:</strong> His suggestion was to develop a Python or PowerShell script to scan and identify these misconfigurations. It was a reasonable approach, but I thought there might be a better way.
           <br><br>
-          <strong>Action:</strong> Instead of arguing, I offered to prove it. I took 5 pilot machines, ran the offboarding script, let them sit for the required period, then re-onboarded. Each got a clean, unique device ID.
+          <strong>Action:</strong> I agreed that scripting could work, but paused to think through the problem. I realized we already had diagnostic logs and Azure Activity logs enabled. Instead of building a separate scanning tool, we could write a KQL query to identify exposed storage accounts and track them in a Sentinel workbook.
           <br><br>
-          I documented the process, showed them the results, and offered to create the remediation script for the rest. I also helped them update the golden image SOP so it wouldn't happen again.
+          I pitched this to my manager: "Instead of a script that runs periodically, we get real-time visibility. The workbook shows current state, tracks remediation progress, and we can set up alerts for new violations."
           <br><br>
-          <strong>Result:</strong> They agreed to my approach. We fixed all 50 devices without re-imaging. More importantly, IT Ops started coming to me for advice on other MDE issues because I'd proven I was there to help, not criticize.
+          For the actual remediation — converting to HTTPS and enabling encryption — we did use PowerShell, but the execution and results were also tracked in the same workbook.
+          <br><br>
+          <strong>Result:</strong> My manager accepted the approach as a better solution. We implemented the workbook, and now we have continuous visibility into storage security posture rather than point-in-time scans.
         </div>
 
         <div class="key-points">
-          <strong>Key elements:</strong> Proved with evidence, didn't argue, made their life easier, built relationship
-          <br><strong>Consulting angle:</strong> This is exactly how you influence clients
+          <strong>Key elements:</strong> Respectfully pushed back, offered better solution, not just disagreement
+          <br><strong>Consulting angle:</strong> Shows you think about the best approach, not just execute what's asked
         </div>
 
         <details class="deep-dive">
-          <summary>Deep Dive — Golden Image Issue & Stakeholder Management</summary>
+          <summary>Deep Dive — Azure Storage Security Monitoring</summary>
           <div class="deep-dive-content">
-            <h5>What Actually Happened (Technical)</h5>
+            <h5>Why Workbook Was Better Than Script</h5>
             <div class="example-box">
-              <strong>The problem:</strong>
+              <strong>Script approach (manager's suggestion):</strong>
               <ul>
-                <li>IT Ops created a golden image (master template for new machines)</li>
-                <li>They installed and ONBOARDED MDE in the image before capturing it</li>
-                <li>Every machine deployed from that image had the SAME device ID</li>
-                <li>MDE portal showed 50+ devices as one device — couldn't distinguish them</li>
-                <li>Alerts, investigations, response actions — all broken</li>
+                <li>Runs periodically (daily/weekly)</li>
+                <li>Point-in-time snapshot</li>
+                <li>Separate tool to maintain</li>
+                <li>No historical tracking</li>
               </ul>
             </div>
             <div class="example-box">
-              <strong>Why IT Ops wanted to re-image:</strong>
+              <strong>Workbook approach (your suggestion):</strong>
               <ul>
-                <li>That's what they know — "start fresh"</li>
-                <li>Didn't trust that offboard/reonboard would work</li>
-                <li>Concerned about "breaking things" with scripts</li>
+                <li>Real-time visibility via KQL</li>
+                <li>Continuous monitoring</li>
+                <li>Uses existing infrastructure (Sentinel)</li>
+                <li>Tracks remediation progress over time</li>
+                <li>Can set up alerts for new violations</li>
               </ul>
             </div>
 
-            <h5>Your Approach (Why It Worked)</h5>
-            <div class="example-box">
-              <strong>Step 1: Don't argue — prove it</strong>
-              <ul>
-                <li>Asked for 5 pilot machines to test</li>
-                <li>Ran offboard script → waited 7 days (required) → ran onboard script</li>
-                <li>Each device got unique ID — showed them in portal</li>
+            <h5>Key Takeaway</h5>
+            <p>This story shows you don't just execute — you think about the best solution. You respectfully disagreed with your manager and offered a better approach.</p>
+          </div>
+        </details>
+      </div>
               </ul>
             </div>
             <div class="example-box">
@@ -1237,15 +1238,15 @@
         <h4>Q: Tell me about your biggest failure <span class="time-indicator">60-90 sec</span></h4>
         
         <div class="answer-text">
-          <strong>Situation:</strong> I enabled an ASR rule that blocks unsigned PowerShell scripts. I tested it in audit mode for one week—no alerts, looked clean.
+          <strong>Situation:</strong> I enabled an ASR rule that blocks unsigned PowerShell scripts. I tested it in audit mode for two weeks—no alerts, looked clean.
           <br><br>
-          <strong>What went wrong:</strong> A week after enforcement, Finance reported their weekly reporting script failed. It only runs on Fridays—I had enabled the rule on a Monday, so my one-week audit completely missed it.
+          <strong>What went wrong:</strong> Two days after enforcement, Finance reported their month-end reporting scripts failed. These scripts only run monthly, so my two-week audit completely missed them.
           <br><br>
-          <strong>Impact:</strong> Finance couldn't run their weekly reports. I had to create an emergency exclusion while we fixed it properly.
+          <strong>Impact:</strong> Finance couldn't run their month-end reports. I had to create an emergency exclusion while we fixed it properly.
           <br><br>
-          <strong>What I learned:</strong> Audit windows need to cover full business cycles, not arbitrary time periods. Now I run audit mode for 2-3 weeks minimum, and I specifically ask stakeholders about scheduled tasks and end-of-month processes.
+          <strong>What I learned:</strong> Audit windows need to cover full business cycles, not arbitrary time periods. Now I run audit mode for a full month minimum for any blocking rule, and I specifically ask stakeholders about scheduled tasks—weekly, monthly, quarterly processes.
           <br><br>
-          <strong>Process improvement:</strong> I created a pre-enforcement checklist that includes confirming with business units about periodic scripts. That checklist is now part of our standard process.
+          <strong>Process improvement:</strong> I created a pre-enforcement checklist that includes confirming with business units about periodic scripts. That checklist is now part of our standard ASR deployment process.
         </div>
 
         <div class="key-points">
@@ -1273,14 +1274,13 @@
               <ul>
                 <li>Blocks PowerShell scripts that look suspicious (encoded, obfuscated)</li>
                 <li>Great for stopping malware, but also blocks some legitimate scripts</li>
-                <li>Finance had a weekly reporting script that was unsigned and somewhat obfuscated</li>
+                <li>Finance had monthly reporting scripts that were unsigned</li>
               </ul>
             </div>
 
             <h5>What Went Wrong (Root Cause Analysis)</h5>
             <ul>
-              <li><strong>Audit period too short:</strong> 1 week didn't cover weekly processes</li>
-              <li><strong>Audit started on wrong day:</strong> Monday start → missed Friday-only script</li>
+              <li><strong>Audit period too short:</strong> 2 weeks didn't cover monthly processes</li>
               <li><strong>No stakeholder validation:</strong> Didn't ask Finance about scheduled tasks</li>
               <li><strong>Assumed silence = safe:</strong> No audit alerts ≠ no impact</li>
             </ul>
