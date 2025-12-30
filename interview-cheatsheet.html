@@ -904,91 +904,222 @@
       </div>
 
       <!-- ==================== COMMON LOG SOURCES ==================== -->
-      <h2>📊 Common Log Sources (Sound Technical)</h2>
+      <h2>📊 Common Log Sources — XDR vs Sentinel</h2>
 
-      <div class="topic-grid">
-        <div class="cheat-section">
-          <h3>Identity & Access</h3>
-          <ul>
-            <li><strong>Azure AD / Entra ID:</strong> Sign-in logs, audit logs, risky users, Conditional Access</li>
-            <li><strong>On-prem AD:</strong> Security events (4624 logon, 4625 failed, 4768 Kerberos TGT)</li>
-            <li><strong>Okta/Ping:</strong> Authentication events, MFA challenges, app access</li>
-            <li><strong>PAM (CyberArk):</strong> Privileged session recordings, credential checkouts</li>
-          </ul>
-        </div>
-
-        <div class="cheat-section">
-          <h3>Endpoint</h3>
-          <ul>
-            <li><strong>MDE:</strong> DeviceProcessEvents, DeviceNetworkEvents, DeviceFileEvents, DeviceLogonEvents</li>
-            <li><strong>Sysmon:</strong> Process creation (1), network (3), file create (11), registry (12/13)</li>
-            <li><strong>Windows Security:</strong> 4688 (process), 4663 (file access), 4657 (registry)</li>
-            <li><strong>CrowdStrike/Carbon Black:</strong> Similar telemetry — process, network, file, registry</li>
-          </ul>
-        </div>
-
-        <div class="cheat-section">
-          <h3>Network</h3>
-          <ul>
-            <li><strong>Firewall (Palo Alto, Fortinet):</strong> Traffic logs, threat logs, URL filtering</li>
-            <li><strong>Proxy (Zscaler, Netskope):</strong> Web traffic, blocked categories, CASB events</li>
-            <li><strong>DNS:</strong> Query logs — detect C2 beaconing, DGA domains</li>
-            <li><strong>VPN:</strong> Connection logs, geo-location anomalies</li>
-            <li><strong>NDR (Darktrace, Vectra):</strong> Network anomalies, lateral movement</li>
-          </ul>
-        </div>
-
-        <div class="cheat-section">
-          <h3>Cloud & SaaS</h3>
-          <ul>
-            <li><strong>Azure Activity:</strong> Resource changes, role assignments, policy modifications</li>
-            <li><strong>AWS CloudTrail:</strong> API calls, console logins, IAM changes</li>
-            <li><strong>O365 Unified Audit:</strong> SharePoint, Teams, Exchange admin actions</li>
-            <li><strong>Salesforce:</strong> Login history, setup audit trail, data exports</li>
-            <li><strong>GitHub:</strong> Push events, branch protection changes, secrets scanning</li>
-          </ul>
-        </div>
-
-        <div class="cheat-section">
-          <h3>Custom / Enterprise Applications (RevFlow Context)</h3>
-          <ul>
-            <li><strong>Salesforce (detailed):</strong></li>
-            <ul style="margin-left: 1rem;">
-              <li>Login History — user auth, IP, geo, browser</li>
-              <li>Setup Audit Trail — config changes, permission sets, profiles</li>
-              <li>Event Monitoring — report exports, API calls, bulk data downloads</li>
-              <li>Real-Time Events — login anomalies, session hijack detection</li>
+      <!-- XDR Handles Section -->
+      <div class="cheat-section" style="margin-bottom: 1.5rem; border-left: 4px solid #6bcf6b;">
+        <h3 style="color: #6bcf6b;">✅ XDR Handles Natively (No Sentinel Ingestion Needed)</h3>
+        <p style="margin-bottom: 1rem; color: #888;">Microsoft Defender XDR correlates these — available in Advanced Hunting without extra cost</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+          <div>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">🖥️ MDE — Endpoint (Data Plane)</p>
+            <ul style="margin-top: 0;">
+              <li>DeviceProcessEvents — process execution</li>
+              <li>DeviceNetworkEvents — network connections</li>
+              <li>DeviceFileEvents — file activity</li>
+              <li>DeviceLogonEvents — local/remote logons</li>
+              <li>DeviceRegistryEvents — registry changes</li>
+              <li>DeviceImageLoadEvents — DLL loads</li>
             </ul>
-            <li><strong>ServiceNow:</strong> Sys_audit table, login events, record changes, workflow executions</li>
-            <li><strong>Workday:</strong> Sign-on logs, security config changes, data access reports</li>
-            <li><strong>SAP:</strong> Security Audit Log (SM21), user changes (SM19), authorization checks</li>
-            <li><strong>Oracle EBS/Cloud:</strong> Login attempts, responsibility changes, concurrent requests</li>
-            <li><strong>Custom Web Apps:</strong> Application logs (auth, errors, transactions), WAF logs</li>
-            <li><strong>Database:</strong> SQL audit logs, privileged query execution, schema changes</li>
-            <li><strong>API Gateways:</strong> Kong, Apigee — request logs, rate limiting, auth failures</li>
-          </ul>
+          </div>
+          <div>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">🔐 MDI — Identity Threats (Data Plane)</p>
+            <ul style="margin-top: 0;">
+              <li>Pass-the-hash / Pass-the-ticket detection</li>
+              <li>Lateral movement paths</li>
+              <li>DCSync / DCShadow attacks</li>
+              <li>Golden ticket usage</li>
+              <li>LDAP / DNS reconnaissance</li>
+              <li>Brute force attempts</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">📧 MDO — Email Security (Data Plane)</p>
+            <ul style="margin-top: 0;">
+              <li>Phishing attempts blocked/delivered</li>
+              <li>Malware attachments</li>
+              <li>Safe Links click tracking</li>
+              <li>Impersonation attempts</li>
+              <li>Spam filtering results</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">☁️ MDCA — Cloud Apps (Data Plane)</p>
+            <ul style="margin-top: 0;">
+              <li>Shadow IT discovery</li>
+              <li>OAuth app permissions</li>
+              <li>Suspicious cloud app activity</li>
+              <li>Mass downloads / data exfil</li>
+              <li>Impossible travel (cloud apps)</li>
+            </ul>
+          </div>
         </div>
+        <p style="margin-top: 1rem; padding: 0.5rem; background: rgba(107, 207, 107, 0.1); border-radius: 8px;">
+          <span class="good-text">Key point:</span> These are already correlated in XDR incidents — don't duplicate into Sentinel unless you need long-term retention or compliance.
+        </p>
+      </div>
 
-        <div class="cheat-section">
-          <h3>Data Warehouse & Analytics</h3>
-          <ul>
-            <li><strong>Snowflake:</strong> Query history, login history, access history, data sharing logs</li>
-            <li><strong>Databricks:</strong> Audit logs, cluster events, notebook executions</li>
-            <li><strong>Power BI:</strong> Activity logs — report views, data exports, sharing</li>
-            <li><strong>Tableau:</strong> User activity, data source access, export events</li>
-          </ul>
+      <!-- Sentinel Required Section -->
+      <div class="cheat-section" style="margin-bottom: 1.5rem; border-left: 4px solid #ffd93d;">
+        <h3 style="color: #ffd93d;">⚠️ Needs Sentinel Ingestion (Management Plane + Non-Microsoft)</h3>
+        <p style="margin-bottom: 1rem; color: #888;">XDR doesn't see these — must ingest into Sentinel for visibility</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+          <div>
+            <p style="color: #ff6b6b; font-weight: bold; margin-bottom: 0.5rem;">📋 Entra ID Audit Logs (Management Plane)</p>
+            <ul style="margin-top: 0;">
+              <li>User added to privileged role ⚠️</li>
+              <li>MFA disabled for user ⚠️</li>
+              <li>Conditional Access policy changed ⚠️</li>
+              <li>Service principal credentials added ⚠️</li>
+              <li>Application permissions granted ⚠️</li>
+              <li>Password reset by admin ⚠️</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ff6b6b; font-weight: bold; margin-bottom: 0.5rem;">🔑 Entra ID Sign-in Logs (Data Plane)</p>
+            <ul style="margin-top: 0;">
+              <li>All user authentications</li>
+              <li>Conditional Access results</li>
+              <li>MFA prompt outcomes</li>
+              <li>Location, device, client app</li>
+              <li>Risky sign-ins correlation</li>
+              <li><em>Note: MDI covers some, but Sentinel gives full history</em></li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ff6b6b; font-weight: bold; margin-bottom: 0.5rem;">☁️ Azure Activity Logs (Management Plane)</p>
+            <ul style="margin-top: 0;">
+              <li>Resource creation/deletion</li>
+              <li>Role assignments (RBAC changes)</li>
+              <li>Policy modifications</li>
+              <li>Network security group changes</li>
+              <li>Key Vault access</li>
+              <li>Subscription-level changes</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ff6b6b; font-weight: bold; margin-bottom: 0.5rem;">🌐 Network (Non-Microsoft)</p>
+            <ul style="margin-top: 0;">
+              <li>Firewall: Palo Alto, Fortinet traffic/threat logs</li>
+              <li>Proxy: Zscaler, Netskope web traffic</li>
+              <li>DNS: Query logs for C2 detection</li>
+              <li>VPN: Connection logs, geo anomalies</li>
+              <li>NDR: Darktrace, Vectra anomalies</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ff6b6b; font-weight: bold; margin-bottom: 0.5rem;">🔐 On-Prem & Third-Party Identity</p>
+            <ul style="margin-top: 0;">
+              <li>On-prem AD: 4624, 4625, 4768, 4769</li>
+              <li>Okta / Ping: Auth events, MFA challenges</li>
+              <li>CyberArk: Session recordings, checkouts</li>
+              <li>Duo: MFA logs, bypass attempts</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ff6b6b; font-weight: bold; margin-bottom: 0.5rem;">🏢 SaaS & Enterprise Apps</p>
+            <ul style="margin-top: 0;">
+              <li>Salesforce: Login, audit trail, event monitoring</li>
+              <li>ServiceNow: Sys_audit, login events</li>
+              <li>Workday: Sign-on logs, config changes</li>
+              <li>SAP: SM21 audit log, SM19 user changes</li>
+              <li>AWS CloudTrail: API calls, IAM changes</li>
+              <li>GCP: Cloud Audit Logs</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ff6b6b; font-weight: bold; margin-bottom: 0.5rem;">📊 Data & DevOps</p>
+            <ul style="margin-top: 0;">
+              <li>Snowflake: Query/login/access history</li>
+              <li>Databricks: Audit logs, cluster events</li>
+              <li>GitHub/GitLab: Push, PR, secrets scanning</li>
+              <li>Azure DevOps: Pipeline runs, permissions</li>
+              <li>Kubernetes: RBAC, pod events, secrets</li>
+              <li>Database: SQL audit, privileged queries</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ff6b6b; font-weight: bold; margin-bottom: 0.5rem;">🛡️ Other Security Tools</p>
+            <ul style="margin-top: 0;">
+              <li>CrowdStrike / Carbon Black (if not XDR)</li>
+              <li>Vulnerability scanners: Qualys, Tenable</li>
+              <li>WAF logs: Cloudflare, AWS WAF</li>
+              <li>API Gateways: Kong, Apigee</li>
+              <li>DLP: Symantec, Forcepoint</li>
+            </ul>
+          </div>
         </div>
+        <p style="margin-top: 1rem; padding: 0.5rem; background: rgba(255, 217, 61, 0.1); border-radius: 8px;">
+          <span class="warning-text">Key point:</span> These logs are where you catch insider threats, privilege escalation, and attacks that bypass XDR. Management plane logs are critical — an attacker's first move after compromise is often to disable security controls.
+        </p>
+      </div>
 
-        <div class="cheat-section">
-          <h3>DevOps & CI/CD</h3>
-          <ul>
-            <li><strong>GitHub/GitLab:</strong> Push events, PR approvals, branch protection, secrets scanning alerts</li>
-            <li><strong>Azure DevOps:</strong> Pipeline runs, artifact access, permission changes</li>
-            <li><strong>Jenkins:</strong> Build logs, credential usage, plugin changes</li>
-            <li><strong>Docker/K8s:</strong> Container events, pod creation, RBAC changes, secrets access</li>
-            <li><strong>Terraform Cloud:</strong> Plan/apply logs, state access, variable changes</li>
-          </ul>
-        </div>
+      <!-- Summary Table -->
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>Quick Reference — Where Does Each Log Go?</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+          <thead>
+            <tr style="border-bottom: 2px solid #4a9eff;">
+              <th style="text-align: left; padding: 0.5rem;">Log Source</th>
+              <th style="text-align: center; padding: 0.5rem;">XDR</th>
+              <th style="text-align: center; padding: 0.5rem;">Sentinel</th>
+              <th style="text-align: left; padding: 0.5rem;">Why?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;">MDE endpoint telemetry</td>
+              <td style="padding: 0.5rem; text-align: center;">✅</td>
+              <td style="padding: 0.5rem; text-align: center;">Optional</td>
+              <td style="padding: 0.5rem;">XDR has full visibility, Sentinel for retention</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;">MDI identity threats</td>
+              <td style="padding: 0.5rem; text-align: center;">✅</td>
+              <td style="padding: 0.5rem; text-align: center;">Optional</td>
+              <td style="padding: 0.5rem;">XDR correlates with endpoint/email</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;">Entra Sign-in Logs</td>
+              <td style="padding: 0.5rem; text-align: center;">Partial</td>
+              <td style="padding: 0.5rem; text-align: center;">✅</td>
+              <td style="padding: 0.5rem;">Full history, compliance, custom detections</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;"><strong>Entra Audit Logs</strong></td>
+              <td style="padding: 0.5rem; text-align: center;">❌</td>
+              <td style="padding: 0.5rem; text-align: center;"><strong>✅ Required</strong></td>
+              <td style="padding: 0.5rem;"><strong>Management plane — detect privilege changes</strong></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;"><strong>Azure Activity Logs</strong></td>
+              <td style="padding: 0.5rem; text-align: center;">❌</td>
+              <td style="padding: 0.5rem; text-align: center;"><strong>✅ Required</strong></td>
+              <td style="padding: 0.5rem;"><strong>Management plane — resource/policy changes</strong></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;">Firewall / Proxy</td>
+              <td style="padding: 0.5rem; text-align: center;">❌</td>
+              <td style="padding: 0.5rem; text-align: center;">✅</td>
+              <td style="padding: 0.5rem;">Network visibility, non-Microsoft</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;">AWS / GCP</td>
+              <td style="padding: 0.5rem; text-align: center;">❌</td>
+              <td style="padding: 0.5rem; text-align: center;">✅</td>
+              <td style="padding: 0.5rem;">Multi-cloud visibility</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.5rem;">SaaS apps (Salesforce, etc.)</td>
+              <td style="padding: 0.5rem; text-align: center;">MDCA partial</td>
+              <td style="padding: 0.5rem; text-align: center;">✅</td>
+              <td style="padding: 0.5rem;">Deep visibility, custom detections</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Interview answer:</span> "XDR handles the data plane — what's happening on endpoints, identity threats, email. But for management plane visibility — who changed policies, who elevated privileges, who modified Azure resources — that has to go to Sentinel. An attacker who compromises an admin will try to disable security controls first. XDR won't see that; audit logs will."
+        </p>
       </div>
 
       <!-- ==================== JOB DESCRIPTION ALIGNMENT ==================== -->
@@ -1645,100 +1776,112 @@
         </p>
       </div>
 
-      <!-- Quick Reference Grid -->
+      <!-- Quick Reference Grid with Examples -->
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>How do you measure security program effectiveness?</h3>
+        <ul>
+          <li><strong>Reduction in incident frequency</strong></li>
+          <li><strong>Mean time to detect (MTTD)</strong></li>
+          <li><strong>Mean time to respond (MTTR)</strong></li>
+          <li><strong>Reduction in false positives</strong></li>
+          <li><strong>Coverage across attack surface</strong></li>
+        </ul>
+        <p style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Example:</span> "When we deployed MDE, I tracked coverage percentage — started at 60%, pushed to 98% in 3 months. Then I measured alert-to-incident ratio. Initially we had 500 alerts/week with 10% true positives. After tuning ASR rules and creating targeted exclusions, we got to 150 alerts/week with 40% true positives. That's the metric that matters — not just 'we have EDR deployed' but 'we can actually respond to what it finds.'"
+        </p>
+      </div>
+
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>How do you balance security and business agility?</h3>
+        <ul>
+          <li><strong>Risk-based decision making</strong> — not all data equal</li>
+          <li><strong>Tiered controls</strong> based on data sensitivity</li>
+          <li><strong>Enablement over restriction</strong> — find the "yes"</li>
+          <li><strong>Understand business context</strong> before saying no</li>
+        </ul>
+        <p style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Example:</span> "When AI tools like ChatGPT emerged, the initial instinct was to block everything. But I knew users would just use personal devices — and then we'd have zero visibility. Instead, I advocated for a sanctioned enterprise AI tool with DLP policies preventing sensitive data in prompts. Users got the productivity benefit, and we maintained visibility. If you make the secure path too hard, users will find the insecure path. My job is to find the 'yes' with appropriate controls."
+        </p>
+      </div>
+
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>How do you handle disagreement with leadership?</h3>
+        <ul>
+          <li><strong>Present data and risk impact</strong> — not opinions</li>
+          <li><strong>Offer options, not ultimatums</strong></li>
+          <li><strong>Align security goals with business outcomes</strong></li>
+          <li><strong>Document the discussion</strong> for accountability</li>
+        </ul>
+        <p style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Example:</span> "During DLP rollout, leadership wanted to go straight to block mode to meet a compliance deadline. I disagreed — we hadn't baselined user behavior yet. Instead of just saying no, I presented data: 'In audit mode, we're seeing 200 policy triggers daily. If we block now, we'll disrupt operations and users will find workarounds.' I offered options: extend audit by 2 weeks with daily tuning, or block with an exception process ready. They chose the phased approach. My job is to inform the risk — their job is to accept it."
+        </p>
+      </div>
+
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>What makes a strong security team?</h3>
+        <ul>
+          <li><strong>Clear ownership</strong> — everyone knows their lane</li>
+          <li><strong>Continuous learning</strong> — threat landscape evolves</li>
+          <li><strong>Strong communication</strong> — with each other and stakeholders</li>
+          <li><strong>Automation mindset</strong> — reduce toil, increase value</li>
+          <li><strong>Documentation culture</strong> — knowledge isn't siloed</li>
+        </ul>
+        <p style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Example:</span> "In our transformation, I made sure detection engineering, incident response, and threat hunting had clear owners. But the real differentiator was automation — we built SOAR playbooks for common alerts like impossible travel or malware detection. Analysts stopped doing repetitive triage and focused on complex investigations. When I left a process, I documented it so thoroughly that anyone could pick it up. A strong team isn't dependent on any single person."
+        </p>
+      </div>
+
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>How do you stay relevant in security?</h3>
+        <ul>
+          <li><strong>Hands-on labs</strong> — home lab, side projects</li>
+          <li><strong>Community engagement</strong> — Reddit, LinkedIn, meetups</li>
+          <li><strong>Continuous learning</strong> — certs, courses, reading</li>
+          <li><strong>Cross-domain exposure</strong> — don't just do one thing</li>
+        </ul>
+        <p style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Example:</span> "I built my own email and SMS threat analysis platform that integrates threat intel feeds and uses AI for intent analysis. I also advise a startup called DietIQ on their GCP/Firebase security — that gives me hands-on multi-cloud experience outside my day job. Mix of passive learning — podcasts like Risky Business, vendor blogs — and active building. You can't just read about security; you have to do it."
+        </p>
+      </div>
+
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>Security vs. Compliance — which is more important?</h3>
+        <ul>
+          <li><strong>Security is the goal</strong> — compliance is a baseline</li>
+          <li><strong>Compliant ≠ Secure:</strong> Checkbox mentality gets breached</li>
+          <li><strong>But compliance enables business:</strong> Contracts require it</li>
+        </ul>
+        <p style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Example:</span> "DLP is a perfect example. For compliance, you might just need to prove you 'have DLP' — checkbox done. But that doesn't mean you're actually preventing data loss. You could have DLP in audit mode forever and still be 'compliant.' Real security means tuning policies, moving to enforcement, measuring effectiveness. Compliance sets the floor — security raises the bar. They're complementary, but I always push beyond the checkbox."
+        </p>
+      </div>
+
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>Describe the NIST Cybersecurity Framework</h3>
+        <ul>
+          <li><strong>5 Functions:</strong> Identify → Protect → Detect → Respond → Recover</li>
+          <li><strong>Tiers:</strong> 1 (Partial) → 4 (Adaptive) maturity</li>
+          <li><strong>Profiles:</strong> Current state vs. target state</li>
+          <li><strong>Value:</strong> Business-focused, works across industries</li>
+        </ul>
+        <p style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Example:</span> "In our security transformation, I mapped our capabilities to NIST CSF. We were strong in Protect (MDE, DLP) but weak in Identify (asset inventory gaps) and Detect (legacy SIEM couldn't correlate). That gap analysis drove our roadmap — Sentinel migration addressed Detect, and we improved Identify through better CMDB integration. It's not a prescriptive checklist — it's a framework to organize and find gaps."
+        </p>
+      </div>
+
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>Describe the IR process. Most important phase?</h3>
+        <ul>
+          <li><strong>NIST:</strong> Preparation → Detection → Containment → Eradication → Recovery → Post-Incident</li>
+          <li><strong>Most important — Preparation:</strong> "You can't buy preparation during an incident"</li>
+          <li><strong>Or — Post-Incident:</strong> "Where organizations actually improve"</li>
+        </ul>
+        <p style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Example:</span> "I'd say Preparation. During the Zscaler false positive storm — 500 impossible travel alerts — we responded quickly because we had playbooks ready. If we'd had to figure out escalation paths and tool access during the incident, we'd have wasted hours. But Post-Incident is where you actually improve. After that incident, we documented the gap — network changes weren't communicated to security — and built a process to prevent it. Most teams skip post-incident reviews; that's why the same mistakes repeat."
+        </p>
+      </div>
+
       <div class="topic-grid">
-        <div class="cheat-section">
-          <h3>How do you measure security program effectiveness?</h3>
-          <ul>
-            <li><strong>Reduction in incident frequency</strong></li>
-            <li><strong>Mean time to detect (MTTD)</strong></li>
-            <li><strong>Mean time to respond (MTTR)</strong></li>
-            <li><strong>Reduction in false positives</strong></li>
-            <li><strong>Coverage across attack surface</strong></li>
-            <li><span class="key-phrase">Key:</span> "Metrics that show both coverage and efficiency"</li>
-          </ul>
-        </div>
-
-        <div class="cheat-section">
-          <h3>How do you balance security and business agility?</h3>
-          <ul>
-            <li><strong>Risk-based decision making</strong> — not all data equal</li>
-            <li><strong>Tiered controls</strong> based on data sensitivity</li>
-            <li><strong>Enablement over restriction</strong> — find the "yes"</li>
-            <li><strong>Understand business context</strong> before saying no</li>
-            <li><span class="key-phrase">Key:</span> "Security should enable the business, not block it"</li>
-          </ul>
-        </div>
-
-        <div class="cheat-section">
-          <h3>How do you handle disagreement with leadership?</h3>
-          <ul>
-            <li><strong>Present data and risk impact</strong> — not opinions</li>
-            <li><strong>Offer options, not ultimatums</strong></li>
-            <li><strong>Align security goals with business outcomes</strong></li>
-            <li><strong>Document the discussion</strong> for accountability</li>
-            <li><span class="key-phrase">Key:</span> "My job is to inform the risk — their job is to accept it"</li>
-          </ul>
-        </div>
-
-        <div class="cheat-section">
-          <h3>What makes a strong security team?</h3>
-          <ul>
-            <li><strong>Clear ownership</strong> — everyone knows their lane</li>
-            <li><strong>Continuous learning</strong> — threat landscape evolves</li>
-            <li><strong>Strong communication</strong> — with each other and stakeholders</li>
-            <li><strong>Automation mindset</strong> — reduce toil, increase value</li>
-            <li><strong>Documentation culture</strong> — knowledge isn't siloed</li>
-          </ul>
-        </div>
-
-        <div class="cheat-section">
-          <h3>How do you stay relevant in security?</h3>
-          <ul>
-            <li><strong>Hands-on labs</strong> — home lab, side projects</li>
-            <li><strong>Community engagement</strong> — Reddit, LinkedIn, meetups</li>
-            <li><strong>Continuous learning</strong> — certs, courses, reading</li>
-            <li><strong>Cross-domain exposure</strong> — don't just do one thing</li>
-            <li><span class="key-phrase">Key:</span> "Mix of passive learning and active building"</li>
-          </ul>
-        </div>
-
-        <div class="cheat-section">
-          <h3>Security vs. Compliance — which is more important?</h3>
-          <ul>
-            <li><strong>Security is the goal</strong> — compliance is a baseline</li>
-            <li><strong>Compliant ≠ Secure:</strong> Checkbox mentality gets breached</li>
-            <li><strong>But compliance enables business:</strong> Contracts require it</li>
-            <li><span class="key-phrase">Answer:</span> "Security is more important, but compliance enables business. They're complementary — compliance sets the floor, security raises the bar."</li>
-          </ul>
-        </div>
-
-        <div class="cheat-section">
-          <h3>Describe the NIST Cybersecurity Framework</h3>
-          <ul>
-            <li><strong>5 Functions:</strong> Identify → Protect → Detect → Respond → Recover</li>
-            <li><strong>Tiers:</strong> 1 (Partial) → 4 (Adaptive) maturity</li>
-            <li><strong>Profiles:</strong> Current state vs. target state</li>
-            <li><strong>Value:</strong> Business-focused, works across industries</li>
-            <li><span class="key-phrase">Key:</span> "Framework to organize and identify gaps, not prescriptive checklist"</li>
-          </ul>
-        </div>
-
-        <div class="cheat-section">
-          <h3>Describe the IR process. Most important phase?</h3>
-          <ul>
-            <li><strong>NIST:</strong> Preparation → Detection → Containment → Eradication → Recovery → Post-Incident</li>
-            <li><strong>Most important — Preparation:</strong></li>
-            <ul style="margin-left: 1rem;">
-              <li>"You can't buy preparation during an incident"</li>
-            </ul>
-            <li><strong>Or — Post-Incident:</strong></li>
-            <ul style="margin-left: 1rem;">
-              <li>"Where organizations actually improve"</li>
-            </ul>
-          </ul>
-        </div>
-
         <div class="cheat-section">
           <h3>Greatest threat to consulting firms?</h3>
           <ul>
