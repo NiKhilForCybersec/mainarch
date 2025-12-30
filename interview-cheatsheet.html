@@ -499,6 +499,58 @@
             <li>Avoid: 1:1 rule migration that recreates what XDR already does</li>
           </ul>
         </div>
+
+        <div class="cheat-section">
+          <h3>XDR vs SIEM — The Plane Model</h3>
+          <ul>
+            <li><strong>Data Plane</strong> (what's happening) → <span class="good-text">XDR handles this</span></li>
+            <ul style="margin-left: 1rem;">
+              <li>User logins, file access, process execution, network traffic, email delivery</li>
+              <li>MDE: endpoint activity, MDI: identity behavior, MDO: email threats, MDCA: cloud app usage</li>
+            </ul>
+            <li><strong>Control Plane</strong> (policy enforcement) → <span class="warning-text">Partial XDR</span></li>
+            <ul style="margin-left: 1rem;">
+              <li>Some in Defender (DLP actions, CA enforcement), some needs SIEM</li>
+            </ul>
+            <li><strong>Management Plane</strong> (who changed configs) → <span class="key-phrase">SIEM required</span></li>
+            <ul style="margin-left: 1rem;">
+              <li>Admin actions, policy changes, privilege modifications</li>
+              <li>Audit logs, Azure Activity logs, config changes</li>
+            </ul>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Example: MDI vs Entra ID Logs</h3>
+          <ul>
+            <li><strong>MDI (Defender for Identity) — Data Plane:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>✅ Pass-the-hash detected</li>
+              <li>✅ Lateral movement path identified</li>
+              <li>✅ DCSync attack detected</li>
+              <li>✅ Golden ticket usage</li>
+              <li>✅ Reconnaissance (LDAP, DNS enumeration)</li>
+            </ul>
+            <li><strong>Entra ID Sign-in Logs — Data Plane:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>✅ User login success/failure</li>
+              <li>✅ Location, device, app used</li>
+              <li>✅ Conditional Access result (granted/blocked)</li>
+              <li>✅ MFA prompt outcome</li>
+            </ul>
+            <li><strong>Entra ID Audit Logs — Management Plane:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>✅ User added to Global Admins → <span class="warning-text">SIEM alert</span></li>
+              <li>✅ MFA disabled for user → <span class="warning-text">SIEM alert</span></li>
+              <li>✅ Conditional Access policy modified → <span class="warning-text">SIEM alert</span></li>
+              <li>✅ Service principal credentials added → <span class="warning-text">SIEM alert</span></li>
+              <li>✅ Password reset by admin → <span class="warning-text">SIEM alert</span></li>
+            </ul>
+          </ul>
+          <p style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+            <span class="key-phrase">Key insight:</span> "XDR sees what users DO. SIEM sees what admins CHANGE. An attacker who compromises an admin will try to disable security controls — XDR won't see that, but audit logs in Sentinel will."
+          </p>
+        </div>
       </div>
 
       <!-- ==================== QUICK STORY BANK ==================== -->
@@ -629,13 +681,17 @@
         </div>
 
         <div class="cheat-section">
-          <h3>Questions for Us?</h3>
+          <h3>Questions to Ask the Director</h3>
           <ul>
-            <li>"What does success look like in the first 6 months?"</li>
-            <li>"What's the team structure for a typical engagement?"</li>
-            <li>"What's one thing you wish you knew before joining?"</li>
-            <li>"How do you balance utilization with professional development?"</li>
-            <li><span class="warning-text">Never:</span> Ask about salary, PTO, or "when will I hear back"</li>
+            <li><strong>Question 1 — First Months Focus:</strong></li>
+            <p style="background: rgba(74, 158, 255, 0.1); padding: 0.75rem; border-radius: 8px; margin: 0.5rem 0 1rem 1rem;">
+              "If I'm selected for the role, what would you recommend I focus on in my first few months to be successful?"
+            </p>
+            <li><strong>Question 2 — Career Growth:</strong></li>
+            <p style="background: rgba(74, 158, 255, 0.1); padding: 0.75rem; border-radius: 8px; margin: 0.5rem 0 1rem 1rem;">
+              "Beyond technical expertise, what skills or mindset do you think helped you grow from an associate level to director in consulting?"
+            </p>
+            <li><span class="warning-text">Never ask:</span> Salary, PTO, "when will I hear back"</li>
           </ul>
         </div>
       </div>
@@ -1482,6 +1538,110 @@
         </div>
         <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
           <span class="key-phrase">Key insight:</span> "When security tools impact business operations, the goal is to find the root cause, understand the trade-offs, and present leadership with clear options — not just say 'we need an exclusion.'"
+        </p>
+      </div>
+
+      <!-- SCENARIO 9: SOC Maturity Assessment -->
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>How do you assess SOC maturity? / What makes a mature security operations program?</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+          <div>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">👥 People</p>
+            <ul style="margin-top: 0;">
+              <li><strong>Skills & Training:</strong> Continuous upskilling, certifications, threat landscape awareness</li>
+              <li><strong>Staffing:</strong> Right coverage (24/7 vs business hours), clear roles (L1/L2/L3)</li>
+              <li><strong>Retention:</strong> Career paths, not just alert fatigue burnout</li>
+              <li><strong>Knowledge sharing:</strong> Cross-training, not single points of failure</li>
+              <li><strong>Maturity signal:</strong> Team can handle novel threats, not just known patterns</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #6bcf6b; font-weight: bold; margin-bottom: 0.5rem;">⚙️ Process</p>
+            <ul style="margin-top: 0;">
+              <li><strong>Playbooks:</strong> Documented, tested, regularly updated</li>
+              <li><strong>Escalation paths:</strong> Clear ownership, defined SLAs</li>
+              <li><strong>Incident response:</strong> Defined phases, post-incident reviews</li>
+              <li><strong>Change management:</strong> Security involved in changes</li>
+              <li><strong>Metrics & reporting:</strong> MTTD, MTTR, false positive rates</li>
+              <li><strong>Maturity signal:</strong> Processes are followed consistently, not ad-hoc</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ffd93d; font-weight: bold; margin-bottom: 0.5rem;">🔧 Technology</p>
+            <ul style="margin-top: 0;">
+              <li><strong>Detection coverage:</strong> Endpoint, identity, network, cloud, email</li>
+              <li><strong>Integration:</strong> Tools talk to each other (XDR + SIEM + SOAR)</li>
+              <li><strong>Automation:</strong> Repetitive tasks automated, analysts focus on complex</li>
+              <li><strong>Visibility:</strong> No blind spots in critical assets</li>
+              <li><strong>Threat intel:</strong> Integrated into detection, not just reports</li>
+              <li><strong>Maturity signal:</strong> Proactive hunting, not just reactive alerting</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ff6b6b; font-weight: bold; margin-bottom: 0.5rem;">📋 Governance</p>
+            <ul style="margin-top: 0;">
+              <li><strong>Policies:</strong> Defined, communicated, enforced</li>
+              <li><strong>Risk alignment:</strong> SOC priorities match business risk</li>
+              <li><strong>Compliance:</strong> Regulatory requirements met and evidenced</li>
+              <li><strong>Executive reporting:</strong> Metrics leadership understands</li>
+              <li><strong>Continuous improvement:</strong> Regular maturity assessments</li>
+              <li><strong>Maturity signal:</strong> Security is a business enabler, not a blocker</li>
+            </ul>
+          </div>
+        </div>
+        <div style="margin-top: 1.5rem;">
+          <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">📊 SOC Maturity Levels</p>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+              <tr style="border-bottom: 2px solid #4a9eff;">
+                <th style="text-align: left; padding: 0.5rem;">Level</th>
+                <th style="text-align: left; padding: 0.5rem;">People</th>
+                <th style="text-align: left; padding: 0.5rem;">Process</th>
+                <th style="text-align: left; padding: 0.5rem;">Technology</th>
+                <th style="text-align: left; padding: 0.5rem;">Governance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid #333;">
+                <td style="padding: 0.5rem;"><strong>1 - Initial</strong></td>
+                <td style="padding: 0.5rem;">Ad-hoc, reactive</td>
+                <td style="padding: 0.5rem;">No playbooks</td>
+                <td style="padding: 0.5rem;">Basic AV/firewall</td>
+                <td style="padding: 0.5rem;">No formal program</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #333;">
+                <td style="padding: 0.5rem;"><strong>2 - Developing</strong></td>
+                <td style="padding: 0.5rem;">Defined roles</td>
+                <td style="padding: 0.5rem;">Some playbooks</td>
+                <td style="padding: 0.5rem;">SIEM deployed</td>
+                <td style="padding: 0.5rem;">Basic policies</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #333;">
+                <td style="padding: 0.5rem;"><strong>3 - Defined</strong></td>
+                <td style="padding: 0.5rem;">Training program</td>
+                <td style="padding: 0.5rem;">Consistent processes</td>
+                <td style="padding: 0.5rem;">XDR + SIEM integrated</td>
+                <td style="padding: 0.5rem;">Risk-aligned</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #333;">
+                <td style="padding: 0.5rem;"><strong>4 - Managed</strong></td>
+                <td style="padding: 0.5rem;">Metrics-driven</td>
+                <td style="padding: 0.5rem;">Measured & optimized</td>
+                <td style="padding: 0.5rem;">SOAR automation</td>
+                <td style="padding: 0.5rem;">Executive dashboards</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.5rem;"><strong>5 - Optimized</strong></td>
+                <td style="padding: 0.5rem;">Threat hunters</td>
+                <td style="padding: 0.5rem;">Continuous improvement</td>
+                <td style="padding: 0.5rem;">Proactive detection</td>
+                <td style="padding: 0.5rem;">Business enabler</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">How to say it:</span> "I assess SOC maturity across four pillars: People, Process, Technology, and Governance. You can have great tools, but without trained people and defined processes, alerts just pile up. And without governance, the SOC isn't aligned to business risk. The goal is balance — most organizations I've seen are strong in technology but underinvest in process and people. A mature SOC is proactive — hunting threats, not just reacting to alerts."
         </p>
       </div>
 
