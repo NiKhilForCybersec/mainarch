@@ -115,22 +115,13 @@
         </div>
 
         <div class="cheat-section">
-          <h3>Why This Firm? — Accenture Security</h3>
-          <ul>
-            <li><strong>Scale:</strong> 25,000+ cybersecurity professionals, 40+ Cyber Fusion Centers globally</li>
-            <li><strong>MSSP Leader:</strong> #1 in Gartner Market Share for Managed Security Services</li>
-            <li><strong>Key Acquisitions (22+ since 2015):</strong></li>
-            <ul style="margin-left: 1rem; margin-top: 0.5rem;">
-              <li><strong>Symantec Cyber Security Services (2020):</strong> 6 global SOCs (US, UK, India, Australia, Singapore, Japan), 300+ employees, MSSP platform, threat intelligence</li>
-              <li><strong>CyberCX (2024-25):</strong> Largest cyber acquisition — 1,400 professionals in APAC, offensive security, managed detection & response</li>
-              <li><strong>IAMConcepts (2025):</strong> Canadian IAM specialist — identity & access management services</li>
-              <li><strong>Innotec Security (2023):</strong> 500 professionals in Spain, cybersecurity-as-a-service</li>
-              <li><strong>6point6 (2024):</strong> UK consultancy — cloud, data, cybersecurity for government/defense</li>
-              <li><strong>Others:</strong> iDefense (threat intel), FusionX (red team), Context, Revolutionary Security, Sentor (Sweden)</li>
-            </ul>
-            <li><strong>Services:</strong> Strategy → Protection → Resilience → Industry-specific cyber</li>
-            <li><strong>New Focus (2024):</strong> Gen AI security, deepfake protection, quantum-safe solutions</li>
-            <li><span class="key-phrase">Key stat:</span> "223% surge in deepfake tools on dark web Q1 2024" (Accenture research)</li>
+          <h3>Why Accenture?</h3>
+          <p style="background: rgba(74, 158, 255, 0.15); padding: 1rem; border-radius: 8px; line-height: 1.6;">
+            "Honestly, it comes down to <strong>learning velocity</strong>. Working with a company at the scale of Accenture enables me to learn more about different clients, industries, and their risk profiles. Moreover, Accenture is one of the leaders in MSSP and works with Fortune 500 companies in enabling security at scale. I think this role and opportunity at Accenture would be a better fit for me to <strong>contribute as well as learn</strong>."
+          </p>
+          <ul style="margin-top: 1rem;">
+            <li><strong>If asked "Why not stay?":</strong> "I've hit the ceiling of what I can learn in one environment. Consulting is the fastest path to breadth."</li>
+            <li><strong>If asked "Why not Deloitte/PwC?":</strong> "Accenture's investment stands out — Symantec acquisition brought 6 global SOCs. You're operating security, not just advising."</li>
           </ul>
         </div>
 
@@ -1181,7 +1172,7 @@
       <!-- ==================== DIRECTOR-LEVEL QUESTIONS ==================== -->
       <h2>👔 Director-Level Questions</h2>
 
-      <!-- Full width sections for detailed answers -->
+      <!-- SCENARIO 1: Security Incident -->
       <div class="cheat-section" style="margin-bottom: 1.5rem;">
         <h3>Explain a security incident you responded to. What went well? What could be better?</h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
@@ -1224,6 +1215,7 @@
         </p>
       </div>
 
+      <!-- SCENARIO 2: Achievement - Email/SMS Platform -->
       <div class="cheat-section" style="margin-bottom: 1.5rem;">
         <h3>Tell me about an achievement you're proud of</h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
@@ -1270,64 +1262,294 @@
         </p>
       </div>
 
+      <!-- SCENARIO 3: Cost Management in SIEM -->
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>How do you manage costs in a SIEM environment like Sentinel or Splunk?</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+          <div>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">Microsoft Sentinel Approach:</p>
+            <ul style="margin-top: 0;">
+              <li><strong>Two pricing models:</strong> Pay-as-you-go vs. Commitment tiers</li>
+              <li><strong>Start with pay-as-you-go</strong> during discovery to understand ingestion</li>
+              <li><strong>Shift to commitment tiers</strong> once patterns stabilize</li>
+              <li><strong>Value-based ingestion:</strong> Not all logs deserve SIEM ingestion</li>
+            </ul>
+            <p style="color: #6bcf6b; font-weight: bold; margin-bottom: 0.5rem;">Evaluation Criteria for Each Log Source:</p>
+            <ul style="margin-top: 0;">
+              <li>Security value — does it enable detection?</li>
+              <li>Compliance requirement — is it mandated?</li>
+              <li>Detection use cases — what rules need it?</li>
+              <li>Retention needs — how long must we keep it?</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ffd93d; font-weight: bold; margin-bottom: 0.5rem;">XDR Cost Optimization:</p>
+            <ul style="margin-top: 0;">
+              <li>Microsoft XDR telemetry = no additional ingestion cost</li>
+              <li>Rely on XDR for detection where possible</li>
+              <li>Don't duplicate XDR data into Sentinel unnecessarily</li>
+              <li>Sentinel for custom logs, compliance, correlation gaps</li>
+            </ul>
+            <p style="color: #ff6b6b; font-weight: bold; margin-bottom: 0.5rem;">Splunk Considerations:</p>
+            <ul style="margin-top: 0;">
+              <li>Ingestion volume directly drives licensing cost</li>
+              <li>Filter at forwarder level before it hits indexer</li>
+              <li>Reduce verbose logs, normalize only what's operational</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Key insight:</span> "Cost control is not about cutting data — it's about engineering smarter data pipelines. The goal is cost efficiency without reducing detection capability."
+        </p>
+      </div>
+
+      <!-- SCENARIO 4: Adapting to Change -->
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>Tell me about a time you had to adapt quickly to a major change</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+          <div>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">The Situation — DietIQ Startup:</p>
+            <ul style="margin-top: 0;">
+              <li>Supporting DietIQ as security advisor</li>
+              <li>Security was stable — secure defaults in Firebase and GCP</li>
+              <li>As product approached launch, a blocker emerged</li>
+              <li>User experience was holding the product back</li>
+              <li>Strong functionality, but UI wasn't engaging users</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #6bcf6b; font-weight: bold; margin-bottom: 0.5rem;">What I Did:</p>
+            <ul style="margin-top: 0;">
+              <li>Stepped in even though UI/UX wasn't my core role</li>
+              <li>Relearned modern design tools and UX principles</li>
+              <li>Redesigned the entire interface within short timeframe</li>
+              <li>Directly contributed to increased user engagement</li>
+              <li>Result: Real adoption and paying customers</li>
+            </ul>
+            <p style="color: #ffd93d; font-weight: bold; margin-bottom: 0.5rem;">What This Showed:</p>
+            <ul style="margin-top: 0;">
+              <li>Adaptability is critical in fast-moving environments</li>
+              <li>Security professionals shouldn't work in isolation</li>
+              <li>Understanding how usability, product, and security connect</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">How to say it:</span> "In a startup I advise, security was stable but the product was struggling with user adoption due to UX issues. Even though it wasn't my core role, I stepped in, relearned design principles, and redesigned the interface. That directly contributed to real adoption and paying customers. It reinforced that security professionals need to understand the full picture."
+        </p>
+      </div>
+
+      <!-- SCENARIO 5: Explaining to Non-Technical -->
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>Tell me about explaining a complex security concept to a non-technical audience</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+          <div>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">The Situation:</p>
+            <ul style="margin-top: 0;">
+              <li>Senior executive's endpoint hadn't checked in with EDR for days</li>
+              <li>High-risk user — required immediate attention</li>
+              <li>Needed to explain the risk without technical jargon</li>
+            </ul>
+            <p style="color: #6bcf6b; font-weight: bold; margin-bottom: 0.5rem;">How I Explained EDR:</p>
+            <ul style="margin-top: 0;">
+              <li>Compared it to a security guard that must stay connected</li>
+              <li>"It continuously monitors your device for threats"</li>
+              <li>"When disconnected, we lose visibility into what's happening"</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ffd93d; font-weight: bold; margin-bottom: 0.5rem;">Risk in Business Terms:</p>
+            <ul style="margin-top: 0;">
+              <li>Loss of visibility — we can't see threats</li>
+              <li>Increased exposure — threats go undetected</li>
+              <li>Impact on incident response — slower reaction</li>
+            </ul>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">The Result:</p>
+            <ul style="margin-top: 0;">
+              <li>Executive understood the "why" immediately</li>
+              <li>Scheduled remediation time willingly</li>
+              <li>Built trust for future security conversations</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Key insight:</span> "Translating security risk into business impact is far more effective than technical depth alone. Once they understand the 'why,' alignment comes naturally."
+        </p>
+      </div>
+
+      <!-- SCENARIO 6: Prioritizing Multiple Initiatives -->
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>How do you prioritize when handling multiple security initiatives?</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+          <div>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">The Context:</p>
+            <ul style="margin-top: 0;">
+              <li>Multiple parallel initiatives at once:</li>
+              <ul style="margin-left: 1rem;">
+                <li>SIEM migration</li>
+                <li>EDR deployment</li>
+                <li>Identity security</li>
+                <li>DLP implementation</li>
+                <li>Infrastructure security</li>
+              </ul>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #6bcf6b; font-weight: bold; margin-bottom: 0.5rem;">My Prioritization Approach:</p>
+            <ul style="margin-top: 0;">
+              <li><strong>1. Identify foundational dependencies</strong></li>
+              <li><strong>2. Align with organizational risk priorities</strong></li>
+              <li>Example: MDE first because XDR needs endpoint coverage</li>
+              <li>Then SIEM correlation and identity integrations</li>
+              <li>Clear communication with stakeholders on sequencing</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">How to say it:</span> "I prioritize by identifying foundational dependencies first. We deployed MDE before SIEM because XDR correlation requires endpoint coverage. Then we expanded into identity and SIEM. Explaining the sequencing to leadership ensured alignment and showed measurable progress."
+        </p>
+      </div>
+
+      <!-- SCENARIO 7: Mentoring -->
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>How do you mentor or support junior team members?</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+          <div>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">My Philosophy:</p>
+            <ul style="margin-top: 0;">
+              <li>Strong believer in <strong>documentation and repeatability</strong></li>
+              <li>For every major task, I create structured documentation:</li>
+              <ul style="margin-left: 1rem;">
+                <li>Context — why we're doing this</li>
+                <li>Step-by-step actions</li>
+                <li>Common pitfalls to avoid</li>
+                <li>Validation steps</li>
+              </ul>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #6bcf6b; font-weight: bold; margin-bottom: 0.5rem;">How I Onboard:</p>
+            <ul style="margin-top: 0;">
+              <li>Walk through real scenarios together</li>
+              <li>Provide documentation for independent practice</li>
+              <li>Let them try, then review and coach</li>
+            </ul>
+            <p style="color: #ffd93d; font-weight: bold; margin-bottom: 0.5rem;">Benefits:</p>
+            <ul style="margin-top: 0;">
+              <li>Reduces dependency on individuals</li>
+              <li>Builds confidence in junior members</li>
+              <li>Improves overall team efficiency</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Key insight:</span> "Structured documentation combined with hands-on walkthroughs is the fastest way to build competence and confidence. It also makes the team more resilient."
+        </p>
+      </div>
+
+      <!-- SCENARIO 8: Complex Security Problem -->
+      <div class="cheat-section" style="margin-bottom: 1.5rem;">
+        <h3>Tell me about a challenging security problem you solved</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+          <div>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">The Problem:</p>
+            <ul style="margin-top: 0;">
+              <li>Application experiencing functional issues after EDR enforcement</li>
+              <li>Initially appeared to be general application failure</li>
+              <li>Further analysis: EDR behavior inspection was the cause</li>
+            </ul>
+            <p style="color: #6bcf6b; font-weight: bold; margin-bottom: 0.5rem;">My Investigation:</p>
+            <ul style="margin-top: 0;">
+              <li>Isolated the issue by testing policy exclusions</li>
+              <li>Identified which inspection module triggered the problem</li>
+              <li>Validated behavior with the vendor</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color: #ffd93d; font-weight: bold; margin-bottom: 0.5rem;">Options Presented to Leadership:</p>
+            <ul style="margin-top: 0;">
+              <li><strong>Option 1:</strong> Temporarily adjust policy scope</li>
+              <li><strong>Option 2:</strong> Create targeted exclusions</li>
+              <li><strong>Option 3:</strong> Wait for upcoming vendor fix</li>
+            </ul>
+            <p style="color: #4a9eff; font-weight: bold; margin-bottom: 0.5rem;">Outcome:</p>
+            <ul style="margin-top: 0;">
+              <li>Balanced security with business continuity</li>
+              <li>Avoided unnecessary risk exposure</li>
+              <li>Leadership appreciated the clear options</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.1); border-radius: 8px;">
+          <span class="key-phrase">Key insight:</span> "When security tools impact business operations, the goal is to find the root cause, understand the trade-offs, and present leadership with clear options — not just say 'we need an exclusion.'"
+        </p>
+      </div>
+
+      <!-- Quick Reference Grid -->
       <div class="topic-grid">
         <div class="cheat-section">
-          <h3>What are your favorite security tools?</h3>
+          <h3>How do you measure security program effectiveness?</h3>
           <ul>
-            <li><strong>MDE + Sentinel:</strong> Unified XDR + SIEM, KQL hunting, native integration</li>
-            <li><strong>Cortex XDR:</strong> Strong behavioral detection, XSOAR automation</li>
-            <li><strong>Splunk:</strong> Most flexible, SPL can do anything</li>
-            <li><span class="key-phrase">Key point:</span> "Right tool depends on environment — I wouldn't recommend Sentinel to a non-Microsoft shop"</li>
+            <li><strong>Reduction in incident frequency</strong></li>
+            <li><strong>Mean time to detect (MTTD)</strong></li>
+            <li><strong>Mean time to respond (MTTR)</strong></li>
+            <li><strong>Reduction in false positives</strong></li>
+            <li><strong>Coverage across attack surface</strong></li>
+            <li><span class="key-phrase">Key:</span> "Metrics that show both coverage and efficiency"</li>
           </ul>
         </div>
 
         <div class="cheat-section">
-          <h3>How do you calculate risk?</h3>
+          <h3>How do you balance security and business agility?</h3>
           <ul>
-            <li><strong>Formula:</strong> Risk = Likelihood × Impact</li>
-            <li><strong>Likelihood:</strong> Threat capability, vulnerability exposure, existing controls</li>
-            <li><strong>Impact:</strong> Financial, operational, reputational, regulatory</li>
-            <li><strong>Business terms:</strong> "X days downtime" or "$Y regulatory fine"</li>
-            <li><span class="key-phrase">Key point:</span> "Translate risk scores to business impact for executives"</li>
+            <li><strong>Risk-based decision making</strong> — not all data equal</li>
+            <li><strong>Tiered controls</strong> based on data sensitivity</li>
+            <li><strong>Enablement over restriction</strong> — find the "yes"</li>
+            <li><strong>Understand business context</strong> before saying no</li>
+            <li><span class="key-phrase">Key:</span> "Security should enable the business, not block it"</li>
           </ul>
         </div>
 
         <div class="cheat-section">
-          <h3>What framework for cloud risk?</h3>
+          <h3>How do you handle disagreement with leadership?</h3>
           <ul>
-            <li><strong>First:</strong> Shared Responsibility Model — what's on us vs. provider</li>
-            <li><strong>Then:</strong> CIS Benchmarks for specific cloud (Azure/AWS/GCP)</li>
-            <li><strong>Broader:</strong> NIST CSF, CSA Cloud Controls Matrix</li>
-            <li><strong>Focus areas:</strong> Identity, Data, Network, Logging</li>
-            <li><span class="key-phrase">Key point:</span> "Those four cover most cloud risk"</li>
+            <li><strong>Present data and risk impact</strong> — not opinions</li>
+            <li><strong>Offer options, not ultimatums</strong></li>
+            <li><strong>Align security goals with business outcomes</strong></li>
+            <li><strong>Document the discussion</strong> for accountability</li>
+            <li><span class="key-phrase">Key:</span> "My job is to inform the risk — their job is to accept it"</li>
           </ul>
         </div>
 
         <div class="cheat-section">
-          <h3>How do you stay up to date?</h3>
+          <h3>What makes a strong security team?</h3>
           <ul>
-            <li><strong>Threat intel:</strong> CISA alerts, Microsoft TI, vendor blogs</li>
-            <li><strong>Podcasts:</strong> Risky Business, Darknet Diaries</li>
-            <li><strong>Communities:</strong> Reddit, LinkedIn, local meetups</li>
-            <li><strong>Hands-on:</strong> Home lab, DietIQ startup, personal projects</li>
-            <li><span class="key-phrase">Key point:</span> "Mix of passive consumption and active building"</li>
+            <li><strong>Clear ownership</strong> — everyone knows their lane</li>
+            <li><strong>Continuous learning</strong> — threat landscape evolves</li>
+            <li><strong>Strong communication</strong> — with each other and stakeholders</li>
+            <li><strong>Automation mindset</strong> — reduce toil, increase value</li>
+            <li><strong>Documentation culture</strong> — knowledge isn't siloed</li>
           </ul>
         </div>
 
         <div class="cheat-section">
-          <h3>Describe the IR process. Most important phase?</h3>
+          <h3>How do you stay relevant in security?</h3>
           <ul>
-            <li><strong>NIST phases:</strong> Preparation → Detection → Containment → Eradication → Recovery → Post-Incident</li>
-            <li><strong>Most important — Preparation:</strong></li>
-            <ul style="margin-left: 1rem;">
-              <li>"You can't buy preparation during an incident"</li>
-              <li>Playbooks, tools, training must be ready beforehand</li>
-            </ul>
-            <li><strong>Or — Post-Incident:</strong></li>
-            <ul style="margin-left: 1rem;">
-              <li>"Where organizations actually improve"</li>
-              <li>Most teams skip it — same mistakes repeat</li>
-            </ul>
+            <li><strong>Hands-on labs</strong> — home lab, side projects</li>
+            <li><strong>Community engagement</strong> — Reddit, LinkedIn, meetups</li>
+            <li><strong>Continuous learning</strong> — certs, courses, reading</li>
+            <li><strong>Cross-domain exposure</strong> — don't just do one thing</li>
+            <li><span class="key-phrase">Key:</span> "Mix of passive learning and active building"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>Security vs. Compliance — which is more important?</h3>
+          <ul>
+            <li><strong>Security is the goal</strong> — compliance is a baseline</li>
+            <li><strong>Compliant ≠ Secure:</strong> Checkbox mentality gets breached</li>
+            <li><strong>But compliance enables business:</strong> Contracts require it</li>
+            <li><span class="key-phrase">Answer:</span> "Security is more important, but compliance enables business. They're complementary — compliance sets the floor, security raises the bar."</li>
           </ul>
         </div>
 
@@ -1338,27 +1560,64 @@
             <li><strong>Tiers:</strong> 1 (Partial) → 4 (Adaptive) maturity</li>
             <li><strong>Profiles:</strong> Current state vs. target state</li>
             <li><strong>Value:</strong> Business-focused, works across industries</li>
-            <li><span class="key-phrase">Key point:</span> "Framework to organize and identify gaps, not prescriptive checklist"</li>
+            <li><span class="key-phrase">Key:</span> "Framework to organize and identify gaps, not prescriptive checklist"</li>
           </ul>
         </div>
 
         <div class="cheat-section">
-          <h3>Security vs. Compliance — which is more important?</h3>
+          <h3>Describe the IR process. Most important phase?</h3>
           <ul>
-            <li><strong>Security is the goal</strong> — compliance is a baseline</li>
-            <li><strong>Compliant ≠ Secure:</strong> Checkbox mentality gets breached</li>
-            <li><strong>But compliance enables business:</strong> Contracts, regulations require it</li>
-            <li><span class="key-phrase">Answer:</span> "Security is more important, but compliance enables business. They're complementary — compliance sets the floor, security raises the bar."</li>
+            <li><strong>NIST:</strong> Preparation → Detection → Containment → Eradication → Recovery → Post-Incident</li>
+            <li><strong>Most important — Preparation:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>"You can't buy preparation during an incident"</li>
+            </ul>
+            <li><strong>Or — Post-Incident:</strong></li>
+            <ul style="margin-left: 1rem;">
+              <li>"Where organizations actually improve"</li>
+            </ul>
           </ul>
         </div>
 
         <div class="cheat-section">
           <h3>Greatest threat to consulting firms?</h3>
           <ul>
-            <li><strong>Supply chain (in reverse):</strong> You ARE the supply chain to clients</li>
+            <li><strong>Supply chain (in reverse):</strong> You ARE the supply chain</li>
             <li>If Accenture compromised → attackers reach Fortune 500 clients</li>
-            <li><strong>Also:</strong> AI-powered social engineering, insider threat at scale</li>
-            <li><span class="key-phrase">Answer:</span> "Consultants have access to client environments — you're a high-value target to reach others"</li>
+            <li><strong>Also:</strong> AI-powered social engineering, insider threat</li>
+            <li><span class="key-phrase">Answer:</span> "Consultants have access to client environments — high-value target to reach others"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>What framework for cloud risk?</h3>
+          <ul>
+            <li><strong>First:</strong> Shared Responsibility Model</li>
+            <li><strong>Then:</strong> CIS Benchmarks for specific cloud</li>
+            <li><strong>Broader:</strong> NIST CSF, CSA Cloud Controls Matrix</li>
+            <li><strong>Focus areas:</strong> Identity, Data, Network, Logging</li>
+            <li><span class="key-phrase">Key:</span> "Those four cover most cloud risk"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>How do you calculate risk?</h3>
+          <ul>
+            <li><strong>Formula:</strong> Risk = Likelihood × Impact</li>
+            <li><strong>Likelihood:</strong> Threat capability, exposure, controls</li>
+            <li><strong>Impact:</strong> Financial, operational, reputational</li>
+            <li><strong>Business terms:</strong> "X days downtime" or "$Y fine"</li>
+            <li><span class="key-phrase">Key:</span> "Translate risk to business impact for executives"</li>
+          </ul>
+        </div>
+
+        <div class="cheat-section">
+          <h3>What are your favorite security tools?</h3>
+          <ul>
+            <li><strong>MDE + Sentinel:</strong> Unified XDR + SIEM, KQL hunting</li>
+            <li><strong>Cortex XDR:</strong> Strong behavioral detection, XSOAR</li>
+            <li><strong>Splunk:</strong> Most flexible, SPL can do anything</li>
+            <li><span class="key-phrase">Key:</span> "Right tool depends on environment"</li>
           </ul>
         </div>
       </div>
