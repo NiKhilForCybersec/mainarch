@@ -99,6 +99,90 @@
       
       <button class="print-btn" onclick="window.print()">🖨️ Print This Page</button>
 
+      <!-- ==================== SECURITY MENTAL MODEL ==================== -->
+      <div class="cheat-section" style="margin-bottom: 2rem; border-left: 4px solid #4a9eff; background: linear-gradient(135deg, rgba(74, 158, 255, 0.1) 0%, rgba(107, 207, 107, 0.05) 100%);">
+        <h3 style="color: #4a9eff;">🧠 The Security Mental Model — How It All Fits Together</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
+          <div style="text-align: center; padding: 0.75rem;">
+            <div style="font-size: 1.5rem;">🏁</div>
+            <strong style="color: #6bcf6b;">Compliance</strong>
+            <p style="font-size: 0.85rem; margin: 0.25rem 0 0 0;">The destination</p>
+          </div>
+          <div style="text-align: center; padding: 0.75rem;">
+            <div style="font-size: 1.5rem;">🗺️</div>
+            <strong style="color: #4a9eff;">Security Frameworks</strong>
+            <p style="font-size: 0.85rem; margin: 0.25rem 0 0 0;">The roadmap</p>
+          </div>
+          <div style="text-align: center; padding: 0.75rem;">
+            <div style="font-size: 1.5rem;">📍</div>
+            <strong style="color: #ffd93d;">Governance</strong>
+            <p style="font-size: 0.85rem; margin: 0.25rem 0 0 0;">The GPS keeping us aligned</p>
+          </div>
+          <div style="text-align: center; padding: 0.75rem;">
+            <div style="font-size: 1.5rem;">🚗</div>
+            <strong style="color: #ff6b6b;">Security Controls</strong>
+            <p style="font-size: 0.85rem; margin: 0.25rem 0 0 0;">The vehicle</p>
+          </div>
+          <div style="text-align: center; padding: 0.75rem;">
+            <div style="font-size: 1.5rem;">🚦</div>
+            <strong style="color: #e0e0e0;">Regulations</strong>
+            <p style="font-size: 0.85rem; margin: 0.25rem 0 0 0;">The rules of the road</p>
+          </div>
+          <div style="text-align: center; padding: 0.75rem;">
+            <div style="font-size: 1.5rem;">⚠️</div>
+            <strong style="color: #ff6b6b;">MITRE ATT&CK</strong>
+            <p style="font-size: 0.85rem; margin: 0.25rem 0 0 0;">Threat landscape map</p>
+          </div>
+        </div>
+        
+        <h4 style="color: #4a9eff; margin-top: 1.5rem;">📋 Practical Example: Ransomware Protection</h4>
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 0.5rem;">
+          <thead>
+            <tr style="border-bottom: 2px solid #4a9eff;">
+              <th style="text-align: left; padding: 0.5rem;">Component</th>
+              <th style="text-align: left; padding: 0.5rem;">What It Means</th>
+              <th style="text-align: left; padding: 0.5rem;">Technical Implementation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;"><strong>🏁 Compliance</strong></td>
+              <td style="padding: 0.5rem;">Must meet SOC 2 / ISO 27001</td>
+              <td style="padding: 0.5rem;">Prove endpoint protection + incident response capability</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;"><strong>🗺️ Framework</strong></td>
+              <td style="padding: 0.5rem;">NIST CSF: Protect + Detect + Respond</td>
+              <td style="padding: 0.5rem;">Map controls to Protect (PR.PT), Detect (DE.CM), Respond (RS.RP)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;"><strong>📍 Governance</strong></td>
+              <td style="padding: 0.5rem;">Policies, ownership, review cycles</td>
+              <td style="padding: 0.5rem;">Ransomware response playbook, quarterly tabletop exercises</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;"><strong>🚗 Controls</strong></td>
+              <td style="padding: 0.5rem;">Actual tools doing the work</td>
+              <td style="padding: 0.5rem;">MDE (behavior blocking), ASR rules, Sentinel detection, backup isolation</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 0.5rem;"><strong>🚦 Regulations</strong></td>
+              <td style="padding: 0.5rem;">Legal requirements</td>
+              <td style="padding: 0.5rem;">72-hour breach notification (GDPR), state disclosure laws</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.5rem;"><strong>⚠️ MITRE ATT&CK</strong></td>
+              <td style="padding: 0.5rem;">Where attackers operate</td>
+              <td style="padding: 0.5rem;">T1486 (Data Encrypted), T1490 (Inhibit Recovery) — validate detection coverage</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(74, 158, 255, 0.15); border-radius: 8px;">
+          <span class="key-phrase">How to say it:</span> "I think of security as a journey. Compliance is the destination — where we need to be. Security frameworks like NIST CSF are the roadmap. Governance is the GPS that keeps us aligned along the way. Security controls — MDE, Sentinel, DLP — are the vehicle that actually gets us there. Regulations are the rules of the road we must follow. And MITRE ATT&CK is the threat landscape map that shows where attackers operate and where we still have gaps in our defenses."
+        </p>
+      </div>
+
       <!-- ==================== FOUNDATION QUESTIONS ==================== -->
       <h2>🎯 Foundation Questions</h2>
       
